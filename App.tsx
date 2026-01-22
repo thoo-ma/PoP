@@ -1,14 +1,45 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  ActivityIndicator, 
+  FlatList, 
+  Dimensions,
+  ViewToken,
+  SafeAreaView
+} from 'react-native';
+import { useState, useCallback } from 'react';
 import { useAuth } from './hooks/useAuth';
 import Auth from './components/Auth';
+import Home from './screens/Home';
+import ProofOfImmobility from './screens/ProofOfImmobility';
+import ProofOfTime from './screens/ProofOfTime';
+
+const { width } = Dimensions.get('window');
+
+const PAGES = [
+  { id: '1', component: Home },
+  { id: '2', component: ProofOfImmobility },
+  { id: '3', component: ProofOfTime },
+];
 
 export default function App() {
-  const { session, loading, signOut, getUserDisplayName } = useAuth();
+  const { session, loading } = useAuth();
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    if (viewableItems.length > 0) {
+      setCurrentPage(viewableItems[0].index || 0);
+    }
+  }, []);
+
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50,
+  };
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#000" />
       </View>
     );
@@ -18,17 +49,45 @@ export default function App() {
     return <Auth />;
   }
 
+  const renderPage = ({ item }: { item: typeof PAGES[0] }) => {
+    const Component = item.component;
+    return (
+      <View style={styles.pageWrapper}>
+        <Component />
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome!</Text>
-      <Text style={styles.email}>{getUserDisplayName()}</Text>
-      
-      <TouchableOpacity style={styles.button} onPress={signOut}>
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={PAGES}
+        renderItem={renderPage}
+        keyExtractor={(item) => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        bounces={false}
+        style={styles.flatList}
+      />
+
+      {/* Page indicators */}
+      <View style={styles.pagination}>
+        {Array.from({ length: PAGES.length }).map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.dot,
+              currentPage === index && styles.activeDot,
+            ]}
+          />
+        ))}
+      </View>
       
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -36,31 +95,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    textAlign: 'center',
+  flatList: {
+    flex: 1,
   },
-  email: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-    textAlign: 'center',
+  pageWrapper: {
+    width,
+    height: '100%',
   },
-  button: {
+  pagination: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#d1d5db',
+  },
+  activeDot: {
+    width: 24,
     backgroundColor: '#000',
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { supabase, isExpoGo } from '../lib/supabase';
 import * as WebBrowser from 'expo-web-browser';
 import type { Provider } from '@supabase/supabase-js';
@@ -24,7 +25,10 @@ function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
       {loading ? (
         <ActivityIndicator color={loaderColor} />
       ) : (
-        <Text style={textStyle}>{label}</Text>
+        <View style={styles.buttonContent}>
+          {isGoogle && <AntDesign name="google" size={20} color="#1F1F1F" style={styles.icon} />}
+          <Text style={textStyle}>{label}</Text>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -32,25 +36,10 @@ function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
+  const [devLoading, setDevLoading] = useState(false);
 
   const getRedirectUrl = (): string => {
     return Platform.OS === 'web' ? window.location.origin : 'pop://';
-  };
-
-  const handleExpoGoBypass = () => {
-    Alert.alert(
-      'Development Mode',
-      'OAuth authentication does not work in Expo Go. Please build a development client to test OAuth.\n\nFor now, continuing without authentication.',
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            // User acknowledges - app will show "not authenticated" state
-            // In a real scenario, you could set a mock session here for testing UI
-          },
-        },
-      ]
-    );
   };
 
   const signInWithProvider = async (provider: OAuthProvider) => {
@@ -97,12 +86,41 @@ export default function Auth() {
       <Text style={styles.subtitle}>Sign in to continue</Text>
 
       {isExpoGo && (
-        <View style={styles.warningBanner}>
-          <Text style={styles.warningText}>⚠️ Expo Go detected</Text>
-          <Text style={styles.warningSubtext}>
-            OAuth won't work. Use a dev build or web for authentication.
-          </Text>
-        </View>
+        <>
+          <View style={styles.warningBanner}>
+            <Text style={styles.warningText}>⚠️ Expo Go detected</Text>
+            <Text style={styles.warningSubtext}>
+              OAuth won't work. Use a dev build or web for authentication.
+            </Text>
+          </View>
+          
+          <TouchableOpacity 
+            style={styles.devBypassButton}
+            onPress={async () => {
+              setDevLoading(true);
+              try {
+                const { error } = await supabase.auth.signInAnonymously();
+                
+                if (error) throw error;
+                
+                // Success - auth state will automatically update via onAuthStateChange
+              } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Failed to authenticate';
+                Alert.alert('Authentication Error', errorMessage);
+                console.error('Anonymous auth error:', err);
+              } finally {
+                setDevLoading(false);
+              }
+            }}
+            disabled={devLoading}
+          >
+            {devLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Continue (Dev Mode)</Text>
+            )}
+          </TouchableOpacity>
+        </>
       )}
 
       <OAuthButton
@@ -157,11 +175,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#856404',
   },
+  devBypassButton: {
+    backgroundColor: '#000',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   button: {
     padding: 16,
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: 16,
     alignItems: 'center',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 8,
   },
   twitterButton: {
     backgroundColor: '#000000',
