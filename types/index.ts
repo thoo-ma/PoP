@@ -22,3 +22,14 @@ export interface OAuthButtonProps {
   onPress: () => void;
   loading: boolean;
 }
+
+// Immobility Challenge Types
+export type DifficultyMode = 'easy' | 'normal' | 'strict';
+
+export interface SensorThresholds {
+  MOVEMENT_THRESHOLD: number;
+  ROTATION_THRESHOLD: number;
+  STEP_COOLDOWN: number;
+  GRACE_PERIOD: number;
+  WARNING_COOLDOWN: number;
+}
