@@ -1,15 +1,64 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import Card from '../components/Card';
 import { colors, typography, layout } from '../constants/theme';
 
 export default function ProofOfTime() {
   const [time, setTime] = useState(new Date());
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const timerStartRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        if (timerStartRef.current) {
+          setElapsedTime(Date.now() - timerStartRef.current);
+        }
+      }, 100);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isTimerRunning]);
+
+  const toggleTimer = () => {
+    if (isTimerRunning) {
+      // Stop timer
+      setIsTimerRunning(false);
+      timerStartRef.current = null;
+    } else {
+      // Start timer
+      setIsTimerRunning(true);
+      timerStartRef.current = Date.now() - elapsedTime;
+    }
+  };
+
+  const resetTimer = () => {
+    setIsTimerRunning(false);
+    setElapsedTime(0);
+    timerStartRef.current = null;
+  };
+
+  const formatElapsedTime = (ms: number): string => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    
+    const displayHours = String(hours).padStart(2, '0');
+    const displayMinutes = String(minutes % 60).padStart(2, '0');
+    const displaySeconds = String(seconds % 60).padStart(2, '0');
+    
+    return `${displayHours}:${displayMinutes}:${displaySeconds}`;
+  };
 
   return (
     <View style={styles.container}>
@@ -18,6 +67,34 @@ export default function ProofOfTime() {
         Time is your most precious resource{'\n'}
         Every second counts
       </Text>
+      
+      <Card
+        title="⏱️ Timer"
+        value={formatElapsedTime(elapsedTime)}
+        titleColor={colors.timeCard}
+        valueColor={colors.timeValue}
+        style={styles.timerCard}
+      />
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={[styles.button, isTimerRunning && styles.stopButton]}
+          onPress={toggleTimer}
+        >
+          <Text style={styles.buttonText}>
+            {isTimerRunning ? 'Stop' : 'Start'}
+          </Text>
+        </TouchableOpacity>
+        
+        {elapsedTime > 0 && !isTimerRunning && (
+          <TouchableOpacity 
+            style={[styles.button, styles.resetButton]}
+            onPress={resetTimer}
+          >
+            <Text style={styles.buttonText}>Reset</Text>
+          </TouchableOpacity>
+        )}
+      </View>
       
       <Card
         title="⏰ Current Time"
@@ -53,8 +130,36 @@ const styles = StyleSheet.create({
     ...typography.description,
     color: colors.timeText,
   },
+  timerCard: {
+    marginBottom: 16,
+    minWidth: 250,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 32,
+  },
+  button: {
+    backgroundColor: colors.timeTitle,
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 8,
+    minWidth: 100,
+    alignItems: 'center',
+  },
+  stopButton: {
+    backgroundColor: '#dc2626',
+  },
+  resetButton: {
+    backgroundColor: colors.timeCard,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   card: {
-    marginBottom: 24,
+    marginBottom: 16,
     minWidth: 250,
   },
   hint: {
