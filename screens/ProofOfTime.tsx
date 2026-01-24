@@ -24,7 +24,7 @@ export default function ProofOfTime() {
         if (timerStartRef.current) {
           setElapsedTime(Date.now() - timerStartRef.current);
         }
-      }, 100);
+      }, 1000); // Update every second instead of 100ms
     }
     
     return () => {
