@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import Card from '../components/Card';
-import { colors, typography, layout } from '../constants/theme';
+import { colors } from '../constants/theme';
 import { formatElapsedTime } from '../utils/timeFormatters';
+import { styles } from '../styles/ProofOfTime.styles';
 
 export default function ProofOfTime() {
   const [time, setTime] = useState(new Date());
@@ -105,55 +106,3 @@ export default function ProofOfTime() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...layout.container,
-    backgroundColor: colors.timeBackground,
-  },
-  title: {
-    ...typography.title,
-    color: colors.timeTitle,
-  },
-  description: {
-    ...typography.description,
-    color: colors.timeText,
-  },
-  timerCard: {
-    marginBottom: 16,
-    minWidth: 250,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 32,
-  },
-  button: {
-    backgroundColor: colors.timeTitle,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 8,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-  stopButton: {
-    backgroundColor: '#dc2626',
-  },
-  resetButton: {
-    backgroundColor: colors.timeCard,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  card: {
-    marginBottom: 16,
-    minWidth: 250,
-  },
-  hint: {
-    ...typography.hint,
-    color: colors.timeHint,
-    marginTop: 24,
-  },
-});
