@@ -1,12 +1,5 @@
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-
-interface CardProps {
-  title: string;
-  value: string;
-  titleColor?: string;
-  valueColor?: string;
-  style?: ViewStyle;
-}
+import { StyleSheet, Text, View } from 'react-native';
+import type { CardProps } from '../types';
 
 export default function Card({ 
   title, 

@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
-import type { DifficultyMode, SensorThresholds } from '../types';
+import type { 
+  DifficultyMode, 
+  SensorThresholds, 
+  ChallengeStatus,
+  AccelerometerData,
+  GyroscopeData,
+  PedometerData
+} from '../types';
 
 // Configuration constants
 const UPDATE_INTERVAL = 100; // Accelerometer/Gyroscope update interval in milliseconds
@@ -34,8 +41,6 @@ const getThresholds = (mode: DifficultyMode = 'normal'): SensorThresholds => {
       };
   }
 };
-
-type ChallengeStatus = 'idle' | 'running' | 'warning';
 
 export interface UseImmobilityChallengeReturn {
   elapsedTime: number;
@@ -103,7 +108,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
   // Handle accelerometer data
   const handleAccelerometerData = useCallback(
-    (data: { x: number; y: number; z: number }) => {
+    (data: AccelerometerData) => {
       if (!isRunning) return;
 
       const { x, y, z } = data;
@@ -139,7 +144,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
   // Handle step detection
   const handleStepDetection = useCallback(
-    (result: { steps: number }) => {
+    (result: PedometerData) => {
       if (!isRunning) return;
 
       const currentSteps = result.steps;
@@ -169,7 +174,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
   // Handle gyroscope data
   const handleGyroscopeData = useCallback(
-    (data: { x: number; y: number; z: number }) => {
+    (data: GyroscopeData) => {
       if (!isRunning) return;
 
       const { x, y, z } = data;

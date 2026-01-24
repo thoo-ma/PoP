@@ -1,10 +1,22 @@
 import type { Session, User } from '@supabase/supabase-js';
 
-// Re-export Supabase types for convenience
+// Re-export Supabase types
 export type { Session, User };
 
-// OAuth Providers
+// Re-export navigation types
+export * from './navigation';
+
+// Re-export component types
+export * from './components';
+
+// Re-export sensor types
+export * from './sensors';
+
+// OAuth Types
 export type OAuthProvider = 'google' | 'twitter';
+
+// Difficulty Modes
+export type DifficultyMode = 'easy' | 'normal' | 'strict';
 
 // Auth Hook Return Type
 export interface UseAuthReturn {
@@ -14,22 +26,4 @@ export interface UseAuthReturn {
   getUserDisplayName: () => string;
   user: User | null;
   isAuthenticated: boolean;
-}
-
-// OAuth Button Props
-export interface OAuthButtonProps {
-  provider: OAuthProvider;
-  onPress: () => void;
-  loading: boolean;
-}
-
-// Immobility Challenge Types
-export type DifficultyMode = 'easy' | 'normal' | 'strict';
-
-export interface SensorThresholds {
-  MOVEMENT_THRESHOLD: number;
-  ROTATION_THRESHOLD: number;
-  STEP_COOLDOWN: number;
-  GRACE_PERIOD: number;
-  WARNING_COOLDOWN: number;
 }

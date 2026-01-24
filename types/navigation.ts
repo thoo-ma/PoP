@@ -1,0 +1,24 @@
+import type { ComponentType } from 'react';
+
+/**
+ * Configuration for a single page/screen in the app
+ */
+export interface PageConfig {
+  id: string;
+  component: ComponentType<any>;
+}
+
+/**
+ * Props for PageIndicator component
+ */
+export interface PageIndicatorProps {
+  totalPages: number;
+  currentPage: number;
+}
+
+/**
+ * FlatList viewability configuration
+ */
+export interface ViewabilityConfig {
+  itemVisiblePercentThreshold: number;
+}

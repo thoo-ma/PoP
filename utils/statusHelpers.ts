@@ -1,4 +1,4 @@
-export type ChallengeStatus = 'idle' | 'running' | 'warning';
+import type { ChallengeStatus } from '../types';
 
 export interface StatusDisplay {
   text: string;

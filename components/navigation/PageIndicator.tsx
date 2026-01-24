@@ -1,10 +1,6 @@
 import { View } from 'react-native';
+import type { PageIndicatorProps } from '../../types';
 import { styles } from '../../styles/PageIndicator.styles';
-
-interface PageIndicatorProps {
-  totalPages: number;
-  currentPage: number;
-}
 
 export default function PageIndicator({ totalPages, currentPage }: PageIndicatorProps) {
   return (

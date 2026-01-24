@@ -1,10 +1,5 @@
 import { Home, ProofOfImmobility, ProofOfTime } from '../screens';
-import type { ComponentType } from 'react';
-
-export interface PageConfig {
-  id: string;
-  component: ComponentType<any>;
-}
+import type { PageConfig } from '../types';
 
 /**
  * Configuration for app pages/screens
