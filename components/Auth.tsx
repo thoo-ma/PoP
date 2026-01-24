@@ -5,6 +5,7 @@ import { supabase, isExpoGo } from '../lib/supabase';
 import * as WebBrowser from 'expo-web-browser';
 import type { Provider } from '@supabase/supabase-js';
 import type { OAuthProvider, OAuthButtonProps } from '../types';
+import { getRedirectUrl } from '../utils/urlHelpers';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,10 +38,6 @@ function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);
-
-  const getRedirectUrl = (): string => {
-    return Platform.OS === 'web' ? window.location.origin : 'pop://';
-  };
 
   const signInWithProvider = async (provider: OAuthProvider) => {
     if (isExpoGo) {

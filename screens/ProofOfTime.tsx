@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import Card from '../components/Card';
 import { colors, typography, layout } from '../constants/theme';
+import { formatElapsedTime } from '../utils/timeFormatters';
 
 export default function ProofOfTime() {
   const [time, setTime] = useState(new Date());
@@ -46,18 +47,6 @@ export default function ProofOfTime() {
     setIsTimerRunning(false);
     setElapsedTime(0);
     timerStartRef.current = null;
-  };
-
-  const formatElapsedTime = (ms: number): string => {
-    const seconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    
-    const displayHours = String(hours).padStart(2, '0');
-    const displayMinutes = String(minutes % 60).padStart(2, '0');
-    const displaySeconds = String(seconds % 60).padStart(2, '0');
-    
-    return `${displayHours}:${displayMinutes}:${displaySeconds}`;
   };
 
   return (

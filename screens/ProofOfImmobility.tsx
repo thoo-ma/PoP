@@ -4,6 +4,8 @@ import Card from '../components/Card';
 import { colors, typography, layout } from '../constants/theme';
 import { useImmobilityChallenge } from '../hooks/useImmobilityChallenge';
 import type { DifficultyMode } from '../types';
+import { formatTime } from '../utils/timeFormatters';
+import { getStatusDisplay } from '../utils/statusHelpers';
 
 export default function ProofOfImmobility() {
   const [mode, setMode] = useState<DifficultyMode>('normal');
@@ -22,27 +24,7 @@ export default function ProofOfImmobility() {
     }
   };
 
-  // Format time as MM:SS:MS
-  const formatTime = (milliseconds: number): string => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    const ms = Math.floor((milliseconds % 1000) / 10); // Show centiseconds (00-99)
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${ms.toString().padStart(2, '0')}`;
-  };
-
-  // Get status display text and color
-  const getStatusDisplay = () => {
-    if (status === 'idle') {
-      return { text: 'Ready', icon: '📍', color: colors.immobilityValue };
-    } else if (status === 'warning') {
-      return { text: 'Movement Detected ⚠️', icon: '⚠️', color: '#ff6b6b' }; // Red
-    } else {
-      return { text: 'Immobile ✓', icon: '✓', color: '#4ade80' }; // Green
-    }
-  };
-
-  const statusDisplay = getStatusDisplay();
+  const statusDisplay = getStatusDisplay(status, colors.immobilityValue);
 
   return (
     <View style={styles.container}>
