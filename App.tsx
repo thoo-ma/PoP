@@ -22,6 +22,15 @@ export default function App() {
     }
   }, []);
 
+  const renderPage = useCallback(({ item }: { item: typeof PAGES[0] }) => {
+    const Component = item.component;
+    return (
+      <View style={styles.pageWrapper}>
+        <Component />
+      </View>
+    );
+  }, []);
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -33,15 +42,6 @@ export default function App() {
   if (!session) {
     return <Auth />;
   }
-
-  const renderPage = ({ item }: { item: typeof PAGES[0] }) => {
-    const Component = item.component;
-    return (
-      <View style={styles.pageWrapper}>
-        <Component />
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView style={styles.container}>
