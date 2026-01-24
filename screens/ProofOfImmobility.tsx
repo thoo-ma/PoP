@@ -1,12 +1,11 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import Card from '../components/Card';
-import { colors } from '../constants/theme';
-import { useImmobilityChallenge } from '../hooks/useImmobilityChallenge';
+import { Card } from '../components';
+import { colors } from '../constants';
+import { useImmobilityChallenge } from '../hooks';
 import type { DifficultyMode } from '../types';
-import { formatTime } from '../utils/timeFormatters';
-import { getStatusDisplay } from '../utils/statusHelpers';
-import { styles } from '../styles/ProofOfImmobility.styles';
+import { formatTime, getStatusDisplay } from '../utils';
+import { proofOfImmobilityStyles as styles } from '../styles';
 
 export default function ProofOfImmobility() {
   const [mode, setMode] = useState<DifficultyMode>('normal');

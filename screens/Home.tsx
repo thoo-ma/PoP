@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import { useAuth } from '../hooks/useAuth';
-import { styles } from '../styles/Home.styles';
+import { useAuth } from '../hooks';
+import { homeStyles as styles } from '../styles';
 
 export default function Home() {
   const { getUserDisplayName, signOut } = useAuth();

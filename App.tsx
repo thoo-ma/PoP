@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { 
-  StyleSheet, 
   View, 
   ActivityIndicator, 
   FlatList, 
@@ -8,10 +7,10 @@ import {
   SafeAreaView
 } from 'react-native';
 import { useState, useCallback } from 'react';
-import { useAuth } from './hooks/useAuth';
-import Auth from './components/Auth';
-import { PAGES, VIEWABILITY_CONFIG } from './constants/navigation';
-import { styles, width } from './styles/App.styles';
+import { useAuth } from './hooks';
+import { Auth } from './components';
+import { PAGES, VIEWABILITY_CONFIG } from './constants';
+import { appStyles as styles, width } from './styles';
 
 export default function App() {
   const { session, loading } = useAuth();

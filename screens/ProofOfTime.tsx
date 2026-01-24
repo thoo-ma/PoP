@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import Card from '../components/Card';
-import { colors } from '../constants/theme';
-import { formatElapsedTime } from '../utils/timeFormatters';
-import { styles } from '../styles/ProofOfTime.styles';
+import { Card } from '../components';
+import { colors } from '../constants';
+import { formatElapsedTime } from '../utils';
+import { proofOfTimeStyles as styles } from '../styles';
 
 export default function ProofOfTime() {
   const [time, setTime] = useState(new Date());

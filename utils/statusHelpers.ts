@@ -1,6 +1,6 @@
-type ChallengeStatus = 'idle' | 'running' | 'warning';
+export type ChallengeStatus = 'idle' | 'running' | 'warning';
 
-interface StatusDisplay {
+export interface StatusDisplay {
   text: string;
   icon: string;
   color: string;

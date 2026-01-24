@@ -1,6 +1,4 @@
-import Home from '../screens/Home';
-import ProofOfImmobility from '../screens/ProofOfImmobility';
-import ProofOfTime from '../screens/ProofOfTime';
+import { Home, ProofOfImmobility, ProofOfTime } from '../screens';
 import type { ComponentType } from 'react';
 
 export interface PageConfig {
