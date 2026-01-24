@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useState, useCallback } from 'react';
 import { useAuth } from './hooks';
-import { Auth } from './components';
+import { Auth, PageIndicator } from './components';
 import { PAGES, VIEWABILITY_CONFIG } from './constants';
 import { appStyles as styles, width } from './styles';
 
@@ -58,18 +58,7 @@ export default function App() {
         style={styles.flatList}
       />
 
-      {/* Page indicators */}
-      <View style={styles.pagination}>
-        {Array.from({ length: PAGES.length }).map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              currentPage === index && styles.activeDot,
-            ]}
-          />
-        ))}
-      </View>
+      <PageIndicator totalPages={PAGES.length} currentPage={currentPage} />
       
       <StatusBar style="auto" />
     </SafeAreaView>

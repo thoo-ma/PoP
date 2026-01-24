@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { Card } from '../components';
+import { Card, DifficultySelector } from '../components';
 import { colors } from '../constants';
 import { useImmobilityChallenge } from '../hooks';
 import type { DifficultyMode } from '../types';
@@ -34,19 +34,11 @@ export default function ProofOfImmobility() {
         Any movement will reset the timer
       </Text>
       
-      {/* Difficulty Mode Selection */}
-      <View style={styles.modeContainer}>
-        <Text style={styles.modeLabel}>Difficulty:</Text>
-        <TouchableOpacity
-          style={styles.modeButton}
-          onPress={cycleDifficulty}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.modeButtonText}>
-            {mode.charAt(0).toUpperCase() + mode.slice(1)}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <DifficultySelector 
+        mode={mode} 
+        onModeChange={cycleDifficulty}
+        disabled={isRunning}
+      />
       
       <Card
         title="Status"

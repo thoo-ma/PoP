@@ -1,40 +1,14 @@
 import { useState } from 'react';
 import { Alert, View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import { supabase, isExpoGo } from '../lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { Provider } from '@supabase/supabase-js';
-import type { OAuthProvider, OAuthButtonProps } from '../types';
+import type { OAuthProvider } from '../types';
 import { getRedirectUrl } from '../utils';
 import { authStyles as styles } from '../styles';
+import OAuthButton from './auth/OAuthButton';
 
 WebBrowser.maybeCompleteAuthSession();
-
-function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
-  const isGoogle = provider === 'google';
-  const buttonStyle = isGoogle ? styles.googleButton : styles.twitterButton;
-  const textStyle = isGoogle ? [styles.buttonText, styles.googleText] : styles.buttonText;
-  const loaderColor = isGoogle ? '#1F1F1F' : '#fff';
-  const label = isGoogle ? 'Continue with Google' : 'Continue with 𝕏';
-
-  return (
-    <TouchableOpacity
-      style={[styles.button, buttonStyle]}
-      onPress={onPress}
-      disabled={loading}
-      accessibilityLabel={label}
-    >
-      {loading ? (
-        <ActivityIndicator color={loaderColor} />
-      ) : (
-        <View style={styles.buttonContent}>
-          {isGoogle && <AntDesign name="google" size={20} color="#1F1F1F" style={styles.icon} />}
-          <Text style={textStyle}>{label}</Text>
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-}
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
