@@ -5,3 +5,4 @@ export { styles as proofOfImmobilityStyles } from './ProofOfImmobility.styles';
 export { styles as proofOfTimeStyles } from './ProofOfTime.styles';
 export { styles as pageIndicatorStyles } from './PageIndicator.styles';
 export { styles as difficultySelectorStyles } from './DifficultySelector.styles';
+export { styles as cardStyles } from './Card.styles';
