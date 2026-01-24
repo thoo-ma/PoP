@@ -68,11 +68,6 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   const initialStepCountRef = useRef<number | null>(null);
   const lastStepTimeRef = useRef<number>(0);
 
-  // Format time - return milliseconds
-  const formatTime = (ms: number): number => {
-    return ms;
-  };
-
   // Unified movement detection handler
   const handleMovementDetected = useCallback(() => {
     if (!isRunning) return;

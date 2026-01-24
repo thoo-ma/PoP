@@ -22,11 +22,6 @@
             "CFBundleURLSchemes": [
               "pop"
             ]
-          },
-          {
-            "CFBundleURLSchemes": [
-              "pop"
-            ]
           }
         ],
         "ITSAppUsesNonExemptEncryption": false
