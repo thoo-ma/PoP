@@ -11,17 +11,9 @@ import {
 import { useState, useCallback } from 'react';
 import { useAuth } from './hooks/useAuth';
 import Auth from './components/Auth';
-import Home from './screens/Home';
-import ProofOfImmobility from './screens/ProofOfImmobility';
-import ProofOfTime from './screens/ProofOfTime';
+import { PAGES, VIEWABILITY_CONFIG } from './constants/navigation';
 
 const { width } = Dimensions.get('window');
-
-const PAGES = [
-  { id: '1', component: Home },
-  { id: '2', component: ProofOfImmobility },
-  { id: '3', component: ProofOfTime },
-];
 
 export default function App() {
   const { session, loading } = useAuth();
@@ -32,10 +24,6 @@ export default function App() {
       setCurrentPage(viewableItems[0].index || 0);
     }
   }, []);
-
-  const viewabilityConfig = {
-    itemVisiblePercentThreshold: 50,
-  };
 
   if (loading) {
     return (
@@ -68,7 +56,7 @@ export default function App() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
+        viewabilityConfig={VIEWABILITY_CONFIG}
         bounces={false}
         style={styles.flatList}
       />
