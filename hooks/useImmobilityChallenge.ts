@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
 import type { Subscription } from 'expo-sensors/build/Pedometer';
+import { SENSOR_UPDATE_INTERVAL } from '../constants';
 import type { 
   DifficultyMode, 
   SensorThresholds, 
@@ -9,9 +10,6 @@ import type {
   GyroscopeData,
   PedometerData
 } from '../types';
-
-// Configuration constants
-const UPDATE_INTERVAL = 100; // Accelerometer/Gyroscope update interval in milliseconds
 
 // Get thresholds based on difficulty mode
 const getThresholds = (mode: DifficultyMode = 'normal'): SensorThresholds => {
@@ -322,7 +320,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     }
 
     // Set update interval
-    Gyroscope.setUpdateInterval(UPDATE_INTERVAL);
+    Gyroscope.setUpdateInterval(SENSOR_UPDATE_INTERVAL);
 
     // Subscribe to gyroscope
     gyroscopeSubscriptionRef.current = Gyroscope.addListener(

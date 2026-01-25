@@ -11,8 +11,13 @@ export const PAGES: PageConfig[] = [
 ];
 
 /**
+ * Viewability threshold percentage for FlatList items
+ */
+export const VIEWABILITY_THRESHOLD_PERCENT = 50;
+
+/**
  * Configuration for FlatList viewability detection
  */
 export const VIEWABILITY_CONFIG = {
-  itemVisiblePercentThreshold: 50,
+  itemVisiblePercentThreshold: VIEWABILITY_THRESHOLD_PERCENT,
 };

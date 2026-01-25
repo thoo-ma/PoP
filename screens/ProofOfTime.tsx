@@ -1,7 +1,7 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { Card } from '../components';
-import { colors } from '../constants';
+import { colors, TIMER_UPDATE_INTERVAL, CLOCK_UPDATE_INTERVAL } from '../constants';
 import { formatElapsedTime } from '../utils';
 import { proofOfTimeStyles as styles } from '../styles';
 
@@ -12,7 +12,7 @@ export default function ProofOfTime() {
   const timerStartRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
+    const timer = setInterval(() => setTime(new Date()), CLOCK_UPDATE_INTERVAL);
     return () => clearInterval(timer);
   }, []);
 
@@ -24,7 +24,7 @@ export default function ProofOfTime() {
         if (timerStartRef.current) {
           setElapsedTime(Date.now() - timerStartRef.current);
         }
-      }, 1000); // Update every second instead of 100ms
+      }, TIMER_UPDATE_INTERVAL);
     }
     
     return () => {
