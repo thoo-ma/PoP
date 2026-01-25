@@ -38,3 +38,14 @@ export interface SensorThresholds {
  * Challenge status types
  */
 export type ChallengeStatus = 'idle' | 'running' | 'warning';
+
+/**
+ * Used by useImmobilityChallenge
+ */
+export interface UseImmobilityChallengeReturn {
+  elapsedTime: number;
+  status: ChallengeStatus;
+  isRunning: boolean;
+  startChallenge: () => void;
+  stopChallenge: () => void;
+}
