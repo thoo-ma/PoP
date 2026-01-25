@@ -216,7 +216,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     timerIntervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current;
       setElapsedTime(elapsed);
-    }, UPDATE_INTERVAL);
+    }, SENSOR_UPDATE_INTERVAL);
   }, []);
 
   // Stop challenge
@@ -256,7 +256,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     }
 
     // Set update interval
-    Accelerometer.setUpdateInterval(UPDATE_INTERVAL);
+    Accelerometer.setUpdateInterval(SENSOR_UPDATE_INTERVAL);
 
     // Subscribe to accelerometer
     accelerometerSubscriptionRef.current = Accelerometer.addListener(
