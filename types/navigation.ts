@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
  */
 export interface PageConfig {
   id: string;
-  component: ComponentType<any>;
+  component: ComponentType<{}>;
 }
 
 /**

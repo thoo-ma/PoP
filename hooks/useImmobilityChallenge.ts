@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
+import type { Subscription } from 'expo-sensors/build/Pedometer';
 import type { 
   DifficultyMode, 
   SensorThresholds, 
@@ -62,9 +63,9 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const graceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const warningCooldownRef = useRef<NodeJS.Timeout | null>(null);
-  const accelerometerSubscriptionRef = useRef<any>(null);
-  const pedometerSubscriptionRef = useRef<any>(null);
-  const gyroscopeSubscriptionRef = useRef<any>(null);
+  const accelerometerSubscriptionRef = useRef<Subscription | null>(null);
+  const pedometerSubscriptionRef = useRef<Subscription | null>(null);
+  const gyroscopeSubscriptionRef = useRef<Subscription | null>(null);
   const initialStepCountRef = useRef<number | null>(null);
   const lastStepTimeRef = useRef<number>(0);
 
