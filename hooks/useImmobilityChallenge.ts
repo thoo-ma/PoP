@@ -361,7 +361,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   }, []);
 
   return {
-    elapsedTime: formatTime(elapsedTime),
+    elapsedTime,
     status,
     isRunning,
     startChallenge,
