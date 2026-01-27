@@ -47,6 +47,8 @@ yarn-error.*
 *.swp
 *.swo
 *~
+# Python virtual env
+venv/
 
 # Logs
 logs/
@@ -56,3 +58,5 @@ logs/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+test_audio/
