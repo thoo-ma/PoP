@@ -59,4 +59,5 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-test_audio/
+**/test_audio/*
+!**/test_audio/.gitkeep
