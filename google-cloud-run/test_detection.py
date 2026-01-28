@@ -4,6 +4,8 @@ import numpy as np
 import csv
 import io
 import librosa
+import os
+import glob
 
 print("Loading YAMNet model...")
 model = hub.load('https://www.kaggle.com/models/google/yamnet/TensorFlow2/yamnet/1')
@@ -17,7 +19,19 @@ def class_names_from_csv(class_map_csv_text):
 class_map_path = model.class_map_path().numpy()
 class_names = class_names_from_csv(tf.io.read_file(class_map_path).numpy().decode('utf-8'))
 
-audio_file = 'toilet_flush.wav'
+# Find audio files in test_audio folder
+test_audio_dir = 'test_audio'
+audio_files = glob.glob(os.path.join(test_audio_dir, '*.wav')) + \
+              glob.glob(os.path.join(test_audio_dir, '*.mp3')) + \
+              glob.glob(os.path.join(test_audio_dir, '*.m4a'))
+
+if not audio_files:
+    print(f"No audio files found in {test_audio_dir}/")
+    print("Please add a .wav, .mp3, or .m4a file to the test_audio/ folder")
+    exit(1)
+
+audio_file = audio_files[0]
+print(f"Found {len(audio_files)} audio file(s)")
 
 print(f"\nLoading audio file: {audio_file}")
 waveform, sample_rate = librosa.load(audio_file, sr=16000, mono=True)

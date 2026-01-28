@@ -61,3 +61,6 @@ Desktop.ini
 
 **/test_audio/*
 !**/test_audio/.gitkeep
+
+# Supabase local development files
+**/.temp/

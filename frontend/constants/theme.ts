@@ -20,6 +20,22 @@ export const colors = {
   timeValue: '#92400e',
   timeHint: '#a16207',
   
+  // Proof of Poop
+  poopBackground: '#fef5ed',
+  poopTitle: '#8B4513',
+  poopText: '#6b4423',
+  poopCard: '#a0826d',
+  poopValue: '#8B4513',
+  poopHint: '#c9a88a',
+  
+  // Detection History
+  historyBackground: '#f5f5f5',
+  historyTitle: '#374151',
+  historyText: '#6b7280',
+  historyCard: '#9ca3af',
+  historyValue: '#374151',
+  historyHint: '#9ca3af',
+  
   // Common
   hint: '#999',
 };

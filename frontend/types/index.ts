@@ -3,6 +3,7 @@ export * from './auth';
 export * from './navigation';
 export * from './components';
 export * from './sensors';
+export * from './audio';
 
 // Difficulty Modes (used across multiple features)
 export type DifficultyMode = 'easy' | 'normal' | 'strict';

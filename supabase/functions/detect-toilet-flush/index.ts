@@ -1,0 +1,203 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    console.log('=== Edge Function Request Started ===')
+    console.log('Headers:', Object.fromEntries(req.headers.entries()))
+    
+    // Get Cloud Run configuration from environment
+    const CLOUD_RUN_URL = Deno.env.get('CLOUD_RUN_URL')
+    const CLOUD_RUN_API_KEY = Deno.env.get('CLOUD_RUN_API_KEY')
+
+    if (!CLOUD_RUN_URL || !CLOUD_RUN_API_KEY) {
+      throw new Error('Missing Cloud Run configuration')
+    }
+
+    // Create Supabase client with service role key
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
+    // Try to get user from JWT (optional for dev mode)
+    let user = null
+    const authHeader = req.headers.get('Authorization')
+    
+    if (authHeader) {
+      console.log('Authorization header found')
+      const token = authHeader.replace('Bearer ', '')
+      console.log('Token length:', token.length)
+      
+      try {
+        const { data, error: userError } = await supabaseClient.auth.getUser(token)
+        if (userError) {
+          console.error('Auth getUser error:', userError)
+        }
+        user = data?.user || null
+        console.log('User extracted:', user ? user.id : 'null')
+      } catch (err) {
+        console.error('Exception during getUser:', err)
+      }
+    } else {
+      console.warn('No Authorization header - proceeding in dev mode')
+    }
+    
+    // For dev mode, allow unauthenticated requests
+    // In production, you might want to enforce authentication
+    const userId = user?.id || 'anonymous'
+
+    // Get request body
+    const { audio_base64, threshold = 0.5 } = await req.json()
+
+    if (!audio_base64) {
+      return new Response(
+        JSON.stringify({ error: 'Missing audio_base64 in request body' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    // Check rate limit
+    const { data: config } = await supabaseClient
+      .from('app_config')
+      .select('value')
+      .eq('key', 'rate_limits')
+      .single()
+
+    const detectionsPerDay = config?.value?.detections_per_day || 10
+
+    // Count user's detections in the last 24 hours
+    const { count, error: countError } = await supabaseClient
+      .from('flush_detections')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+
+    if (countError) {
+      console.error('Error checking rate limit:', countError)
+    }
+
+    if (count !== null && count >= detectionsPerDay) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Rate limit exceeded', 
+          message: `You have reached the daily limit of ${detectionsPerDay} detections. Please try again tomorrow.`,
+          limit: detectionsPerDay,
+          current_count: count
+        }),
+        { 
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    // Calculate audio size
+    const audioSizeKb = Math.round((audio_base64.length * 3) / 4 / 1024)
+
+    // Forward to Cloud Run
+    console.log('Calling Cloud Run:', CLOUD_RUN_URL)
+    console.log('Audio size:', audioSizeKb, 'KB')
+    
+    const cloudRunResponse = await fetch(`${CLOUD_RUN_URL}/detect`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': CLOUD_RUN_API_KEY,
+      },
+      body: JSON.stringify({
+        audio: audio_base64,
+        threshold: threshold
+      })
+    })
+
+    console.log('Cloud Run response status:', cloudRunResponse.status)
+    
+    if (!cloudRunResponse.ok) {
+      const errorText = await cloudRunResponse.text()
+      console.error('Cloud Run error response:', errorText)
+      throw new Error(`Cloud Run error: ${cloudRunResponse.status} - ${errorText}`)
+    }
+
+    const result = await cloudRunResponse.json()
+
+    // Check if detection had an error
+    if (result.error) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Detection failed',
+          message: result.error
+        }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    // Store detection result in database
+    const { error: insertError } = await supabaseClient
+      .from('flush_detections')
+      .insert({
+        user_id: userId,
+        detected: result.detected,
+        confidence: result.confidence,
+        duration_seconds: result.duration_seconds,
+        model_version: result.model_version,
+        audio_size_kb: audioSizeKb
+      })
+
+    if (insertError) {
+      console.error('Error inserting detection:', insertError)
+      // Don't fail the request if DB insert fails, just log it
+    }
+
+    // Return detection result
+    return new Response(
+      JSON.stringify({
+        detected: result.detected,
+        confidence: result.confidence,
+        duration_seconds: result.duration_seconds,
+        top_predictions: result.top_predictions,
+        model_version: result.model_version,
+        threshold_used: result.threshold_used
+      }),
+      { 
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    )
+
+  } catch (error) {
+    console.error('Edge Function error:', error)
+    return new Response(
+      JSON.stringify({ 
+        error: 'Internal server error',
+        message: error.message 
+      }),
+      { 
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    )
+  }
+})

@@ -1,4 +1,4 @@
-import { Home, ProofOfImmobility, ProofOfTime } from '../screens';
+import { Home, ProofOfImmobility, ProofOfFlush, DetectionHistory, ProofOfPoop } from '../screens';
 import type { PageConfig } from '../types';
 
 /**
@@ -7,7 +7,9 @@ import type { PageConfig } from '../types';
 export const PAGES: PageConfig[] = [
   { id: '1', component: Home },
   { id: '2', component: ProofOfImmobility },
-  { id: '3', component: ProofOfTime },
+  { id: '3', component: ProofOfFlush },
+  { id: '4', component: ProofOfPoop },
+  { id: '5', component: DetectionHistory },
 ];
 
 /**
