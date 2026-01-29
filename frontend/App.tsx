@@ -9,7 +9,7 @@ import {
 import { useState, useCallback } from 'react';
 import { useAuth } from './hooks';
 import { Auth, PageIndicator } from './components';
-import { PAGES, VIEWABILITY_CONFIG } from './constants';
+import { PAGES, VIEWABILITY_CONFIG } from './config/navigation';
 import { appStyles as styles, width } from './styles';
 
 export default function App() {
