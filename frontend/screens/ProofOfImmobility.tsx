@@ -1,27 +1,18 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { Card, DifficultySelector } from '../components';
+import { Card, DifficultySelector, NavigationHint } from '../components';
 import { colors } from '../constants';
-import { useImmobilityChallenge } from '../hooks';
-import type { DifficultyMode } from '../types';
+import { useImmobilityChallenge, useDifficultyCycle } from '../hooks';
 import { formatTime, getStatusDisplay } from '../utils';
 import { proofOfImmobilityStyles as styles } from '../styles';
 
 export default function ProofOfImmobility() {
-  const [mode, setMode] = useState<DifficultyMode>('normal');
+  const { mode, cycleMode } = useDifficultyCycle('normal');
   const { elapsedTime, status, isRunning, startChallenge, stopChallenge } = useImmobilityChallenge(mode);
 
-  // Cycle through difficulty modes
-  const cycleDifficulty = () => {
+  // Cycle through difficulty modes only when not running
+  const handleCycleMode = () => {
     if (isRunning) return;
-    
-    if (mode === 'easy') {
-      setMode('normal');
-    } else if (mode === 'normal') {
-      setMode('strict');
-    } else {
-      setMode('easy');
-    }
+    cycleMode();
   };
 
   const statusDisplay = getStatusDisplay(status, colors.immobilityValue);
@@ -36,7 +27,7 @@ export default function ProofOfImmobility() {
       
       <DifficultySelector 
         mode={mode} 
-        onModeChange={cycleDifficulty}
+        onModeChange={handleCycleMode}
         disabled={isRunning}
       />
       
@@ -65,7 +56,7 @@ export default function ProofOfImmobility() {
         </Text>
       </TouchableOpacity>
       
-      <Text style={styles.hint}>← Swipe to navigate →</Text>
+      <NavigationHint text="← Swipe to navigate →" />
     </View>
   );
 }

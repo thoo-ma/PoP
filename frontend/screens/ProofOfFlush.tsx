@@ -1,13 +1,12 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
-import { Card, DifficultySelector } from '../components';
+import { Card, DifficultySelector, NavigationHint } from '../components';
 import { colors } from '../constants';
-import { useToiletDetection } from '../hooks';
-import type { DifficultyMode } from '../types';
+import { useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../hooks';
+import { getThresholdForDifficulty, formatConfidencePercentage } from '../utils';
 import { styles } from '../styles/ProofOfFlush.styles';
 
 export default function ProofOfFlush() {
-  const [mode, setMode] = useState<DifficultyMode>('normal');
+  const { mode, cycleMode } = useDifficultyCycle('normal');
   
   const {
     isRecording,
@@ -22,29 +21,11 @@ export default function ProofOfFlush() {
     clearResult,
   } = useToiletDetection();
 
-  // Map difficulty mode to threshold
-  const getThreshold = (): number => {
-    switch (mode) {
-      case 'easy':
-        return 0.3;
-      case 'normal':
-        return 0.5;
-      case 'strict':
-        return 0.7;
-    }
-  };
-
-  // Cycle through difficulty modes
-  const cycleDifficulty = () => {
+  // Cycle through difficulty modes only when not recording/analyzing
+  const handleCycleMode = () => {
     if (isRecording || isAnalyzing) return;
     
-    if (mode === 'easy') {
-      setMode('normal');
-    } else if (mode === 'normal') {
-      setMode('strict');
-    } else {
-      setMode('easy');
-    }
+    cycleMode();
     
     // Clear previous result when changing difficulty
     if (detectionResult) {
@@ -61,14 +42,17 @@ export default function ProofOfFlush() {
   };
 
   const handleAnalyzePress = () => {
-    const threshold = getThreshold();
+    const threshold = getThresholdForDifficulty(mode);
     analyzeAudio(threshold);
   };
 
   // Determine button states
-  const canRecord = !isAnalyzing && !detectionResult;
-  const canAnalyze = audioUri && !isRecording && !isAnalyzing && !detectionResult;
-  const hasResult = !!detectionResult;
+  const { canRecord, canAnalyze, hasResult } = useRecordingButtonState(
+    isRecording,
+    isAnalyzing,
+    audioUri,
+    detectionResult
+  );
 
   return (
     <View style={styles.container}>
@@ -80,7 +64,7 @@ export default function ProofOfFlush() {
       
       <DifficultySelector 
         mode={mode} 
-        onModeChange={cycleDifficulty}
+        onModeChange={handleCycleMode}
         disabled={isRecording || isAnalyzing}
       />
 
@@ -118,7 +102,7 @@ export default function ProofOfFlush() {
           />
           <Card
             title="Confidence"
-            value={`${Math.round(detectionResult.confidence * 100)}%`}
+            value={formatConfidencePercentage(detectionResult.confidence)}
             titleColor={colors.poopCard}
             valueColor={colors.poopValue}
             style={styles.card}

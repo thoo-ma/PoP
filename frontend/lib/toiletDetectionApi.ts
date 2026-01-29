@@ -12,8 +12,6 @@ export async function detectToiletFlush(
   threshold: number = 0.5
 ): Promise<DetectionResult> {
   try {
-    console.log('Calling edge function with audio length:', audioBase64.length);
-    
     const { data, error } = await supabase.functions.invoke('detect-toilet-flush', {
       body: {
         audio_base64: audioBase64,
@@ -21,11 +19,7 @@ export async function detectToiletFlush(
       }
     });
 
-    console.log('Edge function response:', { data, error });
-
     if (error) {
-      console.error('Edge function error:', error);
-      
       // Check if it's a rate limit error (429)
       if (error.message && error.message.includes('Rate limit')) {
         const rateLimitError: RateLimitError = {
@@ -53,8 +47,6 @@ export async function detectToiletFlush(
 
     return data as DetectionResult;
   } catch (error) {
-    console.error('Detection API error:', error);
-    
     // Re-throw if it's already a structured error
     if (error && typeof error === 'object' && 'error' in error) {
       throw error;

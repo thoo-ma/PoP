@@ -12,18 +12,10 @@ export const formatTime = (milliseconds: number): string => {
 };
 
 /**
- * Format milliseconds to HH:MM:SS
- * @param ms - Time in milliseconds
- * @returns Formatted string like "01:23:45"
+ * Format confidence value to percentage string
+ * @param confidence - Confidence value between 0 and 1
+ * @returns Formatted percentage string like "85%"
  */
-export const formatElapsedTime = (ms: number): string => {
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  
-  const displayHours = String(hours).padStart(2, '0');
-  const displayMinutes = String(minutes % 60).padStart(2, '0');
-  const displaySeconds = String(seconds % 60).padStart(2, '0');
-  
-  return `${displayHours}:${displayMinutes}:${displaySeconds}`;
+export const formatConfidencePercentage = (confidence: number): string => {
+  return `${Math.round(confidence * 100)}%`;
 };

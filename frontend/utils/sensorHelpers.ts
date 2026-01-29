@@ -31,3 +31,20 @@ export const getThresholds = (mode: DifficultyMode = 'normal'): SensorThresholds
       };
   }
 };
+
+/**
+ * Get detection threshold based on difficulty mode
+ * Used for audio detection (toilet flush, etc.)
+ * @param mode - Difficulty mode
+ * @returns Threshold value between 0.0 and 1.0
+ */
+export const getThresholdForDifficulty = (mode: DifficultyMode): number => {
+  switch (mode) {
+    case 'easy':
+      return 0.3;
+    case 'normal':
+      return 0.5;
+    case 'strict':
+      return 0.7;
+  }
+};

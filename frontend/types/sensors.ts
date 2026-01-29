@@ -40,6 +40,16 @@ export interface SensorThresholds {
 export type ChallengeStatus = 'idle' | 'running' | 'warning';
 
 /**
+ * Challenge phase types for ProofOfPoop screen
+ */
+export type ChallengePhase = 'setup' | 'immobility' | 'prompt' | 'recording' | 'results';
+
+/**
+ * Timelapse duration options in milliseconds
+ */
+export type TimelapseOption = 5000 | 10000 | 15000;
+
+/**
  * Used by useImmobilityChallenge
  */
 export interface UseImmobilityChallengeReturn {

@@ -249,7 +249,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
           );
         }
       } catch (error) {
-        console.log('Pedometer subscription error:', error);
+        // Silently handle pedometer subscription errors
       }
     };
 

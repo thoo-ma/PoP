@@ -1,5 +1,6 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useAuth } from '../hooks';
+import { NavigationHint } from '../components';
 import { homeStyles as styles } from '../styles';
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
       
-      <Text style={styles.hint}>← Swipe to discover →</Text>
+      <NavigationHint text="← Swipe to discover →" />
     </View>
   );
 }

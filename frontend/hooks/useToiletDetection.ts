@@ -68,7 +68,6 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setRecording(newRecording);
       setIsRecording(true);
     } catch (err) {
-      console.error('Failed to start recording:', err);
       setError(err instanceof Error ? err.message : 'Failed to start recording');
     }
   }, []);
@@ -95,7 +94,6 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
         setError('Failed to save recording');
       }
     } catch (err) {
-      console.error('Failed to stop recording:', err);
       setError(err instanceof Error ? err.message : 'Failed to stop recording');
     }
   }, [recording]);
@@ -120,16 +118,12 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       const result = await detectToiletFlush(base64Audio, threshold);
       setDetectionResult(result);
     } catch (err) {
-      console.error('Detection failed:', err);
-      console.error('Error details:', JSON.stringify(err, null, 2));
-      
       // Check if it's a rate limit error
       if (err && typeof err === 'object' && 'error' in err && err.error === 'rate_limit') {
         setRateLimitError(err as RateLimitError);
         setError('Daily detection limit reached');
       } else {
         const errorMessage = err instanceof Error ? err.message : 'Detection failed: Unknown error';
-        console.error('Setting error message:', errorMessage);
         setError(errorMessage);
       }
     } finally {

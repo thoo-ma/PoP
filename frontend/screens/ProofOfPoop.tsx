@@ -1,19 +1,16 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Card, DifficultySelector } from '../components';
+import { Card, DifficultySelector, NavigationHint } from '../components';
 import { colors } from '../constants';
-import { useImmobilityChallenge, useToiletDetection } from '../hooks';
-import type { DifficultyMode } from '../types';
-import { formatTime } from '../utils';
+import { useImmobilityChallenge, useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../hooks';
+import type { ChallengePhase, TimelapseOption } from '../types';
+import { formatTime, getThresholdForDifficulty, formatConfidencePercentage } from '../utils';
 import { styles } from '../styles/ProofOfPoop.styles';
-
-type ChallengePhase = 'setup' | 'immobility' | 'prompt' | 'recording' | 'results';
-type TimelapseOption = 5000 | 10000 | 15000;
 
 export default function ProofOfPoop() {
   const [phase, setPhase] = useState<ChallengePhase>('setup');
-  const [poopDifficulty, setPoopDifficulty] = useState<DifficultyMode>('normal');
-  const [immobilityDifficulty, setImmobilityDifficulty] = useState<DifficultyMode>('normal');
+  const { mode: poopDifficulty, cycleMode: cyclePoopMode } = useDifficultyCycle('normal');
+  const { mode: immobilityDifficulty, cycleMode: cycleImmobilityMode } = useDifficultyCycle('normal');
   const [timelapseOption, setTimelapseOption] = useState<TimelapseOption>(10000);
   const [immobilityAchieved, setImmobilityAchieved] = useState<boolean>(false);
   const [finalImmobilityTime, setFinalImmobilityTime] = useState<number>(0);
@@ -35,42 +32,15 @@ export default function ProofOfPoop() {
     clearResult,
   } = useToiletDetection();
 
-  // Map difficulty mode to threshold for poop detection
-  const getThreshold = (): number => {
-    switch (poopDifficulty) {
-      case 'easy':
-        return 0.3;
-      case 'normal':
-        return 0.5;
-      case 'strict':
-        return 0.7;
-    }
+  // Cycle through difficulty modes only in setup phase
+  const handleCyclePoopDifficulty = () => {
+    if (phase !== 'setup') return;
+    cyclePoopMode();
   };
 
-  // Cycle through difficulty modes for poop
-  const cyclePoopDifficulty = () => {
+  const handleCycleImmobilityDifficulty = () => {
     if (phase !== 'setup') return;
-    
-    if (poopDifficulty === 'easy') {
-      setPoopDifficulty('normal');
-    } else if (poopDifficulty === 'normal') {
-      setPoopDifficulty('strict');
-    } else {
-      setPoopDifficulty('easy');
-    }
-  };
-
-  // Cycle through difficulty modes for immobility
-  const cycleImmobilityDifficulty = () => {
-    if (phase !== 'setup') return;
-    
-    if (immobilityDifficulty === 'easy') {
-      setImmobilityDifficulty('normal');
-    } else if (immobilityDifficulty === 'normal') {
-      setImmobilityDifficulty('strict');
-    } else {
-      setImmobilityDifficulty('easy');
-    }
+    cycleImmobilityMode();
   };
 
   // Monitor immobility phase
@@ -132,7 +102,7 @@ export default function ProofOfPoop() {
 
   // Handle analyze button
   const handleAnalyzePress = () => {
-    const threshold = getThreshold();
+    const threshold = getThresholdForDifficulty(poopDifficulty);
     analyzeAudio(threshold);
   };
 
@@ -210,7 +180,7 @@ export default function ProofOfPoop() {
         <Text style={styles.sectionTitle}>Immobility Difficulty</Text>
         <DifficultySelector 
           mode={immobilityDifficulty} 
-          onModeChange={cycleImmobilityDifficulty}
+          onModeChange={handleCycleImmobilityDifficulty}
           disabled={false}
         />
       </View>
@@ -219,7 +189,7 @@ export default function ProofOfPoop() {
         <Text style={styles.sectionTitle}>Detection Difficulty</Text>
         <DifficultySelector 
           mode={poopDifficulty} 
-          onModeChange={cyclePoopDifficulty}
+          onModeChange={handleCyclePoopDifficulty}
           disabled={false}
         />
       </View>
@@ -297,8 +267,12 @@ export default function ProofOfPoop() {
   );
 
   const renderRecordingPhase = () => {
-    const canRecord = !isAnalyzing && !detectionResult;
-    const canAnalyze = audioUri && !isRecording && !isAnalyzing && !detectionResult;
+    const { canRecord, canAnalyze } = useRecordingButtonState(
+      isRecording,
+      isAnalyzing,
+      audioUri,
+      detectionResult
+    );
 
     return (
       <>
@@ -429,7 +403,7 @@ export default function ProofOfPoop() {
             />
             <Card
               title="Confidence"
-              value={`${Math.round(detectionResult.confidence * 100)}%`}
+              value={formatConfidencePercentage(detectionResult.confidence)}
               titleColor={colors.poopCard}
               valueColor={colors.poopValue}
               style={styles.card}
@@ -469,7 +443,7 @@ export default function ProofOfPoop() {
       {phase === 'recording' && renderRecordingPhase()}
       {phase === 'results' && renderResultsPhase()}
       
-      <Text style={styles.hint}>← Swipe to navigate →</Text>
+      <NavigationHint text="← Swipe to navigate →" />
     </View>
   );
 }

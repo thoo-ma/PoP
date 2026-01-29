@@ -1,8 +1,9 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
-import { Card } from '../components';
+import { Card, NavigationHint } from '../components';
 import { colors } from '../constants';
 import { fetchDetectionHistory } from '../lib';
+import { formatConfidencePercentage } from '../utils';
 import type { DetectionRecord } from '../types/audio';
 import { styles } from '../styles/DetectionHistory.styles';
 
@@ -76,7 +77,7 @@ export default function DetectionHistory() {
         <View>
           <Text style={styles.detectionLabel}>Confidence</Text>
           <Text style={styles.detectionValue}>
-            {Math.round(item.confidence * 100)}%
+            {formatConfidencePercentage(item.confidence)}
           </Text>
         </View>
         
@@ -160,7 +161,7 @@ export default function DetectionHistory() {
         )}
       </View>
       
-      <Text style={styles.hint}>← Swipe to go back</Text>
+      <NavigationHint text="← Swipe to go back" />
     </View>
   );
 }
