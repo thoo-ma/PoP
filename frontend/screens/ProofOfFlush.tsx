@@ -91,7 +91,7 @@ export default function ProofOfFlush() {
       )}
 
       {/* Detection Result Card */}
-      {hasResult && (
+      {detectionResult && (
         <>
           <Card
             title="Detection"
