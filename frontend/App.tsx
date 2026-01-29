@@ -3,9 +3,9 @@ import {
   View, 
   ActivityIndicator, 
   FlatList, 
-  ViewToken,
-  SafeAreaView
+  ViewToken
 } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback } from 'react';
 import { useAuth } from './hooks';
 import { Auth, PageIndicator } from './components';
@@ -33,34 +33,42 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#000" />
-      </View>
+      <SafeAreaProvider>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#000" />
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   if (!session) {
-    return <Auth />;
+    return (
+      <SafeAreaProvider>
+        <Auth />
+      </SafeAreaProvider>
+    );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={PAGES}
-        renderItem={renderPage}
-        keyExtractor={(item) => item.id}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={VIEWABILITY_CONFIG}
-        bounces={false}
-        style={styles.flatList}
-      />
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={PAGES}
+          renderItem={renderPage}
+          keyExtractor={(item) => item.id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={VIEWABILITY_CONFIG}
+          bounces={false}
+          style={styles.flatList}
+        />
 
-      <PageIndicator totalPages={PAGES.length} currentPage={currentPage} />
-      
-      <StatusBar style="auto" />
-    </SafeAreaView>
+        <PageIndicator totalPages={PAGES.length} currentPage={currentPage} />
+        
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
