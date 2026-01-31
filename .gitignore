@@ -59,8 +59,13 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-**/test_audio/*
-!**/test_audio/.gitkeep
-
 # Supabase local development files
 **/.temp/
+
+*.mp3
+*.mp4
+*.m4a
+*.wav
+*.flac
+
+todo

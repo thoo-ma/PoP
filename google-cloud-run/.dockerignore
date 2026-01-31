@@ -1,8 +1,13 @@
-venv/
-test_audio/
-test_*.py
+# Local testing files (not needed in production)
+tests/
+
+# Python cache
 *.pyc
 __pycache__/
+
+# Git files
 .git/
 .gitignore
+
+# Documentation
 README.md

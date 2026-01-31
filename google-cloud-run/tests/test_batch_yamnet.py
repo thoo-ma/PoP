@@ -72,19 +72,19 @@ def detect_toilet_flush(audio_file, threshold=0.5):
         }
 
 # Directory containing test audio files
-TEST_DIR = 'test_audio'
+test_audio_dir = 'assets'  # In same directory as this script
 
 # Find all audio files
 audio_extensions = ['.wav', '.mp3', '.mp4', '.m4a', '.flac', '.ogg']
 test_files = []
 
-if os.path.exists(TEST_DIR):
+if os.path.exists(test_audio_dir):
     for ext in audio_extensions:
-        test_files.extend(Path(TEST_DIR).glob(f'*{ext}'))
+        test_files.extend(Path(test_audio_dir).glob(f'*{ext}'))
 else:
-    print(f"⚠️  Test directory '{TEST_DIR}' not found!")
+    print(f"⚠️  Test directory '{test_audio_dir}' not found!")
     print(f"Creating directory and looking for audio files in current directory instead...")
-    os.makedirs(TEST_DIR, exist_ok=True)
+    os.makedirs(test_audio_dir, exist_ok=True)
     for ext in audio_extensions:
         test_files.extend(Path('.').glob(f'*{ext}'))
 
@@ -92,7 +92,7 @@ test_files = sorted([str(f) for f in test_files])
 
 if not test_files:
     print(f"❌ No audio files found!")
-    print(f"Please add audio files to '{TEST_DIR}' directory or current directory")
+    print(f"Please add audio files to '{test_audio_dir}' directory or current directory")
     exit(1)
 
 print(f"\nFound {len(test_files)} audio files to test")

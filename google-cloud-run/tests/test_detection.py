@@ -19,15 +19,18 @@ def class_names_from_csv(class_map_csv_text):
 class_map_path = model.class_map_path().numpy()
 class_names = class_names_from_csv(tf.io.read_file(class_map_path).numpy().decode('utf-8'))
 
-# Find audio files in test_audio folder
-test_audio_dir = 'test_audio'
+# Find audio files in assets folder (same directory as this script)
+test_audio_dir = 'assets'
 audio_files = glob.glob(os.path.join(test_audio_dir, '*.wav')) + \
               glob.glob(os.path.join(test_audio_dir, '*.mp3')) + \
-              glob.glob(os.path.join(test_audio_dir, '*.m4a'))
+              glob.glob(os.path.join(test_audio_dir, '*.m4a')) + \
+              glob.glob(os.path.join(test_audio_dir, '*.mp4')) + \
+              glob.glob(os.path.join(test_audio_dir, '*.flac')) + \
+              glob.glob(os.path.join(test_audio_dir, '*.ogg'))
 
 if not audio_files:
     print(f"No audio files found in {test_audio_dir}/")
-    print("Please add a .wav, .mp3, or .m4a file to the test_audio/ folder")
+    print("Please add audio files (.wav, .mp3, .m4a, .mp4, .flac, .ogg) to the assets/ folder")
     exit(1)
 
 audio_file = audio_files[0]
