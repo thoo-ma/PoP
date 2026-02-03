@@ -62,7 +62,7 @@ export default function Auth() {
           <View style={styles.warningBanner}>
             <Text style={styles.warningText}>⚠️ Expo Go detected</Text>
             <Text style={styles.warningSubtext}>
-              OAuth won't work. Use a dev build or web for authentication.
+              OAuth and activation codes are disabled. Use a dev build or web for full authentication.
             </Text>
           </View>
           

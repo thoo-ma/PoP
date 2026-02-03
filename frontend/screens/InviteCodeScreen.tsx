@@ -1,0 +1,173 @@
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import { supabase } from '../lib/supabase';
+import { inviteCodeScreenStyles as styles } from '../styles';
+import { showSignOutConfirmation } from '../utils';
+import type { ApprovalResult } from '../types/auth';
+
+interface InviteCodeScreenProps {
+  onApprovalSuccess: () => void;
+  onSignOut: () => void;
+}
+
+export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<TextInput>(null);
+
+  // Auto-focus input on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Validate code format (8 alphanumeric characters)
+  const isValidFormat = (text: string): boolean => {
+    return /^[A-Z0-9]{8}$/.test(text);
+  };
+
+  const handleCodeChange = (text: string) => {
+    // Convert to uppercase and filter non-alphanumeric
+    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    setCode(cleaned.slice(0, 8)); // Limit to 8 characters
+    setError(null); // Clear error when user types
+  };
+
+  const handleSubmit = async () => {
+    // Validate format before submitting
+    if (!isValidFormat(code)) {
+      setError('Code must be 8 alphanumeric characters');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Call validate_and_approve_user function
+      const { data, error: rpcError } = await supabase.rpc('validate_and_approve_user', {
+        p_code: code,
+      });
+
+      if (rpcError) {
+        console.error('RPC error:', rpcError);
+        setError('Failed to validate code. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      const result = data as ApprovalResult;
+
+      if (result.success) {
+        // Clear the code input and show success state
+        setCode('');
+        setError(null);
+        
+        // Success! Notify parent to refresh approval status
+        onApprovalSuccess();
+      } else {
+        // Show specific error message from backend
+        setError(result.error || 'Invalid invite code');
+      }
+    } catch (err) {
+      console.error('Error submitting code:', err);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = () => {
+    showSignOutConfirmation(onSignOut);
+  };
+
+  const canSubmit = code.length === 8 && !loading;
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Welcome! 🎉</Text>
+        <Text style={styles.subtitle}>
+          Enter your invite code to access the app
+        </Text>
+
+        <TextInput
+          ref={inputRef}
+          style={[
+            styles.input,
+            isFocused && styles.inputFocused,
+            error && styles.inputError,
+          ]}
+          value={code}
+          onChangeText={handleCodeChange}
+          placeholder="ABC12XYZ"
+          placeholderTextColor="#9CA3AF"
+          maxLength={8}
+          autoCapitalize="characters"
+          autoCorrect={false}
+          autoComplete="off"
+          keyboardType="ascii-capable"
+          returnKeyType="done"
+          onSubmitEditing={handleSubmit}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          editable={!loading}
+        />
+        
+        <Text style={styles.helperText}>
+          8 alphanumeric characters
+        </Text>
+
+        {error && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
+
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3B82F6" />
+          </View>
+        )}
+
+        <TouchableOpacity
+          style={[
+            styles.submitButton,
+            !canSubmit && styles.submitButtonDisabled,
+          ]}
+          onPress={handleSubmit}
+          disabled={!canSubmit}
+        >
+          <Text style={styles.submitButtonText}>
+            {loading ? 'Validating...' : 'Submit'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={handleSignOut}
+          disabled={loading}
+        >
+          <Text style={styles.signOutButtonText}>
+            Sign Out
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+}
