@@ -10,3 +10,4 @@ export { styles as pageIndicatorStyles } from './PageIndicator.styles';
 export { styles as difficultySelectorStyles } from './DifficultySelector.styles';
 export { styles as cardStyles } from './Card.styles';
 export { styles as vaultStyles } from './Vault.styles';
+export { styles as breedStyles } from './Breed.styles';

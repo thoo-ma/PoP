@@ -11,6 +11,7 @@ const PAGE_ICONS = [
   'park',              // Proof of Poop
   'history',           // Detection History
   'account-balance-wallet', // Vault
+  'sync',              // Breed
 ] as const;
 
 export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
