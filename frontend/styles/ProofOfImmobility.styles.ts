@@ -4,21 +4,21 @@ import { colors, typography, layout } from '../constants';
 export const styles = StyleSheet.create({
   container: {
     ...layout.container,
-    backgroundColor: colors.immobilityBackground,
+    backgroundColor: colors.background,
   },
   title: {
     ...typography.title,
-    color: colors.immobilityTitle,
+    color: colors.title,
   },
   description: {
     ...typography.description,
-    color: colors.immobilityText,
+    color: colors.text,
   },
   card: {
     marginBottom: 24,
   },
   button: {
-    backgroundColor: colors.immobilityCard,
+    backgroundColor: colors.card,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -37,6 +37,6 @@ export const styles = StyleSheet.create({
   },
   hint: {
     ...typography.hint,
-    color: colors.immobilityHint,
+    color: colors.hint,
   },
 });

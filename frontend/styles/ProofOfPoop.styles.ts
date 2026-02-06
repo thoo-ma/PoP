@@ -4,15 +4,15 @@ import { colors, typography, layout } from '../constants';
 export const styles = StyleSheet.create({
   container: {
     ...layout.container,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.background,
   },
   title: {
     ...typography.title,
-    color: '#fbbf24',
+    color: colors.title,
   },
   description: {
     ...typography.description,
-    color: '#e5e7eb',
+    color: colors.text,
   },
   sectionContainer: {
     marginBottom: 24,
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#e5e7eb',
+    color: colors.text,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -34,23 +34,23 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    backgroundColor: '#374151',
+    backgroundColor: '#e5e7eb',
     borderWidth: 2,
-    borderColor: '#4b5563',
+    borderColor: '#d1d5db',
     minWidth: 60,
     alignItems: 'center',
   },
   timelapseButtonActive: {
-    backgroundColor: '#fbbf24',
-    borderColor: '#fbbf24',
+    backgroundColor: colors.card,
+    borderColor: colors.card,
   },
   timelapseText: {
-    color: '#e5e7eb',
+    color: colors.text,
     fontSize: 16,
     fontWeight: '600',
   },
   timelapseTextActive: {
-    color: '#1a1a2e',
+    color: '#fff',
   },
   card: {
     marginBottom: 16,
@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#fbbf24',
+    backgroundColor: colors.card,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
     opacity: 0.6,
   },
   buttonText: {
-    color: '#1a1a2e',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     letterSpacing: 0.5,
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
   },
   hint: {
     ...typography.hint,
-    color: '#9ca3af',
+    color: colors.hint,
     marginTop: 24,
   },
 });

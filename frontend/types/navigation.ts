@@ -14,6 +14,7 @@ export interface PageConfig {
 export interface PageIndicatorProps {
   totalPages: number;
   currentPage: number;
+  onPageChange?: (pageIndex: number) => void;
 }
 
 /**

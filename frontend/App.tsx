@@ -6,7 +6,7 @@ import {
   ViewToken
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from './hooks';
 import { Auth, PageIndicator } from './components';
 import { InviteCodeScreen } from './screens';
@@ -18,6 +18,7 @@ export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();
   const { approved, loading: approvalLoading, refetch } = useUserApproval();
   const [currentPage, setCurrentPage] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
 
   const handleApprovalSuccess = useCallback(async () => {
     // After successful code submission, refetch approval status
@@ -27,6 +28,10 @@ export default function App() {
   const handleSignOut = useCallback(async () => {
     await signOut();
   }, [signOut]);
+
+  const scrollToPage = useCallback((pageIndex: number) => {
+    flatListRef.current?.scrollToIndex({ index: pageIndex, animated: true });
+  }, []);
 
   const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems.length > 0) {
@@ -81,6 +86,7 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <FlatList
+          ref={flatListRef}
           data={PAGES}
           renderItem={renderPage}
           keyExtractor={(item) => item.id}
@@ -93,7 +99,11 @@ export default function App() {
           style={styles.flatList}
         />
 
-        <PageIndicator totalPages={PAGES.length} currentPage={currentPage} />
+        <PageIndicator 
+          totalPages={PAGES.length} 
+          currentPage={currentPage} 
+          onPageChange={scrollToPage}
+        />
         
         <StatusBar style="auto" />
       </SafeAreaView>

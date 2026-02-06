@@ -4,15 +4,15 @@ import { colors, typography, layout } from '../constants';
 export const styles = StyleSheet.create({
   container: {
     ...layout.container,
-    backgroundColor: colors.historyBackground,
+    backgroundColor: colors.background,
   },
   title: {
     ...typography.title,
-    color: colors.historyTitle,
+    color: colors.title,
   },
   description: {
     ...typography.description,
-    color: colors.historyText,
+    color: colors.text,
   },
   summaryCard: {
     marginBottom: 24,
@@ -81,13 +81,13 @@ export const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: colors.historyText,
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: colors.historyHint,
+    color: colors.hint,
     textAlign: 'center',
   },
   loadingContainer: {
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
   },
   hint: {
     ...typography.hint,
-    color: colors.historyHint,
+    color: colors.hint,
     position: 'absolute',
     bottom: 40,
   },

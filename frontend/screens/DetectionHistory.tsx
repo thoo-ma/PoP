@@ -107,7 +107,7 @@ export default function DetectionHistory() {
       <View style={styles.container}>
         <Text style={styles.title}>Detection History</Text>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.historyTitle} />
+          <ActivityIndicator size="large" color={colors.title} />
         </View>
       </View>
     );
@@ -125,8 +125,8 @@ export default function DetectionHistory() {
         <Card
           title="Total Detections"
           value={`${successfulDetections}/${totalDetections} (${successRate}%)`}
-          titleColor={colors.historyCard}
-          valueColor={colors.historyValue}
+          titleColor={colors.card}
+          valueColor={colors.value}
           style={styles.summaryCard}
         />
       )}
@@ -154,7 +154,7 @@ export default function DetectionHistory() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                tintColor={colors.historyTitle}
+                tintColor={colors.title}
               />
             }
           />

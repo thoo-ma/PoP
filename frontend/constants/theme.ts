@@ -1,43 +1,15 @@
 export const colors = {
+  // Common
+  background: '#fff',
+  title: '#374151',
+  text: '#6b7280',
+  card: '#64748b',
+  value: '#374151',
+  hint: '#999',
+  
   // Home
-  homeBackground: '#fff',
   homeText: '#666',
   homeButton: '#000',
-  
-  // Proof of Immobility
-  immobilityBackground: '#f0f8ff',
-  immobilityTitle: '#1e3a8a',
-  immobilityText: '#475569',
-  immobilityCard: '#64748b',
-  immobilityValue: '#1e3a8a',
-  immobilityHint: '#94a3b8',
-  
-  // Proof of Time
-  timeBackground: '#fef3c7',
-  timeTitle: '#92400e',
-  timeText: '#78350f',
-  timeCard: '#a16207',
-  timeValue: '#92400e',
-  timeHint: '#a16207',
-  
-  // Proof of Poop
-  poopBackground: '#fef5ed',
-  poopTitle: '#8B4513',
-  poopText: '#6b4423',
-  poopCard: '#a0826d',
-  poopValue: '#8B4513',
-  poopHint: '#c9a88a',
-  
-  // Detection History
-  historyBackground: '#f5f5f5',
-  historyTitle: '#374151',
-  historyText: '#6b7280',
-  historyCard: '#9ca3af',
-  historyValue: '#374151',
-  historyHint: '#9ca3af',
-  
-  // Common
-  hint: '#999',
 };
 
 export const typography = {

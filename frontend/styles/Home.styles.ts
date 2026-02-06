@@ -4,7 +4,7 @@ import { colors, typography, layout } from '../constants';
 export const styles = StyleSheet.create({
   container: {
     ...layout.container,
-    backgroundColor: colors.homeBackground,
+    backgroundColor: colors.background,
   },
   title: typography.title,
   email: {

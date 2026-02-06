@@ -4,15 +4,15 @@ import { colors, typography, layout } from '../constants';
 export const styles = StyleSheet.create({
   container: {
     ...layout.container,
-    backgroundColor: colors.poopBackground,
+    backgroundColor: colors.background,
   },
   title: {
     ...typography.title,
-    color: colors.poopTitle,
+    color: colors.title,
   },
   description: {
     ...typography.description,
-    color: colors.poopText,
+    color: colors.text,
   },
   modeContainer: {
     marginBottom: 24,
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   modeLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.poopText,
+    color: colors.text,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: colors.poopCard,
+    backgroundColor: colors.card,
     minWidth: 120,
     alignItems: 'center',
   },
@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: colors.poopCard,
+    backgroundColor: colors.card,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#dc2626',
   },
   buttonAnalyze: {
-    backgroundColor: colors.poopTitle,
+    backgroundColor: colors.title,
   },
   buttonDisabled: {
     backgroundColor: '#d1d5db',
@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
   },
   hint: {
     ...typography.hint,
-    color: colors.poopHint,
+    color: colors.hint,
     marginTop: 24,
   },
 });

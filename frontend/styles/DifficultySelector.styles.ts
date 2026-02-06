@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   modeLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.immobilityText,
+    color: colors.text,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: colors.immobilityCard,
+    backgroundColor: colors.card,
     minWidth: 120,
     alignItems: 'center',
   },
