@@ -41,8 +41,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timelapseButtonActive: {
-    backgroundColor: colors.card,
-    borderColor: colors.card,
+    backgroundColor: colors.button,
+    borderColor: colors.button,
   },
   timelapseText: {
     color: colors.text,
@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: colors.card,
+    backgroundColor: colors.button,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,

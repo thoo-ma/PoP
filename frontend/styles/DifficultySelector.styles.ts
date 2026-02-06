@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: colors.card,
+    backgroundColor: colors.button,
     minWidth: 120,
     alignItems: 'center',
   },

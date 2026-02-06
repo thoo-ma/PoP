@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: colors.card,
+    backgroundColor: colors.button,
     minWidth: 120,
     alignItems: 'center',
   },
@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: colors.card,
+    backgroundColor: colors.button,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,

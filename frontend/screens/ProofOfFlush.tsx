@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Card, DifficultySelector, NavigationHint } from '../components';
+import { Card, DifficultySelector } from '../components';
 import { colors } from '../constants';
 import { useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../hooks';
 import { getThresholdForDifficulty, formatConfidencePercentage } from '../utils';
@@ -56,7 +56,7 @@ export default function ProofOfFlush() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Proof of Flush 🚽</Text>
+      <Text style={styles.title}>Proof of Flush</Text>
       <Text style={styles.description}>
         Record toilet flush sound{'\n'}
         for verification
@@ -73,7 +73,7 @@ export default function ProofOfFlush() {
         <Card
           title="Status"
           value="🎤 Recording..."
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor="#dc2626"
           style={styles.card}
         />
@@ -84,7 +84,7 @@ export default function ProofOfFlush() {
         <Card
           title="Status"
           value="🔍 Analyzing..."
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={colors.value}
           style={styles.card}
         />
@@ -96,21 +96,21 @@ export default function ProofOfFlush() {
           <Card
             title="Detection"
             value={detectionResult.detected ? '✅ Toilet Flush Detected!' : '❌ Not Detected'}
-            titleColor={colors.card}
+            titleColor={colors.button}
             valueColor={detectionResult.detected ? '#4ade80' : '#dc2626'}
             style={styles.card}
           />
           <Card
             title="Confidence"
             value={formatConfidencePercentage(detectionResult.confidence)}
-            titleColor={colors.card}
+            titleColor={colors.button}
             valueColor={colors.value}
             style={styles.card}
           />
           <Card
             title="Duration"
             value={`${detectionResult.duration_seconds.toFixed(1)}s`}
-            titleColor={colors.card}
+            titleColor={colors.button}
             valueColor={colors.value}
             style={styles.card}
           />
@@ -173,8 +173,7 @@ export default function ProofOfFlush() {
           </TouchableOpacity>
         )}
       </View>
-      
-      <Text style={styles.hint}>← Swipe to navigate →</Text>
+
     </View>
   );
 }

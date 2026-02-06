@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import { Card, DifficultySelector, NavigationHint } from '../components';
+import { Card, DifficultySelector } from '../components';
 import { colors } from '../constants';
 import { useImmobilityChallenge, useDifficultyCycle } from '../hooks';
 import { formatTime, getStatusDisplay } from '../utils';
@@ -34,7 +34,7 @@ export default function ProofOfImmobility() {
       <Card
         title="Status"
         value={statusDisplay.text}
-        titleColor={colors.card}
+        titleColor={colors.button}
         valueColor={statusDisplay.color}
         style={styles.card}
       />
@@ -42,7 +42,7 @@ export default function ProofOfImmobility() {
       <Card
         title="Current Time"
         value={formatTime(elapsedTime)}
-        titleColor={colors.card}
+        titleColor={colors.button}
         valueColor={colors.value}
         style={styles.card}
       />
@@ -55,8 +55,7 @@ export default function ProofOfImmobility() {
           {isRunning ? 'STOP CHALLENGE' : 'START CHALLENGE'}
         </Text>
       </TouchableOpacity>
-      
-      <NavigationHint text="← Swipe to navigate →" />
+
     </View>
   );
 }

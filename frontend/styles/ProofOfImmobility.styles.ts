@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: colors.card,
+    backgroundColor: colors.button,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 12,

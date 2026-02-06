@@ -3,13 +3,12 @@ export const colors = {
   background: '#fff',
   title: '#374151',
   text: '#6b7280',
-  card: '#64748b',
+  button: '#000',
   value: '#374151',
   hint: '#999',
   
   // Home
   homeText: '#666',
-  homeButton: '#000',
 };
 
 export const typography = {

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    backgroundColor: colors.homeButton,
+    backgroundColor: colors.button,
     paddingHorizontal: 32,
     paddingVertical: 16,
     borderRadius: 8,

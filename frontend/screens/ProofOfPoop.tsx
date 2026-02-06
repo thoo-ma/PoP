@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Card, DifficultySelector, NavigationHint } from '../components';
+import { Card, DifficultySelector } from '../components';
 import { colors } from '../constants';
 import { useImmobilityChallenge, useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../hooks';
 import type { ChallengePhase, TimelapseOption } from '../types';
@@ -122,7 +122,7 @@ export default function ProofOfPoop() {
   // Render based on phase
   const renderSetupPhase = () => (
     <>
-      <Text style={styles.title}>Proof of Poop 💩</Text>
+      <Text style={styles.title}>Proof of Poop</Text>
       <Text style={styles.description}>
         Stay immobile, then prove your poop{'\n'}
         The ultimate challenge awaits
@@ -218,7 +218,7 @@ export default function ProofOfPoop() {
         <Card
           title="Status"
           value={statusText}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={statusColor}
           style={styles.card}
         />
@@ -226,7 +226,7 @@ export default function ProofOfPoop() {
         <Card
           title="Time Remaining"
           value={formatTime(remainingTime)}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={colors.value}
           style={styles.card}
         />
@@ -252,7 +252,7 @@ export default function ProofOfPoop() {
       <Card
         title="Immobility Duration"
         value={formatTime(finalImmobilityTime)}
-        titleColor={colors.card}
+        titleColor={colors.button}
         valueColor="#4ade80"
         style={styles.card}
       />
@@ -286,7 +286,7 @@ export default function ProofOfPoop() {
           <Card
             title="Status"
             value="🎤 Recording..."
-            titleColor={colors.card}
+            titleColor={colors.button}
             valueColor="#dc2626"
             style={styles.card}
           />
@@ -296,7 +296,7 @@ export default function ProofOfPoop() {
           <Card
             title="Status"
             value="🔍 Analyzing..."
-            titleColor={colors.card}
+            titleColor={colors.button}
             valueColor={colors.value}
             style={styles.card}
           />
@@ -371,7 +371,7 @@ export default function ProofOfPoop() {
         <Card
           title="Overall Result"
           value={overallSuccess ? '✅ SUCCESS' : '❌ FAILED'}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={overallSuccess ? '#4ade80' : '#dc2626'}
           style={styles.card}
         />
@@ -379,7 +379,7 @@ export default function ProofOfPoop() {
         <Card
           title="Immobility Result"
           value={immobilityAchieved ? '✓ Completed' : '✗ Failed'}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={immobilityAchieved ? '#4ade80' : '#dc2626'}
           style={styles.card}
         />
@@ -387,7 +387,7 @@ export default function ProofOfPoop() {
         <Card
           title="Immobility Duration"
           value={formatTime(finalImmobilityTime)}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={colors.value}
           style={styles.card}
         />
@@ -397,21 +397,21 @@ export default function ProofOfPoop() {
             <Card
               title="Detection Result"
               value={detectionResult.detected ? '✓ Flush Detected' : '✗ Not Detected'}
-              titleColor={colors.card}
+              titleColor={colors.button}
               valueColor={detectionResult.detected ? '#4ade80' : '#dc2626'}
               style={styles.card}
             />
             <Card
               title="Confidence"
               value={formatConfidencePercentage(detectionResult.confidence)}
-              titleColor={colors.card}
+              titleColor={colors.button}
               valueColor={colors.value}
               style={styles.card}
             />
             <Card
               title="Recording Duration"
               value={`${detectionResult.duration_seconds.toFixed(1)}s`}
-              titleColor={colors.card}
+              titleColor={colors.button}
               valueColor={colors.value}
               style={styles.card}
             />
@@ -442,8 +442,6 @@ export default function ProofOfPoop() {
       {phase === 'prompt' && renderPromptPhase()}
       {phase === 'recording' && renderRecordingPhase()}
       {phase === 'results' && renderResultsPhase()}
-      
-      <NavigationHint text="← Swipe to navigate →" />
     </View>
   );
 }

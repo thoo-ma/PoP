@@ -1,6 +1,6 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
-import { Card, NavigationHint } from '../components';
+import { Card } from '../components';
 import { colors } from '../constants';
 import { fetchDetectionHistory } from '../lib';
 import { formatConfidencePercentage } from '../utils';
@@ -125,7 +125,7 @@ export default function DetectionHistory() {
         <Card
           title="Total Detections"
           value={`${successfulDetections}/${totalDetections} (${successRate}%)`}
-          titleColor={colors.card}
+          titleColor={colors.button}
           valueColor={colors.value}
           style={styles.summaryCard}
         />
@@ -160,8 +160,6 @@ export default function DetectionHistory() {
           />
         )}
       </View>
-      
-      <NavigationHint text="← Swipe to go back" />
     </View>
   );
 }
