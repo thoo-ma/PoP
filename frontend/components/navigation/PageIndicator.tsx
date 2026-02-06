@@ -1,38 +1,60 @@
 import { View, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 import type { PageIndicatorProps } from '../../types';
 import { styles } from '../../styles/PageIndicator.styles';
+import MoreMenu from './MoreMenu';
 
-// Define icons for each page
-const PAGE_ICONS = [
-  'home',              // Home
-  'event-seat',        // Proof of Immobility
-  'water-drop',        // Proof of Flush
-  'park',              // Proof of Poop
-  'history',           // Detection History
-  'account-balance-wallet', // Vault
-  'sync',              // Breed
+// Define icons for primary pages only
+const PRIMARY_PAGE_ICONS = [
+  { index: 0, icon: 'home' },              // Home
+  { index: 1, icon: 'account-balance-wallet' }, // Vault
+  { index: 2, icon: 'sync' },              // Breed
 ] as const;
 
 export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
+  const [moreMenuVisible, setMoreMenuVisible] = useState(false);
+
   return (
-    <View style={styles.pagination}>
-      <View style={styles.floatingMenu}>
-        {Array.from({ length: totalPages }).map((_, index) => (
+    <>
+      <View style={styles.pagination}>
+        <View style={styles.floatingMenu}>
+          {PRIMARY_PAGE_ICONS.map(({ index, icon }) => (
+            <TouchableOpacity 
+              key={index} 
+              style={styles.iconWrapper}
+              onPress={() => onPageChange?.(index)}
+              activeOpacity={0.6}
+            >
+              <MaterialIcons
+                name={icon}
+                size={24}
+                color={currentPage === index ? '#000' : '#d1d5db'}
+              />
+            </TouchableOpacity>
+          ))}
+          
+          {/* More button */}
           <TouchableOpacity 
-            key={index} 
             style={styles.iconWrapper}
-            onPress={() => onPageChange?.(index)}
+            onPress={() => setMoreMenuVisible(true)}
             activeOpacity={0.6}
           >
             <MaterialIcons
-              name={PAGE_ICONS[index]}
+              name="more-horiz"
               size={24}
-              color={currentPage === index ? '#000' : '#d1d5db'}
+              color={[3, 4, 5, 6].includes(currentPage) ? '#000' : '#d1d5db'}
             />
           </TouchableOpacity>
-        ))}
+        </View>
       </View>
-    </View>
+
+      <MoreMenu
+        visible={moreMenuVisible}
+        onClose={() => setMoreMenuVisible(false)}
+        onSelectPage={onPageChange || (() => {})}
+        currentPage={currentPage}
+      />
+    </>
   );
 }

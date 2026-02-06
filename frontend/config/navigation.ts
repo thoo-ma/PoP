@@ -3,15 +3,17 @@ import type { PageConfig } from '../types';
 
 /**
  * Configuration for app pages/screens
+ * Primary pages (swipeable): Home, Vault, Breed
+ * Secondary pages (More menu only): Proofs and History
  */
 export const PAGES: PageConfig[] = [
-  { id: '1', component: Home },
-  { id: '2', component: ProofOfImmobility },
-  { id: '3', component: ProofOfFlush },
-  { id: '4', component: ProofOfPoop },
-  { id: '5', component: DetectionHistory },
-  { id: '6', component: Vault },
-  { id: '7', component: Breed },
+  { id: '1', component: Home, isPrimary: true },
+  { id: '6', component: Vault, isPrimary: true },
+  { id: '7', component: Breed, isPrimary: true },
+  { id: '2', component: ProofOfImmobility, isPrimary: false },
+  { id: '3', component: ProofOfFlush, isPrimary: false },
+  { id: '4', component: ProofOfPoop, isPrimary: false },
+  { id: '5', component: DetectionHistory, isPrimary: false },
 ];
 
 /**
