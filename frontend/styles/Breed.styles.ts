@@ -21,14 +21,12 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 120,
     alignItems: 'center',
-    width: '100%',
   },
   selectionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 40,
-    width: '100%',
   },
   assetSlot: {
     width: 140,
@@ -81,7 +79,7 @@ export const styles = StyleSheet.create({
   combineIcon: {
     fontSize: 32,
     color: colors.title,
-    marginHorizontal: 16,
+    marginHorizontal: 24,
     fontWeight: '600',
   },
   breedButton: {
