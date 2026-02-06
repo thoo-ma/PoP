@@ -10,6 +10,7 @@ const PRIMARY_PAGE_ICONS = [
   { index: 0, icon: 'home' },              // Home
   { index: 1, icon: 'account-balance-wallet' }, // Vault
   { index: 2, icon: 'sync' },              // Breed
+  { index: 3, icon: 'shopping-cart' },     // Marketplace
 ] as const;
 
 export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
@@ -43,7 +44,7 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
             <MaterialIcons
               name="more-horiz"
               size={24}
-              color={[3, 4, 5, 6].includes(currentPage) ? '#000' : '#d1d5db'}
+              color={[4, 5, 6, 7].includes(currentPage) ? '#000' : '#d1d5db'}
             />
           </TouchableOpacity>
         </View>

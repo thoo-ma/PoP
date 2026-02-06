@@ -4,10 +4,10 @@ import type { MoreMenuProps } from '../../types';
 import { styles } from '../../styles/MoreMenu.styles';
 
 const MORE_PAGES = [
-  { index: 3, name: 'Proof of Immobility', icon: 'event-seat' },
-  { index: 4, name: 'Proof of Flush', icon: 'water-drop' },
-  { index: 5, name: 'Proof of Poop', icon: 'park' },
-  { index: 6, name: 'Detection History', icon: 'history' },
+  { index: 4, name: 'Proof of Immobility', icon: 'event-seat' },
+  { index: 5, name: 'Proof of Flush', icon: 'water-drop' },
+  { index: 6, name: 'Proof of Poop', icon: 'park' },
+  { index: 7, name: 'Detection History', icon: 'history' },
 ];
 
 export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }: MoreMenuProps) {
