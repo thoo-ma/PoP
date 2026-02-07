@@ -77,8 +77,14 @@ export default function Repair() {
                       { width: `${currentHealth}%` }
                     ]} 
                   />
+                  <View 
+                    style={[
+                      styles.healthBarRepair, 
+                      { width: `${Math.round(repairAmount)}%`, left: `${currentHealth}%` }
+                    ]} 
+                  />
                 </View>
-                <Text style={styles.healthText}>{currentHealth}%</Text>
+                <Text style={styles.healthText}>{currentHealth + Math.round(repairAmount)}%</Text>
               </View>
             </View>
 
@@ -101,9 +107,6 @@ export default function Repair() {
                     thumbTintColor="#000"
                     step={1}
                   />
-                  <Text style={styles.sliderHint}>
-                    New health: {currentHealth + Math.round(repairAmount)}%
-                  </Text>
                 </View>
 
                 {/* Repair Button */}
