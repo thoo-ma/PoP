@@ -45,6 +45,20 @@ export const styles = StyleSheet.create({
     paddingBottom: 120,
     width: '100%',
   },
+  infoBanner: {
+    backgroundColor: '#fef3c7',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#fbbf24',
+  },
+  infoBannerText: {
+    fontSize: 14,
+    color: '#78350f',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -109,60 +123,45 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  listingsContainer: {
-    width: '100%',
-  },
-  listingCard: {
+  healthInfo: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 8,
   },
-  listingImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-    backgroundColor: '#f3f4f6',
-  },
-  listingInfo: {
+  healthBarSmall: {
     flex: 1,
-    marginLeft: 12,
+    height: 5,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginRight: 6,
   },
-  listingName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.title,
-    marginBottom: 4,
+  healthBarFillSmall: {
+    height: '100%',
+    backgroundColor: '#10b981',
   },
-  listingPrice: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.title,
-  },
-  cancelButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-  },
-  cancelButtonText: {
-    fontSize: 12,
+  healthTextSmall: {
+    fontSize: 11,
     fontWeight: '600',
     color: colors.text,
+    width: 32,
+  },
+  unlistButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.button,
+  },
+  unlistButtonText: {
+    color: colors.button,
+    fontSize: 12,
+    fontWeight: '600',
   },
   emptyState: {
     alignItems: 'center',
     paddingVertical: 60,
+    width: '100%',
   },
   emptyText: {
     fontSize: 16,
@@ -174,5 +173,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
     textAlign: 'center',
+    marginTop: 4,
+    lineHeight: 20,
   },
 });

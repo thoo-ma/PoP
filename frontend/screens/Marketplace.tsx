@@ -1,24 +1,26 @@
-import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
 import { marketplaceStyles as styles } from '../styles';
-
-// Placeholder marketplace data
-const MARKETPLACE_ITEMS = [
-  { id: '1', name: 'NFT #101', price: '0.5 ETH', seller: 'User A' },
-  { id: '2', name: 'NFT #102', price: '1.2 ETH', seller: 'User B' },
-  { id: '3', name: 'NFT #103', price: '0.8 ETH', seller: 'User C' },
-  { id: '4', name: 'NFT #104', price: '2.0 ETH', seller: 'User D' },
-  { id: '5', name: 'NFT #105', price: '0.3 ETH', seller: 'User E' },
-  { id: '6', name: 'NFT #106', price: '1.5 ETH', seller: 'User F' },
-];
-
-const MY_LISTINGS = [
-  { id: '1', name: 'NFT #1', price: '0.9 ETH' },
-  { id: '2', name: 'NFT #2', price: '1.1 ETH' },
-];
+import { MOCK_MARKETPLACE_LISTINGS } from '../constants/mockData';
+import { useNFTStore } from '../hooks/useNFTStore';
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
+  const { nfts, unlistNFT, subscribe } = useNFTStore();
+  
+  useEffect(() => {
+    return subscribe();
+  }, []);
+
+  const myListings = nfts.filter(nft => nft.isListed);
+  
+  const handleBuyNFT = () => {
+    Alert.alert(
+      'Coming Soon',
+      'This feature is not yet available.',
+      [{ text: 'OK' }]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +36,7 @@ export default function Marketplace() {
           onPress={() => setActiveTab('buy')}
         >
           <Text style={[styles.tabText, activeTab === 'buy' && styles.tabTextActive]}>
-            Buy
+            Buy ({MOCK_MARKETPLACE_LISTINGS.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -42,7 +44,7 @@ export default function Marketplace() {
           onPress={() => setActiveTab('sell')}
         >
           <Text style={[styles.tabText, activeTab === 'sell' && styles.tabTextActive]}>
-            My Listings
+            My Listings ({myListings.length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -51,23 +53,31 @@ export default function Marketplace() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {activeTab === 'sell' && myListings.length > 0 && (
+          <View style={styles.infoBanner}>
+            <Text style={styles.infoBannerText}>
+              💡 These are your NFTs from the Vault currently listed for sale
+            </Text>
+          </View>
+        )}
+        
         {activeTab === 'buy' ? (
           <View style={styles.grid}>
-            {MARKETPLACE_ITEMS.map((item) => (
+            {MOCK_MARKETPLACE_LISTINGS.map((item) => (
               <View key={item.id} style={styles.nftCard}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: `https://via.placeholder.com/150/${Math.random() > 0.5 ? 'FF6B6B' : '4ECDC4'}` }}
+                    source={{ uri: item.image }}
                     style={styles.nftImage}
                     resizeMode="cover"
                   />
                 </View>
                 <View style={styles.cardContent}>
                   <Text style={styles.nftName}>{item.name}</Text>
-                  <Text style={styles.seller}>by {item.seller}</Text>
+                  <Text style={styles.seller}>by User {item.id}</Text>
                   <View style={styles.priceRow}>
                     <Text style={styles.price}>{item.price}</Text>
-                    <TouchableOpacity style={styles.buyButton}>
+                    <TouchableOpacity style={styles.buyButton} onPress={handleBuyNFT}>
                       <Text style={styles.buyButtonText}>Buy</Text>
                     </TouchableOpacity>
                   </View>
@@ -76,28 +86,50 @@ export default function Marketplace() {
             ))}
           </View>
         ) : (
-          <View style={styles.listingsContainer}>
-            {MY_LISTINGS.length > 0 ? (
-              MY_LISTINGS.map((item) => (
-                <View key={item.id} style={styles.listingCard}>
-                  <Image
-                    source={{ uri: 'https://via.placeholder.com/80/7B68EE' }}
-                    style={styles.listingImage}
-                    resizeMode="cover"
-                  />
-                  <View style={styles.listingInfo}>
-                    <Text style={styles.listingName}>{item.name}</Text>
-                    <Text style={styles.listingPrice}>{item.price}</Text>
+          <View style={styles.grid}>
+            {myListings.length > 0 ? (
+              myListings.map((item) => (
+                <View key={item.id} style={styles.nftCard}>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: item.image }}
+                      style={styles.nftImage}
+                      resizeMode="cover"
+                    />
                   </View>
-                  <TouchableOpacity style={styles.cancelButton}>
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
+                  <View style={styles.cardContent}>
+                    <Text style={styles.nftName}>{item.name}</Text>
+                    {item.health !== undefined && (
+                      <View style={styles.healthInfo}>
+                        <View style={styles.healthBarSmall}>
+                          <View 
+                            style={[
+                              styles.healthBarFillSmall, 
+                              { width: `${item.health}%` }
+                            ]} 
+                          />
+                        </View>
+                        <Text style={styles.healthTextSmall}>{item.health}%</Text>
+                      </View>
+                    )}
+                    <View style={styles.priceRow}>
+                      <Text style={styles.price}>{item.price}</Text>
+                      <TouchableOpacity 
+                        style={styles.unlistButton}
+                        onPress={() => unlistNFT(item.id)}
+                      >
+                        <Text style={styles.unlistButtonText}>Unlist</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
               ))
             ) : (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyText}>No active listings</Text>
-                <Text style={styles.emptySubtext}>List items from your vault to sell them</Text>
+                <Text style={styles.emptySubtext}>
+                  You haven't listed any NFTs yet.
+                </Text>
               </View>
             )}
           </View>

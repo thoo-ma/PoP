@@ -2,21 +2,28 @@ import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useState } from 'react';
 import { repairStyles as styles } from '../styles';
+import { MOCK_NFTS } from '../constants/mockData';
 
 export default function Repair() {
   const [selectedNFT, setSelectedNFT] = useState<string | null>(null);
-  const [currentHealth, setCurrentHealth] = useState(60); // Current health percentage
-  const [repairAmount, setRepairAmount] = useState(0); // How much to repair (0-40 in this case)
+  const [currentHealth, setCurrentHealth] = useState(60);
+  const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
 
   const maxHealth = 100;
   const maxRepairPossible = maxHealth - currentHealth;
 
   const handleSelectNFT = () => {
-    // Simulate NFT selection
-    setSelectedNFT('nft1');
-    setIsRepaired(false);
+    // Simulate NFT selection - use first NFT that's not at full health
+    const nftToRepair = MOCK_NFTS.find(nft => nft.health && nft.health < 100);
+    if (nftToRepair) {
+      setSelectedNFT(nftToRepair.id);
+      setCurrentHealth(nftToRepair.health || 60);
+      setIsRepaired(false);
+    }
   };
+
+  const selectedNFTData = MOCK_NFTS.find(nft => nft.id === selectedNFT);
 
   const handleRepair = () => {
     setCurrentHealth(currentHealth + repairAmount);
@@ -52,11 +59,11 @@ export default function Repair() {
             {/* Selected NFT */}
             <View style={styles.nftCard}>
               <Image
-                source={{ uri: 'https://via.placeholder.com/200/9B59B6' }}
+                source={{ uri: selectedNFTData?.image || 'https://via.placeholder.com/200/9B59B6' }}
                 style={styles.nftImage}
                 resizeMode="cover"
               />
-              <Text style={styles.nftName}>NFT #{selectedNFT}</Text>
+              <Text style={styles.nftName}>{selectedNFTData?.name || `NFT #${selectedNFT}`}</Text>
             </View>
 
             {/* Health Bar */}

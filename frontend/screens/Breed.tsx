@@ -1,6 +1,7 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { breedStyles as styles } from '../styles';
+import { MOCK_NFTS } from '../constants/mockData';
 
 export default function Breed() {
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
@@ -20,14 +21,17 @@ export default function Breed() {
     setBreedResult(null);
   };
 
-  // Mock function to simulate asset selection
+  // Mock function to simulate asset selection - uses actual NFT from vault
   const handleSelectAsset1 = () => {
-    setSelectedAsset1('asset1');
+    setSelectedAsset1(MOCK_NFTS[0].id);
   };
 
   const handleSelectAsset2 = () => {
-    setSelectedAsset2('asset2');
+    setSelectedAsset2(MOCK_NFTS[1].id);
   };
+
+  const asset1 = MOCK_NFTS.find(nft => nft.id === selectedAsset1);
+  const asset2 = MOCK_NFTS.find(nft => nft.id === selectedAsset2);
 
   return (
     <View style={styles.container}>
@@ -49,14 +53,14 @@ export default function Breed() {
                 style={styles.assetSlot}
                 onPress={handleSelectAsset1}
               >
-                {selectedAsset1 ? (
+                {selectedAsset1 && asset1 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={{ uri: 'https://via.placeholder.com/150/4A90E2' }}
+                      source={{ uri: asset1.image }}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
-                    <Text style={styles.assetLabel}>NFT #1</Text>
+                    <Text style={styles.assetLabel}>{asset1.name}</Text>
                   </View>
                 ) : (
                   <View style={styles.emptySlot}>
@@ -74,14 +78,14 @@ export default function Breed() {
                 style={styles.assetSlot}
                 onPress={handleSelectAsset2}
               >
-                {selectedAsset2 ? (
+                {selectedAsset2 && asset2 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={{ uri: 'https://via.placeholder.com/150/E94E77' }}
+                      source={{ uri: asset2.image }}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
-                    <Text style={styles.assetLabel}>NFT #2</Text>
+                    <Text style={styles.assetLabel}>{asset2.name}</Text>
                   </View>
                 ) : (
                   <View style={styles.emptySlot}>
@@ -112,7 +116,7 @@ export default function Breed() {
               
               <View style={styles.resultAsset}>
                 <Image
-                  source={{ uri: 'https://via.placeholder.com/200/7B68EE' }}
+                  source={{ uri: 'https://via.placeholder.com/200/9B59B6' }}
                   style={styles.resultImage}
                   resizeMode="cover"
                 />
@@ -120,7 +124,7 @@ export default function Breed() {
               </View>
 
               <Text style={styles.resultDescription}>
-                A unique combination of your assets
+                A unique combination of {asset1?.name} and {asset2?.name}
               </Text>
             </View>
 
