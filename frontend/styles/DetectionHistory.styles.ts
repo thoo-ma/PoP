@@ -102,10 +102,4 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 20,
   },
-  hint: {
-    ...typography.hint,
-    color: colors.hint,
-    position: 'absolute',
-    bottom: 40,
-  },
 });

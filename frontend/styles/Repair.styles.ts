@@ -131,13 +131,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
-  sliderHint: {
-    fontSize: 13,
-    color: colors.text,
-    textAlign: 'center',
-    marginTop: 4,
-    fontWeight: '600',
-  },
   repairButton: {
     backgroundColor: colors.button,
     paddingVertical: 16,

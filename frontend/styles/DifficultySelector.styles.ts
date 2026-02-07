@@ -6,14 +6,6 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
     alignItems: 'center',
   },
-  modeLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
   modeButton: {
     paddingVertical: 12,
     paddingHorizontal: 24,

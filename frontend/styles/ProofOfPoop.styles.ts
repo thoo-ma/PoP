@@ -103,9 +103,4 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     fontWeight: '600',
   },
-  hint: {
-    ...typography.hint,
-    color: colors.hint,
-    marginTop: 24,
-  },
 });

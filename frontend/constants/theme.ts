@@ -24,10 +24,6 @@ export const typography = {
     textAlign: 'center' as const,
     lineHeight: 24,
   },
-  hint: {
-    fontSize: 14,
-    textAlign: 'center' as const,
-  },
 };
 
 export const layout = {
