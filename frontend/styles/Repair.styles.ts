@@ -1,0 +1,182 @@
+import { StyleSheet } from 'react-native';
+import { colors, typography } from '../constants';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  title: {
+    ...typography.title,
+    color: colors.title,
+  },
+  description: {
+    ...typography.description,
+    color: colors.text,
+    marginBottom: 24,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 120,
+    alignItems: 'center',
+  },
+  selectButton: {
+    width: 280,
+    height: 280,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#d1d5db',
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  plusIcon: {
+    fontSize: 48,
+    color: '#d1d5db',
+    marginBottom: 16,
+  },
+  selectText: {
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '600',
+  },
+  nftCard: {
+    width: 240,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginBottom: 32,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  nftImage: {
+    width: '100%',
+    height: 240,
+    backgroundColor: '#f3f4f6',
+  },
+  nftName: {
+    padding: 16,
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.title,
+    textAlign: 'center',
+  },
+  healthSection: {
+    width: '100%',
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.title,
+    marginBottom: 12,
+  },
+  healthBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  healthBarBackground: {
+    flex: 1,
+    height: 32,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  healthBarFill: {
+    height: '100%',
+    backgroundColor: '#10b981',
+    borderRadius: 16,
+  },
+  healthText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.title,
+    minWidth: 50,
+  },
+  sliderSection: {
+    width: '100%',
+    marginBottom: 24,
+  },
+  sliderValueContainer: {
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  sliderValue: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: colors.title,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  sliderHint: {
+    fontSize: 14,
+    color: colors.text,
+    textAlign: 'center',
+    marginTop: 8,
+    fontWeight: '600',
+  },
+  repairButton: {
+    backgroundColor: colors.button,
+    paddingVertical: 16,
+    paddingHorizontal: 48,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  repairButtonDisabled: {
+    backgroundColor: '#d1d5db',
+    opacity: 0.6,
+  },
+  repairButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  successMessage: {
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  successText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#10b981',
+    marginBottom: 24,
+  },
+  fullHealthMessage: {
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  fullHealthText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.title,
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  resetButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: colors.button,
+  },
+  resetButtonText: {
+    color: colors.button,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

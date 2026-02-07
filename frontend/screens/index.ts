@@ -6,4 +6,5 @@ export { default as ProofOfPoop } from './ProofOfPoop';
 export { default as Vault } from './Vault';
 export { default as Breed } from './Breed';
 export { default as Marketplace } from './Marketplace';
+export { default as Repair } from './Repair';
 export { InviteCodeScreen } from './InviteCodeScreen';
