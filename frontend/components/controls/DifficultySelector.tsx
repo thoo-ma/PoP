@@ -7,7 +7,6 @@ export default function DifficultySelector({ mode, onModeChange, disabled }: Dif
   
   return (
     <View style={styles.modeContainer}>
-      <Text style={styles.modeLabel}>Difficulty:</Text>
       <TouchableOpacity
         style={styles.modeButton}
         onPress={onModeChange}
