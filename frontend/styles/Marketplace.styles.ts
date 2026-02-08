@@ -123,29 +123,6 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  healthInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  healthBarSmall: {
-    flex: 1,
-    height: 5,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 3,
-    overflow: 'hidden',
-    marginRight: 6,
-  },
-  healthBarFillSmall: {
-    height: '100%',
-    backgroundColor: '#10b981',
-  },
-  healthTextSmall: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: colors.text,
-    width: 32,
-  },
   unlistButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,

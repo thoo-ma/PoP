@@ -3,22 +3,25 @@ import Slider from '@react-native-community/slider';
 import { useState } from 'react';
 import { repairStyles as styles } from '../styles';
 import { MOCK_NFTS } from '../constants/mockData';
+import NFTProperties from '../components/NFTProperties';
+import { useNFTStore } from '../hooks/useNFTStore';
 
 export default function Repair() {
+  const { updateNFTResilience } = useNFTStore();
   const [selectedNFT, setSelectedNFT] = useState<string | null>(null);
-  const [currentHealth, setCurrentHealth] = useState(60);
+  const [currentResilience, setCurrentResilience] = useState(60);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
 
-  const maxHealth = 100;
-  const maxRepairPossible = maxHealth - currentHealth;
+  const maxResilience = 100;
+  const maxRepairPossible = maxResilience - currentResilience;
 
   const handleSelectNFT = () => {
-    // Simulate NFT selection - use first NFT that's not at full health
-    const nftToRepair = MOCK_NFTS.find(nft => nft.health && nft.health < 100);
+    // Simulate NFT selection - use first NFT that's not at full resilience
+    const nftToRepair = MOCK_NFTS.find(nft => nft.resilience && nft.resilience < 100);
     if (nftToRepair) {
       setSelectedNFT(nftToRepair.id);
-      setCurrentHealth(nftToRepair.health || 60);
+      setCurrentResilience(nftToRepair.resilience || 60);
       setIsRepaired(false);
     }
   };
@@ -26,14 +29,20 @@ export default function Repair() {
   const selectedNFTData = MOCK_NFTS.find(nft => nft.id === selectedNFT);
 
   const handleRepair = () => {
-    setCurrentHealth(currentHealth + repairAmount);
+    const newResilience = currentResilience + repairAmount;
+    setCurrentResilience(newResilience);
     setIsRepaired(true);
     setRepairAmount(0);
+    
+    // Update the NFT in the store
+    if (selectedNFT) {
+      updateNFTResilience(selectedNFT, newResilience);
+    }
   };
 
   const handleReset = () => {
     setSelectedNFT(null);
-    setCurrentHealth(60);
+    setCurrentResilience(60);
     setRepairAmount(0);
     setIsRepaired(false);
   };
@@ -42,7 +51,7 @@ export default function Repair() {
     <View style={styles.container}>
       <Text style={styles.title}>Repair</Text>
       <Text style={styles.description}>
-        Select an NFT and restore its health
+        Select an NFT and restore its resilience
       </Text>
 
       <ScrollView 
@@ -66,29 +75,53 @@ export default function Repair() {
               <Text style={styles.nftName}>{selectedNFTData?.name || `NFT #${selectedNFT}`}</Text>
             </View>
 
-            {/* Health Bar */}
-            <View style={styles.healthSection}>
-              <Text style={styles.sectionTitle}>Current Health</Text>
-              <View style={styles.healthBarContainer}>
-                <View style={styles.healthBarBackground}>
+            {/* All Properties Display */}
+            {selectedNFTData && (
+              <View style={styles.propertiesSection}>
+                <Text style={styles.sectionTitle}>NFT Properties</Text>
+                <View style={styles.staticPropertiesContainer}>
+                  <View style={styles.staticPropertyRow}>
+                    <Text style={styles.staticPropertyLabel}>Efficiency:</Text>
+                    <Text style={styles.staticPropertyValue}>{selectedNFTData.efficiency}</Text>
+                    <Text style={styles.staticPropertyBadge}>Max</Text>
+                  </View>
+                  <View style={styles.staticPropertyRow}>
+                    <Text style={styles.staticPropertyLabel}>Comfort:</Text>
+                    <Text style={styles.staticPropertyValue}>{selectedNFTData.comfort}</Text>
+                    <Text style={styles.staticPropertyBadge}>Max</Text>
+                  </View>
+                  <View style={styles.staticPropertyRow}>
+                    <Text style={styles.staticPropertyLabel}>Luck:</Text>
+                    <Text style={styles.staticPropertyValue}>{selectedNFTData.luck}</Text>
+                    <Text style={styles.staticPropertyBadge}>Max</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            {/* Resilience Bar */}
+            <View style={styles.resilienceSection}>
+              <Text style={styles.sectionTitle}>Resilience (Repairable)</Text>
+              <View style={styles.resilienceBarContainer}>
+                <View style={styles.resilienceBarBackground}>
                   <View 
                     style={[
-                      styles.healthBarFill, 
-                      { width: `${currentHealth}%` }
+                      styles.resilienceBarFill, 
+                      { width: `${currentResilience}%` }
                     ]} 
                   />
                   <View 
                     style={[
-                      styles.healthBarRepair, 
-                      { width: `${Math.round(repairAmount)}%`, left: `${currentHealth}%` }
+                      styles.resilienceBarRepair, 
+                      { width: `${Math.round(repairAmount)}%`, left: `${currentResilience}%` }
                     ]} 
                   />
                 </View>
-                <Text style={styles.healthText}>{currentHealth + Math.round(repairAmount)}%</Text>
+                <Text style={styles.resilienceText}>{currentResilience + Math.round(repairAmount)}%</Text>
               </View>
             </View>
 
-            {currentHealth < maxHealth && !isRepaired && (
+            {currentResilience < maxResilience && !isRepaired && (
               <>
                 {/* Repair Slider */}
                 <View style={styles.sliderSection}>
@@ -102,9 +135,9 @@ export default function Repair() {
                     maximumValue={maxRepairPossible}
                     value={repairAmount}
                     onValueChange={setRepairAmount}
-                    minimumTrackTintColor="#000"
+                    minimumTrackTintColor="#10b981"
                     maximumTrackTintColor="#d1d5db"
-                    thumbTintColor="#000"
+                    thumbTintColor="#10b981"
                     step={1}
                   />
                 </View>
@@ -132,9 +165,9 @@ export default function Repair() {
               </View>
             )}
 
-            {currentHealth === maxHealth && !isRepaired && (
-              <View style={styles.fullHealthMessage}>
-                <Text style={styles.fullHealthText}>This NFT is at full health!</Text>
+            {currentResilience === maxResilience && !isRepaired && (
+              <View style={styles.fullResilienceMessage}>
+                <Text style={styles.fullResilienceText}>This NFT is at full resilience!</Text>
                 <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
                   <Text style={styles.resetButtonText}>Select Another NFT</Text>
                 </TouchableOpacity>

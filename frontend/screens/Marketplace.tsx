@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { marketplaceStyles as styles } from '../styles';
 import { MOCK_MARKETPLACE_LISTINGS } from '../constants/mockData';
 import { useNFTStore } from '../hooks/useNFTStore';
+import NFTProperties from '../components/NFTProperties';
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
@@ -99,19 +100,13 @@ export default function Marketplace() {
                   </View>
                   <View style={styles.cardContent}>
                     <Text style={styles.nftName}>{item.name}</Text>
-                    {item.health !== undefined && (
-                      <View style={styles.healthInfo}>
-                        <View style={styles.healthBarSmall}>
-                          <View 
-                            style={[
-                              styles.healthBarFillSmall, 
-                              { width: `${item.health}%` }
-                            ]} 
-                          />
-                        </View>
-                        <Text style={styles.healthTextSmall}>{item.health}%</Text>
-                      </View>
-                    )}
+                    <NFTProperties
+                      efficiency={item.efficiency}
+                      resilience={item.resilience}
+                      comfort={item.comfort}
+                      luck={item.luck}
+                      mode="compact"
+                    />
                     <View style={styles.priceRow}>
                       <Text style={styles.price}>{item.price}</Text>
                       <TouchableOpacity 

@@ -70,7 +70,45 @@ export const styles = StyleSheet.create({
     color: colors.title,
     textAlign: 'center',
   },
-  healthSection: {
+  propertiesSection: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  staticPropertiesContainer: {
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
+  staticPropertyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+  },
+  staticPropertyLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+    flex: 1,
+  },
+  staticPropertyValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.title,
+    marginRight: 12,
+  },
+  staticPropertyBadge: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#10b981',
+    backgroundColor: '#d1fae5',
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+  resilienceSection: {
     width: '100%',
     marginBottom: 24,
   },
@@ -80,12 +118,12 @@ export const styles = StyleSheet.create({
     color: colors.title,
     marginBottom: 8,
   },
-  healthBarContainer: {
+  resilienceBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  healthBarBackground: {
+  resilienceBarBackground: {
     flex: 1,
     height: 24,
     backgroundColor: '#f3f4f6',
@@ -95,12 +133,12 @@ export const styles = StyleSheet.create({
     borderColor: '#d1d5db',
     position: 'relative',
   },
-  healthBarFill: {
+  resilienceBarFill: {
     height: '100%',
     backgroundColor: '#10b981',
     position: 'absolute',
   },
-  healthBarRepair: {
+  resilienceBarRepair: {
     height: '100%',
     backgroundColor: '#fbbf24',
     position: 'absolute',
@@ -108,7 +146,7 @@ export const styles = StyleSheet.create({
     borderLeftColor: '#fff',
     borderStyle: 'dashed',
   },
-  healthText: {
+  resilienceText: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.title,
@@ -158,11 +196,11 @@ export const styles = StyleSheet.create({
     color: '#10b981',
     marginBottom: 24,
   },
-  fullHealthMessage: {
+  fullResilienceMessage: {
     alignItems: 'center',
     marginTop: 24,
   },
-  fullHealthText: {
+  fullResilienceText: {
     fontSize: 18,
     fontWeight: '600',
     color: colors.title,

@@ -2,6 +2,7 @@ import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { useEffect } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useNFTStore } from '../hooks/useNFTStore';
+import NFTProperties from '../components/NFTProperties';
 
 export default function Poop() {
   const { nfts, subscribe } = useNFTStore();
@@ -39,27 +40,22 @@ export default function Poop() {
       
       <View style={styles.nftContainer}>
         <View style={styles.nftCard}>
-          <Image
-            source={{ uri: displayNFT.image }}
-            style={styles.nftImage}
-            resizeMode="cover"
-          />
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: displayNFT.image }}
+              style={styles.nftImage}
+              resizeMode="cover"
+            />
+          </View>
           <View style={styles.nftInfo}>
             <Text style={styles.nftName}>{displayNFT.name}</Text>
-            {displayNFT.health !== undefined && (
-              <View style={styles.healthInfo}>
-                <Text style={styles.healthLabel}>Health:</Text>
-                <View style={styles.healthBarContainer}>
-                  <View 
-                    style={[
-                      styles.healthBar, 
-                      { width: `${displayNFT.health}%` }
-                    ]} 
-                  />
-                </View>
-                <Text style={styles.healthValue}>{displayNFT.health}%</Text>
-              </View>
-            )}
+            <NFTProperties
+              efficiency={displayNFT.efficiency}
+              resilience={displayNFT.resilience}
+              comfort={displayNFT.comfort}
+              luck={displayNFT.luck}
+              mode="detailed"
+            />
           </View>
         </View>
       </View>

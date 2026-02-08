@@ -35,10 +35,18 @@ export const useNFTStore = () => {
     notify();
   };
 
+  const updateNFTResilience = (nftId: string, newResilience: number) => {
+    nftState = nftState.map(nft =>
+      nft.id === nftId ? { ...nft, resilience: Math.min(100, Math.max(0, newResilience)) } : nft
+    );
+    notify();
+  };
+
   return {
     nfts: getNFTs(),
     listNFT,
     unlistNFT,
+    updateNFTResilience,
     subscribe,
   };
 };

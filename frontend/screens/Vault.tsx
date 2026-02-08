@@ -2,6 +2,7 @@ import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useEffect } from 'react';
 import { vaultStyles as styles } from '../styles';
 import { useNFTStore } from '../hooks/useNFTStore';
+import NFTProperties from '../components/NFTProperties';
 
 export default function Vault() {
   const { nfts, listNFT, subscribe } = useNFTStore();
@@ -46,22 +47,14 @@ export default function Vault() {
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.nftName}>{nft.name}</Text>
-                {nft.health !== undefined && (
-                  <View style={styles.healthInfo}>
-                    <View style={styles.healthBarSmall}>
-                      <View 
-                        style={[
-                          styles.healthBarFillSmall, 
-                          { width: `${nft.health}%` }
-                        ]} 
-                      />
-                    </View>
-                    <Text style={styles.healthTextSmall}>{nft.health}%</Text>
-                  </View>
-                )}
-                {nft.isListed && nft.price ? (
-                  <Text style={styles.priceText}>{nft.price}</Text>
-                ) : (
+                <NFTProperties
+                  efficiency={nft.efficiency}
+                  resilience={nft.resilience}
+                  comfort={nft.comfort}
+                  luck={nft.luck}
+                  mode="compact"
+                />
+                {!nft.isListed && (
                   <TouchableOpacity 
                     style={styles.listButton}
                     onPress={() => handleListNFT(nft.id)}
