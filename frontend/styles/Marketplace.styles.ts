@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { colors, typography } from '../constants';
+import { sortStyles as baseSortStyles } from './Sort.styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -39,6 +40,10 @@ export const styles = StyleSheet.create({
   },
   tabTextActive: {
     color: '#fff',
+  },
+  sortContainer: {
+    ...baseSortStyles.sortContainer,
+    marginTop: 16,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -154,3 +159,4 @@ export const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+export const sortStyles = baseSortStyles;

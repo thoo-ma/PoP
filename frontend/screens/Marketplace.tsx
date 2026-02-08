@@ -1,12 +1,17 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
-import { marketplaceStyles as styles } from '../styles';
+import { marketplaceStyles as styles, sortStyles } from '../styles';
 import { MOCK_MARKETPLACE_LISTINGS } from '../constants/mockData';
 import { useNFTStore } from '../hooks/useNFTStore';
-import NFTProperties from '../components/NFTProperties';
+import { NFTProperties, SortControls } from '../components';
+import { sortNFTs } from '../utils';
+import type { SortOption } from '../types';
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
+  const [sortBy, setSortBy] = useState<SortOption>('efficiency');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [showSortMenu, setShowSortMenu] = useState(false);
   const { nfts, unlistNFT, subscribe } = useNFTStore();
   
   useEffect(() => {
@@ -14,6 +19,8 @@ export default function Marketplace() {
   }, []);
 
   const myListings = nfts.filter(nft => nft.isListed);
+  const sortedMarketplaceListings = sortNFTs(MOCK_MARKETPLACE_LISTINGS, sortBy, sortOrder);
+  const sortedMyListings = sortNFTs(myListings, sortBy, sortOrder);
   
   const handleBuyNFT = () => {
     Alert.alert(
@@ -50,6 +57,19 @@ export default function Marketplace() {
         </TouchableOpacity>
       </View>
 
+      <SortControls
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        showSortMenu={showSortMenu}
+        onSortByChange={(option) => {
+          setSortBy(option);
+          setShowSortMenu(false);
+        }}
+        onSortOrderToggle={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+        onMenuToggle={() => setShowSortMenu(!showSortMenu)}
+        styles={{ ...sortStyles, sortContainer: styles.sortContainer }}
+      />
+
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -64,7 +84,7 @@ export default function Marketplace() {
         
         {activeTab === 'buy' ? (
           <View style={styles.grid}>
-            {MOCK_MARKETPLACE_LISTINGS.map((item) => (
+            {sortedMarketplaceListings.map((item) => (
               <View key={item.id} style={styles.nftCard}>
                 <View style={styles.imageContainer}>
                   <Image
@@ -88,8 +108,8 @@ export default function Marketplace() {
           </View>
         ) : (
           <View style={styles.grid}>
-            {myListings.length > 0 ? (
-              myListings.map((item) => (
+            {sortedMyListings.length > 0 ? (
+              sortedMyListings.map((item) => (
                 <View key={item.id} style={styles.nftCard}>
                   <View style={styles.imageContainer}>
                     <Image

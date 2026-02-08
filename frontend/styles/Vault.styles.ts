@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { colors, typography } from '../constants';
+import { sortStyles } from './Sort.styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -102,3 +103,4 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+export { sortStyles };
