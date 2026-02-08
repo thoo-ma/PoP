@@ -1,0 +1,83 @@
+import { Text, View, TouchableOpacity, Modal } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useAuth } from '../hooks';
+import { profileStyles as styles } from '../styles';
+import { showSignOutConfirmation } from '../utils';
+
+interface ProfileProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+export default function Profile({ visible, onClose }: ProfileProps) {
+  const { getUserDisplayName, user, signOut } = useAuth();
+
+  const handleSignOut = () => {
+    showSignOutConfirmation(async () => {
+      await signOut();
+      onClose();
+    });
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View style={styles.overlay}>
+        <View style={styles.container}>
+          {/* Close button */}
+          <TouchableOpacity 
+            style={styles.closeButton}
+            onPress={onClose}
+            activeOpacity={0.7}
+          >
+            <MaterialIcons name="close" size={24} color="#000" />
+          </TouchableOpacity>
+
+          {/* Profile icon */}
+          <View style={styles.avatarContainer}>
+            <MaterialIcons name="account-circle" size={80} color="#000" />
+          </View>
+
+          {/* User info */}
+          <Text style={styles.title}>Profile</Text>
+          <Text style={styles.displayName}>{getUserDisplayName()}</Text>
+          {user?.email && (
+            <Text style={styles.email}>{user.email}</Text>
+          )}
+
+          {/* Stats section */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>0</Text>
+              <Text style={styles.statLabel}>Detections</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>0</Text>
+              <Text style={styles.statLabel}>NFTs</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>0</Text>
+              <Text style={styles.statLabel}>Days Active</Text>
+            </View>
+          </View>
+
+          {/* Sign out button */}
+          <TouchableOpacity 
+            style={styles.signOutButton} 
+            onPress={handleSignOut}
+            activeOpacity={0.7}
+          >
+            <MaterialIcons name="logout" size={20} color="#fff" />
+            <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}

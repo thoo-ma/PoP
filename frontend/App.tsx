@@ -9,7 +9,8 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from './hooks';
 import { Auth, PageIndicator } from './components';
-import { InviteCodeScreen } from './screens';
+import ProfileButton from './components/ProfileButton';
+import { InviteCodeScreen, Profile } from './screens';
 import { PAGES, VIEWABILITY_CONFIG } from './config/navigation';
 import { appStyles as styles, width } from './styles';
 import { isExpoGo } from './lib/supabase';
@@ -18,6 +19,7 @@ export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();
   const { approved, loading: approvalLoading, refetch } = useUserApproval();
   const [currentPage, setCurrentPage] = useState(0);
+  const [profileVisible, setProfileVisible] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
   const handleApprovalSuccess = useCallback(async () => {
@@ -99,10 +101,17 @@ export default function App() {
           style={styles.flatList}
         />
 
+        <ProfileButton onPress={() => setProfileVisible(true)} />
+
         <PageIndicator 
           totalPages={PAGES.length} 
           currentPage={currentPage} 
           onPageChange={scrollToPage}
+        />
+
+        <Profile 
+          visible={profileVisible}
+          onClose={() => setProfileVisible(false)}
         />
         
         <StatusBar style="auto" />
