@@ -1,12 +1,13 @@
-import { ProofOfImmobility, ProofOfFlush, DetectionHistory, ProofOfPoop, Vault, Breed, Marketplace, Repair } from '../screens';
+import { ProofOfImmobility, ProofOfFlush, DetectionHistory, ProofOfPoop, Vault, Breed, Marketplace, Repair, Poop } from '../screens';
 import type { PageConfig } from '../types';
 
 /**
  * Configuration for app pages/screens
- * Primary pages (swipeable): Vault, Breed, Marketplace, Repair
+ * Primary pages (swipeable): Poop, Vault, Breed, Marketplace, Repair
  * Secondary pages (More menu only): Proofs and History
  */
 export const PAGES: PageConfig[] = [
+  { id: '1', component: Poop, isPrimary: true },
   { id: '6', component: Vault, isPrimary: true },
   { id: '7', component: Breed, isPrimary: true },
   { id: '8', component: Marketplace, isPrimary: true },

@@ -7,10 +7,11 @@ import MoreMenu from './MoreMenu';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
-  { index: 0, icon: 'account-balance-wallet' }, // Vault
-  { index: 1, icon: 'sync' },              // Breed
-  { index: 2, icon: 'shopping-cart' },     // Marketplace
-  { index: 3, icon: 'construction' },      // Repair
+  { index: 0, icon: 'home' },              // Poop
+  { index: 1, icon: 'account-balance-wallet' }, // Vault
+  { index: 2, icon: 'sync' },              // Breed
+  { index: 3, icon: 'shopping-cart' },     // Marketplace
+  { index: 4, icon: 'construction' },      // Repair
 ] as const;
 
 export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
@@ -44,7 +45,7 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
             <MaterialIcons
               name="more-horiz"
               size={24}
-              color={[4, 5, 6, 7].includes(currentPage) ? '#000' : '#d1d5db'}
+              color={[5, 6, 7, 8].includes(currentPage) ? '#000' : '#d1d5db'}
             />
           </TouchableOpacity>
         </View>

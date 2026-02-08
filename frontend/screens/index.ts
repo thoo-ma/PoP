@@ -8,3 +8,4 @@ export { default as Marketplace } from './Marketplace';
 export { default as Repair } from './Repair';
 export { InviteCodeScreen } from './InviteCodeScreen';
 export { default as Profile } from './Profile';
+export { default as Poop } from './Poop';
