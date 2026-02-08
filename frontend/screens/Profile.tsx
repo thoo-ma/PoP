@@ -26,7 +26,11 @@ export default function Profile({ visible, onClose }: ProfileProps) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
+      <TouchableOpacity 
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={onClose}
+      >
         <View style={styles.container}>
           {/* Close button */}
           <TouchableOpacity 
@@ -77,7 +81,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     </Modal>
   );
 }
