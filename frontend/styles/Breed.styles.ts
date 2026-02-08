@@ -37,6 +37,8 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#fff',
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
