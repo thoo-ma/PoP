@@ -4,7 +4,13 @@ import { breedStyles as styles } from '../styles';
 import { MOCK_NFTS, type MockNFT } from '../constants/mockData';
 import { NFTProperties } from '../components';
 
-const pooImage = require('../assets/poo.jpeg');
+const breedImages = [
+  require('../assets/toilets/chill/chill-4.jpeg'),
+  require('../assets/toilets/chill/chill-5.jpeg'),
+  require('../assets/toilets/chill/chill-6.jpeg'),
+  require('../assets/toilets/nitro/nitro-5.jpeg'),
+  require('../assets/toilets/omega/omega-1.jpeg'),
+];
 
 export default function Breed() {
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
@@ -14,10 +20,11 @@ export default function Breed() {
   const handleBreed = () => {
     if (selectedAsset1 && selectedAsset2 && asset1 && asset2) {
       // Generate new NFT by averaging parents' properties
+      const randomImage = breedImages[Math.floor(Math.random() * breedImages.length)];
       const newNFT: MockNFT = {
         id: `${Date.now()}`,
         name: `NFT #${Math.floor(Math.random() * 9000) + 1000}`,
-        image: pooImage,
+        image: randomImage,
         price: '0.0 ETH',
         isListed: false,
         efficiency: Math.round((asset1.efficiency + asset2.efficiency) / 2),

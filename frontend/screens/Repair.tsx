@@ -71,7 +71,7 @@ export default function Repair() {
                 source={
                   selectedNFTData?.image 
                     ? (typeof selectedNFTData.image === 'string' ? { uri: selectedNFTData.image } : selectedNFTData.image)
-                    : require('../assets/poo.jpeg')
+                    : require('../assets/toilets/nitro/nitro-1.jpeg')
                 }
                 style={styles.nftImage}
                 resizeMode="cover"
