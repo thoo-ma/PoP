@@ -102,6 +102,7 @@ export const styles = StyleSheet.create({
   resultContainer: {
     alignItems: 'center',
     marginBottom: 40,
+    width: '100%',
   },
   resultTitle: {
     fontSize: 24,
@@ -109,8 +110,9 @@ export const styles = StyleSheet.create({
     color: colors.title,
     marginBottom: 24,
   },
-  resultAsset: {
-    width: 200,
+  resultCard: {
+    width: '90%',
+    maxWidth: 320,
     backgroundColor: '#fff',
     borderRadius: 16,
     overflow: 'hidden',
@@ -119,24 +121,36 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 12,
     elevation: 5,
-    marginBottom: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  resultImageContainer: {
+    width: '100%',
+    aspectRatio: 1,
+    backgroundColor: '#f3f4f6',
   },
   resultImage: {
     width: '100%',
-    height: 200,
+    height: '100%',
+  },
+  resultCardContent: {
+    padding: 16,
+    backgroundColor: '#f9fafb',
   },
   resultLabel: {
-    padding: 16,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
     color: colors.title,
     textAlign: 'center',
+    marginBottom: 12,
   },
   resultDescription: {
     fontSize: 14,
     color: colors.text,
     textAlign: 'center',
     paddingHorizontal: 20,
+    lineHeight: 20,
   },
   resetButton: {
     backgroundColor: colors.button,

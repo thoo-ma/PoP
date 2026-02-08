@@ -1,17 +1,29 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { breedStyles as styles } from '../styles';
-import { MOCK_NFTS } from '../constants/mockData';
+import { MOCK_NFTS, type MockNFT } from '../constants/mockData';
+import { NFTProperties } from '../components';
 
 export default function Breed() {
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
   const [selectedAsset2, setSelectedAsset2] = useState<string | null>(null);
-  const [breedResult, setBreedResult] = useState<string | null>(null);
+  const [breedResult, setBreedResult] = useState<MockNFT | null>(null);
 
   const handleBreed = () => {
-    if (selectedAsset1 && selectedAsset2) {
-      // Simulate breeding result
-      setBreedResult('bred');
+    if (selectedAsset1 && selectedAsset2 && asset1 && asset2) {
+      // Generate new NFT by averaging parents' properties
+      const newNFT: MockNFT = {
+        id: `${Date.now()}`,
+        name: `NFT #${Math.floor(Math.random() * 9000) + 1000}`,
+        image: 'https://via.placeholder.com/200/9B59B6',
+        price: '0.0 ETH',
+        isListed: false,
+        efficiency: Math.round((asset1.efficiency + asset2.efficiency) / 2),
+        resilience: Math.round((asset1.resilience + asset2.resilience) / 2),
+        comfort: Math.round((asset1.comfort + asset2.comfort) / 2),
+        luck: Math.round((asset1.luck + asset2.luck) / 2),
+      };
+      setBreedResult(newNFT);
     }
   };
 
@@ -112,15 +124,26 @@ export default function Breed() {
           <>
             {/* Result Area */}
             <View style={styles.resultContainer}>
-              <Text style={styles.resultTitle}>New Asset Created!</Text>
+              <Text style={styles.resultTitle}>🎉 New NFT Created!</Text>
               
-              <View style={styles.resultAsset}>
-                <Image
-                  source={{ uri: 'https://via.placeholder.com/200/9B59B6' }}
-                  style={styles.resultImage}
-                  resizeMode="cover"
-                />
-                <Text style={styles.resultLabel}>NFT #NEW</Text>
+              <View style={styles.resultCard}>
+                <View style={styles.resultImageContainer}>
+                  <Image
+                    source={{ uri: breedResult.image }}
+                    style={styles.resultImage}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={styles.resultCardContent}>
+                  <Text style={styles.resultLabel}>{breedResult.name}</Text>
+                  <NFTProperties
+                    efficiency={breedResult.efficiency}
+                    resilience={breedResult.resilience}
+                    comfort={breedResult.comfort}
+                    luck={breedResult.luck}
+                    mode="detailed"
+                  />
+                </View>
               </View>
 
               <Text style={styles.resultDescription}>
