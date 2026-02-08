@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
   description: {
     ...typography.description,
     color: colors.text,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   tabs: {
     flexDirection: 'row',
     backgroundColor: '#f3f4f6',
     borderRadius: 12,
     padding: 4,
-    marginBottom: 24,
+    marginBottom: 12,
   },
   tab: {
     paddingVertical: 10,
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
   },
   sortContainer: {
     ...baseSortStyles.sortContainer,
-    marginTop: 16,
+    marginTop: 0,
   },
   scrollContent: {
     paddingHorizontal: 20,
