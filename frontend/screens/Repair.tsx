@@ -68,7 +68,11 @@ export default function Repair() {
             {/* Selected NFT */}
             <View style={styles.nftCard}>
               <Image
-                source={{ uri: selectedNFTData?.image || 'https://via.placeholder.com/200/9B59B6' }}
+                source={
+                  selectedNFTData?.image 
+                    ? (typeof selectedNFTData.image === 'string' ? { uri: selectedNFTData.image } : selectedNFTData.image)
+                    : require('../assets/poo.jpeg')
+                }
                 style={styles.nftImage}
                 resizeMode="cover"
               />

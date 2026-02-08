@@ -4,6 +4,8 @@ import { breedStyles as styles } from '../styles';
 import { MOCK_NFTS, type MockNFT } from '../constants/mockData';
 import { NFTProperties } from '../components';
 
+const pooImage = require('../assets/poo.jpeg');
+
 export default function Breed() {
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
   const [selectedAsset2, setSelectedAsset2] = useState<string | null>(null);
@@ -15,7 +17,7 @@ export default function Breed() {
       const newNFT: MockNFT = {
         id: `${Date.now()}`,
         name: `NFT #${Math.floor(Math.random() * 9000) + 1000}`,
-        image: 'https://via.placeholder.com/200/9B59B6',
+        image: pooImage,
         price: '0.0 ETH',
         isListed: false,
         efficiency: Math.round((asset1.efficiency + asset2.efficiency) / 2),
@@ -68,7 +70,7 @@ export default function Breed() {
                 {selectedAsset1 && asset1 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={{ uri: asset1.image }}
+                      source={typeof asset1.image === 'string' ? { uri: asset1.image } : asset1.image}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
@@ -93,7 +95,7 @@ export default function Breed() {
                 {selectedAsset2 && asset2 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={{ uri: asset2.image }}
+                      source={typeof asset2.image === 'string' ? { uri: asset2.image } : asset2.image}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
@@ -129,7 +131,7 @@ export default function Breed() {
               <View style={styles.resultCard}>
                 <View style={styles.resultImageContainer}>
                   <Image
-                    source={{ uri: breedResult.image }}
+                    source={typeof breedResult.image === 'string' ? { uri: breedResult.image } : breedResult.image}
                     style={styles.resultImage}
                     resizeMode="cover"
                   />

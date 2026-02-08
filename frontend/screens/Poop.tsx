@@ -42,7 +42,7 @@ export default function Poop() {
         <View style={styles.nftCard}>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: displayNFT.image }}
+              source={typeof displayNFT.image === 'string' ? { uri: displayNFT.image } : displayNFT.image}
               style={styles.nftImage}
               resizeMode="cover"
             />

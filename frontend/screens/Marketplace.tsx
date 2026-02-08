@@ -88,7 +88,7 @@ export default function Marketplace() {
               <View key={item.id} style={styles.nftCard}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: item.image }}
+                    source={typeof item.image === 'string' ? { uri: item.image } : item.image}
                     style={styles.nftImage}
                     resizeMode="cover"
                   />
@@ -113,7 +113,7 @@ export default function Marketplace() {
                 <View key={item.id} style={styles.nftCard}>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{ uri: item.image }}
+                      source={typeof item.image === 'string' ? { uri: item.image } : item.image}
                       style={styles.nftImage}
                       resizeMode="cover"
                     />

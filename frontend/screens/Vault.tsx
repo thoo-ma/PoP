@@ -55,7 +55,7 @@ export default function Vault() {
             <View key={nft.id} style={styles.nftCard}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: nft.image }}
+                  source={typeof nft.image === 'string' ? { uri: nft.image } : nft.image}
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
