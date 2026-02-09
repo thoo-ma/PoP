@@ -66,7 +66,7 @@ export default function ProofOfPoop() {
       setFinalImmobilityTime(elapsedTime);
       setPhase('prompt');
     }
-  }, [phase, elapsedTime, status, isRunning, timelapseOption, frozenRemainingTime]);
+  }, [phase, elapsedTime, status, isRunning, timelapseOption, frozenRemainingTime, stopChallenge]);
 
   // Start the ultimate challenge
   const handleStartChallenge = () => {
