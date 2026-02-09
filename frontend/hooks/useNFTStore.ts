@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MOCK_NFTS, MockNFT } from '../constants/mockData';
 
 let nftState = [...MOCK_NFTS];
@@ -6,6 +6,16 @@ let listeners: Array<() => void> = [];
 
 export const useNFTStore = () => {
   const [, forceUpdate] = useState({});
+
+  // Auto-subscribe and cleanup properly
+  useEffect(() => {
+    const listener = () => forceUpdate({});
+    listeners.push(listener);
+    
+    return () => {
+      listeners = listeners.filter(l => l !== listener);
+    };
+  }, []);
 
   const subscribe = () => {
     const listener = () => forceUpdate({});

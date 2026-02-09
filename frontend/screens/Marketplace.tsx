@@ -1,5 +1,5 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '../styles';
 import { MOCK_MARKETPLACE_LISTINGS } from '../constants/mockData';
 import { useNFTStore } from '../hooks/useNFTStore';
@@ -12,11 +12,7 @@ export default function Marketplace() {
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
-  const { nfts, unlistNFT, subscribe } = useNFTStore();
-  
-  useEffect(() => {
-    return subscribe();
-  }, []);
+  const { nfts, unlistNFT } = useNFTStore();
 
   const myListings = nfts.filter(nft => nft.isListed);
   const sortedMarketplaceListings = sortNFTs(MOCK_MARKETPLACE_LISTINGS, sortBy, sortOrder);

@@ -1,5 +1,5 @@
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { vaultStyles as styles, sortStyles } from '../styles';
 import { useNFTStore } from '../hooks/useNFTStore';
 import { NFTProperties, SortControls } from '../components';
@@ -7,14 +7,10 @@ import { sortNFTs } from '../utils';
 import type { SortOption } from '../types';
 
 export default function Vault() {
-  const { nfts, listNFT, subscribe } = useNFTStore();
+  const { nfts, listNFT } = useNFTStore();
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
-  
-  useEffect(() => {
-    return subscribe();
-  }, []);
   
   const listedCount = nfts.filter(nft => nft.isListed).length;
   

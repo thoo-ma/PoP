@@ -1,15 +1,10 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useEffect } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useNFTStore } from '../hooks/useNFTStore';
 import NFTProperties from '../components/NFTProperties';
 
 export default function Poop() {
-  const { nfts, subscribe } = useNFTStore();
-  
-  useEffect(() => {
-    return subscribe();
-  }, []);
+  const { nfts } = useNFTStore();
   
   // Get the first NFT from vault (or a random one)
   const displayNFT = nfts[0];
