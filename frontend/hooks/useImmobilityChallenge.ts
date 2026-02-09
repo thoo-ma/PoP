@@ -23,9 +23,30 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   const initialStepCountRef = useRef<number | null>(null);
   const lastStepTimeRef = useRef<number>(0);
 
+  // Refs to stabilize callbacks and prevent stale closures
+  const isRunningRef = useRef(isRunning);
+  const statusRef = useRef(status);
+  const thresholdsRef = useRef(thresholds);
+  const mountedRef = useRef(true);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+    statusRef.current = status;
+    thresholdsRef.current = thresholds;
+  });
+
+  // Track mounted state
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   // Unified movement detection handler
   const handleMovementDetected = useCallback(() => {
-    if (!isRunning) return;
+    if (!mountedRef.current || !isRunningRef.current) return;
 
     // Movement detected - start grace period
     setStatus('warning');
@@ -43,6 +64,8 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
     // Set new grace timeout
     graceTimeoutRef.current = setTimeout(() => {
+      if (!mountedRef.current) return;
+      
       // Grace period expired - reset challenge
       setIsRunning(false);
       setStatus('idle');
@@ -53,13 +76,13 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         clearInterval(timerIntervalRef.current);
         timerIntervalRef.current = null;
       }
-    }, thresholds.GRACE_PERIOD);
-  }, [isRunning, thresholds.GRACE_PERIOD]);
+    }, thresholdsRef.current.GRACE_PERIOD);
+  }, []); // ← Now stable, no dependencies!
 
   // Handle accelerometer data
   const handleAccelerometerData = useCallback(
     (data: AccelerometerData) => {
-      if (!isRunning) return;
+      if (!isRunningRef.current) return;
 
       const { x, y, z } = data;
       
@@ -67,15 +90,17 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       const magnitude = Math.sqrt(x * x + y * y + z * z);
       const movement = Math.abs(magnitude - 1);
 
-      if (movement > thresholds.MOVEMENT_THRESHOLD) {
+      if (movement > thresholdsRef.current.MOVEMENT_THRESHOLD) {
         // Movement detected from accelerometer
         handleMovementDetected();
       } else {
         // No movement detected right now
         
         // If we're in warning state and haven't started cooldown yet, start it
-        if (status === 'warning' && !warningCooldownRef.current) {
+        if (statusRef.current === 'warning' && !warningCooldownRef.current) {
           warningCooldownRef.current = setTimeout(() => {
+            if (!mountedRef.current) return;
+            
             // Cooldown complete - return to running status
             setStatus('running');
             warningCooldownRef.current = null;
@@ -85,17 +110,17 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
               clearTimeout(graceTimeoutRef.current);
               graceTimeoutRef.current = null;
             }
-          }, thresholds.WARNING_COOLDOWN);
+          }, thresholdsRef.current.WARNING_COOLDOWN);
         }
       }
     },
-    [isRunning, status, handleMovementDetected, thresholds.MOVEMENT_THRESHOLD, thresholds.WARNING_COOLDOWN]
+    [handleMovementDetected] // ← Only depends on handleMovementDetected now
   );
 
   // Handle step detection
   const handleStepDetection = useCallback(
     (result: PedometerData) => {
-      if (!isRunning) return;
+      if (!isRunningRef.current) return;
 
       const currentSteps = result.steps;
       
@@ -114,33 +139,35 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       // Check if we have recent steps (within cooldown window)
       const timeSinceLastStep = Date.now() - lastStepTimeRef.current;
       
-      if (timeSinceLastStep < thresholds.STEP_COOLDOWN) {
+      if (timeSinceLastStep < thresholdsRef.current.STEP_COOLDOWN) {
         // Recent steps detected - trigger movement
         handleMovementDetected();
       }
     },
-    [isRunning, handleMovementDetected, thresholds.STEP_COOLDOWN]
+    [handleMovementDetected] // ← Only depends on handleMovementDetected now
   );
 
   // Handle gyroscope data
   const handleGyroscopeData = useCallback(
     (data: GyroscopeData) => {
-      if (!isRunning) return;
+      if (!isRunningRef.current) return;
 
       const { x, y, z } = data;
       
       // Calculate rotation magnitude
       const rotationMagnitude = Math.sqrt(x * x + y * y + z * z);
 
-      if (rotationMagnitude > thresholds.ROTATION_THRESHOLD) {
+      if (rotationMagnitude > thresholdsRef.current.ROTATION_THRESHOLD) {
         // Rotation detected from gyroscope
         handleMovementDetected();
       } else {
         // No rotation detected right now
         
         // If we're in warning state and haven't started cooldown yet, start it
-        if (status === 'warning' && !warningCooldownRef.current) {
+        if (statusRef.current === 'warning' && !warningCooldownRef.current) {
           warningCooldownRef.current = setTimeout(() => {
+            if (!mountedRef.current) return;
+            
             // Cooldown complete - return to running status
             setStatus('running');
             warningCooldownRef.current = null;
@@ -150,11 +177,11 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
               clearTimeout(graceTimeoutRef.current);
               graceTimeoutRef.current = null;
             }
-          }, thresholds.WARNING_COOLDOWN);
+          }, thresholdsRef.current.WARNING_COOLDOWN);
         }
       }
     },
-    [isRunning, status, handleMovementDetected, thresholds.ROTATION_THRESHOLD, thresholds.WARNING_COOLDOWN]
+    [handleMovementDetected] // ← Only depends on handleMovementDetected now
   );
 
   // Start challenge
@@ -166,14 +193,14 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
     // Reset step tracking (will be initialized by first pedometer callback)
     initialStepCountRef.current = null;
-    lastStepTimeRef.current = Date.now() - thresholds.STEP_COOLDOWN; // Set in the past to avoid false positives
+    lastStepTimeRef.current = Date.now() - thresholdsRef.current.STEP_COOLDOWN; // Set in the past to avoid false positives
 
     // Start timer
     timerIntervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current;
       setElapsedTime(elapsed);
     }, SENSOR_UPDATE_INTERVAL);
-  }, []);
+  }, []); // ← Stable callback
 
   // Stop challenge
   const stopChallenge = useCallback(() => {
