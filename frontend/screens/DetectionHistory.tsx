@@ -4,6 +4,7 @@ import { Card } from '../components';
 import { colors } from '../constants';
 import { fetchDetectionHistory } from '../lib';
 import { formatConfidencePercentage } from '../utils';
+import { useErrorHandler } from '../hooks';
 import type { DetectionRecord } from '../types/audio';
 import { styles } from '../styles/DetectionHistory.styles';
 
@@ -11,16 +12,15 @@ export default function DetectionHistory() {
   const [detections, setDetections] = useState<DetectionRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { error, handleError, clearError } = useErrorHandler('DetectionHistory');
 
   const loadDetections = useCallback(async () => {
     try {
-      setError(null);
+      clearError();
       const data = await fetchDetectionHistory(50);
       setDetections(data || []);
     } catch (err) {
-      console.error('Failed to load detections:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load detections');
+      handleError(err, 'Failed to load detections');
     } finally {
       setLoading(false);
       setRefreshing(false);

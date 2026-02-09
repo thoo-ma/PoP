@@ -11,6 +11,7 @@ import {
 import { supabase } from '../lib/supabase';
 import { inviteCodeScreenStyles as styles } from '../styles';
 import { showSignOutConfirmation } from '../utils';
+import { useErrorHandler } from '../hooks';
 import type { ApprovalResult } from '../types/auth';
 
 interface InviteCodeScreenProps {
@@ -21,7 +22,7 @@ interface InviteCodeScreenProps {
 export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { error, handleError, clearError } = useErrorHandler('InviteCode');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
@@ -42,18 +43,18 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
     // Convert to uppercase and filter non-alphanumeric
     const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '');
     setCode(cleaned.slice(0, 8)); // Limit to 8 characters
-    setError(null); // Clear error when user types
+    clearError(); // Clear error when user types
   };
 
   const handleSubmit = async () => {
     // Validate format before submitting
     if (!isValidFormat(code)) {
-      setError('Code must be 8 alphanumeric characters');
+      handleError('Code must be 8 alphanumeric characters', 'Code must be 8 alphanumeric characters');
       return;
     }
 
     setLoading(true);
-    setError(null);
+    clearError();
 
     try {
       // Call validate_and_approve_user function
@@ -63,7 +64,7 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
 
       if (rpcError) {
         console.error('RPC error:', rpcError);
-        setError('Failed to validate code. Please try again.');
+        handleError(rpcError, 'Failed to validate code. Please try again.');
         setLoading(false);
         return;
       }
@@ -73,17 +74,16 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
       if (result.success) {
         // Clear the code input and show success state
         setCode('');
-        setError(null);
+        clearError();
         
         // Success! Notify parent to refresh approval status
         onApprovalSuccess();
       } else {
         // Show specific error message from backend
-        setError(result.error || 'Invalid invite code');
+        handleError(result.error || 'Invalid invite code', result.error || 'Invalid invite code');
       }
     } catch (err) {
-      console.error('Error submitting code:', err);
-      setError('An unexpected error occurred. Please try again.');
+      handleError(err, 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

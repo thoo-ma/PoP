@@ -3,20 +3,22 @@ import { Audio } from 'expo-av';
 import { File } from 'expo-file-system';
 import { detectToiletFlush } from '../lib/toiletDetectionApi';
 import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '../types/audio';
+import { isRateLimitError } from '../utils/errorHelpers';
+import { useErrorHandler } from './useErrorHandler';
 
 export const useToiletDetection = (): UseToiletDetectionReturn => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [detectionResult, setDetectionResult] = useState<DetectionResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { error, handleError, clearError } = useErrorHandler('ToiletDetection');
   const [rateLimitError, setRateLimitError] = useState<RateLimitError | null>(null);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
 
   const startRecording = useCallback(async () => {
     try {
       // Clear previous state
-      setError(null);
+      clearError();
       setRateLimitError(null);
       setDetectionResult(null);
       setAudioUri(null);
@@ -25,9 +27,9 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       const permission = await Audio.requestPermissionsAsync();
       if (!permission.granted) {
         if (permission.canAskAgain) {
-          setError('Microphone permission is required to record audio');
+          handleError('Microphone permission is required to record audio', 'Microphone permission is required to record audio');
         } else {
-          setError('Microphone permission denied. Please enable it in your device Settings → Pop → Microphone');
+          handleError('Microphone permission denied. Please enable it in your device Settings → Pop → Microphone', 'Microphone permission denied. Please enable it in your device Settings → Pop → Microphone');
         }
         return;
       }
@@ -68,9 +70,9 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setRecording(newRecording);
       setIsRecording(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to start recording');
+      handleError(err, 'Failed to start recording');
     }
-  }, []);
+  }, [clearError, handleError]);
 
   const stopRecording = useCallback(async () => {
     try {
@@ -91,22 +93,22 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setRecording(null);
 
       if (!uri) {
-        setError('Failed to save recording');
+        handleError('Failed to save recording', 'Failed to save recording');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to stop recording');
+      handleError(err, 'Failed to stop recording');
     }
-  }, [recording]);
+  }, [recording, handleError]);
 
   const analyzeAudio = useCallback(async (threshold: number = 0.5) => {
     if (!audioUri) {
-      setError('No audio recording available');
+      handleError('No audio recording available', 'No audio recording available');
       return;
     }
 
     try {
       setIsAnalyzing(true);
-      setError(null);
+      clearError();
       setRateLimitError(null);
       setDetectionResult(null);
 
@@ -119,24 +121,23 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setDetectionResult(result);
     } catch (err) {
       // Check if it's a rate limit error
-      if (err && typeof err === 'object' && 'error' in err && err.error === 'rate_limit') {
-        setRateLimitError(err as RateLimitError);
-        setError('Daily detection limit reached');
+      if (isRateLimitError(err)) {
+        setRateLimitError(err);
+        handleError('Daily detection limit reached', 'Daily detection limit reached');
       } else {
-        const errorMessage = err instanceof Error ? err.message : 'Detection failed: Unknown error';
-        setError(errorMessage);
+        handleError(err, 'Detection failed: Unknown error');
       }
     } finally {
       setIsAnalyzing(false);
     }
-  }, [audioUri]);
+  }, [audioUri, clearError, handleError]);
 
   const clearResult = useCallback(() => {
     setDetectionResult(null);
-    setError(null);
+    clearError();
     setRateLimitError(null);
     setAudioUri(null);
-  }, []);
+  }, [clearError]);
 
   return {
     isRecording,

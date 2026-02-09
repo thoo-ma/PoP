@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import type { UseUserApprovalReturn } from '../types/auth';
+import { logError } from '../utils/errorHelpers';
 
 /**
  * Hook to manage user approval status
@@ -36,14 +37,14 @@ export function useUserApproval(): UseUserApprovalReturn {
         if (error.code === 'PGRST116') {
           setApproved(null);
         } else {
-          console.error('Error fetching approval status:', error);
+          logError('UserApproval:Fetch', error);
           setApproved(null);
         }
       } else {
         setApproved(data?.approved ?? null);
       }
     } catch (error) {
-      console.error('Error in fetchApprovalStatus:', error);
+      logError('UserApproval:Fetch', error);
       setApproved(null);
     } finally {
       setLoading(false);

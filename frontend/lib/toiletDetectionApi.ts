@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import type { DetectionResult, RateLimitError } from '../types/audio';
+import { getErrorMessage, logError, isRateLimitError } from '../utils/errorHelpers';
 
 /**
  * Call Supabase Edge Function to detect toilet flush
@@ -47,12 +48,14 @@ export async function detectToiletFlush(
 
     return data as DetectionResult;
   } catch (error) {
-    // Re-throw if it's already a structured error
-    if (error && typeof error === 'object' && 'error' in error) {
+    logError('ToiletDetectionAPI', error);
+    
+    // Re-throw if it's a structured error (like rate limit)
+    if (isRateLimitError(error)) {
       throw error;
     }
     // Otherwise wrap in generic error
-    throw new Error(error instanceof Error ? error.message : 'Unknown error occurred');
+    throw new Error(getErrorMessage(error, 'Unknown error occurred'));
   }
 }
 

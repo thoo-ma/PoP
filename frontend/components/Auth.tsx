@@ -4,7 +4,7 @@ import { supabase, isExpoGo } from '../lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { Provider } from '@supabase/supabase-js';
 import type { OAuthProvider } from '../types';
-import { getRedirectUrl } from '../utils';
+import { getRedirectUrl, getErrorMessage, logError } from '../utils';
 import { authStyles as styles } from '../styles';
 import OAuthButton from './auth/OAuthButton';
 
@@ -45,8 +45,8 @@ export default function Auth() {
         }
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      Alert.alert('Connection error', errorMessage);
+      logError('Auth:OAuth', error);
+      Alert.alert('Connection error', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -77,9 +77,8 @@ export default function Auth() {
                 
                 // Success - auth state will automatically update via onAuthStateChange
               } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'Failed to authenticate';
-                Alert.alert('Authentication Error', errorMessage);
-                console.error('Anonymous auth error:', err);
+                logError('Auth:Anonymous', err);
+                Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
               } finally {
                 setDevLoading(false);
               }

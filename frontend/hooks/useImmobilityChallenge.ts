@@ -4,6 +4,7 @@ import type { Subscription } from 'expo-sensors/build/Pedometer';
 import { SENSOR_UPDATE_INTERVAL } from '../constants';
 import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '../types';
 import { getThresholds } from '../utils/sensorHelpers';
+import { logError } from '../utils/errorHelpers';
 
 export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmobilityChallengeReturn => {
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -276,7 +277,8 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
           );
         }
       } catch (error) {
-        // Silently handle pedometer subscription errors
+        // Silently handle pedometer subscription errors (device may not support it)
+        logError('ImmobilityChallenge:Pedometer', error);
       }
     };
 
