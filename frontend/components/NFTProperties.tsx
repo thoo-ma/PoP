@@ -7,6 +7,7 @@ interface NFTPropertiesProps {
   comfort: number;
   luck: number;
   mode?: 'compact' | 'detailed';
+  excludeProperties?: string[];
 }
 
 interface PropertyBarProps {
@@ -44,7 +45,8 @@ export default function NFTProperties({
   resilience, 
   comfort, 
   luck, 
-  mode = 'compact' 
+  mode = 'compact',
+  excludeProperties = []
 }: NFTPropertiesProps) {
   const isCompact = mode === 'compact';
   
@@ -53,7 +55,7 @@ export default function NFTProperties({
     { label: 'Resilience', value: resilience, color: '#10b981' },  // Green
     { label: 'Comfort', value: comfort, color: '#f59e0b' },        // Orange
     { label: 'Luck', value: luck, color: '#8b5cf6' },              // Purple
-  ];
+  ].filter(prop => !excludeProperties.includes(prop.label));
 
   return (
     <View style={isCompact ? styles.containerCompact : styles.containerDetailed}>

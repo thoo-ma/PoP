@@ -3,7 +3,7 @@ import Slider from '@react-native-community/slider';
 import { useState } from 'react';
 import { repairStyles as styles } from '../styles';
 import { MOCK_NFTS } from '../constants/mockData';
-import NFTProperties from '../components/NFTProperties';
+import { NFTProperties } from '../components';
 import { useNFTStore } from '../hooks/useNFTStore';
 
 export default function Repair() {
@@ -65,70 +65,42 @@ export default function Repair() {
           </TouchableOpacity>
         ) : (
           <>
-            {/* Selected NFT */}
+            {/* Selected NFT Card */}
             <View style={styles.nftCard}>
-              <Image
-                source={
-                  selectedNFTData?.image 
-                    ? (typeof selectedNFTData.image === 'string' ? { uri: selectedNFTData.image } : selectedNFTData.image)
-                    : require('../assets/toilets/nitro/nitro-1.jpeg')
-                }
-                style={styles.nftImage}
-                resizeMode="cover"
-              />
-              <Text style={styles.nftName}>{selectedNFTData?.name || `NFT #${selectedNFT}`}</Text>
-            </View>
-
-            {/* All Properties Display */}
-            {selectedNFTData && (
-              <View style={styles.propertiesSection}>
-                <Text style={styles.sectionTitle}>NFT Properties</Text>
-                <View style={styles.staticPropertiesContainer}>
-                  <View style={styles.staticPropertyRow}>
-                    <Text style={styles.staticPropertyLabel}>Efficiency:</Text>
-                    <Text style={styles.staticPropertyValue}>{selectedNFTData.efficiency}</Text>
-                    <Text style={styles.staticPropertyBadge}>Max</Text>
-                  </View>
-                  <View style={styles.staticPropertyRow}>
-                    <Text style={styles.staticPropertyLabel}>Comfort:</Text>
-                    <Text style={styles.staticPropertyValue}>{selectedNFTData.comfort}</Text>
-                    <Text style={styles.staticPropertyBadge}>Max</Text>
-                  </View>
-                  <View style={styles.staticPropertyRow}>
-                    <Text style={styles.staticPropertyLabel}>Luck:</Text>
-                    <Text style={styles.staticPropertyValue}>{selectedNFTData.luck}</Text>
-                    <Text style={styles.staticPropertyBadge}>Max</Text>
-                  </View>
+              <View style={styles.imageContainer}>
+                <Image
+                  source={
+                    selectedNFTData?.image 
+                      ? (typeof selectedNFTData.image === 'string' ? { uri: selectedNFTData.image } : selectedNFTData.image)
+                      : require('../assets/toilets/nitro/nitro-1.jpeg')
+                  }
+                  style={styles.nftImage}
+                  resizeMode="cover"
+                />
+                <View style={styles.resilienceBadge}>
+                  <Text style={styles.resilienceBadgeText}>Resilience: {currentResilience + Math.round(repairAmount)}%</Text>
                 </View>
               </View>
-            )}
-
-            {/* Resilience Bar */}
-            <View style={styles.resilienceSection}>
-              <Text style={styles.sectionTitle}>Resilience (Repairable)</Text>
-              <View style={styles.resilienceBarContainer}>
-                <View style={styles.resilienceBarBackground}>
-                  <View 
-                    style={[
-                      styles.resilienceBarFill, 
-                      { width: `${currentResilience}%` }
-                    ]} 
+              
+              <View style={styles.cardContent}>
+                <Text style={styles.nftName}>{selectedNFTData?.name || `NFT #${selectedNFT}`}</Text>
+                
+                {selectedNFTData && (
+                  <NFTProperties
+                    efficiency={selectedNFTData.efficiency}
+                    resilience={currentResilience + Math.round(repairAmount)}
+                    comfort={selectedNFTData.comfort}
+                    luck={selectedNFTData.luck}
+                    mode="compact"
                   />
-                  <View 
-                    style={[
-                      styles.resilienceBarRepair, 
-                      { width: `${Math.round(repairAmount)}%`, left: `${currentResilience}%` }
-                    ]} 
-                  />
-                </View>
-                <Text style={styles.resilienceText}>{currentResilience + Math.round(repairAmount)}%</Text>
+                )}
               </View>
             </View>
 
             {currentResilience < maxResilience && !isRepaired && (
               <>
-                {/* Repair Slider */}
-                <View style={styles.sliderSection}>
+                {/* Repair Controls */}
+                <View style={styles.repairControls}>
                   <Text style={styles.sectionTitle}>Repair Amount</Text>
                   <View style={styles.sliderValueContainer}>
                     <Text style={styles.sliderValue}>+{Math.round(repairAmount)}%</Text>
@@ -139,9 +111,9 @@ export default function Repair() {
                     maximumValue={maxRepairPossible}
                     value={repairAmount}
                     onValueChange={setRepairAmount}
-                    minimumTrackTintColor="#10b981"
+                    minimumTrackTintColor="#1e293b"
                     maximumTrackTintColor="#d1d5db"
-                    thumbTintColor="#10b981"
+                    thumbTintColor="#1e293b"
                     step={1}
                   />
                 </View>
