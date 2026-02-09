@@ -1,7 +1,8 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { breedStyles as styles } from '../styles';
-import { MOCK_NFTS, type MockNFT } from '../constants/mockData';
+import { MOCK_NFTS } from '../constants/mockData';
+import type { NFT } from '../types/nft';
 import { NFTProperties } from '../components';
 
 const breedImages = [
@@ -15,13 +16,13 @@ const breedImages = [
 export default function Breed() {
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
   const [selectedAsset2, setSelectedAsset2] = useState<string | null>(null);
-  const [breedResult, setBreedResult] = useState<MockNFT | null>(null);
+  const [breedResult, setBreedResult] = useState<NFT | null>(null);
 
   const handleBreed = () => {
     if (selectedAsset1 && selectedAsset2 && asset1 && asset2) {
       // Generate new NFT by averaging parents' properties
       const randomImage = breedImages[Math.floor(Math.random() * breedImages.length)];
-      const newNFT: MockNFT = {
+      const newNFT: NFT = {
         id: `${Date.now()}`,
         name: `NFT #${Math.floor(Math.random() * 9000) + 1000}`,
         image: randomImage,

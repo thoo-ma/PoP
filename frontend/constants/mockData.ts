@@ -1,16 +1,5 @@
 // Shared mock NFT data across the app
-
-export interface MockNFT {
-  id: string;
-  name: string;
-  image: string | number;
-  efficiency: number;    // 0-100: Mining/earning efficiency
-  resilience: number;    // 0-100: Durability (can be repaired)
-  comfort: number;       // 0-100: User comfort bonus
-  luck: number;          // 0-100: Chance of bonus rewards
-  isListed?: boolean;
-  price?: string;
-}
+import type { NFT } from '../types/nft';
 
 const chillImage1 = require('../assets/toilets/chill/chill-1.jpeg');
 const chillImage2 = require('../assets/toilets/chill/chill-2.jpeg');
@@ -29,7 +18,7 @@ const omegaImage3 = require('../assets/toilets/omega/omega-3.jpeg');
 const omegaImage4 = require('../assets/toilets/omega/omega-4.jpeg');
 const omegaImage5 = require('../assets/toilets/omega/omega-5.jpeg');
 
-export const MOCK_NFTS: MockNFT[] = [
+export const MOCK_NFTS: NFT[] = [
   { 
     id: '1', 
     name: 'NFT #1', 
@@ -95,7 +84,7 @@ export const MOCK_NFTS: MockNFT[] = [
 ];
 
 // Mock marketplace listings from other users
-export const MOCK_MARKETPLACE_LISTINGS: MockNFT[] = [
+export const MOCK_MARKETPLACE_LISTINGS: NFT[] = [
   { id: '101', name: 'NFT #101', price: '0.5 ETH', image: chillImage2, efficiency: 70, resilience: 80, comfort: 75, luck: 68 },
   { id: '102', name: 'NFT #102', price: '1.2 ETH', image: omegaImage4, efficiency: 90, resilience: 95, comfort: 88, luck: 92 },
   { id: '103', name: 'NFT #103', price: '0.8 ETH', image: nitroImage3, efficiency: 72, resilience: 75, comfort: 78, luck: 70 },

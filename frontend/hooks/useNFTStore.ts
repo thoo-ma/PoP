@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { MOCK_NFTS, MockNFT } from '../constants/mockData';
+import { MOCK_NFTS } from '../constants/mockData';
+import type { NFT } from '../types/nft';
 
 let nftState = [...MOCK_NFTS];
 let listeners: Array<() => void> = [];

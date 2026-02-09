@@ -1,14 +1,13 @@
-import type { SortOption } from '../types';
-import type { MockNFT } from '../constants/mockData';
+import type { SortOption, NFT } from '../types';
 
 /**
  * Sort NFTs by a specific property in ascending or descending order
  */
 export function sortNFTs(
-  nfts: MockNFT[], 
-  sortBy: SortOption, 
+  nfts: NFT[], 
+  sortBy: SortOption,
   sortOrder: 'asc' | 'desc'
-): MockNFT[] {
+): NFT[] {
   return [...nfts].sort((a, b) => {
     return sortOrder === 'desc' ? b[sortBy] - a[sortBy] : a[sortBy] - b[sortBy];
   });
