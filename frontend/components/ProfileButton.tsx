@@ -12,6 +12,9 @@ export default function ProfileButton({ onPress }: ProfileButtonProps) {
       style={styles.button}
       onPress={onPress}
       activeOpacity={0.7}
+      accessibilityLabel="Profile"
+      accessibilityRole="button"
+      accessibilityHint="Opens your profile and settings"
     >
       <MaterialIcons name="account-circle" size={32} color={colors.primary} />
     </TouchableOpacity>

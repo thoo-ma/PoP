@@ -38,6 +38,9 @@ export default function Marketplace() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'buy' && styles.tabActive]}
           onPress={() => setActiveTab('buy')}
+          accessibilityLabel="Browse marketplace"
+          accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'buy' }}
         >
           <Text style={[styles.tabText, activeTab === 'buy' && styles.tabTextActive]}>
             Buy ({MOCK_MARKETPLACE_LISTINGS.length})
@@ -46,6 +49,9 @@ export default function Marketplace() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'sell' && styles.tabActive]}
           onPress={() => setActiveTab('sell')}
+          accessibilityLabel="My listings"
+          accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'sell' }}
         >
           <Text style={[styles.tabText, activeTab === 'sell' && styles.tabTextActive]}>
             My Listings ({myListings.length})
@@ -94,7 +100,13 @@ export default function Marketplace() {
                   <Text style={styles.seller}>by User {item.id}</Text>
                   <View style={styles.priceRow}>
                     <Text style={styles.price}>{item.price}</Text>
-                    <TouchableOpacity style={styles.buyButton} onPress={handleBuyNFT}>
+                    <TouchableOpacity 
+                      style={styles.buyButton} 
+                      onPress={handleBuyNFT}
+                      accessibilityLabel={`Buy ${item.name} for ${item.price}`}
+                      accessibilityRole="button"
+                      accessibilityHint="Purchase this NFT"
+                    >
                       <Text style={styles.buyButtonText}>Buy</Text>
                     </TouchableOpacity>
                   </View>
@@ -128,6 +140,9 @@ export default function Marketplace() {
                       <TouchableOpacity 
                         style={styles.unlistButton}
                         onPress={() => unlistNFT(item.id)}
+                        accessibilityLabel={`Unlist ${item.name}`}
+                        accessibilityRole="button"
+                        accessibilityHint="Remove this NFT from marketplace"
                       >
                         <Text style={styles.unlistButtonText}>Unlist</Text>
                       </TouchableOpacity>

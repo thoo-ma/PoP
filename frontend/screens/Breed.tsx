@@ -165,6 +165,9 @@ export default function Breed() {
             <TouchableOpacity
               style={styles.resetButton}
               onPress={handleReset}
+              accessibilityLabel="Reset and breed again"
+              accessibilityRole="button"
+              accessibilityHint="Clear results and select new NFTs to breed"
             >
               <Text style={styles.resetButtonText}>Breed Again</Text>
             </TouchableOpacity>

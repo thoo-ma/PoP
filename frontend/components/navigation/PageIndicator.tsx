@@ -8,12 +8,12 @@ import { colors } from '../../constants';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
-  { index: 0, icon: 'home' },              // Poop
-  { index: 1, icon: 'account-balance-wallet' }, // Vault
-  { index: 2, icon: 'sync' },              // Breed
-  { index: 3, icon: 'shopping-cart' },     // Marketplace
-  { index: 4, icon: 'construction' },      // Repair
-] as const;
+  { index: 0, icon: 'home' as const, label: 'Home' },
+  { index: 1, icon: 'account-balance-wallet' as const, label: 'Vault' },
+  { index: 2, icon: 'sync' as const, label: 'Breed' },
+  { index: 3, icon: 'shopping-cart' as const, label: 'Marketplace' },
+  { index: 4, icon: 'construction' as const, label: 'Repair' },
+];
 
 export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
   const [moreMenuVisible, setMoreMenuVisible] = useState(false);
@@ -22,12 +22,15 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
     <>
       <View style={styles.pagination}>
         <View style={styles.floatingMenu}>
-          {PRIMARY_PAGE_ICONS.map(({ index, icon }) => (
+          {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
             <TouchableOpacity 
               key={index} 
               style={styles.iconWrapper}
               onPress={() => onPageChange?.(index)}
               activeOpacity={0.6}
+              accessibilityLabel={label}
+              accessibilityRole="button"
+              accessibilityState={{ selected: currentPage === index }}
             >
               <MaterialIcons
                 name={icon}
@@ -42,6 +45,9 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
             style={styles.iconWrapper}
             onPress={() => setMoreMenuVisible(true)}
             activeOpacity={0.6}
+            accessibilityLabel="More pages"
+            accessibilityRole="button"
+            accessibilityHint="Opens additional navigation options"
           >
             <MaterialIcons
               name="more-horiz"

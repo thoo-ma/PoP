@@ -12,6 +12,10 @@ export default function DifficultySelector({ mode, onModeChange, disabled }: Dif
         onPress={onModeChange}
         activeOpacity={0.7}
         disabled={disabled}
+        accessibilityLabel={`Difficulty: ${displayMode}`}
+        accessibilityRole="button"
+        accessibilityHint="Tap to cycle through difficulty levels"
+        accessibilityState={{ disabled }}
       >
         <Text style={styles.modeButtonText}>{displayMode}</Text>
       </TouchableOpacity>

@@ -74,6 +74,9 @@ export default function Vault() {
                   <TouchableOpacity 
                     style={styles.listButton}
                     onPress={() => handleListNFT(nft.id)}
+                    accessibilityLabel={`List ${nft.name} for sale`}
+                    accessibilityRole="button"
+                    accessibilityHint="List this NFT on the marketplace"
                   >
                     <Text style={styles.listButtonText}>List for Sale</Text>
                   </TouchableOpacity>

@@ -137,6 +137,10 @@ export default function ProofOfPoop() {
               timelapseOption === 5000 && styles.timelapseButtonActive,
             ]}
             onPress={() => setTimelapseOption(5000)}
+            accessibilityLabel="5 seconds"
+            accessibilityRole="button"
+            accessibilityHint="Set immobility duration to 5 seconds"
+            accessibilityState={{ selected: timelapseOption === 5000 }}
           >
             <Text style={[
               styles.timelapseText,
@@ -151,6 +155,10 @@ export default function ProofOfPoop() {
               timelapseOption === 10000 && styles.timelapseButtonActive,
             ]}
             onPress={() => setTimelapseOption(10000)}
+            accessibilityLabel="10 seconds"
+            accessibilityRole="button"
+            accessibilityHint="Set immobility duration to 10 seconds"
+            accessibilityState={{ selected: timelapseOption === 10000 }}
           >
             <Text style={[
               styles.timelapseText,
@@ -165,6 +173,10 @@ export default function ProofOfPoop() {
               timelapseOption === 15000 && styles.timelapseButtonActive,
             ]}
             onPress={() => setTimelapseOption(15000)}
+            accessibilityLabel="15 seconds"
+            accessibilityRole="button"
+            accessibilityHint="Set immobility duration to 15 seconds"
+            accessibilityState={{ selected: timelapseOption === 15000 }}
           >
             <Text style={[
               styles.timelapseText,
@@ -197,6 +209,9 @@ export default function ProofOfPoop() {
       <TouchableOpacity
         style={styles.button}
         onPress={handleStartChallenge}
+        accessibilityLabel="Start challenge"
+        accessibilityRole="button"
+        accessibilityHint="Begin the immobility and toilet detection challenge"
       >
         <Text style={styles.buttonText}>START CHALLENGE</Text>
       </TouchableOpacity>
@@ -234,6 +249,9 @@ export default function ProofOfPoop() {
         <TouchableOpacity
           style={[styles.button, styles.buttonStop]}
           onPress={handleStopImmobility}
+          accessibilityLabel="Stop challenge"
+          accessibilityRole="button"
+          accessibilityHint="End the current challenge"
         >
           <Text style={styles.buttonText}>STOP CHALLENGE</Text>
         </TouchableOpacity>
@@ -260,6 +278,9 @@ export default function ProofOfPoop() {
       <TouchableOpacity
         style={[styles.button, styles.buttonRecording]}
         onPress={handleStartRecording}
+        accessibilityLabel="Start recording"
+        accessibilityRole="button"
+        accessibilityHint="Proceed to record toilet flush"
       >
         <Text style={styles.buttonText}>START RECORDING</Text>
       </TouchableOpacity>
@@ -321,6 +342,10 @@ export default function ProofOfPoop() {
             ]}
             onPress={handleRecordPress}
             disabled={!canRecord}
+            accessibilityLabel={isRecording ? "Stop recording" : "Start recording"}
+            accessibilityRole="button"
+            accessibilityHint="Record toilet flush sound"
+            accessibilityState={{ disabled: !canRecord }}
           >
             <Text style={styles.buttonText}>
               {isRecording ? 'Stop' : 'Record'}
@@ -336,6 +361,10 @@ export default function ProofOfPoop() {
               ]}
               onPress={handleAnalyzePress}
               disabled={!canAnalyze}
+              accessibilityLabel="Analyze recording"
+              accessibilityRole="button"
+              accessibilityHint="Analyze audio for toilet flush detection"
+              accessibilityState={{ disabled: !canAnalyze, busy: isAnalyzing }}
             >
               {isAnalyzing ? (
                 <ActivityIndicator color="#fff" />
@@ -421,6 +450,9 @@ export default function ProofOfPoop() {
         <TouchableOpacity
           style={styles.button}
           onPress={handleNewChallenge}
+          accessibilityLabel="New challenge"
+          accessibilityRole="button"
+          accessibilityHint="Start a new challenge from the beginning"
         >
           <Text style={styles.buttonText}>NEW CHALLENGE</Text>
         </TouchableOpacity>

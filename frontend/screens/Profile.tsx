@@ -38,6 +38,8 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             style={styles.closeButton}
             onPress={onClose}
             activeOpacity={0.7}
+            accessibilityLabel="Close profile"
+            accessibilityRole="button"
           >
             <MaterialIcons name="close" size={24} color={colors.primary} />
           </TouchableOpacity>
@@ -77,6 +79,9 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             style={styles.signOutButton} 
             onPress={handleSignOut}
             activeOpacity={0.7}
+            accessibilityLabel="Sign out"
+            accessibilityRole="button"
+            accessibilityHint="Sign out of your account"
           >
             <MaterialIcons name="logout" size={20} color={colors.buttonText} />
             <Text style={styles.signOutText}>Sign Out</Text>

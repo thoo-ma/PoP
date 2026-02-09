@@ -30,6 +30,10 @@ function SortControls({
         <TouchableOpacity 
           style={styles.sortButton}
           onPress={onMenuToggle}
+          accessibilityLabel={`Sort by ${sortBy}`}
+          accessibilityRole="button"
+          accessibilityHint="Opens sort options menu"
+          accessibilityState={{ expanded: showSortMenu }}
         >
           <Text style={styles.sortButtonText}>
             {capitalize(sortBy)}
@@ -39,6 +43,9 @@ function SortControls({
         <TouchableOpacity 
           style={styles.sortOrderButton}
           onPress={onSortOrderToggle}
+          accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
+          accessibilityRole="button"
+          accessibilityHint="Toggle between ascending and descending order"
         >
           <Text style={styles.sortOrderIcon}>{sortOrder === 'desc' ? '↓' : '↑'}</Text>
         </TouchableOpacity>
@@ -52,6 +59,9 @@ function SortControls({
                   sortBy === option && styles.sortMenuItemActive
                 ]}
                 onPress={() => onSortByChange(option)}
+                accessibilityLabel={`Sort by ${option}`}
+                accessibilityRole="menuitem"
+                accessibilityState={{ selected: sortBy === option }}
               >
                 <Text style={[
                   styles.sortMenuItemText,

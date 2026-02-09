@@ -85,6 +85,10 @@ export default function Auth() {
               }
             }}
             disabled={devLoading}
+            accessibilityLabel="Continue in development mode"
+            accessibilityRole="button"
+            accessibilityHint="Sign in anonymously for testing purposes"
+            accessibilityState={{ disabled: devLoading }}
           >
             {devLoading ? (
               <ActivityIndicator color={colors.buttonText} />

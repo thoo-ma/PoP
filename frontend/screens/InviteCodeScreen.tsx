@@ -124,6 +124,8 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
           autoComplete="off"
           keyboardType="ascii-capable"
           returnKeyType="done"
+          accessibilityLabel="Invite code"
+          accessibilityHint="Enter your 8-character invite code"
           onSubmitEditing={handleSubmit}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -153,6 +155,10 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
           ]}
           onPress={handleSubmit}
           disabled={!canSubmit}
+          accessibilityLabel="Submit invite code"
+          accessibilityRole="button"
+          accessibilityHint="Validate and submit your invite code"
+          accessibilityState={{ disabled: !canSubmit, busy: loading }}
         >
           <Text style={styles.submitButtonText}>
             {loading ? 'Validating...' : 'Submit'}

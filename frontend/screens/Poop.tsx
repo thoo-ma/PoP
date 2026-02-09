@@ -59,6 +59,9 @@ export default function Poop() {
         style={styles.poopButton} 
         onPress={handlePoop}
         activeOpacity={0.8}
+        accessibilityLabel="Start pooping"
+        accessibilityRole="button"
+        accessibilityHint="Begin your toilet session"
       >
         <Text style={styles.poopButtonText}>Poop</Text>
       </TouchableOpacity>

@@ -5,10 +5,10 @@ import { styles } from '../../styles/MoreMenu.styles';
 import { colors } from '../../constants';
 
 const MORE_PAGES = [
-  { index: 5, name: 'Proof of Immobility', icon: 'event-seat' },
-  { index: 6, name: 'Proof of Flush', icon: 'water-drop' },
-  { index: 7, name: 'Proof of Poop', icon: 'park' },
-  { index: 8, name: 'Detection History', icon: 'history' },
+  { index: 5, name: 'Proof of Immobility', icon: 'event-seat', hint: 'Test your ability to stay still' },
+  { index: 6, name: 'Proof of Flush', icon: 'water-drop', hint: 'Record and verify toilet flush sound' },
+  { index: 7, name: 'Proof of Poop', icon: 'park', hint: 'Complete the ultimate immobility and flush challenge' },
+  { index: 8, name: 'Detection History', icon: 'history', hint: 'View your past detection attempts' },
 ];
 
 export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }: MoreMenuProps) {
@@ -40,6 +40,10 @@ export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }
                   currentPage === page.index && styles.menuItemActive
                 ]}
                 onPress={() => handleSelectPage(page.index)}
+                accessibilityLabel={page.name}
+                accessibilityRole="button"
+                accessibilityHint={page.hint}
+                accessibilityState={{ selected: currentPage === page.index }}
               >
                 <MaterialIcons
                   name={page.icon as any}

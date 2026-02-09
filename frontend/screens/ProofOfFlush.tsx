@@ -140,6 +140,10 @@ export default function ProofOfFlush() {
           ]}
           onPress={handleRecordPress}
           disabled={!canRecord}
+          accessibilityLabel={isRecording ? "Stop recording" : "Start recording"}
+          accessibilityRole="button"
+          accessibilityHint="Record toilet flush sound for analysis"
+          accessibilityState={{ disabled: !canRecord }}
         >
           <Text style={styles.buttonText}>
             {isRecording ? 'Stop' : 'Record'}
@@ -155,6 +159,10 @@ export default function ProofOfFlush() {
             ]}
             onPress={handleAnalyzePress}
             disabled={!canAnalyze}
+            accessibilityLabel="Analyze recording"
+            accessibilityRole="button"
+            accessibilityHint="Analyze the recorded audio for toilet flush detection"
+            accessibilityState={{ disabled: !canAnalyze, busy: isAnalyzing }}
           >
             {isAnalyzing ? (
               <ActivityIndicator color="#fff" />
@@ -168,6 +176,9 @@ export default function ProofOfFlush() {
           <TouchableOpacity
             style={styles.button}
             onPress={clearResult}
+            accessibilityLabel="Start new test"
+            accessibilityRole="button"
+            accessibilityHint="Clear current results and record a new sample"
           >
             <Text style={styles.buttonText}>New Test</Text>
           </TouchableOpacity>
