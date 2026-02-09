@@ -1,5 +1,6 @@
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { colors } from '../constants';
 
 interface ProfileButtonProps {
   onPress: () => void;
@@ -12,7 +13,7 @@ export default function ProfileButton({ onPress }: ProfileButtonProps) {
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <MaterialIcons name="account-circle" size={32} color="#000" />
+      <MaterialIcons name="account-circle" size={32} color={colors.primary} />
     </TouchableOpacity>
   );
 }

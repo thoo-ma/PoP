@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { PageIndicatorProps } from '../../types';
 import { styles } from '../../styles/PageIndicator.styles';
 import MoreMenu from './MoreMenu';
+import { colors } from '../../constants';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -45,7 +46,7 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
             <MaterialIcons
               name="more-horiz"
               size={24}
-              color={[5, 6, 7, 8].includes(currentPage) ? '#000' : '#d1d5db'}
+              color={[5, 6, 7, 8].includes(currentPage) ? colors.active : colors.inactive}
             />
           </TouchableOpacity>
         </View>

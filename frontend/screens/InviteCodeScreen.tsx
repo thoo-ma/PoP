@@ -13,6 +13,7 @@ import { inviteCodeScreenStyles as styles } from '../styles';
 import { showSignOutConfirmation } from '../utils';
 import { useErrorHandler } from '../hooks';
 import type { ApprovalResult } from '../types/auth';
+import { colors } from '../constants';
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void;
@@ -116,7 +117,7 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
           value={code}
           onChangeText={handleCodeChange}
           placeholder="ABC12XYZ"
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.disabled}
           maxLength={8}
           autoCapitalize="characters"
           autoCorrect={false}

@@ -204,7 +204,7 @@ export default function ProofOfPoop() {
   );
 
   const renderImmobilityPhase = () => {
-    const statusColor = status === 'running' ? '#4ade80' : '#dc2626';
+    const statusColor = status === 'running' ? colors.success : colors.error;
     const statusText = status === 'running' ? 'Stay Still! ✓' : 'Movement Detected! ⚠️';
 
     return (
@@ -372,7 +372,7 @@ export default function ProofOfPoop() {
           title="Overall Result"
           value={overallSuccess ? '✅ SUCCESS' : '❌ FAILED'}
           titleColor={colors.button}
-          valueColor={overallSuccess ? '#4ade80' : '#dc2626'}
+          valueColor={overallSuccess ? colors.success : colors.error}
           style={styles.card}
         />
 
@@ -380,7 +380,7 @@ export default function ProofOfPoop() {
           title="Immobility Result"
           value={immobilityAchieved ? '✓ Completed' : '✗ Failed'}
           titleColor={colors.button}
-          valueColor={immobilityAchieved ? '#4ade80' : '#dc2626'}
+          valueColor={immobilityAchieved ? colors.success : colors.error}
           style={styles.card}
         />
 
@@ -398,7 +398,7 @@ export default function ProofOfPoop() {
               title="Detection Result"
               value={detectionResult.detected ? '✓ Flush Detected' : '✗ Not Detected'}
               titleColor={colors.button}
-              valueColor={detectionResult.detected ? '#4ade80' : '#dc2626'}
+              valueColor={detectionResult.detected ? colors.success : colors.error}
               style={styles.card}
             />
             <Card

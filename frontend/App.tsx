@@ -14,6 +14,7 @@ import { InviteCodeScreen, Profile } from './screens';
 import { PAGES, VIEWABILITY_CONFIG } from './config/navigation';
 import { appStyles as styles, width } from './styles';
 import { isExpoGo } from './lib/supabase';
+import { colors } from './constants';
 
 export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();
@@ -55,7 +56,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#000" />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       </SafeAreaProvider>
     );

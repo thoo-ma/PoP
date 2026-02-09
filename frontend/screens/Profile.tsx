@@ -3,6 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../hooks';
 import { profileStyles as styles } from '../styles';
 import { showSignOutConfirmation } from '../utils';
+import { colors } from '../constants';
 
 interface ProfileProps {
   visible: boolean;
@@ -38,12 +39,12 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <MaterialIcons name="close" size={24} color="#000" />
+            <MaterialIcons name="close" size={24} color={colors.primary} />
           </TouchableOpacity>
 
           {/* Profile icon */}
           <View style={styles.avatarContainer}>
-            <MaterialIcons name="account-circle" size={80} color="#000" />
+            <MaterialIcons name="account-circle" size={80} color={colors.primary} />
           </View>
 
           {/* User info */}
@@ -77,7 +78,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             onPress={handleSignOut}
             activeOpacity={0.7}
           >
-            <MaterialIcons name="logout" size={20} color="#fff" />
+            <MaterialIcons name="logout" size={20} color={colors.buttonText} />
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
         </View>

@@ -74,7 +74,7 @@ export default function ProofOfFlush() {
           title="Status"
           value="🎤 Recording..."
           titleColor={colors.button}
-          valueColor="#dc2626"
+          valueColor={colors.error}
           style={styles.card}
         />
       )}
@@ -97,7 +97,7 @@ export default function ProofOfFlush() {
             title="Detection"
             value={detectionResult.detected ? '✅ Toilet Flush Detected!' : '❌ Not Detected'}
             titleColor={colors.button}
-            valueColor={detectionResult.detected ? '#4ade80' : '#dc2626'}
+            valueColor={detectionResult.detected ? colors.success : colors.error}
             style={styles.card}
           />
           <Card

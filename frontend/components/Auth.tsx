@@ -7,6 +7,7 @@ import type { OAuthProvider } from '../types';
 import { getRedirectUrl, getErrorMessage, logError } from '../utils';
 import { authStyles as styles } from '../styles';
 import OAuthButton from './auth/OAuthButton';
+import { colors } from '../constants';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -86,7 +87,7 @@ export default function Auth() {
             disabled={devLoading}
           >
             {devLoading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.buttonText} />
             ) : (
               <Text style={styles.buttonText}>Continue (Dev Mode)</Text>
             )}

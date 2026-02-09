@@ -1,4 +1,5 @@
 import type { ChallengeStatus } from '../types';
+import { colors } from '../constants';
 
 interface StatusDisplay {
   text: string;
@@ -18,8 +19,8 @@ export const getStatusDisplay = (
   if (status === 'idle') {
     return { text: 'Ready', color: immobilityValueColor };
   } else if (status === 'warning') {
-    return { text: 'Movement Detected ⚠️', color: '#ff6b6b' }; // Red
+    return { text: 'Movement Detected ⚠️', color: colors.warning };
   } else {
-    return { text: 'Immobile ✓', color: '#4ade80' }; // Green
+    return { text: 'Immobile ✓', color: colors.success };
   }
 };

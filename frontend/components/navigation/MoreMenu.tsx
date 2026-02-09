@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { MoreMenuProps } from '../../types';
 import { styles } from '../../styles/MoreMenu.styles';
+import { colors } from '../../constants';
 
 const MORE_PAGES = [
   { index: 5, name: 'Proof of Immobility', icon: 'event-seat' },
@@ -43,7 +44,7 @@ export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }
                 <MaterialIcons
                   name={page.icon as any}
                   size={24}
-                  color={currentPage === page.index ? '#000' : '#6b7280'}
+                  color={currentPage === page.index ? colors.active : colors.text}
                 />
                 <Text style={[
                   styles.menuItemText,

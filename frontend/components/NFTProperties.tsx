@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '../styles/NFTProperties.styles';
+import { colors } from '../constants';
 
 interface NFTPropertiesProps {
   efficiency: number;
@@ -52,10 +53,10 @@ function NFTProperties({
   const isCompact = mode === 'compact';
   
   const properties = [
-    { label: 'Efficiency', value: efficiency, color: '#3b82f6' },  // Blue
-    { label: 'Resilience', value: resilience, color: '#10b981' },  // Green
-    { label: 'Comfort', value: comfort, color: '#f59e0b' },        // Orange
-    { label: 'Luck', value: luck, color: '#8b5cf6' },              // Purple
+    { label: 'Efficiency', value: efficiency, color: colors.efficiency },
+    { label: 'Resilience', value: resilience, color: colors.resilience },
+    { label: 'Comfort', value: comfort, color: colors.comfort },
+    { label: 'Luck', value: luck, color: colors.luck },
   ].filter(prop => !excludeProperties.includes(prop.label));
 
   return (
