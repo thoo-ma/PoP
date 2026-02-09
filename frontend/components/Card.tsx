@@ -1,8 +1,9 @@
+import React from 'react';
 import { Text, View } from 'react-native';
 import type { CardProps } from '../types';
 import { styles } from '../styles/Card.styles';
 
-export default function Card({ 
+function Card({ 
   title, 
   value, 
   titleColor = '#64748b',
@@ -16,3 +17,5 @@ export default function Card({
     </View>
   );
 }
+
+export default React.memo(Card);

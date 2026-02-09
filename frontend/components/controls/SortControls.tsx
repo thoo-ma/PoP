@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import type { SortOption } from '../../types';
 import { SORT_OPTIONS } from '../../constants';
@@ -13,7 +14,7 @@ interface SortControlsProps {
   styles: any;
 }
 
-export default function SortControls({
+function SortControls({
   sortBy,
   sortOrder,
   showSortMenu,
@@ -66,3 +67,5 @@ export default function SortControls({
     </View>
   );
 }
+
+export default React.memo(SortControls);

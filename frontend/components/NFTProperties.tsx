@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '../styles/NFTProperties.styles';
 
@@ -17,7 +18,7 @@ interface PropertyBarProps {
   isCompact: boolean;
 }
 
-function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
+const PropertyBar = React.memo(function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
   return (
     <View style={isCompact ? styles.propertyRowCompact : styles.propertyRowDetailed}>
       <Text style={isCompact ? styles.propertyLabelCompact : styles.propertyLabelDetailed}>
@@ -38,9 +39,9 @@ function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
       </View>
     </View>
   );
-}
+});
 
-export default function NFTProperties({ 
+function NFTProperties({ 
   efficiency, 
   resilience, 
   comfort, 
@@ -71,3 +72,5 @@ export default function NFTProperties({
     </View>
   );
 }
+
+export default React.memo(NFTProperties);
