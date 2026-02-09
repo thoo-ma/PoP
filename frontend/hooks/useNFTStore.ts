@@ -18,14 +18,6 @@ export const useNFTStore = () => {
     };
   }, []);
 
-  const subscribe = () => {
-    const listener = () => forceUpdate({});
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter(l => l !== listener);
-    };
-  };
-
   const notify = () => {
     listeners.forEach(listener => listener());
   };
@@ -58,6 +50,5 @@ export const useNFTStore = () => {
     listNFT,
     unlistNFT,
     updateNFTResilience,
-    subscribe,
   };
 };
