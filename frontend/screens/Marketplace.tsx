@@ -94,6 +94,9 @@ export default function Marketplace() {
                     style={styles.nftImage}
                     resizeMode="cover"
                   />
+                  <View style={styles.levelBadge}>
+                    <Text style={styles.levelText}>Lv {item.level}</Text>
+                  </View>
                 </View>
                 <View style={styles.cardContent}>
                   <Text style={styles.nftName}>{item.name}</Text>
@@ -125,6 +128,9 @@ export default function Marketplace() {
                       style={styles.nftImage}
                       resizeMode="cover"
                     />
+                    <View style={styles.levelBadge}>
+                      <Text style={styles.levelText}>Lv {item.level}</Text>
+                    </View>
                   </View>
                   <View style={styles.cardContent}>
                     <Text style={styles.nftName}>{item.name}</Text>

@@ -38,9 +38,9 @@ export const useNFTStore = () => {
     notify();
   };
 
-  const updateNFTResilience = (nftId: string, newResilience: number) => {
+  const updateNFTEnergy = (nftId: string, newEnergy: number) => {
     nftState = nftState.map(nft =>
-      nft.id === nftId ? { ...nft, resilience: Math.min(100, Math.max(0, newResilience)) } : nft
+      nft.id === nftId ? { ...nft, energy: Math.min(100, Math.max(0, newEnergy)) } : nft
     );
     notify();
   };
@@ -49,6 +49,6 @@ export const useNFTStore = () => {
     nfts: getNFTs(),
     listNFT,
     unlistNFT,
-    updateNFTResilience,
+    updateNFTEnergy,
   };
 };

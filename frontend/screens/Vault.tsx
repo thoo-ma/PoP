@@ -55,6 +55,9 @@ export default function Vault() {
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelText}>Lv {nft.level}</Text>
+                </View>
                 {nft.isListed && (
                   <View style={styles.listedBadge}>
                     <Text style={styles.listedText}>Listed</Text>

@@ -21,6 +21,8 @@ export const colors = {
   resilience: '#10b981',
   comfort: '#f59e0b',
   luck: '#8b5cf6',
+  energy: '#ef4444',
+  level: '#6366f1',
   
   // UI Elements
   active: '#000',

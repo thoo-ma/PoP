@@ -8,6 +8,7 @@ interface NFTPropertiesProps {
   resilience: number;
   comfort: number;
   luck: number;
+  energy?: number;
   mode?: 'compact' | 'detailed';
   excludeProperties?: string[];
 }
@@ -47,6 +48,7 @@ function NFTProperties({
   resilience, 
   comfort, 
   luck, 
+  energy,
   mode = 'compact',
   excludeProperties = []
 }: NFTPropertiesProps) {
@@ -57,11 +59,19 @@ function NFTProperties({
     { label: 'Resilience', value: resilience, color: colors.resilience },
     { label: 'Comfort', value: comfort, color: colors.comfort },
     { label: 'Luck', value: luck, color: colors.luck },
-  ].filter(prop => !excludeProperties.includes(prop.label));
+  ];
+
+  // Only add energy if it's provided
+  if (energy !== undefined) {
+    properties.push({ label: 'Energy', value: energy, color: colors.energy });
+  }
+
+  // Filter out excluded properties
+  const filteredProperties = properties.filter(prop => !excludeProperties.includes(prop.label));
 
   return (
     <View style={isCompact ? styles.containerCompact : styles.containerDetailed}>
-      {properties.map((prop) => (
+      {filteredProperties.map((prop) => (
         <PropertyBar 
           key={prop.label}
           label={prop.label}

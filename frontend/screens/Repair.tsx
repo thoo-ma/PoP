@@ -7,21 +7,21 @@ import { NFTProperties } from '../components';
 import { useNFTStore } from '../hooks/useNFTStore';
 
 export default function Repair() {
-  const { updateNFTResilience } = useNFTStore();
+  const { updateNFTEnergy } = useNFTStore();
   const [selectedNFT, setSelectedNFT] = useState<string | null>(null);
-  const [currentResilience, setCurrentResilience] = useState(60);
+  const [currentEnergy, setCurrentEnergy] = useState(60);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
 
-  const maxResilience = 100;
-  const maxRepairPossible = maxResilience - currentResilience;
+  const maxEnergy = 100;
+  const maxRepairPossible = maxEnergy - currentEnergy;
 
   const handleSelectNFT = () => {
-    // Simulate NFT selection - use first NFT that's not at full resilience
-    const nftToRepair = MOCK_NFTS.find(nft => nft.resilience && nft.resilience < 100);
+    // Simulate NFT selection - use first NFT that's not at full energy
+    const nftToRepair = MOCK_NFTS.find(nft => nft.energy && nft.energy < 100);
     if (nftToRepair) {
       setSelectedNFT(nftToRepair.id);
-      setCurrentResilience(nftToRepair.resilience || 60);
+      setCurrentEnergy(nftToRepair.energy || 60);
       setIsRepaired(false);
     }
   };
@@ -29,20 +29,20 @@ export default function Repair() {
   const selectedNFTData = MOCK_NFTS.find(nft => nft.id === selectedNFT);
 
   const handleRepair = () => {
-    const newResilience = currentResilience + repairAmount;
-    setCurrentResilience(newResilience);
+    const newEnergy = currentEnergy + repairAmount;
+    setCurrentEnergy(newEnergy);
     setIsRepaired(true);
     setRepairAmount(0);
     
     // Update the NFT in the store
     if (selectedNFT) {
-      updateNFTResilience(selectedNFT, newResilience);
+      updateNFTEnergy(selectedNFT, newEnergy);
     }
   };
 
   const handleReset = () => {
     setSelectedNFT(null);
-    setCurrentResilience(60);
+    setCurrentEnergy(60);
     setRepairAmount(0);
     setIsRepaired(false);
   };
@@ -51,7 +51,7 @@ export default function Repair() {
     <View style={styles.container}>
       <Text style={styles.title}>Repair</Text>
       <Text style={styles.description}>
-        Select an NFT and restore its resilience
+        Select an NFT and restore its energy
       </Text>
 
       <ScrollView 
@@ -78,7 +78,7 @@ export default function Repair() {
                   resizeMode="cover"
                 />
                 <View style={styles.resilienceBadge}>
-                  <Text style={styles.resilienceBadgeText}>Resilience: {currentResilience + Math.round(repairAmount)}%</Text>
+                  <Text style={styles.resilienceBadgeText}>Energy: {currentEnergy + Math.round(repairAmount)}%</Text>
                 </View>
               </View>
               
@@ -88,16 +88,17 @@ export default function Repair() {
                 {selectedNFTData && (
                   <NFTProperties
                     efficiency={selectedNFTData.efficiency}
-                    resilience={currentResilience + Math.round(repairAmount)}
+                    resilience={selectedNFTData.resilience}
                     comfort={selectedNFTData.comfort}
                     luck={selectedNFTData.luck}
+                    energy={currentEnergy + Math.round(repairAmount)}
                     mode="compact"
                   />
                 )}
               </View>
             </View>
 
-            {currentResilience < maxResilience && !isRepaired && (
+            {currentEnergy < maxEnergy && !isRepaired && (
               <>
                 {/* Repair Controls */}
                 <View style={styles.repairControls}>
@@ -141,9 +142,9 @@ export default function Repair() {
               </View>
             )}
 
-            {currentResilience === maxResilience && !isRepaired && (
+            {currentEnergy === maxEnergy && !isRepaired && (
               <View style={styles.fullResilienceMessage}>
-                <Text style={styles.fullResilienceText}>This NFT is at full resilience!</Text>
+                <Text style={styles.fullResilienceText}>This NFT is at full energy!</Text>
                 <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
                   <Text style={styles.resetButtonText}>Select Another NFT</Text>
                 </TouchableOpacity>

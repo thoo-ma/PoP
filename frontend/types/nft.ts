@@ -8,9 +8,11 @@ export interface NFT {
   name: string;
   image: string | number;
   efficiency: number;    // 0-100: Mining/earning efficiency
-  resilience: number;    // 0-100: Durability (can be repaired)
+  resilience: number;    // 0-100: Durability
   comfort: number;       // 0-100: User comfort bonus
   luck: number;          // 0-100: Chance of bonus rewards
+  energy: number;        // 0-100: Energy level (can be repaired)
+  level: number;         // 0-20: NFT level
   isListed?: boolean;
   price?: string;
 }
