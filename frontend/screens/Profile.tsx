@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../hooks';
 import { profileStyles as styles } from '../styles';
@@ -27,12 +27,11 @@ export default function Profile({ visible, onClose }: ProfileProps) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableOpacity 
+      <Pressable 
         style={styles.overlay}
-        activeOpacity={1}
         onPress={onClose}
       >
-        <View style={styles.container}>
+        <Pressable style={styles.container} onPress={() => {}}>
           {/* Close button */}
           <TouchableOpacity 
             style={styles.closeButton}
@@ -86,8 +85,8 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             <MaterialIcons name="logout" size={20} color={colors.buttonText} />
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 }
