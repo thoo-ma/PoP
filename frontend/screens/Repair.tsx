@@ -77,6 +77,9 @@ export default function Repair() {
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelBadgeText}>Lv {selectedNFTData?.level || 1}</Text>
+                </View>
                 <View style={styles.resilienceBadge}>
                   <Text style={styles.resilienceBadgeText}>Energy: {currentEnergy + Math.round(repairAmount)}%</Text>
                 </View>

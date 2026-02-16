@@ -46,6 +46,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   imageContainer: {
+    position: 'relative',
     width: '100%',
     height: 200,
     backgroundColor: '#f3f4f6',
@@ -56,6 +57,26 @@ export const styles = StyleSheet.create({
   nftImage: {
     width: '100%',
     height: '100%',
+  },
+  levelBadge: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    backgroundColor: '#6366f1',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  levelBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   nftInfo: {
     width: '100%',

@@ -41,6 +41,9 @@ export default function Poop() {
               style={styles.nftImage}
               resizeMode="cover"
             />
+            <View style={styles.levelBadge}>
+              <Text style={styles.levelBadgeText}>Lv {displayNFT.level}</Text>
+            </View>
           </View>
           <View style={styles.nftInfo}>
             <Text style={styles.nftName}>{displayNFT.name}</Text>
