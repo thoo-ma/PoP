@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    paddingBottom: 80,
   },
   title: {
     ...typography.title,
@@ -15,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   description: {
     ...typography.description,
-    marginBottom: 32,
+    marginBottom: 24,
   },
   emptyText: {
     fontSize: 16,
@@ -25,7 +26,7 @@ export const styles = StyleSheet.create({
   nftContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   nftCard: {
     width: '100%',
@@ -48,7 +49,7 @@ export const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     width: '100%',
-    height: 200,
+    height: 180,
     backgroundColor: '#f3f4f6',
     borderRadius: 12,
     marginBottom: 12,
