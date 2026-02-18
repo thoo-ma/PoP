@@ -2,6 +2,7 @@ export { default as Auth } from './Auth';
 export { default as Card } from './Card';
 export { default as NFTCard } from './NFTCard';
 export { default as NFTProperties } from './NFTProperties';
+export { default as NFTSelector } from './NFTSelector';
 export { default as ProfileButton } from './ProfileButton';
 export { default as ScreenLoader } from './ScreenLoader';
 export { default as ScreenError } from './ScreenError';

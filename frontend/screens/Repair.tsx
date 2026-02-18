@@ -1,8 +1,8 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { repairStyles as styles } from '../styles';
-import { NFTProperties, ScreenLoader, ScreenError } from '../components';
+import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '../components';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import type { NFT } from '../types';
 import { nftEvents } from '../utils';
@@ -10,24 +10,40 @@ import { nftEvents } from '../utils';
 export default function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { updateEnergy, loading: updateLoading } = useUpdateNFT();
-  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
+  const [repairedNFT, setRepairedNFT] = useState<NFT | null>(null);
 
+  const selectedNFT = selectedIndex !== null ? (repairedNFT ?? nfts[selectedIndex] ?? null) : null;
   const maxEnergy = 100;
   const currentEnergy = selectedNFT?.energy || 0;
   const maxRepairPossible = maxEnergy - currentEnergy;
 
   const handleSelectNFT = () => {
-    // Find first NFT that's not at full energy
-    const nftToRepair = nfts.find(nft => nft.energy < 100);
-    if (nftToRepair) {
-      setSelectedNFT(nftToRepair);
-      setIsRepaired(false);
-      setRepairAmount(0);
-    } else {
-      Alert.alert('All NFTs at Full Energy', 'All your NFTs are already at full energy!');
-    }
+    if (nfts.length === 0) return;
+    // Start on the first NFT with energy < 100, or index 0
+    const idx = nfts.findIndex(nft => nft.energy < 100);
+    setSelectedIndex(idx >= 0 ? idx : 0);
+    setRepairedNFT(null);
+    setIsRepaired(false);
+    setRepairAmount(0);
+  };
+
+  const handlePrev = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
+    setRepairedNFT(null);
+    setIsRepaired(false);
+    setRepairAmount(0);
+  };
+
+  const handleNext = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex(i => ((i as number) + 1) % nfts.length);
+    setRepairedNFT(null);
+    setIsRepaired(false);
+    setRepairAmount(0);
   };
 
   const handleRepair = async () => {
@@ -43,15 +59,15 @@ export default function Repair() {
       await refetch();
       nftEvents.emit(); // Notify other screens
       // Update selected NFT with new energy value
-      const updatedNFT = { ...selectedNFT, energy: newEnergy };
-      setSelectedNFT(updatedNFT);
+      setRepairedNFT({ ...selectedNFT, energy: newEnergy });
     } else {
       Alert.alert('Repair Failed', 'Failed to repair NFT. Please try again.');
     }
   };
 
   const handleReset = () => {
-    setSelectedNFT(null);
+    setSelectedIndex(null);
+    setRepairedNFT(null);
     setRepairAmount(0);
     setIsRepaired(false);
   };
@@ -75,7 +91,7 @@ export default function Repair() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {!selectedNFT ? (
+        {selectedIndex === null ? (
           <TouchableOpacity 
             style={styles.selectButton} 
             onPress={handleSelectNFT}
@@ -88,6 +104,14 @@ export default function Repair() {
           </TouchableOpacity>
         ) : (
           <>
+            {/* NFT Carousel Selector */}
+            <NFTSelector
+              current={(selectedIndex as number) + 1}
+              total={nfts.length}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              style={{ marginTop: 20, marginBottom: 4 }}
+            />
             {/* Selected NFT Card */}
             <View style={styles.nftCard}>
               <View style={styles.imageContainer}>

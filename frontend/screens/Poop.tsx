@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import NFTProperties from '../components/NFTProperties';
-import { ScreenLoader, ScreenError } from '../components';
+import { ScreenLoader, ScreenError, NFTSelector } from '../components';
 import { nftEvents } from '../utils';
 
 export default function Poop() {
@@ -86,27 +86,13 @@ export default function Poop() {
       </Text>
       
       <View style={styles.nftContainer}>
-        {nfts.length > 1 && (
-          <View style={styles.selectorRow}>
-            <TouchableOpacity
-              onPress={handlePrev}
-              style={styles.selectorArrow}
-              accessibilityLabel="Previous NFT"
-            >
-              <Text style={styles.selectorArrowText}>{'‹'}</Text>
-            </TouchableOpacity>
-            <Text style={styles.selectorCounter}>
-              {selectedIndex + 1} / {nfts.length}
-            </Text>
-            <TouchableOpacity
-              onPress={handleNext}
-              style={styles.selectorArrow}
-              accessibilityLabel="Next NFT"
-            >
-              <Text style={styles.selectorArrowText}>{'›'}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <NFTSelector
+          current={selectedIndex + 1}
+          total={nfts.length}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          style={{ marginBottom: 12 }}
+        />
         <View style={styles.nftCard}>
           <View style={styles.imageContainer}>
             <Image
