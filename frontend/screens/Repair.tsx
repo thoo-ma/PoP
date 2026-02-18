@@ -1,8 +1,8 @@
-import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useState, useEffect } from 'react';
 import { repairStyles as styles } from '../styles';
-import { NFTProperties } from '../components';
+import { NFTProperties, ScreenLoader, ScreenError } from '../components';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import type { NFT } from '../types';
 import { nftEvents } from '../utils';
@@ -57,24 +57,11 @@ export default function Repair() {
   };
 
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Repair</Text>
-        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
-      </View>
-    );
+    return <ScreenLoader title="Repair" />;
   }
 
   if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Repair</Text>
-        <Text style={styles.errorText}>Error: {error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={refetch}>
-          <Text style={styles.retryButtonText}>Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <ScreenError title="Repair" message={`Error: ${error}`} onRetry={refetch} />;
   }
 
   return (

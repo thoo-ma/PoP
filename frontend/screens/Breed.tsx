@@ -1,9 +1,9 @@
-import { Text, View, TouchableOpacity, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
 import { breedStyles as styles } from '../styles';
 import { useUserNFTs, useBreedNFT } from '../hooks';
 import type { NFT } from '../types/nft';
-import { NFTProperties } from '../components';
+import { NFTProperties, ScreenLoader, ScreenError } from '../components';
 import { nftEvents } from '../utils';
 
 export default function Breed() {
@@ -62,21 +62,11 @@ export default function Breed() {
   const asset2 = nfts.find(nft => nft.id === selectedAsset2);
 
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Breed</Text>
-        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
-      </View>
-    );
+    return <ScreenLoader title="Breed" />;
   }
 
   if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Breed</Text>
-        <Text style={styles.errorText}>Error: {error}</Text>
-      </View>
-    );
+    return <ScreenError title="Breed" message={`Error: ${error}`} onRetry={refetch} />;
   }
 
   if (nfts.length < 2) {

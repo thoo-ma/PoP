@@ -1,8 +1,8 @@
-import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
-import { NFTProperties, SortControls, FilterControls } from '../components';
+import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '../components';
 import { sortNFTs, nftEvents } from '../utils';
 import type { SortOption, NFTRarity, NFTTier } from '../types';
 
@@ -69,29 +69,11 @@ export default function Vault() {
   };
   
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Vault</Text>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3b82f6" />
-          <Text style={styles.loadingText}>Loading your collection...</Text>
-        </View>
-      </View>
-    );
+    return <ScreenLoader title="Vault" message="Loading your collection..." />;
   }
-  
+
   if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Vault</Text>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Failed to load NFTs: {error}</Text>
-          <TouchableOpacity style={styles.retryButton} onPress={refetch}>
-            <Text style={styles.retryButtonText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+    return <ScreenError title="Vault" message={`Failed to load NFTs: ${error}`} onRetry={refetch} />;
   }
   
   return (
@@ -129,39 +111,12 @@ export default function Vault() {
       >
         <View style={styles.grid}>
           {sortedNfts.map((nft) => (
-            <View key={nft.id} style={styles.nftCard}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{ uri: nft.image }}
-                  style={styles.nftImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.levelBadge}>
-                  <Text style={styles.levelText}>Lv {nft.level}</Text>
-                </View>
-                <View style={[styles.tierBadge, styles[`${nft.tier}Badge`]]}>
-                  <Text style={styles.tierText}>{nft.tier.toUpperCase()}</Text>
-                </View>
-                <View style={[styles.rarityBadge, styles[`${nft.rarity}Badge`]]}>
-                  <Text style={styles.rarityText}>{nft.rarity.toUpperCase()}</Text>
-                </View>
-                {nft.isListed && (
-                  <View style={styles.listedBadge}>
-                    <Text style={styles.listedText}>Listed</Text>
-                  </View>
-                )}
-              </View>
-              <View style={styles.cardContent}>
-                <Text style={styles.nftName}>{nft.name}</Text>
-                <NFTProperties
-                  efficiency={nft.efficiency}
-                  resilience={nft.resilience}
-                  comfort={nft.comfort}
-                  luck={nft.luck}
-                  mode="compact"
-                />
-                {!nft.isListed && (
-                  <TouchableOpacity 
+            <NFTCard
+              key={nft.id}
+              nft={nft}
+              action={
+                !nft.isListed ? (
+                  <TouchableOpacity
                     style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
                     onPress={() => handleListNFT(nft.id)}
                     disabled={updateLoading}
@@ -173,9 +128,9 @@ export default function Vault() {
                       {updateLoading ? 'Listing...' : 'List for Sale'}
                     </Text>
                   </TouchableOpacity>
-                )}
-              </View>
-            </View>
+                ) : undefined
+              }
+            />
           ))}
         </View>
       </ScrollView>

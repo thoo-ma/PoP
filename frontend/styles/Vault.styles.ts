@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { colors, typography } from '../constants';
-import { sortStyles } from './Sort.styles';
 
 export const styles = StyleSheet.create({
   container: {
@@ -29,156 +28,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  nftCard: {
-    width: '48%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-    overflow: 'hidden',
-  },
-  imageContainer: {
-    width: '100%',
-    aspectRatio: 1,
-    backgroundColor: '#f3f4f6',
-    position: 'relative',
-  },
-  nftImage: {
-    width: '100%',
-    height: '100%',
-  },
-  listedBadge: {
-    position: 'absolute',
-    top: 34,
-    right: 8,
-    backgroundColor: '#10b981',
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  listedText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  levelBadge: {
-    position: 'absolute',
-    top: 8,
-    left: 8,
-    backgroundColor: '#6366f1',
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  levelText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  tierBadge: {
-    position: 'absolute',
-    bottom: 8,
-    left: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  chillBadge: {
-    backgroundColor: '#94a3b8',
-  },
-  nitroBadge: {
-    backgroundColor: '#f59e0b',
-  },
-  omegaBadge: {
-    backgroundColor: '#8b5cf6',
-  },
-  'cruise-seatBadge': {
-    backgroundColor: '#94a3b8',
-  },
-  'turbo-flushBadge': {
-    backgroundColor: '#f59e0b',
-  },
-  'zen-fortressBadge': {
-    backgroundColor: '#8b5cf6',
-  },
-  tierText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  rarityBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  commonBadge: {
-    backgroundColor: '#94a3b8',
-  },
-  rareBadge: {
-    backgroundColor: '#3b82f6',
-  },
-  legendaryBadge: {
-    backgroundColor: '#f59e0b',
-  },
-  transcendentBadge: {
-    backgroundColor: '#a855f7',
-  },
-  rarityText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  cardContent: {
-    padding: 12,
-  },
-  nftName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.title,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  priceText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.title,
-    textAlign: 'center',
-  },
   listButton: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 6,
@@ -193,39 +44,5 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: colors.text,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 14,
-    color: '#ef4444',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: colors.button,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
   },
 });

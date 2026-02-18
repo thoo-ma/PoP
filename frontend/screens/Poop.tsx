@@ -1,8 +1,9 @@
-import { Text, View, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import NFTProperties from '../components/NFTProperties';
+import { ScreenLoader, ScreenError } from '../components';
 import { nftEvents } from '../utils';
 
 export default function Poop() {
@@ -51,22 +52,16 @@ export default function Poop() {
   };
   
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Poop</Text>
-        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
-      </View>
-    );
+    return <ScreenLoader title="Poop" message="Loading your collection..." />;
   }
-  
+
   if (error || !displayNFT) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Poop</Text>
-        <Text style={styles.emptyText}>
-          {error ? `Error: ${error}` : 'No NFTs in your vault'}
-        </Text>
-      </View>
+      <ScreenError
+        title="Poop"
+        message={error ? `Error: ${error}` : 'No NFTs in your vault'}
+        onRetry={error ? refetch : undefined}
+      />
     );
   }
   

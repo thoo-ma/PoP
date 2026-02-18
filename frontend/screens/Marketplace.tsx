@@ -1,10 +1,11 @@
-import { Text, View, ScrollView, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '../styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '../hooks';
-import { NFTProperties, SortControls } from '../components';
+import { NFTCard, SortControls } from '../components';
 import { sortNFTs, nftEvents } from '../utils';
 import type { SortOption } from '../types';
+import { colors } from '../constants';
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
@@ -94,7 +95,7 @@ export default function Marketplace() {
 
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator size="large" color={colors.info} />
         </View>
       ) : (
         <ScrollView 
@@ -112,34 +113,14 @@ export default function Marketplace() {
           {activeTab === 'buy' ? (
             <View style={styles.grid}>
               {sortedMarketplaceListings.map((item) => (
-                <View key={item.id} style={styles.nftCard}>
-                  <View style={styles.imageContainer}>
-                    <Image
-                      source={typeof item.image === 'string' ? { uri: item.image } : item.image}
-                      style={styles.nftImage}
-                      resizeMode="cover"
-                    />
-                    <View style={styles.levelBadge}>
-                      <Text style={styles.levelText}>Lv {item.level}</Text>
-                    </View>
-                    {item.tier && (
-                      <View style={[styles.tierBadge, styles[`${item.tier}Badge`]]}>
-                        <Text style={styles.tierText}>{item.tier.toUpperCase()}</Text>
-                      </View>
-                    )}
-                    {item.rarity && (
-                      <View style={[styles.rarityBadge, styles[`${item.rarity}Badge`]]}>
-                        <Text style={styles.rarityText}>{item.rarity.toUpperCase()}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.nftName}>{item.name}</Text>
-                    <Text style={styles.seller}>by User {item.id.substring(0, 8)}</Text>
+                <NFTCard
+                  key={item.id}
+                  nft={item}
+                  action={
                     <View style={styles.priceRow}>
                       <Text style={styles.price}>{item.price}</Text>
-                      <TouchableOpacity 
-                        style={styles.buyButton} 
+                      <TouchableOpacity
+                        style={styles.buyButton}
                         onPress={handleBuyNFT}
                         accessibilityLabel={`Buy ${item.name} for ${item.price}`}
                         accessibilityRole="button"
@@ -148,43 +129,21 @@ export default function Marketplace() {
                         <Text style={styles.buyButtonText}>Buy</Text>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                </View>
+                  }
+                />
               ))}
             </View>
           ) : (
             <View style={styles.grid}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
-                  <View key={item.id} style={styles.nftCard}>
-                    <View style={styles.imageContainer}>
-                      <Image
-                        source={{ uri: item.image }}
-                        style={styles.nftImage}
-                        resizeMode="cover"
-                      />
-                      <View style={styles.levelBadge}>
-                        <Text style={styles.levelText}>Lv {item.level}</Text>
-                      </View>
-                      <View style={[styles.tierBadge, styles[`${item.tier}Badge`]]}>
-                        <Text style={styles.tierText}>{item.tier.toUpperCase()}</Text>
-                      </View>
-                      <View style={[styles.rarityBadge, styles[`${item.rarity}Badge`]]}>
-                        <Text style={styles.rarityText}>{item.rarity.toUpperCase()}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.cardContent}>
-                      <Text style={styles.nftName}>{item.name}</Text>
-                      <NFTProperties
-                        efficiency={item.efficiency}
-                        resilience={item.resilience}
-                        comfort={item.comfort}
-                        luck={item.luck}
-                        mode="compact"
-                      />
+                  <NFTCard
+                    key={item.id}
+                    nft={item}
+                    action={
                       <View style={styles.priceRow}>
                         <Text style={styles.price}>{item.price}</Text>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                           style={[styles.unlistButton, updateLoading && styles.unlistButtonDisabled]}
                           onPress={() => handleUnlist(item.id)}
                           disabled={updateLoading}
@@ -197,8 +156,8 @@ export default function Marketplace() {
                           </Text>
                         </TouchableOpacity>
                       </View>
-                    </View>
-                  </View>
+                    }
+                  />
                 ))
               ) : (
                 <View style={styles.emptyState}>
