@@ -5,6 +5,7 @@ import { repairStyles as styles } from '../styles';
 import { NFTProperties } from '../components';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import type { NFT } from '../types';
+import { nftEvents } from '../utils';
 
 export default function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -40,6 +41,7 @@ export default function Repair() {
       setRepairAmount(0);
       // Refresh NFT list to show updated energy
       await refetch();
+      nftEvents.emit(); // Notify other screens
       // Update selected NFT with new energy value
       const updatedNFT = { ...selectedNFT, energy: newEnergy };
       setSelectedNFT(updatedNFT);

@@ -4,9 +4,10 @@ import { breedStyles as styles } from '../styles';
 import { useUserNFTs, useBreedNFT } from '../hooks';
 import type { NFT } from '../types/nft';
 import { NFTProperties } from '../components';
+import { nftEvents } from '../utils';
 
 export default function Breed() {
-  const { nfts, loading, error } = useUserNFTs();
+  const { nfts, loading, error, refetch } = useUserNFTs();
   const { breedNFTs, loading: breedLoading } = useBreedNFT();
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
   const [selectedAsset2, setSelectedAsset2] = useState<string | null>(null);
@@ -19,6 +20,8 @@ export default function Breed() {
     
     if (newNFT) {
       setBreedResult(newNFT);
+      // Notify other screens that NFTs have been updated
+      nftEvents.emit();
       Alert.alert(
         'Success!',
         'New NFT created and added to your vault!',

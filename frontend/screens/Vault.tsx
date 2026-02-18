@@ -1,9 +1,9 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { vaultStyles as styles, sortStyles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import { NFTProperties, SortControls } from '../components';
-import { sortNFTs } from '../utils';
+import { sortNFTs, nftEvents } from '../utils';
 import type { SortOption } from '../types';
 
 export default function Vault() {
@@ -12,6 +12,14 @@ export default function Vault() {
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  
+  // Listen for NFT update events from other screens
+  useEffect(() => {
+    const unsubscribe = nftEvents.subscribe(() => {
+      refetch();
+    });
+    return unsubscribe;
+  }, [refetch]);
   
   const listedCount = nfts.filter(nft => nft.isListed).length;
   
@@ -26,6 +34,7 @@ export default function Vault() {
     const success = await listNFT(nftId, price);
     if (success) {
       refetch(); // Refresh NFT list to show updated listing status
+      nftEvents.emit(); // Notify other screens
     }
   };
   

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import NFTProperties from '../components/NFTProperties';
+import { nftEvents } from '../utils';
 
 export default function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -34,6 +35,7 @@ export default function Poop() {
     
     if (success) {
       await refetch(); // Refresh NFT list to show updated energy
+      nftEvents.emit(); // Notify other screens
       Alert.alert(
         'Success!',
         `You earned rewards! Energy: ${displayNFT.energy} → ${newEnergy}`,

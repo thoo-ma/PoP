@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '../styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '../hooks';
 import { NFTProperties, SortControls } from '../components';
-import { sortNFTs } from '../utils';
+import { sortNFTs, nftEvents } from '../utils';
 import type { SortOption } from '../types';
 
 export default function Marketplace() {
@@ -37,6 +37,7 @@ export default function Marketplace() {
     const success = await unlistNFT(nftId);
     if (success) {
       await refetchUser(); // Refresh user's NFT list
+      nftEvents.emit(); // Notify other screens
       Alert.alert('Success', 'NFT removed from marketplace');
     } else {
       Alert.alert('Error', 'Failed to unlist NFT');
