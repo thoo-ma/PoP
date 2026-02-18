@@ -10,8 +10,8 @@ import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from './hooks';
 import { Auth, PageIndicator, ProfileButton } from './components';
 import { InviteCodeScreen, Profile } from './screens';
-import { PAGES, VIEWABILITY_CONFIG } from './config/navigation';
-import { appStyles as styles, width } from './styles';
+import { PAGES, VIEWABILITY_CONFIG } from './constants/navigation';
+import { appStyles as styles } from './styles';
 import { isExpoGo } from './lib/supabase';
 import { colors } from './constants';
 

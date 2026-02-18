@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import type { DifficultySelectorProps } from '../../types';
-import { styles } from '../../styles/DifficultySelector.styles';
+import { styles } from '../../styles/proof/DifficultySelector.styles';
 
 export default function DifficultySelector({ mode, onModeChange, disabled }: DifficultySelectorProps) {
   const displayMode = mode.charAt(0).toUpperCase() + mode.slice(1);

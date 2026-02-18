@@ -2,7 +2,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import type { PageIndicatorProps } from '../../types';
-import { styles } from '../../styles/PageIndicator.styles';
+import { styles } from '../../styles/navigation/PageIndicator.styles';
 import MoreMenu from './MoreMenu';
 import { colors } from '../../constants';
 

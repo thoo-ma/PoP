@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { styles } from '../styles/NFTProperties.styles';
+import { styles } from '../styles/nft/NFTProperties.styles';
 import { colors } from '../constants';
 
 interface NFTPropertiesProps {
