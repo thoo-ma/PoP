@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
   signOutButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,

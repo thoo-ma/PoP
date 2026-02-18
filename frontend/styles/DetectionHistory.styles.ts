@@ -85,9 +85,13 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
   },
+  detectionDateContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
   emptySubtext: {
     fontSize: 14,
-    color: colors.hint,
+    color: colors.textLight,
     textAlign: 'center',
   },
   loadingContainer: {

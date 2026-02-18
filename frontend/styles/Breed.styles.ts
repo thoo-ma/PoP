@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   breedButton: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingVertical: 16,
     paddingHorizontal: 48,
     borderRadius: 12,
@@ -275,7 +275,7 @@ export const styles = StyleSheet.create({
     lineHeight: 20,
   },
   resetButton: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 12,

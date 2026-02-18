@@ -93,7 +93,7 @@ export const sortStyles = StyleSheet.create({
     color: colors.text,
   },
   sortMenuItemTextActive: {
-    color: colors.button,
+    color: colors.buttonPrimary,
     fontWeight: '600',
   },
 });

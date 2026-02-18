@@ -44,21 +44,16 @@ export const colors = {
   
   // Shadows
   shadow: '#000',
-  
+
   // Specific components
   slider: '#1e293b',
-  
+
   // Button states
   buttonPrimary: '#000',
   buttonSecondary: '#d1d5db',
   buttonSuccess: '#10b981',
   buttonText: '#fff',
   buttonTextDark: '#1F1F1F',
-  
-  // Legacy (deprecated - use semantic names above)
-  button: '#000',
-  value: '#374151',
-  hint: '#999',
 };
 
 export const typography = {

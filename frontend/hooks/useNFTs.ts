@@ -3,6 +3,11 @@ import { supabase } from '../lib/supabase';
 import type { NFT } from '../types/nft';
 import { logError } from '../utils/errorHelpers';
 import { getRandomVariant, formatVariantName } from '../constants';
+import type { NFTTier } from '../types/nft';
+
+function isTier(t: string): t is NFTTier {
+  return t === 'cruise-seat' || t === 'turbo-flush' || t === 'zen-fortress';
+}
 
 /**
  * Hook to fetch and manage user's NFT collection
@@ -348,13 +353,15 @@ export function useBreedNFT() {
       };
 
       // Determine offspring tier (weighted by parent tiers)
-      const tierWeights: Record<'cruise-seat' | 'turbo-flush' | 'zen-fortress', number> = { 
-        'cruise-seat': 1, 
-        'turbo-flush': 2, 
-        'zen-fortress': 3 
+      const tierWeights: Record<NFTTier, number> = {
+        'cruise-seat': 1,
+        'turbo-flush': 2,
+        'zen-fortress': 3
       };
-      const avgTierWeight = (tierWeights[parent1.tier as 'cruise-seat' | 'turbo-flush' | 'zen-fortress'] + tierWeights[parent2.tier as 'cruise-seat' | 'turbo-flush' | 'zen-fortress']) / 2;
-      let offspringTier: 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
+      const t1: NFTTier = isTier(parent1.tier) ? parent1.tier : 'cruise-seat';
+      const t2: NFTTier = isTier(parent2.tier) ? parent2.tier : 'cruise-seat';
+      const avgTierWeight = (tierWeights[t1] + tierWeights[t2]) / 2;
+      let offspringTier: NFTTier;
       
       if (avgTierWeight <= 1.5) {
         offspringTier = 'cruise-seat';

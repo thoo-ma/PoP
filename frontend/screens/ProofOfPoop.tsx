@@ -233,7 +233,7 @@ export default function ProofOfPoop() {
         <Card
           title="Status"
           value={statusText}
-          titleColor={colors.button}
+          titleColor={colors.buttonPrimary}
           valueColor={statusColor}
           style={styles.card}
         />
@@ -241,8 +241,8 @@ export default function ProofOfPoop() {
         <Card
           title="Time Remaining"
           value={formatTime(remainingTime)}
-          titleColor={colors.button}
-          valueColor={colors.value}
+          titleColor={colors.buttonPrimary}
+          valueColor={colors.title}
           style={styles.card}
         />
 
@@ -270,7 +270,7 @@ export default function ProofOfPoop() {
       <Card
         title="Immobility Duration"
         value={formatTime(finalImmobilityTime)}
-        titleColor={colors.button}
+        titleColor={colors.buttonPrimary}
         valueColor="#4ade80"
         style={styles.card}
       />
@@ -307,7 +307,7 @@ export default function ProofOfPoop() {
           <Card
             title="Status"
             value="🎤 Recording..."
-            titleColor={colors.button}
+            titleColor={colors.buttonPrimary}
             valueColor="#dc2626"
             style={styles.card}
           />
@@ -317,8 +317,8 @@ export default function ProofOfPoop() {
           <Card
             title="Status"
             value="🔍 Analyzing..."
-            titleColor={colors.button}
-            valueColor={colors.value}
+            titleColor={colors.buttonPrimary}
+            valueColor={colors.title}
             style={styles.card}
           />
         )}
@@ -400,7 +400,7 @@ export default function ProofOfPoop() {
         <Card
           title="Overall Result"
           value={overallSuccess ? '✅ SUCCESS' : '❌ FAILED'}
-          titleColor={colors.button}
+          titleColor={colors.buttonPrimary}
           valueColor={overallSuccess ? colors.success : colors.error}
           style={styles.card}
         />
@@ -408,7 +408,7 @@ export default function ProofOfPoop() {
         <Card
           title="Immobility Result"
           value={immobilityAchieved ? '✓ Completed' : '✗ Failed'}
-          titleColor={colors.button}
+          titleColor={colors.buttonPrimary}
           valueColor={immobilityAchieved ? colors.success : colors.error}
           style={styles.card}
         />
@@ -416,8 +416,8 @@ export default function ProofOfPoop() {
         <Card
           title="Immobility Duration"
           value={formatTime(finalImmobilityTime)}
-          titleColor={colors.button}
-          valueColor={colors.value}
+          titleColor={colors.buttonPrimary}
+          valueColor={colors.title}
           style={styles.card}
         />
 
@@ -426,22 +426,22 @@ export default function ProofOfPoop() {
             <Card
               title="Detection Result"
               value={detectionResult.detected ? '✓ Flush Detected' : '✗ Not Detected'}
-              titleColor={colors.button}
+              titleColor={colors.buttonPrimary}
               valueColor={detectionResult.detected ? colors.success : colors.error}
               style={styles.card}
             />
             <Card
               title="Confidence"
               value={formatConfidencePercentage(detectionResult.confidence)}
-              titleColor={colors.button}
-              valueColor={colors.value}
+              titleColor={colors.buttonPrimary}
+              valueColor={colors.title}
               style={styles.card}
             />
             <Card
               title="Recording Duration"
               value={`${detectionResult.duration_seconds.toFixed(1)}s`}
-              titleColor={colors.button}
-              valueColor={colors.value}
+              titleColor={colors.buttonPrimary}
+              valueColor={colors.title}
               style={styles.card}
             />
           </>

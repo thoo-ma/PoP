@@ -15,6 +15,26 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);
 
+  const handleDevSignIn = async () => {
+    setDevLoading(true);
+    try {
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+
+      // Seed test NFTs for dev mode
+      const { error: seedError } = await supabase.rpc('seed_dev_test_nfts');
+      if (seedError) {
+        console.warn('Failed to seed test NFTs:', seedError);
+      }
+      // Success - auth state will automatically update via onAuthStateChange
+    } catch (err) {
+      logError('Auth:Anonymous', err);
+      Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+    } finally {
+      setDevLoading(false);
+    }
+  };
+
   const signInWithProvider = async (provider: OAuthProvider) => {
     if (isExpoGo) {
       Alert.alert(
@@ -69,27 +89,7 @@ export default function Auth() {
           
           <TouchableOpacity 
             style={styles.devBypassButton}
-            onPress={async () => {
-              setDevLoading(true);
-              try {
-                const { error } = await supabase.auth.signInAnonymously();
-                
-                if (error) throw error;
-                
-                // Seed test NFTs for dev mode
-                const { error: seedError } = await supabase.rpc('seed_dev_test_nfts');
-                if (seedError) {
-                  console.warn('Failed to seed test NFTs:', seedError);
-                }
-                
-                // Success - auth state will automatically update via onAuthStateChange
-              } catch (err) {
-                logError('Auth:Anonymous', err);
-                Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
-              } finally {
-                setDevLoading(false);
-              }
-            }}
+            onPress={handleDevSignIn}
             disabled={devLoading}
             accessibilityLabel="Continue in development mode"
             accessibilityRole="button"

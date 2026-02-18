@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     minWidth: 120,
     alignItems: 'center',
   },

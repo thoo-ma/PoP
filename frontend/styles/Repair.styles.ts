@@ -224,7 +224,7 @@ export const styles = StyleSheet.create({
     height: 40,
   },
   repairButton: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingVertical: 18,
     paddingHorizontal: 64,
     borderRadius: 16,
@@ -275,10 +275,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: colors.button,
+    borderColor: colors.buttonPrimary,
   },
   resetButtonText: {
-    color: colors.button,
+    color: colors.buttonPrimary,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -289,7 +289,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   retryButton: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.buttonPrimary,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,

@@ -15,7 +15,7 @@ export default function ProofOfImmobility() {
     cycleMode();
   };
 
-  const statusDisplay = getStatusDisplay(status, colors.value);
+  const statusDisplay = getStatusDisplay(status, colors.title);
 
   return (
     <View style={styles.container}>
@@ -34,7 +34,7 @@ export default function ProofOfImmobility() {
       <Card
         title="Status"
         value={statusDisplay.text}
-        titleColor={colors.button}
+        titleColor={colors.buttonPrimary}
         valueColor={statusDisplay.color}
         style={styles.card}
       />
@@ -42,8 +42,8 @@ export default function ProofOfImmobility() {
       <Card
         title="Current Time"
         value={formatTime(elapsedTime)}
-        titleColor={colors.button}
-        valueColor={colors.value}
+        titleColor={colors.buttonPrimary}
+        valueColor={colors.title}
         style={styles.card}
       />
       

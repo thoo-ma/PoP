@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import type { DetectionResult } from '../types';
 
 /**
  * Custom hook to determine button states for recording and analyzing audio
@@ -12,7 +13,7 @@ export const useRecordingButtonState = (
   isRecording: boolean,
   isAnalyzing: boolean,
   audioUri: string | null,
-  detectionResult: any | null
+  detectionResult: DetectionResult | null
 ) => {
   return useMemo(() => ({
     canRecord: !isAnalyzing && !detectionResult,

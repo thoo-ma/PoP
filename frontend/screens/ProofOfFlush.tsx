@@ -73,7 +73,7 @@ export default function ProofOfFlush() {
         <Card
           title="Status"
           value="🎤 Recording..."
-          titleColor={colors.button}
+          titleColor={colors.buttonPrimary}
           valueColor={colors.error}
           style={styles.card}
         />
@@ -84,8 +84,8 @@ export default function ProofOfFlush() {
         <Card
           title="Status"
           value="🔍 Analyzing..."
-          titleColor={colors.button}
-          valueColor={colors.value}
+          titleColor={colors.buttonPrimary}
+          valueColor={colors.title}
           style={styles.card}
         />
       )}
@@ -96,22 +96,22 @@ export default function ProofOfFlush() {
           <Card
             title="Detection"
             value={detectionResult.detected ? '✅ Toilet Flush Detected!' : '❌ Not Detected'}
-            titleColor={colors.button}
+            titleColor={colors.buttonPrimary}
             valueColor={detectionResult.detected ? colors.success : colors.error}
             style={styles.card}
           />
           <Card
             title="Confidence"
             value={formatConfidencePercentage(detectionResult.confidence)}
-            titleColor={colors.button}
-            valueColor={colors.value}
+            titleColor={colors.buttonPrimary}
+            valueColor={colors.title}
             style={styles.card}
           />
           <Card
             title="Duration"
             value={`${detectionResult.duration_seconds.toFixed(1)}s`}
-            titleColor={colors.button}
-            valueColor={colors.value}
+            titleColor={colors.buttonPrimary}
+            valueColor={colors.title}
             style={styles.card}
           />
         </>

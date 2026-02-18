@@ -66,7 +66,7 @@ export default function DetectionHistory() {
         <Text style={styles.detectionIcon}>
           {item.detected ? '✅' : '❌'}
         </Text>
-        <View style={{ flex: 1, marginLeft: 12 }}>
+        <View style={styles.detectionDateContainer}>
           <Text style={styles.detectionDate}>
             {formatDate(item.created_at)} at {formatTime(item.created_at)}
           </Text>
@@ -125,8 +125,8 @@ export default function DetectionHistory() {
         <Card
           title="Total Detections"
           value={`${successfulDetections}/${totalDetections} (${successRate}%)`}
-          titleColor={colors.button}
-          valueColor={colors.value}
+          titleColor={colors.buttonPrimary}
+          valueColor={colors.title}
           style={styles.summaryCard}
         />
       )}
