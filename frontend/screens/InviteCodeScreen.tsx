@@ -8,11 +8,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { supabase } from '../lib/supabase';
+import { validateInviteCode } from '../lib/supabase';
 import { inviteCodeScreenStyles as styles } from '../styles';
 import { showSignOutConfirmation } from '../utils';
 import { useErrorHandler } from '../hooks';
-import type { ApprovalResult } from '../types/auth';
 import { colors } from '../constants';
 
 interface InviteCodeScreenProps {
@@ -58,19 +57,7 @@ export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScr
     clearError();
 
     try {
-      // Call validate_and_approve_user function
-      const { data, error: rpcError } = await supabase.rpc('validate_and_approve_user', {
-        p_code: code,
-      });
-
-      if (rpcError) {
-        console.error('RPC error:', rpcError);
-        handleError(rpcError, 'Failed to validate code. Please try again.');
-        setLoading(false);
-        return;
-      }
-
-      const result = data as ApprovalResult;
+      const result = await validateInviteCode(code);
 
       if (result.success) {
         // Clear the code input and show success state

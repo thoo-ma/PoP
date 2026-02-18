@@ -258,4 +258,3 @@ export const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
-export const sortStyles = baseSortStyles;

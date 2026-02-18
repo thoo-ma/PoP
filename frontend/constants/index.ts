@@ -1,5 +1,6 @@
 export * from './theme';
 export * from './sensors';
+import type { NFTTier } from '../types/nft';
 
 // Sort options for NFTs
 export const SORT_OPTIONS = ['efficiency', 'resilience', 'comfort', 'luck', 'level'] as const;
@@ -30,9 +31,6 @@ export const TIER_VARIANTS = {
     'renaissance-chaise',
   ],
 } as const;
-
-// Type for NFT tiers
-export type NFTTier = keyof typeof TIER_VARIANTS;
 
 // Helper function to get a random variant for a given tier
 export const getRandomVariant = (tier: NFTTier): string => {

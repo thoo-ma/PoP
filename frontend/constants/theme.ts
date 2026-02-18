@@ -6,7 +6,6 @@ export const colors = {
   // Text
   title: '#374151',
   text: '#6b7280',
-  textSecondary: '#666',
   textLight: '#999',
   textDark: '#1e293b',
   
@@ -60,7 +59,6 @@ export const colors = {
   button: '#000',
   value: '#374151',
   hint: '#999',
-  homeText: '#666',
 };
 
 export const typography = {

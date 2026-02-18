@@ -8,8 +8,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from './hooks';
-import { Auth, PageIndicator } from './components';
-import ProfileButton from './components/ProfileButton';
+import { Auth, PageIndicator, ProfileButton } from './components';
 import { InviteCodeScreen, Profile } from './screens';
 import { PAGES, VIEWABILITY_CONFIG } from './config/navigation';
 import { appStyles as styles, width } from './styles';
