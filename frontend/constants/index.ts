@@ -2,7 +2,7 @@ export * from './theme';
 export * from './sensors';
 
 // Sort options for NFTs
-export const SORT_OPTIONS = ['efficiency', 'resilience', 'comfort', 'luck'] as const;
+export const SORT_OPTIONS = ['efficiency', 'resilience', 'comfort', 'luck', 'level'] as const;
 
 // NFT Tier Variants
 // Maps each tier to its available named variants (matches Supabase storage structure)

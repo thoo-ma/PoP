@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   description: {
     ...typography.description,
     color: colors.text,
-    marginBottom: 8,
+    marginBottom: 16,
   },
   scrollContent: {
     paddingHorizontal: 20,

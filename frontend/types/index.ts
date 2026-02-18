@@ -10,4 +10,4 @@ export * from './nft';
 export type DifficultyMode = 'easy' | 'normal' | 'strict';
 
 // NFT Sort Options (used in Vault and Marketplace)
-export type SortOption = 'efficiency' | 'resilience' | 'comfort' | 'luck';
+export type SortOption = 'efficiency' | 'resilience' | 'comfort' | 'luck' | 'level';

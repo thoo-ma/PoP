@@ -1,10 +1,10 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
-import { vaultStyles as styles, sortStyles } from '../styles';
+import { vaultStyles as styles, sortStyles, filterStyles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
-import { NFTProperties, SortControls } from '../components';
+import { NFTProperties, SortControls, FilterControls } from '../components';
 import { sortNFTs, nftEvents } from '../utils';
-import type { SortOption } from '../types';
+import type { SortOption, NFTRarity, NFTTier } from '../types';
 
 export default function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -12,6 +12,8 @@ export default function Vault() {
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([]);
+  const [selectedTiers, setSelectedTiers] = useState<NFTTier[]>([]);
   
   // Listen for NFT update events from other screens
   useEffect(() => {
@@ -21,9 +23,37 @@ export default function Vault() {
     return unsubscribe;
   }, [refetch]);
   
+  // Filter NFTs based on selected rarities and tiers
+  const filteredNfts = nfts.filter(nft => {
+    const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);
+    const matchesTier = selectedTiers.length === 0 || selectedTiers.includes(nft.tier);
+    return matchesRarity && matchesTier;
+  });
+  
   const listedCount = nfts.filter(nft => nft.isListed).length;
   
-  const sortedNfts = sortNFTs(nfts, sortBy, sortOrder);
+  const sortedNfts = sortNFTs(filteredNfts, sortBy, sortOrder);
+  
+  const handleRarityToggle = (rarity: NFTRarity) => {
+    setSelectedRarities(prev => 
+      prev.includes(rarity) 
+        ? prev.filter(r => r !== rarity)
+        : [...prev, rarity]
+    );
+  };
+  
+  const handleTierToggle = (tier: NFTTier) => {
+    setSelectedTiers(prev => 
+      prev.includes(tier)
+        ? prev.filter(t => t !== tier)
+        : [...prev, tier]
+    );
+  };
+  
+  const handleClearFilters = () => {
+    setSelectedRarities([]);
+    setSelectedTiers([]);
+  };
   
   const handleListNFT = async (nftId: string) => {
     // Default price based on NFT properties (can be enhanced later)
@@ -68,8 +98,17 @@ export default function Vault() {
     <View style={styles.container}>
       <Text style={styles.title}>Vault</Text>
       <Text style={styles.description}>
-        Your NFT collection ({nfts.length} NFTs, {listedCount} listed)
+        Your NFT collection ({sortedNfts.length} of {nfts.length} NFTs, {listedCount} listed)
       </Text>
+      
+      <FilterControls
+        selectedRarities={selectedRarities}
+        selectedTiers={selectedTiers}
+        onRarityToggle={handleRarityToggle}
+        onTierToggle={handleTierToggle}
+        onClearFilters={handleClearFilters}
+        styles={filterStyles}
+      />
       
       <SortControls
         sortBy={sortBy}

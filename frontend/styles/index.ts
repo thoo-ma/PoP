@@ -17,3 +17,4 @@ export { styles as moreMenuStyles } from './MoreMenu.styles';
 export { styles as profileStyles } from './Profile.styles';
 export { styles as poopStyles } from './Poop.styles';
 export { sortStyles } from './Sort.styles';
+export { filterStyles } from './Filter.styles';
