@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
   },
   listedBadge: {
     position: 'absolute',
-    top: 8,
+    top: 34,
     right: 8,
     backgroundColor: '#10b981',
     paddingVertical: 4,
@@ -132,7 +132,7 @@ export const styles = StyleSheet.create({
   },
   rarityBadge: {
     position: 'absolute',
-    bottom: 8,
+    top: 8,
     right: 8,
     paddingVertical: 4,
     paddingHorizontal: 10,

@@ -153,7 +153,7 @@ export const styles = StyleSheet.create({
   },
   rarityBadge: {
     position: 'absolute',
-    bottom: 8,
+    top: 8,
     right: 8,
     paddingVertical: 4,
     paddingHorizontal: 10,
@@ -181,37 +181,8 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.5,
-  },  rarityBadge: {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
   },
-  commonBadge: {
-    backgroundColor: '#94a3b8',
-  },
-  rareBadge: {
-    backgroundColor: '#3b82f6',
-  },
-  legendaryBadge: {
-    backgroundColor: '#f59e0b',
-  },
-  transcendentBadge: {
-    backgroundColor: '#a855f7',
-  },
-  rarityText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },  cardContent: {
+  cardContent: {
     padding: 12,
   },
   nftName: {
