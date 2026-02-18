@@ -169,6 +169,25 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  levelBadge: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    backgroundColor: '#3b82f6',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  levelBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
   tierBadge: {
     position: 'absolute',
     bottom: 12,
@@ -201,6 +220,37 @@ export const styles = StyleSheet.create({
     backgroundColor: '#8b5cf6',
   },
   tierBadgeText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  rarityBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  commonBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  rareBadge: {
+    backgroundColor: '#3b82f6',
+  },
+  legendaryBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  transcendentBadge: {
+    backgroundColor: '#a855f7',
+  },
+  rarityText: {
     color: '#fff',
     fontSize: 11,
     fontWeight: '700',

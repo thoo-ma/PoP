@@ -188,8 +188,14 @@ export default function Breed() {
                     style={styles.resultImage}
                     resizeMode="cover"
                   />
+                  <View style={styles.levelBadge}>
+                    <Text style={styles.levelBadgeText}>Lv {breedResult.level}</Text>
+                  </View>
                   <View style={[styles.tierBadge, styles[`${breedResult.tier}Badge`]]}>
                     <Text style={styles.tierBadgeText}>{breedResult.tier.toUpperCase()}</Text>
+                  </View>
+                  <View style={[styles.rarityBadge, styles[`${breedResult.rarity}Badge`]]}>
+                    <Text style={styles.rarityText}>{breedResult.rarity.toUpperCase()}</Text>
                   </View>
                 </View>
                 <View style={styles.resultCardContent}>
