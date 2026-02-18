@@ -56,6 +56,15 @@ export const colors = {
   buttonTextDark: '#1F1F1F',
 };
 
+import type { NFTRarity } from '../types/nft';
+
+export const RARITY_COLORS: Record<NFTRarity, string> = {
+  common: '#94a3b8',
+  rare: '#3b82f6',
+  legendary: '#f59e0b',
+  transcendent: '#a855f7',
+};
+
 export const typography = {
   title: {
     fontSize: 32,

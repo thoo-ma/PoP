@@ -48,17 +48,19 @@ This creates the `flush_detections` and `app_config` tables.
 
 ---
 
-### 4. Deploy Supabase Edge Function
+### 4. Deploy Supabase Edge Functions
 
+**Toilet flush detection** (requires Cloud Run):
 ```bash
-# Replace with your actual values:
-# - CLOUD_RUN_URL: from step 2
-# - YOUR_API_KEY: from step 1
-
 supabase functions deploy detect-toilet-flush \
   --project-ref mtnluwkvhkwwxvxdtkgs \
   --set CLOUD_RUN_URL=https://yamnet-detector-xxxxx-uc.a.run.app \
   --set CLOUD_RUN_API_KEY=YOUR_API_KEY
+```
+
+**NFT breeding** (no extra secrets needed — uses auto-injected `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`):
+```bash
+supabase functions deploy breed-nfts --project-ref mtnluwkvhkwwxvxdtkgs
 ```
 
 ---
@@ -115,7 +117,9 @@ No code deployment needed - the Edge Function reads this dynamically!
 
 ### Edge Function returns 401
 - Verify you're logged in the app (uses JWT from Supabase auth)
-- Check Edge Function logs: `supabase functions logs detect-toilet-flush`
+- Check Edge Function logs:
+  - `supabase functions logs detect-toilet-flush`
+  - `supabase functions logs breed-nfts`
 
 ### Audio recording fails
 - iOS: Check Info.plist has microphone permission (Expo should handle this)

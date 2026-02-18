@@ -2,12 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import type { NFT } from '../types/nft';
 import { logError } from '../utils/errorHelpers';
-import { getRandomVariant, formatVariantName } from '../constants';
-import type { NFTTier } from '../types/nft';
-
-function isTier(t: string): t is NFTTier {
-  return t === 'cruise-seat' || t === 'turbo-flush' || t === 'zen-fortress';
-}
 
 /**
  * Hook to fetch and manage user's NFT collection
@@ -312,8 +306,9 @@ export function useMarketplaceListings() {
 }
 
 /**
- * Hook to breed two NFTs and create a new one
- * Averages parent stats with slight randomness
+ * Hook to breed two NFTs and create a new one.
+ * Rarity probability roll and all game logic run server-side in the
+ * `breed-nfts` Supabase Edge Function for tamper-resistance.
  */
 export function useBreedNFT() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -324,113 +319,36 @@ export function useBreedNFT() {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setError('Not authenticated');
+      const { data, error: fnError } = await supabase.functions.invoke('breed-nfts', {
+        body: { parent1_id: parent1Id, parent2_id: parent2Id },
+      });
+
+      if (fnError) {
+        // FunctionsHttpError carries the actual response body in `context`.
+        // Try to read the JSON body first; fall back to the generic message.
+        let message: string = fnError.message;
+        try {
+          const body = await (fnError as any).context?.json?.();
+          if (body?.message) message = body.message;
+          else if (body?.error) message = body.error;
+        } catch {
+          // context not available or not JSON – try parsing the message string
+          try {
+            const parsed = JSON.parse(fnError.message);
+            if (parsed?.message) message = parsed.message;
+          } catch { /* leave message as-is */ }
+        }
+        logError('useBreedNFT:Invoke', fnError);
+        setError(message);
         return null;
       }
 
-      // Fetch both parent NFTs
-      const { data: parents, error: parentsError } = await supabase
-        .from('nfts')
-        .select('*')
-        .in('id', [parent1Id, parent2Id])
-        .eq('user_id', user.id);
-
-      if (parentsError || !parents || parents.length !== 2) {
-        logError('useBreedNFT:FetchParents', parentsError);
-        setError('Failed to fetch parent NFTs');
+      if (!data) {
+        setError('No data returned from breed function');
         return null;
       }
 
-      const [parent1, parent2] = parents;
-
-      // Calculate offspring stats (average with ±5% randomness)
-      const calculateStat = (stat1: number, stat2: number) => {
-        const avg = (stat1 + stat2) / 2;
-        const randomness = (Math.random() - 0.5) * 10; // -5 to +5
-        return Math.max(0, Math.min(100, Math.round(avg + randomness)));
-      };
-
-      // Determine offspring tier (weighted by parent tiers)
-      const tierWeights: Record<NFTTier, number> = {
-        'cruise-seat': 1,
-        'turbo-flush': 2,
-        'zen-fortress': 3
-      };
-      const t1: NFTTier = isTier(parent1.tier) ? parent1.tier : 'cruise-seat';
-      const t2: NFTTier = isTier(parent2.tier) ? parent2.tier : 'cruise-seat';
-      const avgTierWeight = (tierWeights[t1] + tierWeights[t2]) / 2;
-      let offspringTier: NFTTier;
-      
-      if (avgTierWeight <= 1.5) {
-        offspringTier = 'cruise-seat';
-      } else if (avgTierWeight <= 2.5) {
-        offspringTier = 'turbo-flush';
-      } else {
-        offspringTier = 'zen-fortress';
-      }
-
-      // Select random variant for the offspring tier
-      const offspringVariant = getRandomVariant(offspringTier);
-      
-      // Determine offspring rarity (bred NFTs start at common)
-      const offspringRarity = 'common';
-      
-      // Generate a proper display name from the variant
-      const offspringName = `${formatVariantName(offspringVariant)}`;
-      
-      // Build image URL from Supabase Storage using new variant structure
-      // Pattern: toilets/{tier}/{variant}/{variant}-{rarity}.jpg
-      const { data: urlData } = supabase.storage
-        .from('assets')
-        .getPublicUrl(`toilets/${offspringTier}/${offspringVariant}/${offspringVariant}-${offspringRarity}.jpg`);
-      const imageUrl = urlData.publicUrl;
-
-      // Create offspring NFT
-      const { data: offspring, error: createError } = await supabase
-        .from('nfts')
-        .insert({
-          user_id: user.id,
-          name: offspringName,
-          tier: offspringTier,
-          variant: offspringVariant,
-          rarity: offspringRarity,
-          image_url: imageUrl,
-          efficiency: calculateStat(parent1.efficiency, parent2.efficiency),
-          resilience: calculateStat(parent1.resilience, parent2.resilience),
-          comfort: calculateStat(parent1.comfort, parent2.comfort),
-          luck: calculateStat(parent1.luck, parent2.luck),
-          energy: 100, // New NFTs start with full energy
-          level: 1,    // Start at level 1
-        })
-        .select()
-        .single();
-
-      if (createError) {
-        logError('useBreedNFT:Create', createError);
-        setError(createError.message);
-        return null;
-      }
-
-      // Transform to NFT type
-      const newNft: NFT = {
-        id: offspring.id,
-        name: offspring.name,
-        image: offspring.image_url,
-        tier: offspring.tier,
-        variant: offspring.variant,
-        rarity: offspring.rarity,
-        efficiency: offspring.efficiency,
-        resilience: offspring.resilience,
-        comfort: offspring.comfort,
-        luck: offspring.luck,
-        energy: offspring.energy,
-        level: offspring.level,
-        created_at: offspring.created_at,
-        updated_at: offspring.updated_at,
-      };
-
+      const newNft: NFT = data as NFT;
       return newNft;
     } catch (err) {
       logError('useBreedNFT:Breed', err);

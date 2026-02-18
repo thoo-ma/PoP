@@ -1,5 +1,6 @@
 export * from './theme';
 export * from './sensors';
+export * from './breedProbabilities';
 import type { NFTTier } from '../types/nft';
 
 // Sort options for NFTs

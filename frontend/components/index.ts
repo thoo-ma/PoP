@@ -12,3 +12,4 @@ export { default as MoreMenu } from './navigation/MoreMenu';
 export { default as DifficultySelector } from './controls/DifficultySelector';
 export { default as SortControls } from './controls/SortControls';
 export { default as FilterControls } from './controls/FilterControls';
+export { BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from './breed';
