@@ -23,8 +23,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectButton: {
-    width: 220,
-    height: 220,
+    width: 240,
+    height: 360,
     backgroundColor: '#f3f4f6',
     borderRadius: 16,
     borderWidth: 2,

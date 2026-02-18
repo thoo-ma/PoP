@@ -105,15 +105,15 @@ export default function Repair() {
         ) : (
           <>
             {/* NFT Carousel Selector */}
-            <NFTSelector
+            {!isRepaired && <NFTSelector
               current={(selectedIndex as number) + 1}
               total={nfts.length}
               onPrev={handlePrev}
               onNext={handleNext}
               style={{ marginTop: 20, marginBottom: 4 }}
-            />
+            />}
             {/* Selected NFT Card */}
-            <View style={styles.nftCard}>
+            {!isRepaired && <View style={styles.nftCard}>
               <View style={styles.imageContainer}>
                 <Image
                   source={{ uri: selectedNFT.image }}
@@ -145,7 +145,7 @@ export default function Repair() {
                   mode="compact"
                 />
               </View>
-            </View>
+            </View>}
 
             {currentEnergy < maxEnergy && !isRepaired && (
               <>
