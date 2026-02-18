@@ -1,9 +1,8 @@
--- ============================================================================
--- AUTO-SEED TEST NFTs FOR ANONYMOUS USERS (Dev Mode)
--- Provides RPC function to seed 50 test NFTs for development/testing
--- ============================================================================
+-- Fix seed_dev_test_nfts to always create 50 NFTs in dev mode
+-- This replaces the function to remove the early-return check
 
--- Function to seed test NFTs for current authenticated user
+DROP FUNCTION IF EXISTS public.seed_dev_test_nfts();
+
 CREATE OR REPLACE FUNCTION public.seed_dev_test_nfts()
 RETURNS JSON AS $$
 DECLARE
