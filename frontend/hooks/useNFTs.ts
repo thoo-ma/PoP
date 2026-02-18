@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import type { NFT } from '../types/nft';
 import { logError } from '../utils/errorHelpers';
-import { getRandomVariant } from '../constants';
+import { getRandomVariant, formatVariantName } from '../constants';
 
 /**
  * Hook to fetch and manage user's NFT collection
@@ -370,6 +370,9 @@ export function useBreedNFT() {
       // Determine offspring rarity (bred NFTs start at common)
       const offspringRarity = 'common';
       
+      // Generate a proper display name from the variant
+      const offspringName = `${formatVariantName(offspringVariant)}`;
+      
       // Build image URL from Supabase Storage using new variant structure
       // Pattern: toilets/{tier}/{variant}/{variant}-{rarity}.jpg
       const { data: urlData } = supabase.storage
@@ -382,7 +385,7 @@ export function useBreedNFT() {
         .from('nfts')
         .insert({
           user_id: user.id,
-          name: `Bred ${offspringTier.charAt(0).toUpperCase() + offspringTier.slice(1)} #${Date.now()}`,
+          name: offspringName,
           tier: offspringTier,
           variant: offspringVariant,
           rarity: offspringRarity,
