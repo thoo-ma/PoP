@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.title,
     marginBottom: 4,
+    minHeight: 32,
   },
   // Tier badge variants
   'cruise-seatBadge': { backgroundColor: '#94a3b8' },
