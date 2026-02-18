@@ -1,5 +1,5 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { poopStyles as styles } from '../styles';
 import { useUserNFTs, useUpdateNFT } from '../hooks';
 import NFTProperties from '../components/NFTProperties';
@@ -10,9 +10,22 @@ export default function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { updateEnergy } = useUpdateNFT();
   const [actionLoading, setActionLoading] = useState(false);
-  
-  // Get the first NFT from vault with energy > 0 (or first available)
-  const displayNFT = nfts.find(nft => nft.energy > 0) || nfts[0];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // When NFTs load, default to the first one with energy > 0
+  useEffect(() => {
+    if (nfts.length === 0) return;
+    const idx = nfts.findIndex(nft => nft.energy > 0);
+    setSelectedIndex(idx >= 0 ? idx : 0);
+  }, [nfts.length]);
+
+  const displayNFT = nfts[selectedIndex] ?? nfts[0];
+
+  const handlePrev = () =>
+    setSelectedIndex(i => (i - 1 + nfts.length) % nfts.length);
+
+  const handleNext = () =>
+    setSelectedIndex(i => (i + 1) % nfts.length);
   
   const handlePoop = async () => {
     if (!displayNFT) return;
@@ -73,6 +86,27 @@ export default function Poop() {
       </Text>
       
       <View style={styles.nftContainer}>
+        {nfts.length > 1 && (
+          <View style={styles.selectorRow}>
+            <TouchableOpacity
+              onPress={handlePrev}
+              style={styles.selectorArrow}
+              accessibilityLabel="Previous NFT"
+            >
+              <Text style={styles.selectorArrowText}>{'‹'}</Text>
+            </TouchableOpacity>
+            <Text style={styles.selectorCounter}>
+              {selectedIndex + 1} / {nfts.length}
+            </Text>
+            <TouchableOpacity
+              onPress={handleNext}
+              style={styles.selectorArrow}
+              accessibilityLabel="Next NFT"
+            >
+              <Text style={styles.selectorArrowText}>{'›'}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.nftCard}>
           <View style={styles.imageContainer}>
             <Image
