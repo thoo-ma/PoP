@@ -15,8 +15,8 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 24,
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 12,
+    paddingVertical: 10,
+    gap: 4,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -27,6 +27,18 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   iconWrapper: {
-    padding: 4,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  iconLabel: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: '#d1d5db',
+    marginTop: 4,
+  },
+  iconLabelActive: {
+    color: '#000',
+    fontWeight: '700',
   },
 });

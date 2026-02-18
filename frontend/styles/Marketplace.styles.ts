@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 80,
   },
   title: {
     ...typography.title,
@@ -110,7 +110,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 80,
   },
   emptyState: {
     alignItems: 'center',
