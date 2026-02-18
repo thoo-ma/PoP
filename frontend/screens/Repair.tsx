@@ -1,51 +1,79 @@
-import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { repairStyles as styles } from '../styles';
-import { MOCK_NFTS } from '../constants/mockData';
 import { NFTProperties } from '../components';
-import { useNFTStore } from '../hooks/useNFTStore';
+import { useUserNFTs, useUpdateNFT } from '../hooks';
+import type { NFT } from '../types';
 
 export default function Repair() {
-  const { updateNFTEnergy } = useNFTStore();
-  const [selectedNFT, setSelectedNFT] = useState<string | null>(null);
-  const [currentEnergy, setCurrentEnergy] = useState(60);
+  const { nfts, loading, error, refetch } = useUserNFTs();
+  const { updateEnergy, loading: updateLoading } = useUpdateNFT();
+  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
 
   const maxEnergy = 100;
+  const currentEnergy = selectedNFT?.energy || 0;
   const maxRepairPossible = maxEnergy - currentEnergy;
 
   const handleSelectNFT = () => {
-    // Simulate NFT selection - use first NFT that's not at full energy
-    const nftToRepair = MOCK_NFTS.find(nft => nft.energy && nft.energy < 100);
+    // Find first NFT that's not at full energy
+    const nftToRepair = nfts.find(nft => nft.energy < 100);
     if (nftToRepair) {
-      setSelectedNFT(nftToRepair.id);
-      setCurrentEnergy(nftToRepair.energy || 60);
+      setSelectedNFT(nftToRepair);
       setIsRepaired(false);
+      setRepairAmount(0);
+    } else {
+      Alert.alert('All NFTs at Full Energy', 'All your NFTs are already at full energy!');
     }
   };
 
-  const selectedNFTData = MOCK_NFTS.find(nft => nft.id === selectedNFT);
-
-  const handleRepair = () => {
-    const newEnergy = currentEnergy + repairAmount;
-    setCurrentEnergy(newEnergy);
-    setIsRepaired(true);
-    setRepairAmount(0);
+  const handleRepair = async () => {
+    if (!selectedNFT || repairAmount === 0) return;
     
-    // Update the NFT in the store
-    if (selectedNFT) {
-      updateNFTEnergy(selectedNFT, newEnergy);
+    const newEnergy = currentEnergy + repairAmount;
+    const success = await updateEnergy(selectedNFT.id, newEnergy);
+    
+    if (success) {
+      setIsRepaired(true);
+      setRepairAmount(0);
+      // Refresh NFT list to show updated energy
+      await refetch();
+      // Update selected NFT with new energy value
+      const updatedNFT = { ...selectedNFT, energy: newEnergy };
+      setSelectedNFT(updatedNFT);
+    } else {
+      Alert.alert('Repair Failed', 'Failed to repair NFT. Please try again.');
     }
   };
 
   const handleReset = () => {
     setSelectedNFT(null);
-    setCurrentEnergy(60);
     setRepairAmount(0);
     setIsRepaired(false);
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Repair</Text>
+        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Repair</Text>
+        <Text style={styles.errorText}>Error: {error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={refetch}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -59,9 +87,15 @@ export default function Repair() {
         showsVerticalScrollIndicator={false}
       >
         {!selectedNFT ? (
-          <TouchableOpacity style={styles.selectButton} onPress={handleSelectNFT}>
+          <TouchableOpacity 
+            style={styles.selectButton} 
+            onPress={handleSelectNFT}
+            disabled={nfts.length === 0}
+          >
             <Text style={styles.plusIcon}>+</Text>
-            <Text style={styles.selectText}>Select NFT from Vault</Text>
+            <Text style={styles.selectText}>
+              {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
+            </Text>
           </TouchableOpacity>
         ) : (
           <>
@@ -69,35 +103,34 @@ export default function Repair() {
             <View style={styles.nftCard}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={
-                    selectedNFTData?.image 
-                      ? (typeof selectedNFTData.image === 'string' ? { uri: selectedNFTData.image } : selectedNFTData.image)
-                      : require('../assets/toilets/nitro/nitro-1.jpeg')
-                  }
+                  source={{ uri: selectedNFT.image }}
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
                 <View style={styles.levelBadge}>
-                  <Text style={styles.levelBadgeText}>Lv {selectedNFTData?.level || 1}</Text>
+                  <Text style={styles.levelBadgeText}>Lv {selectedNFT.level}</Text>
+                </View>
+                <View style={[styles.tierBadge, styles[`${selectedNFT.tier}Badge`]]}>
+                  <Text style={styles.tierBadgeText}>{selectedNFT.tier.toUpperCase()}</Text>
                 </View>
                 <View style={styles.resilienceBadge}>
-                  <Text style={styles.resilienceBadgeText}>Energy: {currentEnergy + Math.round(repairAmount)}%</Text>
+                  <Text style={styles.resilienceBadgeText}>
+                    Energy: {currentEnergy + Math.round(repairAmount)}%
+                  </Text>
                 </View>
               </View>
               
               <View style={styles.cardContent}>
-                <Text style={styles.nftName}>{selectedNFTData?.name || `NFT #${selectedNFT}`}</Text>
+                <Text style={styles.nftName}>{selectedNFT.name}</Text>
                 
-                {selectedNFTData && (
-                  <NFTProperties
-                    efficiency={selectedNFTData.efficiency}
-                    resilience={selectedNFTData.resilience}
-                    comfort={selectedNFTData.comfort}
-                    luck={selectedNFTData.luck}
-                    energy={currentEnergy + Math.round(repairAmount)}
-                    mode="compact"
-                  />
-                )}
+                <NFTProperties
+                  efficiency={selectedNFT.efficiency}
+                  resilience={selectedNFT.resilience}
+                  comfort={selectedNFT.comfort}
+                  luck={selectedNFT.luck}
+                  energy={currentEnergy + Math.round(repairAmount)}
+                  mode="compact"
+                />
               </View>
             </View>
 
@@ -126,12 +159,14 @@ export default function Repair() {
                 <TouchableOpacity
                   style={[
                     styles.repairButton,
-                    repairAmount === 0 && styles.repairButtonDisabled
+                    (repairAmount === 0 || updateLoading) && styles.repairButtonDisabled
                   ]}
                   onPress={handleRepair}
-                  disabled={repairAmount === 0}
+                  disabled={repairAmount === 0 || updateLoading}
                 >
-                  <Text style={styles.repairButtonText}>Repair</Text>
+                  <Text style={styles.repairButtonText}>
+                    {updateLoading ? 'Repairing...' : 'Repair'}
+                  </Text>
                 </TouchableOpacity>
               </>
             )}

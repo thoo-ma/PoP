@@ -114,7 +114,104 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-  cardContent: {
+  tierBadge: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  chillBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadge: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadge': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadge': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadge': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  rarityBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  commonBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  rareBadge: {
+    backgroundColor: '#3b82f6',
+  },
+  legendaryBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  transcendentBadge: {
+    backgroundColor: '#a855f7',
+  },
+  rarityText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },  rarityBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  commonBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  rareBadge: {
+    backgroundColor: '#3b82f6',
+  },
+  legendaryBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  transcendentBadge: {
+    backgroundColor: '#a855f7',
+  },
+  rarityText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },  cardContent: {
     padding: 12,
   },
   nftName: {
@@ -156,10 +253,20 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.button,
   },
+  unlistButtonDisabled: {
+    borderColor: '#9ca3af',
+    opacity: 0.6,
+  },
   unlistButtonText: {
     color: colors.button,
     fontSize: 12,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 60,
   },
   emptyState: {
     alignItems: 'center',

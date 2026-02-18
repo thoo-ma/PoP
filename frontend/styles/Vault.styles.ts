@@ -93,6 +93,74 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
+  tierBadge: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  chillBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadge: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadge': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadge': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadge': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  rarityBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  commonBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  rareBadge: {
+    backgroundColor: '#3b82f6',
+  },
+  legendaryBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  transcendentBadge: {
+    backgroundColor: '#a855f7',
+  },
+  rarityText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
   cardContent: {
     padding: 12,
   },
@@ -116,11 +184,49 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 4,
   },
+  listButtonDisabled: {
+    backgroundColor: '#9ca3af',
+    opacity: 0.6,
+  },
   listButtonText: {
     color: '#fff',
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: colors.text,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: colors.button,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 export { sortStyles };

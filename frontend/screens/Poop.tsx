@@ -1,27 +1,69 @@
-import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { useState } from 'react';
 import { poopStyles as styles } from '../styles';
-import { useNFTStore } from '../hooks/useNFTStore';
+import { useUserNFTs, useUpdateNFT } from '../hooks';
 import NFTProperties from '../components/NFTProperties';
 
 export default function Poop() {
-  const { nfts } = useNFTStore();
+  const { nfts, loading, error, refetch } = useUserNFTs();
+  const { updateEnergy } = useUpdateNFT();
+  const [actionLoading, setActionLoading] = useState(false);
   
-  // Get the first NFT from vault (or a random one)
-  const displayNFT = nfts[0];
+  // Get the first NFT from vault with energy > 0 (or first available)
+  const displayNFT = nfts.find(nft => nft.energy > 0) || nfts[0];
   
-  const handlePoop = () => {
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not yet available.',
-      [{ text: 'OK' }]
-    );
+  const handlePoop = async () => {
+    if (!displayNFT) return;
+    
+    if (displayNFT.energy <= 0) {
+      Alert.alert(
+        'No Energy',
+        'This NFT has no energy left. Visit the Repair screen to restore energy.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    
+    setActionLoading(true);
+    
+    // Simulate gameplay - decrease energy by 10
+    const newEnergy = Math.max(0, displayNFT.energy - 10);
+    const success = await updateEnergy(displayNFT.id, newEnergy);
+    
+    setActionLoading(false);
+    
+    if (success) {
+      await refetch(); // Refresh NFT list to show updated energy
+      Alert.alert(
+        'Success!',
+        `You earned rewards! Energy: ${displayNFT.energy} → ${newEnergy}`,
+        [{ text: 'OK' }]
+      );
+    } else {
+      Alert.alert(
+        'Error',
+        'Failed to update NFT energy. Please try again.',
+        [{ text: 'OK' }]
+      );
+    }
   };
   
-  if (!displayNFT) {
+  if (loading) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Poop</Text>
-        <Text style={styles.emptyText}>No NFTs in your vault</Text>
+        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
+      </View>
+    );
+  }
+  
+  if (error || !displayNFT) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Poop</Text>
+        <Text style={styles.emptyText}>
+          {error ? `Error: ${error}` : 'No NFTs in your vault'}
+        </Text>
       </View>
     );
   }
@@ -37,12 +79,15 @@ export default function Poop() {
         <View style={styles.nftCard}>
           <View style={styles.imageContainer}>
             <Image
-              source={typeof displayNFT.image === 'string' ? { uri: displayNFT.image } : displayNFT.image}
+              source={{ uri: displayNFT.image }}
               style={styles.nftImage}
               resizeMode="cover"
             />
             <View style={styles.levelBadge}>
               <Text style={styles.levelBadgeText}>Lv {displayNFT.level}</Text>
+            </View>
+            <View style={[styles.tierBadge, styles[`${displayNFT.tier}Badge`]]}>
+              <Text style={styles.tierBadgeText}>{displayNFT.tier.toUpperCase()}</Text>
             </View>
           </View>
           <View style={styles.nftInfo}>
@@ -52,6 +97,7 @@ export default function Poop() {
               resilience={displayNFT.resilience}
               comfort={displayNFT.comfort}
               luck={displayNFT.luck}
+              energy={displayNFT.energy}
               mode="detailed"
             />
           </View>
@@ -59,14 +105,17 @@ export default function Poop() {
       </View>
       
       <TouchableOpacity 
-        style={styles.poopButton} 
+        style={[styles.poopButton, (actionLoading || displayNFT.energy <= 0) && styles.poopButtonDisabled]} 
         onPress={handlePoop}
+        disabled={actionLoading || displayNFT.energy <= 0}
         activeOpacity={0.8}
         accessibilityLabel="Start pooping"
         accessibilityRole="button"
         accessibilityHint="Begin your toilet session"
       >
-        <Text style={styles.poopButtonText}>Poop</Text>
+        <Text style={styles.poopButtonText}>
+          {actionLoading ? 'Processing...' : displayNFT.energy <= 0 ? 'No Energy' : 'Poop'}
+        </Text>
       </TouchableOpacity>
     </View>
   );

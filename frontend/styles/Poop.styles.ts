@@ -78,6 +78,43 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
+  tierBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  chillBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadge: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadge': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadge': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadge': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierBadgeText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
   nftInfo: {
     width: '100%',
   },
@@ -93,6 +130,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 48,
     paddingVertical: 16,
     borderRadius: 8,
+  },
+  poopButtonDisabled: {
+    backgroundColor: '#9ca3af',
+    opacity: 0.6,
   },
   poopButtonText: {
     color: '#fff',

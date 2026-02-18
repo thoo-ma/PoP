@@ -1,39 +1,35 @@
-import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import { breedStyles as styles } from '../styles';
-import { MOCK_NFTS } from '../constants/mockData';
+import { useUserNFTs, useBreedNFT } from '../hooks';
 import type { NFT } from '../types/nft';
 import { NFTProperties } from '../components';
 
-const breedImages = [
-  require('../assets/toilets/chill/chill-4.jpeg'),
-  require('../assets/toilets/chill/chill-5.jpeg'),
-  require('../assets/toilets/chill/chill-6.jpeg'),
-  require('../assets/toilets/nitro/nitro-5.jpeg'),
-  require('../assets/toilets/omega/omega-1.jpeg'),
-];
-
 export default function Breed() {
+  const { nfts, loading, error } = useUserNFTs();
+  const { breedNFTs, loading: breedLoading } = useBreedNFT();
   const [selectedAsset1, setSelectedAsset1] = useState<string | null>(null);
   const [selectedAsset2, setSelectedAsset2] = useState<string | null>(null);
   const [breedResult, setBreedResult] = useState<NFT | null>(null);
 
-  const handleBreed = () => {
-    if (selectedAsset1 && selectedAsset2 && asset1 && asset2) {
-      // Generate new NFT by averaging parents' properties
-      const randomImage = breedImages[Math.floor(Math.random() * breedImages.length)];
-      const newNFT: NFT = {
-        id: `${Date.now()}`,
-        name: `NFT #${Math.floor(Math.random() * 9000) + 1000}`,
-        image: randomImage,
-        price: '0.0 ETH',
-        isListed: false,
-        efficiency: Math.round((asset1.efficiency + asset2.efficiency) / 2),
-        resilience: Math.round((asset1.resilience + asset2.resilience) / 2),
-        comfort: Math.round((asset1.comfort + asset2.comfort) / 2),
-        luck: Math.round((asset1.luck + asset2.luck) / 2),
-      };
+  const handleBreed = async () => {
+    if (!selectedAsset1 || !selectedAsset2) return;
+    
+    const newNFT = await breedNFTs(selectedAsset1, selectedAsset2);
+    
+    if (newNFT) {
       setBreedResult(newNFT);
+      Alert.alert(
+        'Success!',
+        'New NFT created and added to your vault!',
+        [{ text: 'OK' }]
+      );
+    } else {
+      Alert.alert(
+        'Breeding Failed',
+        'Failed to create new NFT. Please try again.',
+        [{ text: 'OK' }]
+      );
     }
   };
 
@@ -43,17 +39,53 @@ export default function Breed() {
     setBreedResult(null);
   };
 
-  // Mock function to simulate asset selection - uses actual NFT from vault
+  // Select first available NFT for asset 1
   const handleSelectAsset1 = () => {
-    setSelectedAsset1(MOCK_NFTS[0].id);
+    const available = nfts.find(nft => nft.id !== selectedAsset2);
+    if (available) {
+      setSelectedAsset1(available.id);
+    }
   };
 
+  // Select second available NFT for asset 2
   const handleSelectAsset2 = () => {
-    setSelectedAsset2(MOCK_NFTS[1].id);
+    const available = nfts.find(nft => nft.id !== selectedAsset1);
+    if (available) {
+      setSelectedAsset2(available.id);
+    }
   };
 
-  const asset1 = MOCK_NFTS.find(nft => nft.id === selectedAsset1);
-  const asset2 = MOCK_NFTS.find(nft => nft.id === selectedAsset2);
+  const asset1 = nfts.find(nft => nft.id === selectedAsset1);
+  const asset2 = nfts.find(nft => nft.id === selectedAsset2);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Breed</Text>
+        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 40 }} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Breed</Text>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (nfts.length < 2) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Breed</Text>
+        <Text style={styles.description}>
+          You need at least 2 NFTs to breed
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -74,15 +106,19 @@ export default function Breed() {
               <TouchableOpacity 
                 style={styles.assetSlot}
                 onPress={handleSelectAsset1}
+                disabled={breedLoading}
               >
                 {selectedAsset1 && asset1 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={typeof asset1.image === 'string' ? { uri: asset1.image } : asset1.image}
+                      source={{ uri: asset1.image }}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
                     <Text style={styles.assetLabel}>{asset1.name}</Text>
+                    <View style={[styles.tierBadgeMini, styles[`${asset1.tier}BadgeMini`]]}>
+                      <Text style={styles.tierBadgeMiniText}>{asset1.tier.toUpperCase()}</Text>
+                    </View>
                   </View>
                 ) : (
                   <View style={styles.emptySlot}>
@@ -99,15 +135,19 @@ export default function Breed() {
               <TouchableOpacity 
                 style={styles.assetSlot}
                 onPress={handleSelectAsset2}
+                disabled={breedLoading}
               >
                 {selectedAsset2 && asset2 ? (
                   <View style={styles.selectedAsset}>
                     <Image
-                      source={typeof asset2.image === 'string' ? { uri: asset2.image } : asset2.image}
+                      source={{ uri: asset2.image }}
                       style={styles.assetImage}
                       resizeMode="cover"
                     />
                     <Text style={styles.assetLabel}>{asset2.name}</Text>
+                    <View style={[styles.tierBadgeMini, styles[`${asset2.tier}BadgeMini`]]}>
+                      <Text style={styles.tierBadgeMiniText}>{asset2.tier.toUpperCase()}</Text>
+                    </View>
                   </View>
                 ) : (
                   <View style={styles.emptySlot}>
@@ -122,12 +162,14 @@ export default function Breed() {
             <TouchableOpacity
               style={[
                 styles.breedButton,
-                (!selectedAsset1 || !selectedAsset2) && styles.breedButtonDisabled
+                (!selectedAsset1 || !selectedAsset2 || breedLoading) && styles.breedButtonDisabled
               ]}
               onPress={handleBreed}
-              disabled={!selectedAsset1 || !selectedAsset2}
+              disabled={!selectedAsset1 || !selectedAsset2 || breedLoading}
             >
-              <Text style={styles.breedButtonText}>Breed</Text>
+              <Text style={styles.breedButtonText}>
+                {breedLoading ? 'Breeding...' : 'Breed'}
+              </Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -139,10 +181,13 @@ export default function Breed() {
               <View style={styles.resultCard}>
                 <View style={styles.resultImageContainer}>
                   <Image
-                    source={typeof breedResult.image === 'string' ? { uri: breedResult.image } : breedResult.image}
+                    source={{ uri: breedResult.image }}
                     style={styles.resultImage}
                     resizeMode="cover"
                   />
+                  <View style={[styles.tierBadge, styles[`${breedResult.tier}Badge`]]}>
+                    <Text style={styles.tierBadgeText}>{breedResult.tier.toUpperCase()}</Text>
+                  </View>
                 </View>
                 <View style={styles.resultCardContent}>
                   <Text style={styles.resultLabel}>{breedResult.name}</Text>

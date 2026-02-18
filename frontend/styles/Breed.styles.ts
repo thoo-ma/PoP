@@ -57,6 +57,38 @@ export const styles = StyleSheet.create({
     color: colors.title,
     textAlign: 'center',
   },
+  tierBadgeMini: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+  chillBadgeMini: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadgeMini: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadgeMini: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadgeMini': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadgeMini': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadgeMini': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierBadgeMiniText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
   emptySlot: {
     width: '100%',
     height: '100%',
@@ -131,10 +163,48 @@ export const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
     backgroundColor: '#f3f4f6',
+    position: 'relative',
   },
   resultImage: {
     width: '100%',
     height: '100%',
+  },
+  tierBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  chillBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadge: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadge': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadge': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadge': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierBadgeText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   resultCardContent: {
     padding: 16,
@@ -164,5 +234,11 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });

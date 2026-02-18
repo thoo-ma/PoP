@@ -76,6 +76,12 @@ export default function Auth() {
                 
                 if (error) throw error;
                 
+                // Seed test NFTs for dev mode
+                const { error: seedError } = await supabase.rpc('seed_dev_test_nfts');
+                if (seedError) {
+                  console.warn('Failed to seed test NFTs:', seedError);
+                }
+                
                 // Success - auth state will automatically update via onAuthStateChange
               } catch (err) {
                 logError('Auth:Anonymous', err);

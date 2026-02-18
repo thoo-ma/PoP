@@ -1,13 +1,14 @@
-import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import { vaultStyles as styles, sortStyles } from '../styles';
-import { useNFTStore } from '../hooks/useNFTStore';
+import { useUserNFTs, useUpdateNFT } from '../hooks';
 import { NFTProperties, SortControls } from '../components';
 import { sortNFTs } from '../utils';
 import type { SortOption } from '../types';
 
 export default function Vault() {
-  const { nfts, listNFT } = useNFTStore();
+  const { nfts, loading, error, refetch } = useUserNFTs();
+  const { listNFT, loading: updateLoading } = useUpdateNFT();
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
@@ -16,11 +17,43 @@ export default function Vault() {
   
   const sortedNfts = sortNFTs(nfts, sortBy, sortOrder);
   
-  const handleListNFT = (nftId: string) => {
-    // Default price based on NFT ID for demo
-    const prices = { '3': '0.7 ETH', '4': '1.5 ETH', '5': '0.4 ETH', '6': '1.0 ETH' };
-    listNFT(nftId, prices[nftId as keyof typeof prices] || '1.0 ETH');
+  const handleListNFT = async (nftId: string) => {
+    // Default price based on NFT properties (can be enhanced later)
+    const nft = nfts.find(n => n.id === nftId);
+    const basePrice = nft ? (nft.efficiency + nft.resilience + nft.comfort + nft.luck) / 400 : 0.5;
+    const price = `${basePrice.toFixed(1)} ETH`;
+    
+    const success = await listNFT(nftId, price);
+    if (success) {
+      refetch(); // Refresh NFT list to show updated listing status
+    }
   };
+  
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Vault</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3b82f6" />
+          <Text style={styles.loadingText}>Loading your collection...</Text>
+        </View>
+      </View>
+    );
+  }
+  
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Vault</Text>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load NFTs: {error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={refetch}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
   
   return (
     <View style={styles.container}>
@@ -51,12 +84,18 @@ export default function Vault() {
             <View key={nft.id} style={styles.nftCard}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={typeof nft.image === 'string' ? { uri: nft.image } : nft.image}
+                  source={{ uri: nft.image }}
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
                 <View style={styles.levelBadge}>
                   <Text style={styles.levelText}>Lv {nft.level}</Text>
+                </View>
+                <View style={[styles.tierBadge, styles[`${nft.tier}Badge`]]}>
+                  <Text style={styles.tierText}>{nft.tier.toUpperCase()}</Text>
+                </View>
+                <View style={[styles.rarityBadge, styles[`${nft.rarity}Badge`]]}>
+                  <Text style={styles.rarityText}>{nft.rarity.toUpperCase()}</Text>
                 </View>
                 {nft.isListed && (
                   <View style={styles.listedBadge}>
@@ -75,13 +114,16 @@ export default function Vault() {
                 />
                 {!nft.isListed && (
                   <TouchableOpacity 
-                    style={styles.listButton}
+                    style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
                     onPress={() => handleListNFT(nft.id)}
+                    disabled={updateLoading}
                     accessibilityLabel={`List ${nft.name} for sale`}
                     accessibilityRole="button"
                     accessibilityHint="List this NFT on the marketplace"
                   >
-                    <Text style={styles.listButtonText}>List for Sale</Text>
+                    <Text style={styles.listButtonText}>
+                      {updateLoading ? 'Listing...' : 'List for Sale'}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -92,3 +134,4 @@ export default function Vault() {
     </View>
   );
 }
+

@@ -88,6 +88,43 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
+  tierBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  chillBadge: {
+    backgroundColor: '#94a3b8',
+  },
+  nitroBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  omegaBadge: {
+    backgroundColor: '#8b5cf6',
+  },
+  'cruise-seatBadge': {
+    backgroundColor: '#94a3b8',
+  },
+  'turbo-flushBadge': {
+    backgroundColor: '#f59e0b',
+  },
+  'zen-fortressBadge': {
+    backgroundColor: '#8b5cf6',
+  },
+  tierBadgeText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
   resilienceBadge: {
     position: 'absolute',
     top: 12,
@@ -243,6 +280,24 @@ export const styles = StyleSheet.create({
   resetButtonText: {
     color: colors.button,
     fontSize: 16,
+    fontWeight: '600',
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  retryButton: {
+    backgroundColor: colors.button,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 14,
     fontWeight: '600',
   },
 });
