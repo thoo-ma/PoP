@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { MoreMenuProps } from '../../types';
-import { styles } from '../../styles/navigation/MoreMenu.styles';
+import { moreMenuStyles as styles } from '../../styles';
 import { colors } from '../../constants';
 
 const MORE_PAGES = [

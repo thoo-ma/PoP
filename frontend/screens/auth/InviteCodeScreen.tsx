@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { validateInviteCode } from '../../lib/supabase';
+import { validateInviteCode } from '../../lib/inviteCodeApi';
 import { inviteCodeScreenStyles as styles } from '../../styles';
 import { showSignOutConfirmation } from '../../utils';
 import { useErrorHandler } from '../../hooks';

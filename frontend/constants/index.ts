@@ -1,7 +1,6 @@
 export * from './theme';
 export * from './sensors';
 export * from './breedProbabilities';
-import type { NFTTier } from '../types/nft';
 
 // Sort options for NFTs
 export const SORT_OPTIONS = ['efficiency', 'resilience', 'comfort', 'luck', 'level'] as const;
@@ -33,16 +32,3 @@ export const TIER_VARIANTS = {
   ],
 } as const;
 
-// Helper function to get a random variant for a given tier
-export const getRandomVariant = (tier: NFTTier): string => {
-  const variants = TIER_VARIANTS[tier];
-  return variants[Math.floor(Math.random() * variants.length)];
-};
-
-// Helper function to format variant name for display
-export const formatVariantName = (variant: string): string => {
-  return variant
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
