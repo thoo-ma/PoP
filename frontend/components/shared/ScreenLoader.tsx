@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { colors } from '../constants';
-import { styles } from '../styles/shared/ScreenLoader.styles';
+import { colors } from '../../constants';
+import { styles } from '../../styles/shared/ScreenLoader.styles';
 
 interface ScreenLoaderProps {
   title: string;

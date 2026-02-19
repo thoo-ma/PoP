@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import type { CardProps } from '../types';
-import { styles } from '../styles/shared/Card.styles';
+import type { CardProps } from '../../types';
+import { styles } from '../../styles/shared/Card.styles';
 
 function Card({ 
   title, 

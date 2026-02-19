@@ -2,8 +2,7 @@ import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
 import { poopStyles as styles } from '../../styles';
 import { useUserNFTs, useUpdateNFT } from '../../hooks';
-import NFTProperties from '../../components/NFTProperties';
-import { ScreenLoader, ScreenError, NFTSelector } from '../../components';
+import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '../../components';
 import { nftEvents } from '../../utils';
 
 export default function Poop() {

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import { styles } from '../styles/nft/NFTSelector.styles';
+import { styles } from '../../styles/nft/NFTSelector.styles';
 
 interface Props {
   current: number;

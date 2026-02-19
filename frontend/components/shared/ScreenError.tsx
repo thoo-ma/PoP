@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { styles } from '../styles/shared/ScreenError.styles';
+import { styles } from '../../styles/shared/ScreenError.styles';
 
 interface ScreenErrorProps {
   title: string;
