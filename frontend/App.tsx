@@ -35,6 +35,9 @@ export default function App() {
     flatListRef.current?.scrollToIndex({ index: pageIndex, animated: true });
   }, []);
 
+  const handleOpenProfile = useCallback(() => setProfileVisible(true), []);
+  const handleCloseProfile = useCallback(() => setProfileVisible(false), []);
+
   const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems.length > 0) {
       setCurrentPage(viewableItems[0].index || 0);
@@ -101,7 +104,7 @@ export default function App() {
           style={styles.flatList}
         />
 
-        <ProfileButton onPress={() => setProfileVisible(true)} />
+        <ProfileButton onPress={handleOpenProfile} />
 
         <PageIndicator 
           totalPages={PAGES.length} 
@@ -111,7 +114,7 @@ export default function App() {
 
         <Profile 
           visible={profileVisible}
-          onClose={() => setProfileVisible(false)}
+          onClose={handleCloseProfile}
         />
         
         <StatusBar style="auto" />

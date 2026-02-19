@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import type { ReactNode } from 'react';
 import type { NFT } from '../types/nft';
@@ -10,7 +11,7 @@ interface NFTCardProps {
   action?: ReactNode;
 }
 
-export default function NFTCard({ nft, action }: NFTCardProps) {
+export default memo(function NFTCard({ nft, action }: NFTCardProps) {
   return (
     <View style={styles.nftCard}>
       <View style={styles.imageContainer}>
@@ -51,7 +52,7 @@ export default function NFTCard({ nft, action }: NFTCardProps) {
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   nftCard: {

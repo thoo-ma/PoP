@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '../styles/nft/NFTProperties.styles';
 import { colors } from '../constants';
@@ -53,21 +53,21 @@ function NFTProperties({
   excludeProperties = []
 }: NFTPropertiesProps) {
   const isCompact = mode === 'compact';
-  
-  const properties = [
-    { label: 'Efficiency', value: efficiency, color: colors.efficiency },
-    { label: 'Resilience', value: resilience, color: colors.resilience },
-    { label: 'Comfort', value: comfort, color: colors.comfort },
-    { label: 'Luck', value: luck, color: colors.luck },
-  ];
 
-  // Only add energy if it's provided
-  if (energy !== undefined) {
-    properties.push({ label: 'Energy', value: energy, color: colors.energy });
-  }
-
-  // Filter out excluded properties
-  const filteredProperties = properties.filter(prop => !excludeProperties.includes(prop.label));
+  const filteredProperties = useMemo(() => {
+    const properties = [
+      { label: 'Efficiency', value: efficiency, color: colors.efficiency },
+      { label: 'Resilience', value: resilience, color: colors.resilience },
+      { label: 'Comfort', value: comfort, color: colors.comfort },
+      { label: 'Luck', value: luck, color: colors.luck },
+    ];
+    if (energy !== undefined) {
+      properties.push({ label: 'Energy', value: energy, color: colors.energy });
+    }
+    return excludeProperties.length > 0
+      ? properties.filter(prop => !excludeProperties.includes(prop.label))
+      : properties;
+  }, [efficiency, resilience, comfort, luck, energy, excludeProperties]);
 
   return (
     <View style={isCompact ? styles.containerCompact : styles.containerDetailed}>

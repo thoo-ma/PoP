@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants';
 
@@ -6,7 +7,7 @@ interface ScreenLoaderProps {
   message?: string;
 }
 
-export default function ScreenLoader({ title, message }: ScreenLoaderProps) {
+export default memo(function ScreenLoader({ title, message }: ScreenLoaderProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -14,7 +15,7 @@ export default function ScreenLoader({ title, message }: ScreenLoaderProps) {
       {message && <Text style={styles.message}>{message}</Text>}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

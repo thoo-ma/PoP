@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../constants';
 
@@ -7,7 +8,7 @@ interface ScreenErrorProps {
   onRetry?: () => void;
 }
 
-export default function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
+export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -19,7 +20,7 @@ export default function ScreenError({ title, message, onRetry }: ScreenErrorProp
       )}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

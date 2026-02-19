@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../constants';
@@ -6,7 +7,7 @@ interface ProfileButtonProps {
   onPress: () => void;
 }
 
-export default function ProfileButton({ onPress }: ProfileButtonProps) {
+export default memo(function ProfileButton({ onPress }: ProfileButtonProps) {
   return (
     <TouchableOpacity 
       style={styles.button}
@@ -19,7 +20,7 @@ export default function ProfileButton({ onPress }: ProfileButtonProps) {
       <MaterialIcons name="account-circle" size={32} color={colors.primary} />
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   button: {

@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import type { PageIndicatorProps } from '../../types';
 import { styles } from '../../styles/navigation/PageIndicator.styles';
 import MoreMenu from './MoreMenu';
@@ -15,8 +15,11 @@ const PRIMARY_PAGE_ICONS = [
   { index: 4, icon: 'construction' as const, label: 'Repair' },
 ];
 
-export default function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
+export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
   const [moreMenuVisible, setMoreMenuVisible] = useState(false);
+
+  const handleMorePress = useCallback(() => setMoreMenuVisible(true), []);
+  const handleMoreClose = useCallback(() => setMoreMenuVisible(false), []);
 
   return (
     <>
@@ -46,7 +49,7 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
           {/* More button */}
           <TouchableOpacity 
             style={styles.iconWrapper}
-            onPress={() => setMoreMenuVisible(true)}
+            onPress={handleMorePress}
             activeOpacity={0.6}
             accessibilityLabel="More pages"
             accessibilityRole="button"
@@ -66,10 +69,10 @@ export default function PageIndicator({ totalPages, currentPage, onPageChange }:
 
       <MoreMenu
         visible={moreMenuVisible}
-        onClose={() => setMoreMenuVisible(false)}
+        onClose={handleMoreClose}
         onSelectPage={onPageChange || (() => {})}
         currentPage={currentPage}
       />
     </>
   );
-}
+});

@@ -1,4 +1,5 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
+import { useCallback } from 'react';
 import { Card } from '../../components';
 import { colors } from '../../constants';
 import { formatConfidencePercentage } from '../../utils';
@@ -6,34 +7,34 @@ import { useDetectionHistory } from '../../hooks';
 import type { DetectionRecord } from '../../types/audio';
 import { styles } from '../../styles/proof/DetectionHistory.styles';
 
+function formatDetectionDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function formatDetectionTime(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default function DetectionHistory() {
   const { detections, loading, refreshing, error, onRefresh } = useDetectionHistory();
 
   // Calculate summary statistics
   const totalDetections = detections.length;
   const successfulDetections = detections.filter(d => d.detected).length;
-  const successRate = totalDetections > 0 
-    ? Math.round((successfulDetections / totalDetections) * 100) 
+  const successRate = totalDetections > 0
+    ? Math.round((successfulDetections / totalDetections) * 100)
     : 0;
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit'
-    });
-  };
-
-  const renderDetection = ({ item }: { item: DetectionRecord }) => (
+  const renderDetection = useCallback(({ item }: { item: DetectionRecord }) => (
     <View style={styles.detectionCard}>
       <View style={styles.detectionHeader}>
         <Text style={styles.detectionIcon}>
@@ -41,7 +42,7 @@ export default function DetectionHistory() {
         </Text>
         <View style={styles.detectionDateContainer}>
           <Text style={styles.detectionDate}>
-            {formatDate(item.created_at)} at {formatTime(item.created_at)}
+            {formatDetectionDate(item.created_at)} at {formatDetectionTime(item.created_at)}
           </Text>
         </View>
       </View>
@@ -73,7 +74,7 @@ export default function DetectionHistory() {
         )}
       </View>
     </View>
-  );
+  ), []);
 
   if (loading) {
     return (

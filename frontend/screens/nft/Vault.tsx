@@ -1,5 +1,5 @@
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles } from '../../styles';
 import { useUserNFTs, useUpdateNFT } from '../../hooks';
 import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '../../components';
@@ -34,39 +34,50 @@ export default function Vault() {
   
   const sortedNfts = sortNFTs(filteredNfts, sortBy, sortOrder);
   
-  const handleRarityToggle = (rarity: NFTRarity) => {
-    setSelectedRarities(prev => 
-      prev.includes(rarity) 
+  const handleRarityToggle = useCallback((rarity: NFTRarity) => {
+    setSelectedRarities(prev =>
+      prev.includes(rarity)
         ? prev.filter(r => r !== rarity)
         : [...prev, rarity]
     );
-  };
-  
-  const handleTierToggle = (tier: NFTTier) => {
-    setSelectedTiers(prev => 
+  }, []);
+
+  const handleTierToggle = useCallback((tier: NFTTier) => {
+    setSelectedTiers(prev =>
       prev.includes(tier)
         ? prev.filter(t => t !== tier)
         : [...prev, tier]
     );
-  };
-  
-  const handleClearFilters = () => {
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
     setSelectedRarities([]);
     setSelectedTiers([]);
-  };
-  
-  const handleListNFT = async (nftId: string) => {
-    // Default price based on NFT properties (can be enhanced later)
+  }, []);
+
+  const handleSortByChange = useCallback((option: SortOption) => {
+    setSortBy(option);
+    setShowSortMenu(false);
+  }, []);
+
+  const handleSortOrderToggle = useCallback(() => {
+    setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
+  }, []);
+
+  const handleMenuToggle = useCallback(() => {
+    setShowSortMenu(prev => !prev);
+  }, []);
+
+  const handleListNFT = useCallback(async (nftId: string) => {
     const nft = nfts.find(n => n.id === nftId);
     const basePrice = nft ? (nft.efficiency + nft.resilience + nft.comfort + nft.luck) / 400 : 0.5;
     const price = `${basePrice.toFixed(1)} ETH`;
-    
     const success = await listNFT(nftId, price);
     if (success) {
-      refetch(); // Refresh NFT list to show updated listing status
-      nftEvents.emit(); // Notify other screens
+      refetch();
+      nftEvents.emit();
     }
-  };
+  }, [nfts, listNFT, refetch]);
   
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />;
@@ -96,12 +107,9 @@ export default function Vault() {
         sortBy={sortBy}
         sortOrder={sortOrder}
         showSortMenu={showSortMenu}
-        onSortByChange={(option) => {
-          setSortBy(option);
-          setShowSortMenu(false);
-        }}
-        onSortOrderToggle={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-        onMenuToggle={() => setShowSortMenu(!showSortMenu)}
+        onSortByChange={handleSortByChange}
+        onSortOrderToggle={handleSortOrderToggle}
+        onMenuToggle={handleMenuToggle}
         styles={sortStyles}
       />
       

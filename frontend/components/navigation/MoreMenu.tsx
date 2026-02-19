@@ -1,17 +1,20 @@
+import { ComponentProps, memo } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import type { MoreMenuProps } from '../../types';
 import { moreMenuStyles as styles } from '../../styles';
 import { colors } from '../../constants';
 
-const MORE_PAGES = [
+type MaterialIconName = ComponentProps<typeof MaterialIcons>['name'];
+
+const MORE_PAGES: { index: number; name: string; icon: MaterialIconName; hint: string }[] = [
   { index: 5, name: 'Proof of Immobility', icon: 'event-seat', hint: 'Test your ability to stay still' },
   { index: 6, name: 'Proof of Flush', icon: 'water-drop', hint: 'Record and verify toilet flush sound' },
   { index: 7, name: 'Proof of Poop', icon: 'park', hint: 'Complete the ultimate immobility and flush challenge' },
   { index: 8, name: 'Detection History', icon: 'history', hint: 'View your past detection attempts' },
 ];
 
-export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }: MoreMenuProps) {
+export default memo(function MoreMenu({ visible, onClose, onSelectPage, currentPage }: MoreMenuProps) {
   const handleSelectPage = (pageIndex: number) => {
     onSelectPage(pageIndex);
     onClose();
@@ -46,7 +49,7 @@ export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }
                 accessibilityState={{ selected: currentPage === page.index }}
               >
                 <MaterialIcons
-                  name={page.icon as any}
+                  name={page.icon}
                   size={24}
                   color={currentPage === page.index ? colors.active : colors.text}
                 />
@@ -63,4 +66,4 @@ export default function MoreMenu({ visible, onClose, onSelectPage, currentPage }
       </TouchableOpacity>
     </Modal>
   );
-}
+});

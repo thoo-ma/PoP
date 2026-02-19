@@ -1,5 +1,5 @@
 import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '../../styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '../../hooks';
 import { NFTCard, SortControls } from '../../components';
@@ -26,24 +26,40 @@ export default function Marketplace() {
   const sortedMarketplaceListings = sortNFTs(marketplaceListings, sortBy, sortOrder);
   const sortedMyListings = sortNFTs(myListings, sortBy, sortOrder);
   
-  const handleBuyNFT = () => {
+  const handleBuyNFT = useCallback(() => {
     Alert.alert(
       'Coming Soon',
       'Buying from marketplace is not yet available.',
       [{ text: 'OK' }]
     );
-  };
+  }, []);
 
-  const handleUnlist = async (nftId: string) => {
+  const handleUnlist = useCallback(async (nftId: string) => {
     const success = await unlistNFT(nftId);
     if (success) {
-      await refetchUser(); // Refresh user's NFT list
-      nftEvents.emit(); // Notify other screens
+      await refetchUser();
+      nftEvents.emit();
       Alert.alert('Success', 'NFT removed from marketplace');
     } else {
       Alert.alert('Error', 'Failed to unlist NFT');
     }
-  };
+  }, [unlistNFT, refetchUser]);
+
+  const handleSetTabBuy = useCallback(() => setActiveTab('buy'), []);
+  const handleSetTabSell = useCallback(() => setActiveTab('sell'), []);
+
+  const handleSortByChange = useCallback((option: SortOption) => {
+    setSortBy(option);
+    setShowSortMenu(false);
+  }, []);
+
+  const handleSortOrderToggle = useCallback(() => {
+    setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
+  }, []);
+
+  const handleMenuToggle = useCallback(() => {
+    setShowSortMenu(prev => !prev);
+  }, []);
 
   const loading = activeTab === 'buy' ? marketplaceLoading : userLoading;
 
@@ -58,7 +74,7 @@ export default function Marketplace() {
       <View style={styles.tabs}>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'buy' && styles.tabActive]}
-          onPress={() => setActiveTab('buy')}
+          onPress={handleSetTabBuy}
           accessibilityLabel="Browse marketplace"
           accessibilityRole="tab"
           accessibilityState={{ selected: activeTab === 'buy' }}
@@ -69,7 +85,7 @@ export default function Marketplace() {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'sell' && styles.tabActive]}
-          onPress={() => setActiveTab('sell')}
+          onPress={handleSetTabSell}
           accessibilityLabel="My listings"
           accessibilityRole="tab"
           accessibilityState={{ selected: activeTab === 'sell' }}
@@ -84,12 +100,9 @@ export default function Marketplace() {
         sortBy={sortBy}
         sortOrder={sortOrder}
         showSortMenu={showSortMenu}
-        onSortByChange={(option) => {
-          setSortBy(option);
-          setShowSortMenu(false);
-        }}
-        onSortOrderToggle={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-        onMenuToggle={() => setShowSortMenu(!showSortMenu)}
+        onSortByChange={handleSortByChange}
+        onSortOrderToggle={handleSortOrderToggle}
+        onMenuToggle={handleMenuToggle}
         styles={{ ...sortStyles, sortContainer: styles.sortContainer }}
       />
 
