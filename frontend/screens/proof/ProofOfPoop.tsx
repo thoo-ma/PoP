@@ -271,7 +271,7 @@ export default function ProofOfPoop() {
         title="Immobility Duration"
         value={formatTime(finalImmobilityTime)}
         titleColor={colors.buttonPrimary}
-        valueColor="#4ade80"
+        valueColor={colors.success}
         style={styles.card}
       />
 
@@ -308,7 +308,7 @@ export default function ProofOfPoop() {
             title="Status"
             value="🎤 Recording..."
             titleColor={colors.buttonPrimary}
-            valueColor="#dc2626"
+            valueColor={colors.error}
             style={styles.card}
           />
         )}

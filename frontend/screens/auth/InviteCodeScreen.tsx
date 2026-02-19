@@ -131,7 +131,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
         {loading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#3B82F6" />
+            <ActivityIndicator size="large" color={colors.info} />
           </View>
         )}
 
