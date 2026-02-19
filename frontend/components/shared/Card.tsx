@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Text, View } from 'react-native';
 import type { CardProps } from '@/types';
 import { styles } from '@/styles/shared/Card.styles';
@@ -18,4 +18,4 @@ function Card({
   );
 }
 
-export default React.memo(Card);
+export default memo(Card);

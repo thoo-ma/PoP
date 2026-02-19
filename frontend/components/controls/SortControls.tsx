@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import type { SortOption } from '@/types';
 import { SORT_OPTIONS } from '@/constants';
@@ -78,4 +78,4 @@ function SortControls({
   );
 }
 
-export default React.memo(SortControls);
+export default memo(SortControls);

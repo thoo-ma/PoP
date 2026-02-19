@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import type { NFTRarity, NFTTier } from '@/types';
 import { RARITIES } from '@/constants';
@@ -140,4 +140,4 @@ function FilterControls({
   );
 }
 
-export default React.memo(FilterControls);
+export default memo(FilterControls);

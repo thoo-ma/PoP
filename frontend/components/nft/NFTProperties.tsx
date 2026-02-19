@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '@/styles/nft/NFTProperties.styles';
 import { colors } from '@/constants';
@@ -20,7 +20,7 @@ interface PropertyBarProps {
   isCompact: boolean;
 }
 
-const PropertyBar = React.memo(function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
+const PropertyBar = memo(function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
   return (
     <View style={isCompact ? styles.propertyRowCompact : styles.propertyRowDetailed}>
       <Text style={isCompact ? styles.propertyLabelCompact : styles.propertyLabelDetailed}>
@@ -84,4 +84,4 @@ function NFTProperties({
   );
 }
 
-export default React.memo(NFTProperties);
+export default memo(NFTProperties);
