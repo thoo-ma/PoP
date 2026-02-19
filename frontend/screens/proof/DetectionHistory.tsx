@@ -1,11 +1,11 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useCallback } from 'react';
-import { Card } from '../../components';
-import { colors } from '../../constants';
-import { formatConfidencePercentage } from '../../utils';
-import { useDetectionHistory } from '../../hooks';
-import type { DetectionRecord } from '../../types/audio';
-import { styles } from '../../styles/proof/DetectionHistory.styles';
+import { Card } from '@/components';
+import { colors } from '@/constants';
+import { formatConfidencePercentage } from '@/utils';
+import { useDetectionHistory } from '@/hooks';
+import type { DetectionRecord } from '@/types/audio';
+import { styles } from '@/styles/proof/DetectionHistory.styles';
 
 function formatDetectionDate(dateString: string): string {
   const date = new Date(dateString);

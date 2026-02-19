@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { styles } from '../../styles/nft/NFTProperties.styles';
-import { colors } from '../../constants';
+import { styles } from '@/styles/nft/NFTProperties.styles';
+import { colors } from '@/constants';
 
 interface NFTPropertiesProps {
   efficiency: number;

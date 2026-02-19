@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
-import { SENSOR_UPDATE_INTERVAL } from '../../constants';
-import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '../../types';
-import { getThresholds } from '../../utils/proof/sensorHelpers';
-import { logError } from '../../utils/errorHelpers';
+import { SENSOR_UPDATE_INTERVAL } from '@/constants';
+import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
+import { getThresholds } from '@/utils/proof/sensorHelpers';
+import { logError } from '@/utils/errorHelpers';
 
 type Subscription = ReturnType<typeof Accelerometer.addListener>;
 

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { DifficultyMode } from '../../types';
+import type { DifficultyMode } from '@/types';
 
 interface UseDifficultyCycleReturn {
   mode: DifficultyMode;

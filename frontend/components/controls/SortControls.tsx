@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import type { SortOption } from '../../types';
-import { SORT_OPTIONS } from '../../constants';
-import { capitalize } from '../../utils';
+import type { SortOption } from '@/types';
+import { SORT_OPTIONS } from '@/constants';
+import { capitalize } from '@/utils';
 
 interface SortControlsProps {
   sortBy: SortOption;

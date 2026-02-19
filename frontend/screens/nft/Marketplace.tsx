@@ -1,11 +1,11 @@
 import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useState, useCallback } from 'react';
-import { marketplaceStyles as styles, sortStyles } from '../../styles';
-import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '../../hooks';
-import { NFTCard, SortControls } from '../../components';
-import { sortNFTs, nftEvents } from '../../utils';
-import type { SortOption } from '../../types';
-import { colors } from '../../constants';
+import { marketplaceStyles as styles, sortStyles } from '@/styles';
+import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
+import { NFTCard, SortControls } from '@/components';
+import { sortNFTs, nftEvents } from '@/utils';
+import type { SortOption } from '@/types';
+import { colors } from '@/constants';
 
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');

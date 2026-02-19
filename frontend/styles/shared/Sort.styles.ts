@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../constants';
+import { colors } from '@/constants';
 
 export const sortStyles = StyleSheet.create({
   sortContainer: {

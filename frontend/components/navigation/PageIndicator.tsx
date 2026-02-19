@@ -1,10 +1,10 @@
 import { View, TouchableOpacity, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState, useCallback, memo } from 'react';
-import type { PageIndicatorProps } from '../../types';
-import { styles } from '../../styles/navigation/PageIndicator.styles';
+import type { PageIndicatorProps } from '@/types';
+import { styles } from '@/styles/navigation/PageIndicator.styles';
 import MoreMenu from './MoreMenu';
-import { colors } from '../../constants';
+import { colors } from '@/constants';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [

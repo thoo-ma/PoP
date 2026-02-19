@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { Image, Text, View } from 'react-native';
 import type { ReactNode } from 'react';
-import type { NFT } from '../../types/nft';
+import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
-import { styles } from '../../styles/nft/NFTCard.styles';
+import { styles } from '@/styles/nft/NFTCard.styles';
 
 interface NFTCardProps {
   nft: NFT;

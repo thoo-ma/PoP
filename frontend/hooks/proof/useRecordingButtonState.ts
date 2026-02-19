@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { DetectionResult } from '../../types';
+import type { DetectionResult } from '@/types';
 
 /**
  * Custom hook to determine button states for recording and analyzing audio

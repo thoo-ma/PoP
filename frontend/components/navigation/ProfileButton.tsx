@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { colors } from '../../constants';
-import { styles } from '../../styles/navigation/ProfileButton.styles';
+import { colors } from '@/constants';
+import { styles } from '@/styles/navigation/ProfileButton.styles';
 
 interface ProfileButtonProps {
   onPress: () => void;

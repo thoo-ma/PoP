@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
-import { logError } from '../../utils/errorHelpers';
+import { supabase } from '@/lib/supabase';
+import { logError } from '@/utils/errorHelpers';
 
 /**
  * Hook to update NFT properties (energy, listing status, etc.).

@@ -8,11 +8,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { validateInviteCode } from '../../lib/inviteCodeApi';
-import { inviteCodeScreenStyles as styles } from '../../styles';
-import { showSignOutConfirmation } from '../../utils';
-import { useErrorHandler } from '../../hooks';
-import { colors } from '../../constants';
+import { validateInviteCode } from '@/lib/inviteCodeApi';
+import { inviteCodeScreenStyles as styles } from '@/styles';
+import { showSignOutConfirmation } from '@/utils';
+import { useErrorHandler } from '@/hooks';
+import { colors } from '@/constants';
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void;

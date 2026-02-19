@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Card, DifficultySelector } from '../../components';
-import { colors } from '../../constants';
-import { useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../../hooks';
-import { getThresholdForDifficulty, formatConfidencePercentage } from '../../utils';
-import { styles } from '../../styles/proof/ProofOfFlush.styles';
+import { Card, DifficultySelector } from '@/components';
+import { colors } from '@/constants';
+import { useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '@/hooks';
+import { getThresholdForDifficulty, formatConfidencePercentage } from '@/utils';
+import { styles } from '@/styles/proof/ProofOfFlush.styles';
 
 export default function ProofOfFlush() {
   const { mode, cycleMode } = useDifficultyCycle('normal');

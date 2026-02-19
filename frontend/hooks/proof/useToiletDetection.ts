@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
 import { Audio } from 'expo-av';
 import { File } from 'expo-file-system';
-import { detectToiletFlush } from '../../lib/toiletDetectionApi';
-import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '../../types/audio';
-import { isRateLimitError } from '../../utils/errorHelpers';
-import { useErrorHandler } from '../useErrorHandler';
+import { detectToiletFlush } from '@/lib/toiletDetectionApi';
+import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '@/types/audio';
+import { isRateLimitError } from '@/utils/errorHelpers';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 export const useToiletDetection = (): UseToiletDetectionReturn => {
   const [isRecording, setIsRecording] = useState(false);

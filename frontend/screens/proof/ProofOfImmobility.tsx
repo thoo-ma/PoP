@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import { Card, DifficultySelector } from '../../components';
-import { colors } from '../../constants';
-import { useImmobilityChallenge, useDifficultyCycle } from '../../hooks';
-import { formatTime, getStatusDisplay } from '../../utils';
-import { proofOfImmobilityStyles as styles } from '../../styles';
+import { Card, DifficultySelector } from '@/components';
+import { colors } from '@/constants';
+import { useImmobilityChallenge, useDifficultyCycle } from '@/hooks';
+import { formatTime, getStatusDisplay } from '@/utils';
+import { proofOfImmobilityStyles as styles } from '@/styles';
 
 export default function ProofOfImmobility() {
   const { mode, cycleMode } = useDifficultyCycle('normal');

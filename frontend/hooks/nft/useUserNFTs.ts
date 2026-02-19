@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
-import type { NFT } from '../../types/nft';
-import { logError } from '../../utils/errorHelpers';
+import { supabase } from '@/lib/supabase';
+import type { NFT } from '@/types/nft';
+import { logError } from '@/utils/errorHelpers';
 
 /**
  * Hook to fetch and manage user's NFT collection.

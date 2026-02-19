@@ -1,5 +1,5 @@
-import type { NFTRarity } from '../../types/nft';
-import { RARITY_RANK, BREED_PROBABILITIES } from '../../constants';
+import type { NFTRarity } from '@/types/nft';
+import { RARITY_RANK, BREED_PROBABILITIES } from '@/constants';
 
 /**
  * Returns the [common%, rare%, legendary%, transcendent%] outcome probabilities

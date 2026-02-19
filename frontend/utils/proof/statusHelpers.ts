@@ -1,5 +1,5 @@
-import type { ChallengeStatus } from '../../types';
-import { colors } from '../../constants';
+import type { ChallengeStatus } from '@/types';
+import { colors } from '@/constants';
 
 interface StatusDisplay {
   text: string;

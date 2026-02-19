@@ -1,9 +1,9 @@
 import { Text, View, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAuth } from '../hooks';
-import { profileStyles as styles } from '../styles';
-import { showSignOutConfirmation } from '../utils';
-import { colors } from '../constants';
+import { useAuth } from '@/hooks';
+import { profileStyles as styles } from '@/styles';
+import { showSignOutConfirmation } from '@/utils';
+import { colors } from '@/constants';
 
 interface ProfileProps {
   visible: boolean;

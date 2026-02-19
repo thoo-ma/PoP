@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { colors, typography } from '../../constants';
-import { sortStyles as baseSortStyles } from '../shared/Sort.styles';
+import { colors, typography } from '@/constants';
+import { sortStyles as baseSortStyles } from '@/styles/shared/Sort.styles';
 
 export const styles = StyleSheet.create({
   container: {

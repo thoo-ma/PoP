@@ -1,5 +1,5 @@
-import type { NFTTier } from '../../types/nft';
-import { TIER_VARIANTS } from '../../constants';
+import type { NFTTier } from '@/types/nft';
+import { TIER_VARIANTS } from '@/constants';
 
 /**
  * Returns a random variant name for the given NFT tier.

@@ -1,10 +1,10 @@
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
-import { vaultStyles as styles, sortStyles, filterStyles } from '../../styles';
-import { useUserNFTs, useUpdateNFT } from '../../hooks';
-import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '../../components';
-import { sortNFTs, nftEvents } from '../../utils';
-import type { SortOption, NFTRarity, NFTTier } from '../../types';
+import { vaultStyles as styles, sortStyles, filterStyles } from '@/styles';
+import { useUserNFTs, useUpdateNFT } from '@/hooks';
+import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '@/components';
+import { sortNFTs, nftEvents } from '@/utils';
+import type { SortOption, NFTRarity, NFTTier } from '@/types';
 
 export default function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();

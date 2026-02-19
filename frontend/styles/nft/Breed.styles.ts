@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors, typography } from '../../constants';
+import { colors, typography } from '@/constants';
 
 const SCREEN_W = Dimensions.get('window').width;
 const TILE_SIZE = (SCREEN_W - 48 - 12) / 2; // 2-col picker grid

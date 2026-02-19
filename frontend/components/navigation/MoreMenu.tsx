@@ -1,9 +1,9 @@
 import { ComponentProps, memo } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import type { MoreMenuProps } from '../../types';
-import { moreMenuStyles as styles } from '../../styles';
-import { colors } from '../../constants';
+import type { MoreMenuProps } from '@/types';
+import { moreMenuStyles as styles } from '@/styles';
+import { colors } from '@/constants';
 
 type MaterialIconName = ComponentProps<typeof MaterialIcons>['name'];
 

@@ -1,11 +1,11 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Card, DifficultySelector } from '../../components';
-import { colors } from '../../constants';
-import { useImmobilityChallenge, useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '../../hooks';
-import type { ChallengePhase, TimelapseOption } from '../../types';
-import { formatTime, getThresholdForDifficulty, formatConfidencePercentage } from '../../utils';
-import { styles } from '../../styles/proof/ProofOfPoop.styles';
+import { Card, DifficultySelector } from '@/components';
+import { colors } from '@/constants';
+import { useImmobilityChallenge, useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '@/hooks';
+import type { ChallengePhase, TimelapseOption } from '@/types';
+import { formatTime, getThresholdForDifficulty, formatConfidencePercentage } from '@/utils';
+import { styles } from '@/styles/proof/ProofOfPoop.styles';
 
 export default function ProofOfPoop() {
   const [phase, setPhase] = useState<ChallengePhase>('setup');

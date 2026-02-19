@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { getErrorMessage, logError } from '../utils/errorHelpers';
+import { getErrorMessage, logError } from '@/utils/errorHelpers';
 
 /**
  * Custom hook for handling errors consistently across components

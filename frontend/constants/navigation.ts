@@ -1,5 +1,5 @@
-import { ProofOfImmobility, ProofOfFlush, DetectionHistory, ProofOfPoop, Vault, Breed, Marketplace, Repair, Poop } from '../screens';
-import type { PageConfig } from '../types';
+import { ProofOfImmobility, ProofOfFlush, DetectionHistory, ProofOfPoop, Vault, Breed, Marketplace, Repair, Poop } from '@/screens';
+import type { PageConfig } from '@/types';
 
 /**
  * Configuration for app pages/screens

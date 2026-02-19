@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
-import type { DetectionResult, RateLimitError } from '../types/audio';
-import { getErrorMessage, logError, isRateLimitError } from '../utils/errorHelpers';
+import type { DetectionResult, RateLimitError } from '@/types/audio';
+import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelpers';
 
 /**
  * Call Supabase Edge Function to detect toilet flush

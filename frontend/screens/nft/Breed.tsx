@@ -1,11 +1,11 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
-import { breedStyles as styles } from '../../styles';
-import { useUserNFTs, useBreedNFT } from '../../hooks';
-import type { NFT } from '../../types/nft';
-import { NFTProperties, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '../../components';
-import { nftEvents, canBreed } from '../../utils';
-import { RARITY_COLORS } from '../../constants';
+import { breedStyles as styles } from '@/styles';
+import { useUserNFTs, useBreedNFT } from '@/hooks';
+import type { NFT } from '@/types/nft';
+import { NFTProperties, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
+import { nftEvents, canBreed } from '@/utils';
+import { RARITY_COLORS } from '@/constants';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 

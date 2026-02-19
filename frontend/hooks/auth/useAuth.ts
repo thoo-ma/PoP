@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../lib';
-import type { Session, UseAuthReturn } from '../../types';
+import { supabase } from '@/lib';
+import type { Session, UseAuthReturn } from '@/types';
 
 export function useAuth(): UseAuthReturn {
   const [session, setSession] = useState<Session | null>(null);

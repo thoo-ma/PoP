@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { ApprovalResult } from '../types/auth';
+import type { ApprovalResult } from '@/types/auth';
 
 /**
  * Validates an invite code and approves the current user.

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import type { OAuthButtonProps } from '../../types';
-import { authStyles as styles } from '../../styles';
+import type { OAuthButtonProps } from '@/types';
+import { authStyles as styles } from '@/styles';
 
 export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
   const isGoogle = provider === 'google';

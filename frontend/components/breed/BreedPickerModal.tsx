@@ -1,9 +1,9 @@
 import { Modal, View, Text, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native';
-import type { NFT } from '../../types/nft';
-import type { NFTRarity } from '../../types/nft';
-import { breedStyles as styles } from '../../styles';
-import { RARITY_COLORS } from '../../constants';
-import { canBreed } from '../../utils';
+import type { NFT } from '@/types/nft';
+import type { NFTRarity } from '@/types/nft';
+import { breedStyles as styles } from '@/styles';
+import { RARITY_COLORS } from '@/constants';
+import { canBreed } from '@/utils';
 
 const SCREEN_W = Dimensions.get('window').width;
 export const TILE_SIZE = (SCREEN_W - 48 - 12) / 2; // 2 columns, 24px side padding, 12px gap

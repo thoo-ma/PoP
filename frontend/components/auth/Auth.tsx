@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Alert, View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { supabase, isExpoGo } from '../../lib';
+import { supabase, isExpoGo } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { Provider } from '@supabase/supabase-js';
-import type { OAuthProvider } from '../../types';
-import { getRedirectUrl, getErrorMessage, logError } from '../../utils';
-import { authStyles as styles } from '../../styles';
+import type { OAuthProvider } from '@/types';
+import { getRedirectUrl, getErrorMessage, logError } from '@/utils';
+import { authStyles as styles } from '@/styles';
 import OAuthButton from './OAuthButton';
-import { colors } from '../../constants';
+import { colors } from '@/constants';
 
 WebBrowser.maybeCompleteAuthSession();
 

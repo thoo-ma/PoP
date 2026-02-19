@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
-import type { NFT } from '../../types/nft';
-import { logError } from '../../utils/errorHelpers';
+import { supabase } from '@/lib/supabase';
+import type { NFT } from '@/types/nft';
+import { logError } from '@/utils/errorHelpers';
 
 /**
  * Hook to breed two NFTs and create a new one.

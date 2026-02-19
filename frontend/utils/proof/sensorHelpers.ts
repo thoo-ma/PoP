@@ -1,4 +1,4 @@
-import type { DifficultyMode, SensorThresholds } from '../../types';
+import type { DifficultyMode, SensorThresholds } from '@/types';
 
 /**
  * Get thresholds based on difficulty mode

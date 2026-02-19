@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-import type { NFT } from '../../types/nft';
-import { breedStyles as styles } from '../../styles';
-import { RARITY_COLORS } from '../../constants';
+import type { NFT } from '@/types/nft';
+import { breedStyles as styles } from '@/styles';
+import { RARITY_COLORS } from '@/constants';
 
 interface BreedParentSlotProps {
   nft: NFT | null;

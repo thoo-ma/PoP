@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import type { NFTRarity, NFTTier } from '../../types';
+import type { NFTRarity, NFTTier } from '@/types';
 
 interface FilterControlsProps {
   selectedRarities: NFTRarity[];

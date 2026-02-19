@@ -1,11 +1,11 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useState } from 'react';
-import { repairStyles as styles } from '../../styles';
-import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '../../components';
-import { useUserNFTs, useUpdateNFT } from '../../hooks';
-import type { NFT } from '../../types';
-import { nftEvents } from '../../utils';
+import { repairStyles as styles } from '@/styles';
+import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
+import { useUserNFTs, useUpdateNFT } from '@/hooks';
+import type { NFT } from '@/types';
+import { nftEvents } from '@/utils';
 
 export default function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
