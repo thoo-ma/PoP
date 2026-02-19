@@ -1,40 +1,13 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
-import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../../components';
 import { colors } from '../../constants';
-import { fetchDetectionHistory } from '../../lib';
 import { formatConfidencePercentage } from '../../utils';
-import { useErrorHandler } from '../../hooks';
+import { useDetectionHistory } from '../../hooks';
 import type { DetectionRecord } from '../../types/audio';
 import { styles } from '../../styles/proof/DetectionHistory.styles';
 
 export default function DetectionHistory() {
-  const [detections, setDetections] = useState<DetectionRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const { error, handleError, clearError } = useErrorHandler('DetectionHistory');
-
-  const loadDetections = useCallback(async () => {
-    try {
-      clearError();
-      const data = await fetchDetectionHistory(50);
-      setDetections(data || []);
-    } catch (err) {
-      handleError(err, 'Failed to load detections');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadDetections();
-  }, [loadDetections]);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    loadDetections();
-  }, [loadDetections]);
+  const { detections, loading, refreshing, error, onRefresh } = useDetectionHistory();
 
   // Calculate summary statistics
   const totalDetections = detections.length;
