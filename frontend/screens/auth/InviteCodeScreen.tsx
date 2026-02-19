@@ -19,7 +19,7 @@ interface InviteCodeScreenProps {
   onSignOut: () => void;
 }
 
-export function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
+export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandler('InviteCode');
