@@ -1,7 +1,7 @@
 // Breed probability constants for the frontend.
 // Keep in sync with: supabase/functions/_shared/breedProbabilities.ts
 
-export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
+import type { NFTRarity } from '@/types/nft';
 
 export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
 

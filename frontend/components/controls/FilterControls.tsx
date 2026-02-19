@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import type { NFTRarity, NFTTier } from '@/types';
+import { RARITIES } from '@/constants';
 
 interface FilterControlsProps {
   selectedRarities: NFTRarity[];
@@ -10,8 +11,6 @@ interface FilterControlsProps {
   onClearFilters: () => void;
   styles: any;
 }
-
-const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
 const TIERS: NFTTier[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
 
 const RARITY_LABELS: Record<NFTRarity, string> = {
