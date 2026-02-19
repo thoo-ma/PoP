@@ -1,6 +1,7 @@
 import { memo } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { colors } from '../constants';
+import { styles } from '../styles/shared/ScreenLoader.styles';
 
 interface ScreenLoaderProps {
   title: string;
@@ -15,28 +16,4 @@ export default memo(function ScreenLoader({ title, message }: ScreenLoaderProps)
       {message && <Text style={styles.message}>{message}</Text>}
     </View>
   );
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    paddingTop: 60,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    textAlign: 'center',
-    color: colors.title,
-  },
-  indicator: {
-    marginTop: 40,
-  },
-  message: {
-    marginTop: 12,
-    fontSize: 14,
-    color: colors.text,
-  },
 });
