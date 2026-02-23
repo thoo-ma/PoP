@@ -22,7 +22,7 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
               <View
                 style={[
                   styles.outcomeBarFill,
-                  { width: `${pct}%` as any, backgroundColor: RARITY_COLORS[rarity] },
+                  { width: `${pct}%`, backgroundColor: RARITY_COLORS[rarity] },
                 ]}
               />
             </View>
