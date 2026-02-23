@@ -38,14 +38,14 @@ function rollRarity(r1: Rarity, r2: Rarity): Rarity {
 // ─── Tier & variant system ────────────────────────────────────────────────────
 
 const TIER_WEIGHTS: Record<NFTTier, number> = {
-  'cruise-seat': 1,
-  'turbo-flush': 2,
+  'turbo-flush':  1,
+  'cruise-seat':  2,
   'zen-fortress': 3,
 }
 
 const TIER_FROM_WEIGHT: Array<[number, NFTTier]> = [
-  [1.5, 'cruise-seat'],
-  [2.5, 'turbo-flush'],
+  [1.5, 'turbo-flush'],
+  [2.5, 'cruise-seat'],
   [Infinity, 'zen-fortress'],
 ]
 
