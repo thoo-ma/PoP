@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
 import { styles } from '@/styles/nft/NFTCard.styles';
+import { formatDisplayName } from '@/utils';
 
 interface NFTCardProps {
   nft: NFT;
@@ -23,9 +24,9 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         <View style={styles.levelBadge}>
           <Text style={styles.levelText}>Lv {nft.level}</Text>
         </View>
-        {nft.tier && (
-          <View style={[styles.tierBadge, styles[`${nft.tier}Badge` as keyof typeof styles] as object]}>
-            <Text style={styles.tierText}>{nft.tier.toUpperCase()}</Text>
+        {nft.type && (
+          <View style={[styles.tierBadge, styles[`${nft.type}Badge` as keyof typeof styles] as object]}>
+            <Text style={styles.tierText}>{nft.type.toUpperCase()}</Text>
           </View>
         )}
         {nft.rarity && (
@@ -40,7 +41,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         )}
       </View>
       <View style={styles.cardContent}>
-        <Text style={styles.nftName}>{nft.name}</Text>
+        <Text style={styles.nftName}>{formatDisplayName(nft.name)}</Text>
         <NFTProperties
           efficiency={nft.efficiency}
           resilience={nft.resilience}

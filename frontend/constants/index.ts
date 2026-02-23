@@ -5,9 +5,9 @@ export * from './breedProbabilities';
 // Sort options for NFTs
 export const SORT_OPTIONS = ['efficiency', 'resilience', 'comfort', 'luck', 'level'] as const;
 
-// NFT Tier Variants
-// Maps each tier to its available named variants (matches Supabase storage structure)
-export const TIER_VARIANTS = {
+// NFT Type Names
+// Maps each type to its available named slugs (matches Supabase storage structure)
+export const TYPE_NAMES = {
   'cruise-seat': [
     'ancient-egyptian',
     'ancient-maya-stone',

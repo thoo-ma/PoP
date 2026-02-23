@@ -4,7 +4,7 @@ import { breedStyles as styles } from '@/styles';
 import { useUserNFTs, useBreedNFT } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import { NFTProperties, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
-import { nftEvents, canBreed } from '@/utils';
+import { nftEvents, canBreed, formatDisplayName } from '@/utils';
 import { RARITY_COLORS } from '@/constants';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
@@ -164,15 +164,15 @@ export default function Breed() {
                 <View style={styles.levelBadge}>
                   <Text style={styles.levelBadgeText}>Lv {breedResult.level}</Text>
                 </View>
-                <View style={[styles.tierBadge, styles[`${breedResult.tier}Badge` as keyof typeof styles] as object]}>
-                  <Text style={styles.tierBadgeText}>{breedResult.tier.toUpperCase()}</Text>
+                <View style={[styles.tierBadge, styles[`${breedResult.type}Badge` as keyof typeof styles] as object]}>
+                  <Text style={styles.tierBadgeText}>{breedResult.type.toUpperCase()}</Text>
                 </View>
                 <View style={[styles.rarityBadge, { backgroundColor: RARITY_COLORS[breedResult.rarity] }]}>
                   <Text style={styles.rarityBadgeText}>{breedResult.rarity.toUpperCase()}</Text>
                 </View>
               </View>
               <View style={styles.resultCardContent}>
-                <Text style={styles.resultLabel}>{breedResult.name}</Text>
+                <Text style={styles.resultLabel}>{formatDisplayName(breedResult.name)}</Text>
                 <NFTProperties
                   efficiency={breedResult.efficiency}
                   resilience={breedResult.resilience}

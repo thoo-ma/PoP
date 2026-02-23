@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
-import { sortNFTs, nftEvents } from '@/utils';
+import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import type { SortOption } from '@/types';
 import { colors } from '@/constants';
 
@@ -135,7 +135,7 @@ export default function Marketplace() {
                       <TouchableOpacity
                         style={styles.buyButton}
                         onPress={handleBuyNFT}
-                        accessibilityLabel={`Buy ${item.name} for ${item.price}`}
+                        accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
                         accessibilityRole="button"
                         accessibilityHint="Purchase this NFT"
                       >
@@ -160,7 +160,7 @@ export default function Marketplace() {
                           style={[styles.unlistButton, updateLoading && styles.unlistButtonDisabled]}
                           onPress={() => handleUnlist(item.id)}
                           disabled={updateLoading}
-                          accessibilityLabel={`Unlist ${item.name}`}
+                          accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
                           accessibilityRole="button"
                           accessibilityHint="Remove this NFT from marketplace"
                         >

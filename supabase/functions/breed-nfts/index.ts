@@ -11,7 +11,7 @@ const corsHeaders = {
 // ─── Rarity system ───────────────────────────────────────────────────────────
 // RARITY_RANK and BREED_PROBABILITIES are imported from shared/breedProbabilities.ts
 
-type NFTTier = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
+type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
 function rarityKey(r1: Rarity, r2: Rarity): string {
   // Sort so that the lower-rank rarity always comes first
@@ -35,21 +35,21 @@ function rollRarity(r1: Rarity, r2: Rarity): Rarity {
   return 'transcendent' // floating-point safety fallback
 }
 
-// ─── Tier & variant system ────────────────────────────────────────────────────
+// ─── Type & name system ────────────────────────────────────────────────────────
 
-const TIER_WEIGHTS: Record<NFTTier, number> = {
+const TYPE_WEIGHTS: Record<NFTType, number> = {
   'turbo-flush':  1,
   'cruise-seat':  2,
   'zen-fortress': 3,
 }
 
-const TIER_FROM_WEIGHT: Array<[number, NFTTier]> = [
+const TYPE_FROM_WEIGHT: Array<[number, NFTType]> = [
   [1.5, 'turbo-flush'],
   [2.5, 'cruise-seat'],
   [Infinity, 'zen-fortress'],
 ]
 
-const TIER_VARIANTS: Record<NFTTier, readonly string[]> = {
+const TYPE_NAMES: Record<NFTType, readonly string[]> = {
   'cruise-seat': [
     'ancient-egyptian',
     'ancient-maya-stone',
@@ -74,21 +74,21 @@ const TIER_VARIANTS: Record<NFTTier, readonly string[]> = {
   ],
 }
 
-function resolveOffspringTier(t1: NFTTier, t2: NFTTier): NFTTier {
-  const avg = (TIER_WEIGHTS[t1] + TIER_WEIGHTS[t2]) / 2
-  for (const [threshold, tier] of TIER_FROM_WEIGHT) {
-    if (avg <= threshold) return tier
+function resolveOffspringType(t1: NFTType, t2: NFTType): NFTType {
+  const avg = (TYPE_WEIGHTS[t1] + TYPE_WEIGHTS[t2]) / 2
+  for (const [threshold, type] of TYPE_FROM_WEIGHT) {
+    if (avg <= threshold) return type
   }
   return 'zen-fortress'
 }
 
-function randomVariant(tier: NFTTier): string {
-  const variants = TIER_VARIANTS[tier]
-  return variants[Math.floor(Math.random() * variants.length)]
+function randomName(type: NFTType): string {
+  const names = TYPE_NAMES[type]
+  return names[Math.floor(Math.random() * names.length)]
 }
 
-function formatVariantName(variant: string): string {
-  return variant
+function formatDisplayName(name: string): string {
+  return name
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase())
 }
@@ -105,8 +105,8 @@ function breedStat(s1: number, s2: number): number {
 
 const SUPABASE_PROJECT_URL = 'https://mtnluwkvhkwwxvxdtkgs.supabase.co'
 
-function buildImageUrl(tier: NFTTier, variant: string, rarity: Rarity): string {
-  return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/assets/toilets/${tier}/${variant}/${variant}-${rarity}.jpg`
+function buildImageUrl(type: NFTType, name: string, rarity: Rarity): string {
+  return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/assets/toilets/${type}/${name}/${name}-${rarity}.jpg`
 }
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
@@ -234,20 +234,19 @@ serve(async (req) => {
     // ── Rarity roll ───────────────────────────────────────────────────────────
     const offspringRarity = rollRarity(r1, r2)
 
-    // ── Tier & variant ────────────────────────────────────────────────────────
-    const t1 = p1.tier as NFTTier
-    const t2 = p2.tier as NFTTier
-    const offspringTier = resolveOffspringTier(t1, t2)
-    const offspringVariant = randomVariant(offspringTier)
+    // ── Type & name ────────────────────────────────────────────────────────────
+    const t1 = p1.type as NFTType
+    const t2 = p2.type as NFTType
+    const offspringType = resolveOffspringType(t1, t2)
+    const offspringName = randomName(offspringType)
 
     // ── Stats ─────────────────────────────────────────────────────────────────
     const offspring = {
       user_id: userId,
-      name: formatVariantName(offspringVariant),
-      tier: offspringTier,
-      variant: offspringVariant,
+      name: offspringName,
+      type: offspringType,
       rarity: offspringRarity,
-      image_url: buildImageUrl(offspringTier, offspringVariant, offspringRarity),
+      image_url: buildImageUrl(offspringType, offspringName, offspringRarity),
       efficiency: breedStat(p1.efficiency, p2.efficiency),
       resilience: breedStat(p1.resilience, p2.resilience),
       comfort:    breedStat(p1.comfort,    p2.comfort),
@@ -278,8 +277,7 @@ serve(async (req) => {
       id:         created.id,
       name:       created.name,
       image:      created.image_url,
-      tier:       created.tier,
-      variant:    created.variant,
+      type:       created.type,
       rarity:     created.rarity,
       efficiency: created.efficiency,
       resilience: created.resilience,

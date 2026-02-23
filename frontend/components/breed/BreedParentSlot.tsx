@@ -2,6 +2,7 @@ import { TouchableOpacity, View, Text, Image } from 'react-native';
 import type { NFT } from '@/types/nft';
 import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS } from '@/constants';
+import { formatDisplayName } from '@/utils';
 
 interface BreedParentSlotProps {
   nft: NFT | null;
@@ -21,7 +22,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
         <>
           <Image source={{ uri: nft.image }} style={styles.parentImage} resizeMode="cover" />
           <View style={styles.parentInfo}>
-            <Text style={styles.parentName} numberOfLines={1}>{nft.name}</Text>
+            <Text style={styles.parentName} numberOfLines={1}>{formatDisplayName(nft.name)}</Text>
             <View style={styles.parentBadgeRow}>
               <View style={[styles.parentRarityBadge, { backgroundColor: RARITY_COLORS[nft.rarity] }]}>
                 <Text style={styles.parentRarityText}>{nft.rarity.toUpperCase()}</Text>

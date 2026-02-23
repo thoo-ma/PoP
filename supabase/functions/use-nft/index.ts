@@ -6,12 +6,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ─── Tier multipliers ─────────────────────────────────────────────────────────
+// ─── Type multipliers ────────────────────────────────────────────────────────
 // Higher multiplier = faster energy drain when used
 
-type NFTTier = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
+type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
-const TIER_DRAIN_MULT: Record<NFTTier, number> = {
+const TYPE_DRAIN_MULT: Record<NFTType, number> = {
   'turbo-flush':  3,
   'cruise-seat':  1.5,
   'zen-fortress': 1,
@@ -24,14 +24,14 @@ const TIER_DRAIN_MULT: Record<NFTTier, number> = {
  *
  * - Base roll: uniform [5, 15] so a fresh NFT always loses some energy.
  * - Resilience dampener: higher resilience = smaller loss (0 res → ×1.0, 100 res → ×0.0).
- * - Tier multiplier: turbo-flush drains fast, zen-fortress is efficient.
+ * - Type multiplier: turbo-flush drains fast, zen-fortress is efficient.
  *
  * Result is clamped to [0, current_energy] and rounded to the nearest integer.
  */
-function calcEnergyLoss(resilience: number, tier: NFTTier, currentEnergy: number): number {
+function calcEnergyLoss(resilience: number, type: NFTType, currentEnergy: number): number {
   const baseRoll = 5 + Math.random() * 10          // [5, 15)
   const resilienceFactor = 1 - resilience / 100     // [0, 1]
-  const mult = TIER_DRAIN_MULT[tier] ?? 1
+  const mult = TYPE_DRAIN_MULT[type] ?? 1
 
   const raw = baseRoll * resilienceFactor * mult
   return Math.min(currentEnergy, Math.round(raw))
@@ -110,7 +110,7 @@ serve(async (req) => {
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase
       .from('nfts')
-      .select('id, tier, resilience, energy')
+      .select('id, type, resilience, energy')
       .eq('id', nft_id)
       .eq('user_id', userId)
       .single()
@@ -130,11 +130,11 @@ serve(async (req) => {
     }
 
     // ── Energy calculation ────────────────────────────────────────────────────
-    const energyLost = calcEnergyLoss(nft.resilience, nft.tier as NFTTier, nft.energy)
+    const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy)
     const newEnergy = nft.energy - energyLost
 
     console.log(
-      `use-nft: nft=${nft_id} tier=${nft.tier} resilience=${nft.resilience} ` +
+      `use-nft: nft=${nft_id} type=${nft.type} resilience=${nft.resilience} ` +
       `energy ${nft.energy} → ${newEnergy} (lost ${energyLost})`
     )
 

@@ -3,7 +3,7 @@ import type { NFT } from '@/types/nft';
 import type { NFTRarity } from '@/types/nft';
 import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS } from '@/constants';
-import { canBreed } from '@/utils';
+import { canBreed, formatDisplayName } from '@/utils';
 
 export interface BreedPickerModalProps {
   visible: boolean;
@@ -57,7 +57,7 @@ export default function BreedPickerModal({
                 {item.disabled && <View style={styles.pickerDimOverlay} />}
                 <View style={[styles.pickerRarityDot, { backgroundColor: RARITY_COLORS[item.nft.rarity] }]} />
                 <Text style={[styles.pickerName, item.disabled && styles.pickerNameDisabled]} numberOfLines={1}>
-                  {item.nft.name}
+                  {formatDisplayName(item.nft.name)}
                 </Text>
                 <Text style={[styles.pickerRarityLabel, { color: RARITY_COLORS[item.nft.rarity] }]}>
                   {item.nft.rarity}

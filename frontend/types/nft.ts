@@ -4,18 +4,17 @@
  * When blockchain integration is added, blockchain-specific fields can extend this base type.
  */
 
-/** NFT tier enum - toilet-specific property */
-export type NFTTier = 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
+/** NFT type enum - toilet-specific property */
+export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
 
 /** NFT rarity enum - applies to all NFT types (toilets, lootboxes, etc.) */
 export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
 
 export interface NFT {
   id: string;
-  name: string;
-  image: string;         // Updated: always URL from Supabase Storage (no longer local require())
-  tier: NFTTier;         // Tier property (toilet-specific: cruise-seat/turbo-flush/zen-fortress)
-  variant: string;       // Named variant (e.g., 'ancient-egyptian', 'dubai')
+  name: string;          // Slug identifier (e.g., 'ancient-egyptian', 'dubai')
+  image: string;         // Always URL from Supabase Storage
+  type: NFTType;         // Type property (toilet-specific: cruise-seat/turbo-flush/zen-fortress)
   rarity: NFTRarity;     // Rarity property (applies to all NFT types)
   efficiency: number;    // 0-100: Mining/earning efficiency
   resilience: number;    // 0-100: Durability

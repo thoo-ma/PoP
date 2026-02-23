@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles } from '@/styles';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '@/components';
-import { sortNFTs, nftEvents } from '@/utils';
-import type { SortOption, NFTRarity, NFTTier } from '@/types';
+import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
+import type { SortOption, NFTRarity, NFTType } from '@/types';
 
 export default function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -13,7 +13,7 @@ export default function Vault() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([]);
-  const [selectedTiers, setSelectedTiers] = useState<NFTTier[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<NFTType[]>([]);
   
   // Listen for NFT update events from other screens
   useEffect(() => {
@@ -26,8 +26,8 @@ export default function Vault() {
   // Filter NFTs based on selected rarities and tiers
   const filteredNfts = nfts.filter(nft => {
     const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);
-    const matchesTier = selectedTiers.length === 0 || selectedTiers.includes(nft.tier);
-    return matchesRarity && matchesTier;
+    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type);
+    return matchesRarity && matchesType;
   });
   
   const listedCount = nfts.filter(nft => nft.isListed).length;
@@ -42,17 +42,17 @@ export default function Vault() {
     );
   }, []);
 
-  const handleTierToggle = useCallback((tier: NFTTier) => {
-    setSelectedTiers(prev =>
-      prev.includes(tier)
-        ? prev.filter(t => t !== tier)
-        : [...prev, tier]
+  const handleTypeToggle = useCallback((type: NFTType) => {
+    setSelectedTypes(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
     );
   }, []);
 
   const handleClearFilters = useCallback(() => {
     setSelectedRarities([]);
-    setSelectedTiers([]);
+    setSelectedTypes([]);
   }, []);
 
   const handleSortByChange = useCallback((option: SortOption) => {
@@ -96,9 +96,9 @@ export default function Vault() {
       
       <FilterControls
         selectedRarities={selectedRarities}
-        selectedTiers={selectedTiers}
+        selectedTypes={selectedTypes}
         onRarityToggle={handleRarityToggle}
-        onTierToggle={handleTierToggle}
+        onTypeToggle={handleTypeToggle}
         onClearFilters={handleClearFilters}
         styles={filterStyles}
       />
@@ -128,7 +128,7 @@ export default function Vault() {
                     style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
                     onPress={() => handleListNFT(nft.id)}
                     disabled={updateLoading}
-                    accessibilityLabel={`List ${nft.name} for sale`}
+                    accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
                     accessibilityRole="button"
                     accessibilityHint="List this NFT on the marketplace"
                   >

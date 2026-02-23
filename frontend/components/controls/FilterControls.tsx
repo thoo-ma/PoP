@@ -1,17 +1,17 @@
 import { memo, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import type { NFTRarity, NFTTier } from '@/types';
+import type { NFTRarity, NFTType } from '@/types';
 import { RARITIES } from '@/constants';
 
 interface FilterControlsProps {
   selectedRarities: NFTRarity[];
-  selectedTiers: NFTTier[];
+  selectedTypes: NFTType[];
   onRarityToggle: (rarity: NFTRarity) => void;
-  onTierToggle: (tier: NFTTier) => void;
+  onTypeToggle: (type: NFTType) => void;
   onClearFilters: () => void;
   styles: any;
 }
-const TIERS: NFTTier[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
 
 const RARITY_LABELS: Record<NFTRarity, string> = {
   'common': 'Com',
@@ -20,7 +20,7 @@ const RARITY_LABELS: Record<NFTRarity, string> = {
   'transcendent': 'Trans',
 };
 
-const TIER_LABELS: Record<NFTTier, string> = {
+const TYPE_LABELS: Record<NFTType, string> = {
   'cruise-seat': 'Cruise',
   'turbo-flush': 'Turbo',
   'zen-fortress': 'Zen',
@@ -28,16 +28,16 @@ const TIER_LABELS: Record<NFTTier, string> = {
 
 function FilterControls({
   selectedRarities,
-  selectedTiers,
+  selectedTypes,
   onRarityToggle,
-  onTierToggle,
+  onTypeToggle,
   onClearFilters,
   styles,
 }: FilterControlsProps) {
   const [showFilters, setShowFilters] = useState(false);
-  const hasActiveFilters = selectedRarities.length > 0 || selectedTiers.length > 0;
+  const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0;
   
-  const activeFilterCount = selectedRarities.length + selectedTiers.length;
+  const activeFilterCount = selectedRarities.length + selectedTypes.length;
 
   return (
     <View style={styles.filterContainer}>
@@ -101,23 +101,23 @@ function FilterControls({
             </View>
           </View>
 
-          {/* Tier Filters */}
+          {/* Type Filters */}
           <View style={[styles.filterSection, styles.filterSectionLast]}>
-            <Text style={styles.filterSectionLabel}>Tier</Text>
+            <Text style={styles.filterSectionLabel}>Type</Text>
             <View style={styles.filterChipsRow}>
-              {TIERS.map((tier) => {
-                const isSelected = selectedTiers.includes(tier);
+              {TYPES.map((type) => {
+                const isSelected = selectedTypes.includes(type);
                 return (
                   <TouchableOpacity
-                    key={tier}
+                    key={type}
                     style={[
                       styles.filterChip,
-                      styles[`${tier}Chip`],
+                      styles[`${type}Chip`],
                       isSelected && styles.filterChipActive,
-                      isSelected && styles[`${tier}ChipActive`],
+                      isSelected && styles[`${type}ChipActive`],
                     ]}
-                    onPress={() => onTierToggle(tier)}
-                    accessibilityLabel={`Filter by ${TIER_LABELS[tier]} tier`}
+                    onPress={() => onTypeToggle(type)}
+                    accessibilityLabel={`Filter by ${TYPE_LABELS[type]} type`}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
                   >
@@ -127,7 +127,7 @@ function FilterControls({
                         isSelected && styles.filterChipTextActive
                       ]}
                     >
-                      {TIER_LABELS[tier]}
+                      {TYPE_LABELS[type]}
                     </Text>
                   </TouchableOpacity>
                 );
