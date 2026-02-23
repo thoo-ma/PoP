@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, RARITY_COLORS } from '@/constants';
 
 export const styles = StyleSheet.create({
   filterContainer: {
@@ -15,13 +15,13 @@ export const styles = StyleSheet.create({
   filterToggleButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
     paddingVertical: 8,
     paddingLeft: 16,
     paddingRight: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: colors.border,
     minWidth: 120,
     height: 36,
     justifyContent: 'space-between',
@@ -44,13 +44,13 @@ export const styles = StyleSheet.create({
   clearFiltersText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#3b82f6',
+    color: colors.info,
   },
   filterContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: colors.border,
     padding: 12,
     marginTop: 8,
   },
@@ -75,9 +75,9 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderRadius: 6,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
     borderWidth: 1.5,
-    borderColor: '#e5e7eb',
+    borderColor: colors.border,
     marginHorizontal: 4,
     marginBottom: 8,
   },
@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({
   filterChipText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6b7280',
+    color: colors.text,
   },
   filterChipTextActive: {
     color: '#fff',
@@ -95,53 +95,53 @@ export const styles = StyleSheet.create({
   },
   // Rarity chip colors
   commonChip: {
-    borderColor: '#94a3b8',
+    borderColor: RARITY_COLORS.common,
   },
   commonChipActive: {
-    backgroundColor: '#94a3b8',
-    borderColor: '#94a3b8',
+    backgroundColor: RARITY_COLORS.common,
+    borderColor: RARITY_COLORS.common,
   },
   rareChip: {
-    borderColor: '#3b82f6',
+    borderColor: RARITY_COLORS.rare,
   },
   rareChipActive: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6',
+    backgroundColor: RARITY_COLORS.rare,
+    borderColor: RARITY_COLORS.rare,
   },
   legendaryChip: {
-    borderColor: '#f59e0b',
+    borderColor: RARITY_COLORS.legendary,
   },
   legendaryChipActive: {
-    backgroundColor: '#f59e0b',
-    borderColor: '#f59e0b',
+    backgroundColor: RARITY_COLORS.legendary,
+    borderColor: RARITY_COLORS.legendary,
   },
   transcendentChip: {
-    borderColor: '#a855f7',
+    borderColor: RARITY_COLORS.transcendent,
   },
   transcendentChipActive: {
-    backgroundColor: '#a855f7',
-    borderColor: '#a855f7',
+    backgroundColor: RARITY_COLORS.transcendent,
+    borderColor: RARITY_COLORS.transcendent,
   },
   // Tier chip colors
   'cruise-seatChip': {
-    borderColor: '#94a3b8',
+    borderColor: RARITY_COLORS.common,
   },
   'cruise-seatChipActive': {
-    backgroundColor: '#94a3b8',
-    borderColor: '#94a3b8',
+    backgroundColor: RARITY_COLORS.common,
+    borderColor: RARITY_COLORS.common,
   },
   'turbo-flushChip': {
-    borderColor: '#f59e0b',
+    borderColor: RARITY_COLORS.legendary,
   },
   'turbo-flushChipActive': {
-    backgroundColor: '#f59e0b',
-    borderColor: '#f59e0b',
+    backgroundColor: RARITY_COLORS.legendary,
+    borderColor: RARITY_COLORS.legendary,
   },
   'zen-fortressChip': {
-    borderColor: '#8b5cf6',
+    borderColor: colors.luck,
   },
   'zen-fortressChipActive': {
-    backgroundColor: '#8b5cf6',
-    borderColor: '#8b5cf6',
+    backgroundColor: colors.luck,
+    borderColor: colors.luck,
   },
 });

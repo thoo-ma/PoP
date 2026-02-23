@@ -36,11 +36,11 @@ export const styles = StyleSheet.create({
     marginTop: 4,
   },
   listButtonDisabled: {
-    backgroundColor: '#9ca3af',
+    backgroundColor: colors.disabled,
     opacity: 0.6,
   },
   listButtonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',

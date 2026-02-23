@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, RARITY_COLORS } from '@/constants';
 
 export const styles = StyleSheet.create({
   nftCard: {
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#6366f1',
+    backgroundColor: colors.level,
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 6,
@@ -115,12 +115,12 @@ export const styles = StyleSheet.create({
     minHeight: 32,
   },
   // Tier badge variants
-  'cruise-seatBadge': { backgroundColor: '#94a3b8' },
-  'turbo-flushBadge': { backgroundColor: '#f59e0b' },
-  'zen-fortressBadge': { backgroundColor: '#8b5cf6' },
+  'cruise-seatBadge': { backgroundColor: RARITY_COLORS.common },
+  'turbo-flushBadge': { backgroundColor: RARITY_COLORS.legendary },
+  'zen-fortressBadge': { backgroundColor: colors.luck },
   // Rarity badge variants
-  commonBadge: { backgroundColor: '#94a3b8' },
-  rareBadge: { backgroundColor: '#3b82f6' },
-  legendaryBadge: { backgroundColor: '#f59e0b' },
-  transcendentBadge: { backgroundColor: '#a855f7' },
+  commonBadge: { backgroundColor: RARITY_COLORS.common },
+  rareBadge: { backgroundColor: RARITY_COLORS.rare },
+  legendaryBadge: { backgroundColor: RARITY_COLORS.legendary },
+  transcendentBadge: { backgroundColor: RARITY_COLORS.transcendent },
 });
