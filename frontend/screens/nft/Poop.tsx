@@ -1,14 +1,13 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
 import { poopStyles as styles } from '@/styles';
-import { useUserNFTs, useUpdateNFT } from '@/hooks';
+import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
 import { nftEvents } from '@/utils';
 
 export default function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { updateEnergy } = useUpdateNFT();
-  const [actionLoading, setActionLoading] = useState(false);
+  const { poopNFT, loading: actionLoading } = usePoopNFT();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isPooped, setIsPooped] = useState(false);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
@@ -23,7 +22,7 @@ export default function Poop() {
 
   const handlePoop = async () => {
     if (!displayNFT) return;
-    
+
     if (displayNFT.energy <= 0) {
       Alert.alert(
         'No Energy',
@@ -32,24 +31,18 @@ export default function Poop() {
       );
       return;
     }
-    
-    setActionLoading(true);
-    
-    // Simulate gameplay - decrease energy by 10
-    const newEnergy = Math.max(0, displayNFT.energy - 10);
-    const success = await updateEnergy(displayNFT.id, newEnergy);
-    
-    setActionLoading(false);
-    
-    if (success) {
+
+    const result = await poopNFT(displayNFT.id);
+
+    if (result) {
       await refetch();
       nftEvents.emit();
-      setPoopedEnergy({ from: displayNFT.energy, to: newEnergy });
+      setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
       setIsPooped(true);
     } else {
       Alert.alert(
         'Error',
-        'Failed to update NFT energy. Please try again.',
+        'Failed to use NFT. Please try again.',
         [{ text: 'OK' }]
       );
     }
