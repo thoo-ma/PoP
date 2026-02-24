@@ -17,7 +17,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
     <View style={styles.nftCard}>
       <View style={styles.imageContainer}>
         <Image
-          source={typeof nft.image === 'string' ? { uri: nft.image } : nft.image}
+          source={{ uri: nft.image_url }}
           style={styles.nftImage}
           resizeMode="cover"
         />

@@ -20,7 +20,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
     >
       {nft ? (
         <>
-          <Image source={{ uri: nft.image }} style={styles.parentImage} resizeMode="cover" />
+          <Image source={{ uri: nft.image_url }} style={styles.parentImage} resizeMode="cover" />
           <View style={styles.parentInfo}>
             <Text style={styles.parentName} numberOfLines={1}>{formatDisplayName(nft.name)}</Text>
             <View style={styles.parentBadgeRow}>

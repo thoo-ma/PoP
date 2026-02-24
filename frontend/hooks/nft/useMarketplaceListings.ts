@@ -51,27 +51,11 @@ export function useMarketplaceListings() {
         return;
       }
 
-      const enrichedListings: NFT[] = (listingsData || [])
-        .filter(listing => listing.nfts)
+      const enrichedListings: NFT[] = (listingsData ?? [])
+        .filter(listing => listing.nfts !== null)
         .map(listing => {
-          const nft = Array.isArray(listing.nfts) ? listing.nfts[0] : listing.nfts;
-          return {
-            id: nft.id,
-            name: nft.name,
-            image: nft.image_url,
-            type: nft.type,
-            rarity: nft.rarity,
-            efficiency: nft.efficiency,
-            resilience: nft.resilience,
-            comfort: nft.comfort,
-            luck: nft.luck,
-            energy: nft.energy,
-            level: nft.level,
-            isListed: true,
-            price: listing.price,
-            created_at: nft.created_at,
-            updated_at: nft.updated_at,
-          };
+          const { user_id: _, ...nft } = listing.nfts!;
+          return { ...nft, isListed: true as const, price: listing.price };
         });
 
       setListings(enrichedListings);

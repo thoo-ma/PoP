@@ -18,20 +18,6 @@ export interface DetectionResult {
 }
 
 /**
- * Detection record from database
- */
-export interface DetectionRecord {
-  id: string;
-  user_id: string;
-  created_at: string;
-  detected: boolean;
-  confidence: number;
-  duration_seconds: number | null;
-  model_version: string | null;
-  audio_size_kb: number | null;
-}
-
-/**
  * Rate limit error response
  */
 export interface RateLimitError {

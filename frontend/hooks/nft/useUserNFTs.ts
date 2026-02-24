@@ -38,11 +38,11 @@ export function useUserNFTs() {
         return;
       }
 
-      const nftIds = nftsData?.map(nft => nft.id) || [];
-      let listingsData: Array<{ nft_id: string; price: string }> | null = null;
+      const nftIds = nftsData?.map(nft => nft.id) ?? [];
+      const listingsMap = new Map<string, string>();
 
       if (nftIds.length > 0) {
-        const { data, error: listingsError } = await supabase
+        const { data: listingsData, error: listingsError } = await supabase
           .from('marketplace_listings')
           .select('nft_id, price')
           .in('nft_id', nftIds);
@@ -50,29 +50,13 @@ export function useUserNFTs() {
         if (listingsError) {
           logError('useUserNFTs:FetchListings', listingsError);
         }
-        listingsData = data;
+        listingsData?.forEach(l => listingsMap.set(l.nft_id, l.price));
       }
 
-      const listingsMap = new Map(
-        listingsData?.map(listing => [listing.nft_id, listing.price]) || []
-      );
-
-      const enrichedNfts: NFT[] = (nftsData || []).map(nft => ({
-        id: nft.id,
-        name: nft.name,
-        image: nft.image_url,
-        type: nft.type,
-        rarity: nft.rarity,
-        efficiency: nft.efficiency,
-        resilience: nft.resilience,
-        comfort: nft.comfort,
-        luck: nft.luck,
-        energy: nft.energy,
-        level: nft.level,
+      const enrichedNfts: NFT[] = (nftsData ?? []).map(({ user_id: _, ...nft }) => ({
+        ...nft,
         isListed: listingsMap.has(nft.id),
         price: listingsMap.get(nft.id),
-        created_at: nft.created_at,
-        updated_at: nft.updated_at,
       }));
 
       setNfts(enrichedNfts);

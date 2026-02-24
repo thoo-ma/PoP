@@ -1,9 +1,7 @@
 import { supabase } from './supabase';
 import type { DetectionResult, RateLimitError } from '@/types/audio';
-import type { Tables } from '@/types/database.types';
+import type { DetectionRecord } from '@/types';
 import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelpers';
-
-export type DetectionRecord = Tables<'flush_detections'>;
 
 /**
  * Call Supabase Edge Function to detect toilet flush

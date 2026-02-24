@@ -1,30 +1,22 @@
+import type { Tables, Enums } from './database.types';
+
 /**
- * NFT type definition
- * This interface represents the core NFT structure used throughout the app.
- * When blockchain integration is added, blockchain-specific fields can extend this base type.
+ * NFT type / rarity — aliased directly from the generated DB enums so they
+ * stay in sync with the schema automatically after every `npm run gen:types`.
  */
+export type NFTType = Enums<'nft_type'>;
+export type NFTRarity = Enums<'nft_rarity'>;
 
-/** NFT type enum - toilet-specific property */
-export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
-
-/** NFT rarity enum - applies to all NFT types (toilets, lootboxes, etc.) */
-export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
-
-export interface NFT {
-  id: string;
-  name: string;          // Slug identifier (e.g., 'ancient-egyptian', 'dubai')
-  image: string;         // Always URL from Supabase Storage
-  type: NFTType;         // Type property (toilet-specific: cruise-seat/turbo-flush/zen-fortress)
-  rarity: NFTRarity;     // Rarity property (applies to all NFT types)
-  efficiency: number;    // 0-100: Mining/earning efficiency
-  resilience: number;    // 0-100: Durability
-  comfort: number;       // 0-100: User comfort bonus
-  luck: number;          // 0-100: Chance of bonus rewards
-  energy: number;        // 0-100: Energy level (can be repaired)
-  level: number;         // 0-20: NFT level
-  isListed?: boolean;    // Derived from marketplace_listings table
-  price?: string;        // Price if listed (e.g., "0.9 ETH")
-  created_at?: string;   // ISO timestamp from database
-  updated_at?: string;   // ISO timestamp from database
-}
+/**
+ * Core NFT type used throughout the app.
+ * Derived from the `nfts` DB row (via generated types) with `user_id` omitted
+ * (a private FK not needed in the UI) and two derived marketplace fields added.
+ * `image_url` matches the DB column name directly — no reshape needed.
+ */
+export type NFT = Omit<Tables<'nfts'>, 'user_id'> & {
+  /** True when the NFT has an active marketplace listing. */
+  isListed?: boolean;
+  /** Listing price string (e.g. "0.9 ETH"). Present only when `isListed` is true. */
+  price?: string;
+};
 

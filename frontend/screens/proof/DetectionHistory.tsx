@@ -4,7 +4,7 @@ import { Card } from '@/components';
 import { colors } from '@/constants';
 import { formatConfidencePercentage } from '@/utils';
 import { useDetectionHistory } from '@/hooks';
-import type { DetectionRecord } from '@/types/audio';
+import type { DetectionRecord } from '@/types';
 import { styles } from '@/styles/proof/DetectionHistory.styles';
 
 function formatDetectionDate(dateString: string): string {

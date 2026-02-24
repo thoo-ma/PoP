@@ -53,7 +53,7 @@ export default function BreedPickerModal({
                 onPress={() => { if (!item.disabled) { onSelect(item.nft); onClose(); } }}
                 activeOpacity={item.disabled ? 1 : 0.7}
               >
-                <Image source={{ uri: item.nft.image }} style={styles.pickerImage} resizeMode="cover" />
+                <Image source={{ uri: item.nft.image_url }} style={styles.pickerImage} resizeMode="cover" />
                 {item.disabled && <View style={styles.pickerDimOverlay} />}
                 <View style={[styles.pickerRarityDot, { backgroundColor: RARITY_COLORS[item.nft.rarity] }]} />
                 <Text style={[styles.pickerName, item.disabled && styles.pickerNameDisabled]} numberOfLines={1}>

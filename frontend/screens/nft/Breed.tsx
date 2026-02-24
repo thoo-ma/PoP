@@ -147,9 +147,9 @@ export default function Breed() {
 
             {/* Parents summary */}
             <View style={styles.resultParentsRow}>
-              <Image source={{ uri: resultParent1?.image }} style={styles.resultParentThumb} />
+              <Image source={{ uri: resultParent1?.image_url }} style={styles.resultParentThumb} />
               <Text style={styles.resultCross}>×</Text>
-              <Image source={{ uri: resultParent2?.image }} style={styles.resultParentThumb} />
+              <Image source={{ uri: resultParent2?.image_url }} style={styles.resultParentThumb} />
               <Text style={styles.resultArrow}>→</Text>
             </View>
 
@@ -157,7 +157,7 @@ export default function Breed() {
             <View style={[styles.resultCard, { borderColor: RARITY_COLORS[breedResult.rarity] }]}>
               <View style={styles.resultImageContainer}>
                 <Image
-                  source={{ uri: breedResult.image }}
+                  source={{ uri: breedResult.image_url }}
                   style={styles.resultImage}
                   resizeMode="cover"
                 />

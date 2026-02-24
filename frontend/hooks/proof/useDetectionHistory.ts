@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchDetectionHistory } from '@/lib';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
-import type { DetectionRecord } from '@/types/audio';
+import type { DetectionRecord } from '@/types';
 
 /**
  * Hook to fetch and manage the user's toilet flush detection history.

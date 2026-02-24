@@ -1,4 +1,5 @@
 import type { Session, User } from '@supabase/supabase-js';
+import type { Tables } from './database.types';
 
 // Re-export Supabase types
 export type { Session, User };
@@ -20,28 +21,11 @@ export interface UseAuthReturn {
   isAuthenticated: boolean;
 }
 
-/**
- * Extended user profile from public.users table
- */
-export interface UserProfile {
-  id: string;
-  approved: boolean;
-  invite_code_id: string | null;
-  created_at: string;
-}
+/** Row type for public.users — derived from generated DB types. */
+export type UserProfile = Tables<'users'>;
 
-/**
- * Invite code from public.invite_codes table
- */
-export interface InviteCode {
-  id: string;
-  code: string;
-  used_by: string | null;
-  created_at: string;
-  used_at: string | null;
-  revoked: boolean;
-  expires_at: string | null;
-}
+/** Row type for public.invite_codes — derived from generated DB types. */
+export type InviteCode = Tables<'invite_codes'>;
 
 /**
  * Result from validate_and_approve_user RPC function

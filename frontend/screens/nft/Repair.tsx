@@ -116,7 +116,7 @@ export default function Repair() {
             {!isRepaired && selectedNFT && <View style={styles.nftCard}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: selectedNFT.image }}
+                  source={{ uri: selectedNFT.image_url }}
                   style={styles.nftImage}
                   resizeMode="cover"
                 />
