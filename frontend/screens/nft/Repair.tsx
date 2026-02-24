@@ -1,13 +1,13 @@
 import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import type { NFT } from '@/types';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
-export default function Repair() {
+export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { updateEnergy, loading: updateLoading } = useUpdateNFT();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -206,4 +206,4 @@ export default function Repair() {
       </ScrollView>
     </View>
   );
-}
+});

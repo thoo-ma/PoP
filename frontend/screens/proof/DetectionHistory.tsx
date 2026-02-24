@@ -1,5 +1,5 @@
 import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Card } from '@/components';
 import { colors } from '@/constants';
 import { formatConfidencePercentage } from '@/utils';
@@ -24,7 +24,7 @@ function formatDetectionTime(dateString: string): string {
   });
 }
 
-export default function DetectionHistory() {
+export default memo(function DetectionHistory() {
   const { detections, loading, refreshing, error, onRefresh } = useDetectionHistory();
 
   // Calculate summary statistics
@@ -136,4 +136,4 @@ export default function DetectionHistory() {
       </View>
     </View>
   );
-}
+});

@@ -1,5 +1,5 @@
 import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { useState, useCallback } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
 import { marketplaceStyles as styles, sortStyles } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
@@ -7,7 +7,7 @@ import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import type { SortOption } from '@/types';
 import { colors } from '@/constants';
 
-export default function Marketplace() {
+export default memo(function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -21,10 +21,16 @@ export default function Marketplace() {
 
   // Filter user's listed NFTs for "My Listings" tab
   const marketplaceListings = backendListings;
-  const myListings = nfts.filter(nft => nft.isListed);
-  
-  const sortedMarketplaceListings = sortNFTs(marketplaceListings, sortBy, sortOrder);
-  const sortedMyListings = sortNFTs(myListings, sortBy, sortOrder);
+  const myListings = useMemo(() => nfts.filter(nft => nft.isListed), [nfts]);
+
+  const sortedMarketplaceListings = useMemo(
+    () => sortNFTs(marketplaceListings, sortBy, sortOrder),
+    [marketplaceListings, sortBy, sortOrder]
+  );
+  const sortedMyListings = useMemo(
+    () => sortNFTs(myListings, sortBy, sortOrder),
+    [myListings, sortBy, sortOrder]
+  );
   
   const handleBuyNFT = useCallback(() => {
     Alert.alert(
@@ -186,4 +192,4 @@ export default function Marketplace() {
       )}
     </View>
   );
-}
+});

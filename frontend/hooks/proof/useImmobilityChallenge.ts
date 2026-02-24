@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
 import { SENSOR_UPDATE_INTERVAL } from '@/constants';
 import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
@@ -13,7 +13,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   const [isRunning, setIsRunning] = useState(false);
 
   // Get thresholds for current mode
-  const thresholds = getThresholds(mode);
+  const thresholds = useMemo(() => getThresholds(mode), [mode]);
 
   const startTimeRef = useRef<number>(0);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);

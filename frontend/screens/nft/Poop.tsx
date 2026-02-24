@@ -1,11 +1,11 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useState, useCallback } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
-export default function Poop() {
+export default memo(function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { poopNFT, loading: actionLoading } = usePoopNFT();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -173,4 +173,4 @@ export default function Poop() {
       )}
     </View>
   );
-}
+});

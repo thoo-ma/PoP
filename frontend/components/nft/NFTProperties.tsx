@@ -50,7 +50,7 @@ function NFTProperties({
   luck, 
   energy,
   mode = 'compact',
-  excludeProperties = []
+  excludeProperties
 }: NFTPropertiesProps) {
   const isCompact = mode === 'compact';
 
@@ -64,7 +64,7 @@ function NFTProperties({
     if (energy !== undefined) {
       properties.push({ label: 'Energy', value: energy, color: colors.energy });
     }
-    return excludeProperties.length > 0
+    return excludeProperties && excludeProperties.length > 0
       ? properties.filter(prop => !excludeProperties.includes(prop.label))
       : properties;
   }, [efficiency, resilience, comfort, luck, energy, excludeProperties]);

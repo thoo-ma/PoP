@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card, DifficultySelector } from '@/components';
 import { colors } from '@/constants';
@@ -5,7 +6,7 @@ import { useToiletDetection, useDifficultyCycle, useRecordingButtonState } from 
 import { getThresholdForDifficulty, formatConfidencePercentage } from '@/utils';
 import { styles } from '@/styles/proof/ProofOfFlush.styles';
 
-export default function ProofOfFlush() {
+export default memo(function ProofOfFlush() {
   const { mode, cycleMode } = useDifficultyCycle('normal');
   
   const {
@@ -187,4 +188,4 @@ export default function ProofOfFlush() {
 
     </View>
   );
-}
+});

@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useState, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Card, DifficultySelector } from '@/components';
 import { colors } from '@/constants';
 import { useImmobilityChallenge, useToiletDetection, useDifficultyCycle, useRecordingButtonState } from '@/hooks';
@@ -7,7 +7,7 @@ import type { ChallengePhase, TimelapseOption } from '@/types';
 import { formatTime, getThresholdForDifficulty, formatConfidencePercentage } from '@/utils';
 import { styles } from '@/styles/proof/ProofOfPoop.styles';
 
-export default function ProofOfPoop() {
+export default memo(function ProofOfPoop() {
   const [phase, setPhase] = useState<ChallengePhase>('setup');
   const { mode: poopDifficulty, cycleMode: cyclePoopMode } = useDifficultyCycle('normal');
   const { mode: immobilityDifficulty, cycleMode: cycleImmobilityMode } = useDifficultyCycle('normal');
@@ -476,4 +476,4 @@ export default function ProofOfPoop() {
       {phase === 'results' && renderResultsPhase()}
     </View>
   );
-}
+});

@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { breedStyles as styles } from '@/styles';
 import { useUserNFTs, useBreedNFT } from '@/hooks';
 import type { NFT } from '@/types/nft';
@@ -9,7 +9,7 @@ import { RARITY_COLORS } from '@/constants';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
-export default function Breed() {
+export default memo(function Breed() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { breedNFTs, loading: breedLoading, error: breedError } = useBreedNFT();
 
@@ -191,5 +191,4 @@ export default function Breed() {
       </ScrollView>
     </View>
   );
-}
-
+});

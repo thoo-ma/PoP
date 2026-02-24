@@ -1,12 +1,12 @@
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles } from '@/styles';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import type { SortOption, NFTRarity, NFTType } from '@/types';
 
-export default function Vault() {
+export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { listNFT, loading: updateLoading } = useUpdateNFT();
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
@@ -24,15 +24,21 @@ export default function Vault() {
   }, [refetch]);
   
   // Filter NFTs based on selected rarities and tiers
-  const filteredNfts = nfts.filter(nft => {
-    const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);
-    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type);
-    return matchesRarity && matchesType;
-  });
-  
-  const listedCount = nfts.filter(nft => nft.isListed).length;
-  
-  const sortedNfts = sortNFTs(filteredNfts, sortBy, sortOrder);
+  const filteredNfts = useMemo(
+    () => nfts.filter(nft => {
+      const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);
+      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type);
+      return matchesRarity && matchesType;
+    }),
+    [nfts, selectedRarities, selectedTypes]
+  );
+
+  const listedCount = useMemo(() => nfts.filter(nft => nft.isListed).length, [nfts]);
+
+  const sortedNfts = useMemo(
+    () => sortNFTs(filteredNfts, sortBy, sortOrder),
+    [filteredNfts, sortBy, sortOrder]
+  );
   
   const handleRarityToggle = useCallback((rarity: NFTRarity) => {
     setSelectedRarities(prev =>
@@ -144,5 +150,4 @@ export default function Vault() {
       </ScrollView>
     </View>
   );
-}
-
+});
