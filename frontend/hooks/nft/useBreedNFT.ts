@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import type { NFT } from '@/types/nft';
 import { logError } from '@/utils/errorHelpers';
@@ -23,14 +24,11 @@ export function useBreedNFT() {
 
       if (fnError) {
         let message: string = fnError.message;
-        try {
-          const body = await (fnError as any).context?.json?.();
-          if (body?.message) message = body.message;
-          else if (body?.error) message = body.error;
-        } catch {
+        if (fnError instanceof FunctionsHttpError) {
           try {
-            const parsed = JSON.parse(fnError.message);
-            if (parsed?.message) message = parsed.message;
+            const body = await fnError.context.json();
+            if (body?.message) message = body.message;
+            else if (body?.error) message = body.error;
           } catch { /* leave message as-is */ }
         }
         logError('useBreedNFT:Invoke', fnError);

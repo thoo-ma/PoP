@@ -1,6 +1,9 @@
 import { supabase } from './supabase';
 import type { DetectionResult, RateLimitError } from '@/types/audio';
+import type { Tables } from '@/types/database.types';
 import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelpers';
+
+export type DetectionRecord = Tables<'flush_detections'>;
 
 /**
  * Call Supabase Edge Function to detect toilet flush
@@ -64,7 +67,7 @@ export async function detectToiletFlush(
  * @param limit - Maximum number of records to fetch
  * @returns Array of detection records
  */
-export async function fetchDetectionHistory(limit: number = 50) {
+export async function fetchDetectionHistory(limit: number = 50): Promise<DetectionRecord[]> {
   const { data, error } = await supabase
     .from('flush_detections')
     .select('*')
@@ -75,5 +78,5 @@ export async function fetchDetectionHistory(limit: number = 50) {
     throw new Error(error.message);
   }
 
-  return data;
+  return data ?? [];
 }

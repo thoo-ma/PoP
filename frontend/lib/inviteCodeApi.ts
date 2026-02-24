@@ -13,5 +13,13 @@ export async function validateInviteCode(code: string): Promise<ApprovalResult> 
     throw error;
   }
 
-  return data as ApprovalResult;
+  if (
+    data === null ||
+    data === undefined ||
+    typeof (data as Record<string, unknown>).success !== 'boolean'
+  ) {
+    throw new Error('Unexpected response shape from validate_and_approve_user RPC');
+  }
+
+  return data as unknown as ApprovalResult;
 }
