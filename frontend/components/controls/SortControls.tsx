@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import type { SortOption } from '@/types';
 import { SORT_OPTIONS } from '@/constants';
 import { capitalize } from '@/utils';
+import { sortStyles } from '@/styles';
 
 interface SortControlsProps {
   sortBy: SortOption;
@@ -11,7 +12,7 @@ interface SortControlsProps {
   onSortByChange: (option: SortOption) => void;
   onSortOrderToggle: () => void;
   onMenuToggle: () => void;
-  styles: any;
+  styles: typeof sortStyles;
 }
 
 function SortControls({

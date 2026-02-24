@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import type { NFTRarity, NFTType } from '@/types';
 import { RARITIES } from '@/constants';
+import { filterStyles } from '@/styles';
 
 interface FilterControlsProps {
   selectedRarities: NFTRarity[];
@@ -9,7 +10,7 @@ interface FilterControlsProps {
   onRarityToggle: (rarity: NFTRarity) => void;
   onTypeToggle: (type: NFTType) => void;
   onClearFilters: () => void;
-  styles: any;
+  styles: typeof filterStyles;
 }
 const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
 
