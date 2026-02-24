@@ -5,7 +5,7 @@ import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import type { NFT } from '@/types';
-import { nftEvents, formatDisplayName } from '@/utils';
+import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
 export default function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -123,7 +123,7 @@ export default function Repair() {
                 <View style={styles.levelBadge}>
                   <Text style={styles.levelBadgeText}>Lv {selectedNFT.level}</Text>
                 </View>
-                <View style={[styles.tierBadge, styles[`${selectedNFT.type}Badge`]]}>
+                <View style={[styles.tierBadge, TYPE_BADGE_STYLES[selectedNFT.type]]}>
                   <Text style={styles.tierBadgeText}>{selectedNFT.type.toUpperCase()}</Text>
                 </View>
                 <View style={styles.resilienceBadge}>

@@ -101,24 +101,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  chillBadge: {
-    backgroundColor: '#94a3b8',
-  },
-  nitroBadge: {
-    backgroundColor: '#f59e0b',
-  },
-  omegaBadge: {
-    backgroundColor: '#8b5cf6',
-  },
-  'cruise-seatBadge': {
-    backgroundColor: '#94a3b8',
-  },
-  'turbo-flushBadge': {
-    backgroundColor: '#f59e0b',
-  },
-  'zen-fortressBadge': {
-    backgroundColor: '#8b5cf6',
-  },
   tierBadgeText: {
     color: '#fff',
     fontSize: 11,

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, RARITY_COLORS } from '@/constants';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   nftCard: {
@@ -114,13 +114,5 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
     minHeight: 32,
   },
-  // Tier badge variants
-  'cruise-seatBadge': { backgroundColor: RARITY_COLORS.common },
-  'turbo-flushBadge': { backgroundColor: RARITY_COLORS.legendary },
-  'zen-fortressBadge': { backgroundColor: colors.luck },
-  // Rarity badge variants
-  commonBadge: { backgroundColor: RARITY_COLORS.common },
-  rareBadge: { backgroundColor: RARITY_COLORS.rare },
-  legendaryBadge: { backgroundColor: RARITY_COLORS.legendary },
-  transcendentBadge: { backgroundColor: RARITY_COLORS.transcendent },
+
 });

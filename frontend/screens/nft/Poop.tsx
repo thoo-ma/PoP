@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
-import { nftEvents, formatDisplayName } from '@/utils';
+import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
 export default function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -115,7 +115,7 @@ export default function Poop() {
                   <View style={styles.levelBadge}>
                     <Text style={styles.levelBadgeText}>Lv {displayNFT!.level}</Text>
                   </View>
-                  <View style={[styles.tierBadge, styles[`${displayNFT!.type}Badge`]]}>
+                  <View style={[styles.tierBadge, TYPE_BADGE_STYLES[displayNFT!.type]]}>
                     <Text style={styles.tierBadgeText}>{displayNFT!.type.toUpperCase()}</Text>
                   </View>
                 </View>
