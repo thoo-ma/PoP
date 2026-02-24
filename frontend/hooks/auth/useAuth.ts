@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib';
 import type { Session, UseAuthReturn } from '@/types';
 
@@ -23,17 +23,17 @@ export function useAuth(): UseAuthReturn {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       return { error };
     }
     return { error: null };
-  };
+  }, []);
 
-  const getUserDisplayName = (): string => {
+  const getUserDisplayName = useCallback((): string => {
     return session?.user.email || session?.user.user_metadata?.name || 'User';
-  };
+  }, [session]);
 
   return {
     session,

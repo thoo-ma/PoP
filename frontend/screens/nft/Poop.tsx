@@ -1,5 +1,5 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
@@ -53,6 +53,18 @@ export default function Poop() {
     setIsPooped(false);
     setPoopedEnergy(null);
   };
+
+  const handlePrev = useCallback(() => {
+    setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
+    setIsPooped(false);
+    setPoopedEnergy(null);
+  }, [nfts.length]);
+
+  const handleNext = useCallback(() => {
+    setSelectedIndex(i => ((i as number) + 1) % nfts.length);
+    setIsPooped(false);
+    setPoopedEnergy(null);
+  }, [nfts.length]);
   
   if (loading) {
     return <ScreenLoader title="Poop" message="Loading your collection..." />;
@@ -92,16 +104,8 @@ export default function Poop() {
             <NFTSelector
               current={selectedIndex + 1}
               total={nfts.length}
-              onPrev={() => {
-                setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
-                setIsPooped(false);
-                setPoopedEnergy(null);
-              }}
-              onNext={() => {
-                setSelectedIndex(i => ((i as number) + 1) % nfts.length);
-                setIsPooped(false);
-                setPoopedEnergy(null);
-              }}
+              onPrev={handlePrev}
+              onNext={handleNext}
               style={{ marginBottom: 12 }}
             />
             {!isPooped && (

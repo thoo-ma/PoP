@@ -23,7 +23,7 @@ export function useDetectionHistory(limit: number = 50) {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [limit]);
+  }, [limit, clearError, handleError]);
 
   useEffect(() => {
     loadDetections();
