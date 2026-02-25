@@ -253,6 +253,7 @@ serve(async (req) => {
       luck:       breedStat(p1.luck,       p2.luck),
       energy: 100,
       level:  1,
+      xp:     0,
     }
 
     console.log(`breed-nfts: ${r1}+${r2} → ${offspringRarity} (key: ${rarityKey(r1, r2)})`)
@@ -285,6 +286,7 @@ serve(async (req) => {
       luck:       created.luck,
       energy:     created.energy,
       level:      created.level,
+      xp:         created.xp,
       created_at: created.created_at,
       updated_at: created.updated_at,
     }
