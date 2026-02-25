@@ -114,5 +114,31 @@ export const styles = StyleSheet.create({
     marginBottom: 4,
     minHeight: 32,
   },
+  xpRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  xpLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: colors.level,
+    width: 20,
+  },
+  xpBarWrapper: {
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  xpBarBackground: {
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.propertyBg,
+    overflow: 'hidden',
+  },
+  xpBarFill: {
+    height: '100%',
+    borderRadius: 2,
+    backgroundColor: colors.level,
+  },
 
 });

@@ -6,6 +6,13 @@ import NFTProperties from './NFTProperties';
 import { styles } from '@/styles/nft/NFTCard.styles';
 import { formatDisplayName, TYPE_BADGE_STYLES, RARITY_BADGE_STYLES } from '@/utils';
 
+const MAX_LEVEL = 20;
+
+/** Mirror of the edge-function formula — single source of truth is the DB. */
+function xpThreshold(level: number): number {
+  return Math.max(33, Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3));
+}
+
 interface NFTCardProps {
   nft: NFT;
   /** Slot for the action area below properties (list button, buy button, price row, etc.) */
@@ -50,6 +57,23 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           energy={nft.energy}
           mode="compact"
         />
+        <View style={styles.xpRow}>
+          <Text style={styles.xpLabel}>XP</Text>
+          <View style={styles.xpBarWrapper}>
+            <View style={styles.xpBarBackground}>
+              <View
+                style={[
+                  styles.xpBarFill,
+                  {
+                    width: nft.level >= MAX_LEVEL
+                      ? '100%'
+                      : `${Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100)}%`,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+        </View>
         {action}
       </View>
     </View>
