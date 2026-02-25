@@ -11,6 +11,7 @@ export default memo(function Poop() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isPooped, setIsPooped] = useState(false);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
+  const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
 
   const displayNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
 
@@ -38,6 +39,7 @@ export default memo(function Poop() {
       await refetch();
       nftEvents.emit();
       setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
+      setPoopedXP({ gained: result.xp_gained, level: result.level, leveledUp: result.leveled_up });
       setIsPooped(true);
     } else {
       Alert.alert(
@@ -52,18 +54,21 @@ export default memo(function Poop() {
     setSelectedIndex(null);
     setIsPooped(false);
     setPoopedEnergy(null);
+    setPoopedXP(null);
   };
 
   const handlePrev = useCallback(() => {
     setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
     setIsPooped(false);
     setPoopedEnergy(null);
+    setPoopedXP(null);
   }, [nfts.length]);
 
   const handleNext = useCallback(() => {
     setSelectedIndex(i => ((i as number) + 1) % nfts.length);
     setIsPooped(false);
     setPoopedEnergy(null);
+    setPoopedXP(null);
   }, [nfts.length]);
   
   if (loading) {
@@ -149,6 +154,18 @@ export default memo(function Poop() {
                 <Text style={styles.successDetail}>
                   Energy: {poopedEnergy.from} → {poopedEnergy.to}
                 </Text>
+              )}
+              {poopedXP && (
+                <>
+                  <Text style={styles.successDetail}>
+                    +{poopedXP.gained} XP
+                  </Text>
+                  {poopedXP.leveledUp && (
+                    <Text style={styles.successDetail}>
+                      🎉 Level Up! Now Lv {poopedXP.level}
+                    </Text>
+                  )}
+                </>
               )}
               <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
                 <Text style={styles.resetButtonText}>Poop Again</Text>

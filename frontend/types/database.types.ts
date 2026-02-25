@@ -143,6 +143,7 @@ export type Database = {
           type: Database["public"]["Enums"]["nft_type"]
           updated_at: string
           user_id: string
+          xp: number
         }
         Insert: {
           comfort: number
@@ -159,6 +160,7 @@ export type Database = {
           type: Database["public"]["Enums"]["nft_type"]
           updated_at?: string
           user_id: string
+          xp?: number
         }
         Update: {
           comfort?: number
@@ -175,6 +177,7 @@ export type Database = {
           type?: Database["public"]["Enums"]["nft_type"]
           updated_at?: string
           user_id?: string
+          xp?: number
         }
         Relationships: []
       }
@@ -237,6 +240,7 @@ export type Database = {
           type: Database["public"]["Enums"]["nft_type"]
           updated_at: string
           user_id: string
+          xp: number
         }[]
       }
       seed_dev_test_nfts: { Args: never; Returns: Json }

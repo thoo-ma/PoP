@@ -9,6 +9,14 @@ export interface PoopResult {
   energy: number;
   energy_lost: number;
   depleted: boolean;
+  /** XP within the current level after the use */
+  xp: number;
+  /** XP earned this poop */
+  xp_gained: number;
+  /** Level after the use */
+  level: number;
+  /** Whether the NFT leveled up this poop */
+  leveled_up: boolean;
 }
 
 /**

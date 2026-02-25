@@ -11,6 +11,60 @@ const corsHeaders = {
 
 type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
+// ─── XP system ───────────────────────────────────────────────────────────────
+// XP is tracked within the current level and resets to the remainder on level-up.
+//
+// Both the per-poop XP gain and the threshold to advance to the next level use
+// the same formula so tuning one tunes both in a single place:
+//
+//   value(level) = round(25 + level × 5 + level² × 0.3)
+//
+// Level 1 has a minimum floor of 33 (matches the design table).
+// Levels: 1 – MAX_LEVEL. The bar at MAX_LEVEL fills to threshold(MAX_LEVEL) = 245.
+
+const MAX_LEVEL = 20
+
+function xpFormula(level: number): number {
+  return Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3)
+}
+
+/** XP threshold to advance from `level` to `level + 1`. */
+function xpThreshold(level: number): number {
+  return Math.max(33, xpFormula(level))
+}
+
+/** XP earned by using an NFT that is currently at `level`. */
+function calcXPGain(level: number): number {
+  return xpFormula(level)
+}
+
+/**
+ * Apply XP gain to the current (xp, level) pair and return the updated values.
+ * XP resets to the remainder when the threshold is crossed; levels cap at MAX_LEVEL.
+ */
+function applyXP(
+  currentXP: number,
+  currentLevel: number,
+  gained: number,
+): { newXP: number; newLevel: number; leveledUp: boolean } {
+  let xp    = currentXP + gained
+  let level = currentLevel
+  let leveledUp = false
+
+  while (level < MAX_LEVEL && xp >= xpThreshold(level)) {
+    xp -= xpThreshold(level)
+    level++
+    leveledUp = true
+  }
+
+  // At max level, cap the bar so it never overflows the display maximum.
+  if (level === MAX_LEVEL) {
+    xp = Math.min(xp, xpThreshold(MAX_LEVEL))
+  }
+
+  return { newXP: xp, newLevel: level, leveledUp }
+}
+
 const TYPE_DRAIN_MULT: Record<NFTType, number> = {
   'turbo-flush':  3,
   'cruise-seat':  1.5,
@@ -110,7 +164,7 @@ serve(async (req) => {
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase
       .from('nfts')
-      .select('id, type, resilience, energy')
+      .select('id, type, resilience, energy, level, xp')
       .eq('id', nft_id)
       .eq('user_id', userId)
       .single()
@@ -133,18 +187,23 @@ serve(async (req) => {
     const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy)
     const newEnergy = nft.energy - energyLost
 
+    // ── XP calculation ───────────────────────────────────────────────────────
+    const xpGained = calcXPGain(nft.level)
+    const { newXP, newLevel, leveledUp } = applyXP(nft.xp, nft.level, xpGained)
+
     console.log(
       `use-nft: nft=${nft_id} type=${nft.type} resilience=${nft.resilience} ` +
-      `energy ${nft.energy} → ${newEnergy} (lost ${energyLost})`
+      `energy ${nft.energy} → ${newEnergy} (lost ${energyLost}) | ` +
+      `xp ${nft.xp}+${xpGained} → ${newXP} level ${nft.level} → ${newLevel}`
     )
 
     // ── Persist ───────────────────────────────────────────────────────────────
     const { data: updated, error: updateError } = await supabase
       .from('nfts')
-      .update({ energy: newEnergy })
+      .update({ energy: newEnergy, xp: newXP, level: newLevel })
       .eq('id', nft_id)
       .eq('user_id', userId)   // defence-in-depth ownership check
-      .select('id, energy')
+      .select('id, energy, xp, level')
       .single()
 
     if (updateError) {
@@ -158,10 +217,14 @@ serve(async (req) => {
     // ── Return result ─────────────────────────────────────────────────────────
     return new Response(
       JSON.stringify({
-        id:           updated.id,
-        energy:       updated.energy,
-        energy_lost:  energyLost,
-        depleted:     updated.energy === 0,
+        id:          updated.id,
+        energy:      updated.energy,
+        energy_lost: energyLost,
+        depleted:    updated.energy === 0,
+        xp:          updated.xp,
+        xp_gained:   xpGained,
+        level:       updated.level,
+        leveled_up:  leveledUp,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
