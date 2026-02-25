@@ -47,6 +47,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           resilience={nft.resilience}
           comfort={nft.comfort}
           luck={nft.luck}
+          energy={nft.energy}
           mode="compact"
         />
         {action}
