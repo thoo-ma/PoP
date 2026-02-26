@@ -6,3 +6,4 @@ export { styles as nftSelectorStyles } from './NFTSelector.styles';
 export { styles as poopStyles } from './Poop.styles';
 export { styles as repairStyles } from './Repair.styles';
 export { styles as vaultStyles } from './Vault.styles';
+export { styles as statAllocationModalStyles } from './StatAllocationModal.styles';

@@ -2,9 +2,10 @@ import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles } from '@/styles';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
-import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError } from '@/components';
+import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
-import type { SortOption, NFTRarity, NFTType } from '@/types';
+import type { SortOption, NFTRarity, NFTType, NFT } from '@/types';
+import type { AllocateResult } from '@/hooks';
 
 export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -14,6 +15,7 @@ export default memo(function Vault() {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<NFTType[]>([]);
+  const [statModalNFT, setStatModalNFT] = useState<NFT | null>(null);
   
   // Listen for NFT update events from other screens
   useEffect(() => {
@@ -84,6 +86,20 @@ export default memo(function Vault() {
       nftEvents.emit();
     }
   }, [nfts, listNFT, refetch]);
+
+  const handleOpenStatModal = useCallback((nft: NFT) => {
+    setStatModalNFT(nft);
+  }, []);
+
+  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+    setStatModalNFT(null);
+    refetch();
+    nftEvents.emit();
+  }, [refetch]);
+
+  const handleStatModalDismiss = useCallback(() => {
+    setStatModalNFT(null);
+  }, []);
   
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />;
@@ -129,25 +145,49 @@ export default memo(function Vault() {
               key={nft.id}
               nft={nft}
               action={
-                !nft.isListed ? (
-                  <TouchableOpacity
-                    style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
-                    onPress={() => handleListNFT(nft.id)}
-                    disabled={updateLoading}
-                    accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                    accessibilityRole="button"
-                    accessibilityHint="List this NFT on the marketplace"
-                  >
-                    <Text style={styles.listButtonText}>
-                      {updateLoading ? 'Listing...' : 'List for Sale'}
-                    </Text>
-                  </TouchableOpacity>
-                ) : undefined
+                <>
+                  {(nft.stat_points ?? 0) > 0 && (
+                    <TouchableOpacity
+                      style={styles.allocateButton}
+                      onPress={() => handleOpenStatModal(nft)}
+                      accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.allocateButtonText}>
+                        ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {!nft.isListed ? (
+                    <TouchableOpacity
+                      style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
+                      onPress={() => handleListNFT(nft.id)}
+                      disabled={updateLoading}
+                      accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                      accessibilityRole="button"
+                      accessibilityHint="List this NFT on the marketplace"
+                    >
+                      <Text style={styles.listButtonText}>
+                        {updateLoading ? 'Listing...' : 'List for Sale'}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : undefined}
+                </>
               }
             />
           ))}
         </View>
       </ScrollView>
+
+      {statModalNFT && (
+        <StatAllocationModal
+          visible
+          nft={statModalNFT}
+          pointsAvailable={statModalNFT.stat_points ?? 0}
+          onComplete={handleStatAllocated}
+          onDismiss={handleStatModalDismiss}
+        />
+      )}
     </View>
   );
 });

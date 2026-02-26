@@ -2,9 +2,11 @@ import { Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-na
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
-import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
+import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 import { getCooldownStatus } from '@/constants/cooldown';
+import type { NFT } from '@/types/nft';
+import type { AllocateResult } from '@/hooks';
 
 export default memo(function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
@@ -13,6 +15,7 @@ export default memo(function Poop() {
   const [isPooped, setIsPooped] = useState(false);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
   const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
+  const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null);
   // Tick every second to keep the cooldown countdown accurate.
   const [, setTick] = useState(0);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -62,6 +65,13 @@ export default memo(function Poop() {
       setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
       setPoopedXP({ gained: result.xp_gained, level: result.level, leveledUp: result.leveled_up });
       setIsPooped(true);
+      // Open the stat allocation modal straight away if points were earned.
+      if (result.leveled_up && result.stat_points > 0) {
+        setStatModalData({
+          nft:    { ...displayNFT, stat_points: result.stat_points },
+          points: result.stat_points,
+        });
+      }
     } else if (cooldownError) {
       // Server-authoritative cooldown response (clock skew / stale client data)
       const remaining = cooldownError.cooldown_remaining_seconds;
@@ -87,6 +97,7 @@ export default memo(function Poop() {
     setIsPooped(false);
     setPoopedEnergy(null);
     setPoopedXP(null);
+    setStatModalData(null);
   };
 
   const handlePrev = useCallback(() => {
@@ -94,6 +105,7 @@ export default memo(function Poop() {
     setIsPooped(false);
     setPoopedEnergy(null);
     setPoopedXP(null);
+    setStatModalData(null);
   }, [nfts.length]);
 
   const handleNext = useCallback(() => {
@@ -101,8 +113,18 @@ export default memo(function Poop() {
     setIsPooped(false);
     setPoopedEnergy(null);
     setPoopedXP(null);
+    setStatModalData(null);
   }, [nfts.length]);
-  
+
+  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+    setStatModalData(null);
+    refetch();
+    nftEvents.emit();
+  }, [refetch]);
+
+  const handleStatModalDismiss = useCallback(() => {
+    setStatModalData(null);
+  }, []);
   if (loading) {
     return <ScreenLoader title="Poop" message="Loading your collection..." />;
   }
@@ -118,12 +140,13 @@ export default memo(function Poop() {
   }
   
   return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-    >
+    <>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
       <Text style={styles.title}>Poop</Text>
       <Text style={styles.description}>
         Use your NFT to generate rewards
@@ -240,6 +263,17 @@ export default memo(function Poop() {
           )}
         </>
       )}
-    </ScrollView>
+      </ScrollView>
+
+      {statModalData && (
+        <StatAllocationModal
+          visible
+          nft={statModalData.nft}
+          pointsAvailable={statModalData.points}
+          onComplete={handleStatAllocated}
+          onDismiss={handleStatModalDismiss}
+        />
+      )}
+    </>
   );
 });

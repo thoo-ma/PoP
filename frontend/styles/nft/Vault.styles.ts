@@ -45,4 +45,17 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+  allocateButton: {
+    backgroundColor: colors.level,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginTop: 4,
+  },
+  allocateButtonText: {
+    color: colors.buttonText,
+    fontSize: 11,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
 });

@@ -36,6 +36,9 @@ export function useMarketplaceListings() {
             luck,
             energy,
             level,
+            xp,
+            stat_points,
+            last_used_at,
             user_id,
             created_at,
             updated_at

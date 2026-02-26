@@ -22,6 +22,8 @@ export interface PoopResult {
   level: number;
   /** Whether the NFT leveled up this poop */
   leveled_up: boolean;
+  /** Total unspent stat points on the NFT after this poop */
+  stat_points: number;
 }
 
 /**

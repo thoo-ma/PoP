@@ -14,7 +14,16 @@ const corsHeaders = {
 // ─── Type multipliers ────────────────────────────────────────────────────────
 // Higher multiplier = faster energy drain when used
 
-type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
+type NFTType   = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
+type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent'
+
+// ─── Stat point rewards per level-up (by rarity) ─────────────────────────────
+const STAT_POINTS_BY_RARITY: Record<NFTRarity, number> = {
+  common:       4,
+  rare:         10,
+  legendary:    14,
+  transcendent: 18,
+}
 
 // ─── XP system ───────────────────────────────────────────────────────────────
 // XP is tracked within the current level and resets to the remainder on level-up.
@@ -51,15 +60,15 @@ function applyXP(
   currentXP: number,
   currentLevel: number,
   gained: number,
-): { newXP: number; newLevel: number; leveledUp: boolean } {
+): { newXP: number; newLevel: number; leveledUp: boolean; levelsGained: number } {
   let xp    = currentXP + gained
   let level = currentLevel
-  let leveledUp = false
+  let levelsGained = 0
 
   while (level < MAX_LEVEL && xp >= xpThreshold(level)) {
     xp -= xpThreshold(level)
     level++
-    leveledUp = true
+    levelsGained++
   }
 
   // At max level, cap the bar so it never overflows the display maximum.
@@ -67,7 +76,7 @@ function applyXP(
     xp = Math.min(xp, xpThreshold(MAX_LEVEL))
   }
 
-  return { newXP: xp, newLevel: level, leveledUp }
+  return { newXP: xp, newLevel: level, leveledUp: levelsGained > 0, levelsGained }
 }
 
 const TYPE_DRAIN_MULT: Record<NFTType, number> = {
@@ -169,7 +178,7 @@ serve(async (req) => {
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase
       .from('nfts')
-      .select('id, type, resilience, energy, level, xp, last_used_at')
+      .select('id, type, rarity, resilience, energy, level, xp, stat_points, last_used_at')
       .eq('id', nft_id)
       .eq('user_id', userId)
       .single()
@@ -210,21 +219,33 @@ serve(async (req) => {
 
     // ── XP calculation ───────────────────────────────────────────────────────
     const xpGained = calcXPGain(nft.level)
-    const { newXP, newLevel, leveledUp } = applyXP(nft.xp, nft.level, xpGained)
+    const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
+
+    // ── Stat points earned ───────────────────────────────────────────────────
+    const rarity = (nft.rarity ?? 'common') as NFTRarity
+    const statPointsEarned = levelsGained * (STAT_POINTS_BY_RARITY[rarity] ?? 0)
+    const newStatPoints = (nft.stat_points ?? 0) + statPointsEarned
 
     console.log(
-      `use-nft: nft=${nft_id} type=${nft.type} resilience=${nft.resilience} ` +
+      `use-nft: nft=${nft_id} type=${nft.type} rarity=${rarity} resilience=${nft.resilience} ` +
       `energy ${nft.energy} → ${newEnergy} (lost ${energyLost}) | ` +
-      `xp ${nft.xp}+${xpGained} → ${newXP} level ${nft.level} → ${newLevel}`
+      `xp ${nft.xp}+${xpGained} → ${newXP} level ${nft.level} → ${newLevel} | ` +
+      `stat_points +${statPointsEarned} → ${newStatPoints}`
     )
 
     // ── Persist ───────────────────────────────────────────────────────────────
     const { data: updated, error: updateError } = await supabase
       .from('nfts')
-      .update({ energy: newEnergy, xp: newXP, level: newLevel, last_used_at: new Date().toISOString() })
+      .update({
+        energy:      newEnergy,
+        xp:          newXP,
+        level:       newLevel,
+        stat_points: newStatPoints,
+        last_used_at: new Date().toISOString(),
+      })
       .eq('id', nft_id)
       .eq('user_id', userId)   // defence-in-depth ownership check
-      .select('id, energy, xp, level')
+      .select('id, energy, xp, level, stat_points')
       .single()
 
     if (updateError) {
@@ -246,6 +267,7 @@ serve(async (req) => {
         xp_gained:   xpGained,
         level:       updated.level,
         leveled_up:  leveledUp,
+        stat_points: updated.stat_points,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

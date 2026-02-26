@@ -145,6 +145,7 @@ export type Database = {
           updated_at: string
           user_id: string
           xp: number
+          stat_points: number
         }
         Insert: {
           comfort: number
@@ -163,6 +164,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           xp?: number
+          stat_points?: number
         }
         Update: {
           comfort?: number
@@ -181,6 +183,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           xp?: number
+          stat_points?: number
         }
         Relationships: []
       }

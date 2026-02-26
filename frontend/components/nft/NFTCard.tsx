@@ -46,6 +46,11 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             <Text style={styles.listedText}>Listed</Text>
           </View>
         )}
+        {(nft.stat_points ?? 0) > 0 && (
+          <View style={styles.statPointsBadge}>
+            <Text style={styles.statPointsBadgeText}>+{nft.stat_points} pts</Text>
+          </View>
+        )}
       </View>
       <View style={styles.cardContent}>
         <Text style={styles.nftName}>{formatDisplayName(nft.name)}</Text>
