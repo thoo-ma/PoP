@@ -123,8 +123,8 @@ export default memo(function Repair() {
                 <View style={styles.levelBadge}>
                   <Text style={styles.levelBadgeText}>Lv {selectedNFT.level}</Text>
                 </View>
-                <View style={[styles.tierBadge, TYPE_BADGE_STYLES[selectedNFT.type]]}>
-                  <Text style={styles.tierBadgeText}>{selectedNFT.type.toUpperCase()}</Text>
+                <View style={[styles.typeBadge, TYPE_BADGE_STYLES[selectedNFT.type]]}>
+                  <Text style={styles.typeBadgeText}>{selectedNFT.type.toUpperCase()}</Text>
                 </View>
                 <View style={styles.resilienceBadge}>
                   <Text style={styles.resilienceBadgeText}>

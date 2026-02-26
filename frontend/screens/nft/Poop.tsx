@@ -184,8 +184,8 @@ export default memo(function Poop() {
                   <View style={styles.levelBadge}>
                     <Text style={styles.levelBadgeText}>Lv {displayNFT!.level}</Text>
                   </View>
-                  <View style={[styles.tierBadge, TYPE_BADGE_STYLES[displayNFT!.type]]}>
-                    <Text style={styles.tierBadgeText}>{displayNFT!.type.toUpperCase()}</Text>
+                  <View style={[styles.typeBadge, TYPE_BADGE_STYLES[displayNFT!.type]]}>
+                    <Text style={styles.typeBadgeText}>{displayNFT!.type.toUpperCase()}</Text>
                   </View>
                 </View>
                 <View style={styles.nftInfo}>

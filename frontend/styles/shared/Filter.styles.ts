@@ -122,7 +122,7 @@ export const styles = StyleSheet.create({
     backgroundColor: RARITY_COLORS.transcendent,
     borderColor: RARITY_COLORS.transcendent,
   },
-  // Tier chip colors
+  // Type chip colors
   'cruise-seatChip': {
     borderColor: RARITY_COLORS.common,
   },

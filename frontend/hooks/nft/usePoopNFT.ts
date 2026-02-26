@@ -29,7 +29,7 @@ export interface PoopResult {
 /**
  * Hook to consume a single use of an NFT (the "poop" action).
  *
- * All game logic — energy drain formula, tier multiplier, resilience factor —
+ * All game logic — energy drain formula, type multiplier, resilience factor —
  * runs server-side in the `use-nft` Edge Function for tamper-resistance.
  */
 export function usePoopNFT() {

@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-  tierBadge: {
+  typeBadge: {
     position: 'absolute',
     bottom: 12,
     left: 12,
@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  tierBadgeText: {
+  typeBadgeText: {
     color: '#fff',
     fontSize: 11,
     fontWeight: '700',

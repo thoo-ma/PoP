@@ -25,7 +25,7 @@ export default memo(function Vault() {
     return unsubscribe;
   }, [refetch]);
   
-  // Filter NFTs based on selected rarities and tiers
+  // Filter NFTs based on selected rarities and types
   const filteredNfts = useMemo(
     () => nfts.filter(nft => {
       const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);

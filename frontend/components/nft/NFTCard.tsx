@@ -32,8 +32,8 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Text style={styles.levelText}>Lv {nft.level}</Text>
         </View>
         {nft.type && (
-          <View style={[styles.tierBadge, TYPE_BADGE_STYLES[nft.type]]}>
-            <Text style={styles.tierText}>{nft.type.toUpperCase()}</Text>
+          <View style={[styles.typeBadge, TYPE_BADGE_STYLES[nft.type]]}>
+            <Text style={styles.typeText}>{nft.type.toUpperCase()}</Text>
           </View>
         )}
         {nft.rarity && (
