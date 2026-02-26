@@ -77,7 +77,7 @@ export default function App() {
 
   // Session exists but user not approved - show invite code screen (BLOCKING)
   // Skip invite code check in Expo Go (dev mode)
-  if (approved === false && !isExpoGo) {
+  if (approved !== true && !isExpoGo) {
     return (
       <SafeAreaProvider>
         <InviteCodeScreen 
