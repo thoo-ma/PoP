@@ -13,10 +13,24 @@ export const RARITY_RANK: Record<NFTRarity, number> = {
 };
 
 /**
+ * All rarity-pair keys for which breeding is allowed (rank diff ≤ 1, always
+ * sorted lower+higher). Adding a new NFTRarity without updating this type
+ * and the table below will be a compile-time error.
+ */
+export type BreedPairKey =
+  | 'common+common'
+  | 'common+rare'
+  | 'rare+rare'
+  | 'rare+legendary'
+  | 'legendary+legendary'
+  | 'legendary+transcendent'
+  | 'transcendent+transcendent';
+
+/**
  * Maps a sorted rarity-pair key ("lower+higher") to
  * [common%, rare%, legendary%, transcendent%] outcome probabilities.
  */
-export const BREED_PROBABILITIES: Record<string, [number, number, number, number]> = {
+export const BREED_PROBABILITIES: Record<BreedPairKey, [number, number, number, number]> = {
   'common+common':             [97.9,  2.0,  0.1,  0.0],
   'common+rare':               [65.0, 34.0,  0.9,  0.1],
   'rare+rare':                 [ 5.0, 92.0,  2.5,  0.5],

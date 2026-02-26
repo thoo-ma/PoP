@@ -1,5 +1,6 @@
 import type { NFTRarity } from '@/types/nft';
 import { RARITY_RANK, BREED_PROBABILITIES } from '@/constants';
+import type { BreedPairKey } from '@/constants/breedProbabilities';
 
 /**
  * Returns the [common%, rare%, legendary%, transcendent%] outcome probabilities
@@ -8,7 +9,7 @@ import { RARITY_RANK, BREED_PROBABILITIES } from '@/constants';
 export function getProbabilities(r1: NFTRarity, r2: NFTRarity): [number, number, number, number] {
   const key = [r1, r2]
     .sort((a, b) => RARITY_RANK[a] - RARITY_RANK[b])
-    .join('+');
+    .join('+') as BreedPairKey;
   return BREED_PROBABILITIES[key] ?? [0, 0, 0, 0];
 }
 
