@@ -36,7 +36,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     isRunningRef.current = isRunning;
     statusRef.current = status;
     thresholdsRef.current = thresholds;
-  });
+  }, [isRunning, status, thresholds]);
 
   // Track mounted state
   useEffect(() => {

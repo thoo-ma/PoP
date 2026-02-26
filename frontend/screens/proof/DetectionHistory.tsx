@@ -9,6 +9,7 @@ import { styles } from '@/styles/proof/DetectionHistory.styles';
 
 function formatDetectionDate(dateString: string): string {
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return '—';
   return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -18,6 +19,7 @@ function formatDetectionDate(dateString: string): string {
 
 function formatDetectionTime(dateString: string): string {
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return '—';
   return date.toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',

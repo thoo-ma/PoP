@@ -10,18 +10,18 @@
 
 import type { NFT, NFTType } from '@/types/nft';
 
-export const COOLDOWN_BASES: Record<NFTType, number> = {
+export const COOLDOWN_BASES = {
   'turbo-flush':  3,
   'cruise-seat':  10,
   'zen-fortress': 22,
-};
+} as const satisfies Record<NFTType, number>;
 
 export const COOLDOWN_LINEAR_MULT = 0.3;
 export const COOLDOWN_EXP_MULT    = 0.02;
 
 /** Cooldown duration in hours for the given NFT type and level. */
 export function calcCooldownHours(type: NFTType, level: number): number {
-  const base = COOLDOWN_BASES[type] ?? COOLDOWN_BASES['cruise-seat'];
+  const base = COOLDOWN_BASES[type];
   return base + level * COOLDOWN_LINEAR_MULT + Math.pow(level, 2) * COOLDOWN_EXP_MULT;
 }
 

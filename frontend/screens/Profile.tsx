@@ -1,4 +1,5 @@
 import { Text, View, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@/hooks';
 import { profileStyles as styles } from '@/styles';
@@ -12,11 +13,17 @@ interface ProfileProps {
 
 export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOut = () => {
     showSignOutConfirmation(async () => {
-      await signOut();
-      onClose();
+      setIsSigningOut(true);
+      try {
+        await signOut();
+        onClose();
+      } finally {
+        setIsSigningOut(false);
+      }
     });
   };
 
@@ -78,9 +85,11 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             style={styles.signOutButton} 
             onPress={handleSignOut}
             activeOpacity={0.7}
+            disabled={isSigningOut}
             accessibilityLabel="Sign out"
             accessibilityRole="button"
             accessibilityHint="Sign out of your account"
+            accessibilityState={{ busy: isSigningOut }}
           >
             <MaterialIcons name="logout" size={20} color={colors.buttonText} />
             <Text style={styles.signOutText}>Sign Out</Text>

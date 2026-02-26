@@ -79,10 +79,17 @@ export function useUpdateNFT() {
       setLoading(true);
       setError(null);
 
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setError('Not authenticated');
+        return false;
+      }
+
       const { error: unlistError } = await supabase
         .from('marketplace_listings')
         .delete()
-        .eq('nft_id', nftId);
+        .eq('nft_id', nftId)
+        .eq('seller_id', user.id);
 
       if (unlistError) {
         logError('useUpdateNFT:UnlistNFT', unlistError);
