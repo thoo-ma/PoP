@@ -1,4 +1,4 @@
-import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
@@ -118,7 +118,12 @@ export default memo(function Poop() {
   }
   
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.title}>Poop</Text>
       <Text style={styles.description}>
         Use your NFT to generate rewards
@@ -235,6 +240,6 @@ export default memo(function Poop() {
           )}
         </>
       )}
-    </View>
+    </ScrollView>
   );
 });

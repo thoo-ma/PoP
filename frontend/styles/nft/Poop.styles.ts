@@ -3,12 +3,16 @@ import { colors, typography } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.background,
     alignItems: 'center',
-    paddingTop: 80,
-    padding: 20,
-    paddingBottom: 80,
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 140,
+  },
+  scroll: {
+    flex: 1,
+    backgroundColor: colors.background,
   },
   title: {
     ...typography.title,
