@@ -103,7 +103,7 @@ function breedStat(s1: number, s2: number): number {
 
 // ─── Image URL ────────────────────────────────────────────────────────────────
 
-const SUPABASE_PROJECT_URL = 'https://mtnluwkvhkwwxvxdtkgs.supabase.co'
+const SUPABASE_PROJECT_URL = Deno.env.get('SUPABASE_URL') ?? ''
 
 function buildImageUrl(type: NFTType, name: string, rarity: Rarity): string {
   return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/assets/toilets/${type}/${name}/${name}-${rarity}.jpg`
