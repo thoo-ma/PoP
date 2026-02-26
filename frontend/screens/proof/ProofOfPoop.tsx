@@ -32,6 +32,13 @@ export default memo(function ProofOfPoop() {
     clearResult,
   } = useToiletDetection();
 
+  const { canRecord, canAnalyze } = useRecordingButtonState(
+    isRecording,
+    isAnalyzing,
+    audioUri,
+    detectionResult
+  );
+
   // Cycle through difficulty modes only in setup phase
   const handleCyclePoopDifficulty = () => {
     if (phase !== 'setup') return;
@@ -288,13 +295,6 @@ export default memo(function ProofOfPoop() {
   );
 
   const renderRecordingPhase = () => {
-    const { canRecord, canAnalyze } = useRecordingButtonState(
-      isRecording,
-      isAnalyzing,
-      audioUri,
-      detectionResult
-    );
-
     return (
       <>
         <Text style={styles.title}>Record the Flush 🚽</Text>

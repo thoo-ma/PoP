@@ -5,7 +5,6 @@
   "scripts": {
     "start": "expo start",
     "start:go": "expo start --go",
-    "start:dev": "expo start",
     "start:tunnel": "expo start --tunnel",
     "android": "expo run:android",
     "android:go": "expo start --android",
