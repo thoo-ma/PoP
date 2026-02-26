@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { RARITY_RANK, BREED_PROBABILITIES } from '../_shared/breedProbabilities.ts'
-import type { NFTRarity as Rarity } from '../_shared/breedProbabilities.ts'
+import type { NFTRarity as Rarity, BreedPairKey } from '../_shared/breedProbabilities.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,11 +13,11 @@ const corsHeaders = {
 
 type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
-function rarityKey(r1: Rarity, r2: Rarity): string {
+function rarityKey(r1: Rarity, r2: Rarity): BreedPairKey {
   // Sort so that the lower-rank rarity always comes first
   return [r1, r2]
     .sort((a, b) => RARITY_RANK[a] - RARITY_RANK[b])
-    .join('+')
+    .join('+') as BreedPairKey
 }
 
 function rollRarity(r1: Rarity, r2: Rarity): Rarity {

@@ -14,7 +14,6 @@ serve(async (req) => {
 
   try {
     console.log('=== Edge Function Request Started ===')
-    console.log('Headers:', Object.fromEntries(req.headers.entries()))
     
     // Get Cloud Run configuration from environment
     const CLOUD_RUN_URL = Deno.env.get('CLOUD_RUN_URL')
