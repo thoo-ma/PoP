@@ -4,6 +4,7 @@ import { memo, useState } from 'react';
 import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
+import { MAX_ENERGY } from '@/constants';
 import type { NFT } from '@/types';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
@@ -16,9 +17,8 @@ export default memo(function Repair() {
   const [repairedNFT, setRepairedNFT] = useState<NFT | null>(null);
 
   const selectedNFT = selectedIndex !== null ? (repairedNFT ?? nfts[selectedIndex] ?? null) : null;
-  const maxEnergy = 100;
   const currentEnergy = selectedNFT?.energy || 0;
-  const maxRepairPossible = maxEnergy - currentEnergy;
+  const maxRepairPossible = MAX_ENERGY - currentEnergy;
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
@@ -147,7 +147,7 @@ export default memo(function Repair() {
               </View>
             </View>}
 
-            {currentEnergy < maxEnergy && !isRepaired && (
+            {currentEnergy < MAX_ENERGY && !isRepaired && (
               <>
                 {/* Repair Controls */}
                 <View style={styles.repairControls}>
@@ -193,7 +193,7 @@ export default memo(function Repair() {
               </View>
             )}
 
-            {currentEnergy === maxEnergy && !isRepaired && (
+            {currentEnergy === MAX_ENERGY && !isRepaired && (
               <View style={styles.fullResilienceMessage}>
                 <Text style={styles.fullResilienceText}>This NFT is at full energy!</Text>
                 <TouchableOpacity style={styles.resetButton} onPress={handleReset}>

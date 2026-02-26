@@ -26,15 +26,3 @@ export function canBreed(r1: NFTRarity, r2: NFTRarity): boolean {
   return Math.abs(RARITY_RANK[r1] - RARITY_RANK[r2]) <= 1;
 }
 
-/**
- * Returns a human-readable label for a rarity-pair breeding combination,
- * e.g. "Rare + Legendary".
- */
-export function breedCombinationLabel(r1: NFTRarity, r2: NFTRarity): string {
-  const sorted = [r1, r2].sort(
-    (a, b) => RARITY_RANK[a] - RARITY_RANK[b]
-  );
-  return sorted
-    .map((r) => r.charAt(0).toUpperCase() + r.slice(1))
-    .join(' + ');
-}

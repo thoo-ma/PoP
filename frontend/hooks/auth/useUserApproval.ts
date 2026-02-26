@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import type { UseUserApprovalReturn } from '@/types/auth';
 import { logError } from '@/utils/errorHelpers';
@@ -8,7 +9,7 @@ import { logError } from '@/utils/errorHelpers';
  * Queries public.users table to check if current user is approved
  * Returns null for approved if user not found (still being created by trigger)
  */
-export function useUserApproval(): UseUserApprovalReturn {
+export function useUserApproval(session?: Session | null): UseUserApprovalReturn {
   const [approved, setApproved] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -56,10 +57,15 @@ export function useUserApproval(): UseUserApprovalReturn {
   }, [fetchApprovalStatus]);
 
   useEffect(() => {
+    if (!session) {
+      setApproved(null);
+      setLoading(false);
+      return;
+    }
     fetchApprovalStatus();
 
     // Listen to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, _session) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         fetchApprovalStatus();
       } else if (event === 'SIGNED_OUT') {
@@ -71,7 +77,7 @@ export function useUserApproval(): UseUserApprovalReturn {
     return () => {
       subscription.unsubscribe();
     };
-  }, [fetchApprovalStatus]);
+  }, [session, fetchApprovalStatus]);
 
   return { approved, loading, refetch };
 }

@@ -20,12 +20,11 @@ export default memo(function Marketplace() {
   const { unlistNFT, loading: updateLoading } = useUpdateNFT();
 
   // Filter user's listed NFTs for "My Listings" tab
-  const marketplaceListings = backendListings;
   const myListings = useMemo(() => nfts.filter(nft => nft.isListed), [nfts]);
 
   const sortedMarketplaceListings = useMemo(
-    () => sortNFTs(marketplaceListings, sortBy, sortOrder),
-    [marketplaceListings, sortBy, sortOrder]
+    () => sortNFTs(backendListings, sortBy, sortOrder),
+    [backendListings, sortBy, sortOrder]
   );
   const sortedMyListings = useMemo(
     () => sortNFTs(myListings, sortBy, sortOrder),
@@ -86,7 +85,7 @@ export default memo(function Marketplace() {
           accessibilityState={{ selected: activeTab === 'buy' }}
         >
           <Text style={[styles.tabText, activeTab === 'buy' && styles.tabTextActive]}>
-            Buy ({marketplaceListings.length})
+            Buy ({backendListings.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

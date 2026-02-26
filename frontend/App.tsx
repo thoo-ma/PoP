@@ -17,7 +17,7 @@ import { colors } from './constants';
 
 export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();
-  const { approved, loading: approvalLoading, refetch } = useUserApproval();
+  const { approved, loading: approvalLoading, refetch } = useUserApproval(session);
   const [currentPage, setCurrentPage] = useState(0);
   const [profileVisible, setProfileVisible] = useState(false);
   const flatListRef = useRef<FlatList>(null);
@@ -38,11 +38,13 @@ export default function App() {
   const handleOpenProfile = useCallback(() => setProfileVisible(true), []);
   const handleCloseProfile = useCallback(() => setProfileVisible(false), []);
 
-  const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    if (viewableItems.length > 0) {
-      setCurrentPage(viewableItems[0].index || 0);
+  const onViewableItemsChangedRef = useRef<(info: { viewableItems: ViewToken[] }) => void>(
+    ({ viewableItems }) => {
+      if (viewableItems.length > 0) {
+        setCurrentPage(viewableItems[0].index || 0);
+      }
     }
-  }, []);
+  );
 
   const renderPage = useCallback(({ item }: { item: typeof PAGES[0] }) => {
     const Component = item.component;
@@ -98,7 +100,7 @@ export default function App() {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          onViewableItemsChanged={onViewableItemsChanged}
+          onViewableItemsChanged={onViewableItemsChangedRef.current}
           viewabilityConfig={VIEWABILITY_CONFIG}
           bounces={false}
           style={styles.flatList}

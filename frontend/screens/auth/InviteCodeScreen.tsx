@@ -49,7 +49,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const handleSubmit = async () => {
     // Validate format before submitting
     if (!isValidFormat(code)) {
-      handleError('Code must be 8 alphanumeric characters', 'Code must be 8 alphanumeric characters');
+      handleError(new Error('Code must be 8 alphanumeric characters'), 'Code must be 8 alphanumeric characters');
       return;
     }
 

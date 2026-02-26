@@ -10,3 +10,6 @@ export const STAT_POINTS_BY_RARITY = {
   legendary:    14,
   transcendent: 18,
 } as const satisfies Record<NFTRarity, number>;
+
+/** Maximum NFT energy value. The same cap is applied server-side in use-nft. */
+export const MAX_ENERGY = 100;

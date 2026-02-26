@@ -27,9 +27,9 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       const permission = await Audio.requestPermissionsAsync();
       if (!permission.granted) {
         if (permission.canAskAgain) {
-          handleError('Microphone permission is required to record audio', 'Microphone permission is required to record audio');
+          handleError(new Error('Microphone permission is required to record audio'), 'Microphone permission is required to record audio');
         } else {
-          handleError('Microphone permission denied. Please enable it in your device Settings → Pop → Microphone', 'Microphone permission denied. Please enable it in your device Settings → Pop → Microphone');
+          handleError(new Error('Microphone permission denied. Please enable it in your device Settings → Pop → Microphone'), 'Microphone permission denied. Please enable it in your device Settings → Pop → Microphone');
         }
         return;
       }
@@ -93,7 +93,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setRecording(null);
 
       if (!uri) {
-        handleError('Failed to save recording', 'Failed to save recording');
+        handleError(new Error('Failed to save recording'), 'Failed to save recording');
       }
     } catch (err) {
       handleError(err, 'Failed to stop recording');
@@ -102,7 +102,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
 
   const analyzeAudio = useCallback(async (threshold: number = 0.5) => {
     if (!audioUri) {
-      handleError('No audio recording available', 'No audio recording available');
+      handleError(new Error('No audio recording available'), 'No audio recording available');
       return;
     }
 
@@ -123,7 +123,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       // Check if it's a rate limit error
       if (isRateLimitError(err)) {
         setRateLimitError(err);
-        handleError('Daily detection limit reached', 'Daily detection limit reached');
+        handleError(new Error('Daily detection limit reached'), 'Daily detection limit reached');
       } else {
         handleError(err, 'Detection failed: Unknown error');
       }
