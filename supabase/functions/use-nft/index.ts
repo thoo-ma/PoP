@@ -1,5 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import {
+  isOnCooldown,
+  getCooldownEndsAt,
+  cooldownRemainingSeconds,
+} from '../_shared/cooldown.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -164,7 +169,7 @@ serve(async (req) => {
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase
       .from('nfts')
-      .select('id, type, resilience, energy, level, xp')
+      .select('id, type, resilience, energy, level, xp, last_used_at')
       .eq('id', nft_id)
       .eq('user_id', userId)
       .single()
@@ -180,6 +185,22 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: 'No Energy', message: 'NFT has no energy remaining' }),
         { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // ── Cooldown check ────────────────────────────────────────────────────────
+    if (isOnCooldown(nft.last_used_at, nft.type as NFTType, nft.level)) {
+      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level)!
+      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level)
+      console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
+      return new Response(
+        JSON.stringify({
+          error:                      'on_cooldown',
+          message:                    `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
+          cooldown_ends_at:           endsAt.toISOString(),
+          cooldown_remaining_seconds: remaining,
+        }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -200,7 +221,7 @@ serve(async (req) => {
     // ── Persist ───────────────────────────────────────────────────────────────
     const { data: updated, error: updateError } = await supabase
       .from('nfts')
-      .update({ energy: newEnergy, xp: newXP, level: newLevel })
+      .update({ energy: newEnergy, xp: newXP, level: newLevel, last_used_at: new Date().toISOString() })
       .eq('id', nft_id)
       .eq('user_id', userId)   // defence-in-depth ownership check
       .select('id, energy, xp, level')

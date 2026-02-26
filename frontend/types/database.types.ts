@@ -135,6 +135,7 @@ export type Database = {
           energy: number
           id: string
           image_url: string
+          last_used_at: string | null
           level: number
           luck: number
           name: string
@@ -152,6 +153,7 @@ export type Database = {
           energy?: number
           id?: string
           image_url: string
+          last_used_at?: string | null
           level?: number
           luck: number
           name: string
@@ -169,6 +171,7 @@ export type Database = {
           energy?: number
           id?: string
           image_url?: string
+          last_used_at?: string | null
           level?: number
           luck?: number
           name?: string

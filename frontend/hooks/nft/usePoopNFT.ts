@@ -3,6 +3,11 @@ import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
 
+export interface CooldownError {
+  cooldown_ends_at: string;
+  cooldown_remaining_seconds: number;
+}
+
 export interface PoopResult {
   id: string;
   /** Energy value after the use */
@@ -28,11 +33,13 @@ export interface PoopResult {
 export function usePoopNFT() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [cooldownError, setCooldownError] = useState<CooldownError | null>(null);
 
   const poopNFT = useCallback(async (nftId: string): Promise<PoopResult | null> => {
     try {
       setLoading(true);
       setError(null);
+      setCooldownError(null);
 
       const { data, error: fnError } = await supabase.functions.invoke('use-nft', {
         body: { nft_id: nftId },
@@ -40,12 +47,21 @@ export function usePoopNFT() {
 
       if (fnError) {
         let message: string = fnError.message;
+        let body: Record<string, unknown> | null = null;
         if (fnError instanceof FunctionsHttpError) {
           try {
-            const body = await fnError.context.json();
-            if (body?.message) message = body.message;
-            else if (body?.error) message = body.error;
+            body = await fnError.context.json();
+            if (body?.message) message = body.message as string;
+            else if (body?.error) message = body.error as string;
           } catch { /* leave message as-is */ }
+        }
+        // Structured cooldown error from the server
+        if (body?.error === 'on_cooldown' && body?.cooldown_ends_at) {
+          setCooldownError({
+            cooldown_ends_at:           body.cooldown_ends_at as string,
+            cooldown_remaining_seconds: body.cooldown_remaining_seconds as number,
+          });
+          return null;
         }
         logError('usePoopNFT:Invoke', fnError);
         setError(message);
@@ -67,5 +83,5 @@ export function usePoopNFT() {
     }
   }, []);
 
-  return { poopNFT, loading, error };
+  return { poopNFT, loading, error, cooldownError };
 }

@@ -1,24 +1,35 @@
 import { Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
+import { getCooldownStatus } from '@/constants/cooldown';
 
 export default memo(function Poop() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { poopNFT, loading: actionLoading } = usePoopNFT();
+  const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isPooped, setIsPooped] = useState(false);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
   const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
+  // Tick every second to keep the cooldown countdown accurate.
+  const [, setTick] = useState(0);
+  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    tickRef.current = setInterval(() => setTick(t => t + 1), 1000);
+    return () => { if (tickRef.current) clearInterval(tickRef.current); };
+  }, []);
 
   const displayNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
-    const idx = nfts.findIndex(nft => nft.energy > 0);
-    setSelectedIndex(idx >= 0 ? idx : 0);
+    // Prefer NFTs that have energy AND are not on cooldown.
+    const ready = nfts.findIndex(nft => nft.energy > 0 && !getCooldownStatus(nft).isOnCooldown);
+    const withEnergy = nfts.findIndex(nft => nft.energy > 0);
+    setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0);
   };
 
   const handlePoop = async () => {
@@ -33,6 +44,16 @@ export default memo(function Poop() {
       return;
     }
 
+    const cooldown = getCooldownStatus(displayNFT);
+    if (cooldown.isOnCooldown) {
+      Alert.alert(
+        'On Cooldown',
+        `This NFT is resting. Ready in ${cooldown.display}.`,
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+
     const result = await poopNFT(displayNFT.id);
 
     if (result) {
@@ -41,6 +62,17 @@ export default memo(function Poop() {
       setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
       setPoopedXP({ gained: result.xp_gained, level: result.level, leveledUp: result.leveled_up });
       setIsPooped(true);
+    } else if (cooldownError) {
+      // Server-authoritative cooldown response (clock skew / stale client data)
+      const remaining = cooldownError.cooldown_remaining_seconds;
+      const hours   = Math.floor(remaining / 3600);
+      const minutes = Math.floor((remaining % 3600) / 60);
+      const display = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+      Alert.alert(
+        'On Cooldown',
+        `This NFT is resting. Ready in ${display}.`,
+        [{ text: 'OK' }]
+      );
     } else {
       Alert.alert(
         'Error',
@@ -172,19 +204,34 @@ export default memo(function Poop() {
               </TouchableOpacity>
             </View>
           ) : (
-            <TouchableOpacity
-              style={[styles.poopButton, (actionLoading || displayNFT!.energy <= 0) && styles.poopButtonDisabled]}
-              onPress={handlePoop}
-              disabled={actionLoading || displayNFT!.energy <= 0}
-              activeOpacity={0.8}
-              accessibilityLabel="Start pooping"
-              accessibilityRole="button"
-              accessibilityHint="Begin your toilet session"
-            >
-              <Text style={styles.poopButtonText}>
-                {actionLoading ? 'Processing...' : displayNFT!.energy <= 0 ? 'No Energy' : 'Poop'}
-              </Text>
-            </TouchableOpacity>
+            <>
+              {(() => {
+                const cooldown = getCooldownStatus(displayNFT!);
+                const onCooldown = cooldown.isOnCooldown;
+                const noEnergy   = displayNFT!.energy <= 0;
+                const disabled   = actionLoading || noEnergy || onCooldown;
+                const label = actionLoading
+                  ? 'Processing...'
+                  : noEnergy
+                  ? 'No Energy'
+                  : onCooldown
+                  ? `Ready in ${cooldown.display}`
+                  : 'Poop';
+                return (
+                  <TouchableOpacity
+                    style={[styles.poopButton, disabled && styles.poopButtonDisabled]}
+                    onPress={handlePoop}
+                    disabled={disabled}
+                    activeOpacity={0.8}
+                    accessibilityLabel={onCooldown ? `Cooldown: ${cooldown.display}` : 'Start pooping'}
+                    accessibilityRole="button"
+                    accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
+                  >
+                    <Text style={styles.poopButtonText}>{label}</Text>
+                  </TouchableOpacity>
+                );
+              })()}
+            </>
           )}
         </>
       )}
