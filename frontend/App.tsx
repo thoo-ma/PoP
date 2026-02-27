@@ -3,7 +3,8 @@ import {
   View, 
   ActivityIndicator, 
   FlatList, 
-  ViewToken
+  ViewToken,
+  Dimensions
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
@@ -100,9 +101,17 @@ export default function App() {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          getItemLayout={(_, index) => ({
+            length: Dimensions.get('window').width,
+            offset: Dimensions.get('window').width * index,
+            index,
+          })}
           onViewableItemsChanged={onViewableItemsChangedRef.current}
           viewabilityConfig={VIEWABILITY_CONFIG}
           bounces={false}
+          windowSize={1}
+          initialNumToRender={1}
+          maxToRenderPerBatch={1}
           style={styles.flatList}
         />
 
