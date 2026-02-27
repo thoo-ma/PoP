@@ -1,4 +1,3 @@
-export { styles as cardStyles } from './Card.styles';
 export { styles as filterStyles } from './Filter.styles';
 export { styles as screenLoaderStyles } from './ScreenLoader.styles';
 export { styles as screenErrorStyles } from './ScreenError.styles';

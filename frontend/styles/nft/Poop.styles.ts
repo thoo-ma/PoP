@@ -181,4 +181,218 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
+  // ─── Challenge phases ───────────────────────────────────────
+
+  challengeContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 12,
+    gap: 20,
+  },
+
+  // Compact NFT header shown during challenge phases
+  challengeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 3,
+    elevation: 2,
+    gap: 12,
+  },
+  challengeNFTAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 10,
+    backgroundColor: '#f3f4f6',
+  },
+  challengeNFTInfo: {
+    flex: 1,
+  },
+  challengeNFTName: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.title,
+    marginBottom: 2,
+  },
+  challengeNFTMeta: {
+    fontSize: 12,
+    color: colors.text,
+  },
+
+  // Countdown overlay (used for 3-2-1 and immobility timer)
+  countdownOverlay: {
+    alignItems: 'center',
+    paddingVertical: 24,
+    gap: 16,
+  },
+  countdownNumber: {
+    fontSize: 80,
+    fontWeight: '800',
+    color: colors.title,
+    lineHeight: 88,
+  },
+  countdownFrozen: {
+    color: '#ef4444',
+  },
+  countdownLabel: {
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '500',
+  },
+
+  // Status badge (running / warning)
+  statusBadge: {
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: 20,
+  },
+  statusBadgeRunning: {
+    backgroundColor: '#d1fae5',
+  },
+  statusBadgeWarning: {
+    backgroundColor: '#fee2e2',
+  },
+  statusBadgeText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.title,
+  },
+
+  // Phase information card
+  phaseCard: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    alignItems: 'center',
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  phaseCardSuccess: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#10b981',
+    textAlign: 'center',
+  },
+  phaseCardLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.title,
+    textAlign: 'center',
+  },
+  phaseCardSub: {
+    fontSize: 13,
+    color: colors.text,
+    textAlign: 'center',
+  },
+
+  // Recording indicator dot
+  recordingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  recordingDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#ef4444',
+  },
+
+  // Primary action button (used in challenge phases)
+  actionButton: {
+    backgroundColor: '#000',
+    paddingHorizontal: 48,
+    paddingVertical: 16,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  // Cancel button (bordered, secondary)
+  cancelLink: {
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#9ca3af',
+    width: '100%',
+    alignItems: 'center',
+  },
+  cancelLinkText: {
+    color: '#9ca3af',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  // Result cards
+  resultCard: {
+    width: '100%',
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 2,
+    alignItems: 'center',
+    gap: 6,
+  },
+  resultSuccess: {
+    backgroundColor: '#d1fae5',
+    borderColor: '#10b981',
+  },
+  resultFailure: {
+    backgroundColor: '#fee2e2',
+    borderColor: '#ef4444',
+  },
+  resultError: {
+    backgroundColor: '#fef3c7',
+    borderColor: '#f59e0b',
+  },
+  resultTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.title,
+    textAlign: 'center',
+  },
+  resultSub: {
+    fontSize: 14,
+    color: colors.text,
+    textAlign: 'center',
+  },
+
+  // Toast message (e.g. "Too much movement")
+  toastMessage: {
+    backgroundColor: '#fee2e2',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#fca5a5',
+  },
+  toastMessageText: {
+    fontSize: 13,
+    color: '#b91c1c',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
 });

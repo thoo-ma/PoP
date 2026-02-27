@@ -19,16 +19,6 @@ export interface PageIndicatorProps {
 }
 
 /**
- * Props for MoreMenu component
- */
-export interface MoreMenuProps {
-  visible: boolean;
-  onClose: () => void;
-  onSelectPage: (pageIndex: number) => void;
-  currentPage: number;
-}
-
-/**
  * FlatList viewability configuration
  */
 export interface ViewabilityConfig {

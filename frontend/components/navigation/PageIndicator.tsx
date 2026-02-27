@@ -1,10 +1,8 @@
 import { View, TouchableOpacity, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useState, useCallback, memo } from 'react';
+import { memo } from 'react';
 import type { PageIndicatorProps } from '@/types';
 import { styles } from '@/styles/navigation/PageIndicator.styles';
-import MoreMenu from './MoreMenu';
-import { colors } from '@/constants';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -16,63 +14,30 @@ const PRIMARY_PAGE_ICONS = [
 ];
 
 export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
-  const [moreMenuVisible, setMoreMenuVisible] = useState(false);
-
-  const handleMorePress = useCallback(() => setMoreMenuVisible(true), []);
-  const handleMoreClose = useCallback(() => setMoreMenuVisible(false), []);
-
   return (
-    <>
-      <View style={styles.pagination}>
-        <View style={styles.floatingMenu}>
-          {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
-            <TouchableOpacity 
-              key={index} 
-              style={styles.iconWrapper}
-              onPress={() => onPageChange?.(index)}
-              activeOpacity={0.6}
-              accessibilityLabel={label}
-              accessibilityRole="button"
-              accessibilityState={{ selected: currentPage === index }}
-            >
-              <MaterialIcons
-                name={icon}
-                size={26}
-                color={currentPage === index ? '#000' : '#d1d5db'}
-              />
-              <Text style={[styles.iconLabel, currentPage === index && styles.iconLabelActive]}>
-                {label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-          
-          {/* More button */}
-          <TouchableOpacity 
+    <View style={styles.pagination}>
+      <View style={styles.floatingMenu}>
+        {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
+          <TouchableOpacity
+            key={index}
             style={styles.iconWrapper}
-            onPress={handleMorePress}
+            onPress={() => onPageChange?.(index)}
             activeOpacity={0.6}
-            accessibilityLabel="More pages"
+            accessibilityLabel={label}
             accessibilityRole="button"
-            accessibilityHint="Opens additional navigation options"
+            accessibilityState={{ selected: currentPage === index }}
           >
             <MaterialIcons
-              name="more-horiz"
+              name={icon}
               size={26}
-              color={[5, 6, 7, 8].includes(currentPage) ? colors.active : colors.inactive}
+              color={currentPage === index ? '#000' : '#d1d5db'}
             />
-            <Text style={[styles.iconLabel, [5, 6, 7, 8].includes(currentPage) && styles.iconLabelActive]}>
-              More
+            <Text style={[styles.iconLabel, currentPage === index && styles.iconLabelActive]}>
+              {label}
             </Text>
           </TouchableOpacity>
-        </View>
+        ))}
       </View>
-
-      <MoreMenu
-        visible={moreMenuVisible}
-        onClose={handleMoreClose}
-        onSelectPage={onPageChange || (() => {})}
-        currentPage={currentPage}
-      />
-    </>
+    </View>
   );
 });
