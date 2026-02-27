@@ -8,19 +8,22 @@
 
 import type { NFTRarity } from './nft.ts';
 
+/** Sorted rarity-pair template — both slots are constrained to NFTRarity. */
+type RarityPair<A extends NFTRarity, B extends NFTRarity> = `${A}+${B}`;
+
 /**
  * All rarity-pair keys for which breeding is allowed (rank diff ≤ 1, always
  * sorted lower+higher). Adding a new NFTRarity without updating this type
  * and the table below will be a compile-time error.
  */
 export type BreedPairKey =
-  | 'common+common'
-  | 'common+rare'
-  | 'rare+rare'
-  | 'rare+legendary'
-  | 'legendary+legendary'
-  | 'legendary+transcendent'
-  | 'transcendent+transcendent';
+  | RarityPair<'common',      'common'>
+  | RarityPair<'common',      'rare'>
+  | RarityPair<'rare',        'rare'>
+  | RarityPair<'rare',        'legendary'>
+  | RarityPair<'legendary',   'legendary'>
+  | RarityPair<'legendary',   'transcendent'>
+  | RarityPair<'transcendent','transcendent'>;
 
 /**
  * Maps a sorted rarity-pair key ("lower+higher") to
