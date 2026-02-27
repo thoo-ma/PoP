@@ -60,12 +60,6 @@ function randomName(type: NFTType): string {
   return names[Math.floor(Math.random() * names.length)]
 }
 
-function formatDisplayName(name: string): string {
-  return name
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-}
-
 // ─── Stat helpers ─────────────────────────────────────────────────────────────
 
 function breedStat(s1: number, s2: number): number {
