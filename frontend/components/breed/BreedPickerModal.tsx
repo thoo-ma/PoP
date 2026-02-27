@@ -1,6 +1,6 @@
 import { Modal, View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
-import type { NFT } from '@/types/nft';
-import type { NFTRarity } from '@/types/nft';
+import type { NFT } from '@/types';
+import type { NFTRarity } from '@shared';
 import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';

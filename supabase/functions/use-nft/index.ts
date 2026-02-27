@@ -1,10 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import type { NFTType, NFTRarity } from '../../../shared/nft.ts'
 import {
   isOnCooldown,
   getCooldownEndsAt,
   cooldownRemainingSeconds,
-} from '../_shared/cooldown.ts'
+} from '../../../shared/cooldown.ts'
+import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,17 +15,6 @@ const corsHeaders = {
 
 // ─── Type multipliers ────────────────────────────────────────────────────────
 // Higher multiplier = faster energy drain when used
-
-type NFTType   = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
-type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent'
-
-// ─── Stat point rewards per level-up (by rarity) ─────────────────────────────
-const STAT_POINTS_BY_RARITY: Record<NFTRarity, number> = {
-  common:       4,
-  rare:         10,
-  legendary:    14,
-  transcendent: 18,
-}
 
 // ─── XP system ───────────────────────────────────────────────────────────────
 // XP is tracked within the current level and resets to the remainder on level-up.

@@ -1,6 +1,7 @@
-import type { NFTRarity } from '@/types/nft';
-import { RARITY_RANK, BREED_PROBABILITIES } from '@/constants';
-import type { BreedPairKey } from '@/constants/breedProbabilities';
+import type { NFTRarity } from '@shared';
+import { RARITY_RANK, BREED_PROBABILITIES } from '@shared';
+import type { BreedPairKey } from '@shared';
+
 
 /**
  * Returns the [common%, rare%, legendary%, transcendent%] outcome probabilities

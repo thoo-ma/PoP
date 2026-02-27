@@ -1,8 +1,5 @@
 import type { Session, User } from '@supabase/supabase-js';
-import type { Tables } from './database.types';
-
-// Re-export Supabase types
-export type { Session, User };
+import type { Tables } from '@shared';
 
 /**
  * OAuth provider types

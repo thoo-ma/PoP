@@ -1,29 +1,12 @@
 /**
- * Cooldown constants and helpers — mirrors supabase/functions/_shared/cooldown.ts.
+ * Cooldown helpers (frontend).
  *
- * Formula:
- *   cooldown_hours = base + (level × LINEAR_MULT) + (level² × EXP_MULT)
- *
- * The server (use-nft edge function) is authoritative; these helpers are used
- * client-side only for optimistic display purposes.
+ * Pure constants and math come from @shared/cooldown. This file adds
+ * getCooldownStatus(), a UI helper that builds a friendly display string.
  */
 
-import type { NFT, NFTType } from '@/types/nft';
-
-export const COOLDOWN_BASES = {
-  'turbo-flush':  3,
-  'cruise-seat':  10,
-  'zen-fortress': 22,
-} as const satisfies Record<NFTType, number>;
-
-export const COOLDOWN_LINEAR_MULT = 0.3;
-export const COOLDOWN_EXP_MULT    = 0.02;
-
-/** Cooldown duration in hours for the given NFT type and level. */
-export function calcCooldownHours(type: NFTType, level: number): number {
-  const base = COOLDOWN_BASES[type];
-  return base + level * COOLDOWN_LINEAR_MULT + Math.pow(level, 2) * COOLDOWN_EXP_MULT;
-}
+import type { NFT } from '@/types';
+import { calcCooldownHours } from '@shared';
 
 /** Human-readable countdown string, e.g. "2h 34m" or "45m" or "30s". */
 function formatCooldown(totalSeconds: number): string {

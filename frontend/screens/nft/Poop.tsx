@@ -4,8 +4,8 @@ import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
-import { getCooldownStatus } from '@/constants/cooldown';
-import type { NFT } from '@/types/nft';
+import { getCooldownStatus } from '@/constants';
+import type { NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
 export default memo(function Poop() {

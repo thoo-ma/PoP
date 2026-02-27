@@ -1,11 +1,4 @@
-import type { Tables, Enums } from './database.types';
-
-/**
- * NFT type / rarity — aliased directly from the generated DB enums so they
- * stay in sync with the schema automatically after every `npm run gen:types`.
- */
-export type NFTType = Enums<'nft_type'>;
-export type NFTRarity = Enums<'nft_rarity'>;
+import type { Tables } from '@shared';
 
 /**
  * Core NFT type used throughout the app.

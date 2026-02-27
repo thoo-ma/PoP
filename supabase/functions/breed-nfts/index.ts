@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { RARITY_RANK, BREED_PROBABILITIES } from '../_shared/breedProbabilities.ts'
-import type { NFTRarity as Rarity, BreedPairKey } from '../_shared/breedProbabilities.ts'
+import { RARITY_RANK, TYPE_NAMES, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
+import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
+import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,9 +10,6 @@ const corsHeaders = {
 }
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
-// RARITY_RANK and BREED_PROBABILITIES are imported from shared/breedProbabilities.ts
-
-type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
 function rarityKey(r1: Rarity, r2: Rarity): BreedPairKey {
   // Sort so that the lower-rank rarity always comes first
@@ -36,7 +34,6 @@ function rollRarity(r1: Rarity, r2: Rarity): Rarity {
 }
 
 // ─── Type & name system ────────────────────────────────────────────────────────
-
 const TYPE_WEIGHTS: Record<NFTType, number> = {
   'turbo-flush':  1,
   'cruise-seat':  2,
@@ -49,30 +46,6 @@ const TYPE_FROM_WEIGHT: Array<[number, NFTType]> = [
   [Infinity, 'zen-fortress'],
 ]
 
-const TYPE_NAMES: Record<NFTType, readonly string[]> = {
-  'cruise-seat': [
-    'ancient-egyptian',
-    'ancient-maya-stone',
-    'medieval-castle-garderobe',
-    'prehistoric-stone',
-    'victorian-era-wooden-throne',
-  ],
-  'turbo-flush': [
-    'astronaut-zero-gravity',
-    'portable-construction-site-cabin',
-    'prehistoric-sanitation',
-    'roman-public-latrines',
-    'rustic-forest-outhouse',
-    'squat',
-  ],
-  'zen-fortress': [
-    'cyberpunk-dystopian',
-    'dubai',
-    'eco-friendly',
-    'futuristic-sci-fi-vacuum',
-    'renaissance-chaise',
-  ],
-}
 
 function resolveOffspringType(t1: NFTType, t2: NFTType): NFTType {
   const avg = (TYPE_WEIGHTS[t1] + TYPE_WEIGHTS[t2]) / 2

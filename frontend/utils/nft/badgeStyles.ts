@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native';
 import { colors, RARITY_COLORS } from '@/constants';
-import type { NFTType, NFTRarity } from '@/types/nft';
+import type { NFTType, NFTRarity } from '@shared';
 
 export const TYPE_BADGE_STYLES: Record<NFTType, ViewStyle> = {
   'cruise-seat': { backgroundColor: RARITY_COLORS.common },

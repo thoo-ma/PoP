@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native';
-import type { NFTRarity } from '@/types/nft';
+import type { NFTRarity } from '@shared';
 import { breedStyles as styles } from '@/styles';
-import { RARITY_COLORS, RARITIES } from '@/constants';
+import { RARITY_COLORS } from '@/constants';
+import { RARITIES } from '@shared';
 import { getProbabilities } from '@/utils';
 
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {

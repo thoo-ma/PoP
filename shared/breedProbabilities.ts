@@ -1,16 +1,12 @@
-// Breed probability constants for the frontend.
-// Keep in sync with: supabase/functions/_shared/breedProbabilities.ts
+/**
+ * Breed probability constants — single source of truth for frontend and
+ * Supabase Edge Functions.
+ *
+ * Supabase imports via:   ../../../shared/breedProbabilities.ts
+ * Frontend imports via:   @shared  (tsconfig path alias)
+ */
 
-import type { NFTRarity } from '@/types/nft';
-
-export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
-
-export const RARITY_RANK: Record<NFTRarity, number> = {
-  common: 0,
-  rare: 1,
-  legendary: 2,
-  transcendent: 3,
-};
+import type { NFTRarity } from './nft.ts';
 
 /**
  * All rarity-pair keys for which breeding is allowed (rank diff ≤ 1, always

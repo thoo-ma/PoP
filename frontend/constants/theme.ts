@@ -56,7 +56,7 @@ export const colors = {
   buttonTextDark: '#1F1F1F',
 };
 
-import type { NFTRarity } from '@/types/nft';
+import type { NFTRarity } from '@shared';
 
 export const RARITY_COLORS: Record<NFTRarity, string> = {
   common: '#94a3b8',

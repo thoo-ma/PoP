@@ -1,5 +1,6 @@
 /**
- * Cooldown utilities shared by edge functions.
+ * Cooldown utilities — single source of truth for frontend and Supabase Edge
+ * Functions.
  *
  * Formula:
  *   cooldown_hours = base + (level × LINEAR_MULT) + (level² × EXP_MULT)
@@ -8,23 +9,26 @@
  *   turbo-flush  →  3
  *   cruise-seat  → 10
  *   zen-fortress → 22
+ *
+ * Supabase imports via:   ../../../shared/cooldown.ts
+ * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
+import type { NFTType } from './nft.ts';
 
 export const COOLDOWN_BASES: Record<NFTType, number> = {
   'turbo-flush':  3,
   'cruise-seat':  10,
   'zen-fortress': 22,
-}
+};
 
-export const LINEAR_MULT = 0.3
-export const EXP_MULT    = 0.02
+export const LINEAR_MULT = 0.3;
+export const EXP_MULT    = 0.02;
 
 /** Cooldown duration in hours for the given type and level. */
 export function calcCooldownHours(type: NFTType, level: number): number {
-  const base = COOLDOWN_BASES[type] ?? COOLDOWN_BASES['cruise-seat']
-  return base + level * LINEAR_MULT + Math.pow(level, 2) * EXP_MULT
+  const base = COOLDOWN_BASES[type] ?? COOLDOWN_BASES['cruise-seat'];
+  return base + level * LINEAR_MULT + Math.pow(level, 2) * EXP_MULT;
 }
 
 /**
@@ -36,9 +40,9 @@ export function getCooldownEndsAt(
   type: NFTType,
   level: number,
 ): Date | null {
-  if (!lastUsedAt) return null
-  const hours = calcCooldownHours(type, level)
-  return new Date(new Date(lastUsedAt).getTime() + hours * 3_600_000)
+  if (!lastUsedAt) return null;
+  const hours = calcCooldownHours(type, level);
+  return new Date(new Date(lastUsedAt).getTime() + hours * 3_600_000);
 }
 
 /** Whether the NFT is currently within its cooldown window. */
@@ -47,9 +51,9 @@ export function isOnCooldown(
   type: NFTType,
   level: number,
 ): boolean {
-  const endsAt = getCooldownEndsAt(lastUsedAt, type, level)
-  if (!endsAt) return false
-  return endsAt > new Date()
+  const endsAt = getCooldownEndsAt(lastUsedAt, type, level);
+  if (!endsAt) return false;
+  return endsAt > new Date();
 }
 
 /** Remaining cooldown in whole seconds (0 when not on cooldown). */
@@ -58,7 +62,7 @@ export function cooldownRemainingSeconds(
   type: NFTType,
   level: number,
 ): number {
-  const endsAt = getCooldownEndsAt(lastUsedAt, type, level)
-  if (!endsAt) return 0
-  return Math.max(0, Math.ceil((endsAt.getTime() - Date.now()) / 1000))
+  const endsAt = getCooldownEndsAt(lastUsedAt, type, level);
+  if (!endsAt) return 0;
+  return Math.max(0, Math.ceil((endsAt.getTime() - Date.now()) / 1000));
 }

@@ -7,13 +7,13 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
-import { useAuth, useUserApproval } from './hooks';
-import { Auth, PageIndicator, ProfileButton } from './components';
-import { InviteCodeScreen, Profile } from './screens';
-import { PAGES, VIEWABILITY_CONFIG } from './constants/navigation';
-import { appStyles as styles } from './styles';
-import { isExpoGo } from './lib/supabase';
-import { colors } from './constants';
+import { useAuth, useUserApproval } from '@/hooks';
+import { Auth, PageIndicator, ProfileButton } from '@/components';
+import { InviteCodeScreen, Profile } from '@/screens';
+import { colors } from '@/constants';
+import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
+import { appStyles as styles } from '@/styles';
+import { isExpoGo } from '@/lib';
 
 export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();

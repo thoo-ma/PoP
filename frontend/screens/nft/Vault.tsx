@@ -4,7 +4,8 @@ import { vaultStyles as styles, sortStyles, filterStyles } from '@/styles';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
-import type { SortOption, NFTRarity, NFTType, NFT } from '@/types';
+import type { NFTRarity, NFTType } from '@shared';
+import type { SortOption, NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
 export default memo(function Vault() {

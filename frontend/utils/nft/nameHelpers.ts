@@ -1,5 +1,5 @@
-import type { NFTType } from '@/types/nft';
-import { TYPE_NAMES } from '@/constants';
+import type { NFTType } from '@shared';
+import { TYPE_NAMES } from '@shared';
 
 /**
  * Returns a random name slug for the given NFT type.

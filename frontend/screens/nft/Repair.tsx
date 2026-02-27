@@ -4,7 +4,7 @@ import { memo, useState } from 'react';
 import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
-import { MAX_ENERGY } from '@/constants';
+import { MAX_ENERGY } from '@shared';
 import type { NFT } from '@/types';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 

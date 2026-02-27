@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import type { NFTRarity, NFTType } from '@/types';
-import { RARITIES } from '@/constants';
+import type { NFTRarity, NFTType } from '@shared';
+import { RARITIES } from '@shared';
 import { filterStyles } from '@/styles';
 
 interface FilterControlsProps {
