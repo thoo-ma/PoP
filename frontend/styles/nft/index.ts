@@ -1,5 +1,6 @@
 export { styles as breedStyles } from './Breed.styles';
 export { styles as marketplaceStyles } from './Marketplace.styles';
+export { styles as mysteryBoxCardStyles } from './MysteryBoxCard.styles';
 export { styles as nftCardStyles } from './NFTCard.styles';
 export { styles as nftPropertiesStyles } from './NFTProperties.styles';
 export { styles as nftSelectorStyles } from './NFTSelector.styles';

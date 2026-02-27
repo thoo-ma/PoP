@@ -19,6 +19,15 @@ export const RARITY_RANK: Record<NFTRarity, number> = {
   transcendent: 3,
 };
 
+/** A mystery box owned by a user. No stats — utility is deferred. */
+export type MysteryBox = {
+  id: string;
+  rarity: NFTRarity;
+  image_url: string;
+  opened: boolean;
+  created_at: string;
+};
+
 /** Maps each NFT type to its available named slugs (matches Supabase storage structure). */
 export const TYPE_NAMES: Record<NFTType, readonly string[]> = {
   'cruise-seat': [

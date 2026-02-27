@@ -18,29 +18,6 @@ export const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: 12,
   },
-  tabs: {
-    flexDirection: 'row',
-    backgroundColor: '#f3f4f6',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 12,
-  },
-  tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  tabActive: {
-    backgroundColor: colors.buttonPrimary,
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.text,
-  },
-  tabTextActive: {
-    color: '#fff',
-  },
   sortContainer: {
     ...baseSortStyles.sortContainer,
     marginTop: 0,

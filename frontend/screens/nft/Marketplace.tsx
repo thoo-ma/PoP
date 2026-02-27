@@ -1,6 +1,6 @@
 import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { marketplaceStyles as styles, sortStyles } from '@/styles';
+import { marketplaceStyles as styles, sortStyles, tabStyles } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -76,26 +76,26 @@ export default memo(function Marketplace() {
       </Text>
 
       {/* Tabs */}
-      <View style={styles.tabs}>
+      <View style={tabStyles.tabs}>
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'buy' && styles.tabActive]}
+          style={[tabStyles.tab, activeTab === 'buy' && tabStyles.tabActive]}
           onPress={handleSetTabBuy}
           accessibilityLabel="Browse marketplace"
           accessibilityRole="tab"
           accessibilityState={{ selected: activeTab === 'buy' }}
         >
-          <Text style={[styles.tabText, activeTab === 'buy' && styles.tabTextActive]}>
+          <Text style={[tabStyles.tabText, activeTab === 'buy' && tabStyles.tabTextActive]}>
             Buy ({backendListings.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'sell' && styles.tabActive]}
+          style={[tabStyles.tab, activeTab === 'sell' && tabStyles.tabActive]}
           onPress={handleSetTabSell}
           accessibilityLabel="My listings"
           accessibilityRole="tab"
           accessibilityState={{ selected: activeTab === 'sell' }}
         >
-          <Text style={[styles.tabText, activeTab === 'sell' && styles.tabTextActive]}>
+          <Text style={[tabStyles.tabText, activeTab === 'sell' && tabStyles.tabTextActive]}>
             My Listings ({myListings.length})
           </Text>
         </TouchableOpacity>

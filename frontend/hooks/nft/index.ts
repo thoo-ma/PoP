@@ -4,3 +4,4 @@ export * from './useMarketplaceListings';
 export * from './useBreedNFT';
 export * from './usePoopNFT';
 export * from './useAllocateStatPoints';
+export * from './useMysteryBoxes';

@@ -1,35 +1,70 @@
 -- ============================================================================
--- DEV TEST NFT SEED
--- Quick seed for development: adds 50 NFTs to the current authenticated user.
--- Run this in the Supabase SQL Editor while authenticated as your test user.
---
--- Level and xp are DERIVED from a total_xp value via _xp_decompose() so that
--- XP is the single source of truth — never hardcode both level and xp.
---
--- Requires: migration 20260225000001_seed_xp_support.sql to be applied first
---           (provides the _xp_decompose helper).
+-- MYSTERY BOXES
+-- Separate table for mystery boxes (no stats — utility deferred to a later
+-- feature). Reuses the existing nft_rarity enum.
 -- ============================================================================
 
-DO $$
+CREATE TABLE public.mystery_boxes (
+  id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id    UUID        NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  rarity     nft_rarity  NOT NULL,
+  image_url  TEXT        NOT NULL,
+  opened     BOOLEAN     NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_mystery_boxes_user_id ON public.mystery_boxes(user_id);
+
+-- Row-Level Security --------------------------------------------------------
+ALTER TABLE public.mystery_boxes ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see their own boxes
+CREATE POLICY "Users can view own mystery boxes"
+  ON public.mystery_boxes FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- Users can insert boxes for themselves (needed by seed RPC)
+CREATE POLICY "Users can insert own mystery boxes"
+  ON public.mystery_boxes FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+-- Users can update their own boxes (e.g. mark opened)
+CREATE POLICY "Users can update own mystery boxes"
+  ON public.mystery_boxes FOR UPDATE
+  USING (auth.uid() = user_id);
+
+-- Users can delete their own boxes
+CREATE POLICY "Users can delete own mystery boxes"
+  ON public.mystery_boxes FOR DELETE
+  USING (auth.uid() = user_id);
+
+
+-- ============================================================================
+-- UPDATE seed_dev_test_nfts() TO ALSO SEED MYSTERY BOXES
+-- Replaces the original function from 20260218000000_auto_seed_anonymous_users
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION public.seed_dev_test_nfts()
+RETURNS JSON AS $$
 DECLARE
-  v_user_id  UUID;
-  v_email    TEXT := 'dev@test.com';  -- CHANGE THIS TO YOUR DEV EMAIL
-  v_base     TEXT := 'https://mtnluwkvhkwwxvxdtkgs.supabase.co/storage/v1/object/public/assets/toilets/';
-  v_box_base TEXT := 'https://mtnluwkvhkwwxvxdtkgs.supabase.co/storage/v1/object/public/assets/mystery-boxes/';
+  v_user_id     UUID;
+  v_supabase_url TEXT := 'https://mtnluwkvhkwwxvxdtkgs.supabase.co';
+  v_box_base    TEXT;
 BEGIN
-  SELECT id INTO v_user_id FROM auth.users WHERE email = v_email;
+  v_user_id := auth.uid();
 
   IF v_user_id IS NULL THEN
-    RAISE EXCEPTION 'User with email % not found. Update v_email above.', v_email;
+    RETURN json_build_object('success', FALSE, 'error', 'Not authenticated');
   END IF;
 
-  RAISE NOTICE 'Seeding 50 NFTs for % (%)', v_email, v_user_id;
+  v_box_base := v_supabase_url || '/storage/v1/object/public/assets/mystery-boxes/';
 
-  -- Fresh slate
+  -- Clear existing data for this user
   DELETE FROM public.marketplace_listings WHERE seller_id = v_user_id;
-  DELETE FROM public.nfts               WHERE user_id    = v_user_id;
-  DELETE FROM public.mystery_boxes      WHERE user_id    = v_user_id;
+  DELETE FROM public.nfts                 WHERE user_id   = v_user_id;
+  DELETE FROM public.mystery_boxes        WHERE user_id   = v_user_id;
 
+  -- ── TOILET NFTs (50) ──────────────────────────────────────────────────────
   INSERT INTO public.nfts
     (user_id, type, name, rarity, image_url, efficiency, resilience, comfort, luck, energy, level, xp)
   SELECT
@@ -37,11 +72,12 @@ BEGIN
     v.nft_type::nft_type,
     v.nft_name,
     v.nft_rarity::nft_rarity,
-    v_base || v.nft_type || '/' || v.nft_name || '/' || v.nft_name || '-' || v.nft_rarity || '.jpg',
+    v_supabase_url || '/storage/v1/object/public/assets/toilets/'
+      || v.nft_type || '/' || v.nft_name || '/' || v.nft_name || '-' || v.nft_rarity || '.jpg',
     v.eff, v.res, v.com, v.lck, v.nrg,
     d.lv, d.xp_rem
   FROM (VALUES
-    -- ── CRUISE-SEAT (15) ───────────────────────────────── type, name, rarity, eff, res, com, lck, nrg, total_xp
+    -- cruise-seat
     ('cruise-seat', 'ancient-egyptian',              'common',        55, 60, 58, 62, 100,   16),
     ('cruise-seat', 'ancient-egyptian',              'rare',          65, 70, 68, 72,  85,   90),
     ('cruise-seat', 'ancient-egyptian',              'legendary',     75, 80, 78, 82,  60,  403),
@@ -57,7 +93,7 @@ BEGIN
     ('cruise-seat', 'victorian-era-wooden-throne',   'common',        56, 60, 64, 68,  80,   51),
     ('cruise-seat', 'victorian-era-wooden-throne',   'rare',          66, 70, 74, 78,  45,  323),
     ('cruise-seat', 'victorian-era-wooden-throne',   'transcendent',  82, 86, 90, 92, 100, 1836),
-    -- ── TURBO-FLUSH (18) ──────────────────────────────────────────────────────
+    -- turbo-flush
     ('turbo-flush', 'astronaut-zero-gravity',              'common',       72, 75, 70, 68, 100,   90),
     ('turbo-flush', 'astronaut-zero-gravity',              'rare',         80, 82, 78, 75,  70,  403),
     ('turbo-flush', 'astronaut-zero-gravity',              'legendary',    88, 90, 86, 82,  40,  958),
@@ -76,7 +112,7 @@ BEGIN
     ('turbo-flush', 'squat',                               'common',       75, 78, 80, 65,  20,   90),
     ('turbo-flush', 'squat',                               'rare',         82, 85, 86, 72,   0,  323),
     ('turbo-flush', 'squat',                               'legendary',    89, 92, 92, 80,  75, 1442),
-    -- ── ZEN-FORTRESS (17) ─────────────────────────────────────────────────────
+    -- zen-fortress
     ('zen-fortress', 'cyberpunk-dystopian',        'common',        82,  85, 80, 78, 100,  191),
     ('zen-fortress', 'cyberpunk-dystopian',        'rare',          88,  90, 86, 84,  80,  702),
     ('zen-fortress', 'cyberpunk-dystopian',        'legendary',     94,  96, 92, 90,  50, 1631),
@@ -97,9 +133,7 @@ BEGIN
   ) AS v(nft_type, nft_name, nft_rarity, eff, res, com, lck, nrg, total_xp)
   CROSS JOIN LATERAL _xp_decompose(v.total_xp::INTEGER) d;
 
-  RAISE NOTICE '✅ Seeded 50 NFTs for %', v_email;
-
-  -- ── MYSTERY BOXES ─────────────────────────────────────────────────────────
+  -- ── MYSTERY BOXES (10) ────────────────────────────────────────────────────
   -- 4× common, 3× rare, 2× legendary, 1× transcendent
   INSERT INTO public.mystery_boxes (user_id, rarity, image_url)
   VALUES
@@ -114,12 +148,6 @@ BEGIN
     (v_user_id, 'legendary'::nft_rarity,    v_box_base || 'legendary.jpg'),
     (v_user_id, 'transcendent'::nft_rarity, v_box_base || 'transcendent.jpg');
 
-  RAISE NOTICE '✅ Seeded 10 mystery boxes for %', v_email;
-END $$;
-
--- Verify (replace email if needed)
-SELECT n.name, n.type, n.rarity, n.level, n.xp, n.energy
-FROM public.nfts n
-JOIN auth.users u ON n.user_id = u.id
-WHERE u.email = 'dev@test.com'
-ORDER BY n.type, n.name, n.rarity;
+  RETURN json_build_object('success', TRUE, 'nfts', 50, 'mystery_boxes', 10);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

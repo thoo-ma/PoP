@@ -95,6 +95,33 @@ export type Database = {
         }
         Relationships: []
       }
+      mystery_boxes: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          opened: boolean
+          rarity: Database["public"]["Enums"]["nft_rarity"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          opened?: boolean
+          rarity: Database["public"]["Enums"]["nft_rarity"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          opened?: boolean
+          rarity?: Database["public"]["Enums"]["nft_rarity"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       marketplace_listings: {
         Row: {
           id: string
@@ -249,7 +276,7 @@ export type Database = {
           xp: number
         }[]
       }
-      seed_dev_test_nfts: { Args: never; Returns: Json }
+      seed_dev_test_nfts: { Args: Record<PropertyKey, never>; Returns: Json }
       validate_and_approve_user: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {

@@ -1,0 +1,85 @@
+import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
+
+export const styles = StyleSheet.create({
+  card: {
+    width: '48%',
+    marginBottom: 16,
+    borderRadius: 12,
+    backgroundColor: colors.bgSurface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    width: '100%',
+    aspectRatio: 1,
+    backgroundColor: colors.bgLight,
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  rarityBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  rarityText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  openedBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+  openedText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '600',
+  },
+  cardContent: {
+    padding: 10,
+  },
+  title: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.title,
+    marginBottom: 4,
+  },
+  typeBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#7c3aed',
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  typeBadgeText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+});
