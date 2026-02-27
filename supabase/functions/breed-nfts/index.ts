@@ -1,13 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { RARITY_RANK, TYPE_NAMES, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
 import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
 
@@ -86,57 +81,9 @@ serve(async (req) => {
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized', message: 'Missing Authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    const token = authHeader.replace('Bearer ', '')
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      { auth: { autoRefreshToken: false, persistSession: false } }
-    )
-
-    // ── Extract user ID ───────────────────────────────────────────────────────
-    // 1. Try getUser() via the service-role client (same pattern as detect-toilet-flush;
-    //    works reliably including Expo Go / dev tunnels).
-    // 2. Fall back to manual JWT payload decode (no network call needed).
-    let userId: string | null = null
-
-    try {
-      const { data, error: userError } = await supabase.auth.getUser(token)
-      if (userError) {
-        console.error('breed-nfts: getUser error', userError)
-      }
-      if (data?.user?.id) userId = data.user.id
-    } catch (e) {
-      console.error('breed-nfts: getUser exception', e)
-    }
-
-    if (!userId) {
-      // Fallback: decode JWT payload without a network call
-      try {
-        const b64url = token.split('.')[1]
-        const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/')
-        const padded = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=')
-        const payload = JSON.parse(atob(padded))
-        if (payload?.sub) userId = payload.sub
-      } catch (e) {
-        console.error('breed-nfts: JWT decode failed', e)
-      }
-    }
-
-    if (!userId) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized', message: 'Could not extract user from token' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+    const auth = await requireAuth(req, 'breed-nfts')
+    if (auth instanceof Response) return auth
+    const { userId, supabase } = auth
 
     console.log(`breed-nfts: user ${userId}`)
 

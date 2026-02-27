@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getUserIdFromToken } from '../_shared/auth.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,31 +37,16 @@ serve(async (req) => {
     )
 
     // Try to get user from JWT (optional for dev mode)
-    let user = null
     const authHeader = req.headers.get('Authorization')
-    
+    let userId = 'anonymous'
+
     if (authHeader) {
-      console.log('Authorization header found')
       const token = authHeader.replace('Bearer ', '')
-      console.log('Token length:', token.length)
-      
-      try {
-        const { data, error: userError } = await supabaseClient.auth.getUser(token)
-        if (userError) {
-          console.error('Auth getUser error:', userError)
-        }
-        user = data?.user || null
-        console.log('User extracted:', user ? user.id : 'null')
-      } catch (err) {
-        console.error('Exception during getUser:', err)
-      }
+      const resolvedId = await getUserIdFromToken(supabaseClient, token, 'detect-toilet-flush')
+      if (resolvedId) userId = resolvedId
     } else {
       console.warn('No Authorization header - proceeding in dev mode')
     }
-    
-    // For dev mode, allow unauthenticated requests
-    // In production, you might want to enforce authentication
-    const userId = user?.id || 'anonymous'
 
     // Get request body
     const { audio_base64, threshold = 0.5 } = await req.json()

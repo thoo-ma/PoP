@@ -1,10 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -16,52 +11,9 @@ serve(async (req) => {
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized', message: 'Missing Authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    const token = authHeader.replace('Bearer ', '')
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      { auth: { autoRefreshToken: false, persistSession: false } }
-    )
-
-    // ── Extract user ID ───────────────────────────────────────────────────────
-    let userId: string | null = null
-
-    try {
-      const { data, error: userError } = await supabase.auth.getUser(token)
-      if (userError) console.error('allocate-stat-points: getUser error', userError)
-      if (data?.user?.id) userId = data.user.id
-    } catch (e) {
-      console.error('allocate-stat-points: getUser exception', e)
-    }
-
-    if (!userId) {
-      // Fallback: decode JWT payload without a network call
-      try {
-        const b64url = token.split('.')[1]
-        const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/')
-        const padded = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=')
-        const payload = JSON.parse(atob(padded))
-        if (payload?.sub) userId = payload.sub
-      } catch (e) {
-        console.error('allocate-stat-points: JWT decode failed', e)
-      }
-    }
-
-    if (!userId) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized', message: 'Could not extract user from token' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+    const auth = await requireAuth(req, 'allocate-stat-points')
+    if (auth instanceof Response) return auth
+    const { userId, supabase } = auth
 
     // ── Request body ──────────────────────────────────────────────────────────
     const body = await req.json()
