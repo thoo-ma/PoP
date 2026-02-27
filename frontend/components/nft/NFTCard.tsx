@@ -5,13 +5,7 @@ import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
 import { styles } from '@/styles/nft/NFTCard.styles';
 import { formatDisplayName, TYPE_BADGE_STYLES, RARITY_BADGE_STYLES } from '@/utils';
-
-const MAX_LEVEL = 20;
-
-/** Mirror of the edge-function formula — single source of truth is the DB. */
-function xpThreshold(level: number): number {
-  return Math.max(33, Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3));
-}
+import { MAX_LEVEL, xpThreshold } from '@shared/xp';
 
 interface NFTCardProps {
   nft: NFT;

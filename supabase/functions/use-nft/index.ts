@@ -7,6 +7,7 @@ import {
   cooldownRemainingSeconds,
 } from '../../../shared/cooldown.ts'
 import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
+import { calcXPGain, applyXP } from '../../../shared/xp.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,60 +16,6 @@ const corsHeaders = {
 
 // ─── Type multipliers ────────────────────────────────────────────────────────
 // Higher multiplier = faster energy drain when used
-
-// ─── XP system ───────────────────────────────────────────────────────────────
-// XP is tracked within the current level and resets to the remainder on level-up.
-//
-// Both the per-poop XP gain and the threshold to advance to the next level use
-// the same formula so tuning one tunes both in a single place:
-//
-//   value(level) = round(25 + level × 5 + level² × 0.3)
-//
-// Level 1 has a minimum floor of 33 (matches the design table).
-// Levels: 1 – MAX_LEVEL. The bar at MAX_LEVEL fills to threshold(MAX_LEVEL) = 245.
-
-const MAX_LEVEL = 20
-
-function xpFormula(level: number): number {
-  return Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3)
-}
-
-/** XP threshold to advance from `level` to `level + 1`. */
-function xpThreshold(level: number): number {
-  return Math.max(33, xpFormula(level))
-}
-
-/** XP earned by using an NFT that is currently at `level`. */
-function calcXPGain(level: number): number {
-  return xpFormula(level)
-}
-
-/**
- * Apply XP gain to the current (xp, level) pair and return the updated values.
- * XP resets to the remainder when the threshold is crossed; levels cap at MAX_LEVEL.
- */
-function applyXP(
-  currentXP: number,
-  currentLevel: number,
-  gained: number,
-): { newXP: number; newLevel: number; leveledUp: boolean; levelsGained: number } {
-  let xp    = currentXP + gained
-  let level = currentLevel
-  let levelsGained = 0
-
-  while (level < MAX_LEVEL && xp >= xpThreshold(level)) {
-    xp -= xpThreshold(level)
-    level++
-    levelsGained++
-  }
-
-  // At max level, cap the bar so it never overflows the display maximum.
-  if (level === MAX_LEVEL) {
-    xp = Math.min(xp, xpThreshold(MAX_LEVEL))
-  }
-
-  return { newXP: xp, newLevel: level, leveledUp: levelsGained > 0, levelsGained }
-}
 
 const TYPE_DRAIN_MULT: Record<NFTType, number> = {
   'turbo-flush':  3,
