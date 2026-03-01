@@ -21,6 +21,11 @@ export function useMarketplaceListings() {
 
       const { data: { user } } = await supabase.auth.getUser();
 
+      if (!user) {
+        setListings([]);
+        return;
+      }
+
       const { data: listingsData, error: listingsError } = await supabase
         .from('marketplace_listings')
         .select(`
@@ -47,7 +52,7 @@ export function useMarketplaceListings() {
             updated_at
           )
         `)
-        .neq('seller_id', user?.id || '00000000-0000-0000-0000-000000000000')
+        .neq('seller_id', user.id)
         .order('listed_at', { ascending: false });
 
       if (listingsError) {

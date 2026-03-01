@@ -125,7 +125,9 @@ serve(async (req) => {
 
     const result = await cloudRunResponse.json()
 
-    // Check if detection had an error
+    // Check if detection had an error (Cloud Run returned 200 but with an error
+    // body, e.g. "Audio too short"). This is a client input problem, so 422 is
+    // the correct status — not 500, which implies a server fault.
     if (result.error) {
       return new Response(
         JSON.stringify({ 
@@ -133,7 +135,7 @@ serve(async (req) => {
           message: result.error
         }),
         { 
-          status: 500,
+          status: 422,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       )

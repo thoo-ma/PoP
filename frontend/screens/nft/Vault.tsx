@@ -16,7 +16,7 @@ import type { AllocateResult } from '@/hooks';
  */
 export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { listNFT, loading: updateLoading } = useUpdateNFT();
+  const { listNFT, loadingListNFT: updateLoading } = useUpdateNFT();
   const { boxes, loading: boxesLoading, error: boxesError, refetch: refetchBoxes } = useMysteryBoxes();
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');

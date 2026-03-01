@@ -4,19 +4,23 @@ import { logError } from '@/utils/errorHelpers';
 
 /**
  * Hook to update NFT properties (energy, listing status, etc.).
- * Note: `loading` is shared across all three operations — only one
- * should be initiated at a time from the calling component.
  *
- * @returns Three mutation callbacks (`updateEnergy`, `listNFT`, `unlistNFT`)
- *   and shared async state (`loading`, `error`).
+ * Each operation (`updateEnergy`, `listNFT`, `unlistNFT`) has its own
+ * independent loading flag so callers can reflect the correct pending state
+ * without one operation masking another.
+ *
+ * @returns Three mutation callbacks and their individual loading flags, plus a
+ *   shared `error` string for the most recent failure.
  */
 export function useUpdateNFT() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingUpdateEnergy, setLoadingUpdateEnergy] = useState<boolean>(false);
+  const [loadingListNFT, setLoadingListNFT] = useState<boolean>(false);
+  const [loadingUnlistNFT, setLoadingUnlistNFT] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const updateEnergy = useCallback(async (nftId: string, newEnergy: number) => {
     try {
-      setLoading(true);
+      setLoadingUpdateEnergy(true);
       setError(null);
 
       const clampedEnergy = Math.max(0, Math.min(100, newEnergy));
@@ -38,13 +42,13 @@ export function useUpdateNFT() {
       setError(err instanceof Error ? err.message : 'Failed to update energy');
       return false;
     } finally {
-      setLoading(false);
+      setLoadingUpdateEnergy(false);
     }
   }, []);
 
   const listNFT = useCallback(async (nftId: string, price: string) => {
     try {
-      setLoading(true);
+      setLoadingListNFT(true);
       setError(null);
 
       const { data: { user } } = await supabase.auth.getUser();
@@ -63,7 +67,12 @@ export function useUpdateNFT() {
 
       if (listError) {
         logError('useUpdateNFT:ListNFT', listError);
-        setError(listError.message);
+        // Unique constraint violation — nft_id already has a listing row.
+        setError(
+          listError.code === '23505'
+            ? 'This NFT is already listed on the marketplace.'
+            : listError.message
+        );
         return false;
       }
 
@@ -73,13 +82,13 @@ export function useUpdateNFT() {
       setError(err instanceof Error ? err.message : 'Failed to list NFT');
       return false;
     } finally {
-      setLoading(false);
+      setLoadingListNFT(false);
     }
   }, []);
 
   const unlistNFT = useCallback(async (nftId: string) => {
     try {
-      setLoading(true);
+      setLoadingUnlistNFT(true);
       setError(null);
 
       const { data: { user } } = await supabase.auth.getUser();
@@ -106,7 +115,7 @@ export function useUpdateNFT() {
       setError(err instanceof Error ? err.message : 'Failed to unlist NFT');
       return false;
     } finally {
-      setLoading(false);
+      setLoadingUnlistNFT(false);
     }
   }, []);
 
@@ -114,7 +123,9 @@ export function useUpdateNFT() {
     updateEnergy,
     listNFT,
     unlistNFT,
-    loading,
+    loadingUpdateEnergy,
+    loadingListNFT,
+    loadingUnlistNFT,
     error,
   };
 }

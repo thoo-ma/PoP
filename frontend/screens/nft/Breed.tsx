@@ -20,8 +20,8 @@ import { RARITY_COLORS } from '@/constants';
   const [parent2, setParent2] = useState<NFT | null>(null);
   const [pickerSlot, setPickerSlot] = useState<1 | 2 | null>(null);
   const [breedResult, setBreedResult] = useState<NFT | null>(null);
-  const [resultParent1, setResultParent1] = useState<NFT | null>(null);
-  const [resultParent2, setResultParent2] = useState<NFT | null>(null);
+  const [resultParent1Url, setResultParent1Url] = useState<string | null>(null);
+  const [resultParent2Url, setResultParent2Url] = useState<string | null>(null);
 
   // When parent1 changes, clear parent2 if it is no longer compatible
   const handleSetParent1 = (nft: NFT) => {
@@ -33,8 +33,8 @@ import { RARITY_COLORS } from '@/constants';
 
   const handleBreed = async () => {
     if (!parent1 || !parent2) return;
-    setResultParent1(parent1);
-    setResultParent2(parent2);
+    setResultParent1Url(parent1.image_url);
+    setResultParent2Url(parent2.image_url);
     const newNFT = await breedNFTs(parent1.id, parent2.id);
     if (newNFT) {
       setBreedResult(newNFT);
@@ -47,8 +47,8 @@ import { RARITY_COLORS } from '@/constants';
     setParent1(null);
     setParent2(null);
     setBreedResult(null);
-    setResultParent1(null);
-    setResultParent2(null);
+    setResultParent1Url(null);
+    setResultParent2Url(null);
   };
 
   // ── Guards ────────────────────────────────────────────────────────────────
@@ -81,6 +81,7 @@ import { RARITY_COLORS } from '@/constants';
           title="Choose Parent 1"
           allNFTs={nfts}
           lockedId={parent2?.id}
+          lockedRarity={parent2?.rarity}
           onSelect={handleSetParent1}
           onClose={() => setPickerSlot(null)}
         />
@@ -150,9 +151,9 @@ import { RARITY_COLORS } from '@/constants';
 
             {/* Parents summary */}
             <View style={styles.resultParentsRow}>
-              <Image source={{ uri: resultParent1?.image_url }} style={styles.resultParentThumb} />
+              {resultParent1Url && <Image source={{ uri: resultParent1Url }} style={styles.resultParentThumb} />}
               <Text style={styles.resultCross}>×</Text>
-              <Image source={{ uri: resultParent2?.image_url }} style={styles.resultParentThumb} />
+              {resultParent2Url && <Image source={{ uri: resultParent2Url }} style={styles.resultParentThumb} />}
               <Text style={styles.resultArrow}>→</Text>
             </View>
 

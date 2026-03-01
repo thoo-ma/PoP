@@ -60,6 +60,36 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     };
   }, []);
 
+  // Single teardown function – clears every timer and sensor subscription.
+  // Called from stopChallenge, the grace-period callback, and the unmount effect
+  // so no code path can leak a phantom timer or subscription.
+  const cleanup = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    if (graceTimeoutRef.current) {
+      clearTimeout(graceTimeoutRef.current);
+      graceTimeoutRef.current = null;
+    }
+    if (warningCooldownRef.current) {
+      clearTimeout(warningCooldownRef.current);
+      warningCooldownRef.current = null;
+    }
+    if (accelerometerSubscriptionRef.current) {
+      accelerometerSubscriptionRef.current.remove();
+      accelerometerSubscriptionRef.current = null;
+    }
+    if (pedometerSubscriptionRef.current) {
+      pedometerSubscriptionRef.current.remove();
+      pedometerSubscriptionRef.current = null;
+    }
+    if (gyroscopeSubscriptionRef.current) {
+      gyroscopeSubscriptionRef.current.remove();
+      gyroscopeSubscriptionRef.current = null;
+    }
+  }, []);
+
   // Unified movement detection handler
   const handleMovementDetected = useCallback(() => {
     if (!mountedRef.current || !isRunningRef.current) return;
@@ -86,14 +116,9 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       setIsRunning(false);
       setStatus('idle');
       setElapsedTime(0);
-      
-      // Clear timer
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-        timerIntervalRef.current = null;
-      }
+      cleanup();
     }, thresholdsRef.current.GRACE_PERIOD);
-  }, []); // ← Now stable, no dependencies!
+  }, [cleanup]); // ← depends only on the stable cleanup callback
 
   // Handle accelerometer data
   const handleAccelerometerData = useCallback(
@@ -130,7 +155,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         }
       }
     },
-    [handleMovementDetected] // ← Only depends on handleMovementDetected now
+    [handleMovementDetected, cleanup]
   );
 
   // Handle step detection
@@ -160,7 +185,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         handleMovementDetected();
       }
     },
-    [handleMovementDetected] // ← Only depends on handleMovementDetected now
+    [handleMovementDetected]
   );
 
   // Handle gyroscope data
@@ -197,7 +222,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         }
       }
     },
-    [handleMovementDetected] // ← Only depends on handleMovementDetected now
+    [handleMovementDetected, cleanup]
   );
 
   // Start challenge
@@ -223,25 +248,8 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     setIsRunning(false);
     setStatus('idle');
     setElapsedTime(0);
-
-    // Clear timer
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-      timerIntervalRef.current = null;
-    }
-
-    // Clear grace timeout
-    if (graceTimeoutRef.current) {
-      clearTimeout(graceTimeoutRef.current);
-      graceTimeoutRef.current = null;
-    }
-
-    // Clear warning cooldown
-    if (warningCooldownRef.current) {
-      clearTimeout(warningCooldownRef.current);
-      warningCooldownRef.current = null;
-    }
-  }, []);
+    cleanup();
+  }, [cleanup]);
 
   // Subscribe to accelerometer when running
   useEffect(() => {
@@ -337,28 +345,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   }, [isRunning, handleGyroscopeData]);
 
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
-      if (graceTimeoutRef.current) {
-        clearTimeout(graceTimeoutRef.current);
-      }
-      if (warningCooldownRef.current) {
-        clearTimeout(warningCooldownRef.current);
-      }
-      if (accelerometerSubscriptionRef.current) {
-        accelerometerSubscriptionRef.current.remove();
-      }
-      if (pedometerSubscriptionRef.current) {
-        pedometerSubscriptionRef.current.remove();
-      }
-      if (gyroscopeSubscriptionRef.current) {
-        gyroscopeSubscriptionRef.current.remove();
-      }
-    };
-  }, []);
+  useEffect(() => cleanup, [cleanup]);
 
   return {
     elapsedTime,

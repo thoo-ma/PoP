@@ -5,7 +5,6 @@ import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import { MAX_ENERGY } from '@shared';
-import type { NFT } from '@/types';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
 /**
@@ -15,13 +14,12 @@ import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
  */
 export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { updateEnergy, loading: updateLoading } = useUpdateNFT();
+  const { updateEnergy, loadingUpdateEnergy: updateLoading } = useUpdateNFT();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
-  const [repairedNFT, setRepairedNFT] = useState<NFT | null>(null);
 
-  const selectedNFT = selectedIndex !== null ? (repairedNFT ?? nfts[selectedIndex] ?? null) : null;
+  const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
   const currentEnergy = selectedNFT?.energy || 0;
   const maxRepairPossible = MAX_ENERGY - currentEnergy;
 
@@ -30,7 +28,6 @@ export default memo(function Repair() {
     // Start on the first NFT with energy < 100, or index 0
     const idx = nfts.findIndex(nft => nft.energy < 100);
     setSelectedIndex(idx >= 0 ? idx : 0);
-    setRepairedNFT(null);
     setIsRepaired(false);
     setRepairAmount(0);
   };
@@ -38,7 +35,6 @@ export default memo(function Repair() {
   const handlePrev = () => {
     if (selectedIndex === null) return;
     setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
-    setRepairedNFT(null);
     setIsRepaired(false);
     setRepairAmount(0);
   };
@@ -46,7 +42,6 @@ export default memo(function Repair() {
   const handleNext = () => {
     if (selectedIndex === null) return;
     setSelectedIndex(i => ((i as number) + 1) % nfts.length);
-    setRepairedNFT(null);
     setIsRepaired(false);
     setRepairAmount(0);
   };
@@ -60,11 +55,12 @@ export default memo(function Repair() {
     if (success) {
       setIsRepaired(true);
       setRepairAmount(0);
-      // Refresh NFT list to show updated energy
+      // Refresh the NFT list from the server so we get the authoritative energy
+      // value (which may differ from our local newEnergy if the server clamps it).
+      // repairedNFT is intentionally NOT set here — selectedNFT will fall back to
+      // nfts[selectedIndex] which now holds fresh server data.
       await refetch();
       nftEvents.emit(); // Notify other screens
-      // Update selected NFT with new energy value
-      setRepairedNFT({ ...selectedNFT, energy: newEnergy });
     } else {
       Alert.alert('Repair Failed', 'Failed to repair NFT. Please try again.');
     }
@@ -72,7 +68,6 @@ export default memo(function Repair() {
 
   const handleReset = () => {
     setSelectedIndex(null);
-    setRepairedNFT(null);
     setRepairAmount(0);
     setIsRepaired(false);
   };

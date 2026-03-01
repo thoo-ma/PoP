@@ -23,11 +23,15 @@ export function useAuth(): UseAuthReturn {
       setLoading(false);
     });
 
-    // Listen to authentication state changes
+    // Listen to authentication state changes.
+    // Also calls setLoading(false) here so that if this listener fires before
+    // the getSession callback resolves (race condition), the spinner is not
+    // left hanging indefinitely.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();

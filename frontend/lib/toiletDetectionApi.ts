@@ -21,13 +21,15 @@ export async function detectToiletFlush(
     });
 
     if (error) {
-      // Check if it's a rate limit error (429)
+      // Check if it's a rate limit error (429) — parse actual values from the
+      // response body exposed via error.context rather than using hardcoded fallbacks.
       if (error.message && error.message.includes('Rate limit')) {
+        const ctx = error.context as Partial<RateLimitError> | undefined;
         const rateLimitError: RateLimitError = {
           error: 'rate_limit',
           message: error.message,
-          limit: 10,
-          current_count: 10
+          limit: ctx?.limit ?? 0,
+          current_count: ctx?.current_count ?? 0,
         };
         throw rateLimitError;
       }

@@ -23,7 +23,7 @@ export default memo(function Marketplace() {
   const { nfts, loading: userLoading, refetch: refetchUser } = useUserNFTs();
   // Fetch marketplace listings from other users
   const { listings: backendListings, loading: marketplaceLoading } = useMarketplaceListings();
-  const { unlistNFT, loading: updateLoading } = useUpdateNFT();
+  const { unlistNFT, loadingUnlistNFT: updateLoading } = useUpdateNFT();
 
   // Filter user's listed NFTs for "My Listings" tab
   const myListings = useMemo(() => nfts.filter(nft => nft.isListed), [nfts]);

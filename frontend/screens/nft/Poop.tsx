@@ -79,6 +79,14 @@ export default memo(function Poop() {
     : Math.max(0, gameImmobilityMs - elapsedTime);
 
   // ── NFT carousel (disabled during challenge) ───────────────
+  // Reset selectedIndex when a background refetch shrinks the nfts array past it,
+  // preventing stale non-null assertions from causing a runtime throw.
+  useEffect(() => {
+    if (selectedIndex !== null && nfts[selectedIndex] === undefined) {
+      setSelectedIndex(null);
+    }
+  }, [nfts, selectedIndex]);
+
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
     const ready      = nfts.findIndex(n => n.energy > 0 && !getCooldownStatus(n).isOnCooldown);
@@ -458,7 +466,7 @@ export default memo(function Poop() {
           )}
 
           <View style={styles.nftContainer}>
-            {selectedIndex === null ? (
+            {selectedIndex === null || !displayNFT ? (
               <TouchableOpacity
                 style={styles.selectButton}
                 onPress={handleSelectNFT}
@@ -481,25 +489,25 @@ export default memo(function Poop() {
                 <View style={styles.nftCard}>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{ uri: displayNFT!.image_url }}
+                      source={{ uri: displayNFT.image_url }}
                       style={styles.nftImage}
                       resizeMode="cover"
                     />
                     <View style={styles.levelBadge}>
-                      <Text style={styles.levelBadgeText}>Lv {displayNFT!.level}</Text>
+                      <Text style={styles.levelBadgeText}>Lv {displayNFT.level}</Text>
                     </View>
-                    <View style={[styles.typeBadge, TYPE_BADGE_STYLES[displayNFT!.type]]}>
-                      <Text style={styles.typeBadgeText}>{displayNFT!.type.toUpperCase()}</Text>
+                    <View style={[styles.typeBadge, TYPE_BADGE_STYLES[displayNFT.type]]}>
+                      <Text style={styles.typeBadgeText}>{displayNFT.type.toUpperCase()}</Text>
                     </View>
                   </View>
                   <View style={styles.nftInfo}>
-                    <Text style={styles.nftName}>{formatDisplayName(displayNFT!.name)}</Text>
+                    <Text style={styles.nftName}>{formatDisplayName(displayNFT.name)}</Text>
                     <NFTProperties
-                      efficiency={displayNFT!.efficiency}
-                      resilience={displayNFT!.resilience}
-                      comfort={displayNFT!.comfort}
-                      luck={displayNFT!.luck}
-                      energy={displayNFT!.energy}
+                      efficiency={displayNFT.efficiency}
+                      resilience={displayNFT.resilience}
+                      comfort={displayNFT.comfort}
+                      luck={displayNFT.luck}
+                      energy={displayNFT.energy}
                       mode="detailed"
                     />
                   </View>
