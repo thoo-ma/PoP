@@ -6,6 +6,9 @@ import { logError } from '@/utils/errorHelpers';
 /**
  * Hook to fetch and manage user's NFT collection.
  * Fetches NFTs from Supabase including marketplace listing status.
+ *
+ * @returns The user's NFT collection (`nfts`), async state (`loading`, `error`),
+ *   and a `refetch` callback.
  */
 export function useUserNFTs() {
   const [nfts, setNfts] = useState<NFT[]>([]);

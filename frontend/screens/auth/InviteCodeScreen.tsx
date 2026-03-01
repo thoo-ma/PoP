@@ -15,10 +15,17 @@ import { useErrorHandler } from '@/hooks';
 import { colors } from '@/constants';
 
 interface InviteCodeScreenProps {
+  /** Called after the entered code is validated and the user is approved. */
   onApprovalSuccess: () => void;
+  /** Called when the user chooses to sign out from this screen. */
   onSignOut: () => void;
 }
 
+/**
+ * Invite-code gate screen shown to authenticated users who are not yet approved.
+ * Accepts a 6-character code, validates it via the `validate_invite_code` RPC,
+ * then calls `onApprovalSuccess` on success.
+ */
 export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);

@@ -11,6 +11,11 @@ import { colors } from '@/constants';
 
 WebBrowser.maybeCompleteAuthSession();
 
+/**
+ * Auth panel that renders Google and X (Twitter) OAuth sign-in buttons.
+ * In Expo Go (development only), also shows a dev-bypass sign-in button
+ * that seeds test NFTs via the `seed_dev_test_nfts` RPC.
+ */
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);

@@ -6,15 +6,27 @@ import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';
 
 export interface BreedPickerModalProps {
+  /** Controls modal visibility. */
   visible: boolean;
+  /** Title displayed at the top of the sheet (e.g. "Choose Parent 1"). */
   title: string;
+  /** Full NFT collection to show as selectable items. */
   allNFTs: NFT[];
-  lockedId?: string;        // the other slot's NFT — cannot be selected
-  lockedRarity?: NFTRarity; // filter compatibility against this rarity
+  /** ID of the NFT already chosen in the other slot — rendered as disabled. */
+  lockedId?: string;
+  /** Rarity of the other slot's NFT — items incompatible with it are disabled. */
+  lockedRarity?: NFTRarity;
+  /** Called with the chosen NFT when the user taps a valid row. */
   onSelect: (nft: NFT) => void;
+  /** Called when the user dismisses the sheet without selecting. */
   onClose: () => void;
 }
 
+/**
+ * Bottom-sheet modal for picking an NFT to place in a breed parent slot.
+ * Items that conflict with `lockedId` or are incompatible with `lockedRarity`
+ * are shown greyed-out and non-interactive.
+ */
 export default function BreedPickerModal({
   visible, title, allNFTs, lockedId, lockedRarity, onSelect, onClose,
 }: BreedPickerModalProps) {

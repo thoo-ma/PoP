@@ -1,12 +1,26 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
+import type { EventSubscription } from 'expo-modules-core';
 import { SENSOR_UPDATE_INTERVAL } from '@/constants';
 import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
 import { getThresholds } from '@/utils/proof/sensorHelpers';
 import { logError } from '@/utils/errorHelpers';
 
-type Subscription = ReturnType<typeof Accelerometer.addListener>;
+/** Sensor listener subscription, typed via the SDK-exported `EventSubscription` from `expo-modules-core`. */
+type Subscription = EventSubscription;
 
+/**
+ * Hook that runs the immobility challenge phase of the Proof-of-Poop flow.
+ *
+ * Subscribes to the accelerometer, gyroscope, and pedometer simultaneously.
+ * The challenge passes when the user remains still (below per-`mode` thresholds)
+ * for the required duration; it fails on excessive movement or step detection.
+ *
+ * @param mode - Sensitivity preset controlling movement thresholds and grace
+ *   periods. Defaults to `'normal'`.
+ * @returns Challenge status, elapsed time, `startChallenge` / `stopChallenge`
+ *   callbacks, and sensor-derived flags.
+ */
 export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmobilityChallengeReturn => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [status, setStatus] = useState<ChallengeStatus>('idle');

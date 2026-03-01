@@ -5,9 +5,16 @@ import type { UseUserApprovalReturn } from '@/types/auth';
 import { logError } from '@/utils/errorHelpers';
 
 /**
- * Hook to manage user approval status
- * Queries public.users table to check if current user is approved
- * Returns null for approved if user not found (still being created by trigger)
+ * Hook to manage user approval status.
+ *
+ * Queries `public.users` to check whether the current user has been approved.
+ * Returns `null` for `approved` while the user row is still being created by
+ * the database trigger (brief window after first sign-in).
+ *
+ * @param session - Current Supabase session; re-triggers the approval check
+ *   whenever the session changes.
+ * @returns Approval state (`approved`, `loading`) and a `checkApproval` callback
+ *   to manually re-trigger the fetch.
  */
 export function useUserApproval(session?: Session | null): UseUserApprovalReturn {
   const [approved, setApproved] = useState<boolean | null>(null);

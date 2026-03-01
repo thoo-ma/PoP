@@ -6,6 +6,9 @@ import { logError } from '@/utils/errorHelpers';
  * Hook to update NFT properties (energy, listing status, etc.).
  * Note: `loading` is shared across all three operations — only one
  * should be initiated at a time from the calling component.
+ *
+ * @returns Three mutation callbacks (`updateEnergy`, `listNFT`, `unlistNFT`)
+ *   and shared async state (`loading`, `error`).
  */
 export function useUpdateNFT() {
   const [loading, setLoading] = useState<boolean>(false);

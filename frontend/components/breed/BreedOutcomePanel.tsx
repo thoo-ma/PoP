@@ -5,6 +5,11 @@ import { RARITY_COLORS } from '@/constants';
 import { RARITIES } from '@shared';
 import { getProbabilities } from '@/utils';
 
+/**
+ * Read-only panel that displays the possible rarity outcomes and their
+ * percentage probabilities for a given pair of parent rarities.
+ * Zero-probability outcomes are hidden automatically.
+ */
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
   const probs = getProbabilities(r1, r2);
   return (

@@ -8,8 +8,11 @@ import { nftEvents, canBreed, formatDisplayName, TYPE_BADGE_STYLES } from '@/uti
 import { RARITY_COLORS } from '@/constants';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
-
-export default memo(function Breed() {
+/**
+ * Breed screen that lets the user select two compatible NFTs and trigger
+ * the `breed-nfts` Edge Function to mint a new child NFT.
+ * Displays a probability breakdown and the resulting child NFT on success.
+ */export default memo(function Breed() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { breedNFTs, loading: breedLoading, error: breedError } = useBreedNFT();
 

@@ -13,6 +13,12 @@ const PRIMARY_PAGE_ICONS = [
   { index: 4, icon: 'construction' as const, label: 'Repair' },
 ];
 
+/**
+ * Bottom navigation bar showing icon buttons for the five primary pages and
+ * a "More" button that opens the secondary-page menu.
+ * Primary page icons are hardcoded to indices 0–4; the More button targets
+ * the remaining pages dynamically.
+ */
 export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
   return (
     <View style={styles.pagination}>

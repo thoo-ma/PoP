@@ -24,6 +24,9 @@ export interface AllocateResult {
  *
  * All validation (sufficient points, stat cap, ownership) runs server-side
  * in the `allocate-stat-points` Edge Function for tamper-resistance.
+ *
+ * @returns An `allocate(nftId, deltas)` callback resolving to `AllocateResult | null`,
+ *   plus `loading` and `error` state.
  */
 export function useAllocateStatPoints() {
   const [loading, setLoading] = useState<boolean>(false);

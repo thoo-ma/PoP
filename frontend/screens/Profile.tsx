@@ -7,10 +7,17 @@ import { showSignOutConfirmation } from '@/utils';
 import { colors } from '@/constants';
 
 interface ProfileProps {
+  /** Controls the visibility of the profile modal. */
   visible: boolean;
+  /** Called when the user dismisses the profile modal. */
   onClose: () => void;
 }
 
+/**
+ * Profile modal screen showing the current user's display name, email,
+ * and placeholder stats (Detections, NFTs, Days Active).
+ * Provides a sign-out action with a confirmation prompt.
+ */
 export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);

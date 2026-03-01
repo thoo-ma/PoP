@@ -8,15 +8,6 @@ import { getCooldownStatus } from '@/constants';
 import type { NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
-// ── DEV TUNING ───────────────────────────────────────────────
-// 1. Immobility duration per NFT type → edit IMMOBILITY_MS_BY_TYPE below
-// 2. Flush detection threshold (0–1) → edit GAME_THRESHOLD below
-//    getThresholdForDifficulty('easy'|'normal'|'strict') returns 0.5 / 0.7 / 0.85
-// 3. Sensor sensitivity (movement / rotation / grace period)
-//    → edit useImmobilityChallenge('normal') call below
-//    accepted values: 'easy' | 'normal' | 'strict'
-//    thresholds defined in @/utils/proof/sensorHelpers :: getThresholds()
-// ───────────────────────────────────────────────
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
   'turbo-flush':  5_000,
   'cruise-seat':  10_000,
@@ -26,6 +17,19 @@ const GAME_THRESHOLD = getThresholdForDifficulty('normal'); // 0.7
 
 type GamePhase = 'idle' | 'countdown' | 'immobility' | 'prompt' | 'recording' | 'results';
 
+/**
+ * Poop screen — the core gameplay loop of the app.
+ *
+ * Walks the user through five sequential phases:
+ * 1. **Idle** — select an NFT and tap Start
+ * 2. **Countdown** — brief ready timer
+ * 3. **Immobility** — sensor challenge requiring the user to stay still
+ * 4. **Prompt** — instruction to record the toilet flush
+ * 5. **Recording / Results** — audio capture, YAMNet analysis, and XP award
+ *
+ * All game logic (energy drain, XP gain, cooldown) runs server-side in
+ * the `use-nft` Edge Function via `usePoopNFT`.
+ */
 export default memo(function Poop() {
   // ── NFT data ──────────────────────────────────────────────
   const { nfts, loading, error, refetch } = useUserNFTs();

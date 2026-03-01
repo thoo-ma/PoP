@@ -7,6 +7,12 @@ import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import type { SortOption } from '@/types';
 import { colors } from '@/constants';
 
+/**
+ * Marketplace screen with "Buy" and "Sell" tabs.
+ * The Buy tab shows NFTs listed by other users; the Sell tab shows
+ * the current user's listed and unlistable NFTs.
+ * The buy flow is currently a stub placeholder.
+ */
 export default memo(function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');

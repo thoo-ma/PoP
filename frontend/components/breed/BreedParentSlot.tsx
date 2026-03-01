@@ -5,11 +5,19 @@ import { RARITY_COLORS } from '@/constants';
 import { formatDisplayName } from '@/utils';
 
 interface BreedParentSlotProps {
+  /** The NFT occupying this slot, or `null` when the slot is empty. */
   nft: NFT | null;
+  /** Display label shown above the slot (e.g. "Parent 1"). */
   label: string;
+  /** Called when the user taps the slot to open the picker. */
   onPress: () => void;
 }
 
+/**
+ * Tappable card representing one of the two breed parent slots.
+ * Shows the selected NFT's image, name, and rarity border colour,
+ * or a placeholder prompt when empty.
+ */
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
   const borderColor = nft ? RARITY_COLORS[nft.rarity] : '#d1d5db';
   return (

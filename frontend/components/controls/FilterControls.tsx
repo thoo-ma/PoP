@@ -5,11 +5,17 @@ import { RARITIES } from '@shared';
 import { filterStyles } from '@/styles';
 
 interface FilterControlsProps {
+  /** Currently active rarity filters. */
   selectedRarities: NFTRarity[];
+  /** Currently active type filters. */
   selectedTypes: NFTType[];
+  /** Called when the user toggles a rarity chip. */
   onRarityToggle: (rarity: NFTRarity) => void;
+  /** Called when the user toggles a type chip. */
   onTypeToggle: (type: NFTType) => void;
+  /** Called when the user taps "Clear" to reset all active filters. */
   onClearFilters: () => void;
+  /** Style object forwarded from the parent screen. */
   styles: typeof filterStyles;
 }
 const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
@@ -27,6 +33,10 @@ const TYPE_LABELS: Record<NFTType, string> = {
   'zen-fortress': 'Zen',
 };
 
+/**
+ * Filter chip bar for narrowing an NFT collection by rarity and type.
+ * Renders a "Clear" button when any filter is active.
+ */
 function FilterControls({
   selectedRarities,
   selectedTypes,

@@ -9,6 +9,11 @@ import type { NFTRarity, NFTType } from '@shared';
 import type { SortOption, NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
+/**
+ * Vault screen displaying the user's full NFT and mystery-box collection.
+ * Supports sorting, rarity/type filtering, marketplace listing, and
+ * stat-point allocation via the `StatAllocationModal`.
+ */
 export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { listNFT, loading: updateLoading } = useUpdateNFT();

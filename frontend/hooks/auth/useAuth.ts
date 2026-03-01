@@ -3,6 +3,15 @@ import { supabase } from '@/lib';
 import type { Session } from '@supabase/supabase-js';
 import type { UseAuthReturn } from '@/types';
 
+/**
+ * Hook to manage the current Supabase auth session.
+ *
+ * Combines a one-time `getSession` call with a long-lived `onAuthStateChange`
+ * listener so the session stays up to date across the app lifetime.
+ *
+ * @returns Session state (`session`, `user`, `isAuthenticated`, `loading`) and
+ *   auth helpers (`signOut`, `getUserDisplayName`).
+ */
 export function useAuth(): UseAuthReturn {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);

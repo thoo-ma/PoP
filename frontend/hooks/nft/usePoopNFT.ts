@@ -31,6 +31,10 @@ export interface PoopResult {
  *
  * All game logic — energy drain formula, type multiplier, resilience factor —
  * runs server-side in the `use-nft` Edge Function for tamper-resistance.
+ *
+ * @returns A `poopNFT(nftId)` callback resolving to `PoopResult | null`,
+ *   async state (`loading`, `error`), and a `cooldownError` object when the
+ *   NFT is still resting (contains `cooldown_ends_at` and `cooldown_remaining_seconds`).
  */
 export function usePoopNFT() {
   const [loading, setLoading] = useState<boolean>(false);

@@ -5,6 +5,9 @@ import { logError } from '@/utils/errorHelpers';
 
 /**
  * Hook to fetch marketplace listings (NFTs from other users).
+ *
+ * @returns Other users' listed NFTs (`listings`), async state (`loading`, `error`),
+ *   and a `fetchListings` callback.
  */
 export function useMarketplaceListings() {
   const [listings, setListings] = useState<NFT[]>([]);

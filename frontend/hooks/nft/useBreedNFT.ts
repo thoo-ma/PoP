@@ -8,6 +8,9 @@ import { logError } from '@/utils/errorHelpers';
  * Hook to breed two NFTs and create a new one.
  * Rarity probability roll and all game logic run server-side in the
  * `breed-nfts` Supabase Edge Function for tamper-resistance.
+ *
+ * @returns A `breedNFTs(parent1Id, parent2Id)` callback that resolves to the
+ *   newly minted child `NFT` or `null`, plus `loading` and `error` state.
  */
 export function useBreedNFT() {
   const [loading, setLoading] = useState<boolean>(false);

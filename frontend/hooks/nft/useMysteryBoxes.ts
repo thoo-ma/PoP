@@ -3,12 +3,25 @@ import { supabase } from '@/lib/supabase';
 import type { MysteryBox } from '@shared';
 
 interface UseMysteryBoxesResult {
+  /** Fetched mystery boxes owned by the current user, newest first. */
   boxes: MysteryBox[];
+  /** True while the fetch or refetch is in flight. */
   loading: boolean;
+  /** Error message from the last failed fetch, or `null`. */
   error: string | null;
+  /** Re-fetches mystery boxes from Supabase. */
   refetch: () => Promise<void>;
 }
 
+/**
+ * Hook to fetch and manage the current user's mystery boxes.
+ *
+ * Fetches all unopened and opened boxes from the `mystery_boxes` table,
+ * ordered newest-first. Re-fetches automatically on mount.
+ *
+ * @returns The user's mystery boxes (`boxes`), async state (`loading`, `error`),
+ *   and a manual `refetch` callback.
+ */
 export function useMysteryBoxes(): UseMysteryBoxesResult {
   const [boxes, setBoxes] = useState<MysteryBox[]>([]);
   const [loading, setLoading] = useState(true);

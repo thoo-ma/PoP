@@ -6,15 +6,26 @@ import { capitalize } from '@/utils';
 import { sortStyles } from '@/styles';
 
 interface SortControlsProps {
+  /** The field currently used for sorting. */
   sortBy: SortOption;
+  /** Current sort direction. */
   sortOrder: 'asc' | 'desc';
+  /** Whether the sort-field dropdown is open. */
   showSortMenu: boolean;
+  /** Called when the user picks a new sort field. */
   onSortByChange: (option: SortOption) => void;
+  /** Called when the user toggles the sort direction. */
   onSortOrderToggle: () => void;
+  /** Called when the user taps the sort button to toggle the dropdown. */
   onMenuToggle: () => void;
+  /** Style object forwarded from the parent screen. */
   styles: typeof sortStyles;
 }
 
+/**
+ * Sort control bar with a field-selector dropdown and an asc/desc toggle.
+ * The dropdown visibility is controlled externally via `showSortMenu`.
+ */
 function SortControls({
   sortBy,
   sortOrder,

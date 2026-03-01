@@ -8,6 +8,11 @@ import { MAX_ENERGY } from '@shared';
 import type { NFT } from '@/types';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 
+/**
+ * Repair screen for restoring an NFT's energy using the Energy slider.
+ * Persists the updated energy value via `updateEnergy` and emits an
+ * `nftUpdated` event so other screens stay in sync.
+ */
 export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { updateEnergy, loading: updateLoading } = useUpdateNFT();

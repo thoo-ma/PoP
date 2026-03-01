@@ -6,6 +6,17 @@ import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '
 import { isRateLimitError } from '@/utils/errorHelpers';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 
+/**
+ * Hook to record audio and submit it to the toilet-flush detection pipeline.
+ *
+ * Manages the full recording lifecycle: requesting microphone permission,
+ * starting/stopping an `expo-av` recording session, handing the base-64
+ * audio to `detectToiletFlush`, and surfacing the detection result or any
+ * rate-limit / error state to the caller.
+ *
+ * @returns Recording controls, loading flags, the last `DetectionResult`,
+ *   the last `RateLimitError`, and error state.
+ */
 export const useToiletDetection = (): UseToiletDetectionReturn => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUri, setAudioUri] = useState<string | null>(null);

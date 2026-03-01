@@ -3,6 +3,11 @@ import { AntDesign } from '@expo/vector-icons';
 import type { OAuthButtonProps } from '@/types';
 import { authStyles as styles } from '@/styles';
 
+/**
+ * Reusable OAuth sign-in button for Google and X (Twitter) providers.
+ * Renders provider-specific colours, icon, and label; shows a spinner
+ * while `loading` is true.
+ */
 export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
   const isGoogle = provider === 'google';
   const buttonStyle = isGoogle ? styles.googleButton : styles.twitterButton;
