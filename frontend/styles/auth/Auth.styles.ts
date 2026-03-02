@@ -45,6 +45,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.base,
   },
+  testModeButton: {
+    backgroundColor: '#1a6b5a',
+    padding: spacing.base,
+    borderRadius: radii.md,
+    alignItems: 'center',
+    marginBottom: spacing.base,
+  },
   button: {
     padding: spacing.base,
     borderRadius: radii.md,

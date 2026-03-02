@@ -19,6 +19,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);
+  const [testLoading, setTestLoading] = useState(false);
 
   const handleDevSignIn = async () => {
     setDevLoading(true);
@@ -37,6 +38,26 @@ export default function Auth() {
       Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
     } finally {
       setDevLoading(false);
+    }
+  };
+
+  const handleTestSignIn = async () => {
+    setTestLoading(true);
+    try {
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+
+      // Seed 1 mystery box of each rarity for test mode
+      const { error: seedError } = await supabase.rpc('seed_test_mystery_boxes');
+      if (seedError) {
+        console.warn('Failed to seed test mystery boxes:', seedError);
+      }
+      // Success - auth state will automatically update via onAuthStateChange
+    } catch (err) {
+      logError('Auth:TestMode', err);
+      Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+    } finally {
+      setTestLoading(false);
     }
   };
 
@@ -105,6 +126,22 @@ export default function Auth() {
               <ActivityIndicator color={colors.buttonText} />
             ) : (
               <Text style={styles.buttonText}>Continue (Dev Mode)</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.testModeButton}
+            onPress={handleTestSignIn}
+            disabled={testLoading}
+            accessibilityLabel="Continue in test mode"
+            accessibilityRole="button"
+            accessibilityHint="Sign in anonymously with one mystery box of each rarity"
+            accessibilityState={{ disabled: testLoading }}
+          >
+            {testLoading ? (
+              <ActivityIndicator color={colors.buttonText} />
+            ) : (
+              <Text style={styles.buttonText}>Continue (Test Mode)</Text>
             )}
           </TouchableOpacity>
         </>
