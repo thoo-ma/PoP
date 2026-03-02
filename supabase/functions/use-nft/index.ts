@@ -162,6 +162,25 @@ serve(async (req) => {
 
     console.log(`use-nft: user ${userId} earned ${POOP_PER_USE} POOP → balance ${newPoopBalance}`)
 
+    // ── Create pending loot roll ──────────────────────────────────────────────
+    // Upsert one row per user; any stale un-rolled session is silently replaced.
+    const { data: lootRollData, error: lootRollError } = await supabase
+      .from('pending_loot_rolls')
+      .upsert(
+        { user_id: userId, nft_id: nft_id, holds: 0 },
+        { onConflict: 'user_id' }
+      )
+      .select('id')
+      .single()
+
+    if (lootRollError) {
+      // Non-fatal: log but don't fail the whole request
+      console.error('use-nft: loot roll upsert error', lootRollError)
+    }
+
+    const lootRollId: string | null = lootRollData?.id ?? null
+    console.log(`use-nft: loot roll upserted → id=${lootRollId}`)
+
     // ── Return result ─────────────────────────────────────────────────────────
     return new Response(
       JSON.stringify({
@@ -176,6 +195,7 @@ serve(async (req) => {
         stat_points:  updated.stat_points,
         poop_earned:  POOP_PER_USE,
         poop_balance: newPoopBalance,
+        loot_roll_id: lootRollId,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

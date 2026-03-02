@@ -2,7 +2,7 @@ import { Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-na
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { poopStyles as styles } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
-import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal } from '@/components';
+import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, getThresholdForDifficulty, formatConfidencePercentage } from '@/utils';
 import { getCooldownStatus } from '@/constants';
 import type { NFT } from '@/types';
@@ -15,7 +15,7 @@ const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
 };
 const GAME_THRESHOLD = getThresholdForDifficulty('normal'); // 0.7
 
-type GamePhase = 'idle' | 'countdown' | 'immobility' | 'prompt' | 'recording' | 'results';
+type GamePhase = 'idle' | 'countdown' | 'immobility' | 'prompt' | 'recording' | 'results' | 'roulette';
 
 /**
  * Poop screen — the core gameplay loop of the app.
@@ -39,6 +39,7 @@ export default memo(function Poop() {
   const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
   const [poopedPoop, setPoopedPoop] = useState<{ earned: number; balance: number } | null>(null);
   const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null);
+  const [lootRollId, setLootRollId] = useState<string | null>(null);
   const hasPoopedRef = useRef(false); // guard — call poopNFT exactly once per challenge
 
   // Tick once/s so the cooldown countdown refreshes in the UI
@@ -218,6 +219,7 @@ export default memo(function Poop() {
         setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
         setPoopedXP({ gained: result.xp_gained, level: result.level, leveledUp: result.leveled_up });
         setPoopedPoop({ earned: result.poop_earned, balance: result.poop_balance });
+        setLootRollId(result.loot_roll_id ?? null);
         if (result.leveled_up && result.stat_points > 0) {
           setStatModalData({ nft: { ...displayNFT, stat_points: result.stat_points }, points: result.stat_points });
         }
@@ -241,6 +243,7 @@ export default memo(function Poop() {
     setPoopedXP(null);
     setPoopedPoop(null);
     setStatModalData(null);
+    setLootRollId(null);
     setFrozenRemainingTime(null);
     setImmobilityMessage(null);
     setPhase('idle');
@@ -419,9 +422,33 @@ export default memo(function Poop() {
           )}
           {actionLoading && <Text style={styles.resultSub}>Saving…</Text>}
         </View>
-        <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
-          <Text style={styles.actionButtonText}>Done</Text>
-        </TouchableOpacity>
+        {lootRollId ? (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setPhase('roulette')}
+            disabled={actionLoading}
+          >
+            <Text style={styles.actionButtonText}>Continue →</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
+            <Text style={styles.actionButtonText}>Done</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
+
+  const renderRoulettePhase = () => {
+    if (!lootRollId) {
+      // Fallback: no pending roll (e.g. edge function failed to upsert)
+      handleFullReset();
+      return null;
+    }
+    return (
+      <View style={styles.challengeContainer}>
+        {renderChallengeHeader()}
+        <LootRouletteCard lootRollId={lootRollId} onDone={handleFullReset} />
       </View>
     );
   };
@@ -453,6 +480,7 @@ export default memo(function Poop() {
           {phase === 'prompt'     && renderPromptPhase()}
           {phase === 'recording'  && renderRecordingPhase()}
           {phase === 'results'    && renderResultsPhase()}
+          {phase === 'roulette'   && renderRoulettePhase()}
         </ScrollView>
       ) : (
         // ── Idle (home) ────────────────────────────────────

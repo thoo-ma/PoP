@@ -40,3 +40,9 @@ export function buildImageUrl(type: NFTType, name: string, rarity: Rarity): stri
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
   return `${supabaseUrl}/storage/v1/object/public/assets/toilets/${type}/${name}/${name}-${rarity}.jpg`
 }
+
+/** Constructs the public storage URL for a mystery box image. */
+export function buildMysteryBoxImageUrl(rarity: Rarity): string {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+  return `${supabaseUrl}/storage/v1/object/public/assets/mystery-boxes/${rarity}.jpg`
+}

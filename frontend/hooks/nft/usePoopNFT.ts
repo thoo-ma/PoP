@@ -28,6 +28,8 @@ export interface PoopResult {
   poop_earned: number;
   /** Updated wallet balance after this use */
   poop_balance: number;
+  /** ID of the newly created pending loot roll — pass to useRollLoot */
+  loot_roll_id: string | null;
 }
 
 /**
