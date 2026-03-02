@@ -3,6 +3,7 @@ export * from './useUpdateNFT';
 export * from './useMarketplaceListings';
 export * from './useBreedNFT';
 export * from './usePoopNFT';
+export * from './useRepairNFT';
 export * from './useAllocateStatPoints';
 export * from './useMysteryBoxes';
 export * from './useOpenMysteryBox';

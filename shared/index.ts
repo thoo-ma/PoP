@@ -1,6 +1,7 @@
 export * from './nft';
 export * from './breedProbabilities';
 export * from './cooldown';
+export * from './currency';
 export * from './database.types';
 export * from './statPoints';
 export * from './xp';

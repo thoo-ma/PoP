@@ -37,6 +37,7 @@ export default memo(function Poop() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
   const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
+  const [poopedPoop, setPoopedPoop] = useState<{ earned: number; balance: number } | null>(null);
   const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null);
   const hasPoopedRef = useRef(false); // guard — call poopNFT exactly once per challenge
 
@@ -97,13 +98,13 @@ export default memo(function Poop() {
   const handlePrev = useCallback(() => {
     if (phase !== 'idle') return;
     setSelectedIndex(i => ((i as number) - 1 + nfts.length) % nfts.length);
-    setPoopedEnergy(null); setPoopedXP(null); setStatModalData(null);
+    setPoopedEnergy(null); setPoopedXP(null); setPoopedPoop(null); setStatModalData(null);
   }, [nfts.length, phase]);
 
   const handleNext = useCallback(() => {
     if (phase !== 'idle') return;
     setSelectedIndex(i => ((i as number) + 1) % nfts.length);
-    setPoopedEnergy(null); setPoopedXP(null); setStatModalData(null);
+    setPoopedEnergy(null); setPoopedXP(null); setPoopedPoop(null); setStatModalData(null);
   }, [nfts.length, phase]);
 
   // ── Tap Poop: guards → begin 3-2-1 ────────────────────────
@@ -216,6 +217,7 @@ export default memo(function Poop() {
         nftEvents.emit();
         setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
         setPoopedXP({ gained: result.xp_gained, level: result.level, leveledUp: result.leveled_up });
+        setPoopedPoop({ earned: result.poop_earned, balance: result.poop_balance });
         if (result.leveled_up && result.stat_points > 0) {
           setStatModalData({ nft: { ...displayNFT, stat_points: result.stat_points }, points: result.stat_points });
         }
@@ -237,6 +239,7 @@ export default memo(function Poop() {
     hasPoopedRef.current = false;
     setPoopedEnergy(null);
     setPoopedXP(null);
+    setPoopedPoop(null);
     setStatModalData(null);
     setFrozenRemainingTime(null);
     setImmobilityMessage(null);
@@ -410,6 +413,9 @@ export default memo(function Poop() {
                 <Text style={styles.resultSub}>🎉 Level Up! Now Lv {poopedXP.level}</Text>
               )}
             </>
+          )}
+          {poopedPoop && (
+            <Text style={styles.resultSub}>+{poopedPoop.earned} 💩 POOP</Text>
           )}
           {actionLoading && <Text style={styles.resultSub}>Saving…</Text>}
         </View>

@@ -220,18 +220,21 @@ export type Database = {
           created_at: string
           id: string
           invite_code_id: string | null
+          poop_balance: number
         }
         Insert: {
           approved?: boolean
           created_at?: string
           id: string
           invite_code_id?: string | null
+          poop_balance?: number
         }
         Update: {
           approved?: boolean
           created_at?: string
           id?: string
           invite_code_id?: string | null
+          poop_balance?: number
         }
         Relationships: [
           {

@@ -1,9 +1,10 @@
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { memo, useState } from 'react';
 import { breedStyles as styles } from '@/styles';
-import { useUserNFTs, useBreedNFT } from '@/hooks';
+import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
+import { POOP_BREED_COST } from '@shared';
 import { MysteryBoxCard, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
 import { nftEvents, canBreed } from '@/utils';
 
@@ -15,6 +16,7 @@ import { nftEvents, canBreed } from '@/utils';
  */export default memo(function Breed() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { breedNFTs, loading: breedLoading, error: breedError } = useBreedNFT();
+  const { poopBalance } = useWallet();
 
   const [parent1, setParent1] = useState<NFT | null>(null);
   const [parent2, setParent2] = useState<NFT | null>(null);
@@ -59,12 +61,20 @@ import { nftEvents, canBreed } from '@/utils';
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Breed</Text>
+
+        {/* Wallet balance + cost */}
+        <Text style={styles.description}>
+          {poopBalance !== null
+            ? `💩 Balance: ${poopBalance} POOP  ·  Cost: ${POOP_BREED_COST} POOP`
+            : `Cost: ${POOP_BREED_COST} POOP`}
+        </Text>
         <Text style={styles.description}>You need at least 2 NFTs to breed</Text>
       </View>
     );
   }
 
   const canBreedNow = Boolean(parent1 && parent2);
+  const hasEnoughPoop = poopBalance === null || poopBalance >= POOP_BREED_COST;
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -130,17 +140,23 @@ import { nftEvents, canBreed } from '@/utils';
               <Text style={styles.breedError}>{breedError}</Text>
             )}
 
-            {/* ── Breed button ──────────────────────────────────────────── */}
+            {!hasEnoughPoop && (
+              <Text style={styles.breedError}>
+                Insufficient POOP — you need {POOP_BREED_COST} POOP to breed.
+              </Text>
+            )}
+
+            {/* ── Breed button ──────────────────────────────────────────────── */}
             <TouchableOpacity
               style={[
                 styles.breedButton,
-                (!canBreedNow || breedLoading) && styles.breedButtonDisabled,
+                (!canBreedNow || breedLoading || !hasEnoughPoop) && styles.breedButtonDisabled,
               ]}
               onPress={handleBreed}
-              disabled={!canBreedNow || breedLoading}
+              disabled={!canBreedNow || breedLoading || !hasEnoughPoop}
             >
               <Text style={styles.breedButtonText}>
-                {breedLoading ? 'Breeding…' : 'Breed'}
+                {breedLoading ? 'Breeding…' : `Breed (${POOP_BREED_COST} POOP)`}
               </Text>
             </TouchableOpacity>
           </>
