@@ -7,11 +7,13 @@ import { RARITY_BADGE_STYLES } from '@/utils';
 
 interface MysteryBoxCardProps {
   box: MysteryBox;
-  /** Slot for the action area below the card header (e.g. an Open button once utility is implemented). */
+  /** Number of boxes of this rarity. When > 1, a count badge is shown. */
+  count?: number;
+  /** Slot for the action area below the card header (e.g. an Open button). */
   action?: ReactNode;
 }
 
-export default memo(function MysteryBoxCard({ box, action }: MysteryBoxCardProps) {
+export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
@@ -23,6 +25,11 @@ export default memo(function MysteryBoxCard({ box, action }: MysteryBoxCardProps
         <View style={[styles.rarityBadge, RARITY_BADGE_STYLES[box.rarity]]}>
           <Text style={styles.rarityText}>{box.rarity.toUpperCase()}</Text>
         </View>
+        {count !== undefined && count > 0 && (
+          <View style={styles.countBadge}>
+            <Text style={styles.countText}>×{count}</Text>
+          </View>
+        )}
         {box.opened && (
           <View style={styles.openedBadge}>
             <Text style={styles.openedText}>Opened</Text>

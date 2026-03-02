@@ -42,6 +42,7 @@ export function useMysteryBoxes(): UseMysteryBoxesResult {
         .from('mystery_boxes')
         .select('id, rarity, image_url, opened, created_at')
         .eq('user_id', user.id)
+        .eq('opened', false)
         .order('created_at', { ascending: false });
 
       if (fetchError) {

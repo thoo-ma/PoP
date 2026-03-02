@@ -1,0 +1,93 @@
+import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
+
+export const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.70)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  sheet: {
+    width: '100%',
+    backgroundColor: colors.bgSurface,
+    borderRadius: 20,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 32,
+    alignItems: 'center',
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.textDark,
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 13,
+    color: colors.text,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  imageWrapper: {
+    width: '70%',
+    aspectRatio: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: colors.bgLight,
+    marginBottom: 16,
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  rarityBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    elevation: 2,
+  },
+  rarityText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  nftName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.title,
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  nftType: {
+    fontSize: 12,
+    color: colors.text,
+    marginBottom: 20,
+    textAlign: 'center',
+    textTransform: 'capitalize',
+  },
+  closeButton: {
+    width: '100%',
+    backgroundColor: '#7c3aed',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+});

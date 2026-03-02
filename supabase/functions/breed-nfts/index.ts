@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { RARITY_RANK, TYPE_NAMES, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
+import { RARITY_RANK, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
+import { randomName, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
@@ -50,25 +51,12 @@ function resolveOffspringType(t1: NFTType, t2: NFTType): NFTType {
   return 'zen-fortress'
 }
 
-function randomName(type: NFTType): string {
-  const names = TYPE_NAMES[type]
-  return names[Math.floor(Math.random() * names.length)]
-}
-
 // ─── Stat helpers ─────────────────────────────────────────────────────────────
 
 function breedStat(s1: number, s2: number): number {
   const avg = (s1 + s2) / 2
   const noise = (Math.random() - 0.5) * 10 // ±5
   return Math.max(0, Math.min(100, Math.round(avg + noise)))
-}
-
-// ─── Image URL ────────────────────────────────────────────────────────────────
-
-const SUPABASE_PROJECT_URL = Deno.env.get('SUPABASE_URL') ?? ''
-
-function buildImageUrl(type: NFTType, name: string, rarity: Rarity): string {
-  return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/assets/toilets/${type}/${name}/${name}-${rarity}.jpg`
 }
 
 // ─── Edge Function entry point ────────────────────────────────────────────────

@@ -45,6 +45,20 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
+  countBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+  countText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
   openedBadge: {
     position: 'absolute',
     top: 8,

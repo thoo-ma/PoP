@@ -1,11 +1,11 @@
 import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { vaultStyles as styles, sortStyles, filterStyles, tabStyles } from '@/styles';
-import { useUserNFTs, useUpdateNFT, useMysteryBoxes } from '@/hooks';
-import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal } from '@/components';
+import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
+import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import { colors } from '@/constants';
-import type { NFTRarity, NFTType } from '@shared';
+import type { NFTRarity, NFTType, MysteryBox } from '@shared';
 import type { SortOption, NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
@@ -18,6 +18,7 @@ export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { listNFT, loadingListNFT: updateLoading } = useUpdateNFT();
   const { boxes, loading: boxesLoading, error: boxesError, refetch: refetchBoxes } = useMysteryBoxes();
+  const { openBox, loading: openLoading } = useOpenMysteryBox();
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -25,6 +26,9 @@ export default memo(function Vault() {
   const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<NFTType[]>([]);
   const [statModalNFT, setStatModalNFT] = useState<NFT | null>(null);
+  const [revealedNFT, setRevealedNFT] = useState<NFT | null>(null);
+  const [revealVisible, setRevealVisible] = useState(false);
+  const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null);
   
   // Listen for NFT update events from other screens
   useEffect(() => {
@@ -36,6 +40,24 @@ export default memo(function Vault() {
   }, [refetch, refetchBoxes]);
   
   // Filter NFTs based on selected rarities and types
+  /** Boxes grouped by rarity, sorted transcendent → common. */
+  const groupedBoxes = useMemo(() => {
+    const RARITY_ORDER: NFTRarity[] = ['transcendent', 'legendary', 'rare', 'common'];
+    const map = new Map<NFTRarity, { box: MysteryBox; count: number }>();
+    for (const box of boxes) {
+      const entry = map.get(box.rarity);
+      if (entry) {
+        entry.count++;
+      } else {
+        map.set(box.rarity, { box, count: 1 });
+      }
+    }
+    return RARITY_ORDER.flatMap((r) => {
+      const entry = map.get(r);
+      return entry ? [{ rarity: r, box: entry.box, count: entry.count }] : [];
+    });
+  }, [boxes]);
+
   const filteredNfts = useMemo(
     () => nfts.filter(nft => {
       const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity);
@@ -107,6 +129,25 @@ export default memo(function Vault() {
 
   const handleStatModalDismiss = useCallback(() => {
     setStatModalNFT(null);
+  }, []);
+
+  const handleOpenBox = useCallback(async (rarity: NFTRarity) => {
+    const box = boxes.find((b) => b.rarity === rarity);
+    if (!box) return;
+    setOpeningRarity(rarity);
+    const nft = await openBox(box.id);
+    setOpeningRarity(null);
+    if (nft) {
+      setRevealedNFT(nft);
+      setRevealVisible(true);
+      refetchBoxes();
+      refetch();
+      nftEvents.emit();
+    }
+  }, [boxes, openBox, refetchBoxes, refetch]);
+
+  const handleRevealClose = useCallback(() => {
+    setRevealVisible(false);
   }, []);
 
   const handleTabToilets = useCallback(() => setActiveTab('toilets'), []);
@@ -244,9 +285,29 @@ export default memo(function Vault() {
               </View>
             ) : (
               <View style={styles.grid}>
-                {boxes.map((box) => (
-                  <MysteryBoxCard key={box.id} box={box} />
-                ))}
+                {groupedBoxes.map((group) => {
+                  const isOpening = openingRarity === group.rarity;
+                  return (
+                    <MysteryBoxCard
+                      key={group.rarity}
+                      box={group.box}
+                      count={group.count}
+                      action={
+                        <TouchableOpacity
+                          style={[styles.listButton, (isOpening || openLoading) && styles.listButtonDisabled]}
+                          onPress={() => handleOpenBox(group.rarity)}
+                          disabled={isOpening || openLoading}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Open a ${group.rarity} mystery box`}
+                        >
+                          <Text style={styles.listButtonText}>
+                            {isOpening ? 'Opening...' : 'Open'}
+                          </Text>
+                        </TouchableOpacity>
+                      }
+                    />
+                  );
+                })}
               </View>
             )}
           </ScrollView>
@@ -262,6 +323,12 @@ export default memo(function Vault() {
           onDismiss={handleStatModalDismiss}
         />
       )}
+
+      <MysteryBoxRevealModal
+        visible={revealVisible}
+        nft={revealedNFT}
+        onClose={handleRevealClose}
+      />
     </View>
   );
 });

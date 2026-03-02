@@ -5,3 +5,4 @@ export * from './useBreedNFT';
 export * from './usePoopNFT';
 export * from './useAllocateStatPoints';
 export * from './useMysteryBoxes';
+export * from './useOpenMysteryBox';

@@ -12,6 +12,8 @@ export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
 
 export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
 
+export const NFT_TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+
 export const RARITY_RANK: Record<NFTRarity, number> = {
   common:       0,
   rare:         1,
