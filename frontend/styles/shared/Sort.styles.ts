@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const sortStyles = StyleSheet.create({
   sortContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-    paddingHorizontal: 20,
+    marginBottom: spacing.base,
+    paddingHorizontal: spacing.lg,
   },
   sortLabel: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
     marginRight: 10,
-    fontWeight: '500',
+    fontWeight: fontWeights.medium,
   },
   sortControlGroup: {
     flexDirection: 'row',
@@ -25,11 +25,11 @@ export const sortStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.bgSurface,
-    paddingVertical: 8,
-    paddingLeft: 16,
-    paddingRight: 12,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
+    paddingVertical: spacing.sm,
+    paddingLeft: spacing.base,
+    paddingRight: spacing.md,
+    borderTopLeftRadius: radii.md,
+    borderBottomLeftRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
     minWidth: 100,
@@ -37,20 +37,20 @@ export const sortStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sortButtonText: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.title,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     marginRight: 6,
   },
   sortButtonIcon: {
-    fontSize: 10,
+    fontSize: fontSizes.xs,
     color: colors.text,
   },
   sortOrderButton: {
     backgroundColor: colors.bgSurface,
     paddingHorizontal: 10,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
+    borderTopRightRadius: radii.md,
+    borderBottomRightRadius: radii.md,
     borderWidth: 1,
     borderLeftWidth: 0,
     borderColor: colors.border,
@@ -59,9 +59,9 @@ export const sortStyles = StyleSheet.create({
     alignItems: 'center',
   },
   sortOrderIcon: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.title,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
   sortMenu: {
     position: 'absolute',
@@ -69,7 +69,7 @@ export const sortStyles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: colors.bgSurface,
-    borderRadius: 8,
+    borderRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
     shadowColor: colors.shadow,
@@ -81,7 +81,7 @@ export const sortStyles = StyleSheet.create({
   },
   sortMenuItem: {
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.base,
     borderBottomWidth: 1,
     borderBottomColor: colors.bgLight,
   },
@@ -89,11 +89,11 @@ export const sortStyles = StyleSheet.create({
     backgroundColor: colors.selectionBg,
   },
   sortMenuItemText: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
   },
   sortMenuItemTextActive: {
     color: colors.buttonPrimary,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
 });

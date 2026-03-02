@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { colors, typography } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing, typography } from '@/constants';
+import { nftFragments } from '@/styles/shared';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
     paddingTop: 60,
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
     paddingBottom: 140,
   },
   scroll: {
@@ -16,50 +17,50 @@ export const styles = StyleSheet.create({
   },
   title: {
     ...typography.title,
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   description: {
     ...typography.description,
-    marginBottom: 24,
+    marginBottom: spacing.xl,
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.text,
     textAlign: 'center',
   },
   nftContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   selectButton: {
     width: 240,
     height: 360,
     backgroundColor: colors.bgLight,
-    borderRadius: 16,
+    borderRadius: radii.xl,
     borderWidth: 2,
     borderColor: colors.borderLight,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: spacing.lg,
   },
   plusIcon: {
     fontSize: 40,
     color: colors.inactive,
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   selectText: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.text,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
   nftCard: {
     width: '100%',
     maxWidth: 280,
     backgroundColor: colors.bgSurface,
-    borderRadius: 16,
-    padding: 12,
+    borderRadius: radii.xl,
+    padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
     shadowColor: colors.shadow,
@@ -77,8 +78,8 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 180,
     backgroundColor: colors.bgLight,
-    borderRadius: 12,
-    marginBottom: 12,
+    borderRadius: radii.lg,
+    marginBottom: spacing.md,
     overflow: 'hidden',
   },
   nftImage: {
@@ -86,49 +87,33 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   levelBadge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
+    ...nftFragments.badgeLg,
+    top: spacing.md,
+    left: spacing.md,
     backgroundColor: colors.level,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
   },
   levelBadgeText: {
     color: colors.buttonText,
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.bold,
     letterSpacing: 0.5,
   },
   typeBadge: {
-    position: 'absolute',
-    bottom: 12,
-    left: 12,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    ...nftFragments.badgeLg,
+    bottom: spacing.md,
+    left: spacing.md,
   },
   typeBadgeText: {
     color: colors.buttonText,
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     letterSpacing: 0.5,
   },
   nftInfo: {
     width: '100%',
   },
   nftName: {
-    fontSize: 18,
+    fontSize: fontSizes.lg,
     fontWeight: 'bold',
     color: colors.title,
     marginBottom: 10,
@@ -137,8 +122,8 @@ export const styles = StyleSheet.create({
   poopButton: {
     backgroundColor: colors.buttonPrimary,
     paddingHorizontal: 48,
-    paddingVertical: 16,
-    borderRadius: 8,
+    paddingVertical: spacing.base,
+    borderRadius: radii.md,
   },
   poopButtonDisabled: {
     backgroundColor: colors.disabled,
@@ -146,40 +131,40 @@ export const styles = StyleSheet.create({
   },
   poopButtonText: {
     color: colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
   successMessage: {
     alignItems: 'center',
-    marginTop: 32,
+    marginTop: spacing.xxl,
     backgroundColor: colors.successBg,
-    padding: 24,
-    borderRadius: 16,
+    padding: spacing.xl,
+    borderRadius: radii.xl,
     borderWidth: 2,
     borderColor: colors.buttonSuccess,
   },
   successText: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: fontSizes.xxl,
+    fontWeight: fontWeights.bold,
     color: colors.buttonSuccess,
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   successDetail: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.successTextDark,
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   resetButton: {
     paddingVertical: 14,
-    paddingHorizontal: 32,
-    borderRadius: 12,
+    paddingHorizontal: spacing.xxl,
+    borderRadius: radii.lg,
     borderWidth: 2,
     borderColor: colors.buttonPrimary,
   },
   resetButtonText: {
     color: colors.buttonPrimary,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
 
   // ─── Challenge phases ───────────────────────────────────────
@@ -187,8 +172,8 @@ export const styles = StyleSheet.create({
   challengeContainer: {
     width: '100%',
     alignItems: 'center',
-    paddingTop: 12,
-    gap: 20,
+    paddingTop: spacing.md,
+    gap: spacing.lg,
   },
 
   // Compact NFT header shown during challenge phases
@@ -198,7 +183,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.bgSurface,
     borderRadius: 14,
-    padding: 12,
+    padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
     shadowColor: colors.shadow,
@@ -206,7 +191,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.07,
     shadowRadius: 3,
     elevation: 2,
-    gap: 12,
+    gap: spacing.md,
   },
   challengeNFTAvatar: {
     width: 56,
@@ -219,24 +204,24 @@ export const styles = StyleSheet.create({
   },
   challengeNFTName: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     color: colors.title,
     marginBottom: 2,
   },
   challengeNFTMeta: {
-    fontSize: 12,
+    fontSize: fontSizes.sm,
     color: colors.text,
   },
 
   // Countdown overlay (used for 3-2-1 and immobility timer)
   countdownOverlay: {
     alignItems: 'center',
-    paddingVertical: 24,
-    gap: 16,
+    paddingVertical: spacing.xl,
+    gap: spacing.base,
   },
   countdownNumber: {
     fontSize: 80,
-    fontWeight: '800',
+    fontWeight: fontWeights.extrabold,
     color: colors.title,
     lineHeight: 88,
   },
@@ -244,16 +229,16 @@ export const styles = StyleSheet.create({
     color: colors.errorLight,
   },
   countdownLabel: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.text,
-    fontWeight: '500',
+    fontWeight: fontWeights.medium,
   },
 
   // Status badge (running / warning)
   statusBadge: {
-    paddingVertical: 8,
+    paddingVertical: spacing.sm,
     paddingHorizontal: 18,
-    borderRadius: 20,
+    borderRadius: radii.xxl,
   },
   statusBadgeRunning: {
     backgroundColor: colors.successBg,
@@ -262,8 +247,8 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.errorBg,
   },
   statusBadgeText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
     color: colors.title,
   },
 
@@ -272,11 +257,11 @@ export const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.bgSurface,
     borderRadius: 14,
-    padding: 20,
+    padding: spacing.lg,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
-    gap: 8,
+    gap: spacing.sm,
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.07,
@@ -284,14 +269,14 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   phaseCardSuccess: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: fontSizes.xl,
+    fontWeight: fontWeights.bold,
     color: colors.buttonSuccess,
     textAlign: 'center',
   },
   phaseCardLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
     color: colors.title,
     textAlign: 'center',
   },
@@ -305,13 +290,13 @@ export const styles = StyleSheet.create({
   recordingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+    gap: spacing.sm,
+    marginBottom: spacing.md,
   },
   recordingDot: {
     width: 12,
     height: 12,
-    borderRadius: 6,
+    borderRadius: radii.sm,
     backgroundColor: colors.errorLight,
   },
 
@@ -319,22 +304,22 @@ export const styles = StyleSheet.create({
   actionButton: {
     backgroundColor: colors.buttonPrimary,
     paddingHorizontal: 48,
-    paddingVertical: 16,
-    borderRadius: 8,
+    paddingVertical: spacing.base,
+    borderRadius: radii.md,
     width: '100%',
     alignItems: 'center',
   },
   actionButtonText: {
     color: colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
 
   // Cancel button (bordered, secondary)
   cancelLink: {
     paddingVertical: 14,
-    paddingHorizontal: 32,
-    borderRadius: 12,
+    paddingHorizontal: spacing.xxl,
+    borderRadius: radii.lg,
     borderWidth: 2,
     borderColor: colors.disabled,
     width: '100%',
@@ -342,15 +327,15 @@ export const styles = StyleSheet.create({
   },
   cancelLinkText: {
     color: colors.disabled,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
 
   // Result cards
   resultCard: {
     width: '100%',
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: radii.xl,
+    padding: spacing.xl,
     borderWidth: 2,
     alignItems: 'center',
     gap: 6,
@@ -369,12 +354,12 @@ export const styles = StyleSheet.create({
   },
   resultTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     color: colors.title,
     textAlign: 'center',
   },
   resultSub: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
     textAlign: 'center',
   },
@@ -384,15 +369,15 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.errorBg,
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginBottom: 8,
+    paddingHorizontal: spacing.base,
+    marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.toastBorder,
   },
   toastMessageText: {
     fontSize: 13,
     color: colors.toastText,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     textAlign: 'center',
   },
 });

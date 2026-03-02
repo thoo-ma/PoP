@@ -1,70 +1,70 @@
 import { StyleSheet } from 'react-native';
-import { colors, RARITY_COLORS } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, RARITY_COLORS, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   filterContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 8,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
   },
   filterToggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   filterToggleButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.background,
-    paddingVertical: 8,
-    paddingLeft: 16,
-    paddingRight: 12,
-    borderRadius: 8,
+    paddingVertical: spacing.sm,
+    paddingLeft: spacing.base,
+    paddingRight: spacing.md,
+    borderRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
     minWidth: 120,
     height: 36,
     justifyContent: 'space-between',
-    marginRight: 8,
+    marginRight: spacing.sm,
   },
   filterToggleText: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.title,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     marginRight: 6,
   },
   filterToggleIcon: {
-    fontSize: 10,
+    fontSize: fontSizes.xs,
     color: colors.text,
   },
   clearButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   clearFiltersText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     color: colors.info,
   },
   filterContent: {
     backgroundColor: colors.background,
-    borderRadius: 8,
+    borderRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 12,
-    marginTop: 8,
+    padding: spacing.md,
+    marginTop: spacing.sm,
   },
   filterSection: {
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   filterSectionLast: {
     marginBottom: 0,
   },
   filterSectionLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
     color: colors.text,
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   filterChipsRow: {
     flexDirection: 'row',
@@ -73,25 +73,25 @@ export const styles = StyleSheet.create({
   },
   filterChip: {
     paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 6,
+    paddingHorizontal: spacing.base,
+    borderRadius: radii.sm,
     backgroundColor: colors.background,
     borderWidth: 1.5,
     borderColor: colors.border,
-    marginHorizontal: 4,
-    marginBottom: 8,
+    marginHorizontal: spacing.xs,
+    marginBottom: spacing.sm,
   },
   filterChipActive: {
     borderWidth: 2,
   },
   filterChipText: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
     color: colors.text,
   },
   filterChipTextActive: {
     color: colors.buttonText,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
   },
   // Rarity chip colors
   commonChip: {

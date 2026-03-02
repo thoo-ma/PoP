@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,18 +9,18 @@ export const styles = StyleSheet.create({
     paddingTop: 60,
   },
   title: {
-    fontSize: 32,
+    fontSize: fontSizes.display,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: spacing.md,
     textAlign: 'center',
     color: colors.title,
   },
   indicator: {
-    marginTop: 40,
+    marginTop: spacing.xxxl,
   },
   message: {
-    marginTop: 12,
-    fontSize: 14,
+    marginTop: spacing.md,
+    fontSize: fontSizes.md,
     color: colors.text,
   },
 });

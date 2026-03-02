@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   overlay: {
@@ -10,8 +10,8 @@ export const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: colors.background,
-    borderRadius: 20,
-    padding: 32,
+    borderRadius: radii.xxl,
+    padding: spacing.xxl,
     width: '85%',
     maxWidth: 400,
     alignItems: 'center',
@@ -19,41 +19,41 @@ export const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 16,
-    right: 16,
-    padding: 8,
+    top: spacing.base,
+    right: spacing.base,
+    padding: spacing.sm,
     zIndex: 1,
   },
   avatarContainer: {
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: spacing.base,
+    marginBottom: spacing.base,
   },
   title: {
-    fontSize: 28,
+    fontSize: fontSizes.xxxl,
     fontWeight: 'bold',
     color: colors.title,
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   displayName: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
     color: colors.title,
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   email: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
-    marginBottom: 24,
+    marginBottom: spacing.xl,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    paddingVertical: 20,
-    marginBottom: 24,
+    paddingVertical: spacing.lg,
+    marginBottom: spacing.xl,
     backgroundColor: colors.bgLighter,
-    borderRadius: 12,
+    borderRadius: radii.lg,
   },
   statItem: {
     flex: 1,
@@ -65,27 +65,27 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.border,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: fontSizes.xxl,
     fontWeight: 'bold',
     color: colors.title,
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: fontSizes.sm,
     color: colors.text,
   },
   signOutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.buttonPrimary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 8,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    borderRadius: radii.md,
+    gap: spacing.sm,
   },
   signOutText: {
     color: colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
 });

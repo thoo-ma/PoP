@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     top: 60,
-    left: 20,
+    left: spacing.lg,
     zIndex: 100,
-    padding: 8,
+    padding: spacing.sm,
     backgroundColor: colors.bgOverlay,
-    borderRadius: 20,
+    borderRadius: radii.xxl,
     shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,

@@ -1,17 +1,17 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   selectorRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: spacing.base,
   },
   selectorArrow: {
     width: 52,
     height: 36,
-    borderRadius: 8,
+    borderRadius: radii.md,
     backgroundColor: colors.bgLight,
     alignItems: 'center',
     justifyContent: 'center',
@@ -22,12 +22,12 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 28,
     color: colors.title,
-    fontWeight: '400',
+    fontWeight: fontWeights.normal,
   },
   selectorCounter: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
-    fontWeight: '500',
+    fontWeight: fontWeights.medium,
     minWidth: 48,
     textAlign: 'center',
   },

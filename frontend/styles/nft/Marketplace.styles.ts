@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, typography } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing, typography } from '@/constants';
 import { sortStyles as baseSortStyles } from '@/styles/shared/Sort.styles';
 
 export const styles = StyleSheet.create({
@@ -16,27 +16,27 @@ export const styles = StyleSheet.create({
   description: {
     ...typography.description,
     color: colors.text,
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   sortContainer: {
     ...baseSortStyles.sortContainer,
     marginTop: 0,
   },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
     paddingBottom: 120,
     width: '100%',
   },
   infoBanner: {
     backgroundColor: colors.resultWarningBg,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
+    borderRadius: radii.lg,
+    padding: spacing.base,
+    marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: colors.amber,
   },
   infoBannerText: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.warningTextDark,
     textAlign: 'center',
     lineHeight: 20,
@@ -53,25 +53,25 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   price: {
-    fontSize: 14,
-    fontWeight: '700',
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.bold,
     color: colors.title,
   },
   buyButton: {
     backgroundColor: colors.buttonPrimary,
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.sm,
   },
   buyButtonText: {
     color: colors.buttonText,
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
   },
   unlistButton: {
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.sm,
     borderWidth: 1,
     borderColor: colors.buttonPrimary,
   },  unlistButtonDisabled: {
@@ -80,8 +80,8 @@ export const styles = StyleSheet.create({
   },
   unlistButtonText: {
     color: colors.buttonPrimary,
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
   },
   loadingContainer: {
     flex: 1,
@@ -95,16 +95,16 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   emptyText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
     color: colors.title,
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   emptySubtext: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.text,
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: spacing.xs,
     lineHeight: 20,
   },
 });

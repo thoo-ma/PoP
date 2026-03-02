@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, typography } from '@/constants';
+import { colors, fontWeights, radii, spacing, typography } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,10 +15,10 @@ export const styles = StyleSheet.create({
   description: {
     ...typography.description,
     color: colors.text,
-    marginBottom: 16,
+    marginBottom: spacing.base,
   },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
     paddingBottom: 120,
     width: '100%',
   },
@@ -31,9 +31,9 @@ export const styles = StyleSheet.create({
   listButton: {
     backgroundColor: colors.buttonPrimary,
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    marginTop: 4,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.sm,
+    marginTop: spacing.xs,
   },
   listButtonDisabled: {
     backgroundColor: colors.disabled,
@@ -42,20 +42,20 @@ export const styles = StyleSheet.create({
   listButtonText: {
     color: colors.buttonText,
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     textAlign: 'center',
   },
   allocateButton: {
     backgroundColor: colors.level,
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    marginTop: 4,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.sm,
+    marginTop: spacing.xs,
   },
   allocateButtonText: {
     color: colors.buttonText,
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     textAlign: 'center',
   },
 });

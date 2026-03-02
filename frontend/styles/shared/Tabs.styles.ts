@@ -1,25 +1,25 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const tabStyles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
     backgroundColor: colors.bgLight,
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 12,
+    borderRadius: radii.lg,
+    padding: spacing.xs,
+    marginBottom: spacing.md,
   },
   tab: {
     paddingVertical: 10,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    paddingHorizontal: spacing.xl,
+    borderRadius: radii.md,
   },
   tabActive: {
     backgroundColor: colors.buttonPrimary,
   },
   tabText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
     color: colors.text,
   },
   tabTextActive: {

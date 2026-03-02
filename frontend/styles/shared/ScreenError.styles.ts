@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,27 +9,27 @@ export const styles = StyleSheet.create({
     paddingTop: 60,
   },
   title: {
-    fontSize: 32,
+    fontSize: fontSizes.display,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: spacing.md,
     textAlign: 'center',
     color: colors.title,
   },
   errorText: {
     color: colors.error,
-    marginTop: 20,
+    marginTop: spacing.lg,
     textAlign: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.xl,
   },
   retryButton: {
-    marginTop: 16,
-    paddingHorizontal: 24,
+    marginTop: spacing.base,
+    paddingHorizontal: spacing.xl,
     paddingVertical: 10,
     backgroundColor: colors.buttonPrimary,
-    borderRadius: 8,
+    borderRadius: radii.md,
   },
   retryButtonText: {
     color: colors.buttonText,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
 });

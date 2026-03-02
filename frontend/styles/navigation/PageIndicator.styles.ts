@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   pagination: {
     position: 'absolute',
-    bottom: 40,
+    bottom: spacing.xxxl,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -14,10 +14,10 @@ export const styles = StyleSheet.create({
   floatingMenu: {
     flexDirection: 'row',
     backgroundColor: colors.bgOverlayFull,
-    borderRadius: 24,
-    paddingHorizontal: 16,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.base,
     paddingVertical: 10,
-    gap: 4,
+    gap: spacing.xs,
     shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,
@@ -30,16 +30,16 @@ export const styles = StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: spacing.xs,
   },
   iconLabel: {
-    fontSize: 10,
-    fontWeight: '500',
+    fontSize: fontSizes.xs,
+    fontWeight: fontWeights.medium,
     color: colors.inactive,
-    marginTop: 4,
+    marginTop: spacing.xs,
   },
   iconLabelActive: {
     color: colors.active,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
   },
 });

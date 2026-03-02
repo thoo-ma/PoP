@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   overlay: {
@@ -9,11 +9,11 @@ export const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: colors.bgSurface,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 40,
+    borderTopLeftRadius: radii.xxl,
+    borderTopRightRadius: radii.xxl,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xxxl,
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.12,
@@ -24,24 +24,24 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.bold,
     color: colors.textDark,
   },
   closeButton: {
-    padding: 4,
+    padding: spacing.xs,
   },
   closeText: {
-    fontSize: 18,
+    fontSize: fontSizes.lg,
     color: colors.text,
   },
   subtitle: {
     fontSize: 13,
     color: colors.text,
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   nftName: {
     fontSize: 13,
@@ -55,17 +55,17 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.bgLight,
     borderRadius: 10,
     paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginBottom: 20,
+    paddingHorizontal: spacing.base,
+    marginBottom: spacing.lg,
   },
   pointsLabel: {
     fontSize: 13,
     color: colors.text,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
   pointsValue: {
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: fontWeights.extrabold,
     color: colors.level,
   },
   statRow: {
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   statLabel: {
     width: 80,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     color: colors.propertyText,
   },
   barWrapper: {
@@ -103,8 +103,8 @@ export const styles = StyleSheet.create({
     opacity: 0.55,
   },
   valueText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.bold,
     color: colors.propertyValue,
     width: 36,
     textAlign: 'right',
@@ -128,22 +128,22 @@ export const styles = StyleSheet.create({
     opacity: 0.35,
   },
   adjustBtnText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.bold,
     color: colors.textDark,
     lineHeight: 20,
   },
   deltaText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.bold,
     color: colors.level,
     width: 28,
     textAlign: 'center',
   },
   buttonRow: {
     flexDirection: 'row',
-    gap: 12,
-    marginTop: 8,
+    gap: spacing.md,
+    marginTop: spacing.sm,
   },
   confirmButton: {
     flex: 1,
@@ -157,7 +157,7 @@ export const styles = StyleSheet.create({
   },
   confirmButtonText: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     color: colors.buttonText,
   },
   laterButton: {
@@ -171,13 +171,13 @@ export const styles = StyleSheet.create({
   },
   laterButtonText: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     color: colors.textDark,
   },
   errorText: {
-    fontSize: 12,
+    fontSize: fontSizes.sm,
     color: colors.error,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
 });

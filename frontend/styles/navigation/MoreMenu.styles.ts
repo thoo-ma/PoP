@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   overlay: {
@@ -9,12 +9,12 @@ export const styles = StyleSheet.create({
   },
   menuContainer: {
     paddingBottom: 100,
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
   },
   menu: {
     backgroundColor: colors.background,
-    borderRadius: 16,
-    padding: 8,
+    borderRadius: radii.xl,
+    padding: spacing.sm,
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.25,
@@ -22,32 +22,32 @@ export const styles = StyleSheet.create({
     elevation: 10,
   },
   menuTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
     color: colors.text,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.base,
+    paddingVertical: spacing.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.base,
     paddingVertical: 14,
-    borderRadius: 8,
-    gap: 12,
+    borderRadius: radii.md,
+    gap: spacing.md,
   },
   menuItemActive: {
     backgroundColor: colors.bgLight,
   },
   menuItemText: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.text,
-    fontWeight: '500',
+    fontWeight: fontWeights.medium,
   },
   menuItemTextActive: {
     color: colors.title,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
   },
 });

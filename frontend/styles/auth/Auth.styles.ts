@@ -1,54 +1,54 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    padding: spacing.lg,
     backgroundColor: colors.background,
   },
   title: {
-    fontSize: 32,
+    fontSize: fontSizes.display,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: fontSizes.base,
     color: colors.text,
-    marginBottom: 40,
+    marginBottom: spacing.xxxl,
     textAlign: 'center',
   },
   warningBanner: {
     backgroundColor: colors.warningBg,
     borderWidth: 1,
     borderColor: colors.warningBorder,
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 24,
+    borderRadius: radii.md,
+    padding: spacing.base,
+    marginBottom: spacing.xl,
   },
   warningText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
     color: colors.warningText,
-    marginBottom: 4,
+    marginBottom: spacing.xs,
   },
   warningSubtext: {
-    fontSize: 14,
+    fontSize: fontSizes.md,
     color: colors.warningText,
   },
   devBypassButton: {
     backgroundColor: colors.buttonPrimary,
-    padding: 16,
-    borderRadius: 8,
+    padding: spacing.base,
+    borderRadius: radii.md,
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.base,
   },
   button: {
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
+    padding: spacing.base,
+    borderRadius: radii.md,
+    marginBottom: spacing.base,
     alignItems: 'center',
   },
   buttonContent: {
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    marginRight: 8,
+    marginRight: spacing.sm,
   },
   twitterButton: {
     backgroundColor: colors.primary,
@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: fontSizes.base,
+    fontWeight: fontWeights.semibold,
   },
   googleText: {
     color: colors.buttonTextDark,

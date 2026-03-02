@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '@/constants';
+import { colors, fontSizes, fontWeights, spacing } from '@/constants';
 
 export const styles = StyleSheet.create({
   // Compact mode styles (for grid views like Vault/Marketplace)
   containerCompact: {
-    marginTop: 8,
-    gap: 4,
+    marginTop: spacing.sm,
+    gap: spacing.xs,
   },
   propertyRowCompact: {
     flexDirection: 'row',
@@ -13,16 +13,16 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   propertyLabelCompact: {
-    fontSize: 10,
+    fontSize: fontSizes.xs,
     color: colors.propertyText,
     width: 50,
-    marginRight: 4,
+    marginRight: spacing.xs,
   },
   propertyBarWrapperCompact: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: spacing.xs,
   },
   propertyBarBackgroundCompact: {
     flex: 1,
@@ -36,24 +36,24 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
   },
   propertyValueCompact: {
-    fontSize: 10,
+    fontSize: fontSizes.xs,
     color: colors.propertyText,
-    fontWeight: '600',
+    fontWeight: fontWeights.semibold,
     width: 20,
     textAlign: 'right',
   },
 
   // Detailed mode styles (for full screen views like Poop)
   containerDetailed: {
-    marginTop: 8,
-    gap: 8,
+    marginTop: spacing.sm,
+    gap: spacing.sm,
   },
   propertyRowDetailed: {
-    gap: 4,
+    gap: spacing.xs,
   },
   propertyLabelDetailed: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
     color: colors.propertyText,
     marginBottom: 2,
   },
@@ -74,9 +74,9 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
   },
   propertyValueDetailed: {
-    fontSize: 12,
+    fontSize: fontSizes.sm,
     color: colors.textDark,
-    fontWeight: '700',
+    fontWeight: fontWeights.bold,
     width: 26,
     textAlign: 'right',
   },
