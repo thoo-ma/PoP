@@ -3,9 +3,9 @@ import { memo, useState } from 'react';
 import { breedStyles as styles } from '@/styles';
 import { useUserNFTs, useBreedNFT } from '@/hooks';
 import type { NFT } from '@/types/nft';
-import { NFTProperties, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
-import { nftEvents, canBreed, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
-import { RARITY_COLORS } from '@/constants';
+import type { MysteryBox } from '@shared';
+import { MysteryBoxCard, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
+import { nftEvents, canBreed } from '@/utils';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 /**
@@ -19,7 +19,7 @@ import { RARITY_COLORS } from '@/constants';
   const [parent1, setParent1] = useState<NFT | null>(null);
   const [parent2, setParent2] = useState<NFT | null>(null);
   const [pickerSlot, setPickerSlot] = useState<1 | 2 | null>(null);
-  const [breedResult, setBreedResult] = useState<NFT | null>(null);
+  const [breedResult, setBreedResult] = useState<MysteryBox | null>(null);
   const [resultParent1Url, setResultParent1Url] = useState<string | null>(null);
   const [resultParent2Url, setResultParent2Url] = useState<string | null>(null);
 
@@ -147,7 +147,7 @@ import { RARITY_COLORS } from '@/constants';
         ) : (
           /* ── Result ───────────────────────────────────────────────────── */
           <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>🎉 New NFT Created!</Text>
+            <Text style={styles.resultTitle}>🎉 Mystery Box Earned!</Text>
 
             {/* Parents summary */}
             <View style={styles.resultParentsRow}>
@@ -157,35 +157,8 @@ import { RARITY_COLORS } from '@/constants';
               <Text style={styles.resultArrow}>→</Text>
             </View>
 
-            {/* Offspring card */}
-            <View style={[styles.resultCard, { borderColor: RARITY_COLORS[breedResult.rarity] }]}>
-              <View style={styles.resultImageContainer}>
-                <Image
-                  source={{ uri: breedResult.image_url }}
-                  style={styles.resultImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.levelBadge}>
-                  <Text style={styles.levelBadgeText}>Lv {breedResult.level}</Text>
-                </View>
-                <View style={[styles.typeBadge, TYPE_BADGE_STYLES[breedResult.type]]}>
-                  <Text style={styles.typeBadgeText}>{breedResult.type.toUpperCase()}</Text>
-                </View>
-                <View style={[styles.rarityBadge, { backgroundColor: RARITY_COLORS[breedResult.rarity] }]}>
-                  <Text style={styles.rarityBadgeText}>{breedResult.rarity.toUpperCase()}</Text>
-                </View>
-              </View>
-              <View style={styles.resultCardContent}>
-                <Text style={styles.resultLabel}>{formatDisplayName(breedResult.name)}</Text>
-                <NFTProperties
-                  efficiency={breedResult.efficiency}
-                  resilience={breedResult.resilience}
-                  comfort={breedResult.comfort}
-                  luck={breedResult.luck}
-                  mode="detailed"
-                />
-              </View>
-            </View>
+            {/* Mystery box result */}
+            <MysteryBoxCard box={breedResult} />
 
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetButtonText}>Breed Again</Text>

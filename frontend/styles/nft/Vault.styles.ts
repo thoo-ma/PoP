@@ -28,6 +28,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
+  gridItem: {
+    width: '48%',
+  },
   listButton: {
     backgroundColor: colors.buttonPrimary,
     paddingVertical: 6,

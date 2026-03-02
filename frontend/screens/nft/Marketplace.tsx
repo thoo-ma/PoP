@@ -137,6 +137,7 @@ export default memo(function Marketplace() {
           {activeTab === 'buy' ? (
             <View style={styles.grid}>
               {sortedMarketplaceListings.map((item) => (
+                <View key={item.id} style={styles.gridItem}>
                 <NFTCard
                   key={item.id}
                   nft={item}
@@ -155,12 +156,14 @@ export default memo(function Marketplace() {
                     </View>
                   }
                 />
+                </View>
               ))}
             </View>
           ) : (
             <View style={styles.grid}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
+                  <View key={item.id} style={styles.gridItem}>
                   <NFTCard
                     key={item.id}
                     nft={item}
@@ -182,6 +185,7 @@ export default memo(function Marketplace() {
                       </View>
                     }
                   />
+                  </View>
                 ))
               ) : (
                 <View style={styles.emptyState}>

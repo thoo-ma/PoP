@@ -41,6 +41,9 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
+  gridItem: {
+    width: '48%',
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

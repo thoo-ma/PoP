@@ -219,6 +219,7 @@ export default memo(function Vault() {
           >
             <View style={styles.grid}>
               {sortedNfts.map((nft) => (
+                <View key={nft.id} style={styles.gridItem}>
                 <NFTCard
                   key={nft.id}
                   nft={nft}
@@ -253,6 +254,7 @@ export default memo(function Vault() {
                     </>
                   }
                 />
+                </View>
               ))}
             </View>
           </ScrollView>
@@ -288,8 +290,8 @@ export default memo(function Vault() {
                 {groupedBoxes.map((group) => {
                   const isOpening = openingRarity === group.rarity;
                   return (
+                    <View key={group.rarity} style={styles.gridItem}>
                     <MysteryBoxCard
-                      key={group.rarity}
                       box={group.box}
                       count={group.count}
                       action={
@@ -306,6 +308,7 @@ export default memo(function Vault() {
                         </TouchableOpacity>
                       }
                     />
+                    </View>
                   );
                 })}
               </View>
