@@ -9,3 +9,4 @@ export { styles as repairStyles } from './Repair.styles';
 export { styles as vaultStyles } from './Vault.styles';
 export { styles as statAllocationModalStyles } from './StatAllocationModal.styles';
 export { styles as mysteryBoxRevealModalStyles } from './MysteryBoxRevealModal.styles';
+export { styles as lootRouletteCardStyles } from './LootRouletteCard.styles';

@@ -7,3 +7,4 @@ export * from './useRepairNFT';
 export * from './useAllocateStatPoints';
 export * from './useMysteryBoxes';
 export * from './useOpenMysteryBox';
+export * from './useRollLoot';
