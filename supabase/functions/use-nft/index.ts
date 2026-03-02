@@ -6,7 +6,7 @@ import {
   cooldownRemainingSeconds,
 } from '../../../shared/cooldown.ts'
 import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
-import { calcXPGain, applyXP } from '../../../shared/xp.ts'
+import { XP_PER_USE, applyXP } from '../../../shared/xp.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Type multipliers ────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ serve(async (req) => {
     const newEnergy = nft.energy - energyLost
 
     // ── XP calculation ───────────────────────────────────────────────────────
-    const xpGained = calcXPGain(nft.level)
+    const xpGained = XP_PER_USE
     const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
 
     // ── Stat points earned ───────────────────────────────────────────────────
