@@ -1,16 +1,16 @@
 import { useState, useCallback } from 'react';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import type { NFT } from '@/types/nft';
+import type { MysteryBox } from '@shared';
 import { logError } from '@/utils/errorHelpers';
 
 /**
- * Hook to breed two NFTs and create a new one.
+ * Hook to breed two NFTs and receive a mystery box.
  * Rarity probability roll and all game logic run server-side in the
  * `breed-nfts` Supabase Edge Function for tamper-resistance.
  *
  * @returns A `breedNFTs(parent1Id, parent2Id)` callback that resolves to the
- *   newly minted child `NFT` or `null`, plus `loading` and `error` state.
+ *   newly created `MysteryBox` or `null`, plus `loading` and `error` state.
  */
 export function useBreedNFT() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,7 @@ export function useBreedNFT() {
         return null;
       }
 
-      return data as NFT;
+      return data as MysteryBox;
     } catch (err) {
       logError('useBreedNFT:Breed', err);
       setError(err instanceof Error ? err.message : 'Failed to breed NFTs');

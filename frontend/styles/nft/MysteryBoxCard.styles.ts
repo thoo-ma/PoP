@@ -4,7 +4,7 @@ import { nftFragments } from '@/styles/shared';
 
 export const styles = StyleSheet.create({
   card: {
-    width: '48%',
+    width: '100%',
     marginBottom: spacing.base,
     borderRadius: radii.lg,
     backgroundColor: colors.bgSurface,

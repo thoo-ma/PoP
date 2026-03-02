@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { RARITY_RANK, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
-import { randomName, buildImageUrl } from '../_shared/nftHelpers.ts'
+import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
+import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
@@ -27,36 +27,6 @@ function rollRarity(r1: Rarity, r2: Rarity): Rarity {
     if (roll < cumulative) return rarities[i]
   }
   return 'transcendent' // floating-point safety fallback
-}
-
-// ─── Type & name system ────────────────────────────────────────────────────────
-const TYPE_WEIGHTS: Record<NFTType, number> = {
-  'turbo-flush':  1,
-  'cruise-seat':  2,
-  'zen-fortress': 3,
-}
-
-const TYPE_FROM_WEIGHT: Array<[number, NFTType]> = [
-  [1.5, 'turbo-flush'],
-  [2.5, 'cruise-seat'],
-  [Infinity, 'zen-fortress'],
-]
-
-
-function resolveOffspringType(t1: NFTType, t2: NFTType): NFTType {
-  const avg = (TYPE_WEIGHTS[t1] + TYPE_WEIGHTS[t2]) / 2
-  for (const [threshold, type] of TYPE_FROM_WEIGHT) {
-    if (avg <= threshold) return type
-  }
-  return 'zen-fortress'
-}
-
-// ─── Stat helpers ─────────────────────────────────────────────────────────────
-
-function breedStat(s1: number, s2: number): number {
-  const avg = (s1 + s2) / 2
-  const noise = (Math.random() - 0.5) * 10 // ±5
-  return Math.max(0, Math.min(100, Math.round(avg + noise)))
 }
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
@@ -136,34 +106,20 @@ serve(async (req) => {
     // ── Rarity roll ───────────────────────────────────────────────────────────
     const offspringRarity = rollRarity(r1, r2)
 
-    // ── Type & name ────────────────────────────────────────────────────────────
-    const t1 = p1.type as NFTType
-    const t2 = p2.type as NFTType
-    const offspringType = resolveOffspringType(t1, t2)
-    const offspringName = randomName(offspringType)
+    console.log(`breed-nfts: ${r1}+${r2} → mystery box (${offspringRarity}) (key: ${rarityKey(r1, r2)})`)
 
-    // ── Stats ─────────────────────────────────────────────────────────────────
-    const offspring = {
-      user_id: userId,
-      name: offspringName,
-      type: offspringType,
-      rarity: offspringRarity,
-      image_url: buildImageUrl(offspringType, offspringName, offspringRarity),
-      efficiency: breedStat(p1.efficiency, p2.efficiency),
-      resilience: breedStat(p1.resilience, p2.resilience),
-      comfort:    breedStat(p1.comfort,    p2.comfort),
-      luck:       breedStat(p1.luck,       p2.luck),
-      energy: 100,
-      level:  1,
-      xp:     0,
+    // ── Build mystery box ─────────────────────────────────────────────────────
+    const mysteryBox = {
+      user_id:   userId,
+      rarity:    offspringRarity,
+      image_url: buildMysteryBoxImageUrl(offspringRarity),
+      opened:    false,
     }
-
-    console.log(`breed-nfts: ${r1}+${r2} → ${offspringRarity} (key: ${rarityKey(r1, r2)})`)
 
     // ── Insert ────────────────────────────────────────────────────────────────
     const { data: created, error: insertError } = await supabase
-      .from('nfts')
-      .insert(offspring)
+      .from('mystery_boxes')
+      .insert(mysteryBox)
       .select()
       .single()
 
@@ -175,22 +131,13 @@ serve(async (req) => {
       )
     }
 
-    // ── Return new NFT ────────────────────────────────────────────────────────
+    // ── Return new mystery box ────────────────────────────────────────────────
     const result = {
       id:         created.id,
-      name:       created.name,
-      image:      created.image_url,
-      type:       created.type,
       rarity:     created.rarity,
-      efficiency: created.efficiency,
-      resilience: created.resilience,
-      comfort:    created.comfort,
-      luck:       created.luck,
-      energy:     created.energy,
-      level:      created.level,
-      xp:         created.xp,
+      image_url:  created.image_url,
+      opened:     created.opened,
       created_at: created.created_at,
-      updated_at: created.updated_at,
     }
 
     return new Response(
