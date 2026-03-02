@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
     color: colors.text,
   },
   filterChipTextActive: {
-    color: '#fff',
+    color: colors.buttonText,
     fontWeight: '700',
   },
   // Rarity chip colors

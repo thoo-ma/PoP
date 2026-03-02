@@ -4,7 +4,7 @@ import { colors } from '@/constants';
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: colors.bgOverlayDark,
     justifyContent: 'flex-end',
   },
   menuContainer: {
@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 16,
     padding: 8,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.25,
     shadowRadius: 16,
@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
   menuItemActive: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.bgLight,
   },
   menuItemText: {
     fontSize: 16,

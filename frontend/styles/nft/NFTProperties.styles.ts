@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   // Compact mode styles (for grid views like Vault/Marketplace)
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   propertyLabelCompact: {
     fontSize: 10,
-    color: '#64748b',
+    color: colors.propertyText,
     width: 50,
     marginRight: 4,
   },
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
   propertyBarBackgroundCompact: {
     flex: 1,
     height: 6,
-    backgroundColor: '#e2e8f0',
+    backgroundColor: colors.propertyBg,
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   propertyValueCompact: {
     fontSize: 10,
-    color: '#475569',
+    color: colors.propertyText,
     fontWeight: '600',
     width: 20,
     textAlign: 'right',
@@ -53,7 +54,7 @@ export const styles = StyleSheet.create({
   propertyLabelDetailed: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#475569',
+    color: colors.propertyText,
     marginBottom: 2,
   },
   propertyBarWrapperDetailed: {
@@ -64,7 +65,7 @@ export const styles = StyleSheet.create({
   propertyBarBackgroundDetailed: {
     flex: 1,
     height: 8,
-    backgroundColor: '#e2e8f0',
+    backgroundColor: colors.propertyBg,
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -74,7 +75,7 @@ export const styles = StyleSheet.create({
   },
   propertyValueDetailed: {
     fontSize: 12,
-    color: '#1e293b',
+    color: colors.textDark,
     fontWeight: '700',
     width: 26,
     textAlign: 'right',

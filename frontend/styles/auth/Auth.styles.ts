@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 32,
@@ -15,14 +16,14 @@ export const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.text,
     marginBottom: 40,
     textAlign: 'center',
   },
   warningBanner: {
-    backgroundColor: '#FFF3CD',
+    backgroundColor: colors.warningBg,
     borderWidth: 1,
-    borderColor: '#FFC107',
+    borderColor: colors.warningBorder,
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
@@ -30,15 +31,15 @@ export const styles = StyleSheet.create({
   warningText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#856404',
+    color: colors.warningText,
     marginBottom: 4,
   },
   warningSubtext: {
     fontSize: 14,
-    color: '#856404',
+    color: colors.warningText,
   },
   devBypassButton: {
-    backgroundColor: '#000',
+    backgroundColor: colors.buttonPrimary,
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -58,19 +59,19 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   twitterButton: {
-    backgroundColor: '#000000',
+    backgroundColor: colors.primary,
   },
   googleButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgSurface,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 16,
     fontWeight: '600',
   },
   googleText: {
-    color: '#1F1F1F',
+    color: colors.buttonTextDark,
   },
 });

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   selectorRow: {
@@ -11,21 +12,21 @@ export const styles = StyleSheet.create({
     width: 52,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.bgLight,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: colors.border,
   },
   selectorArrowText: {
     fontSize: 22,
     lineHeight: 28,
-    color: '#374151',
+    color: colors.title,
     fontWeight: '400',
   },
   selectorCounter: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.text,
     fontWeight: '500',
     minWidth: 48,
     textAlign: 'center',

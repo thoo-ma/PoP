@@ -4,7 +4,7 @@ import { colors } from '@/constants';
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: colors.bgOverlayDarkHeavy,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 20,
     marginBottom: 24,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.bgLighter,
     borderRadius: 12,
   },
   statItem: {
@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
   statDivider: {
     width: 1,
     height: 40,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.border,
   },
   statValue: {
     fontSize: 24,
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   signOutText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 16,
     fontWeight: '600',
   },

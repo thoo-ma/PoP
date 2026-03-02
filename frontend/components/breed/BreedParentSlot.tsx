@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import type { NFT } from '@/types/nft';
 import { breedStyles as styles } from '@/styles';
-import { RARITY_COLORS } from '@/constants';
+import { RARITY_COLORS, colors } from '@/constants';
 import { formatDisplayName } from '@/utils';
 
 interface BreedParentSlotProps {
@@ -19,7 +19,7 @@ interface BreedParentSlotProps {
  * or a placeholder prompt when empty.
  */
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
-  const borderColor = nft ? RARITY_COLORS[nft.rarity] : '#d1d5db';
+  const borderColor = nft ? RARITY_COLORS[nft.rarity] : colors.inactive;
   return (
     <TouchableOpacity
       style={[styles.parentSlot, { borderColor }]}

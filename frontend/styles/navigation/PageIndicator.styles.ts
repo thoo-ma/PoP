@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   pagination: {
@@ -12,12 +13,12 @@ export const styles = StyleSheet.create({
   },
   floatingMenu: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: colors.bgOverlayFull,
     borderRadius: 24,
     paddingHorizontal: 16,
     paddingVertical: 10,
     gap: 4,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -34,11 +35,11 @@ export const styles = StyleSheet.create({
   iconLabel: {
     fontSize: 10,
     fontWeight: '500',
-    color: '#d1d5db',
+    color: colors.inactive,
     marginTop: 4,
   },
   iconLabelActive: {
-    color: '#000',
+    color: colors.active,
     fontWeight: '700',
   },
 });

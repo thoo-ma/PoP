@@ -28,16 +28,16 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   infoBanner: {
-    backgroundColor: '#fef3c7',
+    backgroundColor: colors.resultWarningBg,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#fbbf24',
+    borderColor: colors.amber,
   },
   infoBannerText: {
     fontSize: 14,
-    color: '#78350f',
+    color: colors.warningTextDark,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
   },
   buyButtonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.buttonPrimary,
   },  unlistButtonDisabled: {
-    borderColor: '#9ca3af',
+    borderColor: colors.disabled,
     opacity: 0.6,
   },
   unlistButtonText: {

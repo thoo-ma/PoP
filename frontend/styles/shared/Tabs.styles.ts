@@ -4,7 +4,7 @@ import { colors } from '@/constants';
 export const tabStyles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.bgLight,
     borderRadius: 12,
     padding: 4,
     marginBottom: 12,
@@ -23,6 +23,6 @@ export const tabStyles = StyleSheet.create({
     color: colors.text,
   },
   tabTextActive: {
-    color: '#fff',
+    color: colors.buttonText,
   },
 });

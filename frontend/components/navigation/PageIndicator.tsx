@@ -3,6 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { memo } from 'react';
 import type { PageIndicatorProps } from '@/types';
 import { styles } from '@/styles/navigation/PageIndicator.styles';
+import { colors } from '@/constants';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -36,7 +37,7 @@ export default memo(function PageIndicator({ totalPages, currentPage, onPageChan
             <MaterialIcons
               name={icon}
               size={26}
-              color={currentPage === index ? '#000' : '#d1d5db'}
+              color={currentPage === index ? colors.active : colors.inactive}
             />
             <Text style={[styles.iconLabel, currentPage === index && styles.iconLabelActive]}>
               {label}

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants';
 
 export const styles = StyleSheet.create({
   button: {
@@ -7,9 +8,9 @@ export const styles = StyleSheet.create({
     left: 20,
     zIndex: 100,
     padding: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: colors.bgOverlay,
     borderRadius: 20,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,

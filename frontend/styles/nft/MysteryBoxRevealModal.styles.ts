@@ -4,7 +4,7 @@ import { colors } from '@/constants';
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.70)',
+    backgroundColor: colors.bgOverlayDarkHeavy,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   rarityText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 9,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -80,13 +80,13 @@ export const styles = StyleSheet.create({
   },
   closeButton: {
     width: '100%',
-    backgroundColor: '#7c3aed',
+    backgroundColor: colors.mystery,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
   },
   closeButtonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 15,
     fontWeight: '700',
   },

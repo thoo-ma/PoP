@@ -4,7 +4,7 @@ import { colors } from '@/constants';
 export const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    backgroundColor: colors.bgOverlayDarkMid,
     justifyContent: 'flex-end',
   },
   sheet: {

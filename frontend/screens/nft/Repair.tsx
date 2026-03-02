@@ -6,6 +6,7 @@ import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/compone
 import { useUserNFTs, useUpdateNFT } from '@/hooks';
 import { MAX_ENERGY } from '@shared';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
+import { colors } from '@/constants';
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -161,9 +162,9 @@ export default memo(function Repair() {
                     maximumValue={maxRepairPossible}
                     value={repairAmount}
                     onValueChange={setRepairAmount}
-                    minimumTrackTintColor="#1e293b"
-                    maximumTrackTintColor="#d1d5db"
-                    thumbTintColor="#1e293b"
+                    minimumTrackTintColor={colors.slider}
+                    maximumTrackTintColor={colors.inactive}
+                    thumbTintColor={colors.slider}
                     step={1}
                   />
                 </View>
