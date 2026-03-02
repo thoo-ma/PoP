@@ -3,6 +3,7 @@ import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
+import { POOP_BREED_COST } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
@@ -103,6 +104,34 @@ serve(async (req) => {
       )
     }
 
+    // ── POOP balance check ─────────────────────────────────────────────────────
+    const { data: userRow, error: userFetchError } = await supabase
+      .from('users')
+      .select('poop_balance')
+      .eq('id', userId)
+      .single()
+
+    if (userFetchError) {
+      console.error('breed-nfts: wallet fetch error', userFetchError)
+      return new Response(
+        JSON.stringify({ error: 'Internal server error', message: userFetchError.message }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const currentPoopBalance = userRow?.poop_balance ?? 0
+    if (currentPoopBalance < POOP_BREED_COST) {
+      return new Response(
+        JSON.stringify({
+          error: 'insufficient_poop',
+          message: `Breeding costs ${POOP_BREED_COST} POOP. You have ${currentPoopBalance} POOP.`,
+          poop_balance: currentPoopBalance,
+          poop_required: POOP_BREED_COST,
+        }),
+        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // ── Rarity roll ───────────────────────────────────────────────────────────
     const offspringRarity = rollRarity(r1, r2)
 
@@ -130,6 +159,20 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
+
+    // ── Deduct POOP ───────────────────────────────────────────────────────────
+    const newPoopBalance = currentPoopBalance - POOP_BREED_COST
+    const { error: poopError } = await supabase
+      .from('users')
+      .update({ poop_balance: newPoopBalance })
+      .eq('id', userId)
+
+    if (poopError) {
+      // Non-fatal: offspring already created; log but don't rollback
+      console.error('breed-nfts: poop deduction error', poopError)
+    }
+
+    console.log(`breed-nfts: user ${userId} spent ${POOP_BREED_COST} POOP → balance ${newPoopBalance}`)
 
     // ── Return new mystery box ────────────────────────────────────────────────
     const result = {

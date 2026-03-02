@@ -5,16 +5,42 @@
  * XP is tracked within the current level and resets to the remainder on
  * level-up.
  *
- * Both the per-poop XP gain and the level-advance threshold use the same
- * formula so tuning one tunes both:
+ * XP required to advance from level N to N+1:
  *
- *   value(level) = round(25 + level × 5 + level² × 0.3)
+ *   xpThreshold(level) = max(33, round(25 + level × 5 + level² × 0.3))
  *
- * Level 1 has a minimum floor of 33 (matches the design table).
+ * XP earned per NFT use: XP_PER_USE (flat, level-independent).
+ *
  * Levels: 1 – MAX_LEVEL. The bar at MAX_LEVEL fills to xpThreshold(MAX_LEVEL).
+ *
+ * ┌───────┬───────────────────────┬──────────────────────────┐
+ * │ Level │ XP to reach next level│ Uses needed (@ 15 XP/use)│
+ * ├───────┼───────────────────────┼──────────────────────────┤
+ * │   1   │          33           │            3             │
+ * │   2   │          36           │            3             │
+ * │   3   │          43           │            3             │
+ * │   4   │          50           │            4             │
+ * │   5   │          58           │            4             │
+ * │   6   │          66           │            5             │
+ * │   7   │          75           │            5             │
+ * │   8   │          84           │            6             │
+ * │   9   │          94           │            7             │
+ * │  10   │         105           │            7             │
+ * │  11   │         116           │            8             │
+ * │  12   │         128           │            9             │
+ * │  13   │         141           │           10             │
+ * │  14   │         154           │           11             │
+ * │  15   │         168           │           12             │
+ * │  16   │         182           │           13             │
+ * │  17   │         197           │           14             │
+ * │  18   │         212           │           15             │
+ * │  19   │         228           │           16             │
+ * │  20   │         245  (max)    │            —             │
+ * └───────┴───────────────────────┴──────────────────────────┘
  */
 
 export const MAX_LEVEL = 20
+export const XP_PER_USE = 15
 
 function xpFormula(level: number): number {
   return Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3)
@@ -23,11 +49,6 @@ function xpFormula(level: number): number {
 /** XP threshold to advance from `level` to `level + 1`. */
 export function xpThreshold(level: number): number {
   return Math.max(33, xpFormula(level))
-}
-
-/** XP earned by using an NFT that is currently at `level`. */
-export function calcXPGain(level: number): number {
-  return xpFormula(level)
 }
 
 /**

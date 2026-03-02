@@ -6,7 +6,8 @@ import {
   cooldownRemainingSeconds,
 } from '../../../shared/cooldown.ts'
 import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
-import { calcXPGain, applyXP } from '../../../shared/xp.ts'
+import { XP_PER_USE, applyXP } from '../../../shared/xp.ts'
+import { POOP_PER_USE } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Type multipliers ────────────────────────────────────────────────────────
@@ -108,7 +109,7 @@ serve(async (req) => {
     const newEnergy = nft.energy - energyLost
 
     // ── XP calculation ───────────────────────────────────────────────────────
-    const xpGained = calcXPGain(nft.level)
+    const xpGained = XP_PER_USE
     const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
 
     // ── Stat points earned ───────────────────────────────────────────────────
@@ -146,18 +147,35 @@ serve(async (req) => {
       )
     }
 
+    // ── Award POOP currency ───────────────────────────────────────────────────
+    const { data: poopData, error: poopError } = await supabase.rpc(
+      'increment_poop_balance',
+      { user_id: userId, amount: POOP_PER_USE },
+    )
+
+    if (poopError) {
+      // Non-fatal: log but don't fail the whole request
+      console.error('use-nft: poop increment error', poopError)
+    }
+
+    const newPoopBalance: number = (poopData as number) ?? 0
+
+    console.log(`use-nft: user ${userId} earned ${POOP_PER_USE} POOP → balance ${newPoopBalance}`)
+
     // ── Return result ─────────────────────────────────────────────────────────
     return new Response(
       JSON.stringify({
-        id:          updated.id,
-        energy:      updated.energy,
-        energy_lost: energyLost,
-        depleted:    updated.energy === 0,
-        xp:          updated.xp,
-        xp_gained:   xpGained,
-        level:       updated.level,
-        leveled_up:  leveledUp,
-        stat_points: updated.stat_points,
+        id:           updated.id,
+        energy:       updated.energy,
+        energy_lost:  energyLost,
+        depleted:     updated.energy === 0,
+        xp:           updated.xp,
+        xp_gained:    xpGained,
+        level:        updated.level,
+        leveled_up:   leveledUp,
+        stat_points:  updated.stat_points,
+        poop_earned:  POOP_PER_USE,
+        poop_balance: newPoopBalance,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

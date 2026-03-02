@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks';
 import { profileStyles as styles } from '@/styles';
 import { showSignOutConfirmation } from '@/utils';
 import { colors } from '@/constants';
+import Wallet from './Wallet';
 
 interface ProfileProps {
   /** Controls the visibility of the profile modal. */
@@ -21,6 +22,7 @@ interface ProfileProps {
 export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [walletVisible, setWalletVisible] = useState(false);
 
   const handleSignOut = () => {
     showSignOutConfirmation(async () => {
@@ -46,6 +48,8 @@ export default function Profile({ visible, onClose }: ProfileProps) {
         onPress={onClose}
       >
         <Pressable style={styles.container} onPress={() => {}}>
+          {/* Wallet modal */}
+          <Wallet visible={walletVisible} onClose={() => setWalletVisible(false)} />
           {/* Close button */}
           <TouchableOpacity 
             style={styles.closeButton}
@@ -100,6 +104,18 @@ export default function Profile({ visible, onClose }: ProfileProps) {
           >
             <MaterialIcons name="logout" size={20} color={colors.buttonText} />
             <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
+
+          {/* Wallet button */}
+          <TouchableOpacity
+            style={[styles.signOutButton, { marginTop: 10, backgroundColor: colors.bgLighter }]}
+            onPress={() => setWalletVisible(true)}
+            activeOpacity={0.7}
+            accessibilityLabel="Open wallet"
+            accessibilityRole="button"
+          >
+            <Text style={{ fontSize: 18 }}>💩</Text>
+            <Text style={[styles.signOutText, { color: colors.title }]}>Wallet</Text>
           </TouchableOpacity>
         </Pressable>
       </Pressable>
