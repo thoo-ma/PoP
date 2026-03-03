@@ -4,7 +4,7 @@ import { memo, useState } from 'react';
 import { repairStyles as styles } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
-import { MAX_ENERGY, POOP_REPAIR_COST } from '@shared';
+import { MAX_ENERGY, repairCost } from '@shared';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 import { colors } from '@/constants';
 
@@ -21,10 +21,13 @@ export default memo(function Repair() {
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
   const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null);
+  const [poopSpent, setPoopSpent] = useState<number | null>(null);
 
   const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
   const currentEnergy = selectedNFT?.energy || 0;
   const maxRepairPossible = MAX_ENERGY - currentEnergy;
+  // Cost in POOP, recalculated whenever the slider or selected NFT changes
+  const poopCost = selectedNFT ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY) : 0;
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
@@ -57,6 +60,7 @@ export default memo(function Repair() {
     
     if (result) {
       setRepairedEnergy(result.energy);
+      setPoopSpent(result.poop_spent);
       setIsRepaired(true);
       setRepairAmount(0);
       await refetch();
@@ -77,6 +81,7 @@ export default memo(function Repair() {
     setRepairAmount(0);
     setIsRepaired(false);
     setRepairedEnergy(null);
+    setPoopSpent(null);
   };
 
   if (loading) {
@@ -183,17 +188,17 @@ export default memo(function Repair() {
                 <TouchableOpacity
                   style={[
                     styles.repairButton,
-                    (repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < POOP_REPAIR_COST)) && styles.repairButtonDisabled
+                    (repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < poopCost)) && styles.repairButtonDisabled
                   ]}
                   onPress={handleRepair}
-                  disabled={repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < POOP_REPAIR_COST)}
+                  disabled={repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < poopCost)}
                 >
                   <Text style={styles.repairButtonText}>
                     {updateLoading
                       ? 'Repairing...'
-                      : (poopBalance !== null && poopBalance < POOP_REPAIR_COST)
-                      ? `Need ${POOP_REPAIR_COST} POOP`
-                      : `Repair (${POOP_REPAIR_COST} POOP)`}
+                      : (poopBalance !== null && poopBalance < poopCost)
+                      ? `Need ${poopCost} POOP`
+                      : `Repair (${poopCost} POOP)`}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -205,7 +210,9 @@ export default memo(function Repair() {
                 {repairedEnergy !== null && (
                   <Text style={styles.successText}>Energy: {repairedEnergy}%</Text>
                 )}
-                <Text style={styles.successText}>-{POOP_REPAIR_COST} POOP spent</Text>
+                {poopSpent !== null && (
+                  <Text style={styles.successText}>-{poopSpent} POOP spent</Text>
+                )}
                 <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
                   <Text style={styles.resetButtonText}>Repair Another NFT</Text>
                 </TouchableOpacity>
