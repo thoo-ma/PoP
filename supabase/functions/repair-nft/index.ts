@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { POOP_REPAIR_COST } from '../../../shared/currency.ts'
+import { repairCost } from '../../../shared/currency.ts'
+import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
@@ -40,7 +41,7 @@ serve(async (req) => {
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchNFTError } = await supabase
       .from('nfts')
-      .select('id, energy')
+      .select('id, energy, level, rarity')
       .eq('id', nft_id)
       .eq('user_id', userId)
       .single()
@@ -62,6 +63,14 @@ serve(async (req) => {
       )
     }
 
+    // ── Dynamic repair cost ───────────────────────────────────────────────────
+    // Formula: Cost($) = (0.85 × level² + 4.15) × RarityMultiplier
+    // Tokens  = Math.round(Cost$ / USD_PER_TOKEN × Δenergy / MAX_ENERGY)
+    // The $PAPER split from the design is not yet implemented;
+    // the full token amount is charged in POOP only.
+    const energyDelta = new_energy - nft.energy
+    const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY)
+
     // ── POOP balance check ────────────────────────────────────────────────────
     const { data: userRow, error: userFetchError } = await supabase
       .from('users')
@@ -78,13 +87,13 @@ serve(async (req) => {
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
-    if (currentPoopBalance < POOP_REPAIR_COST) {
+    if (currentPoopBalance < poopCost) {
       return new Response(
         JSON.stringify({
           error: 'insufficient_poop',
-          message: `Repairing costs ${POOP_REPAIR_COST} POOP. You have ${currentPoopBalance} POOP.`,
+          message: `Repairing costs ${poopCost} POOP. You have ${currentPoopBalance} POOP.`,
           poop_balance: currentPoopBalance,
-          poop_required: POOP_REPAIR_COST,
+          poop_required: poopCost,
         }),
         { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -108,7 +117,7 @@ serve(async (req) => {
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
-    const newPoopBalance = currentPoopBalance - POOP_REPAIR_COST
+    const newPoopBalance = currentPoopBalance - poopCost
     const { error: poopError } = await supabase
       .from('users')
       .update({ poop_balance: newPoopBalance })
@@ -121,7 +130,7 @@ serve(async (req) => {
 
     console.log(
       `repair-nft: nft=${nft_id} energy ${nft.energy} → ${updated.energy} | ` +
-      `user ${userId} spent ${POOP_REPAIR_COST} POOP → balance ${newPoopBalance}`
+      `user ${userId} spent ${poopCost} POOP → balance ${newPoopBalance}`
     )
 
     // ── Return result ─────────────────────────────────────────────────────────
@@ -129,7 +138,7 @@ serve(async (req) => {
       JSON.stringify({
         id:           updated.id,
         energy:       updated.energy,
-        poop_spent:   POOP_REPAIR_COST,
+        poop_spent:   poopCost,
         poop_balance: newPoopBalance,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
