@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useWallet } from '@/hooks';
 import { colors, fontSizes, fontWeights, radii, spacing } from '@/constants';
-import { POOP_PER_USE, POOP_REPAIR_COST, POOP_BREED_COST } from '@shared';
+import { POOP_REPAIR_COST, POOP_BREED_COST } from '@shared';
 
 interface WalletProps {
   /** Controls the visibility of the wallet modal. */
@@ -66,8 +66,8 @@ export default function Wallet({ visible, onClose }: WalletProps) {
               <View style={styles.row}>
                 <MaterialIcons name="check-circle" size={18} color={colors.success} />
                 <Text style={styles.rowText}>
-                  <Text style={styles.bold}>+{POOP_PER_USE} POOP</Text>
-                  {' '}per successful NFT flush
+                  <Text style={styles.bold}>35 – 180+ POOP</Text>
+                  {' '}per flush (scales with type, rarity & level)
                 </Text>
               </View>
             </View>

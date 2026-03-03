@@ -7,7 +7,7 @@ import {
 } from '../../../shared/cooldown.ts'
 import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
 import { XP_PER_USE, applyXP } from '../../../shared/xp.ts'
-import { POOP_PER_USE } from '../../../shared/currency.ts'
+import { calcPoopEarned } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Type multipliers ────────────────────────────────────────────────────────
@@ -108,12 +108,17 @@ serve(async (req) => {
     const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy)
     const newEnergy = nft.energy - energyLost
 
+    // ── Rarity (used by both POOP reward and stat points) ────────────────────
+    const rarity = (nft.rarity ?? 'common') as NFTRarity
+
+    // ── POOP reward calculation ────────────────────────────────────────────────
+    const poopEarned = calcPoopEarned(nft.type as NFTType, rarity, nft.level)
+
     // ── XP calculation ───────────────────────────────────────────────────────
     const xpGained = XP_PER_USE
     const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
 
     // ── Stat points earned ───────────────────────────────────────────────────
-    const rarity = (nft.rarity ?? 'common') as NFTRarity
     const statPointsEarned = levelsGained * (STAT_POINTS_BY_RARITY[rarity] ?? 0)
     const newStatPoints = (nft.stat_points ?? 0) + statPointsEarned
 
@@ -150,7 +155,7 @@ serve(async (req) => {
     // ── Award POOP currency ───────────────────────────────────────────────────
     const { data: poopData, error: poopError } = await supabase.rpc(
       'increment_poop_balance',
-      { user_id: userId, amount: POOP_PER_USE },
+      { user_id: userId, amount: poopEarned },
     )
 
     if (poopError) {
@@ -160,7 +165,7 @@ serve(async (req) => {
 
     const newPoopBalance: number = (poopData as number) ?? 0
 
-    console.log(`use-nft: user ${userId} earned ${POOP_PER_USE} POOP → balance ${newPoopBalance}`)
+    console.log(`use-nft: user ${userId} earned ${poopEarned} POOP (type=${nft.type} rarity=${rarity} level=${nft.level}) → balance ${newPoopBalance}`)
 
     // ── Create pending loot roll ──────────────────────────────────────────────
     // Upsert one row per user; any stale un-rolled session is silently replaced.
@@ -193,7 +198,7 @@ serve(async (req) => {
         level:        updated.level,
         leveled_up:   leveledUp,
         stat_points:  updated.stat_points,
-        poop_earned:  POOP_PER_USE,
+        poop_earned:  poopEarned,
         poop_balance: newPoopBalance,
         loot_roll_id: lootRollId,
       }),
