@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 /**
  * hold-loot-roll
@@ -24,6 +25,9 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'hold-loot-roll')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    const cfg = await getGameConfig(supabase)
+    const MAX_HOLDS = cfg.loot_roll.MAX_HOLDS
 
     const body = await req.json()
     const { loot_roll_id } = body
@@ -50,9 +54,9 @@ serve(async (req) => {
       )
     }
 
-    if (roll.holds >= 3) {
+    if (roll.holds >= MAX_HOLDS) {
       return new Response(
-        JSON.stringify({ error: 'Max Holds Reached', message: 'You can only hold up to 3 times' }),
+        JSON.stringify({ error: 'Max Holds Reached', message: `You can only hold up to ${MAX_HOLDS} times` }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

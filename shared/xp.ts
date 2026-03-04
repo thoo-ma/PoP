@@ -50,13 +50,25 @@ export const XP_FORMULA_LINEAR = 5
 export const XP_FORMULA_QUADRATIC = 0.3
 export const XP_FORMULA_FLOOR = 33
 
-function xpFormula(level: number): number {
-  return Math.round(XP_FORMULA_BASE + level * XP_FORMULA_LINEAR + Math.pow(level, 2) * XP_FORMULA_QUADRATIC)
+// Inline config type — avoids a circular dep with shared/schemas.ts
+type XpCfg = {
+  XP_FORMULA_BASE?:      number;
+  XP_FORMULA_LINEAR?:    number;
+  XP_FORMULA_QUADRATIC?: number;
+  XP_FORMULA_FLOOR?:     number;
+};
+
+function xpFormula(level: number, cfg?: XpCfg): number {
+  const base      = cfg?.XP_FORMULA_BASE      ?? XP_FORMULA_BASE
+  const linear    = cfg?.XP_FORMULA_LINEAR    ?? XP_FORMULA_LINEAR
+  const quadratic = cfg?.XP_FORMULA_QUADRATIC ?? XP_FORMULA_QUADRATIC
+  return Math.round(base + level * linear + Math.pow(level, 2) * quadratic)
 }
 
 /** XP threshold to advance from `level` to `level + 1`. */
-export function xpThreshold(level: number): number {
-  return Math.max(XP_FORMULA_FLOOR, xpFormula(level))
+export function xpThreshold(level: number, cfg?: XpCfg): number {
+  const floor = cfg?.XP_FORMULA_FLOOR ?? XP_FORMULA_FLOOR
+  return Math.max(floor, xpFormula(level, cfg))
 }
 
 /**
@@ -67,20 +79,21 @@ export function applyXP(
   currentXP: number,
   currentLevel: number,
   gained: number,
+  cfg?: XpCfg,
 ): { newXP: number; newLevel: number; leveledUp: boolean; levelsGained: number } {
   let xp    = currentXP + gained
   let level = currentLevel
   let levelsGained = 0
 
-  while (level < MAX_LEVEL && xp >= xpThreshold(level)) {
-    xp -= xpThreshold(level)
+  while (level < MAX_LEVEL && xp >= xpThreshold(level, cfg)) {
+    xp -= xpThreshold(level, cfg)
     level++
     levelsGained++
   }
 
   // At max level, cap the bar so it never overflows the display maximum.
   if (level === MAX_LEVEL) {
-    xp = Math.min(xp, xpThreshold(MAX_LEVEL))
+    xp = Math.min(xp, xpThreshold(MAX_LEVEL, cfg))
   }
 
   return { newXP: xp, newLevel: level, leveledUp: levelsGained > 0, levelsGained }

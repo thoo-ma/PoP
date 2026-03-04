@@ -25,10 +25,20 @@ export const COOLDOWN_BASES: Record<NFTType, number> = {
 export const LINEAR_MULT = 0.3;
 export const EXP_MULT    = 0.02;
 
+// Inline config type — avoids a circular dep with shared/schemas.ts
+type CooldownCfg = {
+  COOLDOWN_BASES?: Record<NFTType, number>;
+  LINEAR_MULT?:    number;
+  EXP_MULT?:       number;
+};
+
 /** Cooldown duration in hours for the given type and level. */
-export function calcCooldownHours(type: NFTType, level: number): number {
-  const base = COOLDOWN_BASES[type] ?? COOLDOWN_BASES['cruise-seat'];
-  return base + level * LINEAR_MULT + Math.pow(level, 2) * EXP_MULT;
+export function calcCooldownHours(type: NFTType, level: number, cfg?: CooldownCfg): number {
+  const bases  = cfg?.COOLDOWN_BASES ?? COOLDOWN_BASES;
+  const linear = cfg?.LINEAR_MULT    ?? LINEAR_MULT;
+  const exp    = cfg?.EXP_MULT       ?? EXP_MULT;
+  const base   = bases[type] ?? bases['cruise-seat'];
+  return base + level * linear + Math.pow(level, 2) * exp;
 }
 
 /**
@@ -39,9 +49,10 @@ export function getCooldownEndsAt(
   lastUsedAt: string | null,
   type: NFTType,
   level: number,
+  cfg?: CooldownCfg,
 ): Date | null {
   if (!lastUsedAt) return null;
-  const hours = calcCooldownHours(type, level);
+  const hours = calcCooldownHours(type, level, cfg);
   return new Date(new Date(lastUsedAt).getTime() + hours * 3_600_000);
 }
 
@@ -50,8 +61,9 @@ export function isOnCooldown(
   lastUsedAt: string | null,
   type: NFTType,
   level: number,
+  cfg?: CooldownCfg,
 ): boolean {
-  const endsAt = getCooldownEndsAt(lastUsedAt, type, level);
+  const endsAt = getCooldownEndsAt(lastUsedAt, type, level, cfg);
   if (!endsAt) return false;
   return endsAt > new Date();
 }
@@ -61,8 +73,9 @@ export function cooldownRemainingSeconds(
   lastUsedAt: string | null,
   type: NFTType,
   level: number,
+  cfg?: CooldownCfg,
 ): number {
-  const endsAt = getCooldownEndsAt(lastUsedAt, type, level);
+  const endsAt = getCooldownEndsAt(lastUsedAt, type, level, cfg);
   if (!endsAt) return 0;
   return Math.max(0, Math.ceil((endsAt.getTime() - Date.now()) / 1000));
 }

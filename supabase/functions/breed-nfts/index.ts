@@ -2,10 +2,10 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
 import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
-import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
-import { breedCost, BREED_MAX_COUNT } from '../../../shared/currency.ts'
+import { breedCost } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
 
@@ -16,9 +16,9 @@ function rarityKey(r1: Rarity, r2: Rarity): BreedPairKey {
     .join('+') as BreedPairKey
 }
 
-function rollRarity(r1: Rarity, r2: Rarity): Rarity {
+function rollRarity(r1: Rarity, r2: Rarity, probsMap: Record<BreedPairKey, [number, number, number, number]>): Rarity {
   const key = rarityKey(r1, r2)
-  const probs = BREED_PROBABILITIES[key]
+  const probs = probsMap[key]
   if (!probs) throw new Error(`No probability table for combination: ${key}`)
 
   const roll = Math.random() * 100
@@ -44,6 +44,9 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'breed-nfts')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    // ── Load live game config ─────────────────────────────────────────────────
+    const cfg = await getGameConfig(supabase)
 
     console.log(`breed-nfts: user ${userId}`)
 
@@ -108,6 +111,7 @@ serve(async (req) => {
     // ── Breed count cap check ─────────────────────────────────────────────────
     const p1BreedCount = p1.breed_count ?? 0
     const p2BreedCount = p2.breed_count ?? 0
+    const BREED_MAX_COUNT = cfg.currency.BREED_MAX_COUNT
 
     if (p1BreedCount >= BREED_MAX_COUNT || p2BreedCount >= BREED_MAX_COUNT) {
       const exhausted = p1BreedCount >= BREED_MAX_COUNT ? parent1_id : parent2_id
@@ -124,8 +128,8 @@ serve(async (req) => {
     // ── Dynamic breed cost ────────────────────────────────────────────────────
     // Each parent is charged independently based on its own breed_count and
     // rarity; the session total is the sum of both individual costs.
-    const p1Cost = breedCost(p1BreedCount, r1)
-    const p2Cost = breedCost(p2BreedCount, r2)
+    const p1Cost = breedCost(p1BreedCount, r1, cfg.currency)
+    const p2Cost = breedCost(p2BreedCount, r2, cfg.currency)
     const totalBreedCost = p1Cost + p2Cost
 
     console.log(
@@ -165,7 +169,7 @@ serve(async (req) => {
     }
 
     // ── Rarity roll ───────────────────────────────────────────────────────────
-    const offspringRarity = rollRarity(r1, r2)
+    const offspringRarity = rollRarity(r1, r2, cfg.breed.BREED_PROBABILITIES)
 
     console.log(`breed-nfts: ${r1}+${r2} → mystery box (${offspringRarity}) (key: ${rarityKey(r1, r2)})`)
 

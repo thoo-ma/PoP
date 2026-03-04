@@ -65,6 +65,24 @@ export type Database = {
         }
         Relationships: []
       }
+      game_config: {
+        Row: {
+          key:        string
+          value:      Json
+          updated_at: string
+        }
+        Insert: {
+          key:         string
+          value:       Json
+          updated_at?: string
+        }
+        Update: {
+          key?:        string
+          value?:      Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invite_codes: {
         Row: {
           code: string

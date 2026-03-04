@@ -47,32 +47,62 @@ const PositiveNumber = z.number().min(0)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import {
-  POOP_REWARD_BASE,
-  POOP_REWARD_EXPONENT,
-  POOP_EFFICIENCY_PER_LEVEL,
-  POOP_TYPE_REWARD_MULT,
-  POOP_REPAIR_COST,
-  POOP_BREED_COST,
+  // Use reward
+  REWARD_BASE_PRICE_USD,
+  REWARD_GROWTH_RATE,
+  REWARD_USD_PER_TOKEN,
+  REWARD_TYPE_MULTIPLIER,
+  REWARD_RARITY_MULTIPLIER,
+  // Repair
+  REPAIR_COEF_A,
+  REPAIR_COEF_B,
+  REPAIR_USD_PER_TOKEN,
+  REPAIR_RARITY_MULTIPLIER,
+  // Breed
+  BREED_BASE_PRICE_USD,
+  BREED_GROWTH_RATE,
+  BREED_USD_PER_TOKEN,
+  BREED_MAX_COUNT,
+  BREED_RARITY_MULTIPLIER,
 } from './currency.ts'
 
 export const CurrencyConfigSchema = z.object({
-  POOP_REWARD_BASE:           PositiveNumber.max(50_000),
-  POOP_REWARD_EXPONENT:       z.number().min(0.5).max(5),
-  POOP_EFFICIENCY_PER_LEVEL:  NFTRarityRecord(PositiveNumber.max(1000)),
-  POOP_TYPE_REWARD_MULT:      NFTTypeRecord(PositiveNumber.max(100)),
-  POOP_REPAIR_COST:           PositiveNumber.max(100_000),
-  POOP_BREED_COST:            PositiveNumber.max(100_000),
+  // ─── Use reward ────────────────────────────────────────────────────────────
+  REWARD_BASE_PRICE_USD:    z.number().min(0).max(1),
+  REWARD_GROWTH_RATE:       z.number().min(1).max(5),
+  REWARD_USD_PER_TOKEN:     z.number().min(0.0001).max(1),
+  REWARD_TYPE_MULTIPLIER:   NFTTypeRecord(PositiveNumber.max(100)),
+  REWARD_RARITY_MULTIPLIER: NFTRarityRecord(PositiveNumber.max(1_000)),
+  // ─── Repair ────────────────────────────────────────────────────────────────
+  REPAIR_COEF_A:            PositiveNumber.max(100),
+  REPAIR_COEF_B:            PositiveNumber.max(100),
+  REPAIR_USD_PER_TOKEN:     z.number().min(0.0001).max(1),
+  REPAIR_RARITY_MULTIPLIER: NFTRarityRecord(PositiveNumber.max(100)),
+  // ─── Breed ─────────────────────────────────────────────────────────────────
+  BREED_BASE_PRICE_USD:     PositiveNumber.max(100),
+  BREED_GROWTH_RATE:        z.number().min(1).max(10),
+  BREED_USD_PER_TOKEN:      z.number().min(0.0001).max(1),
+  BREED_MAX_COUNT:          z.number().int().min(1).max(20),
+  BREED_RARITY_MULTIPLIER:  NFTRarityRecord(PositiveNumber.max(1_000)),
 })
 
 export type CurrencyConfig = z.infer<typeof CurrencyConfigSchema>
 
 export const CURRENCY_DEFAULTS: CurrencyConfig = {
-  POOP_REWARD_BASE,
-  POOP_REWARD_EXPONENT,
-  POOP_EFFICIENCY_PER_LEVEL: { ...POOP_EFFICIENCY_PER_LEVEL },
-  POOP_TYPE_REWARD_MULT:     { ...POOP_TYPE_REWARD_MULT },
-  POOP_REPAIR_COST,
-  POOP_BREED_COST,
+  REWARD_BASE_PRICE_USD,
+  REWARD_GROWTH_RATE,
+  REWARD_USD_PER_TOKEN,
+  REWARD_TYPE_MULTIPLIER:   { ...REWARD_TYPE_MULTIPLIER },
+  REWARD_RARITY_MULTIPLIER: { ...REWARD_RARITY_MULTIPLIER },
+  REPAIR_COEF_A,
+  REPAIR_COEF_B,
+  REPAIR_USD_PER_TOKEN,
+  REPAIR_RARITY_MULTIPLIER: { ...REPAIR_RARITY_MULTIPLIER },
+  BREED_BASE_PRICE_USD,
+  BREED_GROWTH_RATE,
+  BREED_USD_PER_TOKEN,
+  BREED_MAX_COUNT,
+  BREED_RARITY_MULTIPLIER:  { ...BREED_RARITY_MULTIPLIER },
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
