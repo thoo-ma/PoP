@@ -16,11 +16,11 @@ const DIFF_COLORS: Record<string, string> = {
 }
 
 const PRESET_FIELDS = [
-  { key: 'MOVEMENT_THRESHOLD', label: 'Movement', step: '0.01', unit: '' },
-  { key: 'ROTATION_THRESHOLD', label: 'Rotation', step: '0.01', unit: '' },
-  { key: 'STEP_COOLDOWN',      label: 'Step Cooldown', step: '100', unit: 'ms' },
-  { key: 'GRACE_PERIOD',       label: 'Grace Period',  step: '50',  unit: 'ms' },
-  { key: 'WARNING_COOLDOWN',   label: 'Warning CD',    step: '100', unit: 'ms' },
+  { key: 'MOVEMENT_THRESHOLD', label: 'Movement', step: 0.01, unit: '' },
+  { key: 'ROTATION_THRESHOLD', label: 'Rotation', step: 0.01, unit: '' },
+  { key: 'STEP_COOLDOWN',      label: 'Step Cooldown', step: 100, unit: 'ms' },
+  { key: 'GRACE_PERIOD',       label: 'Grace Period',  step: 50,  unit: 'ms' },
+  { key: 'WARNING_COOLDOWN',   label: 'Warning CD',    step: 100, unit: 'ms' },
 ] as const
 
 type PresetField = typeof PRESET_FIELDS[number]['key']
