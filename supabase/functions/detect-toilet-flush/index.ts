@@ -59,7 +59,7 @@ serve(async (req) => {
 
     // Check rate limit
     const cfg = await getGameConfig(supabaseClient)
-    const detectionsPerDay = cfg.cloud_run.detections_per_day
+    const detectionsPerDay = cfg.cloud_run.DETECTIONS_PER_DAY
 
     // Count user's detections in the last 24 hours
     const { count, error: countError } = await supabaseClient
