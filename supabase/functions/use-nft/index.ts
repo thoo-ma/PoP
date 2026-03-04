@@ -5,36 +5,32 @@ import {
   getCooldownEndsAt,
   cooldownRemainingSeconds,
 } from '../../../shared/cooldown.ts'
-import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
-import { XP_PER_USE, applyXP } from '../../../shared/xp.ts'
+import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
-
-// ─── Type multipliers ────────────────────────────────────────────────────────
-// Higher multiplier = faster energy drain when used
-
-const TYPE_DRAIN_MULT: Record<NFTType, number> = {
-  'turbo-flush':  3,
-  'cruise-seat':  1.5,
-  'zen-fortress': 1,
-}
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 /**
  * Calculate energy lost for a single use.
  *
- * loss = random(5..15) * (1 - resilience / 100) * mult
+ * loss = random(ROLL_MIN..ROLL_MAX) * (1 - resilience / 100) * mult
  *
- * - Base roll: uniform [5, 15] so a fresh NFT always loses some energy.
- * - Resilience dampener: higher resilience = smaller loss (0 res → ×1.0, 100 res → ×0.0).
+ * - Base roll: uniform [ENERGY_ROLL_MIN, ENERGY_ROLL_MAX] from config.
+ * - Resilience dampener: higher resilience = smaller loss.
  * - Type multiplier: turbo-flush drains fast, zen-fortress is efficient.
  *
  * Result is clamped to [0, current_energy] and rounded to the nearest integer.
  */
-function calcEnergyLoss(resilience: number, type: NFTType, currentEnergy: number): number {
-  const baseRoll = 5 + Math.random() * 10          // [5, 15)
-  const resilienceFactor = 1 - resilience / 100     // [0, 1]
+function calcEnergyLoss(
+  resilience: number,
+  type: NFTType,
+  currentEnergy: number,
+  cfg: { TYPE_DRAIN_MULT: Record<NFTType, number>; ENERGY_ROLL_MIN: number; ENERGY_ROLL_MAX: number },
+): number {
+  const { ENERGY_ROLL_MIN, ENERGY_ROLL_MAX, TYPE_DRAIN_MULT } = cfg
+  const baseRoll = ENERGY_ROLL_MIN + Math.random() * (ENERGY_ROLL_MAX - ENERGY_ROLL_MIN) // [min, max)
+  const resilienceFactor = 1 - resilience / 100
   const mult = TYPE_DRAIN_MULT[type] ?? 1
-
   const raw = baseRoll * resilienceFactor * mult
   return Math.min(currentEnergy, Math.round(raw))
 }
@@ -52,6 +48,9 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'use-nft')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    // ── Load live game config (falls back to shared/ defaults) ────────────────
+    const cfg = await getGameConfig(supabase)
 
     console.log(`use-nft: user ${userId}`)
 
@@ -89,9 +88,9 @@ serve(async (req) => {
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
-    if (isOnCooldown(nft.last_used_at, nft.type as NFTType, nft.level)) {
-      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level)!
-      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level)
+    if (isOnCooldown(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)) {
+      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)!
+      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)
       console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
       return new Response(
         JSON.stringify({
@@ -105,21 +104,21 @@ serve(async (req) => {
     }
 
     // ── Energy calculation ────────────────────────────────────────────────────
-    const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy)
+    const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy, cfg.energy_drain)
     const newEnergy = nft.energy - energyLost
 
     // ── Rarity (used by both POOP reward and stat points) ────────────────────
     const rarity = (nft.rarity ?? 'common') as NFTRarity
 
     // ── POOP reward calculation ────────────────────────────────────────────────
-    const poopEarned = calcPoopEarned(nft.type as NFTType, rarity, nft.level)
+    const poopEarned = calcPoopEarned(nft.type as NFTType, rarity, nft.level, cfg.currency)
 
     // ── XP calculation ───────────────────────────────────────────────────────
-    const xpGained = XP_PER_USE
-    const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
+    const xpGained = cfg.xp.XP_PER_USE
+    const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained, cfg.xp)
 
     // ── Stat points earned ───────────────────────────────────────────────────
-    const statPointsEarned = levelsGained * (STAT_POINTS_BY_RARITY[rarity] ?? 0)
+    const statPointsEarned = levelsGained * (cfg.stat_points.STAT_POINTS_BY_RARITY[rarity] ?? 0)
     const newStatPoints = (nft.stat_points ?? 0) + statPointsEarned
 
     console.log(

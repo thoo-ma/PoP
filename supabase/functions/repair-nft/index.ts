@@ -3,6 +3,7 @@ import { repairCost } from '../../../shared/currency.ts'
 import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -17,6 +18,8 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'repair-nft')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    const cfg = await getGameConfig(supabase)
 
     console.log(`repair-nft: user ${userId}`)
 
@@ -69,7 +72,7 @@ serve(async (req) => {
     // The $PAPER split from the design is not yet implemented;
     // the full token amount is charged in POOP only.
     const energyDelta = new_energy - nft.energy
-    const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY)
+    const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY, cfg.currency)
 
     // ── POOP balance check ────────────────────────────────────────────────────
     const { data: userRow, error: userFetchError } = await supabase

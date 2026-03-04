@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 /**
  * roll-loot
@@ -33,6 +34,8 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'roll-loot')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    const cfg = await getGameConfig(supabase)
 
     const body = await req.json()
     const { loot_roll_id } = body
@@ -74,8 +77,9 @@ serve(async (req) => {
     }
 
     // ── Server-side roll ──────────────────────────────────────────────────────
-    // Base 10% + 10% per hold, max 40%
-    const probability = 0.10 + holdsUsed * 0.10
+    // Probability = BASE_WIN_PROBABILITY + holds × PER_HOLD_INCREMENT
+    const { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } = cfg.loot_roll
+    const probability = BASE_WIN_PROBABILITY + holdsUsed * PER_HOLD_INCREMENT
     const won = Math.random() < probability
 
     console.log(

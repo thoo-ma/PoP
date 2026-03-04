@@ -20,8 +20,12 @@ export function randomName(type: NFTType): string {
  * Rolls a single stat value within the rarity-appropriate range.
  * Used when minting first-generation NFTs (e.g. from mystery boxes).
  */
-export function rollStat(rarity: Rarity): number {
-  const [min, max] = STAT_RANGES[rarity]
+export function rollStat(
+  rarity: Rarity,
+  cfg?: { STAT_RANGES?: Record<Rarity, [number, number]> },
+): number {
+  const ranges = cfg?.STAT_RANGES ?? STAT_RANGES
+  const [min, max] = ranges[rarity]
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 

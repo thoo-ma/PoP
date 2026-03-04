@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import type { NFTRarity as Rarity, NFTType } from '../../../shared/nft.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 // ─── Edge Function entry point ─────────────────────────────────────────────
 
@@ -16,6 +17,8 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'open-mystery-box')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+
+    const cfg = await getGameConfig(supabase)
 
     console.log(`open-mystery-box: user ${userId}`)
 
@@ -63,10 +66,10 @@ serve(async (req) => {
       type,
       rarity,
       image_url:  buildImageUrl(type, name, rarity),
-      efficiency: rollStat(rarity),
-      resilience: rollStat(rarity),
-      comfort:    rollStat(rarity),
-      luck:       rollStat(rarity),
+      efficiency: rollStat(rarity, cfg.minting),
+      resilience: rollStat(rarity, cfg.minting),
+      comfort:    rollStat(rarity, cfg.minting),
+      luck:       rollStat(rarity, cfg.minting),
       energy:     100,
       level:      1,
       xp:         0,

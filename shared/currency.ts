@@ -37,15 +37,26 @@ export const REPAIR_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
  * @param rarity         NFT's rarity tier
  * @param energyRestored Amount of energy being restored (Δenergy)
  * @param maxEnergy      Maximum possible energy (used to scale the cost)
+ * @param cfg            Optional DB config override (falls back to module constants)
  */
 export function repairCost(
   level: number,
   rarity: NFTRarity,
   energyRestored: number,
   maxEnergy: number,
+  cfg?: {
+    REPAIR_COEF_A?: number;
+    REPAIR_COEF_B?: number;
+    REPAIR_USD_PER_TOKEN?: number;
+    REPAIR_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+  },
 ): number {
-  const fullCostUsd = (REPAIR_COEF_A * Math.pow(level, 2) + REPAIR_COEF_B) * REPAIR_RARITY_MULTIPLIER[rarity];
-  const fullCostTokens = fullCostUsd / REPAIR_USD_PER_TOKEN;
+  const a           = cfg?.REPAIR_COEF_A            ?? REPAIR_COEF_A;
+  const b           = cfg?.REPAIR_COEF_B            ?? REPAIR_COEF_B;
+  const usdPerToken = cfg?.REPAIR_USD_PER_TOKEN      ?? REPAIR_USD_PER_TOKEN;
+  const rarityMult  = cfg?.REPAIR_RARITY_MULTIPLIER  ?? REPAIR_RARITY_MULTIPLIER;
+  const fullCostUsd    = (a * Math.pow(level, 2) + b) * rarityMult[rarity];
+  const fullCostTokens = fullCostUsd / usdPerToken;
   return Math.round((energyRestored / maxEnergy) * fullCostTokens);
 }
 
@@ -91,10 +102,24 @@ export const BREED_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
  *
  * @param breedCount  How many times this NFT has already been bred (0–5)
  * @param rarity      This NFT's rarity tier
+ * @param cfg         Optional DB config override (falls back to module constants)
  */
-export function breedCost(breedCount: number, rarity: NFTRarity): number {
-  const costUsd = BREED_BASE_PRICE_USD * Math.pow(BREED_GROWTH_RATE, breedCount) * BREED_RARITY_MULTIPLIER[rarity];
-  return Math.round(costUsd / BREED_USD_PER_TOKEN);
+export function breedCost(
+  breedCount: number,
+  rarity: NFTRarity,
+  cfg?: {
+    BREED_BASE_PRICE_USD?: number;
+    BREED_GROWTH_RATE?: number;
+    BREED_USD_PER_TOKEN?: number;
+    BREED_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+  },
+): number {
+  const base        = cfg?.BREED_BASE_PRICE_USD    ?? BREED_BASE_PRICE_USD;
+  const growth      = cfg?.BREED_GROWTH_RATE        ?? BREED_GROWTH_RATE;
+  const usdPerToken = cfg?.BREED_USD_PER_TOKEN      ?? BREED_USD_PER_TOKEN;
+  const rarityMult  = cfg?.BREED_RARITY_MULTIPLIER  ?? BREED_RARITY_MULTIPLIER;
+  const costUsd = base * Math.pow(growth, breedCount) * rarityMult[rarity];
+  return Math.round(costUsd / usdPerToken);
 }
 
 // ─── Use reward formula ───────────────────────────────────────────────────────
@@ -130,12 +155,29 @@ export const REWARD_TYPE_MULTIPLIER: Record<NFTType, number> = {
  * @param type   NFT type
  * @param rarity NFT rarity tier
  * @param level  NFT's current level (1–20)
+ * @param cfg    Optional DB config override (falls back to module constants)
  */
-export function calcPoopEarned(type: NFTType, rarity: NFTRarity, level: number): number {
+export function calcPoopEarned(
+  type: NFTType,
+  rarity: NFTRarity,
+  level: number,
+  cfg?: {
+    REWARD_BASE_PRICE_USD?: number;
+    REWARD_GROWTH_RATE?: number;
+    REWARD_USD_PER_TOKEN?: number;
+    REWARD_TYPE_MULTIPLIER?: Record<NFTType, number>;
+    REWARD_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+  },
+): number {
+  const base        = cfg?.REWARD_BASE_PRICE_USD    ?? REWARD_BASE_PRICE_USD;
+  const growth      = cfg?.REWARD_GROWTH_RATE        ?? REWARD_GROWTH_RATE;
+  const usdPerToken = cfg?.REWARD_USD_PER_TOKEN      ?? REWARD_USD_PER_TOKEN;
+  const typeMult    = cfg?.REWARD_TYPE_MULTIPLIER    ?? REWARD_TYPE_MULTIPLIER;
+  const rarityMult  = cfg?.REWARD_RARITY_MULTIPLIER  ?? REWARD_RARITY_MULTIPLIER;
   const rewardUsd =
-    REWARD_BASE_PRICE_USD *
-    Math.pow(REWARD_GROWTH_RATE, level - 1) *
-    REWARD_TYPE_MULTIPLIER[type] *
-    REWARD_RARITY_MULTIPLIER[rarity];
-  return Math.max(1, Math.round(rewardUsd / REWARD_USD_PER_TOKEN));
+    base *
+    Math.pow(growth, level - 1) *
+    typeMult[type] *
+    rarityMult[rarity];
+  return Math.max(1, Math.round(rewardUsd / usdPerToken));
 }
