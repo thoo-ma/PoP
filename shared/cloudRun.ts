@@ -18,3 +18,6 @@ export const MAX_AUDIO_DURATION = 30.0;
 
 /** Minimum audio duration in seconds (below this, detection returns an error). */
 export const MIN_AUDIO_DURATION = 0.5;
+
+/** Maximum number of flush detections a user may submit per 24-hour window. */
+export const DETECTIONS_PER_DAY = 10;

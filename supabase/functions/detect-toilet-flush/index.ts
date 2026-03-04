@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { getUserIdFromToken, corsHeaders } from '../_shared/auth.ts'
+import { getGameConfig } from '../_shared/gameConfig.ts'
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -57,13 +58,8 @@ serve(async (req) => {
     }
 
     // Check rate limit
-    const { data: config } = await supabaseClient
-      .from('app_config')
-      .select('value')
-      .eq('key', 'rate_limits')
-      .single()
-
-    const detectionsPerDay = config?.value?.detections_per_day || 10
+    const cfg = await getGameConfig(supabaseClient)
+    const detectionsPerDay = cfg.cloud_run.detections_per_day
 
     // Count user's detections in the last 24 hours
     const { count, error: countError } = await supabaseClient

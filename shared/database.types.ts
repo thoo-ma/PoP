@@ -14,24 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      app_config: {
-        Row: {
-          key: string
-          updated_at: string | null
-          value: Json
-        }
-        Insert: {
-          key: string
-          updated_at?: string | null
-          value: Json
-        }
-        Update: {
-          key?: string
-          updated_at?: string | null
-          value?: Json
-        }
-        Relationships: []
-      }
       flush_detections: {
         Row: {
           audio_size_kb: number | null

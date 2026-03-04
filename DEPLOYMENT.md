@@ -44,7 +44,7 @@ cd /home/youngbenjaminhorne/work/pop
 supabase db push
 ```
 
-This creates the `flush_detections` and `app_config` tables.
+This creates the `flush_detections` table.
 
 ---
 
@@ -100,9 +100,9 @@ To change the daily detection limit from 10 to another value:
 1. Go to Supabase Dashboard > SQL Editor
 2. Run:
 ```sql
-UPDATE app_config 
-SET value = '{"detections_per_day": 20}'::jsonb 
-WHERE key = 'rate_limits';
+UPDATE game_config 
+SET value = value || '{"detections_per_day": 20}'::jsonb
+WHERE key = 'cloud_run';
 ```
 
 No code deployment needed - the Edge Function reads this dynamically!
@@ -127,7 +127,7 @@ No code deployment needed - the Edge Function reads this dynamically!
 
 ### Rate limit not working
 - Check database migration ran: `supabase db diff`
-- Check app_config table exists in Supabase Dashboard > Table Editor
+- Check game_config table has a `cloud_run` row in Supabase Dashboard > Table Editor
 
 ---
 

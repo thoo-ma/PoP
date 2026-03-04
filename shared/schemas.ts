@@ -318,12 +318,14 @@ import {
   YAMNET_TOILET_FLUSH_CLASS,
   MAX_AUDIO_DURATION,
   MIN_AUDIO_DURATION,
+  DETECTIONS_PER_DAY,
 } from './cloudRun.ts'
 
 export const CloudRunConfigSchema = z.object({
   YAMNET_TOILET_FLUSH_CLASS: z.number().int().min(0).max(999),
   MAX_AUDIO_DURATION:        PositiveNumber.max(300),
   MIN_AUDIO_DURATION:        PositiveNumber.max(60),
+  detections_per_day:        z.number().int().min(1),
 })
 
 export type CloudRunConfig = z.infer<typeof CloudRunConfigSchema>
@@ -332,6 +334,7 @@ export const CLOUD_RUN_DEFAULTS: CloudRunConfig = {
   YAMNET_TOILET_FLUSH_CLASS,
   MAX_AUDIO_DURATION,
   MIN_AUDIO_DURATION,
+  detections_per_day: DETECTIONS_PER_DAY,
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
