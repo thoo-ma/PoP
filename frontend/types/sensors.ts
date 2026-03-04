@@ -24,17 +24,6 @@ export interface PedometerData {
 }
 
 /**
- * Thresholds for different difficulty modes
- */
-export interface SensorThresholds {
-  MOVEMENT_THRESHOLD: number;
-  ROTATION_THRESHOLD: number;
-  STEP_COOLDOWN: number;
-  GRACE_PERIOD: number;
-  WARNING_COOLDOWN: number;
-}
-
-/**
  * Challenge status types
  */
 export type ChallengeStatus = 'idle' | 'running' | 'warning';

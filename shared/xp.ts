@@ -42,13 +42,21 @@
 export const MAX_LEVEL = 20
 export const XP_PER_USE = 15
 
+// ─── XP formula coefficients ─────────────────────────────────────────────────
+// xpThreshold(level) = max(FLOOR, round(BASE + level × LINEAR + level² × QUADRATIC))
+
+export const XP_FORMULA_BASE = 25
+export const XP_FORMULA_LINEAR = 5
+export const XP_FORMULA_QUADRATIC = 0.3
+export const XP_FORMULA_FLOOR = 33
+
 function xpFormula(level: number): number {
-  return Math.round(25 + level * 5 + Math.pow(level, 2) * 0.3)
+  return Math.round(XP_FORMULA_BASE + level * XP_FORMULA_LINEAR + Math.pow(level, 2) * XP_FORMULA_QUADRATIC)
 }
 
 /** XP threshold to advance from `level` to `level + 1`. */
 export function xpThreshold(level: number): number {
-  return Math.max(33, xpFormula(level))
+  return Math.max(XP_FORMULA_FLOOR, xpFormula(level))
 }
 
 /**

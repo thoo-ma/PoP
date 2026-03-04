@@ -2,8 +2,9 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
 import type { EventSubscription } from 'expo-modules-core';
 import { SENSOR_UPDATE_INTERVAL } from '@/constants';
-import type { DifficultyMode, UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
-import { getThresholds } from '@/utils/proof/sensorHelpers';
+import type { UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
+import type { DifficultyMode } from '@shared/sensors';
+import { getThresholds } from '@shared/sensors';
 import { logError } from '@/utils/errorHelpers';
 
 /** Sensor listener subscription, typed via the SDK-exported `EventSubscription` from `expo-modules-core`. */

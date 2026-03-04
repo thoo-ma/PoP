@@ -1,17 +1,7 @@
 import { TYPE_NAMES, NFT_TYPES, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
+import { STAT_RANGES } from '../../../shared/minting.ts'
 
-// ─── Constants ─────────────────────────────────────────────────────────────
-
-/**
- * Per-rarity stat ranges for freshly minted (non-bred) NFTs.
- * Higher rarity boxes produce higher base stats.
- */
-export const STAT_RANGES: Record<Rarity, [number, number]> = {
-  common:       [40, 70],
-  rare:         [50, 80],
-  legendary:    [60, 90],
-  transcendent: [70, 100],
-}
+export { STAT_RANGES }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
