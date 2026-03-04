@@ -10,7 +10,6 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { MAX_LEVEL } from '@shared/xp'
-import { BREED_MAX_COUNT } from '@shared/currency'
 
 const TYPES    = ['turbo-flush', 'cruise-seat', 'zen-fortress'] as const
 const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
@@ -379,7 +378,7 @@ function BreedTab() {
   const setDraft = useGameConfigStore((s) => s.setDraft)
 
   const chartOptions = useMemo(() => {
-    const counts = Array.from({ length: BREED_MAX_COUNT + 1 }, (_, i) => i)
+    const counts = Array.from({ length: cur.BREED_MAX_COUNT + 1 }, (_, i) => i)
     const series = RARITIES.map((r) => ({
       name: r,
       type: 'bar' as const,
@@ -519,7 +518,7 @@ function BreedTab() {
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: BREED_MAX_COUNT + 1 }, (_, i) => (
+                {Array.from({ length: cur.BREED_MAX_COUNT + 1 }, (_, i) => (
                   <tr key={i} className="border-b border-neutral-800/50 text-neutral-300">
                     <td className="px-3 py-1.5 font-mono text-neutral-400">{i}</td>
                     {RARITIES.map((r) => (

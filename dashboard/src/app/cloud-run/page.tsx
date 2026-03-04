@@ -7,8 +7,6 @@ import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 
-const YAMNET_FLUSH_CLASS_LABEL = 'Toilet flush (YAMNet class 368)'
-
 export default function CloudRunPanel() {
   const cr       = useGameConfigStore(useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })))
   const source   = useGameConfigStore((s) => s.sources.cloud_run)
@@ -74,7 +72,7 @@ export default function CloudRunPanel() {
               />
             </div>
             <p className="text-[11px] text-neutral-600">
-              {YAMNET_FLUSH_CLASS_LABEL}. Only change if the YAMNet model version changes its class
+              Toilet flush is YAMNet class {cr.YAMNET_TOILET_FLUSH_CLASS}. Only change if the YAMNet model version changes its class
               mapping.
             </p>
           </CardContent>

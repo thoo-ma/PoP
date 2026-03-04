@@ -8,12 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { MAX_LEVEL } from '@shared/xp'
 
 const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
 const RARITY_COLORS: Record<string, string> = {
   common: '#a3a3a3', rare: '#3b82f6', legendary: '#f59e0b', transcendent: '#a855f7',
 }
-const MAX_LEVEL = 20
 
 export default function StatPointsPanel() {
   const sp       = useGameConfigStore(useShallow((s) => ({ ...s.config.stat_points, ...s.drafts.stat_points })))

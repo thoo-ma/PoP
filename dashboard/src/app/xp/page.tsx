@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
-import { MAX_LEVEL, XP_PER_USE } from '@shared/xp'
+import { MAX_LEVEL } from '@shared/xp'
 
 /**
  * Compute XP threshold for a given level using the formula:
@@ -45,7 +45,7 @@ export default function XpPanel() {
       )
       levels.push(lvl)
       thresholds.push(threshold)
-      uses.push(Math.ceil(threshold / XP_PER_USE))
+      uses.push(Math.ceil(threshold / xp.XP_PER_USE))
     }
 
     return { levels, thresholds, uses }
@@ -246,7 +246,7 @@ export default function XpPanel() {
             </div>
           </div>
           <div className="mt-3 text-[11px] text-neutral-600">
-            XP per use: <span className="text-neutral-400">{XP_PER_USE}</span> (structural — not editable at runtime)
+            XP per use: <span className="text-neutral-400">{xp.XP_PER_USE}</span>
           </div>
         </CardContent>
       </Card>
@@ -288,7 +288,7 @@ export default function XpPanel() {
                 <tr className="border-b border-neutral-800 text-left text-[11px] uppercase tracking-wider text-neutral-500">
                   <th className="px-3 py-2">Level</th>
                   <th className="px-3 py-2">XP Required</th>
-                  <th className="px-3 py-2">Uses ({XP_PER_USE} XP/use)</th>
+                  <th className="px-3 py-2">Uses ({xp.XP_PER_USE} XP/use)</th>
                   <th className="px-3 py-2">Cumulative XP</th>
                   <th className="px-3 py-2">Cumulative Uses</th>
                 </tr>
@@ -301,7 +301,7 @@ export default function XpPanel() {
                     <td className="px-3 py-1.5 font-mono">{chartData.uses[i]}</td>
                     <td className="px-3 py-1.5 font-mono">{cumulativeData[i].toLocaleString()}</td>
                     <td className="px-3 py-1.5 font-mono">
-                      {Math.ceil(cumulativeData[i] / XP_PER_USE)}
+                      {Math.ceil(cumulativeData[i] / xp.XP_PER_USE)}
                     </td>
                   </tr>
                 ))}

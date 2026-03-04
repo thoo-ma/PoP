@@ -47,6 +47,8 @@ interface GameConfigState {
   loading: boolean
   /** Error message (null = no error) */
   error: string | null
+  /** Keys that failed Zod validation (DB row exists but is malformed — using defaults). */
+  warnings: string[]
 
   // ─── Actions ──────────────────────────────────────────────────────────────
 
@@ -75,14 +77,15 @@ function buildDefaultSources(): ConfigSource {
 // ─── Store ────────────────────────────────────────────────────────────────────
 
 export const useGameConfigStore = create<GameConfigState>((set) => ({
-  config:  buildDefaults(),
-  sources: buildDefaultSources(),
-  drafts:  {},
-  loading: true,
-  error:   null,
+  config:   buildDefaults(),
+  sources:  buildDefaultSources(),
+  drafts:   {},
+  loading:  true,
+  error:    null,
+  warnings: [],
 
   fetch: async () => {
-    set({ loading: true, error: null })
+    set({ loading: true, error: null, warnings: [] })
 
     if (!supabase) {
       set({ loading: false, error: 'Supabase not configured (missing env vars)' })
@@ -99,6 +102,8 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
       const config  = buildDefaults()
       const sources = buildDefaultSources()
 
+      const warnings: string[] = []
+
       for (const row of rows ?? []) {
         const key   = row.key as GameConfigKey
         const entry = GAME_CONFIG_REGISTRY[key]
@@ -114,6 +119,8 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
           )
           sources[key] = 'db'
         } else {
+          const issues = parsed.error.issues.map((i) => i.message).join('; ')
+          warnings.push(`"${key}" failed validation — using defaults (${issues})`)
           console.warn(
             `[gameConfigStore] Invalid DB value for "${key}", using defaults:`,
             parsed.error.issues,
@@ -122,7 +129,7 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
         }
       }
 
-      set({ config, sources, loading: false })
+      set({ config, sources, loading: false, warnings })
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Failed to load game config'
       console.error('[gameConfigStore] fetch error:', msg)
