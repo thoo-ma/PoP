@@ -6,8 +6,5 @@ export * from './sensors';
 export * from './audio';
 export * from './nft';
 
-// Difficulty Modes (used across multiple features)
-export type DifficultyMode = 'easy' | 'normal' | 'strict';
-
 // NFT Sort Options (used in Vault and Marketplace)
 export type SortOption = 'efficiency' | 'resilience' | 'comfort' | 'luck' | 'level';
