@@ -6,6 +6,7 @@ import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/compone
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
+import { useGameConfig } from '@/store/gameConfigStore';
 import { colors } from '@/constants';
 
 /**
@@ -17,6 +18,7 @@ export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { repairNFT, loading: updateLoading, error: repairError, insufficientPoopError } = useRepairNFT();
   const { poopBalance } = useWallet();
+  const { config: cfg } = useGameConfig();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [repairAmount, setRepairAmount] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
@@ -27,7 +29,7 @@ export default memo(function Repair() {
   const currentEnergy = selectedNFT?.energy || 0;
   const maxRepairPossible = MAX_ENERGY - currentEnergy;
   // Cost in POOP, recalculated whenever the slider or selected NFT changes
-  const poopCost = selectedNFT ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY) : 0;
+  const poopCost = selectedNFT ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY, cfg.currency) : 0;
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;

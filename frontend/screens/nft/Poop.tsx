@@ -6,6 +6,7 @@ import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationMo
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
 import { getThresholdForDifficulty } from '@shared/sensors';
 import { getCooldownStatus } from '@/constants';
+import { useGameConfig } from '@/store/gameConfigStore';
 import type { NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 
@@ -35,6 +36,7 @@ export default memo(function Poop() {
   // ── NFT data ──────────────────────────────────────────────
   const { nfts, loading, error, refetch } = useUserNFTs();
   const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT();
+  const { config: cfg } = useGameConfig();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
   const [poopedXP, setPoopedXP] = useState<{ gained: number; level: number; leveledUp: boolean } | null>(null);
@@ -92,7 +94,7 @@ export default memo(function Poop() {
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
-    const ready      = nfts.findIndex(n => n.energy > 0 && !getCooldownStatus(n).isOnCooldown);
+    const ready      = nfts.findIndex(n => n.energy > 0 && !getCooldownStatus(n, cfg.cooldown).isOnCooldown);
     const withEnergy = nfts.findIndex(n => n.energy > 0);
     setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0);
   };
@@ -116,7 +118,7 @@ export default memo(function Poop() {
       Alert.alert('No Energy', 'This NFT has no energy left. Visit the Repair screen to restore energy.', [{ text: 'OK' }]);
       return;
     }
-    const cooldown = getCooldownStatus(displayNFT);
+    const cooldown = getCooldownStatus(displayNFT, cfg.cooldown);
     if (cooldown.isOnCooldown) {
       Alert.alert('On Cooldown', `This NFT is resting. Ready in ${cooldown.display}.`, [{ text: 'OK' }]);
       return;
@@ -457,7 +459,7 @@ export default memo(function Poop() {
   // ═════════════════════════════════════════════════════════
   // IDLE SCREEN
   // ═════════════════════════════════════════════════════════
-  const cooldown      = displayNFT ? getCooldownStatus(displayNFT) : null;
+  const cooldown      = displayNFT ? getCooldownStatus(displayNFT, cfg.cooldown) : null;
   const onCooldown    = cooldown?.isOnCooldown ?? false;
   const noEnergy      = displayNFT ? displayNFT.energy <= 0 : false;
   const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null;

@@ -15,6 +15,7 @@ import { colors } from '@/constants';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
 import { appStyles as styles } from '@/styles';
 import { isExpoGo } from '@/lib';
+import { GameConfigProvider } from '@/store/gameConfigStore';
 
 export default function App() {
   const { session, loading: authLoading, signOut } = useAuth();
@@ -91,6 +92,7 @@ export default function App() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
+    <GameConfigProvider>
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -131,5 +133,6 @@ export default function App() {
         <StatusBar style="auto" />
       </SafeAreaView>
     </SafeAreaProvider>
+    </GameConfigProvider>
   );
 }
