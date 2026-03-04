@@ -4,7 +4,7 @@ import { breedStyles as styles } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
-import { POOP_BREED_COST } from '@shared';
+import { breedCost, BREED_MAX_COUNT } from '@shared';
 import { MysteryBoxCard, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
 import { nftEvents, canBreed } from '@/utils';
 
@@ -65,8 +65,8 @@ import { nftEvents, canBreed } from '@/utils';
         {/* Wallet balance + cost */}
         <Text style={styles.description}>
           {poopBalance !== null
-            ? `💩 Balance: ${poopBalance} POOP  ·  Cost: ${POOP_BREED_COST} POOP`
-            : `Cost: ${POOP_BREED_COST} POOP`}
+            ? `💩 Balance: ${poopBalance} POOP  ·  Cost: from 100 POOP (scales with rarity & breed count)`
+            : 'Cost: from 100 POOP (scales with rarity & breed count)'}
         </Text>
         <Text style={styles.description}>You need at least 2 NFTs to breed</Text>
       </View>
@@ -74,7 +74,21 @@ import { nftEvents, canBreed } from '@/utils';
   }
 
   const canBreedNow = Boolean(parent1 && parent2);
-  const hasEnoughPoop = poopBalance === null || poopBalance >= POOP_BREED_COST;
+
+  // Dynamic cost: sum of each parent's individual breedCost, or null when not both selected.
+  const totalBreedCost: number | null =
+    parent1 && parent2
+      ? breedCost(parent1.breed_count ?? 0, parent1.rarity) +
+        breedCost(parent2.breed_count ?? 0, parent2.rarity)
+      : null;
+
+  // True if either selected parent has hit the breed cap.
+  const atBreedLimit =
+    (parent1 !== null && (parent1.breed_count ?? 0) >= BREED_MAX_COUNT) ||
+    (parent2 !== null && (parent2.breed_count ?? 0) >= BREED_MAX_COUNT);
+
+  const hasEnoughPoop =
+    poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost;
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -140,9 +154,15 @@ import { nftEvents, canBreed } from '@/utils';
               <Text style={styles.breedError}>{breedError}</Text>
             )}
 
+            {atBreedLimit && (
+              <Text style={styles.breedError}>
+                One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT}) and cannot be bred again.
+              </Text>
+            )}
+
             {!hasEnoughPoop && (
               <Text style={styles.breedError}>
-                Insufficient POOP — you need {POOP_BREED_COST} POOP to breed.
+                Insufficient POOP — you need {totalBreedCost} POOP to breed.
               </Text>
             )}
 
@@ -150,13 +170,17 @@ import { nftEvents, canBreed } from '@/utils';
             <TouchableOpacity
               style={[
                 styles.breedButton,
-                (!canBreedNow || breedLoading || !hasEnoughPoop) && styles.breedButtonDisabled,
+                (!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit) && styles.breedButtonDisabled,
               ]}
               onPress={handleBreed}
-              disabled={!canBreedNow || breedLoading || !hasEnoughPoop}
+              disabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
             >
               <Text style={styles.breedButtonText}>
-                {breedLoading ? 'Breeding…' : `Breed (${POOP_BREED_COST} POOP)`}
+                {breedLoading
+                  ? 'Breeding…'
+                  : totalBreedCost !== null
+                    ? `Breed (${totalBreedCost} POOP)`
+                    : 'Breed'}
               </Text>
             </TouchableOpacity>
           </>

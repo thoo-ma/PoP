@@ -156,6 +156,7 @@ export type Database = {
       }
       nfts: {
         Row: {
+          breed_count: number
           comfort: number
           created_at: string
           efficiency: number
@@ -175,6 +176,7 @@ export type Database = {
           stat_points: number
         }
         Insert: {
+          breed_count?: number
           comfort: number
           created_at?: string
           efficiency: number
@@ -194,6 +196,7 @@ export type Database = {
           stat_points?: number
         }
         Update: {
+          breed_count?: number
           comfort?: number
           created_at?: string
           efficiency?: number

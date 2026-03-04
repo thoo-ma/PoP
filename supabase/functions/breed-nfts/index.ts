@@ -1,9 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
+import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES } from '../../../shared/breedProbabilities.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
-import { POOP_BREED_COST } from '../../../shared/currency.ts'
+import { breedCost, BREED_MAX_COUNT } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
@@ -86,8 +87,8 @@ serve(async (req) => {
       )
     }
 
-    const p1 = parents.find((p) => p.id === parent1_id)!
-    const p2 = parents.find((p) => p.id === parent2_id)!
+    const p1 = parents.find((p: Tables<'nfts'>) => p.id === parent1_id)!
+    const p2 = parents.find((p: Tables<'nfts'>) => p.id === parent2_id)!
 
     // ── Rarity adjacency check ────────────────────────────────────────────────
     const r1 = p1.rarity as Rarity
@@ -103,6 +104,36 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
+
+    // ── Breed count cap check ─────────────────────────────────────────────────
+    const p1BreedCount = p1.breed_count ?? 0
+    const p2BreedCount = p2.breed_count ?? 0
+
+    if (p1BreedCount >= BREED_MAX_COUNT || p2BreedCount >= BREED_MAX_COUNT) {
+      const exhausted = p1BreedCount >= BREED_MAX_COUNT ? parent1_id : parent2_id
+      return new Response(
+        JSON.stringify({
+          error: 'breed_limit_reached',
+          message: `NFT ${exhausted} has already been bred ${BREED_MAX_COUNT} times and can no longer be used as a parent.`,
+          exhausted_nft_id: exhausted,
+        }),
+        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // ── Dynamic breed cost ────────────────────────────────────────────────────
+    // Each parent is charged independently based on its own breed_count and
+    // rarity; the session total is the sum of both individual costs.
+    const p1Cost = breedCost(p1BreedCount, r1)
+    const p2Cost = breedCost(p2BreedCount, r2)
+    const totalBreedCost = p1Cost + p2Cost
+
+    console.log(
+      `breed-nfts: cost breakdown — ` +
+      `parent1 (${r1} breed_count=${p1BreedCount}) → ${p1Cost} POOP, ` +
+      `parent2 (${r2} breed_count=${p2BreedCount}) → ${p2Cost} POOP, ` +
+      `total → ${totalBreedCost} POOP`
+    )
 
     // ── POOP balance check ─────────────────────────────────────────────────────
     const { data: userRow, error: userFetchError } = await supabase
@@ -120,13 +151,14 @@ serve(async (req) => {
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
-    if (currentPoopBalance < POOP_BREED_COST) {
+    if (currentPoopBalance < totalBreedCost) {
       return new Response(
         JSON.stringify({
           error: 'insufficient_poop',
-          message: `Breeding costs ${POOP_BREED_COST} POOP. You have ${currentPoopBalance} POOP.`,
+          message: `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentPoopBalance} POOP.`,
           poop_balance: currentPoopBalance,
-          poop_required: POOP_BREED_COST,
+          poop_required: totalBreedCost,
+          poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
         }),
         { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -161,7 +193,7 @@ serve(async (req) => {
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
-    const newPoopBalance = currentPoopBalance - POOP_BREED_COST
+    const newPoopBalance = currentPoopBalance - totalBreedCost
     const { error: poopError } = await supabase
       .from('users')
       .update({ poop_balance: newPoopBalance })
@@ -172,15 +204,41 @@ serve(async (req) => {
       console.error('breed-nfts: poop deduction error', poopError)
     }
 
-    console.log(`breed-nfts: user ${userId} spent ${POOP_BREED_COST} POOP → balance ${newPoopBalance}`)
+    console.log(`breed-nfts: user ${userId} spent ${totalBreedCost} POOP (${p1Cost}+${p2Cost}) → balance ${newPoopBalance}`)
+
+    // ── Increment breed_count for both parents ────────────────────────────────
+    const { error: breedCountError } = await supabase
+      .from('nfts')
+      .update({ breed_count: p1BreedCount + 1 })
+      .eq('id', parent1_id)
+      .eq('user_id', userId)
+
+    if (breedCountError) {
+      console.error('breed-nfts: breed_count increment error (parent1)', breedCountError)
+    }
+
+    const { error: breedCountError2 } = await supabase
+      .from('nfts')
+      .update({ breed_count: p2BreedCount + 1 })
+      .eq('id', parent2_id)
+      .eq('user_id', userId)
+
+    if (breedCountError2) {
+      console.error('breed-nfts: breed_count increment error (parent2)', breedCountError2)
+    }
+
+    console.log(`breed-nfts: breed_count incremented — parent1=${p1BreedCount + 1} parent2=${p2BreedCount + 1}`)
 
     // ── Return new mystery box ────────────────────────────────────────────────
     const result = {
-      id:         created.id,
-      rarity:     created.rarity,
-      image_url:  created.image_url,
-      opened:     created.opened,
-      created_at: created.created_at,
+      id:           created.id,
+      rarity:       created.rarity,
+      image_url:    created.image_url,
+      opened:       created.opened,
+      created_at:   created.created_at,
+      poop_spent:   totalBreedCost,
+      poop_spent_breakdown: { parent1: p1Cost, parent2: p2Cost },
+      poop_balance: newPoopBalance,
     }
 
     return new Response(
