@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { MAX_LEVEL } from '@shared/xp'
 
 /**
@@ -25,9 +26,11 @@ function computeThreshold(
 }
 
 export default function XpPanel() {
-  const source    = useGameConfigStore((s) => s.sources.xp)
-  const setDraft  = useGameConfigStore((s) => s.setDraft)
-  const xp        = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })))
+  const source           = useGameConfigStore((s) => s.sources.xp)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.xp !== undefined)
+  const xp               = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })))
 
   // Generate chart data: levels 1–MAX_LEVEL
   const chartData = useMemo(() => {
@@ -190,6 +193,16 @@ export default function XpPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('xp')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       {/* Formula display */}

@@ -6,11 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 export default function CloudRunPanel() {
-  const cr       = useGameConfigStore(useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })))
-  const source   = useGameConfigStore((s) => s.sources.cloud_run)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const cr               = useGameConfigStore(useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })))
+  const source           = useGameConfigStore((s) => s.sources.cloud_run)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.cloud_run !== undefined)
 
   const handleChange = (field: keyof typeof cr, value: string) => {
     const num = field === 'YAMNET_TOILET_FLUSH_CLASS' ? parseInt(value, 10) : parseFloat(value)
@@ -30,6 +33,16 @@ export default function CloudRunPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('cloud_run')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Card className="border-neutral-800 bg-neutral-900/50">

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
 const RARITY_COLORS: Record<string, string> = {
@@ -15,9 +16,11 @@ const RARITY_COLORS: Record<string, string> = {
 }
 
 export default function MintingPanel() {
-  const minting  = useGameConfigStore(useShallow((s) => ({ ...s.config.minting, ...s.drafts.minting })))
-  const source   = useGameConfigStore((s) => s.sources.minting)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const minting          = useGameConfigStore(useShallow((s) => ({ ...s.config.minting, ...s.drafts.minting })))
+  const source           = useGameConfigStore((s) => s.sources.minting)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.minting !== undefined)
 
   const chartOptions = useMemo(() => ({
     backgroundColor: 'transparent',
@@ -111,6 +114,16 @@ export default function MintingPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('minting')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Card className="border-neutral-800 bg-neutral-900/50">

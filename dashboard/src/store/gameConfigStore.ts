@@ -38,6 +38,8 @@ interface GameConfigState {
   setDraft: <K extends GameConfigKey>(key: K, value: Partial<FullGameConfig[K]>) => void
   /** Clear all drafts (revert to fetched config). */
   clearDrafts: () => void
+  /** Clear the draft for a single config key. */
+  clearDraftForKey: (key: GameConfigKey) => void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -84,4 +86,10 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
   },
 
   clearDrafts: () => set({ drafts: {} }),
+
+  clearDraftForKey: (key) => set((state) => {
+    const next = { ...state.drafts }
+    delete next[key]
+    return { drafts: next }
+  }),
 }))

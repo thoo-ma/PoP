@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 const TYPES = ['turbo-flush', 'cruise-seat', 'zen-fortress'] as const
 const TYPE_COLORS: Record<string, string> = {
@@ -15,9 +16,11 @@ const TYPE_COLORS: Record<string, string> = {
 }
 
 export default function EnergyPanel() {
-  const energy   = useGameConfigStore(useShallow((s) => ({ ...s.config.energy_drain, ...s.drafts.energy_drain })))
-  const source   = useGameConfigStore((s) => s.sources.energy_drain)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const energy           = useGameConfigStore(useShallow((s) => ({ ...s.config.energy_drain, ...s.drafts.energy_drain })))
+  const source           = useGameConfigStore((s) => s.sources.energy_drain)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.energy_drain !== undefined)
 
   // Expected drain per use at resilience=0 (worst case) and resilience=50
   const tableRows = useMemo(() => {
@@ -98,6 +101,16 @@ export default function EnergyPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('energy_drain')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Card className="border-neutral-800 bg-neutral-900/50">

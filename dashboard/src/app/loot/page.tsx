@@ -8,11 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 export default function LootRollPanel() {
-  const loot     = useGameConfigStore(useShallow((s) => ({ ...s.config.loot_roll, ...s.drafts.loot_roll })))
-  const source   = useGameConfigStore((s) => s.sources.loot_roll)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const loot             = useGameConfigStore(useShallow((s) => ({ ...s.config.loot_roll, ...s.drafts.loot_roll })))
+  const source           = useGameConfigStore((s) => s.sources.loot_roll)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.loot_roll !== undefined)
 
   const holds = useMemo(
     () => Array.from({ length: loot.MAX_HOLDS + 1 }, (_, i) => i),
@@ -103,6 +106,16 @@ export default function LootRollPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('loot_roll')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Card className="border-neutral-800 bg-neutral-900/50">

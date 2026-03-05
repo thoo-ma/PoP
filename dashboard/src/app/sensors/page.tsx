@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const DIFFICULTIES = ['easy', 'normal', 'strict'] as const
@@ -26,9 +27,11 @@ const PRESET_FIELDS = [
 type PresetField = typeof PRESET_FIELDS[number]['key']
 
 export default function SensorsPanel() {
-  const sensors  = useGameConfigStore(useShallow((s) => ({ ...s.config.sensors, ...s.drafts.sensors })))
-  const source   = useGameConfigStore((s) => s.sources.sensors)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const sensors          = useGameConfigStore(useShallow((s) => ({ ...s.config.sensors, ...s.drafts.sensors })))
+  const source           = useGameConfigStore((s) => s.sources.sensors)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.sensors !== undefined)
 
   // Radar chart for motion presets (normalise each axis 0–1)
   const radarOptions = useMemo(() => {
@@ -148,6 +151,16 @@ export default function SensorsPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('sensors')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="presets" className="w-full">

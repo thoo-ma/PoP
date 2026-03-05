@@ -7,6 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
 const RARITY_COLORS: Record<string, string> = {
@@ -30,9 +31,11 @@ function rowSum(row: readonly [number, number, number, number]): number {
 }
 
 export default function BreedPanel() {
-  const breed    = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })))
-  const source   = useGameConfigStore((s) => s.sources.breed)
-  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const breed            = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })))
+  const source           = useGameConfigStore((s) => s.sources.breed)
+  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft         = useGameConfigStore((s) => s.drafts.breed !== undefined)
 
   const chartOptions = useMemo(() => ({
     backgroundColor: 'transparent',
@@ -99,6 +102,16 @@ export default function BreedPanel() {
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
+        {hasDraft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => clearDraftForKey('breed')}
+            className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
+          >
+            Reset
+          </Button>
+        )}
       </div>
 
       <Card className="border-neutral-800 bg-neutral-900/50">
