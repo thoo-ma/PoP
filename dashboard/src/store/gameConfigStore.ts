@@ -4,17 +4,12 @@ import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
 import { type GameConfigKey } from '@shared/schemas'
 import {
-  buildDefaults,
   buildGameConfig,
   type FullGameConfig,
   type ConfigSource,
 } from '@shared/gameConfig'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-/** @deprecated Use FullGameConfig from @shared/gameConfig */
-export type GameConfigMap = FullGameConfig
-export type { FullGameConfig, ConfigSource }
 
 interface GameConfigState {
   /** Validated config — always fully populated (defaults where DB is missing). */
@@ -44,9 +39,11 @@ interface GameConfigState {
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
+const _initial = buildGameConfig()
+
 export const useGameConfigStore = create<GameConfigState>((set) => ({
-  config:   buildDefaults(),
-  sources:  buildGameConfig().sources,
+  config:   _initial.config,
+  sources:  _initial.sources,
   drafts:   {},
   loading:  true,
   error:    null,
