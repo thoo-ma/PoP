@@ -29,6 +29,7 @@ export type BreedPairKey =
  * Maps a sorted rarity-pair key ("lower+higher") to
  * [common%, rare%, legendary%, transcendent%] outcome probabilities.
  */
+// @migration: DELETE — game_config.breed
 export const BREED_PROBABILITIES: Record<BreedPairKey, [number, number, number, number]> = {
   'common+common':             [97.9,  2.0,  0.1,  0.0],
   'common+rare':               [65.0, 34.0,  0.9,  0.1],

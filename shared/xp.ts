@@ -39,15 +39,21 @@
  * └───────┴───────────────────────┴──────────────────────────┘
  */
 
+// @migration: KEEP — structural invariant (level cap 1–20); never moves to DB
 export const MAX_LEVEL = 20
+// @migration: DELETE — game_config.xp
 export const XP_PER_USE = 15
 
 // ─── XP formula coefficients ─────────────────────────────────────────────────
 // xpThreshold(level) = max(FLOOR, round(BASE + level × LINEAR + level² × QUADRATIC))
 
+// @migration: DELETE — game_config.xp
 export const XP_FORMULA_BASE = 25
+// @migration: DELETE — game_config.xp
 export const XP_FORMULA_LINEAR = 5
+// @migration: DELETE — game_config.xp
 export const XP_FORMULA_QUADRATIC = 0.3
+// @migration: DELETE — game_config.xp
 export const XP_FORMULA_FLOOR = 33
 
 // Inline config type — avoids a circular dep with shared/schemas.ts

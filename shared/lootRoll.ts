@@ -12,10 +12,13 @@
  */
 
 /** Base probability of winning a loot roll (10%). */
+// @migration: DELETE — game_config.loot_roll
 export const BASE_WIN_PROBABILITY = 0.10;
 
 /** Additional probability per hold (each hold adds 10%). */
+// @migration: DELETE — game_config.loot_roll
 export const PER_HOLD_INCREMENT = 0.10;
 
 /** Maximum number of holds allowed per loot roll session. */
+// @migration: DELETE — game_config.loot_roll
 export const MAX_HOLDS = 3;

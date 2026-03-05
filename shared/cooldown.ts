@@ -16,13 +16,16 @@
 
 import type { NFTType } from './nft.ts';
 
+// @migration: DELETE — game_config.cooldown
 export const COOLDOWN_BASES: Record<NFTType, number> = {
   'turbo-flush':  3,
   'cruise-seat':  10,
   'zen-fortress': 22,
 };
 
+// @migration: DELETE — game_config.cooldown
 export const LINEAR_MULT = 0.3;
+// @migration: DELETE — game_config.cooldown
 export const EXP_MULT    = 0.02;
 
 // Inline config type — avoids a circular dep with shared/schemas.ts

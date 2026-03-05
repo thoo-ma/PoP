@@ -14,6 +14,7 @@ import type { NFTRarity } from './nft.ts';
  *
  * Each value is a tuple: [min, max] (inclusive).
  */
+// @migration: DELETE — game_config.minting
 export const STAT_RANGES: Record<NFTRarity, [number, number]> = {
   common:       [40, 70],
   rare:         [50, 80],

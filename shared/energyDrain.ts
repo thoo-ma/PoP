@@ -17,6 +17,7 @@ import type { NFTType } from './nft.ts';
  * Per-type energy drain multiplier.
  * Higher = faster drain. turbo-flush punishes; zen-fortress rewards patience.
  */
+// @migration: DELETE — game_config.energy_drain
 export const TYPE_DRAIN_MULT: Record<NFTType, number> = {
   'turbo-flush':  3,
   'cruise-seat':  1.5,
@@ -24,7 +25,9 @@ export const TYPE_DRAIN_MULT: Record<NFTType, number> = {
 };
 
 /** Minimum of the base energy loss roll (inclusive). */
+// @migration: DELETE — game_config.energy_drain
 export const ENERGY_ROLL_MIN = 5;
 
 /** Maximum of the base energy loss roll (exclusive). */
+// @migration: DELETE — game_config.energy_drain
 export const ENERGY_ROLL_MAX = 15;

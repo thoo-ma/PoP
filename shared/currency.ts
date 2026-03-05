@@ -19,10 +19,14 @@ import type { NFTType } from './nft.ts';
 // Note: the design splits cost 50/50 between $POOP and $PAPER. The $PAPER
 // half is not yet implemented — the full token amount is charged in POOP only.
 
+// @migration: DELETE — game_config.currency
 export const REPAIR_COEF_A = 0.85;
+// @migration: DELETE — game_config.currency
 export const REPAIR_COEF_B = 4.15;
+// @migration: DELETE — game_config.currency
 export const REPAIR_USD_PER_TOKEN = 0.002;
 
+// @migration: DELETE — game_config.currency
 export const REPAIR_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
   common:       1.0,
   rare:         1.2,
@@ -80,14 +84,19 @@ export function repairCost(
 //       5      │   $19.53    │ $156.25   │    $781.25      │   $2 929.69
 
 /** Base breed price in USD at breedCount = 0. */
+// @migration: DELETE — game_config.currency
 export const BREED_BASE_PRICE_USD = 0.20;
 /** Exponential growth rate per breed level. */
+// @migration: DELETE — game_config.currency
 export const BREED_GROWTH_RATE = 2.5;
 /** USD value of one $POOP token (consistent with REPAIR_USD_PER_TOKEN). */
+// @migration: DELETE — game_config.currency
 export const BREED_USD_PER_TOKEN = 0.002;
 /** Maximum number of times an NFT can be used as a parent (inclusive). */
+// @migration: DELETE — game_config.currency
 export const BREED_MAX_COUNT = 5;
 
+// @migration: DELETE — game_config.currency
 export const BREED_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
   common:       1,
   rare:         8,
@@ -130,12 +139,16 @@ export function breedCost(
 // applies at level 1 (exponent = 0).
 
 /** Base reward in USD at level 1. */
+// @migration: DELETE — game_config.currency
 export const REWARD_BASE_PRICE_USD = 0.004;
 /** Exponential growth rate per level. */
+// @migration: DELETE — game_config.currency
 export const REWARD_GROWTH_RATE = 1.08;
 /** USD value of one $POOP token. */
+// @migration: DELETE — game_config.currency
 export const REWARD_USD_PER_TOKEN = 0.002;
 
+// @migration: DELETE — game_config.currency
 export const REWARD_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
   common:       1,
   rare:         2,
@@ -143,6 +156,7 @@ export const REWARD_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
   transcendent: 12,
 };
 
+// @migration: DELETE — game_config.currency
 export const REWARD_TYPE_MULTIPLIER: Record<NFTType, number> = {
   'turbo-flush':  1.5,
   'cruise-seat':  1.0,
