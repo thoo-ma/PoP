@@ -13,6 +13,7 @@ import {
   Battery,
   Dices,
   Cloud,
+  ChevronRight,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -25,19 +26,37 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 
-const NAV_ITEMS: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: 'XP & Leveling',   href: '/xp',          icon: TrendingUp  },
-  { label: 'Currency (POOP)', href: '/currency',     icon: Coins       },
-  { label: 'Cooldown',        href: '/cooldown',     icon: Timer       },
-  { label: 'Stat Points',     href: '/stat-points',  icon: BarChart3   },
-  { label: 'Breeding',        href: '/breed',        icon: Dna         },
-  { label: 'Minting',         href: '/minting',      icon: Layers      },
-  { label: 'Sensors',         href: '/sensors',      icon: Smartphone  },
-  { label: 'Energy Drain',    href: '/energy',       icon: Battery     },
-  { label: 'Loot Roll',       href: '/loot',         icon: Dices       },
-  { label: 'Cloud Run',       href: '/cloud-run',    icon: Cloud       },
+type NavItem = { label: string; href: string; icon: LucideIcon }
+
+const GAME_MECHANICS: NavItem[] = [
+  { label: 'XP & Leveling',  href: '/xp',          icon: TrendingUp },
+  { label: 'Cooldown',       href: '/cooldown',     icon: Timer      },
+  { label: 'Stat Points',    href: '/stat-points',  icon: BarChart3  },
+  { label: 'Sensors',        href: '/sensors',      icon: Smartphone },
+  { label: 'Energy Drain',   href: '/energy',       icon: Battery    },
+  { label: 'Cloud Run',      href: '/cloud-run',    icon: Cloud      },
+]
+
+const ECONOMY_ROI: NavItem[] = [
+  { label: 'Currency (POOP)', href: '/currency', icon: Coins  },
+  { label: 'Breeding',        href: '/breed',    icon: Dna    },
+  { label: 'Minting',         href: '/minting',  icon: Layers },
+  { label: 'Loot Roll',       href: '/loot',     icon: Dices  },
+]
+
+const NAV_GROUPS: { label: string; icon: LucideIcon; items: NavItem[] }[] = [
+  { label: 'Game Mechanics', icon: Dices,  items: GAME_MECHANICS },
+  { label: 'Economy & ROI',  icon: Coins,  items: ECONOMY_ROI    },
 ]
 
 export function AppSidebar() {
@@ -58,22 +77,44 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Mechanics</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV_ITEMS.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
+              {NAV_GROUPS.map((group) => {
+                const isOpen = group.items.some((item) => item.href === pathname)
+                return (
+                  <Collapsible
+                    key={group.label}
                     asChild
-                    isActive={pathname === item.href}
+                    defaultOpen={isOpen}
+                    className="group/collapsible"
                   >
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={group.label}>
+                          <group.icon />
+                          <span>{group.label}</span>
+                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {group.items.map((item) => (
+                            <SidebarMenuSubItem key={item.href}>
+                              <SidebarMenuSubButton asChild isActive={pathname === item.href}>
+                                <Link href={item.href}>
+                                  <item.icon />
+                                  <span>{item.label}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
