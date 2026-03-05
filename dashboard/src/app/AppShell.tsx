@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Sidebar } from '@/components/layout/Sidebar'
+import { AppSidebar } from '@/components/layout/Sidebar'
 import { Header } from '@/components/layout/Header'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { useGameConfigStore } from '@/store/gameConfigStore'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -15,9 +16,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [fetch])
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
         <Header />
         {error && (
           <div className="flex items-center gap-2 border-b border-red-900/60 bg-red-950/40 px-6 py-2.5 text-xs text-red-400">
@@ -37,7 +38,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
