@@ -1,3 +1,11 @@
+// ── Global error capture (debug) ──────────────────────────────────────────────
+const _originalHandler = (globalThis as any).ErrorUtils?.getGlobalHandler?.();
+(globalThis as any).ErrorUtils?.setGlobalHandler?.((error: any, isFatal: boolean) => {
+  console.error('[GLOBAL_ERROR]', isFatal ? 'FATAL' : 'non-fatal', error?.message ?? error);
+  console.error('[GLOBAL_STACK]', error?.stack ?? '(no stack)');
+  if (_originalHandler) _originalHandler(error, isFatal);
+});
+
 import { registerRootComponent } from 'expo';
 
 import App from './App';

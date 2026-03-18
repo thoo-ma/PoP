@@ -4,7 +4,7 @@ import {
   ActivityIndicator, 
   FlatList, 
   ViewToken,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
@@ -15,9 +15,18 @@ import { colors } from '@/constants';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
 import { appStyles as styles } from '@/styles';
 import { isExpoGo } from '@/lib';
+
 import { GameConfigProvider } from '@/store/gameConfigStore';
 
 export default function App() {
+  return (
+    <GameConfigProvider>
+      <AppInner />
+    </GameConfigProvider>
+  );
+}
+
+function AppInner() {
   const { session, loading: authLoading, signOut } = useAuth();
   const { approved, loading: approvalLoading, refetch } = useUserApproval(session);
   const [currentPage, setCurrentPage] = useState(0);
@@ -92,7 +101,6 @@ export default function App() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <GameConfigProvider>
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -133,6 +141,5 @@ export default function App() {
         <StatusBar style="auto" />
       </SafeAreaView>
     </SafeAreaProvider>
-    </GameConfigProvider>
   );
 }

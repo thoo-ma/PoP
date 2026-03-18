@@ -14,4 +14,9 @@ config.resolver.alias = {
   '@shared': path.join(workspaceRoot, 'shared'),
 };
 
+// Let files outside frontend/ (e.g. shared/) resolve node_modules from frontend/
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+];
+
 module.exports = config;
