@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Audio } from 'expo-av';
-import { File } from 'expo-file-system';
+import * as FileSystem from 'expo-file-system';
 import { detectToiletFlush } from '@/lib/toiletDetectionApi';
 import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '@/types/audio';
 import { isRateLimitError } from '@/utils/errorHelpers';
@@ -124,7 +124,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setDetectionResult(null);
 
       // Read audio file as base64 using new File API
-      const file = new File(audioUri);
+      const file = new FileSystem.File(audioUri);
       const base64Audio = await file.base64();
 
       // Call detection API
