@@ -20,24 +20,6 @@ export const styles = StyleSheet.create({
     marginBottom: spacing.xxxl,
     textAlign: 'center',
   },
-  warningBanner: {
-    backgroundColor: colors.warningBg,
-    borderWidth: 1,
-    borderColor: colors.warningBorder,
-    borderRadius: radii.md,
-    padding: spacing.base,
-    marginBottom: spacing.xl,
-  },
-  warningText: {
-    fontSize: fontSizes.base,
-    fontWeight: fontWeights.semibold,
-    color: colors.warningText,
-    marginBottom: spacing.xs,
-  },
-  warningSubtext: {
-    fontSize: fontSizes.md,
-    color: colors.warningText,
-  },
   devBypassButton: {
     backgroundColor: colors.buttonPrimary,
     padding: spacing.base,

@@ -14,7 +14,6 @@ import { InviteCodeScreen, Profile } from '@/screens';
 import { colors } from '@/constants';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
 import { appStyles as styles } from '@/styles';
-import { isExpoGo } from '@/lib';
 
 import { GameConfigProvider } from '@/store/gameConfigStore';
 
@@ -87,8 +86,8 @@ function AppInner() {
   }
 
   // Session exists but user not approved - show invite code screen (BLOCKING)
-  // Skip invite code check in Expo Go (dev mode)
-  if (approved !== true && !isExpoGo) {
+  // Anonymous users (dev/test mode) skip invite code
+  if (approved !== true && !session.user.is_anonymous) {
     return (
       <SafeAreaProvider>
         <InviteCodeScreen 

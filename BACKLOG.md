@@ -9,7 +9,8 @@ Items are grouped by priority tier and annotated with cross-references where fix
 These must be resolved before any public release. They represent security holes, missing legal requirements, or data-integrity risks.
 
 - [ ] **4.5** *(critical)* `detect-toilet-flush` edge function allows unauthenticated requests to proceed as `userId = 'anonymous'`, bypassing per-user rate limits — hard-fail with HTTP 401 when `user` is null in production. → also see **9.2** (no body-size guard makes this doubly dangerous)
-- [ ] **4.2** `isExpoGo` dev bypass is entirely client-side — ensure the `seed_dev_test_nfts` RPC is strictly guarded server-side and cannot be called from a production build.
+- [ ] **4.2** Dev mode bypass (anonymous sign-in + `seed_dev_test_nfts` RPC) is client-side password-gated — ensure the RPC is strictly guarded server-side and cannot be abused in production.
+- [ ] **4.2b** Remove dev mode password-gating (`EXPO_PUBLIC_DEV_MODE_PASSWORD`) before public release — `EXPO_PUBLIC_` vars are bundled in the JS binary and extractable.
 - [ ] **4.3** OAuth redirect URI `'pop://'` is too broad in `utils/auth/urlHelpers.ts` — scope to `'pop://auth/callback'` and enforce strict path matching in the deep-link handler. → blocks **8.4** (router migration should happen first to own the deep-link handler)
 - [ ] **P.11** Storage bucket RLS — tighten policies on the toilet-images bucket so only the owning user (or admins) can upload/delete; currently any authenticated user can delete any image.
 - [ ] **P.12** Terms of service / Privacy Policy — required before App Store / Play Store submission. → blocks **P.13**
