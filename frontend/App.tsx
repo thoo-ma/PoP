@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import './global.css';
 import { initialize } from '@embrace-io/react-native';
 import { StatusBar } from 'expo-status-bar';
