@@ -1,3 +1,4 @@
+import './global.css';
 import { initialize } from '@embrace-io/react-native';
 import { StatusBar } from 'expo-status-bar';
 import { 
@@ -18,13 +19,19 @@ import { colors } from '@/constants';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
 import { appStyles as styles } from '@/styles';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { HeroUINativeProvider } from 'heroui-native';
 import { GameConfigProvider } from '@/store/gameConfigStore';
 
 export default function App() {
   return (
-    <GameConfigProvider>
-      <AppInner />
-    </GameConfigProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <HeroUINativeProvider>
+        <GameConfigProvider>
+          <AppInner />
+        </GameConfigProvider>
+      </HeroUINativeProvider>
+    </GestureHandlerRootView>
   );
 }
 

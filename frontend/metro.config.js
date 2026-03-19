@@ -1,4 +1,5 @@
 const { getDefaultConfig } = require('expo/metro-config');
+const { withUniwindConfig } = require('uniwind/metro');
 const path = require('path');
 
 const projectRoot = __dirname;
@@ -19,4 +20,6 @@ config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
 ];
 
-module.exports = config;
+module.exports = withUniwindConfig(config, {
+  cssEntryFile: './global.css',
+});
