@@ -54,7 +54,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "@embrace-io/react-native/lib/app.plugin.js",
+        {
+          "androidAppId": "64y2w",
+          "iOSAppId": "PLACEHOLDER"
+        }
+      ]
     ],
     "extra": {
       "eas": {
