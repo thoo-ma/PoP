@@ -262,12 +262,12 @@ export default memo(function Vault() {
       ) : (
         /* Mystery Boxes tab */
         boxesLoading ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.boxesLoading}>
             <ActivityIndicator size="large" color={colors.info} />
           </View>
         ) : boxesError ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24 }}>
-            <Text style={{ color: colors.error, textAlign: 'center' }}>
+          <View style={styles.boxesError}>
+            <Text style={styles.boxesErrorText}>
               Failed to load mystery boxes: {boxesError}
             </Text>
           </View>
@@ -277,11 +277,11 @@ export default memo(function Vault() {
             showsVerticalScrollIndicator={false}
           >
             {boxes.length === 0 ? (
-              <View style={{ paddingVertical: 48, alignItems: 'center' }}>
-                <Text style={{ fontSize: 16, color: colors.text, textAlign: 'center' }}>
+              <View style={styles.boxesEmpty}>
+                <Text style={styles.boxesEmptyTitle}>
                   No mystery boxes yet
                 </Text>
-                <Text style={{ fontSize: 13, color: colors.text, opacity: 0.6, marginTop: 8, textAlign: 'center' }}>
+                <Text style={styles.boxesEmptySubtitle}>
                   Mystery boxes will appear here once you earn them.
                 </Text>
               </View>
