@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import './global.css';
-import { initialize } from '@embrace-io/react-native';
 import { StatusBar } from 'expo-status-bar';
 import { 
   View, 
@@ -9,8 +8,6 @@ import {
   ViewToken,
   Dimensions,
 } from 'react-native';
-
-initialize();
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from '@/hooks';

@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.pop",
+      "bundleIdentifier": "com.pop-corporation.pop",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
@@ -59,7 +59,7 @@
         "@embrace-io/react-native/lib/app.plugin.js",
         {
           "androidAppId": "64y2w",
-          "iOSAppId": "PLACEHOLDER"
+          "iOSAppId": ""
         }
       ]
     ],
