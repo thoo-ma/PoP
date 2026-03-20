@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, Text } from 'react-native';
 import type { ReactNode } from 'react';
 import { Card, Chip } from 'heroui-native';
 import type { NFT } from '@/types/nft';
@@ -103,7 +103,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         />
         {/* XP bar */}
         <View className="flex-row items-center mt-1">
-          <Chip.Label className="text-xs font-semibold w-5" style={{ color: '#f59e0b' }}>XP</Chip.Label>
+          <Text className="text-xs font-semibold w-5" style={{ color: '#f59e0b' }}>XP</Text>
           <View className="flex-1 mx-1">
             <View className="h-1 rounded-full overflow-hidden bg-gray-200">
               <View
