@@ -1,10 +1,9 @@
-import { Text, View, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { Text, View } from 'react-native';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Avatar, Button, Dialog } from 'heroui-native';
 import { useAuth } from '@/hooks';
-import { profileStyles as styles } from '@/styles';
 import { showSignOutConfirmation } from '@/utils';
-import { colors } from '@/constants';
 import Wallet from './Wallet';
 
 interface ProfileProps {
@@ -36,89 +35,86 @@ export default function Profile({ visible, onClose }: ProfileProps) {
     });
   };
 
+  const initials = getUserDisplayName()
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <Pressable 
-        style={styles.overlay}
-        onPress={onClose}
-      >
-        <Pressable style={styles.container} onPress={() => {}}>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay isCloseOnPress />
+        <Dialog.Content className="mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center">
           {/* Wallet modal */}
           <Wallet visible={walletVisible} onClose={() => setWalletVisible(false)} />
-          {/* Close button */}
-          <TouchableOpacity 
-            style={styles.closeButton}
-            onPress={onClose}
-            activeOpacity={0.7}
-            accessibilityLabel="Close profile"
-            accessibilityRole="button"
-          >
-            <MaterialIcons name="close" size={24} color={colors.primary} />
-          </TouchableOpacity>
 
-          {/* Profile icon */}
-          <View style={styles.avatarContainer}>
-            <MaterialIcons name="account-circle" size={80} color={colors.primary} />
+          <Dialog.Close
+            variant="ghost"
+            accessibilityLabel="Close profile"
+            className="absolute top-4 right-4"
+          />
+
+          {/* Avatar */}
+          <View className="mt-4 mb-4">
+            <Avatar size="lg" color="accent" alt={getUserDisplayName() || 'User avatar'}>
+              <Avatar.Fallback>
+                {initials || <MaterialIcons name="person" size={28} />}
+              </Avatar.Fallback>
+            </Avatar>
           </View>
 
           {/* User info */}
-          <Text style={styles.title}>Profile</Text>
-          <Text style={styles.displayName}>{getUserDisplayName()}</Text>
+          <Dialog.Title className="text-3xl font-bold text-foreground mb-2">Profile</Dialog.Title>
+          <Text className="text-lg font-semibold text-foreground mb-1">{getUserDisplayName()}</Text>
           {user?.email && (
-            <Text style={styles.email}>{user.email}</Text>
+            <Text className="text-base text-muted mb-6">{user.email}</Text>
           )}
 
           {/* Stats section */}
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>0</Text>
-              <Text style={styles.statLabel}>Detections</Text>
+          <View className="flex-row justify-around items-center w-full py-5 mb-6 bg-default rounded-xl">
+            <View className="flex-1 items-center">
+              <Text className="text-xl font-bold text-foreground">0</Text>
+              <Text className="text-sm text-muted">Detections</Text>
             </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>0</Text>
-              <Text style={styles.statLabel}>NFTs</Text>
+            <View className="w-px h-8 bg-border" />
+            <View className="flex-1 items-center">
+              <Text className="text-xl font-bold text-foreground">0</Text>
+              <Text className="text-sm text-muted">NFTs</Text>
             </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>0</Text>
-              <Text style={styles.statLabel}>Days Active</Text>
+            <View className="w-px h-8 bg-border" />
+            <View className="flex-1 items-center">
+              <Text className="text-xl font-bold text-foreground">0</Text>
+              <Text className="text-sm text-muted">Days Active</Text>
             </View>
           </View>
 
           {/* Sign out button */}
-          <TouchableOpacity 
-            style={styles.signOutButton} 
+          <Button
+            variant="primary"
+            className="w-full mb-2.5"
             onPress={handleSignOut}
-            activeOpacity={0.7}
-            disabled={isSigningOut}
+            isDisabled={isSigningOut}
             accessibilityLabel="Sign out"
-            accessibilityRole="button"
             accessibilityHint="Sign out of your account"
-            accessibilityState={{ busy: isSigningOut }}
           >
-            <MaterialIcons name="logout" size={20} color={colors.buttonText} />
-            <Text style={styles.signOutText}>Sign Out</Text>
-          </TouchableOpacity>
+            <MaterialIcons name="logout" size={18} color="#fff" />
+            <Button.Label>Sign Out</Button.Label>
+          </Button>
 
           {/* Wallet button */}
-          <TouchableOpacity
-            style={[styles.signOutButton, { marginTop: 10, backgroundColor: colors.bgLighter }]}
+          <Button
+            variant="secondary"
+            className="w-full"
             onPress={() => setWalletVisible(true)}
-            activeOpacity={0.7}
             accessibilityLabel="Open wallet"
-            accessibilityRole="button"
           >
-            <Text style={{ fontSize: 18 }}>💩</Text>
-            <Text style={[styles.signOutText, { color: colors.title }]}>Wallet</Text>
-          </TouchableOpacity>
-        </Pressable>
-      </Pressable>
-    </Modal>
+            <Text className="text-lg">💩</Text>
+            <Button.Label>Wallet</Button.Label>
+          </Button>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 }

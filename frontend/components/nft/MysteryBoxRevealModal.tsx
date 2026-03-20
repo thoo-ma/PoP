@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { Modal, View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Image } from 'react-native';
+import { Button, Dialog } from 'heroui-native';
 import type { NFT } from '@/types/nft';
 import { RARITY_BADGE_STYLES } from '@/utils';
 import { formatDisplayName } from '@/utils';
-import { styles } from '@/styles/nft/MysteryBoxRevealModal.styles';
 
 interface MysteryBoxRevealModalProps {
   visible: boolean;
@@ -21,41 +21,50 @@ export default memo(function MysteryBoxRevealModal({ visible, nft, onClose }: My
   if (!nft) return null;
 
   return (
-    <Modal
-      visible={visible}
-      animationType="fade"
-      transparent
-      onRequestClose={onClose}
-    >
-      <View style={styles.overlay}>
-        <View style={styles.sheet}>
-          <Text style={styles.header}>You got a toilet! 🚽</Text>
-          <Text style={styles.subtitle}>Your mystery box has been opened</Text>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content className="mx-6 rounded-3xl px-6 pt-6 pb-8 items-center">
+          <Dialog.Title className="text-xl font-extrabold text-foreground mb-1 text-center">
+            You got a toilet! 🚽
+          </Dialog.Title>
+          <Dialog.Description className="text-sm text-muted mb-5 text-center">
+            Your mystery box has been opened
+          </Dialog.Description>
 
-          <View style={styles.imageWrapper}>
+          <View className="w-[70%] aspect-square rounded-xl overflow-hidden bg-default mb-4 relative">
             <Image
               source={{ uri: nft.image_url }}
-              style={styles.image}
+              className="w-full h-full"
               resizeMode="cover"
             />
-            <View style={[styles.rarityBadge, RARITY_BADGE_STYLES[nft.rarity]]}>
-              <Text style={styles.rarityText}>{nft.rarity.toUpperCase()}</Text>
+            <View
+              style={RARITY_BADGE_STYLES[nft.rarity]}
+              className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md"
+            >
+              <Dialog.Description className="text-white text-xs font-bold tracking-wide">
+                {nft.rarity.toUpperCase()}
+              </Dialog.Description>
             </View>
           </View>
 
-          <Text style={styles.nftName}>{formatDisplayName(nft.name)}</Text>
-          <Text style={styles.nftType}>{nft.type.replace(/-/g, ' ')}</Text>
+          <Dialog.Title className="text-base font-bold text-foreground mb-1 text-center">
+            {formatDisplayName(nft.name)}
+          </Dialog.Title>
+          <Dialog.Description className="text-sm text-muted mb-5 text-center capitalize">
+            {nft.type.replace(/-/g, ' ')}
+          </Dialog.Description>
 
-          <TouchableOpacity
-            style={styles.closeButton}
+          <Button
+            variant="primary"
+            className="w-full"
             onPress={onClose}
-            accessibilityRole="button"
             accessibilityLabel="Close reveal and return to vault"
           >
-            <Text style={styles.closeButtonText}>View in Vault</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
+            <Button.Label>View in Vault</Button.Label>
+          </Button>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 });

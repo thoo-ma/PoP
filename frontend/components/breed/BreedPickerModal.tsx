@@ -1,7 +1,7 @@
-import { Modal, View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, Image, FlatList } from 'react-native';
+import { Button, Dialog } from 'heroui-native';
 import type { NFT } from '@/types';
 import type { NFTRarity } from '@shared';
-import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';
 
@@ -38,17 +38,16 @@ export default function BreedPickerModal({
   }));
 
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalSheet}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>{title}</Text>
-            <TouchableOpacity onPress={onClose} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-              <Text style={styles.modalClose}>✕</Text>
-            </TouchableOpacity>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content className="rounded-t-3xl pt-1 max-h-[85%]">
+          <View className="flex-row justify-between items-center px-5 py-4 border-b border-border">
+            <Dialog.Title className="text-lg font-bold text-foreground">{title}</Dialog.Title>
+            <Dialog.Close variant="ghost" />
           </View>
           {lockedRarity && (
-            <Text style={styles.modalSubtitle}>
+            <Text className="text-sm text-muted px-5 pt-2.5 pb-1 leading-[18px]">
               Greyed-out NFTs are incompatible with your first selection.
             </Text>
           )}
@@ -56,29 +55,45 @@ export default function BreedPickerModal({
             data={items}
             keyExtractor={(item) => item.nft.id}
             numColumns={2}
-            columnWrapperStyle={styles.pickerRow}
-            contentContainerStyle={styles.pickerGrid}
+            columnWrapperStyle={{ gap: 12, marginBottom: 12 }}
+            contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[styles.pickerTile, item.disabled && styles.pickerTileDisabled]}
+              <Button
+                variant="ghost"
+                className={`flex-1 p-0 overflow-hidden rounded-xl border border-border bg-surface${item.disabled ? ' opacity-40' : ''}`}
                 onPress={() => { if (!item.disabled) { onSelect(item.nft); onClose(); } }}
-                activeOpacity={item.disabled ? 1 : 0.7}
+                isDisabled={item.disabled}
               >
-                <Image source={{ uri: item.nft.image_url }} style={styles.pickerImage} resizeMode="cover" />
-                {item.disabled && <View style={styles.pickerDimOverlay} />}
-                <View style={[styles.pickerRarityDot, { backgroundColor: RARITY_COLORS[item.nft.rarity] }]} />
-                <Text style={[styles.pickerName, item.disabled && styles.pickerNameDisabled]} numberOfLines={1}>
-                  {formatDisplayName(item.nft.name)}
-                </Text>
-                <Text style={[styles.pickerRarityLabel, { color: RARITY_COLORS[item.nft.rarity] }]}>
-                  {item.nft.rarity}
-                </Text>
-              </TouchableOpacity>
+                <View>
+                  <Image source={{ uri: item.nft.image_url }} className="w-full aspect-square" resizeMode="cover" />
+                  {item.disabled && (
+                    <View className="absolute inset-0 bg-white/50" style={{ top: 0, height: undefined, bottom: 0 }} />
+                  )}
+                  <View
+                    className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface"
+                    style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
+                  />
+                  <View className="px-2 pt-1.5">
+                    <Text
+                      className={`text-sm font-semibold${item.disabled ? ' text-muted' : ' text-foreground'}`}
+                      numberOfLines={1}
+                    >
+                      {formatDisplayName(item.nft.name)}
+                    </Text>
+                    <Text
+                      className="text-[11px] font-medium capitalize pb-2"
+                      style={{ color: RARITY_COLORS[item.nft.rarity] }}
+                    >
+                      {item.nft.rarity}
+                    </Text>
+                  </View>
+                </View>
+              </Button>
             )}
           />
-        </View>
-      </View>
-    </Modal>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 }

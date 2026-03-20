@@ -1,6 +1,7 @@
-import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { marketplaceStyles as styles, tabStyles } from '@/styles';
+import { Skeleton, Tabs } from 'heroui-native';
+import { marketplaceStyles as styles } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -54,18 +55,13 @@ export default memo(function Marketplace() {
     }
   }, [unlistNFT, refetchUser]);
 
-  const handleSetTabBuy = useCallback(() => setActiveTab('buy'), []);
-  const handleSetTabSell = useCallback(() => setActiveTab('sell'), []);
-
-  const handleSortByChange = useCallback((option: SortOption) => {
-    setSortBy(option);
-  }, []);
-
   const handleSortOrderToggle = useCallback(() => {
     setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
   }, []);
 
-  const loading = activeTab === 'buy' ? marketplaceLoading : userLoading;
+  const handleSortByChange = useCallback((option: SortOption) => {
+    setSortBy(option);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -75,30 +71,16 @@ export default memo(function Marketplace() {
       </Text>
 
       {/* Tabs */}
-      <View style={tabStyles.tabs}>
-        <TouchableOpacity
-          style={[tabStyles.tab, activeTab === 'buy' && tabStyles.tabActive]}
-          onPress={handleSetTabBuy}
-          accessibilityLabel="Browse marketplace"
-          accessibilityRole="tab"
-          accessibilityState={{ selected: activeTab === 'buy' }}
-        >
-          <Text style={[tabStyles.tabText, activeTab === 'buy' && tabStyles.tabTextActive]}>
-            Buy ({backendListings.length})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[tabStyles.tab, activeTab === 'sell' && tabStyles.tabActive]}
-          onPress={handleSetTabSell}
-          accessibilityLabel="My listings"
-          accessibilityRole="tab"
-          accessibilityState={{ selected: activeTab === 'sell' }}
-        >
-          <Text style={[tabStyles.tabText, activeTab === 'sell' && tabStyles.tabTextActive]}>
-            My Listings ({myListings.length})
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'buy' | 'sell')}>
+        <Tabs.List>
+          <Tabs.Indicator />
+          <Tabs.Trigger value="buy">
+            <Tabs.Label>Buy ({backendListings.length})</Tabs.Label>
+          </Tabs.Trigger>
+          <Tabs.Trigger value="sell">
+            <Tabs.Label>My Listings ({myListings.length})</Tabs.Label>
+          </Tabs.Trigger>
+        </Tabs.List>
 
       <SortControls
         sortBy={sortBy}
@@ -107,24 +89,22 @@ export default memo(function Marketplace() {
         onSortOrderToggle={handleSortOrderToggle}
       />
 
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.info} />
-        </View>
-      ) : (
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {activeTab === 'sell' && myListings.length > 0 && (
-            <View style={styles.infoBanner}>
-              <Text style={styles.infoBannerText}>
-                💡 These are your NFTs from the Vault currently listed for sale
-              </Text>
-            </View>
-          )}
-          
-          {activeTab === 'buy' ? (
+      <Tabs.Content value="buy">
+        {marketplaceLoading ? (
+          <View style={styles.grid} className="p-4">
+            {[0, 1, 2, 3].map((i) => (
+              <View key={i} style={styles.gridItem} className="mb-3">
+                <Skeleton className="aspect-square w-full rounded-xl" />
+                <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
+                <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
+              </View>
+            ))}
+          </View>
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.grid}>
               {sortedMarketplaceListings.map((item) => (
                 <View key={item.id} style={styles.gridItem}>
@@ -149,7 +129,33 @@ export default memo(function Marketplace() {
                 </View>
               ))}
             </View>
-          ) : (
+          </ScrollView>
+        )}
+      </Tabs.Content>
+
+      <Tabs.Content value="sell">
+        {userLoading ? (
+          <View style={styles.grid} className="p-4">
+            {[0, 1, 2, 3].map((i) => (
+              <View key={i} style={styles.gridItem} className="mb-3">
+                <Skeleton className="aspect-square w-full rounded-xl" />
+                <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
+                <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
+              </View>
+            ))}
+          </View>
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {myListings.length > 0 && (
+              <View style={styles.infoBanner}>
+                <Text style={styles.infoBannerText}>
+                  💡 These are your NFTs from the Vault currently listed for sale
+                </Text>
+              </View>
+            )}
             <View style={styles.grid}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
@@ -186,9 +192,10 @@ export default memo(function Marketplace() {
                 </View>
               )}
             </View>
-          )}
-        </ScrollView>
-      )}
+          </ScrollView>
+        )}
+      </Tabs.Content>
+      </Tabs>
     </View>
   );
 });
