@@ -1,6 +1,6 @@
-import { Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { poopStyles as styles } from '@/styles';
+import { Button, Dialog } from 'heroui-native';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -44,6 +44,9 @@ export default memo(function Poop() {
   const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null);
   const [lootRollId, setLootRollId] = useState<string | null>(null);
   const hasPoopedRef = useRef(false); // guard — call poopNFT exactly once per challenge
+
+  // ── Alert dialog state ─────────────────────────────────────
+  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null);
 
   // Tick once/s so the cooldown countdown refreshes in the UI
   const [, setTick] = useState(0);
@@ -115,12 +118,12 @@ export default memo(function Poop() {
   const handlePoop = () => {
     if (!displayNFT) return;
     if (displayNFT.energy <= 0) {
-      Alert.alert('No Energy', 'This NFT has no energy left. Visit the Repair screen to restore energy.', [{ text: 'OK' }]);
+      setAlertDialog({ title: 'No Energy', message: 'This NFT has no energy left. Visit the Repair screen to restore energy.' });
       return;
     }
     const cooldown = getCooldownStatus(displayNFT, cfg.cooldown);
     if (cooldown.isOnCooldown) {
-      Alert.alert('On Cooldown', `This NFT is resting. Ready in ${cooldown.display}.`, [{ text: 'OK' }]);
+      setAlertDialog({ title: 'On Cooldown', message: `This NFT is resting. Ready in ${cooldown.display}.` });
       return;
     }
     hasPoopedRef.current = false;
@@ -231,7 +234,7 @@ export default memo(function Poop() {
         const h    = Math.floor(rem / 3600);
         const m    = Math.floor((rem % 3600) / 60);
         const disp = h > 0 ? `${h}h ${m}m` : `${m}m`;
-        Alert.alert('On Cooldown', `This NFT is resting. Ready in ${disp}.`, [{ text: 'OK' }]);
+        setAlertDialog({ title: 'On Cooldown', message: `This NFT is resting. Ready in ${disp}.` });
         handleFullReset();
       }
     })();
@@ -269,93 +272,112 @@ export default memo(function Poop() {
   const renderChallengeHeader = () => {
     if (!displayNFT) return null;
     return (
-      <View style={styles.challengeHeader}>
-        <Image source={{ uri: displayNFT.image_url }} style={styles.challengeNFTAvatar} resizeMode="cover" />
-        <View style={styles.challengeNFTInfo}>
-          <Text style={styles.challengeNFTName}>{formatDisplayName(displayNFT.name)}</Text>
-          <Text style={styles.challengeNFTMeta}>Lv {displayNFT.level} · {displayNFT.type}</Text>
+      <View className="flex-row items-center w-full bg-white rounded-[14px] p-3 border border-gray-200 gap-3"
+        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}>
+        <Image source={{ uri: displayNFT.image_url }} className="w-14 h-14 rounded-[10px] bg-gray-100" resizeMode="cover" />
+        <View className="flex-1">
+          <Text className="text-[15px] font-bold text-gray-700 mb-0.5">{formatDisplayName(displayNFT.name)}</Text>
+          <Text className="text-xs text-gray-500">Lv {displayNFT.level} · {displayNFT.type}</Text>
         </View>
       </View>
     );
   };
 
   const renderCountdownPhase = () => (
-    <View style={styles.challengeContainer}>
+    <View className="w-full items-center pt-3 gap-5">
       {renderChallengeHeader()}
-      <View style={styles.countdownOverlay}>
-        <Text style={styles.countdownNumber}>{countdownValue}</Text>
-        <Text style={styles.countdownLabel}>Get ready…</Text>
+      <View className="items-center py-6 gap-4">
+        <Text className="text-[80px] font-extrabold text-gray-700 leading-[88px]">{countdownValue}</Text>
+        <Text className="text-base text-gray-500 font-medium">Get ready…</Text>
       </View>
-      <TouchableOpacity style={styles.cancelLink} onPress={handleCancelCountdownOrImmobility}>
-        <Text style={styles.cancelLinkText}>Cancel</Text>
-      </TouchableOpacity>
+      <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
+        Cancel
+      </Button>
     </View>
   );
 
   const renderImmobilityPhase = () => {
     const isWarning = status === 'warning';
     return (
-      <View style={styles.challengeContainer}>
+      <View className="w-full items-center pt-3 gap-5">
         {renderChallengeHeader()}
-        <View style={styles.countdownOverlay}>
-          <Text style={[styles.countdownNumber, isWarning && styles.countdownFrozen]}>
+        <View className="items-center py-6 gap-4">
+          <Text
+            className="text-[80px] font-extrabold leading-[88px]"
+            style={{ color: isWarning ? '#ef4444' : '#374151' }}
+          >
             {(remainingTime / 1000).toFixed(1)}s
           </Text>
-          <View style={[styles.statusBadge, isWarning ? styles.statusBadgeWarning : styles.statusBadgeRunning]}>
-            <Text style={styles.statusBadgeText}>
+          <View
+            className="py-2 px-[18px] rounded-full"
+            style={{ backgroundColor: isWarning ? '#fee2e2' : '#f0fdf4' }}
+          >
+            <Text className="text-sm font-semibold text-gray-700">
               {isWarning ? '🔴 Movement detected!' : '🟢 Hold still'}
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.cancelLink} onPress={handleCancelCountdownOrImmobility}>
-          <Text style={styles.cancelLinkText}>Cancel</Text>
-        </TouchableOpacity>
+        <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
+          Cancel
+        </Button>
       </View>
     );
   };
 
   const renderPromptPhase = () => (
-    <View style={styles.challengeContainer}>
+    <View className="w-full items-center pt-3 gap-5">
       {renderChallengeHeader()}
-      <View style={styles.phaseCard}>
-        <Text style={styles.phaseCardSuccess}>✓ Immobility confirmed!</Text>
-        <Text style={styles.phaseCardSub}>Now record the flush sound</Text>
+      <View
+        className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
+        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+      >
+        <Text className="text-xl font-bold text-green-600 text-center">✓ Immobility confirmed!</Text>
+        <Text className="text-[13px] text-gray-500 text-center">Now record the flush sound</Text>
       </View>
-      <TouchableOpacity style={styles.actionButton} onPress={handleStartRecording}>
-        <Text style={styles.actionButtonText}>Start Recording</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelLink} onPress={handleCancelPrompt}>
-        <Text style={styles.cancelLinkText}>Cancel</Text>
-      </TouchableOpacity>
+      <Button variant="primary" onPress={handleStartRecording} className="w-full">
+        Start Recording
+      </Button>
+      <Button variant="outline" onPress={handleCancelPrompt} className="w-full">
+        Cancel
+      </Button>
     </View>
   );
 
   const renderRecordingPhase = () => (
-    <View style={styles.challengeContainer}>
+    <View className="w-full items-center pt-3 gap-5">
       {renderChallengeHeader()}
       {isAnalyzing ? (
-        <View style={styles.phaseCard}>
-          <Text style={styles.phaseCardLabel}>🔍 Analyzing audio…</Text>
+        <View
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
+          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+        >
+          <Text className="text-base font-semibold text-gray-700 text-center">🔍 Analyzing audio…</Text>
         </View>
       ) : isRecording ? (
-        <View style={styles.phaseCard}>
-          <View style={styles.recordingRow}>
-            <View style={styles.recordingDot} />
-            <Text style={styles.phaseCardLabel}>Recording…</Text>
+        <View
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
+          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+        >
+          <View className="flex-row items-center gap-2 mb-3">
+            <View className="w-3 h-3 rounded-full bg-red-500" />
+            <Text className="text-base font-semibold text-gray-700">Recording…</Text>
           </View>
-          <TouchableOpacity style={styles.actionButton} onPress={stopRecording}>
-            <Text style={styles.actionButtonText}>Stop</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={stopRecording} className="w-full">
+            Stop
+          </Button>
         </View>
       ) : (
-        <View style={styles.phaseCard}>
-          <Text style={styles.phaseCardLabel}>Processing…</Text>
+        <View
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
+          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+        >
+          <Text className="text-base font-semibold text-gray-700 text-center">Processing…</Text>
         </View>
       )}
       {!isAnalyzing && (
-        <TouchableOpacity style={styles.cancelLink} onPress={handleCancelRecording}>
-          <Text style={styles.cancelLinkText}>Cancel</Text>
-        </TouchableOpacity>
+        <Button variant="outline" onPress={handleCancelRecording} className="w-full">
+          Cancel
+        </Button>
       )}
     </View>
   );
@@ -363,80 +385,73 @@ export default memo(function Poop() {
   const renderResultsPhase = () => {
     if (rateLimitError) {
       return (
-        <View style={styles.challengeContainer}>
+        <View className="w-full items-center pt-3 gap-5">
           {renderChallengeHeader()}
-          <View style={[styles.resultCard, styles.resultError]}>
-            <Text style={styles.resultTitle}>Daily limit reached</Text>
-            <Text style={styles.resultSub}>{rateLimitError.message}</Text>
+          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-amber-100 border-amber-400">
+            <Text className="text-[22px] font-bold text-gray-700 text-center">Daily limit reached</Text>
+            <Text className="text-sm text-gray-500 text-center">{rateLimitError.message}</Text>
           </View>
-          <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
-            <Text style={styles.actionButtonText}>Done</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={handleFullReset} className="w-full">Done</Button>
         </View>
       );
     }
     if (detectionError && !detectionResult) {
       return (
-        <View style={styles.challengeContainer}>
+        <View className="w-full items-center pt-3 gap-5">
           {renderChallengeHeader()}
-          <View style={[styles.resultCard, styles.resultError]}>
-            <Text style={styles.resultTitle}>Something went wrong</Text>
-            <Text style={styles.resultSub}>{detectionError}</Text>
+          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-amber-100 border-amber-400">
+            <Text className="text-[22px] font-bold text-gray-700 text-center">Something went wrong</Text>
+            <Text className="text-sm text-gray-500 text-center">{detectionError}</Text>
           </View>
-          <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
-            <Text style={styles.actionButtonText}>Try Again</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={handleFullReset} className="w-full">Try Again</Button>
         </View>
       );
     }
     if (detectionResult && !detectionResult.detected) {
       return (
-        <View style={styles.challengeContainer}>
+        <View className="w-full items-center pt-3 gap-5">
           {renderChallengeHeader()}
-          <View style={[styles.resultCard, styles.resultFailure]}>
-            <Text style={styles.resultTitle}>Flush not detected</Text>
-            <Text style={styles.resultSub}>Confidence: {formatConfidencePercentage(detectionResult.confidence)}</Text>
+          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-red-100 border-red-500">
+            <Text className="text-[22px] font-bold text-gray-700 text-center">Flush not detected</Text>
+            <Text className="text-sm text-gray-500 text-center">Confidence: {formatConfidencePercentage(detectionResult.confidence)}</Text>
           </View>
-          <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
-            <Text style={styles.actionButtonText}>Try Again</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={handleFullReset} className="w-full">Try Again</Button>
         </View>
       );
     }
     // Success
     return (
-      <View style={styles.challengeContainer}>
+      <View className="w-full items-center pt-3 gap-5">
         {renderChallengeHeader()}
-        <View style={[styles.resultCard, styles.resultSuccess]}>
-          <Text style={styles.resultTitle}>💧 Flush confirmed!</Text>
+        <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-green-100 border-green-500">
+          <Text className="text-[22px] font-bold text-gray-700 text-center">💧 Flush confirmed!</Text>
           {poopedEnergy && (
-            <Text style={styles.resultSub}>Energy: {poopedEnergy.from} → {poopedEnergy.to}</Text>
+            <Text className="text-sm text-gray-500 text-center">Energy: {poopedEnergy.from} → {poopedEnergy.to}</Text>
           )}
           {poopedXP && (
             <>
-              <Text style={styles.resultSub}>+{poopedXP.gained} XP</Text>
+              <Text className="text-sm text-gray-500 text-center">+{poopedXP.gained} XP</Text>
               {poopedXP.leveledUp && (
-                <Text style={styles.resultSub}>🎉 Level Up! Now Lv {poopedXP.level}</Text>
+                <Text className="text-sm text-gray-500 text-center">🎉 Level Up! Now Lv {poopedXP.level}</Text>
               )}
             </>
           )}
           {poopedPoop && (
-            <Text style={styles.resultSub}>+{poopedPoop.earned} 💩 POOP</Text>
+            <Text className="text-sm text-gray-500 text-center">+{poopedPoop.earned} 💩 POOP</Text>
           )}
-          {actionLoading && <Text style={styles.resultSub}>Saving…</Text>}
+          {actionLoading && <Text className="text-sm text-gray-500 text-center">Saving…</Text>}
         </View>
         {lootRollId ? (
-          <TouchableOpacity
-            style={styles.actionButton}
+          <Button
+            variant="primary"
             onPress={() => setPhase('roulette')}
-            disabled={actionLoading}
+            isDisabled={actionLoading}
+            className="w-full"
           >
-            <Text style={styles.actionButtonText}>Continue →</Text>
-          </TouchableOpacity>
+            Continue →
+          </Button>
         ) : (
-          <TouchableOpacity style={styles.actionButton} onPress={handleFullReset}>
-            <Text style={styles.actionButtonText}>Done</Text>
-          </TouchableOpacity>
+          <Button variant="primary" onPress={handleFullReset} className="w-full">Done</Button>
         )}
       </View>
     );
@@ -449,7 +464,7 @@ export default memo(function Poop() {
       return null;
     }
     return (
-      <View style={styles.challengeContainer}>
+      <View className="w-full items-center pt-3 gap-5">
         {renderChallengeHeader()}
         <LootRouletteCard lootRollId={lootRollId} onDone={handleFullReset} />
       </View>
@@ -477,7 +492,11 @@ export default memo(function Poop() {
     <>
       {phase !== 'idle' ? (
         // ── Active challenge ───────────────────────────────
-        <ScrollView style={styles.scroll} contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          className="flex-1 bg-background"
+          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
+          showsVerticalScrollIndicator={false}
+        >
           {phase === 'countdown'  && renderCountdownPhase()}
           {phase === 'immobility' && renderImmobilityPhase()}
           {phase === 'prompt'     && renderPromptPhase()}
@@ -488,32 +507,33 @@ export default memo(function Poop() {
       ) : (
         // ── Idle (home) ────────────────────────────────────
         <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.container}
+          className="flex-1 bg-white"
+          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.title}>Poop</Text>
-          <Text style={styles.description}>Use your NFT to generate rewards</Text>
+          <Text className="text-[32px] font-bold text-center mb-2 text-gray-700">Poop</Text>
+          <Text className="text-base text-center text-gray-500 mb-6">Use your NFT to generate rewards</Text>
 
           {immobilityMessage && (
-            <View style={styles.toastMessage}>
-              <Text style={styles.toastMessageText}>{immobilityMessage}</Text>
+            <View className="bg-red-100 rounded-[10px] py-2.5 px-4 mb-2 border border-red-300">
+              <Text className="text-[13px] text-red-700 font-semibold text-center">{immobilityMessage}</Text>
             </View>
           )}
 
-          <View style={styles.nftContainer}>
+          <View className="w-full items-center mb-5">
             {selectedIndex === null || !displayNFT ? (
-              <TouchableOpacity
-                style={styles.selectButton}
+              <Button
+                variant="ghost"
                 onPress={handleSelectNFT}
-                disabled={nfts.length === 0}
+                isDisabled={nfts.length === 0}
+                className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-gray-300 flex-col mt-5"
               >
-                <Text style={styles.plusIcon}>+</Text>
-                <Text style={styles.selectText}>
+                <Text className="text-[40px] text-gray-400 mb-3">+</Text>
+                <Button.Label className="text-base text-gray-500 font-semibold">
                   {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
-                </Text>
-              </TouchableOpacity>
+                </Button.Label>
+              </Button>
             ) : (
               <>
                 <NFTSelector
@@ -523,22 +543,28 @@ export default memo(function Poop() {
                   onNext={handleNext}
                   style={{ marginBottom: 12 }}
                 />
-                <View style={styles.nftCard}>
-                  <View style={styles.imageContainer}>
+                <View
+                  className="w-full max-w-[280px] bg-white rounded-2xl p-3 border border-gray-200 overflow-hidden"
+                  style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}
+                >
+                  <View className="relative w-full h-[180px] bg-gray-100 rounded-xl mb-3 overflow-hidden">
                     <Image
                       source={{ uri: displayNFT.image_url }}
-                      style={styles.nftImage}
+                      className="w-full h-full"
                       resizeMode="cover"
                     />
-                    <View style={styles.levelBadge}>
-                      <Text style={styles.levelBadgeText}>Lv {displayNFT.level}</Text>
+                    <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
+                      <Text className="text-white text-xs font-bold tracking-wide">Lv {displayNFT.level}</Text>
                     </View>
-                    <View style={[styles.typeBadge, TYPE_BADGE_STYLES[displayNFT.type]]}>
-                      <Text style={styles.typeBadgeText}>{displayNFT.type.toUpperCase()}</Text>
+                    <View
+                      className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
+                      style={{ backgroundColor: (TYPE_BADGE_STYLES[displayNFT.type] as { backgroundColor: string }).backgroundColor }}
+                    >
+                      <Text className="text-white text-[11px] font-bold tracking-wide">{displayNFT.type.toUpperCase()}</Text>
                     </View>
                   </View>
-                  <View style={styles.nftInfo}>
-                    <Text style={styles.nftName}>{formatDisplayName(displayNFT.name)}</Text>
+                  <View className="w-full">
+                    <Text className="text-lg font-bold text-gray-700 mb-2.5 text-center">{formatDisplayName(displayNFT.name)}</Text>
                     <NFTProperties
                       efficiency={displayNFT.efficiency}
                       resilience={displayNFT.resilience}
@@ -553,17 +579,16 @@ export default memo(function Poop() {
             )}
           </View>
 
-          <TouchableOpacity
-            style={[styles.poopButton, buttonDisabled && styles.poopButtonDisabled]}
+          <Button
+            variant="primary"
             onPress={handlePoop}
-            disabled={buttonDisabled}
-            activeOpacity={0.8}
+            isDisabled={buttonDisabled}
+            className="px-12"
             accessibilityLabel={onCooldown ? `Cooldown: ${cooldown!.display}` : 'Start pooping'}
-            accessibilityRole="button"
             accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
           >
-            <Text style={styles.poopButtonText}>{buttonLabel}</Text>
-          </TouchableOpacity>
+            <Button.Label>{buttonLabel}</Button.Label>
+          </Button>
         </ScrollView>
       )}
 
@@ -576,6 +601,24 @@ export default memo(function Poop() {
           onDismiss={handleStatModalDismiss}
         />
       )}
+
+      <Dialog isOpen={alertDialog !== null} onOpenChange={(open) => { if (!open) setAlertDialog(null); }}>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Close />
+            <View className="mb-4 gap-1.5">
+              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
+              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
+            </View>
+            <View className="flex-row justify-end">
+              <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
+                OK
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
     </>
   );
 });
