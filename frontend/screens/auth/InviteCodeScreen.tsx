@@ -3,16 +3,13 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native';
 import { validateInviteCode } from '@/lib/inviteCodeApi';
-import { inviteCodeScreenStyles as styles } from '@/styles';
 import { showSignOutConfirmation } from '@/utils';
 import { useErrorHandler } from '@/hooks';
-import { colors } from '@/constants';
 
 interface InviteCodeScreenProps {
   /** Called after the entered code is validated and the user is approved. */
@@ -30,7 +27,6 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandler('InviteCode');
-  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
   // Auto-focus input on mount
@@ -93,81 +89,61 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      className="flex-1 justify-center p-5 bg-background"
     >
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome! 🎉</Text>
-        <Text style={styles.subtitle}>
+      <View className="flex-1 justify-center">
+        <Text className="text-[28px] font-bold mb-2 text-center text-primary">Welcome! 🎉</Text>
+        <Text className="text-base text-gray-500 mb-10 text-center leading-6">
           Enter your invite code to access the app
         </Text>
 
-        <TextInput
-          ref={inputRef}
-          style={[
-            styles.input,
-            isFocused && styles.inputFocused,
-            error && styles.inputError,
-          ]}
-          value={code}
-          onChangeText={handleCodeChange}
-          placeholder="ABC12XYZ"
-          placeholderTextColor={colors.disabled}
-          maxLength={8}
-          autoCapitalize="characters"
-          autoCorrect={false}
-          autoComplete="off"
-          keyboardType="ascii-capable"
-          returnKeyType="done"
-          accessibilityLabel="Invite code"
-          accessibilityHint="Enter your 8-character invite code"
-          onSubmitEditing={handleSubmit}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          editable={!loading}
-        />
-        
-        <Text style={styles.helperText}>
-          8 alphanumeric characters
-        </Text>
-
-        {error && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        )}
+        <TextField isInvalid={!!error} className="mb-4">
+          <Label>Invite Code</Label>
+          <Input
+            ref={inputRef}
+            value={code}
+            onChangeText={handleCodeChange}
+            placeholder="ABC12XYZ"
+            maxLength={8}
+            autoCapitalize="characters"
+            autoCorrect={false}
+            autoComplete="off"
+            keyboardType="ascii-capable"
+            returnKeyType="done"
+            accessibilityLabel="Invite code"
+            accessibilityHint="Enter your 8-character invite code"
+            onSubmitEditing={handleSubmit}
+            editable={!loading}
+            className="text-center text-2xl font-semibold tracking-widest uppercase"
+          />
+          <Description>8 alphanumeric characters</Description>
+          {error && <FieldError>{error}</FieldError>}
+        </TextField>
 
         {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.info} />
+          <View className="mb-4 items-center">
+            <Spinner size="lg" />
           </View>
         )}
 
-        <TouchableOpacity
-          style={[
-            styles.submitButton,
-            !canSubmit && styles.submitButtonDisabled,
-          ]}
+        <Button
+          variant="primary"
           onPress={handleSubmit}
-          disabled={!canSubmit}
+          isDisabled={!canSubmit}
+          className="mb-4"
           accessibilityLabel="Submit invite code"
-          accessibilityRole="button"
           accessibilityHint="Validate and submit your invite code"
-          accessibilityState={{ disabled: !canSubmit, busy: loading }}
         >
-          <Text style={styles.submitButtonText}>
-            {loading ? 'Validating...' : 'Submit'}
-          </Text>
-        </TouchableOpacity>
+          {loading ? 'Validating...' : 'Submit'}
+        </Button>
 
-        <TouchableOpacity
-          style={styles.signOutButton}
+        <Button
+          variant="outline"
           onPress={handleSignOut}
-          disabled={loading}
+          isDisabled={loading}
         >
-          <Text style={styles.signOutButtonText}>
-            Sign Out
-          </Text>
-        </TouchableOpacity>
+          Sign Out
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );

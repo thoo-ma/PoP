@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { styles } from '@/styles/shared/ScreenError.styles';
+import { View } from 'react-native';
+import { Alert, Button } from 'heroui-native';
 
 interface ScreenErrorProps {
   title: string;
@@ -10,13 +10,18 @@ interface ScreenErrorProps {
 
 export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.errorText}>{message}</Text>
+    <View className="flex-1 bg-background items-center pt-[60px] px-6">
+      <Alert status="danger">
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title>{title}</Alert.Title>
+          <Alert.Description>{message}</Alert.Description>
+        </Alert.Content>
+      </Alert>
       {onRetry && (
-        <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
-          <Text style={styles.retryButtonText}>Retry</Text>
-        </TouchableOpacity>
+        <Button variant="primary" onPress={onRetry} className="mt-4">
+          Retry
+        </Button>
       )}
     </View>
   );

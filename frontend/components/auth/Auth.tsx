@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Alert as RNAlert, View, Text } from 'react-native';
+import { Button, Spinner } from 'heroui-native';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
 import { getErrorMessage, logError } from '@/utils';
-import { authStyles as styles } from '@/styles';
 import OAuthButton from './OAuthButton';
 import PasswordPromptModal from './PasswordPromptModal';
-import { colors } from '@/constants';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -40,7 +39,7 @@ export default function Auth() {
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
       logError('Auth:Anonymous', err);
-      Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+      RNAlert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
     } finally {
       setDevLoading(false);
     }
@@ -55,7 +54,7 @@ export default function Auth() {
     if (password === DEV_MODE_PASSWORD) {
       handleDevSignIn();
     } else {
-      Alert.alert('Access Denied', 'Incorrect password.');
+      RNAlert.alert('Access Denied', 'Incorrect password.');
     }
   };
 
@@ -73,14 +72,14 @@ export default function Auth() {
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
       logError('Auth:TestMode', err);
-      Alert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+      RNAlert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
     } finally {
       setTestLoading(false);
     }
   };
 
   const signInWithProvider = async (_provider: OAuthProvider) => {
-    Alert.alert(
+    RNAlert.alert(
       'OAuth Not Available',
       'OAuth authentication is not yet available.\n\nPlease use Test Mode or Dev Mode to sign in.',
       [{ text: 'OK' }]
@@ -88,41 +87,31 @@ export default function Auth() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Pop</Text>
-      <Text style={styles.subtitle}>Sign in to continue</Text>
+    <View className="flex-1 justify-center p-5 bg-background">
+      <Text className="text-[32px] font-bold mb-2 text-center">Welcome to Pop</Text>
+      <Text className="text-base text-gray-500 mb-10 text-center">Sign in to continue</Text>
 
-      <TouchableOpacity
-        style={styles.testModeButton}
+      <Button
+        variant="primary"
         onPress={handleTestSignIn}
-        disabled={testLoading}
+        isDisabled={testLoading}
+        className="mb-4 bg-[#1a6b5a]"
         accessibilityLabel="Continue in test mode"
-        accessibilityRole="button"
         accessibilityHint="Sign in anonymously with one mystery box of each rarity"
-        accessibilityState={{ disabled: testLoading }}
       >
-        {testLoading ? (
-          <ActivityIndicator color={colors.buttonText} />
-        ) : (
-          <Text style={styles.buttonText}>Continue (Test Mode)</Text>
-        )}
-      </TouchableOpacity>
+        {testLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Test Mode)'}
+      </Button>
 
-      <TouchableOpacity 
-        style={styles.devBypassButton}
+      <Button
+        variant="primary"
         onPress={handleDevModePress}
-        disabled={devLoading}
+        isDisabled={devLoading}
+        className="mb-4"
         accessibilityLabel="Continue in development mode"
-        accessibilityRole="button"
         accessibilityHint="Sign in anonymously for testing purposes (password required)"
-        accessibilityState={{ disabled: devLoading }}
       >
-        {devLoading ? (
-          <ActivityIndicator color={colors.buttonText} />
-        ) : (
-          <Text style={styles.buttonText}>Continue (Dev Mode)</Text>
-        )}
-      </TouchableOpacity>
+        {devLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Dev Mode)'}
+      </Button>
 
       <OAuthButton
         provider="twitter"
