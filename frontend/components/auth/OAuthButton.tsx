@@ -16,7 +16,7 @@ export default function OAuthButton({ provider, onPress, loading }: OAuthButtonP
       variant={isGoogle ? 'outline' : 'primary'}
       onPress={onPress}
       isDisabled={loading}
-      className={`mb-4 ${isGoogle ? '' : ''}`}
+      className="mb-4"
       accessibilityLabel={label}
     >
       {loading ? (
