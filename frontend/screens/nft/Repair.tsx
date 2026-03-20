@@ -1,7 +1,7 @@
-import { Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { memo, useState } from 'react';
-import { repairStyles as styles } from '@/styles';
+import { Button, Dialog } from 'heroui-native';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -24,6 +24,9 @@ export default memo(function Repair() {
   const [isRepaired, setIsRepaired] = useState(false);
   const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null);
   const [poopSpent, setPoopSpent] = useState<number | null>(null);
+
+  // ── Alert dialog state ─────────────────────────────────────
+  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null);
 
   const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
   const currentEnergy = selectedNFT?.energy || 0;
@@ -68,13 +71,12 @@ export default memo(function Repair() {
       await refetch();
       nftEvents.emit(); // Notify other screens
     } else if (insufficientPoopError) {
-      Alert.alert(
-        'Insufficient POOP',
-        `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
-        [{ text: 'OK' }]
-      );
+      setAlertDialog({
+        title: 'Insufficient POOP',
+        message: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
+      });
     } else {
-      Alert.alert('Repair Failed', 'Failed to repair NFT. Please try again.');
+      setAlertDialog({ title: 'Repair Failed', message: 'Failed to repair NFT. Please try again.' });
     }
   };
 
@@ -95,143 +97,168 @@ export default memo(function Repair() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Repair</Text>
-      <Text style={styles.description}>
-        Select an NFT and restore its energy
-      </Text>
-      {/* Wallet balance */}
-      {poopBalance !== null && (
-        <Text style={styles.description}>💩 Balance: {poopBalance} POOP</Text>
-      )}
+    <>
+      <View className="flex-1 bg-white items-center pt-[80px]">
+        <Text className="text-[32px] font-bold text-center mb-3 text-gray-700">Repair</Text>
+        <Text className="text-base text-center text-gray-500 mb-4">
+          Select an NFT and restore its energy
+        </Text>
+        {/* Wallet balance */}
+        {poopBalance !== null && (
+          <Text className="text-base text-center text-gray-500 mb-4">💩 Balance: {poopBalance} POOP</Text>
+        )}
 
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {selectedIndex === null ? (
-          <TouchableOpacity 
-            style={styles.selectButton} 
-            onPress={handleSelectNFT}
-            disabled={nfts.length === 0}
-          >
-            <Text style={styles.plusIcon}>+</Text>
-            <Text style={styles.selectText}>
-              {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <>
-            {/* NFT Carousel Selector */}
-            {!isRepaired && <NFTSelector
-              current={(selectedIndex as number) + 1}
-              total={nfts.length}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              style={{ marginTop: 20, marginBottom: 4 }}
-            />}
-            {/* Selected NFT Card */}
-            {!isRepaired && selectedNFT && <View style={styles.nftCard}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{ uri: selectedNFT.image_url }}
-                  style={styles.nftImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.levelBadge}>
-                  <Text style={styles.levelBadgeText}>Lv {selectedNFT.level}</Text>
-                </View>
-                <View style={[styles.typeBadge, TYPE_BADGE_STYLES[selectedNFT.type]]}>
-                  <Text style={styles.typeBadgeText}>{selectedNFT.type.toUpperCase()}</Text>
-                </View>
-                <View style={styles.resilienceBadge}>
-                  <Text style={styles.resilienceBadgeText}>
-                    Energy: {currentEnergy + Math.round(repairAmount)}%
-                  </Text>
-                </View>
-              </View>
-              
-              <View style={styles.cardContent}>
-                <Text style={styles.nftName}>{formatDisplayName(selectedNFT.name)}</Text>
-                
-                <NFTProperties
-                  efficiency={selectedNFT.efficiency}
-                  resilience={selectedNFT.resilience}
-                  comfort={selectedNFT.comfort}
-                  luck={selectedNFT.luck}
-                  energy={currentEnergy + Math.round(repairAmount)}
-                  mode="compact"
-                />
-              </View>
-            </View>}
-
-            {currentEnergy < MAX_ENERGY && !isRepaired && (
-              <>
-                {/* Repair Controls */}
-                <View style={styles.repairControls}>
-                  <Text style={styles.sectionTitle}>Repair Amount</Text>
-                  <View style={styles.sliderValueContainer}>
-                    <Text style={styles.sliderValue}>+{Math.round(repairAmount)}%</Text>
-                  </View>
-                  <Slider
-                    style={styles.slider}
-                    minimumValue={0}
-                    maximumValue={maxRepairPossible}
-                    value={repairAmount}
-                    onValueChange={setRepairAmount}
-                    minimumTrackTintColor={colors.slider}
-                    maximumTrackTintColor={colors.inactive}
-                    thumbTintColor={colors.slider}
-                    step={1}
-                  />
-                </View>
-
-                {/* Repair Button */}
-                <TouchableOpacity
-                  style={[
-                    styles.repairButton,
-                    (repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < poopCost)) && styles.repairButtonDisabled
-                  ]}
-                  onPress={handleRepair}
-                  disabled={repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < poopCost)}
+        <ScrollView
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center' }}
+          showsVerticalScrollIndicator={false}
+        >
+          {selectedIndex === null ? (
+            <Button
+              variant="ghost"
+              onPress={handleSelectNFT}
+              isDisabled={nfts.length === 0}
+              className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-gray-300 flex-col mt-5"
+            >
+              <Text className="text-[40px] text-gray-400 mb-3">+</Text>
+              <Button.Label className="text-base text-gray-500 font-semibold">
+                {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
+              </Button.Label>
+            </Button>
+          ) : (
+            <>
+              {/* NFT Carousel Selector */}
+              {!isRepaired && <NFTSelector
+                current={(selectedIndex as number) + 1}
+                total={nfts.length}
+                onPrev={handlePrev}
+                onNext={handleNext}
+                style={{ marginTop: 20, marginBottom: 4 }}
+              />}
+              {/* Selected NFT Card */}
+              {!isRepaired && selectedNFT && (
+                <View
+                  className="w-[280px] bg-white rounded-2xl overflow-hidden mt-5 mb-6 border border-gray-200"
+                  style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 3 }}
                 >
-                  <Text style={styles.repairButtonText}>
+                  <View className="relative w-full">
+                    <Image
+                      source={{ uri: selectedNFT.image_url }}
+                      className="w-full h-[280px] bg-gray-100"
+                      resizeMode="cover"
+                    />
+                    <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
+                      <Text className="text-white text-xs font-bold tracking-wide">Lv {selectedNFT.level}</Text>
+                    </View>
+                    <View
+                      className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
+                      style={{ backgroundColor: (TYPE_BADGE_STYLES[selectedNFT.type] as { backgroundColor: string }).backgroundColor }}
+                    >
+                      <Text className="text-white text-[11px] font-bold tracking-wide">{selectedNFT.type.toUpperCase()}</Text>
+                    </View>
+                    <View className="absolute top-3 right-3 rounded-lg px-3 py-1.5" style={{ backgroundColor: 'rgba(16, 185, 129, 0.95)' }}>
+                      <Text className="text-white text-xs font-bold tracking-wide">
+                        Energy: {currentEnergy + Math.round(repairAmount)}%
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View className="p-4">
+                    <Text className="text-lg font-bold text-gray-700 mb-3 text-center">{formatDisplayName(selectedNFT.name)}</Text>
+
+                    <NFTProperties
+                      efficiency={selectedNFT.efficiency}
+                      resilience={selectedNFT.resilience}
+                      comfort={selectedNFT.comfort}
+                      luck={selectedNFT.luck}
+                      energy={currentEnergy + Math.round(repairAmount)}
+                      mode="compact"
+                    />
+                  </View>
+                </View>
+              )}
+
+              {currentEnergy < MAX_ENERGY && !isRepaired && (
+                <>
+                  {/* Repair Controls */}
+                  <View className="w-full bg-gray-50 rounded-2xl p-4 mb-5 border border-gray-200">
+                    <Text className="text-base font-bold text-gray-700 mb-3">Repair Amount</Text>
+                    <View className="items-center mb-2">
+                      <Text className="text-[32px] font-bold text-green-600">+{Math.round(repairAmount)}%</Text>
+                    </View>
+                    <Slider
+                      style={{ width: '100%', height: 40 }}
+                      minimumValue={0}
+                      maximumValue={maxRepairPossible}
+                      value={repairAmount}
+                      onValueChange={setRepairAmount}
+                      minimumTrackTintColor={colors.slider}
+                      maximumTrackTintColor={colors.inactive}
+                      thumbTintColor={colors.slider}
+                      step={1}
+                    />
+                  </View>
+
+                  {/* Repair Button */}
+                  <Button
+                    variant="primary"
+                    onPress={handleRepair}
+                    isDisabled={repairAmount === 0 || updateLoading || (poopBalance !== null && poopBalance < poopCost)}
+                    className="w-full"
+                  >
                     {updateLoading
                       ? 'Repairing...'
                       : (poopBalance !== null && poopBalance < poopCost)
                       ? `Need ${poopCost} POOP`
                       : `Repair (${poopCost} POOP)`}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            )}
+                  </Button>
+                </>
+              )}
 
-            {isRepaired && (
-              <View style={styles.successMessage}>
-                <Text style={styles.successText}>✓ Repair Complete!</Text>
-                {repairedEnergy !== null && (
-                  <Text style={styles.successText}>Energy: {repairedEnergy}%</Text>
-                )}
-                {poopSpent !== null && (
-                  <Text style={styles.successText}>-{poopSpent} POOP spent</Text>
-                )}
-                <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-                  <Text style={styles.resetButtonText}>Repair Another NFT</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+              {isRepaired && (
+                <View className="items-center mt-8 bg-green-100 p-6 rounded-2xl border-2 border-green-500">
+                  <Text className="text-2xl font-bold text-green-600 mb-5">✓ Repair Complete!</Text>
+                  {repairedEnergy !== null && (
+                    <Text className="text-2xl font-bold text-green-600 mb-5">Energy: {repairedEnergy}%</Text>
+                  )}
+                  {poopSpent !== null && (
+                    <Text className="text-2xl font-bold text-green-600 mb-5">-{poopSpent} POOP spent</Text>
+                  )}
+                  <Button variant="outline" onPress={handleReset} className="w-full">
+                    Repair Another NFT
+                  </Button>
+                </View>
+              )}
 
-            {currentEnergy === MAX_ENERGY && !isRepaired && (
-              <View style={styles.fullResilienceMessage}>
-                <Text style={styles.fullResilienceText}>This NFT is at full energy!</Text>
-                <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-                  <Text style={styles.resetButtonText}>Select Another NFT</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </>
-        )}
-      </ScrollView>
-    </View>
+              {currentEnergy === MAX_ENERGY && !isRepaired && (
+                <View className="items-center mt-6">
+                  <Text className="text-lg font-semibold text-gray-700 mb-6 text-center">This NFT is at full energy!</Text>
+                  <Button variant="outline" onPress={handleReset} className="w-full">
+                    Select Another NFT
+                  </Button>
+                </View>
+              )}
+            </>
+          )}
+        </ScrollView>
+      </View>
+
+      <Dialog isOpen={alertDialog !== null} onOpenChange={(open) => { if (!open) setAlertDialog(null); }}>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Close />
+            <View className="mb-4 gap-1.5">
+              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
+              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
+            </View>
+            <View className="flex-row justify-end">
+              <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
+                OK
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
+    </>
   );
 });

@@ -1,6 +1,6 @@
-import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { memo, useState } from 'react';
-import { breedStyles as styles } from '@/styles';
+import { Button } from 'heroui-native';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -61,16 +61,16 @@ import { nftEvents, canBreed } from '@/utils';
 
   if (nfts.length < 2) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Breed</Text>
+      <View className="flex-1 bg-white items-center pt-[80px]">
+        <Text className="text-[32px] font-bold text-center mb-3 text-gray-700">Breed</Text>
 
         {/* Wallet balance + cost */}
-        <Text style={styles.description}>
+        <Text className="text-base text-center text-gray-500 mb-6">
           {poopBalance !== null
             ? `💩 Balance: ${poopBalance} POOP  ·  Cost: from 100 POOP (scales with rarity & breed count)`
             : 'Cost: from 100 POOP (scales with rarity & breed count)'}
         </Text>
-        <Text style={styles.description}>You need at least 2 NFTs to breed</Text>
+        <Text className="text-base text-center text-gray-500 mb-6">You need at least 2 NFTs to breed</Text>
       </View>
     );
   }
@@ -94,11 +94,11 @@ import { nftEvents, canBreed } from '@/utils';
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Breed</Text>
+    <View className="flex-1 bg-white items-center pt-[80px]">
+      <Text className="text-[32px] font-bold text-center mb-3 text-gray-700">Breed</Text>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center', width: '100%' }}
         showsVerticalScrollIndicator={false}
       >
         {/* ── Picker modal ──────────────────────────────────────────────── */}
@@ -124,14 +124,14 @@ import { nftEvents, canBreed } from '@/utils';
         {!breedResult ? (
           <>
             {/* ── Parent slots ──────────────────────────────────────────── */}
-            <View style={styles.parentsRow}>
+            <View className="flex-row items-stretch justify-center mb-6 w-full">
               <BreedParentSlot
                 nft={parent1}
                 label="Choose Parent 1"
                 onPress={() => setPickerSlot(1)}
               />
-              <View style={styles.vsColumn}>
-                <Text style={styles.vsText}>×</Text>
+              <View className="w-[36px] justify-center items-center">
+                <Text className="text-[26px] font-bold text-gray-700">×</Text>
               </View>
               <BreedParentSlot
                 nft={parent2}
@@ -144,8 +144,8 @@ import { nftEvents, canBreed } from '@/utils';
             {canBreedNow ? (
               <BreedOutcomePanel r1={parent1!.rarity} r2={parent2!.rarity} />
             ) : (
-              <View style={styles.outcomePlaceholder}>
-                <Text style={styles.outcomePlaceholderText}>
+              <View className="w-full bg-gray-50 rounded-[14px] border border-dashed border-gray-200 p-5 items-center mb-6">
+                <Text className="text-[13px] text-gray-500 text-center leading-5">
                   Select both parents to see outcome probabilities
                 </Text>
               </View>
@@ -153,58 +153,54 @@ import { nftEvents, canBreed } from '@/utils';
 
             {/* ── Breed error ───────────────────────────────────────────── */}
             {breedError && (
-              <Text style={styles.breedError}>{breedError}</Text>
+              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">{breedError}</Text>
             )}
 
             {atBreedLimit && (
-              <Text style={styles.breedError}>
+              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">
                 One of the selected NFTs has reached its max breed count ({cfg.currency.BREED_MAX_COUNT}) and cannot be bred again.
               </Text>
             )}
 
             {!hasEnoughPoop && (
-              <Text style={styles.breedError}>
+              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">
                 Insufficient POOP — you need {totalBreedCost} POOP to breed.
               </Text>
             )}
 
             {/* ── Breed button ──────────────────────────────────────────────── */}
-            <TouchableOpacity
-              style={[
-                styles.breedButton,
-                (!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit) && styles.breedButtonDisabled,
-              ]}
+            <Button
+              variant="primary"
               onPress={handleBreed}
-              disabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
+              isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
+              className="w-full"
             >
-              <Text style={styles.breedButtonText}>
-                {breedLoading
-                  ? 'Breeding…'
-                  : totalBreedCost !== null
-                    ? `Breed (${totalBreedCost} POOP)`
-                    : 'Breed'}
-              </Text>
-            </TouchableOpacity>
+              {breedLoading
+                ? 'Breeding…'
+                : totalBreedCost !== null
+                  ? `Breed (${totalBreedCost} POOP)`
+                  : 'Breed'}
+            </Button>
           </>
         ) : (
           /* ── Result ───────────────────────────────────────────────────── */
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>🎉 Mystery Box Earned!</Text>
+          <View className="items-center w-full">
+            <Text className="text-[26px] font-bold text-gray-700 mb-5 text-center">🎉 Mystery Box Earned!</Text>
 
             {/* Parents summary */}
-            <View style={styles.resultParentsRow}>
-              {resultParent1Url && <Image source={{ uri: resultParent1Url }} style={styles.resultParentThumb} />}
-              <Text style={styles.resultCross}>×</Text>
-              {resultParent2Url && <Image source={{ uri: resultParent2Url }} style={styles.resultParentThumb} />}
-              <Text style={styles.resultArrow}>→</Text>
+            <View className="flex-row items-center mb-5 gap-2">
+              {resultParent1Url && <Image source={{ uri: resultParent1Url }} className="w-[52px] h-[52px] rounded-lg border border-gray-200" />}
+              <Text className="text-lg text-gray-500 font-semibold">×</Text>
+              {resultParent2Url && <Image source={{ uri: resultParent2Url }} className="w-[52px] h-[52px] rounded-lg border border-gray-200" />}
+              <Text className="text-[22px] text-gray-700 font-bold">→</Text>
             </View>
 
             {/* Mystery box result */}
             <MysteryBoxCard box={breedResult} />
 
-            <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-              <Text style={styles.resetButtonText}>Breed Again</Text>
-            </TouchableOpacity>
+            <Button variant="primary" onPress={handleReset} className="w-full">
+              Breed Again
+            </Button>
           </View>
         )}
       </ScrollView>
