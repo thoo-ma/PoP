@@ -1,6 +1,6 @@
-import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
+import { PressableFeedback, Chip } from 'heroui-native';
 import type { NFT } from '@/types/nft';
-import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS, colors } from '@/constants';
 import { formatDisplayName } from '@/utils';
 
@@ -21,32 +21,40 @@ interface BreedParentSlotProps {
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
   const borderColor = nft ? RARITY_COLORS[nft.rarity] : colors.inactive;
   return (
-    <TouchableOpacity
-      style={[styles.parentSlot, { borderColor }]}
+    <PressableFeedback
       onPress={onPress}
-      activeOpacity={0.8}
+      style={{ flex: 1, borderRadius: 14, borderWidth: 2, borderColor, overflow: 'hidden' }}
+      className="bg-content1 shadow-sm"
     >
       {nft ? (
         <>
-          <Image source={{ uri: nft.image_url }} style={styles.parentImage} resizeMode="cover" />
-          <View style={styles.parentInfo}>
-            <Text style={styles.parentName} numberOfLines={1}>{formatDisplayName(nft.name)}</Text>
-            <View style={styles.parentBadgeRow}>
-              <View style={[styles.parentRarityBadge, { backgroundColor: RARITY_COLORS[nft.rarity] }]}>
-                <Text style={styles.parentRarityText}>{nft.rarity.toUpperCase()}</Text>
-              </View>
+          <Image
+            source={{ uri: nft.image_url }}
+            style={{ width: '100%', aspectRatio: 1 }}
+            resizeMode="cover"
+          />
+          <View className="p-2 pb-1">
+            <Text className="text-[13px] font-bold text-foreground mb-1" numberOfLines={1}>
+              {formatDisplayName(nft.name)}
+            </Text>
+            <View className="flex-row gap-1">
+              <Chip size="sm" style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}>
+                <Chip.Label className="text-white text-[10px] font-bold">
+                  {nft.rarity.toUpperCase()}
+                </Chip.Label>
+              </Chip>
             </View>
           </View>
-          <View style={styles.parentChangeHint}>
-            <Text style={styles.parentChangeText}>tap to change</Text>
+          <View className="px-2 pb-2">
+            <Text className="text-xs text-default-400 italic">tap to change</Text>
           </View>
         </>
       ) : (
-        <View style={styles.emptySlotInner}>
-          <Text style={styles.emptySlotPlus}>＋</Text>
-          <Text style={styles.emptySlotLabel}>{label}</Text>
+        <View className="aspect-square justify-center items-center bg-default-100">
+          <Text className="text-[36px] text-default-300 mb-1.5">＋</Text>
+          <Text className="text-sm text-default-500 text-center px-4 leading-4">{label}</Text>
         </View>
       )}
-    </TouchableOpacity>
+    </PressableFeedback>
   );
 }

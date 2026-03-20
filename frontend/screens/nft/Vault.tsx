@@ -1,6 +1,6 @@
 import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
-import { vaultStyles as styles, sortStyles, filterStyles, tabStyles } from '@/styles';
+import { vaultStyles as styles, tabStyles } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -22,7 +22,6 @@ export default memo(function Vault() {
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [showSortMenu, setShowSortMenu] = useState(false);
   const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<NFTType[]>([]);
   const [statModalNFT, setStatModalNFT] = useState<NFT | null>(null);
@@ -95,15 +94,10 @@ export default memo(function Vault() {
 
   const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option);
-    setShowSortMenu(false);
   }, []);
 
   const handleSortOrderToggle = useCallback(() => {
     setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
-  }, []);
-
-  const handleMenuToggle = useCallback(() => {
-    setShowSortMenu(prev => !prev);
   }, []);
 
   const handleListNFT = useCallback(async (nftId: string) => {
@@ -200,17 +194,13 @@ export default memo(function Vault() {
             onRarityToggle={handleRarityToggle}
             onTypeToggle={handleTypeToggle}
             onClearFilters={handleClearFilters}
-            styles={filterStyles}
           />
 
           <SortControls
             sortBy={sortBy}
             sortOrder={sortOrder}
-            showSortMenu={showSortMenu}
             onSortByChange={handleSortByChange}
             onSortOrderToggle={handleSortOrderToggle}
-            onMenuToggle={handleMenuToggle}
-            styles={sortStyles}
           />
 
           <ScrollView

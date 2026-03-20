@@ -1,6 +1,6 @@
 import { Text, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { marketplaceStyles as styles, sortStyles, tabStyles } from '@/styles';
+import { marketplaceStyles as styles, tabStyles } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -17,8 +17,6 @@ export default memo(function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [showSortMenu, setShowSortMenu] = useState(false);
-  
   // Fetch user's NFTs for "My Listings" tab
   const { nfts, loading: userLoading, refetch: refetchUser } = useUserNFTs();
   // Fetch marketplace listings from other users
@@ -61,15 +59,10 @@ export default memo(function Marketplace() {
 
   const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option);
-    setShowSortMenu(false);
   }, []);
 
   const handleSortOrderToggle = useCallback(() => {
     setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
-  }, []);
-
-  const handleMenuToggle = useCallback(() => {
-    setShowSortMenu(prev => !prev);
   }, []);
 
   const loading = activeTab === 'buy' ? marketplaceLoading : userLoading;
@@ -110,11 +103,8 @@ export default memo(function Marketplace() {
       <SortControls
         sortBy={sortBy}
         sortOrder={sortOrder}
-        showSortMenu={showSortMenu}
         onSortByChange={handleSortByChange}
         onSortOrderToggle={handleSortOrderToggle}
-        onMenuToggle={handleMenuToggle}
-        styles={{ ...sortStyles, sortContainer: styles.sortContainer }}
       />
 
       {loading ? (

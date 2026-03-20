@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { Card, Button } from 'heroui-native';
 import { useRollLoot } from '@/hooks';
 import type { RollLootResult } from '@/hooks';
-import { styles } from '@/styles/nft/LootRouletteCard.styles';
 
 const MAX_HOLDS = 3;
 const BASE_CHANCE = 10;
@@ -52,75 +52,83 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
   };
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>🎰 Loot Roll</Text>
+    <Card className="mx-4 items-center gap-4" animation="disable-all">
+      <Card.Body className="items-center gap-4 w-full">
+        <Card.Title className="text-xl font-bold">🎰 Loot Roll</Card.Title>
 
-      {!result ? (
-        <>
-          <Text style={styles.chanceLabel}>
-            Loot Chance: <Text style={styles.chanceValue}>{lootChance}%</Text>
-          </Text>
-
-          {holds > 0 && (
-            <Text style={styles.holdsBadge}>
-              {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
+        {!result ? (
+          <>
+            <Text className="text-base">
+              Loot Chance: <Text className="font-bold" style={{ color: '#8b5cf6' }}>{lootChance}%</Text>
             </Text>
-          )}
 
-          {holds === MAX_HOLDS && (
-            <Text style={styles.maxHoldNotice}>Max holds reached — now roll!</Text>
-          )}
+            {holds > 0 && (
+              <Text className="text-sm italic" style={{ color: '#3b82f6' }}>
+                {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
+              </Text>
+            )}
 
-          {err && <Text style={styles.errorText}>{err}</Text>}
+            {holds === MAX_HOLDS && (
+              <Text className="text-sm italic" style={{ color: '#f59e0b' }}>
+                Max holds reached — now roll!
+              </Text>
+            )}
 
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={[styles.holdButton, (!canHold || loading) && styles.buttonDisabled]}
-              onPress={handleHold}
-              disabled={!canHold || loading}
-              activeOpacity={0.75}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text style={styles.holdButtonText}>Hold +{CHANCE_PER_HOLD}%</Text>
-              )}
-            </TouchableOpacity>
+            {err && (
+              <Text className="text-sm text-center" style={{ color: '#ef4444' }}>{err}</Text>
+            )}
 
-            <TouchableOpacity
-              style={[styles.rollButton, (!canRoll || loading) && styles.buttonDisabled]}
-              onPress={handleRoll}
-              disabled={!canRoll || loading}
-              activeOpacity={0.75}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text style={styles.rollButtonText}>Roll!</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-        </>
-      ) : (
-        <>
-          {result.won ? (
-            <View style={styles.winBox}>
-              <Text style={styles.winTitle}>🎁 You won!</Text>
-              <Text style={styles.winSub}>A Common Mystery Box has been added to your Vault.</Text>
+            <View className="flex-row gap-3 w-full mt-2">
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onPress={handleHold}
+                isDisabled={!canHold || loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Button.Label>Hold +{CHANCE_PER_HOLD}%</Button.Label>
+                )}
+              </Button>
+
+              <Button
+                variant="primary"
+                className="flex-1"
+                onPress={handleRoll}
+                isDisabled={!canRoll || loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Button.Label>Roll!</Button.Label>
+                )}
+              </Button>
             </View>
-          ) : (
-            <View style={styles.lossBox}>
-              <Text style={styles.lossTitle}>No luck this time</Text>
-              <Text style={styles.lossSub}>Better luck on your next flush!</Text>
-            </View>
-          )}
+          </>
+        ) : (
+          <>
+            {result.won ? (
+              <View className="items-center gap-2 rounded-xl py-4 px-6 w-full" style={{ backgroundColor: '#d1fae5' }}>
+                <Text className="text-2xl font-extrabold" style={{ color: '#065f46' }}>🎁 You won!</Text>
+                <Text className="text-base text-center" style={{ color: '#065f46' }}>
+                  A Common Mystery Box has been added to your Vault.
+                </Text>
+              </View>
+            ) : (
+              <View className="items-center gap-2 rounded-xl py-4 px-6 w-full" style={{ backgroundColor: '#f3f4f6' }}>
+                <Text className="text-xl font-bold" style={{ color: '#374151' }}>No luck this time</Text>
+                <Text className="text-base text-center" style={{ color: '#6b7280' }}>Better luck on your next flush!</Text>
+              </View>
+            )}
 
-          <TouchableOpacity style={styles.doneButton} onPress={onDone} activeOpacity={0.75}>
-            <Text style={styles.doneButtonText}>Done</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+            <Button variant="secondary" className="px-8 mt-2" onPress={onDone}>
+              <Button.Label>Done</Button.Label>
+            </Button>
+          </>
+        )}
+      </Card.Body>
+    </Card>
   );
 });
 

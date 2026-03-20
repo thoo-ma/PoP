@@ -1,10 +1,11 @@
 import { memo } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View, Text } from 'react-native';
 import type { ReactNode } from 'react';
+import { Card, Chip } from 'heroui-native';
 import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
-import { styles } from '@/styles/nft/NFTCard.styles';
-import { formatDisplayName, TYPE_BADGE_STYLES, RARITY_BADGE_STYLES } from '@/utils';
+import { formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
+import { RARITY_COLORS } from '@/constants';
 import { MAX_LEVEL, xpThreshold } from '@shared/xp';
 
 interface NFTCardProps {
@@ -14,40 +15,84 @@ interface NFTCardProps {
 }
 
 export default memo(function NFTCard({ nft, action }: NFTCardProps) {
+  const xpPct = nft.level >= MAX_LEVEL
+    ? 100
+    : Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100);
+
   return (
-    <View style={styles.nftCard}>
-      <View style={styles.imageContainer}>
+    <Card className="w-full mb-4" animation="disable-all">
+      {/* Image + badge overlay */}
+      <View className="w-full aspect-square relative">
         <Image
           source={{ uri: nft.image_url }}
-          style={styles.nftImage}
+          style={{ width: '100%', height: '100%' }}
           resizeMode="cover"
         />
-        <View style={styles.levelBadge}>
-          <Text style={styles.levelText}>Lv {nft.level}</Text>
-        </View>
+        {/* Level — top-left */}
+        <Chip
+          size="sm"
+          variant="primary"
+          className="absolute top-2 left-2"
+          animation="disable-all"
+        >
+          <Chip.Label className="text-white text-xs font-bold">Lv {nft.level}</Chip.Label>
+        </Chip>
+
+        {/* Type — bottom-left */}
         {nft.type && (
-          <View style={[styles.typeBadge, TYPE_BADGE_STYLES[nft.type]]}>
-            <Text style={styles.typeText}>{nft.type.toUpperCase()}</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="primary"
+            style={{ position: 'absolute', bottom: 8, left: 8, backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-xs font-bold">{nft.type.toUpperCase()}</Chip.Label>
+          </Chip>
         )}
+
+        {/* Rarity — top-right */}
         {nft.rarity && (
-          <View style={[styles.rarityBadge, RARITY_BADGE_STYLES[nft.rarity]]}>
-            <Text style={styles.rarityText}>{nft.rarity.toUpperCase()}</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="primary"
+            style={{ position: 'absolute', top: 8, right: 8, backgroundColor: RARITY_COLORS[nft.rarity] }}
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-xs font-bold">{nft.rarity.toUpperCase()}</Chip.Label>
+          </Chip>
         )}
+
+        {/* Listed — below rarity */}
         {nft.isListed && (
-          <View style={styles.listedBadge}>
-            <Text style={styles.listedText}>Listed</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="primary"
+            color="success"
+            className="absolute right-2"
+            style={{ position: 'absolute', top: 40, right: 8 }}
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-xs font-bold">Listed</Chip.Label>
+          </Chip>
         )}
+
+        {/* Stat points — bottom-right */}
         {(nft.stat_points ?? 0) > 0 && (
-          <View style={styles.statPointsBadge}>
-            <Text style={styles.statPointsBadgeText}>+{nft.stat_points} pts</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="primary"
+            style={{ position: 'absolute', bottom: 8, right: 8 }}
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-xs font-bold">+{nft.stat_points} pts</Chip.Label>
+          </Chip>
         )}
       </View>
-      <View style={styles.cardContent}>
-        <Text style={styles.nftName}>{formatDisplayName(nft.name)}</Text>
+
+      <Card.Body className="p-2 gap-2">
+        <Card.Title className="text-sm font-bold" style={{ minHeight: 32 }}>
+          {formatDisplayName(nft.name)}
+        </Card.Title>
         <NFTProperties
           efficiency={nft.efficiency}
           resilience={nft.resilience}
@@ -56,25 +101,20 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           energy={nft.energy}
           mode="compact"
         />
-        <View style={styles.xpRow}>
-          <Text style={styles.xpLabel}>XP</Text>
-          <View style={styles.xpBarWrapper}>
-            <View style={styles.xpBarBackground}>
+        {/* XP bar */}
+        <View className="flex-row items-center mt-1">
+          <Text className="text-xs font-semibold w-5" style={{ color: '#f59e0b' }}>XP</Text>
+          <View className="flex-1 mx-1">
+            <View className="h-1 rounded-full overflow-hidden bg-gray-200">
               <View
-                style={[
-                  styles.xpBarFill,
-                  {
-                    width: nft.level >= MAX_LEVEL
-                      ? '100%'
-                      : `${Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100)}%`,
-                  },
-                ]}
+                className="h-full rounded-full bg-yellow-400"
+                style={{ width: `${xpPct}%` }}
               />
             </View>
           </View>
         </View>
         {action}
-      </View>
-    </View>
+      </Card.Body>
+    </Card>
   );
 });
