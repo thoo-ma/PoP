@@ -1,24 +1,16 @@
 import 'react-native-gesture-handler';
 import './global.css';
 import { StatusBar } from 'expo-status-bar';
-import { 
-  View, 
-  ActivityIndicator, 
-  FlatList, 
-  ViewToken,
-  Dimensions,
-} from 'react-native';
+import { View, FlatList, ViewToken, Dimensions } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from '@/hooks';
 import { Auth, PageIndicator, ProfileButton } from '@/components';
 import { InviteCodeScreen, Profile } from '@/screens';
-import { colors } from '@/constants';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
-import { appStyles as styles } from '@/styles';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HeroUINativeProvider } from 'heroui-native';
+import { HeroUINativeProvider, Spinner } from 'heroui-native';
 import { GameConfigProvider } from '@/store/gameConfigStore';
 
 export default function App() {
@@ -67,7 +59,7 @@ function AppInner() {
   const renderPage = useCallback(({ item }: { item: typeof PAGES[0] }) => {
     const Component = item.component;
     return (
-      <View style={styles.pageWrapper}>
+      <View style={{ width: Dimensions.get('window').width, height: '100%' }}>
         <Component />
       </View>
     );
@@ -77,8 +69,8 @@ function AppInner() {
   if (authLoading || (session && approvalLoading)) {
     return (
       <SafeAreaProvider>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+        <View className="flex-1 bg-surface-bg items-center justify-center">
+          <Spinner size="lg" />
         </View>
       </SafeAreaProvider>
     );
@@ -109,7 +101,7 @@ function AppInner() {
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView className="flex-1 bg-surface-bg">
         <FlatList
           ref={flatListRef}
           data={PAGES}
@@ -129,7 +121,7 @@ function AppInner() {
           windowSize={1}
           initialNumToRender={1}
           maxToRenderPerBatch={1}
-          style={styles.flatList}
+          className="flex-1"
         />
 
         <ProfileButton onPress={handleOpenProfile} />

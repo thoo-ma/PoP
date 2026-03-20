@@ -1,11 +1,9 @@
-import { Text, View, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
-import { Skeleton, Tabs } from 'heroui-native';
-import { vaultStyles as styles } from '@/styles';
+import { Button, Skeleton, Tabs } from 'heroui-native';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
-import { colors } from '@/constants';
 import type { NFTRarity, NFTType, MysteryBox } from '@shared';
 import type { SortOption, NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
@@ -154,9 +152,9 @@ export default memo(function Vault() {
   }
   
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Vault</Text>
-      <Text style={styles.description}>
+    <View className="flex-1 bg-surface-bg items-center pt-20">
+      <Text className="text-[32px] font-bold mb-3 text-center text-text-title">Vault</Text>
+      <Text className="text-base mb-4 text-center text-text-body">
         Your collection ({nfts.length} toilet{nfts.length !== 1 ? 's' : ''}, {boxes.length} box{boxes.length !== 1 ? 'es' : ''})
       </Text>
 
@@ -190,42 +188,40 @@ export default memo(function Vault() {
           />
 
           <ScrollView
-            contentContainerStyle={styles.scrollContent}
+            contentContainerClassName="px-5 pb-[120px] w-full"
             showsVerticalScrollIndicator={false}
           >
-            <View style={styles.grid}>
+            <View className="flex-row flex-wrap justify-between w-full">
               {sortedNfts.map((nft) => (
-                <View key={nft.id} style={styles.gridItem}>
+                <View key={nft.id} className="w-[48%]">
                 <NFTCard
                   key={nft.id}
                   nft={nft}
                   action={
                     <>
                       {(nft.stat_points ?? 0) > 0 && (
-                        <TouchableOpacity
-                          style={styles.allocateButton}
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="mt-1"
                           onPress={() => handleOpenStatModal(nft)}
                           accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
-                          accessibilityRole="button"
                         >
-                          <Text style={styles.allocateButtonText}>
-                            ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
-                          </Text>
-                        </TouchableOpacity>
+                          <Button.Label>⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}</Button.Label>
+                        </Button>
                       )}
                       {!nft.isListed ? (
-                        <TouchableOpacity
-                          style={[styles.listButton, updateLoading && styles.listButtonDisabled]}
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="mt-1"
+                          isDisabled={updateLoading}
                           onPress={() => handleListNFT(nft.id)}
-                          disabled={updateLoading}
                           accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                          accessibilityRole="button"
                           accessibilityHint="List this NFT on the marketplace"
                         >
-                          <Text style={styles.listButtonText}>
-                            {updateLoading ? 'Listing...' : 'List for Sale'}
-                          </Text>
-                        </TouchableOpacity>
+                          <Button.Label>{updateLoading ? 'Listing...' : 'List for Sale'}</Button.Label>
+                        </Button>
                       ) : undefined}
                     </>
                   }
@@ -238,9 +234,9 @@ export default memo(function Vault() {
       </Tabs.Content>
       <Tabs.Content value="mystery-boxes">
       {boxesLoading ? (
-          <View style={styles.grid} className="p-4">
+          <View className="flex-row flex-wrap justify-between w-full p-4">
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} style={styles.gridItem} className="mb-3">
+              <View key={i} className="w-[48%] mb-3">
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -248,46 +244,45 @@ export default memo(function Vault() {
             ))}
           </View>
         ) : boxesError ? (
-          <View style={styles.boxesError}>
-            <Text style={styles.boxesErrorText}>
+          <View className="flex-1 justify-center items-center px-6">
+            <Text className="text-app-error text-center">
               Failed to load mystery boxes: {boxesError}
             </Text>
           </View>
         ) : (
           <ScrollView
-            contentContainerStyle={styles.scrollContent}
+            contentContainerClassName="px-5 pb-[120px] w-full"
             showsVerticalScrollIndicator={false}
           >
             {boxes.length === 0 ? (
-              <View style={styles.boxesEmpty}>
-                <Text style={styles.boxesEmptyTitle}>
+              <View className="py-12 items-center">
+                <Text className="text-base text-text-body text-center">
                   No mystery boxes yet
                 </Text>
-                <Text style={styles.boxesEmptySubtitle}>
+                <Text className="text-sm text-text-body opacity-60 mt-2 text-center">
                   Mystery boxes will appear here once you earn them.
                 </Text>
               </View>
             ) : (
-              <View style={styles.grid}>
+              <View className="flex-row flex-wrap justify-between w-full">
                 {groupedBoxes.map((group) => {
                   const isOpening = openingRarity === group.rarity;
                   return (
-                    <View key={group.rarity} style={styles.gridItem}>
+                    <View key={group.rarity} className="w-[48%]">
                     <MysteryBoxCard
                       box={group.box}
                       count={group.count}
                       action={
-                        <TouchableOpacity
-                          style={[styles.listButton, (isOpening || openLoading) && styles.listButtonDisabled]}
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="mt-1"
+                          isDisabled={isOpening || openLoading}
                           onPress={() => handleOpenBox(group.rarity)}
-                          disabled={isOpening || openLoading}
-                          accessibilityRole="button"
                           accessibilityLabel={`Open a ${group.rarity} mystery box`}
                         >
-                          <Text style={styles.listButtonText}>
-                            {isOpening ? 'Opening...' : 'Open'}
-                          </Text>
-                        </TouchableOpacity>
+                          <Button.Label>{isOpening ? 'Opening...' : 'Open'}</Button.Label>
+                        </Button>
                       }
                     />
                     </View>
