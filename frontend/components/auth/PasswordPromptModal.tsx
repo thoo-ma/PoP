@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, fontWeights, radii } from '@/constants';
+import { View } from 'react-native';
+import { Button, Dialog, TextField, Input, Label } from 'heroui-native';
 
 interface Props {
   visible: boolean;
@@ -22,90 +22,35 @@ export default function PasswordPromptModal({ visible, onSubmit, onCancel }: Pro
   };
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={handleCancel}>
-      <View style={modalStyles.overlay}>
-        <View style={modalStyles.container}>
-          <Text style={modalStyles.title}>Dev Mode</Text>
-          <Text style={modalStyles.subtitle}>Enter password to continue</Text>
-          <TextInput
-            style={modalStyles.input}
-            placeholder="Password"
-            placeholderTextColor={colors.textLight}
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            autoFocus
-          />
-          <View style={modalStyles.buttons}>
-            <TouchableOpacity style={modalStyles.cancelButton} onPress={handleCancel}>
-              <Text style={modalStyles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={modalStyles.submitButton} onPress={handleSubmit}>
-              <Text style={modalStyles.submitText}>Continue</Text>
-            </TouchableOpacity>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) handleCancel(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Close />
+          <View className="mb-5 gap-1.5">
+            <Dialog.Title>Dev Mode</Dialog.Title>
+            <Dialog.Description>Enter password to continue</Dialog.Description>
           </View>
-        </View>
-      </View>
-    </Modal>
+          <TextField className="mb-4">
+            <Label>Password</Label>
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+              autoFocus
+            />
+          </TextField>
+          <View className="flex-row justify-end gap-3">
+            <Button variant="ghost" size="sm" onPress={handleCancel}>
+              Cancel
+            </Button>
+            <Button size="sm" onPress={handleSubmit}>
+              Continue
+            </Button>
+          </View>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 }
-
-const modalStyles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: colors.bgOverlayDark,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    backgroundColor: colors.bgSurface,
-    borderRadius: radii.md,
-    padding: spacing.xl,
-    width: '80%',
-    maxWidth: 320,
-  },
-  title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.bold,
-    textAlign: 'center',
-    marginBottom: spacing.xs,
-  },
-  subtitle: {
-    fontSize: fontSizes.md,
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: spacing.base,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.sm,
-    padding: spacing.md,
-    fontSize: fontSizes.base,
-    marginBottom: spacing.base,
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: spacing.sm,
-  },
-  cancelButton: {
-    padding: spacing.md,
-    borderRadius: radii.sm,
-  },
-  cancelText: {
-    fontSize: fontSizes.base,
-    color: colors.text,
-  },
-  submitButton: {
-    backgroundColor: colors.buttonPrimary,
-    padding: spacing.md,
-    paddingHorizontal: spacing.xl,
-    borderRadius: radii.sm,
-  },
-  submitText: {
-    fontSize: fontSizes.base,
-    fontWeight: fontWeights.semibold,
-    color: colors.buttonText,
-  },
-});

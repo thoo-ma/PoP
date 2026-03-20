@@ -1,7 +1,6 @@
 import { memo } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
-import { colors } from '@/constants';
-import { styles } from '@/styles/shared/ScreenLoader.styles';
+import { Text, View } from 'react-native';
+import { Spinner } from 'heroui-native';
 
 interface ScreenLoaderProps {
   title: string;
@@ -10,10 +9,10 @@ interface ScreenLoaderProps {
 
 export default memo(function ScreenLoader({ title, message }: ScreenLoaderProps) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <ActivityIndicator size="large" color={colors.info} style={styles.indicator} />
-      {message && <Text style={styles.message}>{message}</Text>}
+    <View className="flex-1 bg-background items-center pt-[60px]">
+      <Text className="text-[32px] font-bold mb-3 text-center text-gray-700">{title}</Text>
+      <Spinner size="lg" className="mt-10" />
+      {message && <Text className="mt-3 text-sm text-gray-500">{message}</Text>}
     </View>
   );
 });

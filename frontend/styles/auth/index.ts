@@ -1,2 +1,1 @@
-export { styles as authStyles } from './Auth.styles';
-export { styles as inviteCodeScreenStyles } from './InviteCodeScreen.styles';
+// Auth styles have been migrated to HeroUI Native components with Uniwind classNames.
