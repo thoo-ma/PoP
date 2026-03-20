@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { Card, Button } from 'heroui-native';
+import { View, Text } from 'react-native';
+import { Card, Button, Spinner } from 'heroui-native';
 import { useRollLoot } from '@/hooks';
 import type { RollLootResult } from '@/hooks';
 
@@ -86,7 +86,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                 isDisabled={!canHold || loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="#fff" size="small" />
+                  <Spinner size="sm" />
                 ) : (
                   <Button.Label>Hold +{CHANCE_PER_HOLD}%</Button.Label>
                 )}
@@ -99,7 +99,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                 isDisabled={!canRoll || loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="#fff" size="small" />
+                  <Spinner size="sm" />
                 ) : (
                   <Button.Label>Roll!</Button.Label>
                 )}

@@ -1,12 +1,12 @@
-import { Text, View, ScrollView, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { Skeleton, Tabs } from 'heroui-native';
-import { marketplaceStyles as styles } from '@/styles';
+import { Button, Dialog, Skeleton, Tabs } from 'heroui-native';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
 import type { SortOption } from '@/types';
-import { colors } from '@/constants';
+
+type DialogInfo = { title: string; message: string } | null;
 
 /**
  * Marketplace screen with "Buy" and "Sell" tabs.
@@ -18,6 +18,7 @@ export default memo(function Marketplace() {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [sortBy, setSortBy] = useState<SortOption>('efficiency');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [dialog, setDialog] = useState<DialogInfo>(null);
   // Fetch user's NFTs for "My Listings" tab
   const { nfts, loading: userLoading, refetch: refetchUser } = useUserNFTs();
   // Fetch marketplace listings from other users
@@ -37,11 +38,7 @@ export default memo(function Marketplace() {
   );
   
   const handleBuyNFT = useCallback(() => {
-    Alert.alert(
-      'Coming Soon',
-      'Buying from marketplace is not yet available.',
-      [{ text: 'OK' }]
-    );
+    setDialog({ title: 'Coming Soon', message: 'Buying from marketplace is not yet available.' });
   }, []);
 
   const handleUnlist = useCallback(async (nftId: string) => {
@@ -49,9 +46,9 @@ export default memo(function Marketplace() {
     if (success) {
       await refetchUser();
       nftEvents.emit();
-      Alert.alert('Success', 'NFT removed from marketplace');
+      setDialog({ title: 'Success', message: 'NFT removed from marketplace' });
     } else {
-      Alert.alert('Error', 'Failed to unlist NFT');
+      setDialog({ title: 'Error', message: 'Failed to unlist NFT' });
     }
   }, [unlistNFT, refetchUser]);
 
@@ -64,9 +61,9 @@ export default memo(function Marketplace() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Marketplace</Text>
-      <Text style={styles.description}>
+    <View className="flex-1 bg-surface-bg items-center pt-20">
+      <Text className="text-[32px] font-bold mb-3 text-center text-text-title">Marketplace</Text>
+      <Text className="text-base mb-4 text-center text-text-body">
         Buy and sell NFTs with other users
       </Text>
 
@@ -91,9 +88,9 @@ export default memo(function Marketplace() {
 
       <Tabs.Content value="buy">
         {marketplaceLoading ? (
-          <View style={styles.grid} className="p-4">
+          <View className="flex-row flex-wrap justify-between w-full p-4">
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} style={styles.gridItem} className="mb-3">
+              <View key={i} className="w-[48%] mb-3">
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -102,27 +99,27 @@ export default memo(function Marketplace() {
           </View>
         ) : (
           <ScrollView
-            contentContainerStyle={styles.scrollContent}
+            contentContainerClassName="px-5 pb-[120px] w-full"
             showsVerticalScrollIndicator={false}
           >
-            <View style={styles.grid}>
+            <View className="flex-row flex-wrap justify-between w-full">
               {sortedMarketplaceListings.map((item) => (
-                <View key={item.id} style={styles.gridItem}>
+                <View key={item.id} className="w-[48%]">
                 <NFTCard
                   key={item.id}
                   nft={item}
                   action={
-                    <View style={styles.priceRow}>
-                      <Text style={styles.price}>{item.price}</Text>
-                      <TouchableOpacity
-                        style={styles.buyButton}
+                    <View className="flex-row justify-between items-center">
+                      <Text className="text-sm font-bold text-text-title">{item.price}</Text>
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onPress={handleBuyNFT}
                         accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
-                        accessibilityRole="button"
                         accessibilityHint="Purchase this NFT"
                       >
-                        <Text style={styles.buyButtonText}>Buy</Text>
-                      </TouchableOpacity>
+                        <Button.Label>Buy</Button.Label>
+                      </Button>
                     </View>
                   }
                 />
@@ -135,9 +132,9 @@ export default memo(function Marketplace() {
 
       <Tabs.Content value="sell">
         {userLoading ? (
-          <View style={styles.grid} className="p-4">
+          <View className="flex-row flex-wrap justify-between w-full p-4">
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} style={styles.gridItem} className="mb-3">
+              <View key={i} className="w-[48%] mb-3">
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -146,47 +143,45 @@ export default memo(function Marketplace() {
           </View>
         ) : (
           <ScrollView
-            contentContainerStyle={styles.scrollContent}
+            contentContainerClassName="px-5 pb-[120px] w-full"
             showsVerticalScrollIndicator={false}
           >
             {myListings.length > 0 && (
-              <View style={styles.infoBanner}>
-                <Text style={styles.infoBannerText}>
+              <View className="bg-[#fef3c7] rounded-xl p-4 mb-5 border border-[#fbbf24]">
+                <Text className="text-sm text-[#78350f] text-center leading-5">
                   💡 These are your NFTs from the Vault currently listed for sale
                 </Text>
               </View>
             )}
-            <View style={styles.grid}>
+            <View className="flex-row flex-wrap justify-between w-full">
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
-                  <View key={item.id} style={styles.gridItem}>
+                  <View key={item.id} className="w-[48%]">
                   <NFTCard
                     key={item.id}
                     nft={item}
                     action={
-                      <View style={styles.priceRow}>
-                        <Text style={styles.price}>{item.price}</Text>
-                        <TouchableOpacity
-                          style={[styles.unlistButton, updateLoading && styles.unlistButtonDisabled]}
+                      <View className="flex-row justify-between items-center">
+                        <Text className="text-sm font-bold text-text-title">{item.price}</Text>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          isDisabled={updateLoading}
                           onPress={() => handleUnlist(item.id)}
-                          disabled={updateLoading}
                           accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
-                          accessibilityRole="button"
                           accessibilityHint="Remove this NFT from marketplace"
                         >
-                          <Text style={styles.unlistButtonText}>
-                            {updateLoading ? 'Unlisting...' : 'Unlist'}
-                          </Text>
-                        </TouchableOpacity>
+                          <Button.Label>{updateLoading ? 'Unlisting...' : 'Unlist'}</Button.Label>
+                        </Button>
                       </View>
                     }
                   />
                   </View>
                 ))
               ) : (
-                <View style={styles.emptyState}>
-                  <Text style={styles.emptyText}>No active listings</Text>
-                  <Text style={styles.emptySubtext}>
+                <View className="items-center py-[60px] w-full">
+                  <Text className="text-base font-semibold text-text-title mb-2">No active listings</Text>
+                  <Text className="text-sm text-text-body text-center mt-1 leading-5">
                     You haven't listed any NFTs yet.
                   </Text>
                 </View>
@@ -196,6 +191,24 @@ export default memo(function Marketplace() {
         )}
       </Tabs.Content>
       </Tabs>
+
+      <Dialog isOpen={dialog !== null} onOpenChange={(open) => { if (!open) setDialog(null); }}>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Close />
+            <View className="mb-4 gap-1.5">
+              <Dialog.Title>{dialog?.title}</Dialog.Title>
+              <Dialog.Description>{dialog?.message}</Dialog.Description>
+            </View>
+            <View className="flex-row justify-end">
+              <Button variant="primary" size="sm" onPress={() => setDialog(null)}>
+                <Button.Label>OK</Button.Label>
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
     </View>
   );
 });
