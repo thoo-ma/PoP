@@ -1,91 +1,67 @@
 import { memo } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
+import { Button, Select } from 'heroui-native';
 import type { SortOption } from '@/types';
 import { SORT_OPTIONS } from '@/constants';
 import { capitalize } from '@/utils';
-import { sortStyles } from '@/styles';
 
 interface SortControlsProps {
   /** The field currently used for sorting. */
   sortBy: SortOption;
   /** Current sort direction. */
   sortOrder: 'asc' | 'desc';
-  /** Whether the sort-field dropdown is open. */
-  showSortMenu: boolean;
   /** Called when the user picks a new sort field. */
   onSortByChange: (option: SortOption) => void;
   /** Called when the user toggles the sort direction. */
   onSortOrderToggle: () => void;
-  /** Called when the user taps the sort button to toggle the dropdown. */
-  onMenuToggle: () => void;
-  /** Style object forwarded from the parent screen. */
-  styles: typeof sortStyles;
 }
 
 /**
  * Sort control bar with a field-selector dropdown and an asc/desc toggle.
- * The dropdown visibility is controlled externally via `showSortMenu`.
  */
 function SortControls({
   sortBy,
   sortOrder,
-  showSortMenu,
   onSortByChange,
   onSortOrderToggle,
-  onMenuToggle,
-  styles,
 }: SortControlsProps) {
   return (
-    <View style={styles.sortContainer}>
-      <Text style={styles.sortLabel}>Sort by:</Text>
-      <View style={styles.sortControlGroup}>
-        <TouchableOpacity 
-          style={styles.sortButton}
-          onPress={onMenuToggle}
-          accessibilityLabel={`Sort by ${sortBy}`}
-          accessibilityRole="button"
-          accessibilityHint="Opens sort options menu"
-          accessibilityState={{ expanded: showSortMenu }}
+    <View className="flex-row items-center gap-2 px-4 pb-2">
+      <View className="flex-1">
+        <Select
+          value={{ value: sortBy, label: capitalize(sortBy) }}
+          onValueChange={(opt) => {
+            if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption);
+          }}
         >
-          <Text style={styles.sortButtonText}>
-            {capitalize(sortBy)}
-          </Text>
-          <Text style={styles.sortButtonIcon}>{showSortMenu ? '▲' : '▼'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.sortOrderButton}
-          onPress={onSortOrderToggle}
-          accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
-          accessibilityRole="button"
-          accessibilityHint="Toggle between ascending and descending order"
-        >
-          <Text style={styles.sortOrderIcon}>{sortOrder === 'desc' ? '↓' : '↑'}</Text>
-        </TouchableOpacity>
-        {showSortMenu && (
-          <View style={styles.sortMenu}>
-            {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
-              <TouchableOpacity
-                key={option}
-                style={[
-                  styles.sortMenuItem,
-                  sortBy === option && styles.sortMenuItemActive
-                ]}
-                onPress={() => onSortByChange(option)}
-                accessibilityLabel={`Sort by ${option}`}
-                accessibilityRole="menuitem"
-                accessibilityState={{ selected: sortBy === option }}
-              >
-                <Text style={[
-                  styles.sortMenuItemText,
-                  sortBy === option && styles.sortMenuItemTextActive
-                ]}>
-                  {capitalize(option)}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
+          <Select.Trigger>
+            <Select.Value placeholder="Sort by..." />
+            <Select.TriggerIndicator />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Overlay />
+            <Select.Content presentation="popover" width="trigger">
+              {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
+                <Select.Item
+                  key={option}
+                  value={option}
+                  label={capitalize(option)}
+                />
+              ))}
+            </Select.Content>
+          </Select.Portal>
+        </Select>
       </View>
+
+      <Button
+        variant="outline"
+        size="sm"
+        isIconOnly
+        onPress={onSortOrderToggle}
+        accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
+      >
+        <Button.Label>{sortOrder === 'desc' ? '↓' : '↑'}</Button.Label>
+      </Button>
     </View>
   );
 }

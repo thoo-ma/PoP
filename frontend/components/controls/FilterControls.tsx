@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
+import { Button, TagGroup } from 'heroui-native';
 import type { NFTRarity, NFTType } from '@shared';
 import { RARITIES } from '@shared';
-import { filterStyles } from '@/styles';
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -15,9 +15,8 @@ interface FilterControlsProps {
   onTypeToggle: (type: NFTType) => void;
   /** Called when the user taps "Clear" to reset all active filters. */
   onClearFilters: () => void;
-  /** Style object forwarded from the parent screen. */
-  styles: typeof filterStyles;
 }
+
 const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
 
 const RARITY_LABELS: Record<NFTRarity, string> = {
@@ -43,108 +42,87 @@ function FilterControls({
   onRarityToggle,
   onTypeToggle,
   onClearFilters,
-  styles,
 }: FilterControlsProps) {
   const [showFilters, setShowFilters] = useState(false);
   const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0;
-  
   const activeFilterCount = selectedRarities.length + selectedTypes.length;
 
+  const handleRaritySelectionChange = (newKeys: Set<NFTRarity>) => {
+    const prev = new Set(selectedRarities);
+    for (const key of newKeys) {
+      if (!prev.has(key)) onRarityToggle(key);
+    }
+    for (const key of prev) {
+      if (!newKeys.has(key)) onRarityToggle(key);
+    }
+  };
+
+  const handleTypeSelectionChange = (newKeys: Set<NFTType>) => {
+    const prev = new Set(selectedTypes);
+    for (const key of newKeys) {
+      if (!prev.has(key)) onTypeToggle(key);
+    }
+    for (const key of prev) {
+      if (!newKeys.has(key)) onTypeToggle(key);
+    }
+  };
+
   return (
-    <View style={styles.filterContainer}>
-      <View style={styles.filterToggleRow}>
-        <TouchableOpacity 
-          style={styles.filterToggleButton}
+    <View className="px-4 pb-2">
+      <View className="flex-row items-center justify-between mb-2">
+        <Button
+          variant="ghost"
+          size="sm"
           onPress={() => setShowFilters(!showFilters)}
           accessibilityLabel="Toggle filters"
-          accessibilityRole="button"
         >
-          <Text style={styles.filterToggleText}>
-            Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-          </Text>
-          <Text style={styles.filterToggleIcon}>{showFilters ? '▲' : '▼'}</Text>
-        </TouchableOpacity>
+          <Button.Label>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</Button.Label>
+        </Button>
         {hasActiveFilters && (
-          <TouchableOpacity 
+          <Button
+            variant="ghost"
+            size="sm"
             onPress={onClearFilters}
-            style={styles.clearButton}
             accessibilityLabel="Clear all filters"
-            accessibilityRole="button"
           >
-            <Text style={styles.clearFiltersText}>Clear All</Text>
-          </TouchableOpacity>
+            <Button.Label>Clear All</Button.Label>
+          </Button>
         )}
       </View>
 
       {showFilters && (
-        <View style={styles.filterContent}>
+        <View className="gap-3">
           {/* Rarity Filters */}
-          <View style={styles.filterSection}>
-            <Text style={styles.filterSectionLabel}>Rarity</Text>
-            <View style={styles.filterChipsRow}>
-              {RARITIES.map((rarity) => {
-                const isSelected = selectedRarities.includes(rarity);
-                return (
-                  <TouchableOpacity
-                    key={rarity}
-                    style={[
-                      styles.filterChip,
-                      styles[`${rarity}Chip`],
-                      isSelected && styles.filterChipActive,
-                      isSelected && styles[`${rarity}ChipActive`],
-                    ]}
-                    onPress={() => onRarityToggle(rarity)}
-                    accessibilityLabel={`Filter by ${rarity} rarity`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isSelected }}
-                  >
-                    <Text 
-                      style={[
-                        styles.filterChipText,
-                        isSelected && styles.filterChipTextActive
-                      ]}
-                    >
-                      {RARITY_LABELS[rarity]}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
+          <TagGroup
+            selectionMode="multiple"
+            selectedKeys={new Set(selectedRarities)}
+            onSelectionChange={(keys) => handleRaritySelectionChange(keys as Set<NFTRarity>)}
+            size="sm"
+          >
+            <TagGroup.List className="flex-row flex-wrap gap-2">
+              {RARITIES.map((rarity) => (
+                <TagGroup.Item key={rarity} id={rarity}>
+                  <TagGroup.ItemLabel>{RARITY_LABELS[rarity]}</TagGroup.ItemLabel>
+                </TagGroup.Item>
+              ))}
+            </TagGroup.List>
+          </TagGroup>
 
           {/* Type Filters */}
-          <View style={[styles.filterSection, styles.filterSectionLast]}>
-            <Text style={styles.filterSectionLabel}>Type</Text>
-            <View style={styles.filterChipsRow}>
-              {TYPES.map((type) => {
-                const isSelected = selectedTypes.includes(type);
-                return (
-                  <TouchableOpacity
-                    key={type}
-                    style={[
-                      styles.filterChip,
-                      styles[`${type}Chip`],
-                      isSelected && styles.filterChipActive,
-                      isSelected && styles[`${type}ChipActive`],
-                    ]}
-                    onPress={() => onTypeToggle(type)}
-                    accessibilityLabel={`Filter by ${TYPE_LABELS[type]} type`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isSelected }}
-                  >
-                    <Text 
-                      style={[
-                        styles.filterChipText,
-                        isSelected && styles.filterChipTextActive
-                      ]}
-                    >
-                      {TYPE_LABELS[type]}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
+          <TagGroup
+            selectionMode="multiple"
+            selectedKeys={new Set(selectedTypes)}
+            onSelectionChange={(keys) => handleTypeSelectionChange(keys as Set<NFTType>)}
+            size="sm"
+          >
+            <TagGroup.List className="flex-row flex-wrap gap-2">
+              {TYPES.map((type) => (
+                <TagGroup.Item key={type} id={type}>
+                  <TagGroup.ItemLabel>{TYPE_LABELS[type]}</TagGroup.ItemLabel>
+                </TagGroup.Item>
+              ))}
+            </TagGroup.List>
+          </TagGroup>
         </View>
       )}
     </View>

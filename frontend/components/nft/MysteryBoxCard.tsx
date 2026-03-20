@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import type { ReactNode } from 'react';
+import { Card, Chip } from 'heroui-native';
 import type { MysteryBox } from '@shared';
-import { styles } from '@/styles/nft/MysteryBoxCard.styles';
-import { RARITY_BADGE_STYLES } from '@/utils';
+import { RARITY_COLORS } from '@/constants';
 
 interface MysteryBoxCardProps {
   box: MysteryBox;
@@ -15,34 +15,55 @@ interface MysteryBoxCardProps {
 
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
-    <View style={styles.card}>
-      <View style={styles.imageContainer}>
+    <Card className="w-full mb-4" animation="disable-all">
+      <View className="w-full aspect-square relative">
         <Image
           source={{ uri: box.image_url }}
-          style={styles.image}
+          style={{ width: '100%', height: '100%' }}
           resizeMode="cover"
         />
-        <View style={[styles.rarityBadge, RARITY_BADGE_STYLES[box.rarity]]}>
-          <Text style={styles.rarityText}>{box.rarity.toUpperCase()}</Text>
-        </View>
+        {/* Rarity — bottom-right */}
+        <Chip
+          size="sm"
+          variant="primary"
+          style={{ position: 'absolute', bottom: 8, right: 8, backgroundColor: RARITY_COLORS[box.rarity] }}
+          animation="disable-all"
+        >
+          <Chip.Label className="text-white text-xs font-bold">{box.rarity.toUpperCase()}</Chip.Label>
+        </Chip>
+
+        {/* Count — top-left */}
         {count !== undefined && count > 0 && (
-          <View style={styles.countBadge}>
-            <Text style={styles.countText}>×{count}</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="secondary"
+            className="absolute top-2 left-2"
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-sm font-bold">×{count}</Chip.Label>
+          </Chip>
         )}
+
+        {/* Opened — top-right */}
         {box.opened && (
-          <View style={styles.openedBadge}>
-            <Text style={styles.openedText}>Opened</Text>
-          </View>
+          <Chip
+            size="sm"
+            variant="secondary"
+            className="absolute top-2 right-2"
+            animation="disable-all"
+          >
+            <Chip.Label className="text-white text-xs font-semibold">Opened</Chip.Label>
+          </Chip>
         )}
       </View>
-      <View style={styles.cardContent}>
-        <Text style={styles.title}>Mystery Box</Text>
-        <View style={styles.typeBadge}>
-          <Text style={styles.typeBadgeText}>MYSTERY BOX</Text>
-        </View>
+
+      <Card.Body className="p-2 gap-2">
+        <Card.Title className="text-sm font-bold">Mystery Box</Card.Title>
+        <Chip size="sm" variant="primary" animation="disable-all">
+          <Chip.Label className="text-white text-xs font-bold tracking-wide">MYSTERY BOX</Chip.Label>
+        </Chip>
         {action}
-      </View>
-    </View>
+      </Card.Body>
+    </Card>
   );
 });

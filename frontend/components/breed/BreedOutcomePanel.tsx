@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
+import { Card } from 'heroui-native';
 import type { NFTRarity } from '@shared';
-import { breedStyles as styles } from '@/styles';
 import { RARITY_COLORS } from '@/constants';
 import { RARITIES } from '@shared';
 import { getProbabilities } from '@/utils';
@@ -13,29 +13,32 @@ import { getProbabilities } from '@/utils';
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
   const probs = getProbabilities(r1, r2);
   return (
-    <View style={styles.outcomePanel}>
-      <Text style={styles.outcomePanelTitle}>Possible outcomes</Text>
-      {RARITIES.map((rarity, i) => {
-        const pct = probs[i];
-        if (pct === 0) return null;
-        return (
-          <View key={rarity} style={styles.outcomeRow}>
-            <View style={[styles.outcomeColorDot, { backgroundColor: RARITY_COLORS[rarity] }]} />
-            <Text style={styles.outcomeRarityLabel}>
-              {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
-            </Text>
-            <View style={styles.outcomeBarTrack}>
+    <Card className="w-full mb-5">
+      <Card.Body className="p-4">
+        <Card.Title className="text-[13px] font-bold uppercase tracking-widest mb-3">
+          Possible outcomes
+        </Card.Title>
+        {RARITIES.map((rarity, i) => {
+          const pct = probs[i];
+          if (pct === 0) return null;
+          return (
+            <View key={rarity} className="flex-row items-center mb-2 gap-2">
               <View
-                style={[
-                  styles.outcomeBarFill,
-                  { width: `${pct}%`, backgroundColor: RARITY_COLORS[rarity] },
-                ]}
+                style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: RARITY_COLORS[rarity] }}
               />
+              <Text className="text-[13px] text-foreground font-semibold w-[90px]">
+                {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
+              </Text>
+              <View className="flex-1 h-2 bg-default-100 rounded overflow-hidden">
+                <View
+                  style={{ width: `${pct}%`, height: '100%', borderRadius: 4, backgroundColor: RARITY_COLORS[rarity] }}
+                />
+              </View>
+              <Text className="text-sm font-bold text-default-600 w-11 text-right">{pct}%</Text>
             </View>
-            <Text style={styles.outcomePct}>{pct}%</Text>
-          </View>
-        );
-      })}
-    </View>
+          );
+        })}
+      </Card.Body>
+    </Card>
   );
 }
