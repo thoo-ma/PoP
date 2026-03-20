@@ -98,14 +98,14 @@ export default memo(function Repair() {
 
   return (
     <>
-      <View className="flex-1 bg-white items-center pt-[80px]">
-        <Text className="text-[32px] font-bold text-center mb-3 text-gray-700">Repair</Text>
-        <Text className="text-base text-center text-gray-500 mb-4">
+      <View className="flex-1 bg-background items-center pt-[80px]">
+        <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Repair</Text>
+        <Text className="text-base text-center text-muted mb-4">
           Select an NFT and restore its energy
         </Text>
         {/* Wallet balance */}
         {poopBalance !== null && (
-          <Text className="text-base text-center text-gray-500 mb-4">💩 Balance: {poopBalance} POOP</Text>
+          <Text className="text-base text-center text-muted mb-4">💩 Balance: {poopBalance} POOP</Text>
         )}
 
         <ScrollView
@@ -117,10 +117,10 @@ export default memo(function Repair() {
               variant="ghost"
               onPress={handleSelectNFT}
               isDisabled={nfts.length === 0}
-              className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-gray-300 flex-col mt-5"
+              className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-border flex-col mt-5"
             >
-              <Text className="text-[40px] text-gray-400 mb-3">+</Text>
-              <Button.Label className="text-base text-gray-500 font-semibold">
+              <Text className="text-[40px] text-muted mb-3">+</Text>
+              <Button.Label className="text-base text-muted font-semibold">
                 {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
               </Button.Label>
             </Button>
@@ -137,13 +137,13 @@ export default memo(function Repair() {
               {/* Selected NFT Card */}
               {!isRepaired && selectedNFT && (
                 <View
-                  className="w-[280px] bg-white rounded-2xl overflow-hidden mt-5 mb-6 border border-gray-200"
+                  className="w-[280px] bg-surface rounded-2xl overflow-hidden mt-5 mb-6 border border-border"
                   style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 3 }}
                 >
                   <View className="relative w-full">
                     <Image
                       source={{ uri: selectedNFT.image_url }}
-                      className="w-full h-[280px] bg-gray-100"
+                      className="w-full h-[280px] bg-default"
                       resizeMode="cover"
                     />
                     <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
@@ -163,7 +163,7 @@ export default memo(function Repair() {
                   </View>
 
                   <View className="p-4">
-                    <Text className="text-lg font-bold text-gray-700 mb-3 text-center">{formatDisplayName(selectedNFT.name)}</Text>
+                    <Text className="text-lg font-bold text-foreground mb-3 text-center">{formatDisplayName(selectedNFT.name)}</Text>
 
                     <NFTProperties
                       efficiency={selectedNFT.efficiency}
@@ -180,8 +180,8 @@ export default memo(function Repair() {
               {currentEnergy < MAX_ENERGY && !isRepaired && (
                 <>
                   {/* Repair Controls */}
-                  <View className="w-full bg-gray-50 rounded-2xl p-4 mb-5 border border-gray-200">
-                    <Text className="text-base font-bold text-gray-700 mb-3">Repair Amount</Text>
+                  <View className="w-full bg-default rounded-2xl p-4 mb-5 border border-border">
+                    <Text className="text-base font-bold text-foreground mb-3">Repair Amount</Text>
                     <View className="items-center mb-2">
                       <Text className="text-[32px] font-bold text-green-600">+{Math.round(repairAmount)}%</Text>
                     </View>
@@ -231,7 +231,7 @@ export default memo(function Repair() {
 
               {currentEnergy === MAX_ENERGY && !isRepaired && (
                 <View className="items-center mt-6">
-                  <Text className="text-lg font-semibold text-gray-700 mb-6 text-center">This NFT is at full energy!</Text>
+                  <Text className="text-lg font-semibold text-foreground mb-6 text-center">This NFT is at full energy!</Text>
                   <Button variant="outline" onPress={handleReset} className="w-full">
                     Select Another NFT
                   </Button>
