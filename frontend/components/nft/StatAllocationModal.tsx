@@ -1,21 +1,13 @@
 import { memo, useState, useCallback, useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
+import { Button, Dialog, Slider } from 'heroui-native';
 import type { NFT } from '@/types/nft';
-import { colors } from '@/constants';
 import { formatDisplayName } from '@/utils';
 import { useAllocateStatPoints } from '@/hooks';
 import type { StatDeltas, AllocateResult } from '@/hooks';
-import { styles } from '@/styles/nft/StatAllocationModal.styles';
 
 const STAT_KEYS = ['efficiency', 'resilience', 'comfort', 'luck'] as const;
 type StatKey = typeof STAT_KEYS[number];
-
-const STAT_COLORS: Record<StatKey, string> = {
-  efficiency: colors.efficiency,
-  resilience: colors.resilience,
-  comfort:    colors.comfort,
-  luck:       colors.luck,
-};
 
 const STAT_LABELS: Record<StatKey, string> = {
   efficiency: 'Efficiency',
@@ -50,21 +42,16 @@ export default memo(function StatAllocationModal({
   const totalSpent = deltas.efficiency + deltas.resilience + deltas.comfort + deltas.luck;
   const remaining  = pointsAvailable - totalSpent;
 
-  const increment = useCallback((key: StatKey) => {
+  const handleSliderChange = useCallback((key: StatKey, newValue: number | number[]) => {
+    const value = Array.isArray(newValue) ? newValue[0] : newValue;
+    const current = nft[key] ?? 0;
+    const newDelta = Math.max(0, value - current);
     setDeltas(prev => {
-      const spent = prev.efficiency + prev.resilience + prev.comfort + prev.luck;
-      if (spent >= pointsAvailable) return prev;
-      if ((nft[key] ?? 0) + prev[key] >= 100) return prev;
-      return { ...prev, [key]: prev[key] + 1 };
+      const otherSpent = (prev.efficiency + prev.resilience + prev.comfort + prev.luck) - prev[key];
+      const capped = Math.min(newDelta, pointsAvailable - otherSpent);
+      return { ...prev, [key]: capped };
     });
-  }, [pointsAvailable, nft]);
-
-  const decrement = useCallback((key: StatKey) => {
-    setDeltas(prev => {
-      if (prev[key] <= 0) return prev;
-      return { ...prev, [key]: prev[key] - 1 };
-    });
-  }, []);
+  }, [nft, pointsAvailable]);
 
   const handleConfirm = useCallback(async () => {
     if (totalSpent === 0 || loading) return;
@@ -82,107 +69,83 @@ export default memo(function StatAllocationModal({
 
   const rows = useMemo(() => STAT_KEYS.map(key => ({
     key,
-    label:    STAT_LABELS[key],
-    color:    STAT_COLORS[key],
-    current:  nft[key] ?? 0,
-    delta:    deltas[key],
-    canInc:   remaining > 0 && (nft[key] ?? 0) + deltas[key] < 100,
-    canDec:   deltas[key] > 0,
+    label:   STAT_LABELS[key],
+    current: nft[key] ?? 0,
+    delta:   deltas[key],
+    sliderMax: Math.min(100, (nft[key] ?? 0) + remaining + deltas[key]),
   })), [nft, deltas, remaining]);
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent
-      onRequestClose={handleDismiss}
-    >
-      <View style={styles.overlay}>
-        <View style={styles.sheet}>
-          <View style={styles.header}>
-            <Text style={styles.title}>🎉 Level Up!</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={handleDismiss}>
-              <Text style={styles.closeText}>✕</Text>
-            </TouchableOpacity>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) handleDismiss(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content className="px-6 pt-5 pb-10 rounded-t-3xl">
+          <View className="flex-row items-center justify-between mb-1">
+            <Dialog.Title className="text-lg font-bold text-foreground">🎉 Level Up!</Dialog.Title>
+            <Dialog.Close variant="ghost" />
           </View>
-          <Text style={styles.subtitle}>
+
+          <Dialog.Description className="text-sm text-muted mb-5">
             Allocate stat points for{' '}
-            <Text style={styles.nftName}>{formatDisplayName(nft.name)}</Text>
-          </Text>
+            <Text className="italic">{formatDisplayName(nft.name)}</Text>
+          </Dialog.Description>
 
           {/* Points remaining */}
-          <View style={styles.pointsRow}>
-            <Text style={styles.pointsLabel}>Points remaining</Text>
-            <Text style={styles.pointsValue}>{remaining}</Text>
+          <View className="flex-row items-center justify-between bg-default rounded-xl py-2.5 px-4 mb-5">
+            <Text className="text-sm font-semibold text-muted">Points remaining</Text>
+            <Text className="text-2xl font-extrabold text-foreground">{remaining}</Text>
           </View>
 
-          {/* Stat rows */}
-          {rows.map(({ key, label, color, current, delta, canInc, canDec }) => (
-            <View key={key} style={styles.statRow}>
-              <Text style={styles.statLabel}>{label}</Text>
-
-              {/* Progress bar — base fill + pending delta */}
-              <View style={styles.barWrapper}>
-                <View
-                  style={[styles.barFill, { width: `${current}%`, backgroundColor: color }]}
-                />
-                {delta > 0 && (
-                  <View
-                    style={[
-                      styles.barDelta,
-                      {
-                        left:            `${current}%`,
-                        width:           `${delta}%`,
-                        backgroundColor: color,
-                      },
-                    ]}
-                  />
-                )}
+          {/* Stat sliders */}
+          {rows.map(({ key, label, current, delta, sliderMax }) => (
+            <View key={key} className="mb-4">
+              <View className="flex-row items-center justify-between mb-1">
+                <Text className="text-sm font-semibold text-muted">{label}</Text>
+                <Text className="text-sm font-bold text-foreground">
+                  {current}{delta > 0 ? `+${delta}` : ''}
+                </Text>
               </View>
-
-              <Text style={styles.valueText}>
-                {current}{delta > 0 ? `+${delta}` : ''}
-              </Text>
-
-              {/* – / delta / + controls */}
-              <View style={styles.adjustRow}>
-                <TouchableOpacity
-                  style={[styles.adjustBtn, !canDec && styles.adjustBtnDisabled]}
-                  onPress={() => decrement(key)}
-                  disabled={!canDec}
-                >
-                  <Text style={styles.adjustBtnText}>−</Text>
-                </TouchableOpacity>
-                <Text style={styles.deltaText}>{delta > 0 ? `+${delta}` : '0'}</Text>
-                <TouchableOpacity
-                  style={[styles.adjustBtn, !canInc && styles.adjustBtnDisabled]}
-                  onPress={() => increment(key)}
-                  disabled={!canInc}
-                >
-                  <Text style={styles.adjustBtnText}>+</Text>
-                </TouchableOpacity>
-              </View>
+              <Slider
+                minValue={current}
+                maxValue={sliderMax}
+                value={current + delta}
+                onChange={(v) => handleSliderChange(key, v)}
+                isDisabled={sliderMax <= current}
+              >
+                <Slider.Track>
+                  <Slider.Fill />
+                  <Slider.Thumb />
+                </Slider.Track>
+              </Slider>
             </View>
           ))}
 
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {error && (
+            <Text className="text-sm text-danger text-center mb-2">{error}</Text>
+          )}
 
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.laterButton} onPress={handleDismiss} disabled={loading}>
-              <Text style={styles.laterButtonText}>Later</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.confirmButton, (totalSpent === 0 || loading) && styles.confirmButtonDisabled]}
-              onPress={handleConfirm}
-              disabled={totalSpent === 0 || loading}
+          <View className="flex-row gap-3 mt-2">
+            <Button
+              variant="ghost"
+              className="flex-1"
+              onPress={handleDismiss}
+              isDisabled={loading}
             >
-              <Text style={styles.confirmButtonText}>
+              <Button.Label>Later</Button.Label>
+            </Button>
+            <Button
+              variant="primary"
+              className="flex-1"
+              onPress={handleConfirm}
+              isDisabled={totalSpent === 0 || loading}
+            >
+              <Button.Label>
                 {loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
-              </Text>
-            </TouchableOpacity>
+              </Button.Label>
+            </Button>
           </View>
-        </View>
-      </View>
-    </Modal>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 });

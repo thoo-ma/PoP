@@ -1,6 +1,7 @@
-import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
-import { vaultStyles as styles, tabStyles } from '@/styles';
+import { Skeleton, Tabs } from 'heroui-native';
+import { vaultStyles as styles } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -143,9 +144,6 @@ export default memo(function Vault() {
   const handleRevealClose = useCallback(() => {
     setRevealVisible(false);
   }, []);
-
-  const handleTabToilets = useCallback(() => setActiveTab('toilets'), []);
-  const handleTabBoxes = useCallback(() => setActiveTab('mystery-boxes'), []);
   
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />;
@@ -163,30 +161,18 @@ export default memo(function Vault() {
       </Text>
 
       {/* Tabs */}
-      <View style={tabStyles.tabs}>
-        <TouchableOpacity
-          style={[tabStyles.tab, activeTab === 'toilets' && tabStyles.tabActive]}
-          onPress={handleTabToilets}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: activeTab === 'toilets' }}
-        >
-          <Text style={[tabStyles.tabText, activeTab === 'toilets' && tabStyles.tabTextActive]}>
-            Toilets ({nfts.length})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[tabStyles.tab, activeTab === 'mystery-boxes' && tabStyles.tabActive]}
-          onPress={handleTabBoxes}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: activeTab === 'mystery-boxes' }}
-        >
-          <Text style={[tabStyles.tabText, activeTab === 'mystery-boxes' && tabStyles.tabTextActive]}>
-            Mystery Boxes ({boxes.length})
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}>
+        <Tabs.List>
+          <Tabs.Indicator />
+          <Tabs.Trigger value="toilets">
+            <Tabs.Label>Toilets ({nfts.length})</Tabs.Label>
+          </Tabs.Trigger>
+          <Tabs.Trigger value="mystery-boxes">
+            <Tabs.Label>Mystery Boxes ({boxes.length})</Tabs.Label>
+          </Tabs.Trigger>
+        </Tabs.List>
 
-      {activeTab === 'toilets' ? (
+      <Tabs.Content value="toilets">
         <>
           <FilterControls
             selectedRarities={selectedRarities}
@@ -249,11 +235,17 @@ export default memo(function Vault() {
             </View>
           </ScrollView>
         </>
-      ) : (
-        /* Mystery Boxes tab */
-        boxesLoading ? (
-          <View style={styles.boxesLoading}>
-            <ActivityIndicator size="large" color={colors.info} />
+      </Tabs.Content>
+      <Tabs.Content value="mystery-boxes">
+      {boxesLoading ? (
+          <View style={styles.grid} className="p-4">
+            {[0, 1, 2, 3].map((i) => (
+              <View key={i} style={styles.gridItem} className="mb-3">
+                <Skeleton className="aspect-square w-full rounded-xl" />
+                <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
+                <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
+              </View>
+            ))}
           </View>
         ) : boxesError ? (
           <View style={styles.boxesError}>
@@ -305,7 +297,9 @@ export default memo(function Vault() {
             )}
           </ScrollView>
         )
-      )}
+      }
+      </Tabs.Content>
+      </Tabs>
 
       {statModalNFT && (
         <StatAllocationModal

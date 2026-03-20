@@ -1,8 +1,8 @@
-import { Text, View, TouchableOpacity, Modal, Pressable, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Button, Dialog } from 'heroui-native';
 import { useWallet } from '@/hooks';
 import { colors } from '@/constants';
-import { walletStyles as styles } from '@/styles';
 
 
 interface WalletProps {
@@ -20,80 +20,73 @@ export default function Wallet({ visible, onClose }: WalletProps) {
   const { poopBalance, loading } = useWallet();
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <Pressable style={styles.overlay} onPress={onClose}>
-        <Pressable style={styles.container} onPress={() => {}}>
+    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay isCloseOnPress />
+        <Dialog.Content className="mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center">
           {/* Close button */}
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={onClose}
-            activeOpacity={0.7}
+          <Dialog.Close
+            variant="ghost"
             accessibilityLabel="Close wallet"
-            accessibilityRole="button"
-          >
-            <MaterialIcons name="close" size={24} color={colors.primary} />
-          </TouchableOpacity>
+            className="absolute top-4 right-4"
+          />
 
           {/* Header */}
-          <Text style={styles.emoji}>💩</Text>
-          <Text style={styles.title}>Wallet</Text>
+          <Text className="text-4xl mb-2">💩</Text>
+          <Dialog.Title className="text-3xl font-bold text-foreground mb-4">Wallet</Dialog.Title>
 
           {/* Balance */}
-          <View style={styles.balanceCard}>
-            <Text style={styles.balanceLabel}>POOP Balance</Text>
+          <View className="w-full bg-default rounded-xl px-4 py-4 items-center mb-4">
+            <Text className="text-sm text-muted mb-1">POOP Balance</Text>
             {loading ? (
-              <Text style={styles.balanceValue}>—</Text>
+              <Text className="text-3xl font-bold text-foreground">—</Text>
             ) : (
-              <Text style={styles.balanceValue}>
-                {poopBalance ?? 0} <Text style={styles.balanceCurrency}>POOP</Text>
+              <Text className="text-3xl font-bold text-foreground">
+                {poopBalance ?? 0}{' '}
+                <Text className="text-lg text-muted font-medium">POOP</Text>
               </Text>
             )}
           </View>
 
           <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
+            className="w-full"
+            contentContainerStyle={{ paddingBottom: 8 }}
             showsVerticalScrollIndicator={false}
           >
             {/* How to earn */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Earn POOP</Text>
-              <View style={styles.row}>
+            <View className="mb-4">
+              <Text className="text-base font-bold text-foreground mb-2">Earn POOP</Text>
+              <View className="flex-row items-start gap-2">
                 <MaterialIcons name="check-circle" size={18} color={colors.success} />
-                <Text style={styles.rowText}>
-                  <Text style={styles.bold}>Variable POOP</Text>
+                <Text className="flex-1 text-sm text-muted leading-5">
+                  <Text className="font-bold text-foreground">Variable POOP</Text>
                   {' '}per successful flush (scales with type, rarity &amp; level)
                 </Text>
               </View>
             </View>
 
             {/* How to spend */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Spend POOP</Text>
-              <View style={styles.row}>
+            <View>
+              <Text className="text-base font-bold text-foreground mb-2">Spend POOP</Text>
+              <View className="flex-row items-start gap-2 mb-2">
                 <MaterialIcons name="build" size={18} color={colors.comfort} />
-                <Text style={styles.rowText}>
-                  <Text style={styles.bold}>Variable POOP</Text>
+                <Text className="flex-1 text-sm text-muted leading-5">
+                  <Text className="font-bold text-foreground">Variable POOP</Text>
                   {' '}per repair (scales with level &amp; rarity)
                 </Text>
               </View>
-              <View style={styles.row}>
+              <View className="flex-row items-start gap-2">
                 <MaterialIcons name="device-hub" size={18} color={colors.luck} />
-                <Text style={styles.rowText}>
-                  <Text style={styles.bold}>Variable POOP</Text>
+                <Text className="flex-1 text-sm text-muted leading-5">
+                  <Text className="font-bold text-foreground">Variable POOP</Text>
                   {' '}per breed (scales with rarity &amp; breed count)
                 </Text>
               </View>
             </View>
           </ScrollView>
-        </Pressable>
-      </Pressable>
-    </Modal>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 }
 
