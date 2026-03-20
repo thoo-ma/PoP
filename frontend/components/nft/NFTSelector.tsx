@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import { styles } from '@/styles/nft/NFTSelector.styles';
+import { View, Text } from 'react-native';
+import { Button } from 'heroui-native';
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */
@@ -22,24 +22,26 @@ export default function NFTSelector({ current, total, onPrev, onNext, style }: P
   if (total <= 1) return null;
 
   return (
-    <View style={[styles.selectorRow, style]}>
-      <TouchableOpacity
+    <View className="flex-row items-center justify-center gap-4" style={style}>
+      <Button
+        isIconOnly
+        variant="ghost"
         onPress={onPrev}
-        style={styles.selectorArrow}
         accessibilityLabel="Previous NFT"
       >
-        <Text style={styles.selectorArrowText}>{'‹'}</Text>
-      </TouchableOpacity>
-      <Text style={styles.selectorCounter}>
+        <Button.Label className="text-[22px] leading-7 text-text-title">{'‹'}</Button.Label>
+      </Button>
+      <Text className="text-sm text-text-body font-medium min-w-12 text-center">
         {current} / {total}
       </Text>
-      <TouchableOpacity
+      <Button
+        isIconOnly
+        variant="ghost"
         onPress={onNext}
-        style={styles.selectorArrow}
         accessibilityLabel="Next NFT"
       >
-        <Text style={styles.selectorArrowText}>{'›'}</Text>
-      </TouchableOpacity>
+        <Button.Label className="text-[22px] leading-7 text-text-title">{'›'}</Button.Label>
+      </Button>
     </View>
   );
 }

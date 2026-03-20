@@ -1,8 +1,7 @@
 import { memo } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '@/constants';
-import { styles } from '@/styles/navigation/ProfileButton.styles';
+import { Button } from 'heroui-native';
 
 interface ProfileButtonProps {
   /** Called when the user taps the profile icon button. */
@@ -15,15 +14,15 @@ interface ProfileButtonProps {
  */
 export default memo(function ProfileButton({ onPress }: ProfileButtonProps) {
   return (
-    <TouchableOpacity 
-      style={styles.button}
+    <Button
+      isIconOnly
+      variant="ghost"
       onPress={onPress}
-      activeOpacity={0.7}
+      className="absolute top-[60px] left-5 z-[100] bg-[rgba(255,255,255,0.9)] rounded-[20px] shadow p-2"
       accessibilityLabel="Profile"
-      accessibilityRole="button"
       accessibilityHint="Opens your profile and settings"
     >
       <MaterialIcons name="account-circle" size={32} color={colors.primary} />
-    </TouchableOpacity>
+    </Button>
   );
 });

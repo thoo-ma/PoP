@@ -1,9 +1,9 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { memo } from 'react';
 import type { PageIndicatorProps } from '@/types';
-import { styles } from '@/styles/navigation/PageIndicator.styles';
 import { colors } from '@/constants';
+import { Button } from 'heroui-native';
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -22,27 +22,30 @@ const PRIMARY_PAGE_ICONS = [
  */
 export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
   return (
-    <View style={styles.pagination}>
-      <View style={styles.floatingMenu}>
+    <View className="absolute bottom-10 left-0 right-0 flex-row justify-center items-center">
+      <View className="flex-row bg-[rgba(255,255,255,0.95)] rounded-[24px] px-4 py-[10px] gap-1 shadow-lg">
         {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.iconWrapper}
-            onPress={() => onPageChange?.(index)}
-            activeOpacity={0.6}
-            accessibilityLabel={label}
-            accessibilityRole="button"
-            accessibilityState={{ selected: currentPage === index }}
-          >
-            <MaterialIcons
-              name={icon}
-              size={26}
-              color={currentPage === index ? colors.active : colors.inactive}
-            />
-            <Text style={[styles.iconLabel, currentPage === index && styles.iconLabelActive]}>
+          <View key={index} className="items-center px-[10px] py-1">
+            <Button
+              isIconOnly
+              variant="ghost"
+              onPress={() => onPageChange?.(index)}
+              accessibilityLabel={label}
+              accessibilityState={{ selected: currentPage === index }}
+            >
+              <MaterialIcons
+                name={icon}
+                size={26}
+                color={currentPage === index ? colors.active : colors.inactive}
+              />
+            </Button>
+            <Text
+              className="text-[10px] font-medium mt-1"
+              style={{ color: currentPage === index ? colors.active : colors.inactive }}
+            >
               {label}
             </Text>
-          </TouchableOpacity>
+          </View>
         ))}
       </View>
     </View>
