@@ -493,7 +493,7 @@ export default memo(function Poop() {
       {phase !== 'idle' ? (
         // ── Active challenge ───────────────────────────────
         <ScrollView
-          className="flex-1 bg-white"
+          className="flex-1 bg-background"
           contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
           showsVerticalScrollIndicator={false}
         >
