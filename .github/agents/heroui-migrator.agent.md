@@ -57,8 +57,8 @@ For each component in the checklist:
 **Rules:**
 - Work through the checklist top-to-bottom, one component at a time
 - Do NOT batch multiple component migrations — finish one before starting the next
-- Use granular imports: `import { Button } from "heroui-native/button"` (not from root)
-- Follow compound component patterns from the HeroUI docs (e.g. `Button.StartContent`, `Card.Header`)
+- Use root imports: `import { Button } from "heroui-native"` — see component docs for exact exports
+- Follow compound component patterns from the HeroUI docs (e.g. `Button.Label`, `Card.Header`, `Dialog.Trigger`)
 - Preserve all existing functionality — this is a UI swap, not a feature change
 - When in doubt about a HeroUI API, fetch docs via MCP before guessing
 
