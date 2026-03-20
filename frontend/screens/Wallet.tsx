@@ -1,6 +1,6 @@
 import { Text, View, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Dialog } from 'heroui-native';
+import { Dialog } from 'heroui-native';
 import { useWallet } from '@/hooks';
 import { colors } from '@/constants';
 
