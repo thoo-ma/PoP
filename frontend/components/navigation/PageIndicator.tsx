@@ -23,7 +23,10 @@ const PRIMARY_PAGE_ICONS = [
 export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
   return (
     <View className="absolute bottom-10 left-0 right-0 flex-row justify-center items-center">
-      <View className="flex-row bg-[rgba(255,255,255,0.95)] rounded-[24px] px-4 py-[10px] gap-1 shadow-lg">
+      <View
+        className="flex-row rounded-[24px] px-4 py-[10px] gap-1 shadow-lg"
+        style={{ backgroundColor: colors.bgOverlayFull }}
+      >
         {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
           <View key={index} className="items-center px-[10px] py-1">
             <Button
