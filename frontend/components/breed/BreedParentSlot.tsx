@@ -23,14 +23,14 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
   return (
     <PressableFeedback
       onPress={onPress}
-      style={{ flex: 1, borderRadius: 14, borderWidth: 2, borderColor, overflow: 'hidden' }}
-      className="bg-content1 shadow-sm"
+      className="flex-1 rounded-[14px] border-2 overflow-hidden bg-content1 shadow-sm"
+      style={{ borderColor }}
     >
       {nft ? (
         <>
           <Image
             source={{ uri: nft.image_url }}
-            style={{ width: '100%', aspectRatio: 1 }}
+            className="w-full aspect-square"
             resizeMode="cover"
           />
           <View className="p-2 pb-1">

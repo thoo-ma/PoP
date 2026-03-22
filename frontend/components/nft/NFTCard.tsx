@@ -25,7 +25,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
       <View className="w-full aspect-square relative">
         <Image
           source={{ uri: nft.image_url }}
-          style={{ width: '100%', height: '100%' }}
+          className="w-full h-full"
           resizeMode="cover"
         />
         {/* Level — top-left */}
@@ -43,7 +43,8 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            style={{ position: 'absolute', bottom: 8, left: 8, backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
+            className="absolute bottom-2 left-2"
+            style={{ backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-bold">{nft.type.toUpperCase()}</Chip.Label>
@@ -55,7 +56,8 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            style={{ position: 'absolute', top: 8, right: 8, backgroundColor: RARITY_COLORS[nft.rarity] }}
+            className="absolute top-2 right-2"
+            style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-bold">{nft.rarity.toUpperCase()}</Chip.Label>
@@ -68,8 +70,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             size="sm"
             variant="primary"
             color="success"
-            className="absolute right-2"
-            style={{ position: 'absolute', top: 40, right: 8 }}
+            className="absolute top-10 right-2"
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-bold">Listed</Chip.Label>
@@ -81,7 +82,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            style={{ position: 'absolute', bottom: 8, right: 8 }}
+            className="absolute bottom-2 right-2"
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-bold">+{nft.stat_points} pts</Chip.Label>
@@ -90,7 +91,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
       </View>
 
       <Card.Body className="p-2 gap-2">
-        <Card.Title className="text-sm font-bold" style={{ minHeight: 32 }}>
+        <Card.Title className="text-sm font-bold min-h-8">
           {formatDisplayName(nft.name)}
         </Card.Title>
         <NFTProperties
@@ -103,7 +104,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         />
         {/* XP bar */}
         <View className="flex-row items-center mt-1">
-          <Text className="text-xs font-semibold w-5" style={{ color: '#f59e0b' }}>XP</Text>
+          <Text className="text-xs font-semibold w-5 text-stat-comfort">XP</Text>
           <View className="flex-1 mx-1">
             <View className="h-1 rounded-full overflow-hidden bg-gray-200">
               <View

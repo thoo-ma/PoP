@@ -51,7 +51,7 @@ export default function Wallet({ visible, onClose }: WalletProps) {
 
           <ScrollShadow LinearGradientComponent={LinearGradient} className="w-full">
             <ScrollView
-              contentContainerStyle={{ paddingBottom: 8 }}
+              contentContainerClassName="pb-2"
               showsVerticalScrollIndicator={false}
             >
             {/* How to earn */}

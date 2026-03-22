@@ -56,7 +56,7 @@ export default function BreedPickerModal({
             keyExtractor={(item) => item.nft.id}
             numColumns={2}
             columnWrapperStyle={{ gap: 12, marginBottom: 12 }}
-            contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+            contentContainerClassName="p-4 pb-10"
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <Button
@@ -68,7 +68,7 @@ export default function BreedPickerModal({
                 <View>
                   <Image source={{ uri: item.nft.image_url }} className="w-full aspect-square" resizeMode="cover" />
                   {item.disabled && (
-                    <View className="absolute inset-0 bg-white/50" style={{ top: 0, height: undefined, bottom: 0 }} />
+                    <View className="absolute inset-0 bg-white/50" />
                   )}
                   <View
                     className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface"

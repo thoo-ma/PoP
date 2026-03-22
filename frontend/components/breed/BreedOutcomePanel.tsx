@@ -24,14 +24,16 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
           return (
             <View key={rarity} className="flex-row items-center mb-2 gap-2">
               <View
-                style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: RARITY_COLORS[rarity] }}
+                className="w-2.5 h-2.5 rounded-full"
+                style={{ backgroundColor: RARITY_COLORS[rarity] }}
               />
               <Text className="text-[13px] text-foreground font-semibold w-[90px]">
                 {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
               </Text>
               <View className="flex-1 h-2 bg-default-100 rounded overflow-hidden">
                 <View
-                  style={{ width: `${pct}%`, height: '100%', borderRadius: 4, backgroundColor: RARITY_COLORS[rarity] }}
+                  className="h-full rounded"
+                  style={{ width: `${pct}%`, backgroundColor: RARITY_COLORS[rarity] }}
                 />
               </View>
               <Text className="text-sm font-bold text-default-600 w-11 text-right">{pct}%</Text>

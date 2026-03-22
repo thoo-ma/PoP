@@ -100,7 +100,7 @@ import { nftEvents, canBreed } from '@/utils';
 
       <ScrollShadow LinearGradientComponent={LinearGradient}>
         <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center', width: '100%' }}
+          contentContainerClassName="px-5 pb-[120px] items-center w-full"
           showsVerticalScrollIndicator={false}
         >
         {/* ── Picker modal ──────────────────────────────────────────────── */}

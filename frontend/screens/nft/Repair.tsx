@@ -111,7 +111,7 @@ export default memo(function Repair() {
 
         <ScrollShadow LinearGradientComponent={LinearGradient}>
           <ScrollView
-            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center' }}
+            contentContainerClassName="px-5 pb-[120px] items-center"
             showsVerticalScrollIndicator={false}
           >
           {selectedIndex === null ? (
@@ -139,8 +139,7 @@ export default memo(function Repair() {
               {/* Selected NFT Card */}
               {!isRepaired && selectedNFT && (
                 <View
-                  className="w-[280px] bg-surface rounded-2xl overflow-hidden mt-5 mb-6 border border-border"
-                  style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 3 }}
+                  className="w-[280px] bg-surface rounded-2xl overflow-hidden mt-5 mb-6 border border-border shadow-md"
                 >
                   <View className="relative w-full">
                     <Image
@@ -157,7 +156,7 @@ export default memo(function Repair() {
                     >
                       <Text className="text-white text-[11px] font-bold tracking-wide">{selectedNFT.type.toUpperCase()}</Text>
                     </View>
-                    <View className="absolute top-3 right-3 rounded-lg px-3 py-1.5" style={{ backgroundColor: 'rgba(16, 185, 129, 0.95)' }}>
+                    <View className="absolute top-3 right-3 rounded-lg px-3 py-1.5 bg-emerald-500/95">
                       <Text className="text-white text-xs font-bold tracking-wide">
                         Energy: {currentEnergy + Math.round(repairAmount)}%
                       </Text>
