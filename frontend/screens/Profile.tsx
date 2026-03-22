@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Avatar, Button, Dialog } from 'heroui-native';
 import { useAuth } from '@/hooks';
-import { showSignOutConfirmation } from '@/utils';
+import { useSignOutDialog } from '@/utils';
 import Wallet from './Wallet';
 
 interface ProfileProps {
@@ -22,9 +22,10 @@ export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
+  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
 
   const handleSignOut = () => {
-    showSignOutConfirmation(async () => {
+    showSignOutDialog(async () => {
       setIsSigningOut(true);
       try {
         await signOut();
@@ -43,7 +44,8 @@ export default function Profile({ visible, onClose }: ProfileProps) {
     .toUpperCase();
 
   return (
-    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <>
+      <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Dialog.Portal>
         <Dialog.Overlay isCloseOnPress />
         <Dialog.Content className="mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center">
@@ -115,6 +117,8 @@ export default function Profile({ visible, onClose }: ProfileProps) {
           </Button>
         </Dialog.Content>
       </Dialog.Portal>
-    </Dialog>
+      </Dialog>
+      {signOutDialog}
+    </>
   );
 }

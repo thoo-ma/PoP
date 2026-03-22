@@ -1,6 +1,7 @@
 import { Text, View, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
-import { Button, Skeleton, Tabs } from 'heroui-native';
+import { Button, Skeleton, Tabs, ScrollShadow } from 'heroui-native';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -187,10 +188,11 @@ export default memo(function Vault() {
             onSortOrderToggle={handleSortOrderToggle}
           />
 
-          <ScrollView
-            contentContainerClassName="px-5 pb-[120px] w-full"
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName="px-5 pb-[120px] w-full"
+              showsVerticalScrollIndicator={false}
+            >
             <View className="flex-row flex-wrap justify-between w-full">
               {sortedNfts.map((nft) => (
                 <View key={nft.id} className="w-[48%]">
@@ -230,6 +232,7 @@ export default memo(function Vault() {
               ))}
             </View>
           </ScrollView>
+          </ScrollShadow>
         </>
       </Tabs.Content>
       <Tabs.Content value="mystery-boxes">
@@ -250,10 +253,11 @@ export default memo(function Vault() {
             </Text>
           </View>
         ) : (
-          <ScrollView
-            contentContainerClassName="px-5 pb-[120px] w-full"
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName="px-5 pb-[120px] w-full"
+              showsVerticalScrollIndicator={false}
+            >
             {boxes.length === 0 ? (
               <View className="py-12 items-center">
                 <Text className="text-base text-text-body text-center">
@@ -291,6 +295,7 @@ export default memo(function Vault() {
               </View>
             )}
           </ScrollView>
+          </ScrollShadow>
         )
       }
       </Tabs.Content>

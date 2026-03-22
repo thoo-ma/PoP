@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native';
 import { validateInviteCode } from '@/lib/inviteCodeApi';
-import { showSignOutConfirmation } from '@/utils';
+import { useSignOutDialog } from '@/utils';
 import { useErrorHandler } from '@/hooks';
 
 interface InviteCodeScreenProps {
@@ -28,6 +28,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandler('InviteCode');
   const inputRef = useRef<TextInput>(null);
+  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
 
   // Auto-focus input on mount
   useEffect(() => {
@@ -81,12 +82,13 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   };
 
   const handleSignOut = () => {
-    showSignOutConfirmation(onSignOut);
+    showSignOutDialog(onSignOut);
   };
 
   const canSubmit = code.length === 8 && !loading;
 
   return (
+    <>
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className="flex-1 justify-center p-5 bg-background"
@@ -146,5 +148,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
         </Button>
       </View>
     </KeyboardAvoidingView>
+    {signOutDialog}
+  </>
   );
 }

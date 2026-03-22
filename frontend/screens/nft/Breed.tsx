@@ -1,6 +1,7 @@
 import { Text, View, Image, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
-import { Button } from 'heroui-native';
+import { Button, ScrollShadow } from 'heroui-native';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -97,10 +98,11 @@ import { nftEvents, canBreed } from '@/utils';
     <View className="flex-1 bg-background items-center pt-[80px]">
       <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Breed</Text>
 
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center', width: '100%' }}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollShadow LinearGradientComponent={LinearGradient}>
+        <ScrollView
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center', width: '100%' }}
+          showsVerticalScrollIndicator={false}
+        >
         {/* ── Picker modal ──────────────────────────────────────────────── */}
         <BreedPickerModal
           visible={pickerSlot === 1}
@@ -203,7 +205,8 @@ import { nftEvents, canBreed } from '@/utils';
             </Button>
           </View>
         )}
-      </ScrollView>
+        </ScrollView>
+      </ScrollShadow>
     </View>
   );
 });

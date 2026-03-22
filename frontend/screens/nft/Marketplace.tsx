@@ -1,6 +1,7 @@
 import { Text, View, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { Button, Dialog, Skeleton, Tabs } from 'heroui-native';
+import { Button, Dialog, Skeleton, Tabs, ScrollShadow } from 'heroui-native';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -98,10 +99,11 @@ export default memo(function Marketplace() {
             ))}
           </View>
         ) : (
-          <ScrollView
-            contentContainerClassName="px-5 pb-[120px] w-full"
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName="px-5 pb-[120px] w-full"
+              showsVerticalScrollIndicator={false}
+            >
             <View className="flex-row flex-wrap justify-between w-full">
               {sortedMarketplaceListings.map((item) => (
                 <View key={item.id} className="w-[48%]">
@@ -126,7 +128,8 @@ export default memo(function Marketplace() {
                 </View>
               ))}
             </View>
-          </ScrollView>
+            </ScrollView>
+          </ScrollShadow>
         )}
       </Tabs.Content>
 
@@ -142,10 +145,11 @@ export default memo(function Marketplace() {
             ))}
           </View>
         ) : (
-          <ScrollView
-            contentContainerClassName="px-5 pb-[120px] w-full"
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName="px-5 pb-[120px] w-full"
+              showsVerticalScrollIndicator={false}
+            >
             {myListings.length > 0 && (
               <View className="bg-[#fef3c7] rounded-xl p-4 mb-5 border border-[#fbbf24]">
                 <Text className="text-sm text-[#78350f] text-center leading-5">
@@ -187,7 +191,8 @@ export default memo(function Marketplace() {
                 </View>
               )}
             </View>
-          </ScrollView>
+            </ScrollView>
+          </ScrollShadow>
         )}
       </Tabs.Content>
       </Tabs>
