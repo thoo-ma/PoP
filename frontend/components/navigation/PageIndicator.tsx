@@ -43,7 +43,7 @@ export default memo(function PageIndicator({ totalPages, currentPage, onPageChan
               />
             </Button>
             <Text
-              className="text-[10px] font-medium mt-1"
+              className={currentPage === index ? 'text-[10px] font-bold mt-1' : 'text-[10px] font-medium mt-1'}
               style={{ color: currentPage === index ? colors.active : colors.inactive }}
             >
               {label}
