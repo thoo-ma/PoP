@@ -18,7 +18,8 @@ export default memo(function ProfileButton({ onPress }: ProfileButtonProps) {
       isIconOnly
       variant="ghost"
       onPress={onPress}
-      className="absolute top-[60px] left-5 z-[100] bg-[rgba(255,255,255,0.9)] rounded-[20px] shadow p-2"
+      className="absolute top-[60px] left-5 z-[100] rounded-[20px] shadow p-2"
+      style={{ backgroundColor: colors.bgOverlay }}
       accessibilityLabel="Profile"
       accessibilityHint="Opens your profile and settings"
     >
