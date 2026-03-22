@@ -1,6 +1,7 @@
 import { Text, View, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Dialog } from 'heroui-native';
+import { Dialog, ScrollShadow } from 'heroui-native';
 import { useWallet } from '@/hooks';
 import { colors } from '@/constants';
 
@@ -48,11 +49,11 @@ export default function Wallet({ visible, onClose }: WalletProps) {
             )}
           </View>
 
-          <ScrollView
-            className="w-full"
-            contentContainerStyle={{ paddingBottom: 8 }}
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollShadow LinearGradientComponent={LinearGradient} className="w-full">
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 8 }}
+              showsVerticalScrollIndicator={false}
+            >
             {/* How to earn */}
             <View className="mb-4">
               <Text className="text-base font-bold text-foreground mb-2">Earn POOP</Text>
@@ -84,6 +85,7 @@ export default function Wallet({ visible, onClose }: WalletProps) {
               </View>
             </View>
           </ScrollView>
+          </ScrollShadow>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>

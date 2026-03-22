@@ -1,7 +1,8 @@
 import { Text, View, ScrollView, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Slider from '@react-native-community/slider';
 import { memo, useState } from 'react';
-import { Button, Dialog } from 'heroui-native';
+import { Button, Dialog, ScrollShadow } from 'heroui-native';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -108,10 +109,11 @@ export default memo(function Repair() {
           <Text className="text-base text-center text-muted mb-4">💩 Balance: {poopBalance} POOP</Text>
         )}
 
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center' }}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollShadow LinearGradientComponent={LinearGradient}>
+          <ScrollView
+            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, alignItems: 'center' }}
+            showsVerticalScrollIndicator={false}
+          >
           {selectedIndex === null ? (
             <Button
               variant="ghost"
@@ -240,6 +242,7 @@ export default memo(function Repair() {
             </>
           )}
         </ScrollView>
+        </ScrollShadow>
       </View>
 
       <Dialog isOpen={alertDialog !== null} onOpenChange={(open) => { if (!open) setAlertDialog(null); }}>

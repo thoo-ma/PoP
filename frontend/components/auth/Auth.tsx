@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Alert as RNAlert, View, Text } from 'react-native';
-import { Button, Spinner } from 'heroui-native';
+import { View, Text } from 'react-native';
+import { Button, Spinner, Dialog, useToast } from 'heroui-native';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
@@ -20,10 +20,12 @@ const DEV_MODE_PASSWORD = process.env.EXPO_PUBLIC_DEV_MODE_PASSWORD;
  * - X / Google OAuth: currently disabled (alert shown)
  */
 export default function Auth() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);
   const [testLoading, setTestLoading] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [oauthDialogVisible, setOauthDialogVisible] = useState(false);
 
   const handleDevSignIn = async () => {
     setDevLoading(true);
@@ -39,7 +41,7 @@ export default function Auth() {
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
       logError('Auth:Anonymous', err);
-      RNAlert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
     } finally {
       setDevLoading(false);
     }
@@ -54,7 +56,7 @@ export default function Auth() {
     if (password === DEV_MODE_PASSWORD) {
       handleDevSignIn();
     } else {
-      RNAlert.alert('Access Denied', 'Incorrect password.');
+      toast.show({ variant: 'danger', label: 'Access Denied', description: 'Incorrect password.' });
     }
   };
 
@@ -72,18 +74,14 @@ export default function Auth() {
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
       logError('Auth:TestMode', err);
-      RNAlert.alert('Authentication Error', getErrorMessage(err, 'Failed to authenticate'));
+      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
     } finally {
       setTestLoading(false);
     }
   };
 
   const signInWithProvider = async (_provider: OAuthProvider) => {
-    RNAlert.alert(
-      'OAuth Not Available',
-      'OAuth authentication is not yet available.\n\nPlease use Test Mode or Dev Mode to sign in.',
-      [{ text: 'OK' }]
-    );
+    setOauthDialogVisible(true);
   };
 
   return (
@@ -130,6 +128,26 @@ export default function Auth() {
         onSubmit={handlePasswordSubmit}
         onCancel={() => setPasswordModalVisible(false)}
       />
+
+      <Dialog isOpen={oauthDialogVisible} onOpenChange={setOauthDialogVisible}>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Close />
+            <View className="mb-4 gap-1.5">
+              <Dialog.Title>OAuth Not Available</Dialog.Title>
+              <Dialog.Description>
+                OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode to sign in.
+              </Dialog.Description>
+            </View>
+            <View className="flex-row justify-end">
+              <Button variant="primary" size="sm" onPress={() => setOauthDialogVisible(false)}>
+                OK
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
     </View>
   );
 }

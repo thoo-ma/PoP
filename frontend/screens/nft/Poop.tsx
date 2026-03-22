@@ -1,6 +1,7 @@
 import { Text, View, Image, ScrollView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { Button, Dialog } from 'heroui-native';
+import { Button, Dialog, ScrollShadow } from 'heroui-native';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -492,26 +493,29 @@ export default memo(function Poop() {
     <>
       {phase !== 'idle' ? (
         // ── Active challenge ───────────────────────────────
-        <ScrollView
-          className="flex-1 bg-background"
-          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+          <ScrollView
+            className="bg-background"
+            contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
+            showsVerticalScrollIndicator={false}
+          >
           {phase === 'countdown'  && renderCountdownPhase()}
           {phase === 'immobility' && renderImmobilityPhase()}
           {phase === 'prompt'     && renderPromptPhase()}
           {phase === 'recording'  && renderRecordingPhase()}
           {phase === 'results'    && renderResultsPhase()}
           {phase === 'roulette'   && renderRoulettePhase()}
-        </ScrollView>
+          </ScrollView>
+        </ScrollShadow>
       ) : (
         // ── Idle (home) ────────────────────────────────────
-        <ScrollView
-          className="flex-1 bg-white"
-          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
+        <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+          <ScrollView
+            className="bg-white"
+            contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
           <Text className="text-[32px] font-bold text-center mb-2 text-gray-700">Poop</Text>
           <Text className="text-base text-center text-gray-500 mb-6">Use your NFT to generate rewards</Text>
 
@@ -589,7 +593,8 @@ export default memo(function Poop() {
           >
             <Button.Label>{buttonLabel}</Button.Label>
           </Button>
-        </ScrollView>
+          </ScrollView>
+        </ScrollShadow>
       )}
 
       {statModalData && (
