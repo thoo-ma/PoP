@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
 import { Text, View } from 'react-native';
+import { colors } from '@/constants';
 
 interface NFTPropertiesProps {
   efficiency: number;
@@ -36,7 +37,7 @@ const PropertyBar = memo(function PropertyBar({ label, value, color, isCompact }
           : 'flex-1 h-2 bg-property-bg rounded overflow-hidden'
         }>
           <View
-            className={isCompact ? 'h-full rounded' : 'h-full rounded'}
+            className="h-full rounded"
             style={{ width: `${value}%`, backgroundColor: color }}
           />
         </View>
@@ -64,13 +65,13 @@ function NFTProperties({
 
   const filteredProperties = useMemo(() => {
     const properties = [
-      { label: 'Efficiency', value: efficiency, color: '#3b82f6' },
-      { label: 'Resilience', value: resilience, color: '#10b981' },
-      { label: 'Comfort', value: comfort, color: '#f59e0b' },
-      { label: 'Luck', value: luck, color: '#8b5cf6' },
+      { label: 'Efficiency', value: efficiency, color: colors.efficiency },
+      { label: 'Resilience', value: resilience, color: colors.resilience },
+      { label: 'Comfort', value: comfort, color: colors.comfort },
+      { label: 'Luck', value: luck, color: colors.luck },
     ];
     if (energy !== undefined) {
-      properties.push({ label: 'Energy', value: energy, color: '#ef4444' });
+      properties.push({ label: 'Energy', value: energy, color: colors.energy });
     }
     return excludeProperties && excludeProperties.length > 0
       ? properties.filter(prop => !excludeProperties.includes(prop.label))
