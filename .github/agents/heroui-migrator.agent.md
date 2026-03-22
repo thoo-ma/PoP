@@ -101,7 +101,6 @@ For each component in the checklist:
 - Do NOT create new files unless the issue explicitly says to
 - Do NOT proceed to Phase 2 if Phase 1 reveals blockers — report them and stop
 - Do NOT skip the PR creation in Phase 3
-- Do NOT loop more than 3 times in Phase 4 — escalate to human
 - Do NOT force-push — always regular push to preserve review history
 - Do NOT auto-fix a review comment if there is any ambiguity about the correct fix
 - ALWAYS preserve existing app functionality — zero regressions

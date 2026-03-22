@@ -1,6 +1,6 @@
 # Skill: PR Review Handler
 
-Handle Copilot code review comments on a pull request: auto-fix clear bugs, escalate ambiguous comments to the human, reply to everything, and re-push.
+Handle Copilot code review comments on a pull request: auto-fix clear bugs, escalate ambiguous comments to the human, reply to everything, and push fixes.
 
 ## Required MCP Tools
 
@@ -8,7 +8,6 @@ Handle Copilot code review comments on a pull request: auto-fix clear bugs, esca
 |---|---|
 | `github/pull_request_read` | Fetch review comments on a PR |
 | `github/add_reply_to_pull_request_comment` | Reply to a review comment thread |
-| `github/request_copilot_review` | Re-trigger Copilot review after fixes |
 | `read/readFile` | Read local working copy |
 | `edit/editFiles` | Apply fixes locally |
 | `execute/runInTerminal` | Run type-check / lint / tests |
@@ -32,7 +31,7 @@ The calling agent must provide:
 
 Poll `github/pull_request_read` every 30 seconds until review comments appear.
 - Timeout: **5 minutes** (Copilot can be slow on large PRs)
-- If no comments arrive after timeout, the PR is clean — skip to the final report
+- If no comments arrive after timeout, the PR is clean — skip to the review report
 
 ### Step 2 — Fetch and group comments
 
@@ -86,23 +85,23 @@ If there were zero auto-fixes (everything was escalated), skip this step.
 
 ### Step 7 — Present summary to human
 
-**Always ask the human before continuing.** Use `vscode/askQuestions` to present:
+Use `vscode/askQuestions` to present:
 
 ```
-Review round complete. Here's what happened:
+Review complete. Here's what happened:
 
 Auto-fixed (N comments):
 - file.tsx:42 — Added missing null check on `user.name`
 - file.tsx:78 — Fixed import: `Button` from heroui-native
 
 Escalated for your review (M comments):
-- file.tsx:15 — Copilot suggests using `Card.Body` instead of `View`. This is a design choice — want me to apply it?
-- file.tsx:55 — Copilot asks: "Is this fallback intentional?" — Yes/No?
+- file.tsx:15 — Copilot suggests using `Card.Body` instead of `View`. This is a design choice.
+- file.tsx:55 — Copilot asks: "Is this fallback intentional?"
 
-What should I do?
-  [a] Apply suggested changes (list which ones)
-  [b] Dismiss escalated comments as-is
-  [c] Let me review the PR on GitHub first
+What should I do with the escalated comments?
+  [a] Apply some of them (tell me which ones)
+  [b] Dismiss them all as-is
+  [c] I'll handle them on GitHub myself
 ```
 
 Wait for the human's response before proceeding.
@@ -114,31 +113,13 @@ Based on the human's answer:
 - Reply to dismissed comments with the human's reasoning
 - If human chose [c], stop and let them handle it on GitHub
 
-### Step 9 — Optional re-review
-
-If fixes were pushed (auto or human-approved), offer to re-request Copilot review:
-
-```
-Fixes pushed. Want me to re-request a Copilot review to verify?
-  [a] Yes, run another review cycle
-  [b] No, we're done
-```
-
-If yes, loop back to Step 1. Maximum 3 total iterations.
-
-**Exit conditions:**
-- ✅ Zero unresolved comments → Done
-- ✅ Human chose to handle remaining comments themselves → Done
-- ⚠️ 3 iterations reached → Stop, report status
-
-### Step 10 — Review report
+### Step 9 — Review report
 
 Before returning control to the calling agent, output a structured review report:
 
 ```
 ## Review report
 
-Iterations: N
 Total comments: X
 
 Auto-fixed (N):
@@ -160,7 +141,6 @@ This report covers **review activity only**. The calling agent is responsible fo
 
 - Do NOT auto-fix a comment if there is any ambiguity about what the correct fix is
 - Do NOT force-push — always regular push to preserve review history
-- Do NOT loop more than 3 times — escalate to human after that
 - Do NOT use generic replies — each reply must show understanding of the comment
 - ALWAYS run type-check before pushing fixes
 - ALWAYS present escalated comments to the human before continuing

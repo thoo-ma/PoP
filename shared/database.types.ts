@@ -169,11 +169,11 @@ export type Database = {
           name: string
           rarity: Database["public"]["Enums"]["nft_rarity"]
           resilience: number
+          stat_points: number
           type: Database["public"]["Enums"]["nft_type"]
           updated_at: string
           user_id: string
           xp: number
-          stat_points: number
         }
         Insert: {
           breed_count?: number
@@ -189,11 +189,11 @@ export type Database = {
           name: string
           rarity: Database["public"]["Enums"]["nft_rarity"]
           resilience: number
+          stat_points?: number
           type: Database["public"]["Enums"]["nft_type"]
           updated_at?: string
           user_id: string
           xp?: number
-          stat_points?: number
         }
         Update: {
           breed_count?: number
@@ -209,11 +209,35 @@ export type Database = {
           name?: string
           rarity?: Database["public"]["Enums"]["nft_rarity"]
           resilience?: number
+          stat_points?: number
           type?: Database["public"]["Enums"]["nft_type"]
           updated_at?: string
           user_id?: string
           xp?: number
-          stat_points?: number
+        }
+        Relationships: []
+      }
+      pending_loot_rolls: {
+        Row: {
+          created_at: string
+          holds: number
+          id: string
+          nft_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          holds?: number
+          id?: string
+          nft_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          holds?: number
+          id?: string
+          nft_id?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -254,6 +278,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _xp_decompose: {
+        Args: { total_xp: number }
+        Returns: {
+          lv: number
+          xp_rem: number
+        }[]
+      }
       generate_invite_codes: {
         Args: { p_count?: number }
         Returns: {
@@ -282,7 +313,12 @@ export type Database = {
           xp: number
         }[]
       }
-      seed_dev_test_nfts: { Args: Record<PropertyKey, never>; Returns: Json }
+      increment_poop_balance: {
+        Args: { amount: number; user_id: string }
+        Returns: number
+      }
+      seed_dev_test_nfts: { Args: never; Returns: Json }
+      seed_test_mystery_boxes: { Args: never; Returns: Json }
       validate_and_approve_user: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
