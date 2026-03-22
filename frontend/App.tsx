@@ -8,6 +8,7 @@ import { useAuth, useUserApproval } from '@/hooks';
 import { Auth, PageIndicator, ProfileButton } from '@/components';
 import { InviteCodeScreen, Profile } from '@/screens';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
+import { colors } from '@/constants';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HeroUINativeProvider, Spinner } from 'heroui-native';
@@ -101,7 +102,7 @@ function AppInner() {
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1 bg-surface-bg">
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         <FlatList
           ref={flatListRef}
           data={PAGES}
@@ -121,7 +122,7 @@ function AppInner() {
           windowSize={1}
           initialNumToRender={1}
           maxToRenderPerBatch={1}
-          className="flex-1"
+          style={{ flex: 1 }}
         />
 
         <ProfileButton onPress={handleOpenProfile} />
