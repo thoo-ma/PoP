@@ -1,7 +1,5 @@
 import { memo, useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { styles } from '@/styles/nft/NFTProperties.styles';
-import { colors } from '@/constants';
 
 interface NFTPropertiesProps {
   efficiency: number;
@@ -22,20 +20,30 @@ interface PropertyBarProps {
 
 const PropertyBar = memo(function PropertyBar({ label, value, color, isCompact }: PropertyBarProps) {
   return (
-    <View style={isCompact ? styles.propertyRowCompact : styles.propertyRowDetailed}>
-      <Text style={isCompact ? styles.propertyLabelCompact : styles.propertyLabelDetailed}>
+    <View className={isCompact ? 'flex-row items-center justify-between' : 'gap-1'}>
+      <Text className={isCompact
+        ? 'text-[10px] text-property-text w-[50px] mr-1'
+        : 'text-xs font-semibold text-property-text mb-0.5'
+      }>
         {label}
       </Text>
-      <View style={isCompact ? styles.propertyBarWrapperCompact : styles.propertyBarWrapperDetailed}>
-        <View style={[isCompact ? styles.propertyBarBackgroundCompact : styles.propertyBarBackgroundDetailed]}>
-          <View 
-            style={[
-              isCompact ? styles.propertyBarFillCompact : styles.propertyBarFillDetailed, 
-              { width: `${value}%`, backgroundColor: color }
-            ]} 
+      <View className={isCompact
+        ? 'flex-1 flex-row items-center gap-1'
+        : 'flex-row items-center gap-1.5'
+      }>
+        <View className={isCompact
+          ? 'flex-1 h-1.5 bg-property-bg rounded overflow-hidden'
+          : 'flex-1 h-2 bg-property-bg rounded overflow-hidden'
+        }>
+          <View
+            className={isCompact ? 'h-full rounded' : 'h-full rounded'}
+            style={{ width: `${value}%`, backgroundColor: color }}
           />
         </View>
-        <Text style={isCompact ? styles.propertyValueCompact : styles.propertyValueDetailed}>
+        <Text className={isCompact
+          ? 'text-[10px] text-property-text font-semibold w-5 text-right'
+          : 'text-xs text-text-dark font-bold w-[26px] text-right'
+        }>
           {Math.round(value)}
         </Text>
       </View>
@@ -56,13 +64,13 @@ function NFTProperties({
 
   const filteredProperties = useMemo(() => {
     const properties = [
-      { label: 'Efficiency', value: efficiency, color: colors.efficiency },
-      { label: 'Resilience', value: resilience, color: colors.resilience },
-      { label: 'Comfort', value: comfort, color: colors.comfort },
-      { label: 'Luck', value: luck, color: colors.luck },
+      { label: 'Efficiency', value: efficiency, color: '#3b82f6' },
+      { label: 'Resilience', value: resilience, color: '#10b981' },
+      { label: 'Comfort', value: comfort, color: '#f59e0b' },
+      { label: 'Luck', value: luck, color: '#8b5cf6' },
     ];
     if (energy !== undefined) {
-      properties.push({ label: 'Energy', value: energy, color: colors.energy });
+      properties.push({ label: 'Energy', value: energy, color: '#ef4444' });
     }
     return excludeProperties && excludeProperties.length > 0
       ? properties.filter(prop => !excludeProperties.includes(prop.label))
@@ -70,7 +78,7 @@ function NFTProperties({
   }, [efficiency, resilience, comfort, luck, energy, excludeProperties]);
 
   return (
-    <View style={isCompact ? styles.containerCompact : styles.containerDetailed}>
+    <View className={isCompact ? 'mt-2 gap-1' : 'mt-2 gap-2'}>
       {filteredProperties.map((prop) => (
         <PropertyBar 
           key={prop.label}

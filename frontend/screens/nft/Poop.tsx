@@ -273,8 +273,7 @@ export default memo(function Poop() {
   const renderChallengeHeader = () => {
     if (!displayNFT) return null;
     return (
-      <View className="flex-row items-center w-full bg-white rounded-[14px] p-3 border border-gray-200 gap-3"
-        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}>
+      <View className="flex-row items-center w-full bg-white rounded-[14px] p-3 border border-gray-200 gap-3 shadow-sm">
         <Image source={{ uri: displayNFT.image_url }} className="w-14 h-14 rounded-[10px] bg-gray-100" resizeMode="cover" />
         <View className="flex-1">
           <Text className="text-[15px] font-bold text-gray-700 mb-0.5">{formatDisplayName(displayNFT.name)}</Text>
@@ -304,14 +303,12 @@ export default memo(function Poop() {
         {renderChallengeHeader()}
         <View className="items-center py-6 gap-4">
           <Text
-            className="text-[80px] font-extrabold leading-[88px]"
-            style={{ color: isWarning ? '#ef4444' : '#374151' }}
+            className={`text-[80px] font-extrabold leading-[88px] ${isWarning ? 'text-stat-energy' : 'text-text-title'}`}
           >
             {(remainingTime / 1000).toFixed(1)}s
           </Text>
           <View
-            className="py-2 px-[18px] rounded-full"
-            style={{ backgroundColor: isWarning ? '#fee2e2' : '#f0fdf4' }}
+            className={`py-2 px-[18px] rounded-full ${isWarning ? 'bg-red-100' : 'bg-green-50'}`}
           >
             <Text className="text-sm font-semibold text-gray-700">
               {isWarning ? '🔴 Movement detected!' : '🟢 Hold still'}
@@ -329,8 +326,7 @@ export default memo(function Poop() {
     <View className="w-full items-center pt-3 gap-5">
       {renderChallengeHeader()}
       <View
-        className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
-        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+        className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
       >
         <Text className="text-xl font-bold text-green-600 text-center">✓ Immobility confirmed!</Text>
         <Text className="text-[13px] text-gray-500 text-center">Now record the flush sound</Text>
@@ -349,15 +345,13 @@ export default memo(function Poop() {
       {renderChallengeHeader()}
       {isAnalyzing ? (
         <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
-          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
         >
           <Text className="text-base font-semibold text-gray-700 text-center">🔍 Analyzing audio…</Text>
         </View>
       ) : isRecording ? (
         <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
-          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
         >
           <View className="flex-row items-center gap-2 mb-3">
             <View className="w-3 h-3 rounded-full bg-red-500" />
@@ -369,8 +363,7 @@ export default memo(function Poop() {
         </View>
       ) : (
         <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2"
-          style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 3, elevation: 2 }}
+          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
         >
           <Text className="text-base font-semibold text-gray-700 text-center">Processing…</Text>
         </View>
@@ -496,7 +489,7 @@ export default memo(function Poop() {
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="bg-background"
-            contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
+            contentContainerClassName="flex-grow items-center pt-[60px] px-5 pb-[140px]"
             showsVerticalScrollIndicator={false}
           >
           {phase === 'countdown'  && renderCountdownPhase()}
@@ -512,7 +505,7 @@ export default memo(function Poop() {
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="bg-white"
-            contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingTop: 60, paddingHorizontal: 20, paddingBottom: 140 }}
+            contentContainerClassName="flex-grow items-center pt-[60px] px-5 pb-[140px]"
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
@@ -548,8 +541,7 @@ export default memo(function Poop() {
                   style={{ marginBottom: 12 }}
                 />
                 <View
-                  className="w-full max-w-[280px] bg-white rounded-2xl p-3 border border-gray-200 overflow-hidden"
-                  style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}
+                  className="w-full max-w-[280px] bg-white rounded-2xl p-3 border border-gray-200 overflow-hidden shadow-md"
                 >
                   <View className="relative w-full h-[180px] bg-gray-100 rounded-xl mb-3 overflow-hidden">
                     <Image

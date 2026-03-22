@@ -19,14 +19,15 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
       <View className="w-full aspect-square relative">
         <Image
           source={{ uri: box.image_url }}
-          style={{ width: '100%', height: '100%' }}
+          className="w-full h-full"
           resizeMode="cover"
         />
         {/* Rarity — bottom-right */}
         <Chip
           size="sm"
           variant="primary"
-          style={{ position: 'absolute', bottom: 8, right: 8, backgroundColor: RARITY_COLORS[box.rarity] }}
+          className="absolute bottom-2 right-2"
+          style={{ backgroundColor: RARITY_COLORS[box.rarity] }}
           animation="disable-all"
         >
           <Chip.Label className="text-white text-xs font-bold">{box.rarity.toUpperCase()}</Chip.Label>
