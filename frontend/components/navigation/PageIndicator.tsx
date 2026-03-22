@@ -28,27 +28,28 @@ export default memo(function PageIndicator({ totalPages, currentPage, onPageChan
         style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12, elevation: 8 }}
       >
         {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
-          <View key={index} className="items-center px-[10px] py-1">
-            <Button
-              isIconOnly
-              variant="ghost"
-              onPress={() => onPageChange?.(index)}
-              accessibilityLabel={label}
-              accessibilityState={{ selected: currentPage === index }}
-            >
+          <Button
+            key={index}
+            variant="ghost"
+            onPress={() => onPageChange?.(index)}
+            className="px-[10px] py-1"
+            accessibilityLabel={label}
+            accessibilityState={{ selected: currentPage === index }}
+          >
+            <View className="items-center">
               <MaterialIcons
                 name={icon}
                 size={26}
                 color={currentPage === index ? colors.active : colors.inactive}
               />
-            </Button>
-            <Text
-              className={currentPage === index ? 'text-[10px] font-bold mt-1' : 'text-[10px] font-medium mt-1'}
-              style={{ color: currentPage === index ? colors.active : colors.inactive }}
-            >
-              {label}
-            </Text>
-          </View>
+              <Text
+                className={currentPage === index ? 'text-[10px] font-bold mt-1' : 'text-[10px] font-medium mt-1'}
+                style={{ color: currentPage === index ? colors.active : colors.inactive }}
+              >
+                {label}
+              </Text>
+            </View>
+          </Button>
         ))}
       </View>
     </View>

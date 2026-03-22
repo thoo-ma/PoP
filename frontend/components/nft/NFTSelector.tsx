@@ -27,6 +27,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, style }: P
         isIconOnly
         variant="ghost"
         onPress={onPrev}
+        className="w-[52px] h-9 rounded-lg bg-surface-light border border-border-default"
         accessibilityLabel="Previous NFT"
       >
         <Button.Label className="text-[22px] leading-7 text-text-title">{'‹'}</Button.Label>
@@ -38,6 +39,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, style }: P
         isIconOnly
         variant="ghost"
         onPress={onNext}
+        className="w-[52px] h-9 rounded-lg bg-surface-light border border-border-default"
         accessibilityLabel="Next NFT"
       >
         <Button.Label className="text-[22px] leading-7 text-text-title">{'›'}</Button.Label>
