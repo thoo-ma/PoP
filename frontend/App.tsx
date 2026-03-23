@@ -5,8 +5,8 @@ import { View, FlatList, ViewToken, Dimensions } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useCallback, useRef } from 'react';
 import { useAuth, useUserApproval } from '@/hooks';
-import { Auth, PageIndicator, ProfileButton } from '@/components';
-import { InviteCodeScreen, Profile } from '@/screens';
+import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader } from '@/components';
+import { InviteCodeScreen, Profile, Wallet } from '@/screens';
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
 import { colors } from '@/constants';
 
@@ -33,6 +33,7 @@ function AppInner() {
   const { approved, loading: approvalLoading, refetch } = useUserApproval(session);
   const [currentPage, setCurrentPage] = useState(0);
   const [profileVisible, setProfileVisible] = useState(false);
+  const [walletVisible, setWalletVisible] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
   const handleApprovalSuccess = useCallback(async () => {
@@ -50,6 +51,8 @@ function AppInner() {
 
   const handleOpenProfile = useCallback(() => setProfileVisible(true), []);
   const handleCloseProfile = useCallback(() => setProfileVisible(false), []);
+  const handleOpenWallet = useCallback(() => setWalletVisible(true), []);
+  const handleCloseWallet = useCallback(() => setWalletVisible(false), []);
 
   const onViewableItemsChangedRef = useRef<(info: { viewableItems: ViewToken[] }) => void>(
     ({ viewableItems }) => {
@@ -119,6 +122,8 @@ function AppInner() {
       />
 
       <ProfileButton onPress={handleOpenProfile} />
+      <ScreenHeader currentPage={currentPage} />
+      <WalletButton onPress={handleOpenWallet} />
 
       <PageIndicator 
         totalPages={PAGES.length} 
@@ -129,6 +134,11 @@ function AppInner() {
       <Profile 
         visible={profileVisible}
         onClose={handleCloseProfile}
+      />
+
+      <Wallet
+        visible={walletVisible}
+        onClose={handleCloseWallet}
       />
       
       <StatusBar style="auto" />

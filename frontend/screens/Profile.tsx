@@ -5,7 +5,6 @@ import { Avatar, Button, Dialog } from 'heroui-native';
 import { useAuth } from '@/hooks';
 import { dialogPanel } from '@/styles';
 import { useSignOutDialog } from '@/utils';
-import Wallet from './Wallet';
 
 interface ProfileProps {
   /** Controls the visibility of the profile modal. */
@@ -22,7 +21,6 @@ interface ProfileProps {
 export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const [walletVisible, setWalletVisible] = useState(false);
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
 
   const handleSignOut = () => {
@@ -52,9 +50,6 @@ export default function Profile({ visible, onClose }: ProfileProps) {
       <Dialog.Portal>
         <Dialog.Overlay isCloseOnPress />
         <Dialog.Content className={panel.content()}>
-          {/* Wallet modal */}
-          <Wallet visible={walletVisible} onClose={() => setWalletVisible(false)} />
-
           <Dialog.Close
             variant="ghost"
             accessibilityLabel="Close profile"
@@ -106,17 +101,6 @@ export default function Profile({ visible, onClose }: ProfileProps) {
           >
             <MaterialIcons name="logout" size={18} color="#fff" />
             <Button.Label>Sign Out</Button.Label>
-          </Button>
-
-          {/* Wallet button */}
-          <Button
-            variant="secondary"
-            className="w-full"
-            onPress={() => setWalletVisible(true)}
-            accessibilityLabel="Open wallet"
-          >
-            <Text className="text-lg">💩</Text>
-            <Button.Label>Wallet</Button.Label>
           </Button>
         </Dialog.Content>
       </Dialog.Portal>

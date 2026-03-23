@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, emptyState, dialogBody, skeletonCard } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, emptyState, dialogBody, skeletonCard } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -67,7 +67,6 @@ export default memo(function Marketplace() {
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-      <Text className={screenTitle()}>Marketplace</Text>
 
       {/* Tabs */}
       <Tabs className="w-full" value={activeTab} onValueChange={(v) => setActiveTab(v as 'buy' | 'sell')}>
