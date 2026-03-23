@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent } from '@/styles';
+import { screenContainer, scrollContent, screenTitle, screenSubtitle } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -64,15 +64,15 @@ import { nftEvents, canBreed } from '@/utils';
   if (nfts.length < 2) {
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Breed</Text>
+        <Text className={screenTitle({ color: 'default' })}>Breed</Text>
 
         {/* Wallet balance + cost */}
-        <Text className="text-base text-center text-muted mb-6">
+        <Text className={screenSubtitle({ color: 'default', spacing: 'md' })}>
           {poopBalance !== null
             ? `💩 Balance: ${poopBalance} POOP  ·  Cost: from 100 POOP (scales with rarity & breed count)`
             : 'Cost: from 100 POOP (scales with rarity & breed count)'}
         </Text>
-        <Text className="text-base text-center text-muted mb-6">You need at least 2 NFTs to breed</Text>
+        <Text className={screenSubtitle({ color: 'default', spacing: 'md' })}>You need at least 2 NFTs to breed</Text>
       </View>
     );
   }
@@ -97,7 +97,7 @@ import { nftEvents, canBreed } from '@/utils';
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-      <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Breed</Text>
+      <Text className={screenTitle({ color: 'default' })}>Breed</Text>
 
       <ScrollShadow LinearGradientComponent={LinearGradient}>
         <ScrollView

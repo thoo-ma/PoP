@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -509,8 +509,8 @@ export default memo(function Poop() {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-          <Text className="text-[32px] font-bold text-center mb-2 text-gray-700">Poop</Text>
-          <Text className="text-base text-center text-gray-500 mb-6">Use your NFT to generate rewards</Text>
+          <Text className={screenTitle({ spacing: 'sm', color: 'neutral' })}>Poop</Text>
+          <Text className={screenSubtitle({ color: 'gray', spacing: 'md' })}>Use your NFT to generate rewards</Text>
 
           {immobilityMessage && (
             <View className={toastStyles.root()}>
@@ -550,13 +550,13 @@ export default memo(function Poop() {
                       resizeMode="cover"
                     />
                     <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
-                      <Text className="text-white text-xs font-bold tracking-wide">Lv {displayNFT.level}</Text>
+                      <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {displayNFT.level}</Text>
                     </View>
                     <View
                       className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
                       style={{ backgroundColor: (TYPE_BADGE_STYLES[displayNFT.type] as { backgroundColor: string }).backgroundColor }}
                     >
-                      <Text className="text-white text-[11px] font-bold tracking-wide">{displayNFT.type.toUpperCase()}</Text>
+                      <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{displayNFT.type.toUpperCase()}</Text>
                     </View>
                   </View>
                   <View className="w-full">

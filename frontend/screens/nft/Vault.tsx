@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -155,8 +155,8 @@ export default memo(function Vault() {
   
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-      <Text className="text-[32px] font-bold mb-3 text-center text-text-title">Vault</Text>
-      <Text className="text-base mb-4 text-center text-text-body">
+      <Text className={screenTitle()}>Vault</Text>
+      <Text className={screenSubtitle()}>
         Your collection ({nfts.length} toilet{nfts.length !== 1 ? 's' : ''}, {boxes.length} box{boxes.length !== 1 ? 'es' : ''})
       </Text>
 

@@ -7,6 +7,7 @@ import NFTProperties from './NFTProperties';
 import { formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 import { RARITY_COLORS } from '@/constants';
 import { MAX_LEVEL, xpThreshold } from '@shared/xp';
+import { badgeLabel } from '@/styles';
 
 interface NFTCardProps {
   nft: NFT;
@@ -35,7 +36,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           className="absolute top-2 left-2"
           animation="disable-all"
         >
-          <Chip.Label className="text-white text-xs font-bold">Lv {nft.level}</Chip.Label>
+          <Chip.Label className={badgeLabel()}>Lv {nft.level}</Chip.Label>
         </Chip>
 
         {/* Type — bottom-left */}
@@ -47,7 +48,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             style={{ backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-xs font-bold">{nft.type.toUpperCase()}</Chip.Label>
+            <Chip.Label className={badgeLabel()}>{nft.type.toUpperCase()}</Chip.Label>
           </Chip>
         )}
 
@@ -60,7 +61,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-xs font-bold">{nft.rarity.toUpperCase()}</Chip.Label>
+            <Chip.Label className={badgeLabel()}>{nft.rarity.toUpperCase()}</Chip.Label>
           </Chip>
         )}
 
@@ -73,7 +74,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             className="absolute top-10 right-2"
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-xs font-bold">Listed</Chip.Label>
+            <Chip.Label className={badgeLabel()}>Listed</Chip.Label>
           </Chip>
         )}
 
@@ -85,7 +86,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             className="absolute bottom-2 right-2"
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-xs font-bold">+{nft.stat_points} pts</Chip.Label>
+            <Chip.Label className={badgeLabel()}>+{nft.stat_points} pts</Chip.Label>
           </Chip>
         )}
       </View>
