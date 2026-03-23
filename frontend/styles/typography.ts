@@ -11,6 +11,7 @@ export const screenTitle = tv({
       accent: 'text-text-title',
       neutral: 'text-gray-700',
       default: 'text-foreground',
+      none: '',
     },
   },
   defaultVariants: { spacing: 'md', color: 'accent' },

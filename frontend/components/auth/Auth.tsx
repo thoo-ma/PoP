@@ -87,7 +87,7 @@ export default function Auth() {
 
   return (
     <View className="flex-1 justify-center p-5 bg-background">
-      <Text className={screenTitle({ spacing: 'sm', color: 'default' })}>Welcome to Pop</Text>
+      <Text className={screenTitle({ spacing: 'sm', color: 'none' })}>Welcome to Pop</Text>
       <Text className={cn(screenSubtitle({ color: 'gray' }), 'mb-10')}>Sign in to continue</Text>
 
       <Button
