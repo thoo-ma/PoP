@@ -5,6 +5,7 @@ import { Avatar, Button, Dialog } from 'heroui-native';
 import { useAuth } from '@/hooks';
 import { dialogPanel } from '@/styles';
 import { useSignOutDialog } from '@/utils';
+import { colors } from '@/constants';
 
 interface ProfileProps {
   /** Controls the visibility of the profile modal. */
@@ -99,7 +100,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             accessibilityLabel="Sign out"
             accessibilityHint="Sign out of your account"
           >
-            <MaterialIcons name="logout" size={18} color="#fff" />
+            <MaterialIcons name="logout" size={18} color={colors.buttonText} />
             <Button.Label>Sign Out</Button.Label>
           </Button>
         </Dialog.Content>
