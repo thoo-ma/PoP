@@ -1,11 +1,14 @@
-import { View, Text, Image } from 'react-native';
-import { BottomSheet, Button } from 'heroui-native';
+import { View, Text, Image, useWindowDimensions } from 'react-native';
+import { BottomSheet, Card, PressableFeedback } from 'heroui-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import type { NFT } from '@/types';
 import type { NFTRarity } from '@shared';
 import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';
-import { cardImageContainer } from '@/styles';
+import { breedPickerCard } from '@/styles';
+
+const GRID_PADDING = 16;
+const GRID_GAP = 12;
 
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
@@ -32,6 +35,9 @@ export interface BreedPickerModalProps {
 export default function BreedPickerModal({
   visible, title, allNFTs, lockedId, lockedRarity, onSelect, onClose,
 }: BreedPickerModalProps) {
+  const { width: windowWidth } = useWindowDimensions();
+  const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2;
+
   const items = allNFTs.map((nft) => ({
     nft,
     disabled:
@@ -57,44 +63,52 @@ export default function BreedPickerModal({
             data={items}
             keyExtractor={(item: { nft: NFT; disabled: boolean }) => item.nft.id}
             numColumns={2}
-            columnWrapperStyle={{ gap: 12, marginBottom: 12 }}
-            contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+            columnWrapperStyle={{ gap: GRID_GAP }}
+            contentContainerStyle={{ padding: GRID_PADDING, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => (
-              <Button
-                variant="ghost"
-                className={`flex-1 p-0 overflow-hidden rounded-xl border border-border bg-surface${item.disabled ? ' opacity-40' : ''}`}
-                onPress={() => { if (!item.disabled) { onSelect(item.nft); onClose(); } }}
-                isDisabled={item.disabled}
-              >
-                <View>
-                  <View className={cardImageContainer()}>
-                    <Image source={{ uri: item.nft.image_url }} className="w-full h-full" resizeMode="cover" />
-                    {item.disabled && (
-                      <View className="absolute inset-0 bg-white/50" />
-                    )}
-                    <View
-                      className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface"
-                      style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
-                    />
-                  </View>
-                  <View className="px-2 pt-1.5">
-                    <Text
-                      className={`text-sm font-semibold${item.disabled ? ' text-muted' : ' text-foreground'}`}
-                      numberOfLines={1}
-                    >
-                      {formatDisplayName(item.nft.name)}
-                    </Text>
-                    <Text
-                      className="text-[11px] font-medium capitalize pb-2"
-                      style={{ color: RARITY_COLORS[item.nft.rarity] }}
-                    >
-                      {item.nft.rarity}
-                    </Text>
-                  </View>
-                </View>
-              </Button>
-            )}
+            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => {
+              const s = breedPickerCard({ disabled: item.disabled });
+              const isSelected = lockedId !== undefined && lockedId === item.nft.id;
+              const hint = item.disabled
+                ? isSelected
+                  ? 'This NFT is already selected as a parent'
+                  : 'This NFT is incompatible as a parent'
+                : 'Tap to select as parent';
+              return (
+                <PressableFeedback
+                  onPress={() => { onSelect(item.nft); onClose(); }}
+                  isDisabled={item.disabled}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: item.disabled, selected: isSelected }}
+                  accessibilityLabel={`Select ${formatDisplayName(item.nft.name)}`}
+                  accessibilityHint={hint}
+                  style={{ width: cardWidth }}
+                  className="mb-3"
+                >
+                  <Card className={s.root()} animation="disable-all">
+                    <View className={s.image()}>
+                      <Image source={{ uri: item.nft.image_url }} className="w-full h-full" resizeMode="cover" />
+                      {item.disabled && <View className={s.disabledOverlay()} />}
+                      <View
+                        className={s.rarityDot()}
+                        style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
+                      />
+                    </View>
+                    <View className={s.info()}>
+                      <Text className={s.name()} numberOfLines={1}>
+                        {formatDisplayName(item.nft.name)}
+                      </Text>
+                      <Text
+                        className={s.rarity()}
+                        style={{ color: RARITY_COLORS[item.nft.rarity] }}
+                      >
+                        {item.nft.rarity}
+                      </Text>
+                    </View>
+                  </Card>
+                </PressableFeedback>
+              );
+            }}
           />
         </BottomSheet.Content>
       </BottomSheet.Portal>

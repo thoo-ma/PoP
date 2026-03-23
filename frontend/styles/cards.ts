@@ -90,6 +90,27 @@ export const skeletonCard = tv({
   },
 });
 
+// ── Breed picker card ────────────────────────────────────────────────────────
+// Grid item card used in BreedPickerModal's 2-column NFT list.
+export const breedPickerCard = tv({
+  slots: {
+    root: 'overflow-hidden rounded-xl',
+    image: 'w-full aspect-square relative',
+    rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',
+    disabledOverlay: 'absolute inset-0 bg-white/50',
+    info: 'px-2 pt-1.5 pb-2',
+    name: 'text-sm font-semibold',
+    rarity: 'text-[11px] font-medium capitalize',
+  },
+  variants: {
+    disabled: {
+      true: { root: 'opacity-40', name: 'text-muted' },
+      false: { root: '', name: 'text-foreground' },
+    },
+  },
+  defaultVariants: { disabled: false },
+});
+
 // ── NFT nav button ───────────────────────────────────────────────────────────
 // Prev / next arrow button used in NFTSelector.
 export const nftNavButton = tv({
