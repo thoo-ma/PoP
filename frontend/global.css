@@ -12,6 +12,11 @@
  * These complement the HeroUI/Uniwind theming system.
  */
 @theme {
+  /* ── App background override ─────────────────────────────── */
+  /* HeroUI's default --background is light grey (oklch 0.97).
+     Override to pure white so every screen has a consistent bg. */
+  --color-background: #fff;
+
   /* ── NFT stat colors ─────────────────────────────────────── */
   --color-stat-efficiency: #3b82f6;
   --color-stat-resilience: #10b981;
