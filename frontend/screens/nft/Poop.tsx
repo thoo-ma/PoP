@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils';
@@ -511,7 +511,6 @@ export default memo(function Poop() {
             keyboardShouldPersistTaps="handled"
           >
           <Text className={screenTitle({ spacing: 'sm', color: 'neutral' })}>Poop</Text>
-          <Text className={screenSubtitle({ color: 'gray', spacing: 'md' })}>Use your NFT to generate rewards</Text>
 
           {immobilityMessage && (
             <View className={toastStyles.root()}>
