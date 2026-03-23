@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Button, Dialog, TextField, Input, Label } from 'heroui-native';
 
 interface Props {
@@ -25,6 +25,7 @@ export default function PasswordPromptModal({ visible, onSubmit, onCancel }: Pro
     <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) handleCancel(); }}>
       <Dialog.Portal>
         <Dialog.Overlay />
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Dialog.Content>
           <Dialog.Close />
           <View className="mb-5 gap-1.5">
@@ -50,6 +51,7 @@ export default function PasswordPromptModal({ visible, onSubmit, onCancel }: Pro
             </Button>
           </View>
         </Dialog.Content>
+        </KeyboardAvoidingView>
       </Dialog.Portal>
     </Dialog>
   );
