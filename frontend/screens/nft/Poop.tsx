@@ -2,6 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow } from 'heroui-native';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -272,22 +273,23 @@ export default memo(function Poop() {
 
   const renderChallengeHeader = () => {
     if (!displayNFT) return null;
+    const headerStyles = challengeHeader();
     return (
-      <View className="flex-row items-center w-full bg-white rounded-[14px] p-3 border border-gray-200 gap-3 shadow-sm">
-        <Image source={{ uri: displayNFT.image_url }} className="w-14 h-14 rounded-[10px] bg-gray-100" resizeMode="cover" />
-        <View className="flex-1">
-          <Text className="text-[15px] font-bold text-gray-700 mb-0.5">{formatDisplayName(displayNFT.name)}</Text>
-          <Text className="text-xs text-gray-500">Lv {displayNFT.level} · {displayNFT.type}</Text>
+      <View className={headerStyles.root()}>
+        <Image source={{ uri: displayNFT.image_url }} className={headerStyles.avatar()} resizeMode="cover" />
+        <View className={headerStyles.info()}>
+          <Text className={headerStyles.name()}>{formatDisplayName(displayNFT.name)}</Text>
+          <Text className={headerStyles.subtitle()}>Lv {displayNFT.level} · {displayNFT.type}</Text>
         </View>
       </View>
     );
   };
 
   const renderCountdownPhase = () => (
-    <View className="w-full items-center pt-3 gap-5">
+    <View className={phaseContainer()}>
       {renderChallengeHeader()}
-      <View className="items-center py-6 gap-4">
-        <Text className="text-[80px] font-extrabold text-gray-700 leading-[88px]">{countdownValue}</Text>
+      <View className={phaseContent()}>
+        <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
         <Text className="text-base text-gray-500 font-medium">Get ready…</Text>
       </View>
       <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
@@ -298,19 +300,16 @@ export default memo(function Poop() {
 
   const renderImmobilityPhase = () => {
     const isWarning = status === 'warning';
+    const badgeStyles = statusBadge({ status: isWarning ? 'warning' : 'ok' });
     return (
-      <View className="w-full items-center pt-3 gap-5">
+      <View className={phaseContainer()}>
         {renderChallengeHeader()}
-        <View className="items-center py-6 gap-4">
-          <Text
-            className={`text-[80px] font-extrabold leading-[88px] ${isWarning ? 'text-stat-energy' : 'text-text-title'}`}
-          >
+        <View className={phaseContent()}>
+          <Text className={timerText({ status: isWarning ? 'danger' : 'normal' })}>
             {(remainingTime / 1000).toFixed(1)}s
           </Text>
-          <View
-            className={`py-2 px-[18px] rounded-full ${isWarning ? 'bg-red-100' : 'bg-green-50'}`}
-          >
-            <Text className="text-sm font-semibold text-gray-700">
+          <View className={badgeStyles.root()}>
+            <Text className={badgeStyles.label()}>
               {isWarning ? '🔴 Movement detected!' : '🟢 Hold still'}
             </Text>
           </View>
@@ -323,11 +322,9 @@ export default memo(function Poop() {
   };
 
   const renderPromptPhase = () => (
-    <View className="w-full items-center pt-3 gap-5">
+    <View className={phaseContainer()}>
       {renderChallengeHeader()}
-      <View
-        className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
-      >
+      <View className={infoCard()}>
         <Text className="text-xl font-bold text-green-600 text-center">✓ Immobility confirmed!</Text>
         <Text className="text-[13px] text-gray-500 text-center">Now record the flush sound</Text>
       </View>
@@ -340,100 +337,101 @@ export default memo(function Poop() {
     </View>
   );
 
-  const renderRecordingPhase = () => (
-    <View className="w-full items-center pt-3 gap-5">
-      {renderChallengeHeader()}
-      {isAnalyzing ? (
-        <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
-        >
-          <Text className="text-base font-semibold text-gray-700 text-center">🔍 Analyzing audio…</Text>
-        </View>
-      ) : isRecording ? (
-        <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
-        >
-          <View className="flex-row items-center gap-2 mb-3">
-            <View className="w-3 h-3 rounded-full bg-red-500" />
-            <Text className="text-base font-semibold text-gray-700">Recording…</Text>
+  const renderRecordingPhase = () => {
+    const recordStyles = recordingIndicator();
+    return (
+      <View className={phaseContainer()}>
+        {renderChallengeHeader()}
+        {isAnalyzing ? (
+          <View className={infoCard()}>
+            <Text className="text-base font-semibold text-gray-700 text-center">🔍 Analyzing audio…</Text>
           </View>
-          <Button variant="primary" onPress={stopRecording} className="w-full">
-            Stop
+        ) : isRecording ? (
+          <View className={infoCard()}>
+            <View className={recordStyles.root()}>
+              <View className={recordStyles.dot()} />
+              <Text className={recordStyles.label()}>Recording…</Text>
+            </View>
+            <Button variant="primary" onPress={stopRecording} className="w-full">
+              Stop
+            </Button>
+          </View>
+        ) : (
+          <View className={infoCard()}>
+            <Text className="text-base font-semibold text-gray-700 text-center">Processing…</Text>
+          </View>
+        )}
+        {!isAnalyzing && (
+          <Button variant="outline" onPress={handleCancelRecording} className="w-full">
+            Cancel
           </Button>
-        </View>
-      ) : (
-        <View
-          className="w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm"
-        >
-          <Text className="text-base font-semibold text-gray-700 text-center">Processing…</Text>
-        </View>
-      )}
-      {!isAnalyzing && (
-        <Button variant="outline" onPress={handleCancelRecording} className="w-full">
-          Cancel
-        </Button>
-      )}
-    </View>
-  );
+        )}
+      </View>
+    );
+  };
 
   const renderResultsPhase = () => {
     if (rateLimitError) {
+      const cardStyles = resultCard({ status: 'warning' });
       return (
-        <View className="w-full items-center pt-3 gap-5">
+        <View className={phaseContainer()}>
           {renderChallengeHeader()}
-          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-amber-100 border-amber-400">
-            <Text className="text-[22px] font-bold text-gray-700 text-center">Daily limit reached</Text>
-            <Text className="text-sm text-gray-500 text-center">{rateLimitError.message}</Text>
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Daily limit reached</Text>
+            <Text className={cardStyles.detail()}>{rateLimitError.message}</Text>
           </View>
           <Button variant="primary" onPress={handleFullReset} className="w-full">Done</Button>
         </View>
       );
     }
     if (detectionError && !detectionResult) {
+      const cardStyles = resultCard({ status: 'warning' });
       return (
-        <View className="w-full items-center pt-3 gap-5">
+        <View className={phaseContainer()}>
           {renderChallengeHeader()}
-          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-amber-100 border-amber-400">
-            <Text className="text-[22px] font-bold text-gray-700 text-center">Something went wrong</Text>
-            <Text className="text-sm text-gray-500 text-center">{detectionError}</Text>
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Something went wrong</Text>
+            <Text className={cardStyles.detail()}>{detectionError}</Text>
           </View>
           <Button variant="primary" onPress={handleFullReset} className="w-full">Try Again</Button>
         </View>
       );
     }
     if (detectionResult && !detectionResult.detected) {
+      const cardStyles = resultCard({ status: 'failure' });
       return (
-        <View className="w-full items-center pt-3 gap-5">
+        <View className={phaseContainer()}>
           {renderChallengeHeader()}
-          <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-red-100 border-red-500">
-            <Text className="text-[22px] font-bold text-gray-700 text-center">Flush not detected</Text>
-            <Text className="text-sm text-gray-500 text-center">Confidence: {formatConfidencePercentage(detectionResult.confidence)}</Text>
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Flush not detected</Text>
+            <Text className={cardStyles.detail()}>Confidence: {formatConfidencePercentage(detectionResult.confidence)}</Text>
           </View>
           <Button variant="primary" onPress={handleFullReset} className="w-full">Try Again</Button>
         </View>
       );
     }
     // Success
+    const cardStyles = resultCard({ status: 'success' });
     return (
-      <View className="w-full items-center pt-3 gap-5">
+      <View className={phaseContainer()}>
         {renderChallengeHeader()}
-        <View className="w-full rounded-2xl p-6 border-2 items-center gap-1.5 bg-green-100 border-green-500">
-          <Text className="text-[22px] font-bold text-gray-700 text-center">💧 Flush confirmed!</Text>
+        <View className={cardStyles.root()}>
+          <Text className={cardStyles.title()}>💧 Flush confirmed!</Text>
           {poopedEnergy && (
-            <Text className="text-sm text-gray-500 text-center">Energy: {poopedEnergy.from} → {poopedEnergy.to}</Text>
+            <Text className={cardStyles.detail()}>Energy: {poopedEnergy.from} → {poopedEnergy.to}</Text>
           )}
           {poopedXP && (
             <>
-              <Text className="text-sm text-gray-500 text-center">+{poopedXP.gained} XP</Text>
+              <Text className={cardStyles.detail()}>+{poopedXP.gained} XP</Text>
               {poopedXP.leveledUp && (
-                <Text className="text-sm text-gray-500 text-center">🎉 Level Up! Now Lv {poopedXP.level}</Text>
+                <Text className={cardStyles.detail()}>🎉 Level Up! Now Lv {poopedXP.level}</Text>
               )}
             </>
           )}
           {poopedPoop && (
-            <Text className="text-sm text-gray-500 text-center">+{poopedPoop.earned} 💩 POOP</Text>
+            <Text className={cardStyles.detail()}>+{poopedPoop.earned} 💩 POOP</Text>
           )}
-          {actionLoading && <Text className="text-sm text-gray-500 text-center">Saving…</Text>}
+          {actionLoading && <Text className={cardStyles.detail()}>Saving…</Text>}
         </View>
         {lootRollId ? (
           <Button
@@ -458,7 +456,7 @@ export default memo(function Poop() {
       return null;
     }
     return (
-      <View className="w-full items-center pt-3 gap-5">
+      <View className={phaseContainer()}>
         {renderChallengeHeader()}
         <LootRouletteCard lootRollId={lootRollId} onDone={handleFullReset} />
       </View>
@@ -481,6 +479,8 @@ export default memo(function Poop() {
     : selectedIndex === null
     ? 'Select an NFT'
     : 'Poop';
+
+  const toastStyles = toastBanner();
 
   return (
     <>
@@ -513,8 +513,8 @@ export default memo(function Poop() {
           <Text className="text-base text-center text-gray-500 mb-6">Use your NFT to generate rewards</Text>
 
           {immobilityMessage && (
-            <View className="bg-red-100 rounded-[10px] py-2.5 px-4 mb-2 border border-red-300">
-              <Text className="text-[13px] text-red-700 font-semibold text-center">{immobilityMessage}</Text>
+            <View className={toastStyles.root()}>
+              <Text className={toastStyles.label()}>{immobilityMessage}</Text>
             </View>
           )}
 
