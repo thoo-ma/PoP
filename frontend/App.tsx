@@ -17,11 +17,13 @@ import { GameConfigProvider } from '@/store/gameConfigStore';
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <HeroUINativeProvider>
-        <GameConfigProvider>
-          <AppInner />
-        </GameConfigProvider>
-      </HeroUINativeProvider>
+      <SafeAreaProvider>
+        <HeroUINativeProvider>
+          <GameConfigProvider>
+            <AppInner />
+          </GameConfigProvider>
+        </HeroUINativeProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
@@ -69,77 +71,67 @@ function AppInner() {
   // Show loading while checking auth or approval status
   if (authLoading || (session && approvalLoading)) {
     return (
-      <SafeAreaProvider>
-        <View className="flex-1 bg-surface-bg items-center justify-center">
-          <Spinner size="lg" />
-        </View>
-      </SafeAreaProvider>
+      <View className="flex-1 bg-surface-bg items-center justify-center">
+        <Spinner size="lg" />
+      </View>
     );
   }
 
   // No session - show auth screen
   if (!session) {
-    return (
-      <SafeAreaProvider>
-        <Auth />
-      </SafeAreaProvider>
-    );
+    return <Auth />;
   }
 
   // Session exists but user not approved - show invite code screen (BLOCKING)
   // Anonymous users (dev/test mode) skip invite code
   if (approved !== true && !session.user.is_anonymous) {
     return (
-      <SafeAreaProvider>
-        <InviteCodeScreen 
-          onApprovalSuccess={handleApprovalSuccess}
-          onSignOut={handleSignOut}
-        />
-      </SafeAreaProvider>
+      <InviteCodeScreen 
+        onApprovalSuccess={handleApprovalSuccess}
+        onSignOut={handleSignOut}
+      />
     );
   }
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-        <FlatList
-          ref={flatListRef}
-          data={PAGES}
-          renderItem={renderPage}
-          keyExtractor={(item) => item.id}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          getItemLayout={(_, index) => ({
-            length: Dimensions.get('window').width,
-            offset: Dimensions.get('window').width * index,
-            index,
-          })}
-          onViewableItemsChanged={onViewableItemsChangedRef.current}
-          viewabilityConfig={VIEWABILITY_CONFIG}
-          bounces={false}
-          windowSize={1}
-          initialNumToRender={1}
-          maxToRenderPerBatch={1}
-          style={{ flex: 1 }}
-        />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <FlatList
+        ref={flatListRef}
+        data={PAGES}
+        renderItem={renderPage}
+        keyExtractor={(item) => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        getItemLayout={(_, index) => ({
+          length: Dimensions.get('window').width,
+          offset: Dimensions.get('window').width * index,
+          index,
+        })}
+        onViewableItemsChanged={onViewableItemsChangedRef.current}
+        viewabilityConfig={VIEWABILITY_CONFIG}
+        bounces={false}
+        windowSize={1}
+        initialNumToRender={1}
+        maxToRenderPerBatch={1}
+        style={{ flex: 1 }}
+      />
 
-        <ProfileButton onPress={handleOpenProfile} />
+      <ProfileButton onPress={handleOpenProfile} />
 
-        <PageIndicator 
-          totalPages={PAGES.length} 
-          currentPage={currentPage} 
-          onPageChange={scrollToPage}
-        />
+      <PageIndicator 
+        totalPages={PAGES.length} 
+        currentPage={currentPage} 
+        onPageChange={scrollToPage}
+      />
 
-        <Profile 
-          visible={profileVisible}
-          onClose={handleCloseProfile}
-        />
-        
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    </SafeAreaProvider>
+      <Profile 
+        visible={profileVisible}
+        onClose={handleCloseProfile}
+      />
+      
+      <StatusBar style="auto" />
+    </SafeAreaView>
   );
 }
