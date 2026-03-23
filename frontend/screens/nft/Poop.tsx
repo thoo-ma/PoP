@@ -1,8 +1,8 @@
 import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { Button, Dialog, ScrollShadow } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner } from '@/styles';
+import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -489,7 +489,7 @@ export default memo(function Poop() {
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="bg-background"
-            contentContainerClassName="flex-grow items-center pt-[60px] px-5 pb-[140px]"
+            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[60px]')}
             showsVerticalScrollIndicator={false}
           >
           {phase === 'countdown'  && renderCountdownPhase()}
@@ -504,8 +504,8 @@ export default memo(function Poop() {
         // ── Idle (home) ────────────────────────────────────
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
-            className="bg-white"
-            contentContainerClassName="flex-grow items-center pt-[60px] px-5 pb-[140px]"
+            className="flex-1 bg-white"
+            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[60px]')}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
@@ -524,7 +524,7 @@ export default memo(function Poop() {
                 variant="ghost"
                 onPress={handleSelectNFT}
                 isDisabled={nfts.length === 0}
-                className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-gray-300 flex-col mt-5"
+                className={nftPickerButton()}
               >
                 <Text className="text-[40px] text-gray-400 mb-3">+</Text>
                 <Button.Label className="text-base text-gray-500 font-semibold">

@@ -1,7 +1,8 @@
 import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
-import { Button, Skeleton, Tabs, ScrollShadow } from 'heroui-native';
+import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
+import { screenContainer, scrollContent, gridLayout } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -153,7 +154,7 @@ export default memo(function Vault() {
   }
   
   return (
-    <View className="flex-1 bg-surface-bg items-center pt-20">
+    <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
       <Text className="text-[32px] font-bold mb-3 text-center text-text-title">Vault</Text>
       <Text className="text-base mb-4 text-center text-text-body">
         Your collection ({nfts.length} toilet{nfts.length !== 1 ? 's' : ''}, {boxes.length} box{boxes.length !== 1 ? 'es' : ''})
@@ -190,12 +191,12 @@ export default memo(function Vault() {
 
           <ScrollShadow LinearGradientComponent={LinearGradient}>
             <ScrollView
-              contentContainerClassName="px-5 pb-[120px] w-full"
+              contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            <View className="flex-row flex-wrap justify-between w-full">
+            <View className={gridLayout().wrapper()}>
               {sortedNfts.map((nft) => (
-                <View key={nft.id} className="w-[48%]">
+                <View key={nft.id} className={gridLayout().item()}>
                 <NFTCard
                   key={nft.id}
                   nft={nft}
@@ -237,9 +238,9 @@ export default memo(function Vault() {
       </Tabs.Content>
       <Tabs.Content value="mystery-boxes">
       {boxesLoading ? (
-          <View className="flex-row flex-wrap justify-between w-full p-4">
+          <View className={cn(gridLayout().wrapper(), 'p-4')}>
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} className="w-[48%] mb-3">
+              <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -255,7 +256,7 @@ export default memo(function Vault() {
         ) : (
           <ScrollShadow LinearGradientComponent={LinearGradient}>
             <ScrollView
-              contentContainerClassName="px-5 pb-[120px] w-full"
+              contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
             {boxes.length === 0 ? (
@@ -268,11 +269,11 @@ export default memo(function Vault() {
                 </Text>
               </View>
             ) : (
-              <View className="flex-row flex-wrap justify-between w-full">
+              <View className={gridLayout().wrapper()}>
                 {groupedBoxes.map((group) => {
                   const isOpening = openingRarity === group.rarity;
                   return (
-                    <View key={group.rarity} className="w-[48%]">
+                    <View key={group.rarity} className={gridLayout().item()}>
                     <MysteryBoxCard
                       box={group.box}
                       count={group.count}
