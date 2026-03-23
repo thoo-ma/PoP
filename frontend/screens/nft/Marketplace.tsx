@@ -70,7 +70,7 @@ export default memo(function Marketplace() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'buy' | 'sell')}>
-        <Tabs.List>
+        <Tabs.List className="self-center">
           <Tabs.Indicator />
           <Tabs.Trigger value="buy">
             <Tabs.Label>Buy ({backendListings.length})</Tabs.Label>

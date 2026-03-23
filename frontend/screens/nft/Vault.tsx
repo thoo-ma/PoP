@@ -161,7 +161,7 @@ export default memo(function Vault() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}>
-        <Tabs.List>
+        <Tabs.List className="self-center">
           <Tabs.Indicator />
           <Tabs.Trigger value="toilets">
             <Tabs.Label>Toilets ({nfts.length})</Tabs.Label>
