@@ -26,7 +26,6 @@ export function useUserNFTs() {
 
       if (!session) {
         setNfts([]);
-        setLoading(false);
         return;
       }
 
