@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Avatar, Button, Dialog, cn } from 'heroui-native';
+import { Avatar, Button, Dialog } from 'heroui-native';
 import { useAuth } from '@/hooks';
 import { dialogPanel } from '@/styles';
 import { useSignOutDialog } from '@/utils';
