@@ -35,7 +35,12 @@ Poll `github/pull_request_read` every 30 seconds until review comments appear.
 
 ### Step 2 — Fetch and group comments
 
-Use `github/pull_request_read` to get all review comments. Filter to unresolved comments (no reply from PR author). Group by file path.
+Use `github/pull_request_read` to collect **both** types of feedback:
+
+1. **Inline review comments** — line-level comments attached to a specific file and line. These require triage (Steps 3–5). Group by file path.
+2. **Overall review body** — the top-level `body` field on each review object. This is the reviewer's conclusion summary, NOT actionable per-line feedback. **Do not triage, fix, or escalate it.** Read it, include it verbatim in the review report, and move on.
+
+Filter inline comments to unresolved items only (no reply from the PR author).
 
 ### Step 3 — Triage each comment
 
