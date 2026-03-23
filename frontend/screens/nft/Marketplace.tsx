@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, emptyState, infoBanner, dialogBody, skeletonCard } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, emptyState, dialogBody, skeletonCard } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -62,7 +62,6 @@ export default memo(function Marketplace() {
     setSortBy(option);
   }, []);
 
-  const bannerStyles = infoBanner();
   const emptyStyles = emptyState();
   const skeleton = skeletonCard();
 
@@ -152,13 +151,6 @@ export default memo(function Marketplace() {
               contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            {myListings.length > 0 && (
-              <View className={bannerStyles.root()}>
-                <Text className={bannerStyles.label()}>
-                  💡 These are your NFTs from the Vault currently listed for sale
-                </Text>
-              </View>
-            )}
             <View className={gridLayout().wrapper()}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (

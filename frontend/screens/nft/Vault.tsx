@@ -173,7 +173,7 @@ export default memo(function Vault() {
         </Tabs.List>
 
       <Tabs.Content value="toilets">
-        <>
+        <View className="flex-1 w-full">
           <FilterControls
             selectedRarities={selectedRarities}
             selectedTypes={selectedTypes}
@@ -234,7 +234,7 @@ export default memo(function Vault() {
             </View>
           </ScrollView>
           </ScrollShadow>
-        </>
+        </View>
       </Tabs.Content>
       <Tabs.Content value="mystery-boxes">
       {boxesLoading ? (
