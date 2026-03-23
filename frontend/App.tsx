@@ -122,7 +122,7 @@ function AppInner() {
       />
 
       <ProfileButton onPress={handleOpenProfile} />
-      <ScreenHeader currentPage={currentPage} />
+      <ScreenHeader title={PAGES[currentPage]?.title ?? ''} />
       <WalletButton onPress={handleOpenWallet} />
 
       <PageIndicator 
