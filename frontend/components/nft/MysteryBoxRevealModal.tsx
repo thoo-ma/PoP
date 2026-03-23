@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { View, Image } from 'react-native';
-import { Button, Dialog } from 'heroui-native';
+import { Button, Dialog, cn } from 'heroui-native';
 import type { NFT } from '@/types/nft';
-import { RARITY_BADGE_STYLES } from '@/utils';
+import { rarityBadge } from '@/styles';
 import { formatDisplayName } from '@/utils';
 
 interface MysteryBoxRevealModalProps {
@@ -39,8 +39,7 @@ export default memo(function MysteryBoxRevealModal({ visible, nft, onClose }: My
               resizeMode="cover"
             />
             <View
-              style={RARITY_BADGE_STYLES[nft.rarity]}
-              className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md"
+              className={cn('absolute bottom-2 right-2 px-2.5 py-1 rounded-md', rarityBadge({ rarity: nft.rarity }))}
             >
               <Dialog.Description className="text-white text-xs font-bold tracking-wide">
                 {nft.rarity.toUpperCase()}

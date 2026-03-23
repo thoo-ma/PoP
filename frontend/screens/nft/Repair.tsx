@@ -2,11 +2,11 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody, infoBox } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody, infoBox } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
-import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
+import { nftEvents, formatDisplayName } from '@/utils';
 import { useGameConfig } from '@/store/gameConfigStore';
 
 /**
@@ -151,8 +151,7 @@ export default memo(function Repair() {
                       <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {selectedNFT.level}</Text>
                     </View>
                     <View
-                      className={overlayBadge({ position: 'bottomLeft' })}
-                      style={{ backgroundColor: (TYPE_BADGE_STYLES[selectedNFT.type] as { backgroundColor: string }).backgroundColor }}
+                      className={cn(overlayBadge({ position: 'bottomLeft' }), typeBadge({ type: selectedNFT.type }))}
                     >
                       <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{selectedNFT.type.toUpperCase()}</Text>
                     </View>

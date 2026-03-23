@@ -2,10 +2,10 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
-import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
+import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils';
 import { getThresholdForDifficulty } from '@shared/sensors';
 import { getCooldownStatus } from '@/constants';
 import { useGameConfig } from '@/store/gameConfigStore';
@@ -554,8 +554,7 @@ export default memo(function Poop() {
                       <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {displayNFT.level}</Text>
                     </View>
                     <View
-                      className={overlayBadge({ position: 'bottomLeft' })}
-                      style={{ backgroundColor: (TYPE_BADGE_STYLES[displayNFT.type] as { backgroundColor: string }).backgroundColor }}
+                      className={cn(overlayBadge({ position: 'bottomLeft' }), typeBadge({ type: displayNFT.type }))}
                     >
                       <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{displayNFT.type.toUpperCase()}</Text>
                     </View>

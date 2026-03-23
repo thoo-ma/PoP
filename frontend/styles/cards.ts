@@ -53,6 +53,33 @@ export const overlayBadge = tv({
   },
 });
 
+// ── Type badge ───────────────────────────────────────────────────────────────
+// Background colour by NFT type — replaces the old TYPE_BADGE_STYLES ViewStyle record.
+export const typeBadge = tv({
+  base: '',
+  variants: {
+    type: {
+      'cruise-seat': 'bg-type-cruise-seat',
+      'turbo-flush': 'bg-type-turbo-flush',
+      'zen-fortress': 'bg-type-zen-fortress',
+    },
+  },
+});
+
+// ── Rarity badge ─────────────────────────────────────────────────────────────
+// Background colour by NFT rarity — replaces the old RARITY_BADGE_STYLES ViewStyle record.
+export const rarityBadge = tv({
+  base: '',
+  variants: {
+    rarity: {
+      common: 'bg-rarity-common',
+      rare: 'bg-rarity-rare',
+      legendary: 'bg-rarity-legendary',
+      transcendent: 'bg-rarity-transcendent',
+    },
+  },
+});
+
 // ── Skeleton card ────────────────────────────────────────────────────────────
 // Placeholder shimmer lines used in Vault and Marketplace loading states.
 export const skeletonCard = tv({
