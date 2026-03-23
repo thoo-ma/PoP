@@ -50,9 +50,6 @@ export const gridLayout = tv({
   },
   variants: {
     columns: {
-      one: {
-        item: 'w-full',
-      },
       two: {
         item: 'w-[48%]',
       },

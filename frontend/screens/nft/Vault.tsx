@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle, emptyState, skeletonCard } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, emptyState, skeletonCard } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -159,9 +159,6 @@ export default memo(function Vault() {
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
       <Text className={screenTitle()}>Vault</Text>
-      <Text className={screenSubtitle()}>
-        Your collection ({nfts.length} toilet{nfts.length !== 1 ? 's' : ''}, {boxes.length} box{boxes.length !== 1 ? 'es' : ''})
-      </Text>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}>
@@ -176,7 +173,7 @@ export default memo(function Vault() {
         </Tabs.List>
 
       <Tabs.Content value="toilets">
-        <>
+        <View className="flex-1 w-full">
           <FilterControls
             selectedRarities={selectedRarities}
             selectedTypes={selectedTypes}
@@ -197,9 +194,9 @@ export default memo(function Vault() {
               contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            <View className={gridLayout({ columns: sortedNfts.length === 1 ? 'one' : 'two' }).wrapper()}>
+            <View className={gridLayout().wrapper()}>
               {sortedNfts.map((nft) => (
-                <View key={nft.id} className={gridLayout({ columns: sortedNfts.length === 1 ? 'one' : 'two' }).item()}>
+                <View key={nft.id} className={gridLayout().item()}>
                 <NFTCard
                   key={nft.id}
                   nft={nft}
@@ -237,7 +234,7 @@ export default memo(function Vault() {
             </View>
           </ScrollView>
           </ScrollShadow>
-        </>
+        </View>
       </Tabs.Content>
       <Tabs.Content value="mystery-boxes">
       {boxesLoading ? (
@@ -272,11 +269,11 @@ export default memo(function Vault() {
                 </Text>
               </View>
             ) : (
-              <View className={gridLayout({ columns: groupedBoxes.length === 1 ? 'one' : 'two' }).wrapper()}>
+              <View className={gridLayout().wrapper()}>
                 {groupedBoxes.map((group) => {
                   const isOpening = openingRarity === group.rarity;
                   return (
-                    <View key={group.rarity} className={gridLayout({ columns: groupedBoxes.length === 1 ? 'one' : 'two' }).item()}>
+                    <View key={group.rarity} className={gridLayout().item()}>
                     <MysteryBoxCard
                       box={group.box}
                       count={group.count}
