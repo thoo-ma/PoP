@@ -19,6 +19,11 @@
   --color-stat-energy:     #ef4444;
   --color-stat-level:      #6366f1;
 
+  /* ── NFT type colors ──────────────────────────────────────── */
+  --color-type-cruise-seat:   #94a3b8;
+  --color-type-turbo-flush:   #f59e0b;
+  --color-type-zen-fortress:  #8b5cf6;
+
   /* ── NFT rarity colors ───────────────────────────────────── */
   --color-rarity-common:       #94a3b8;
   --color-rarity-rare:         #3b82f6;
