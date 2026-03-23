@@ -538,7 +538,7 @@ export default memo(function Poop() {
                   total={nfts.length}
                   onPrev={handlePrev}
                   onNext={handleNext}
-                  style={{ marginBottom: 12 }}
+                  className="mb-3"
                 />
                 <View
                   className="w-full max-w-[280px] bg-white rounded-2xl p-3 border border-gray-200 overflow-hidden shadow-md"

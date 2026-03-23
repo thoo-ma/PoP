@@ -10,19 +10,19 @@ interface Props {
   onPrev: () => void;
   /** Called when the user taps the right arrow. */
   onNext: () => void;
-  /** Optional style override for the outer row container. */
-  style?: object;
+  /** Optional className for the outer row container. */
+  className?: string;
 }
 
 /**
  * Prev / Next arrow navigator for cycling through an NFT collection.
  * Renders `null` when `total` is 1 or less (nothing to navigate).
  */
-export default function NFTSelector({ current, total, onPrev, onNext, style }: Props) {
+export default function NFTSelector({ current, total, onPrev, onNext, className }: Props) {
   if (total <= 1) return null;
 
   return (
-    <View className="flex-row items-center justify-center gap-4" style={style}>
+    <View className={`flex-row items-center justify-center gap-4${className ? ` ${className}` : ''}`}>
       <Button
         isIconOnly
         variant="ghost"

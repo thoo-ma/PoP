@@ -18,7 +18,7 @@ export default memo(function ProfileButton({ onPress }: ProfileButtonProps) {
       isIconOnly
       variant="ghost"
       onPress={onPress}
-      style={{ position: 'absolute', top: 60, left: 20, zIndex: 100, padding: 8, backgroundColor: 'rgba(255, 255, 255, 0.9)', borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}
+      className="absolute top-[60px] left-5 z-[100] p-2 bg-[rgba(255,255,255,0.9)] rounded-[20px] shadow-md"
       accessibilityLabel="Profile"
       accessibilityHint="Opens your profile and settings"
     >
