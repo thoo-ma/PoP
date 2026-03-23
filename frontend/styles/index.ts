@@ -1,4 +1,5 @@
 export * from './cards';
+export * from './feedback';
 export * from './game';
 export * from './layout';
 export * from './typography';

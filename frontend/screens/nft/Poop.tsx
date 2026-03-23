@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -605,7 +605,7 @@ export default memo(function Poop() {
           <Dialog.Overlay />
           <Dialog.Content>
             <Dialog.Close />
-            <View className="mb-4 gap-1.5">
+            <View className={dialogBody()}>
               <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>

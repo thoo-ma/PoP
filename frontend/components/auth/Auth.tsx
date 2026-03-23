@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
 import { Button, Spinner, Dialog, useToast, cn } from 'heroui-native';
-import { screenTitle, screenSubtitle } from '@/styles';
+import { screenTitle, screenSubtitle, dialogBody } from '@/styles';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
@@ -135,7 +135,7 @@ export default function Auth() {
           <Dialog.Overlay />
           <Dialog.Content>
             <Dialog.Close />
-            <View className="mb-4 gap-1.5">
+            <View className={dialogBody()}>
               <Dialog.Title>OAuth Not Available</Dialog.Title>
               <Dialog.Description>
                 OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode to sign in.

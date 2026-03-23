@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Button, Dialog } from 'heroui-native';
+import { dialogBody } from '@/styles';
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -29,7 +30,7 @@ export function useSignOutDialog() {
         <Dialog.Overlay />
         <Dialog.Content>
           <Dialog.Close />
-          <View className="mb-4 gap-1.5">
+          <View className={dialogBody()}>
             <Dialog.Title>Sign Out</Dialog.Title>
             <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
           </View>

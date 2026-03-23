@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle, emptyState, infoBanner, dialogBody } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -61,6 +61,9 @@ export default memo(function Marketplace() {
   const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option);
   }, []);
+
+  const bannerStyles = infoBanner();
+  const emptyStyles = emptyState();
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -152,8 +155,8 @@ export default memo(function Marketplace() {
               showsVerticalScrollIndicator={false}
             >
             {myListings.length > 0 && (
-              <View className="bg-[#fef3c7] rounded-xl p-4 mb-5 border border-[#fbbf24]">
-                <Text className="text-sm text-[#78350f] text-center leading-5">
+              <View className={bannerStyles.root()}>
+                <Text className={bannerStyles.label()}>
                   💡 These are your NFTs from the Vault currently listed for sale
                 </Text>
               </View>
@@ -184,9 +187,9 @@ export default memo(function Marketplace() {
                   </View>
                 ))
               ) : (
-                <View className="items-center py-[60px] w-full">
-                  <Text className="text-base font-semibold text-text-title mb-2">No active listings</Text>
-                  <Text className="text-sm text-text-body text-center mt-1 leading-5">
+                <View className={cn(emptyStyles.root(), 'py-[60px] w-full')}>
+                  <Text className={emptyStyles.title()}>No active listings</Text>
+                  <Text className={cn(emptyStyles.detail(), 'mt-1 leading-5')}>
                     You haven't listed any NFTs yet.
                   </Text>
                 </View>
@@ -203,7 +206,7 @@ export default memo(function Marketplace() {
           <Dialog.Overlay />
           <Dialog.Content>
             <Dialog.Close />
-            <View className="mb-4 gap-1.5">
+            <View className={dialogBody()}>
               <Dialog.Title>{dialog?.title}</Dialog.Title>
               <Dialog.Description>{dialog?.message}</Dialog.Description>
             </View>
