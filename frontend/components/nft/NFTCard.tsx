@@ -1,13 +1,12 @@
 import { memo } from 'react';
 import { Image, View, Text } from 'react-native';
 import type { ReactNode } from 'react';
-import { Card, Chip } from 'heroui-native';
+import { Card, Chip, cn } from 'heroui-native';
 import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
-import { formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
-import { RARITY_COLORS } from '@/constants';
+import { formatDisplayName } from '@/utils';
 import { MAX_LEVEL, xpThreshold } from '@shared/xp';
-import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
+import { badgeLabel, cardImageContainer, badgePosition, cardBody, typeBadge, rarityBadge } from '@/styles';
 
 interface NFTCardProps {
   nft: NFT;
@@ -44,8 +43,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className={badgePosition({ position: 'bottomLeft' })}
-            style={{ backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
+            className={cn(badgePosition({ position: 'bottomLeft' }), typeBadge({ type: nft.type }))}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>{nft.type.toUpperCase()}</Chip.Label>
@@ -57,8 +55,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className={badgePosition({ position: 'topRight' })}
-            style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}
+            className={cn(badgePosition({ position: 'topRight' }), rarityBadge({ rarity: nft.rarity }))}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>{nft.rarity.toUpperCase()}</Chip.Label>
