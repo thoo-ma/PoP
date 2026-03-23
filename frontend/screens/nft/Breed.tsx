@@ -1,7 +1,8 @@
 import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
-import { Button, ScrollShadow } from 'heroui-native';
+import { Button, ScrollShadow, cn } from 'heroui-native';
+import { screenContainer, scrollContent } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -62,7 +63,7 @@ import { nftEvents, canBreed } from '@/utils';
 
   if (nfts.length < 2) {
     return (
-      <View className="flex-1 bg-background items-center pt-[80px]">
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Breed</Text>
 
         {/* Wallet balance + cost */}
@@ -95,12 +96,12 @@ import { nftEvents, canBreed } from '@/utils';
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <View className="flex-1 bg-background items-center pt-[80px]">
+    <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Breed</Text>
 
       <ScrollShadow LinearGradientComponent={LinearGradient}>
         <ScrollView
-          contentContainerClassName="px-5 pb-[120px] items-center w-full"
+          contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'items-center w-full')}
           showsVerticalScrollIndicator={false}
         >
         {/* ── Picker modal ──────────────────────────────────────────────── */}

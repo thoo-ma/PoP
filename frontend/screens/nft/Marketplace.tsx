@@ -1,7 +1,8 @@
 import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
-import { Button, Dialog, Skeleton, Tabs, ScrollShadow } from 'heroui-native';
+import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
+import { screenContainer, scrollContent, gridLayout } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -62,7 +63,7 @@ export default memo(function Marketplace() {
   }, []);
 
   return (
-    <View className="flex-1 bg-surface-bg items-center pt-20">
+    <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
       <Text className="text-[32px] font-bold mb-3 text-center text-text-title">Marketplace</Text>
       <Text className="text-base mb-4 text-center text-text-body">
         Buy and sell NFTs with other users
@@ -89,9 +90,9 @@ export default memo(function Marketplace() {
 
       <Tabs.Content value="buy">
         {marketplaceLoading ? (
-          <View className="flex-row flex-wrap justify-between w-full p-4">
+          <View className={cn(gridLayout().wrapper(), 'p-4')}>
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} className="w-[48%] mb-3">
+              <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -101,12 +102,12 @@ export default memo(function Marketplace() {
         ) : (
           <ScrollShadow LinearGradientComponent={LinearGradient}>
             <ScrollView
-              contentContainerClassName="px-5 pb-[120px] w-full"
+              contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            <View className="flex-row flex-wrap justify-between w-full">
+            <View className={gridLayout().wrapper()}>
               {sortedMarketplaceListings.map((item) => (
-                <View key={item.id} className="w-[48%]">
+                <View key={item.id} className={gridLayout().item()}>
                 <NFTCard
                   key={item.id}
                   nft={item}
@@ -135,9 +136,9 @@ export default memo(function Marketplace() {
 
       <Tabs.Content value="sell">
         {userLoading ? (
-          <View className="flex-row flex-wrap justify-between w-full p-4">
+          <View className={cn(gridLayout().wrapper(), 'p-4')}>
             {[0, 1, 2, 3].map((i) => (
-              <View key={i} className="w-[48%] mb-3">
+              <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
                 <Skeleton className="aspect-square w-full rounded-xl" />
                 <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
                 <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
@@ -147,7 +148,7 @@ export default memo(function Marketplace() {
         ) : (
           <ScrollShadow LinearGradientComponent={LinearGradient}>
             <ScrollView
-              contentContainerClassName="px-5 pb-[120px] w-full"
+              contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
             {myListings.length > 0 && (
@@ -157,10 +158,10 @@ export default memo(function Marketplace() {
                 </Text>
               </View>
             )}
-            <View className="flex-row flex-wrap justify-between w-full">
+            <View className={gridLayout().wrapper()}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
-                  <View key={item.id} className="w-[48%]">
+                  <View key={item.id} className={gridLayout().item()}>
                   <NFTCard
                     key={item.id}
                     nft={item}

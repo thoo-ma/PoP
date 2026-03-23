@@ -1,7 +1,8 @@
 import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
-import { Button, Dialog, ScrollShadow, Slider } from 'heroui-native';
+import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
+import { screenContainer, scrollContent, nftPickerButton } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -97,7 +98,7 @@ export default memo(function Repair() {
 
   return (
     <>
-      <View className="flex-1 bg-background items-center pt-[80px]">
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Repair</Text>
         <Text className="text-base text-center text-muted mb-4">
           Select an NFT and restore its energy
@@ -109,7 +110,7 @@ export default memo(function Repair() {
 
         <ScrollShadow LinearGradientComponent={LinearGradient}>
           <ScrollView
-            contentContainerClassName="px-5 pb-[120px] items-center"
+            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'items-center')}
             showsVerticalScrollIndicator={false}
           >
           {selectedIndex === null ? (
@@ -117,7 +118,7 @@ export default memo(function Repair() {
               variant="ghost"
               onPress={handleSelectNFT}
               isDisabled={nfts.length === 0}
-              className="w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-border flex-col mt-5"
+              className={nftPickerButton()}
             >
               <Text className="text-[40px] text-muted mb-3">+</Text>
               <Button.Label className="text-base text-muted font-semibold">
