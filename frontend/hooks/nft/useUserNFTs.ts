@@ -20,9 +20,11 @@ export function useUserNFTs() {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      // getSession() reads from local storage — fast and reliable on remount.
+      // getUser() does a network trip and can return null during token refresh.
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (!user) {
+      if (!session) {
         setNfts([]);
         setLoading(false);
         return;
@@ -31,7 +33,7 @@ export function useUserNFTs() {
       const { data: nftsData, error: nftsError } = await supabase
         .from('nfts')
         .select('*, marketplace_listings(*)')
-        .eq('user_id', user.id)
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: false });
 
       if (nftsError) {
