@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions } from 'react-native';
+import { View, Text, Image, useWindowDimensions } from 'react-native';
 import { BottomSheet, Card, PressableFeedback } from 'heroui-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import type { NFT } from '@/types';
@@ -9,7 +9,6 @@ import { breedPickerCard } from '@/styles';
 
 const GRID_PADDING = 16;
 const GRID_GAP = 12;
-const CARD_WIDTH = (Dimensions.get('window').width - GRID_PADDING * 2 - GRID_GAP) / 2;
 
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
@@ -36,6 +35,9 @@ export interface BreedPickerModalProps {
 export default function BreedPickerModal({
   visible, title, allNFTs, lockedId, lockedRarity, onSelect, onClose,
 }: BreedPickerModalProps) {
+  const { width: windowWidth } = useWindowDimensions();
+  const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2;
+
   const items = allNFTs.map((nft) => ({
     nft,
     disabled:
@@ -66,13 +68,21 @@ export default function BreedPickerModal({
             showsVerticalScrollIndicator={false}
             renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => {
               const s = breedPickerCard({ disabled: item.disabled });
+              const isSelected = lockedId !== undefined && lockedId === item.nft.id;
+              const hint = item.disabled
+                ? isSelected
+                  ? 'This NFT is already selected as a parent'
+                  : 'This NFT is incompatible as a parent'
+                : 'Tap to select as parent';
               return (
                 <PressableFeedback
                   onPress={() => { onSelect(item.nft); onClose(); }}
                   isDisabled={item.disabled}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: item.disabled, selected: isSelected }}
                   accessibilityLabel={`Select ${formatDisplayName(item.nft.name)}`}
-                  accessibilityHint={item.disabled ? 'This NFT is incompatible' : 'Tap to select as parent'}
-                  style={{ width: CARD_WIDTH }}
+                  accessibilityHint={hint}
+                  style={{ width: cardWidth }}
                   className="mb-3"
                 >
                   <Card className={s.root()} animation="disable-all">
