@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, screenTitle, screenSubtitle } from '@/styles';
+import { screenContainer, scrollContent, screenTitle, screenSubtitle, errorMessage } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -156,17 +156,17 @@ import { nftEvents, canBreed } from '@/utils';
 
             {/* ── Breed error ───────────────────────────────────────────── */}
             {breedError && (
-              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">{breedError}</Text>
+              <Text className={errorMessage()}>{breedError}</Text>
             )}
 
             {atBreedLimit && (
-              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">
+              <Text className={errorMessage()}>
                 One of the selected NFTs has reached its max breed count ({cfg.currency.BREED_MAX_COUNT}) and cannot be bred again.
               </Text>
             )}
 
             {!hasEnoughPoop && (
-              <Text className="text-[13px] text-red-600 text-center mb-3 px-2">
+              <Text className={errorMessage()}>
                 Insufficient POOP — you need {totalBreedCost} POOP to breed.
               </Text>
             )}

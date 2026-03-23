@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -251,7 +251,7 @@ export default memo(function Repair() {
           <Dialog.Overlay />
           <Dialog.Content>
             <Dialog.Close />
-            <View className="mb-4 gap-1.5">
+            <View className={dialogBody()}>
               <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>

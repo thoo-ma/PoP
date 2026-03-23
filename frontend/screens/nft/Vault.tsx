@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle, emptyState } from '@/styles';
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -260,11 +260,11 @@ export default memo(function Vault() {
               showsVerticalScrollIndicator={false}
             >
             {boxes.length === 0 ? (
-              <View className="py-12 items-center">
-                <Text className="text-base text-text-body text-center">
+              <View className={emptyState().root()}>
+                <Text className={cn(emptyState().title(), 'font-normal text-text-body text-center mb-0')}>
                   No mystery boxes yet
                 </Text>
-                <Text className="text-sm text-text-body opacity-60 mt-2 text-center">
+                <Text className={cn(emptyState().detail(), 'opacity-60 mt-2')}>
                   Mystery boxes will appear here once you earn them.
                 </Text>
               </View>
