@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { Card, Chip, cn } from 'heroui-native';
 import type { MysteryBox } from '@shared';
 import { RARITY_COLORS } from '@/constants';
-import { badgeLabel } from '@/styles';
+import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
 
 interface MysteryBoxCardProps {
   box: MysteryBox;
@@ -17,7 +17,7 @@ interface MysteryBoxCardProps {
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
     <Card className="w-full mb-4" animation="disable-all">
-      <View className="w-full aspect-square relative">
+      <View className={cardImageContainer()}>
         <Image
           source={{ uri: box.image_url }}
           className="w-full h-full"
@@ -27,7 +27,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
         <Chip
           size="sm"
           variant="primary"
-          className="absolute bottom-2 right-2"
+          className={badgePosition({ position: 'bottomRight' })}
           style={{ backgroundColor: RARITY_COLORS[box.rarity] }}
           animation="disable-all"
         >
@@ -39,7 +39,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           <Chip
             size="sm"
             variant="secondary"
-            className="absolute top-2 left-2"
+            className={badgePosition({ position: 'topLeft' })}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-sm font-bold">×{count}</Chip.Label>
@@ -51,7 +51,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           <Chip
             size="sm"
             variant="secondary"
-            className="absolute top-2 right-2"
+            className={badgePosition({ position: 'topRight' })}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-semibold">Opened</Chip.Label>
@@ -59,7 +59,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
         )}
       </View>
 
-      <Card.Body className="p-2 gap-2">
+      <Card.Body className={cardBody()}>
         <Card.Title className="text-sm font-bold">Mystery Box</Card.Title>
         <Chip size="sm" variant="primary" animation="disable-all">
           <Chip.Label className={cn(badgeLabel(), 'tracking-wide')}>MYSTERY BOX</Chip.Label>

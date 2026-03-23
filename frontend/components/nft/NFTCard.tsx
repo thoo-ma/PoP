@@ -7,7 +7,7 @@ import NFTProperties from './NFTProperties';
 import { formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 import { RARITY_COLORS } from '@/constants';
 import { MAX_LEVEL, xpThreshold } from '@shared/xp';
-import { badgeLabel } from '@/styles';
+import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
 
 interface NFTCardProps {
   nft: NFT;
@@ -23,7 +23,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
   return (
     <Card className="w-full mb-4" animation="disable-all">
       {/* Image + badge overlay */}
-      <View className="w-full aspect-square relative">
+      <View className={cardImageContainer()}>
         <Image
           source={{ uri: nft.image_url }}
           className="w-full h-full"
@@ -33,7 +33,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         <Chip
           size="sm"
           variant="primary"
-          className="absolute top-2 left-2"
+          className={badgePosition({ position: 'topLeft' })}
           animation="disable-all"
         >
           <Chip.Label className={badgeLabel()}>Lv {nft.level}</Chip.Label>
@@ -44,7 +44,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className="absolute bottom-2 left-2"
+            className={badgePosition({ position: 'bottomLeft' })}
             style={{ backgroundColor: (TYPE_BADGE_STYLES[nft.type] as { backgroundColor: string }).backgroundColor }}
             animation="disable-all"
           >
@@ -57,7 +57,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className="absolute top-2 right-2"
+            className={badgePosition({ position: 'topRight' })}
             style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}
             animation="disable-all"
           >
@@ -71,7 +71,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             size="sm"
             variant="primary"
             color="success"
-            className="absolute top-10 right-2"
+            className={badgePosition({ position: 'topRightOffset' })}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>Listed</Chip.Label>
@@ -83,7 +83,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className="absolute bottom-2 right-2"
+            className={badgePosition({ position: 'bottomRight' })}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>+{nft.stat_points} pts</Chip.Label>
@@ -91,7 +91,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         )}
       </View>
 
-      <Card.Body className="p-2 gap-2">
+      <Card.Body className={cardBody()}>
         <Card.Title className="text-sm font-bold min-h-8">
           {formatDisplayName(nft.name)}
         </Card.Title>

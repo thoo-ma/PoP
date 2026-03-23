@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -481,6 +481,7 @@ export default memo(function Poop() {
     : 'Poop';
 
   const toastStyles = toastBanner();
+  const detailStyles = nftDetailCard();
 
   return (
     <>
@@ -541,26 +542,26 @@ export default memo(function Poop() {
                   className="mb-3"
                 />
                 <View
-                  className="w-full max-w-[280px] bg-white rounded-2xl p-3 border border-gray-200 overflow-hidden shadow-md"
+                  className={cn(detailStyles.root(), 'w-full max-w-[280px] bg-white p-3 border-gray-200')}
                 >
-                  <View className="relative w-full h-[180px] bg-gray-100 rounded-xl mb-3 overflow-hidden">
+                  <View className={cn(detailStyles.imageWrap(), 'h-[180px] bg-gray-100 rounded-xl mb-3')}>
                     <Image
                       source={{ uri: displayNFT.image_url }}
                       className="w-full h-full"
                       resizeMode="cover"
                     />
-                    <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
+                    <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
                       <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {displayNFT.level}</Text>
                     </View>
                     <View
-                      className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
+                      className={overlayBadge({ position: 'bottomLeft' })}
                       style={{ backgroundColor: (TYPE_BADGE_STYLES[displayNFT.type] as { backgroundColor: string }).backgroundColor }}
                     >
                       <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{displayNFT.type.toUpperCase()}</Text>
                     </View>
                   </View>
-                  <View className="w-full">
-                    <Text className="text-lg font-bold text-gray-700 mb-2.5 text-center">{formatDisplayName(displayNFT.name)}</Text>
+                  <View className={detailStyles.content()}>
+                    <Text className={cn(detailStyles.title(), 'text-gray-700 mb-2.5')}>{formatDisplayName(displayNFT.name)}</Text>
                     <NFTProperties
                       efficiency={displayNFT.efficiency}
                       resilience={displayNFT.resilience}

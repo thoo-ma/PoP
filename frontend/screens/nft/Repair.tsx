@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -33,6 +33,7 @@ export default memo(function Repair() {
   const maxRepairPossible = MAX_ENERGY - currentEnergy;
   // Cost in POOP, recalculated whenever the slider or selected NFT changes
   const poopCost = selectedNFT ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY, cfg.currency) : 0;
+  const detailStyles = nftDetailCard();
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return;
@@ -138,32 +139,32 @@ export default memo(function Repair() {
               {/* Selected NFT Card */}
               {!isRepaired && selectedNFT && (
                 <View
-                  className="w-[280px] bg-surface rounded-2xl overflow-hidden mt-5 mb-6 border border-border shadow-md"
+                  className={cn(detailStyles.root(), 'w-[280px] bg-surface mt-5 mb-6 border-border')}
                 >
-                  <View className="relative w-full">
+                  <View className={detailStyles.imageWrap()}>
                     <Image
                       source={{ uri: selectedNFT.image_url }}
                       className="w-full h-[280px] bg-default"
                       resizeMode="cover"
                     />
-                    <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
+                    <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
                       <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {selectedNFT.level}</Text>
                     </View>
                     <View
-                      className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
+                      className={overlayBadge({ position: 'bottomLeft' })}
                       style={{ backgroundColor: (TYPE_BADGE_STYLES[selectedNFT.type] as { backgroundColor: string }).backgroundColor }}
                     >
                       <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{selectedNFT.type.toUpperCase()}</Text>
                     </View>
-                    <View className="absolute top-3 right-3 rounded-lg px-3 py-1.5 bg-emerald-500/95">
+                    <View className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}>
                       <Text className={cn(badgeLabel(), 'tracking-wide')}>
                         Energy: {currentEnergy + Math.round(repairAmount)}%
                       </Text>
                     </View>
                   </View>
 
-                  <View className="p-4">
-                    <Text className="text-lg font-bold text-foreground mb-3 text-center">{formatDisplayName(selectedNFT.name)}</Text>
+                  <View className={cn(detailStyles.content(), 'p-4')}>
+                    <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>{formatDisplayName(selectedNFT.name)}</Text>
 
                     <NFTProperties
                       efficiency={selectedNFT.efficiency}

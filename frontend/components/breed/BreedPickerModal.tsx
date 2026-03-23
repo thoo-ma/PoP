@@ -5,6 +5,7 @@ import type { NFT } from '@/types';
 import type { NFTRarity } from '@shared';
 import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';
+import { cardImageContainer } from '@/styles';
 
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
@@ -67,14 +68,16 @@ export default function BreedPickerModal({
                 isDisabled={item.disabled}
               >
                 <View>
-                  <Image source={{ uri: item.nft.image_url }} className="w-full aspect-square" resizeMode="cover" />
-                  {item.disabled && (
-                    <View className="absolute inset-0 bg-white/50" />
-                  )}
-                  <View
-                    className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface"
-                    style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
-                  />
+                  <View className={cardImageContainer()}>
+                    <Image source={{ uri: item.nft.image_url }} className="w-full h-full" resizeMode="cover" />
+                    {item.disabled && (
+                      <View className="absolute inset-0 bg-white/50" />
+                    )}
+                    <View
+                      className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface"
+                      style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
+                    />
+                  </View>
                   <View className="px-2 pt-1.5">
                     <Text
                       className={`text-sm font-semibold${item.disabled ? ' text-muted' : ' text-foreground'}`}
