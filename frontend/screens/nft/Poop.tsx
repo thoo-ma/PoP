@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, screenContainer, scrollContent, nftPickerButton } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES, formatConfidencePercentage } from '@/utils';
@@ -504,7 +504,7 @@ export default memo(function Poop() {
         // ── Idle (home) ────────────────────────────────────
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
-            className={screenContainer({ bg: 'white' })}
+            className="flex-1 bg-white"
             contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[60px]')}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
