@@ -1,5 +1,6 @@
-import { View, Text, Image, FlatList } from 'react-native';
-import { Button, Dialog } from 'heroui-native';
+import { View, Text, Image } from 'react-native';
+import { BottomSheet, Button } from 'heroui-native';
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import type { NFT } from '@/types';
 import type { NFTRarity } from '@shared';
 import { RARITY_COLORS } from '@/constants';
@@ -38,27 +39,27 @@ export default function BreedPickerModal({
   }));
 
   return (
-    <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <Dialog.Portal>
-        <Dialog.Overlay />
-        <Dialog.Content className="rounded-t-3xl pt-1 max-h-[85%]">
+    <BottomSheet isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <BottomSheet.Portal>
+        <BottomSheet.Overlay />
+        <BottomSheet.Content snapPoints={['70%']}>
           <View className="flex-row justify-between items-center px-5 py-4 border-b border-border">
-            <Dialog.Title className="text-lg font-bold text-foreground">{title}</Dialog.Title>
-            <Dialog.Close variant="ghost" />
+            <BottomSheet.Title className="text-lg font-bold text-foreground">{title}</BottomSheet.Title>
+            <BottomSheet.Close />
           </View>
           {lockedRarity && (
             <Text className="text-sm text-muted px-5 pt-2.5 pb-1 leading-[18px]">
               Greyed-out NFTs are incompatible with your first selection.
             </Text>
           )}
-          <FlatList
+          <BottomSheetFlatList<{ nft: NFT; disabled: boolean }>
             data={items}
-            keyExtractor={(item) => item.nft.id}
+            keyExtractor={(item: { nft: NFT; disabled: boolean }) => item.nft.id}
             numColumns={2}
             columnWrapperStyle={{ gap: 12, marginBottom: 12 }}
-            contentContainerClassName="p-4 pb-10"
+            contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
+            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => (
               <Button
                 variant="ghost"
                 className={`flex-1 p-0 overflow-hidden rounded-xl border border-border bg-surface${item.disabled ? ' opacity-40' : ''}`}
@@ -92,8 +93,8 @@ export default function BreedPickerModal({
               </Button>
             )}
           />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog>
+        </BottomSheet.Content>
+      </BottomSheet.Portal>
+    </BottomSheet>
   );
 }
