@@ -34,7 +34,7 @@ export const nftDetailCard = tv({
   slots: {
     root: 'rounded-2xl overflow-hidden shadow-md border',
     imageWrap: 'relative w-full overflow-hidden',
-    content: '',
+    content: 'w-full',
     title: 'text-lg font-bold text-center',
   },
 });
