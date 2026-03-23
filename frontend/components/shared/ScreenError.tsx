@@ -10,7 +10,7 @@ interface ScreenErrorProps {
 
 export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
   return (
-    <View className="flex-1 bg-background items-center pt-[60px] px-6">
+    <View className="flex-1 bg-background items-center justify-center px-6">
       <Alert status="danger">
         <Alert.Indicator />
         <Alert.Content>
