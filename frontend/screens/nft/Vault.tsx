@@ -197,9 +197,9 @@ export default memo(function Vault() {
               contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            <View className={gridLayout().wrapper()}>
+            <View className={gridLayout({ columns: sortedNfts.length === 1 ? 'one' : 'two' }).wrapper()}>
               {sortedNfts.map((nft) => (
-                <View key={nft.id} className={gridLayout().item()}>
+                <View key={nft.id} className={gridLayout({ columns: sortedNfts.length === 1 ? 'one' : 'two' }).item()}>
                 <NFTCard
                   key={nft.id}
                   nft={nft}
@@ -272,11 +272,11 @@ export default memo(function Vault() {
                 </Text>
               </View>
             ) : (
-              <View className={gridLayout().wrapper()}>
+              <View className={gridLayout({ columns: groupedBoxes.length === 1 ? 'one' : 'two' }).wrapper()}>
                 {groupedBoxes.map((group) => {
                   const isOpening = openingRarity === group.rarity;
                   return (
-                    <View key={group.rarity} className={gridLayout().item()}>
+                    <View key={group.rarity} className={gridLayout({ columns: groupedBoxes.length === 1 ? 'one' : 'two' }).item()}>
                     <MysteryBoxCard
                       box={group.box}
                       count={group.count}

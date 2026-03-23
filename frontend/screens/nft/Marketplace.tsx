@@ -109,9 +109,9 @@ export default memo(function Marketplace() {
               contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'md' }), 'w-full')}
               showsVerticalScrollIndicator={false}
             >
-            <View className={gridLayout().wrapper()}>
+            <View className={gridLayout({ columns: sortedMarketplaceListings.length === 1 ? 'one' : 'two' }).wrapper()}>
               {sortedMarketplaceListings.map((item) => (
-                <View key={item.id} className={gridLayout().item()}>
+                <View key={item.id} className={gridLayout({ columns: sortedMarketplaceListings.length === 1 ? 'one' : 'two' }).item()}>
                 <NFTCard
                   key={item.id}
                   nft={item}
@@ -162,10 +162,10 @@ export default memo(function Marketplace() {
                 </Text>
               </View>
             )}
-            <View className={gridLayout().wrapper()}>
+            <View className={gridLayout({ columns: sortedMyListings.length === 1 ? 'one' : 'two' }).wrapper()}>
               {sortedMyListings.length > 0 ? (
                 sortedMyListings.map((item) => (
-                  <View key={item.id} className={gridLayout().item()}>
+                  <View key={item.id} className={gridLayout({ columns: sortedMyListings.length === 1 ? 'one' : 'two' }).item()}>
                   <NFTCard
                     key={item.id}
                     nft={item}
