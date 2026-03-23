@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -99,13 +99,13 @@ export default memo(function Repair() {
   return (
     <>
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <Text className="text-[32px] font-bold text-center mb-3 text-foreground">Repair</Text>
-        <Text className="text-base text-center text-muted mb-4">
+        <Text className={screenTitle({ color: 'default' })}>Repair</Text>
+        <Text className={screenSubtitle({ color: 'default' })}>
           Select an NFT and restore its energy
         </Text>
         {/* Wallet balance */}
         {poopBalance !== null && (
-          <Text className="text-base text-center text-muted mb-4">💩 Balance: {poopBalance} POOP</Text>
+          <Text className={screenSubtitle({ color: 'default' })}>💩 Balance: {poopBalance} POOP</Text>
         )}
 
         <ScrollShadow LinearGradientComponent={LinearGradient}>
@@ -147,16 +147,16 @@ export default memo(function Repair() {
                       resizeMode="cover"
                     />
                     <View className="absolute top-3 left-3 rounded-lg px-3 py-1.5 bg-indigo-500">
-                      <Text className="text-white text-xs font-bold tracking-wide">Lv {selectedNFT.level}</Text>
+                      <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {selectedNFT.level}</Text>
                     </View>
                     <View
                       className="absolute bottom-3 left-3 rounded-lg px-3 py-1.5"
                       style={{ backgroundColor: (TYPE_BADGE_STYLES[selectedNFT.type] as { backgroundColor: string }).backgroundColor }}
                     >
-                      <Text className="text-white text-[11px] font-bold tracking-wide">{selectedNFT.type.toUpperCase()}</Text>
+                      <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{selectedNFT.type.toUpperCase()}</Text>
                     </View>
                     <View className="absolute top-3 right-3 rounded-lg px-3 py-1.5 bg-emerald-500/95">
-                      <Text className="text-white text-xs font-bold tracking-wide">
+                      <Text className={cn(badgeLabel(), 'tracking-wide')}>
                         Energy: {currentEnergy + Math.round(repairAmount)}%
                       </Text>
                     </View>

@@ -1,9 +1,10 @@
 import { memo } from 'react';
 import { Image, View } from 'react-native';
 import type { ReactNode } from 'react';
-import { Card, Chip } from 'heroui-native';
+import { Card, Chip, cn } from 'heroui-native';
 import type { MysteryBox } from '@shared';
 import { RARITY_COLORS } from '@/constants';
+import { badgeLabel } from '@/styles';
 
 interface MysteryBoxCardProps {
   box: MysteryBox;
@@ -30,7 +31,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           style={{ backgroundColor: RARITY_COLORS[box.rarity] }}
           animation="disable-all"
         >
-          <Chip.Label className="text-white text-xs font-bold">{box.rarity.toUpperCase()}</Chip.Label>
+          <Chip.Label className={badgeLabel()}>{box.rarity.toUpperCase()}</Chip.Label>
         </Chip>
 
         {/* Count — top-left */}
@@ -61,7 +62,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
       <Card.Body className="p-2 gap-2">
         <Card.Title className="text-sm font-bold">Mystery Box</Card.Title>
         <Chip size="sm" variant="primary" animation="disable-all">
-          <Chip.Label className="text-white text-xs font-bold tracking-wide">MYSTERY BOX</Chip.Label>
+          <Chip.Label className={cn(badgeLabel(), 'tracking-wide')}>MYSTERY BOX</Chip.Label>
         </Chip>
         {action}
       </Card.Body>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
-import { Button, Spinner, Dialog, useToast } from 'heroui-native';
+import { Button, Spinner, Dialog, useToast, cn } from 'heroui-native';
+import { screenTitle, screenSubtitle } from '@/styles';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
@@ -86,8 +87,8 @@ export default function Auth() {
 
   return (
     <View className="flex-1 justify-center p-5 bg-background">
-      <Text className="text-[32px] font-bold mb-2 text-center">Welcome to Pop</Text>
-      <Text className="text-base text-gray-500 mb-10 text-center">Sign in to continue</Text>
+      <Text className={screenTitle({ spacing: 'sm', color: 'none' })}>Welcome to Pop</Text>
+      <Text className={cn(screenSubtitle({ color: 'gray' }), 'mb-10')}>Sign in to continue</Text>
 
       <Button
         variant="primary"
