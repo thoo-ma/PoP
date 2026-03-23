@@ -4,6 +4,7 @@
 
 @source "./components/**/*.tsx";
 @source "./screens/**/*.tsx";
+@source "./styles/**/*.ts";
 @source "./node_modules/heroui-native/lib";
 
 /*
