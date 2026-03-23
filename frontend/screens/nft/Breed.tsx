@@ -65,6 +65,11 @@ import { nftEvents, canBreed } from '@/utils';
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <Text className={screenTitle({ color: 'default' })}>Breed</Text>
+        <View className={infoBox({ tone: 'info' })}>
+          <Text className="text-sm text-foreground-500 text-center">
+            You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding.
+          </Text>
+        </View>
       </View>
     );
   }
