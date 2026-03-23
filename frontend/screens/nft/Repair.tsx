@@ -1,14 +1,12 @@
-import { Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Slider from '@react-native-community/slider';
 import { memo, useState } from 'react';
-import { Button, Dialog, ScrollShadow } from 'heroui-native';
+import { Button, Dialog, ScrollShadow, Slider } from 'heroui-native';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
 import { nftEvents, formatDisplayName, TYPE_BADGE_STYLES } from '@/utils';
 import { useGameConfig } from '@/store/gameConfigStore';
-import { colors } from '@/constants';
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -134,7 +132,7 @@ export default memo(function Repair() {
                 total={nfts.length}
                 onPrev={handlePrev}
                 onNext={handleNext}
-                style={{ marginTop: 20, marginBottom: 4 }}
+                className="mt-5 mb-1"
               />}
               {/* Selected NFT Card */}
               {!isRepaired && selectedNFT && (
@@ -187,16 +185,18 @@ export default memo(function Repair() {
                       <Text className="text-[32px] font-bold text-green-600">+{Math.round(repairAmount)}%</Text>
                     </View>
                     <Slider
-                      style={{ width: '100%', height: 40 }}
-                      minimumValue={0}
-                      maximumValue={maxRepairPossible}
-                      value={repairAmount}
-                      onValueChange={setRepairAmount}
-                      minimumTrackTintColor={colors.slider}
-                      maximumTrackTintColor={colors.inactive}
-                      thumbTintColor={colors.slider}
-                      step={1}
-                    />
+                        className="w-full"
+                        minValue={0}
+                        maxValue={maxRepairPossible}
+                        value={repairAmount}
+                        onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
+                        step={1}
+                      >
+                        <Slider.Track>
+                          <Slider.Fill />
+                          <Slider.Thumb />
+                        </Slider.Track>
+                      </Slider>
                   </View>
 
                   {/* Repair Button */}
@@ -240,9 +240,9 @@ export default memo(function Repair() {
               )}
             </>
           )}
-        </ScrollView>
-        </ScrollShadow>
-      </View>
+          </ScrollView>
+          </ScrollShadow>
+        </View>
 
       <Dialog isOpen={alertDialog !== null} onOpenChange={(open) => { if (!open) setAlertDialog(null); }}>
         <Dialog.Portal>
