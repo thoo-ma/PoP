@@ -1,6 +1,7 @@
 ---
 name: tailwind-variants
 description: "Tailwind-variants (tv) style extraction for React Native. Use when centralising className strings into reusable tv() recipes, creating wrapper components with variant props, or factoring out duplicated Tailwind classes across components. Keywords: tailwind-variants, tv(), variants, compoundVariants, slots, className extraction, style recipes, cn, tailwind-merge."
+user-invocable: true
 metadata:
   author: PoP team
   version: "1.0.0"

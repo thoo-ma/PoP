@@ -14,6 +14,10 @@ description: >
   gradients, hairlineWidth(), fontScale(), pixelRatio(), light-dark(), OKLCH,
   cn, tailwind-merge, HeroUI Native, react-native-reusables, Gluestack.
   Does NOT handle migration — use migrate-nativewind-to-uniwind skill.
+user-invocable: true
+metadata:
+  author: uni-stack
+  version: "1.5.0"
 ---
 
 # Uniwind — Complete Reference

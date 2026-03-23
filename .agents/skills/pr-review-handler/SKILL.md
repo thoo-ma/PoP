@@ -1,3 +1,14 @@
+---
+name: pr-review-handler
+description: "Handle Copilot code review comments on a pull request: auto-fix clear bugs, escalate ambiguous comments to the human, reply to everything, and push fixes. Keywords: PR review, code review, Copilot, auto-fix, escalate, review triage."
+user-invocable: true
+disable-model-invocation: true
+argument-hint: "PR number to review (e.g. 42)"
+metadata:
+  author: PoP team
+  version: "1.0.0"
+---
+
 # Skill: PR Review Handler
 
 Handle Copilot code review comments on a pull request: auto-fix clear bugs, escalate ambiguous comments to the human, reply to everything, and push fixes.
