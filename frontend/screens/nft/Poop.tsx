@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Dialog, ScrollShadow, cn } from 'heroui-native';
-import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, screenTitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody } from '@/styles';
+import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, resultCard, infoCard, recordingIndicator, toastBanner, scrollContent, nftPickerButton, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody } from '@/styles';
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils';
@@ -490,7 +490,7 @@ export default memo(function Poop() {
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="bg-background"
-            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[60px]')}
+            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[100px]')}
             showsVerticalScrollIndicator={false}
           >
           {phase === 'countdown'  && renderCountdownPhase()}
@@ -506,11 +506,10 @@ export default memo(function Poop() {
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="flex-1 bg-white"
-            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[60px]')}
+            contentContainerClassName={cn(scrollContent({ padding: 'md', bottomPad: 'lg' }), 'flex-grow items-center pt-[100px]')}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-          <Text className={screenTitle({ spacing: 'sm', color: 'neutral' })}>Poop</Text>
 
           {immobilityMessage && (
             <View className={toastStyles.root()}>

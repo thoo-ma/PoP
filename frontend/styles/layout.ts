@@ -8,8 +8,8 @@ export const screenContainer = tv({
   variants: {
     padTop: {
       sm: 'pt-[60px]',
-      md: 'pt-[80px]',
-      lg: 'pt-20',
+      md: 'pt-[100px]',
+      lg: 'pt-[100px]',
     },
     padX: {
       none: '',

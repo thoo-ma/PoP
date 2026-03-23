@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton, screenTitle, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody, infoBox } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody, infoBox } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -100,7 +100,6 @@ export default memo(function Repair() {
   return (
     <>
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <Text className={screenTitle({ color: 'default' })}>Repair</Text>
 
         <ScrollShadow LinearGradientComponent={LinearGradient}>
           <ScrollView

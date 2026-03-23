@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, screenTitle, errorMessage, infoBox } from '@/styles';
+import { screenContainer, scrollContent, errorMessage, infoBox } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -64,7 +64,6 @@ import { nftEvents, canBreed } from '@/utils';
   if (nfts.length < 2) {
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <Text className={screenTitle({ color: 'default' })}>Breed</Text>
         <View className={infoBox({ tone: 'info' })}>
           <Text className="text-sm text-foreground-500 text-center">
             You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding.
@@ -94,7 +93,6 @@ import { nftEvents, canBreed } from '@/utils';
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-      <Text className={screenTitle({ color: 'default' })}>Breed</Text>
 
       <ScrollShadow LinearGradientComponent={LinearGradient}>
         <ScrollView
