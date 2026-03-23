@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState, useCallback, useMemo } from 'react';
 import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle, emptyState, infoBanner, dialogBody } from '@/styles';
+import { screenContainer, scrollContent, gridLayout, screenTitle, screenSubtitle, emptyState, infoBanner, dialogBody, skeletonCard } from '@/styles';
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks';
 import { NFTCard, SortControls } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
@@ -64,6 +64,7 @@ export default memo(function Marketplace() {
 
   const bannerStyles = infoBanner();
   const emptyStyles = emptyState();
+  const skeleton = skeletonCard();
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -96,9 +97,9 @@ export default memo(function Marketplace() {
           <View className={cn(gridLayout().wrapper(), 'p-4')}>
             {[0, 1, 2, 3].map((i) => (
               <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
-                <Skeleton className="aspect-square w-full rounded-xl" />
-                <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
-                <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
+                <Skeleton className={skeleton.image()} />
+                <Skeleton className={skeleton.titleLine()} />
+                <Skeleton className={skeleton.subtitleLine()} />
               </View>
             ))}
           </View>
@@ -142,9 +143,9 @@ export default memo(function Marketplace() {
           <View className={cn(gridLayout().wrapper(), 'p-4')}>
             {[0, 1, 2, 3].map((i) => (
               <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
-                <Skeleton className="aspect-square w-full rounded-xl" />
-                <Skeleton className="h-4 w-3/4 rounded-md mt-2" />
-                <Skeleton className="h-3 w-1/2 rounded-md mt-1" />
+                <Skeleton className={skeleton.image()} />
+                <Skeleton className={skeleton.titleLine()} />
+                <Skeleton className={skeleton.subtitleLine()} />
               </View>
             ))}
           </View>

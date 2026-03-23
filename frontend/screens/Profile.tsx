@@ -1,8 +1,9 @@
 import { Text, View } from 'react-native';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Avatar, Button, Dialog } from 'heroui-native';
+import { Avatar, Button, Dialog, cn } from 'heroui-native';
 import { useAuth } from '@/hooks';
+import { dialogPanel } from '@/styles';
 import { useSignOutDialog } from '@/utils';
 import Wallet from './Wallet';
 
@@ -43,19 +44,21 @@ export default function Profile({ visible, onClose }: ProfileProps) {
     .slice(0, 2)
     .toUpperCase();
 
+  const panel = dialogPanel();
+
   return (
     <>
       <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Dialog.Portal>
         <Dialog.Overlay isCloseOnPress />
-        <Dialog.Content className="mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center">
+        <Dialog.Content className={panel.content()}>
           {/* Wallet modal */}
           <Wallet visible={walletVisible} onClose={() => setWalletVisible(false)} />
 
           <Dialog.Close
             variant="ghost"
             accessibilityLabel="Close profile"
-            className="absolute top-4 right-4"
+            className={panel.close()}
           />
 
           {/* Avatar */}

@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
-import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody } from '@/styles';
+import { screenContainer, scrollContent, nftPickerButton, screenTitle, screenSubtitle, badgeLabel, nftDetailCard, overlayBadge, dialogBody, infoBox } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@shared';
@@ -181,7 +181,7 @@ export default memo(function Repair() {
               {currentEnergy < MAX_ENERGY && !isRepaired && (
                 <>
                   {/* Repair Controls */}
-                  <View className="w-full bg-default rounded-2xl p-4 mb-5 border border-border">
+                  <View className={cn(infoBox(), 'mb-5')}>
                     <Text className="text-base font-bold text-foreground mb-3">Repair Amount</Text>
                     <View className="items-center mb-2">
                       <Text className="text-[32px] font-bold text-green-600">+{Math.round(repairAmount)}%</Text>
