@@ -152,6 +152,8 @@ export default memo(function Vault() {
   if (error) {
     return <ScreenError title="Vault" message={`Failed to load NFTs: ${error}`} onRetry={refetch} />;
   }
+
+  const emptyStyles = emptyState();
   
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -260,11 +262,11 @@ export default memo(function Vault() {
               showsVerticalScrollIndicator={false}
             >
             {boxes.length === 0 ? (
-              <View className={emptyState().root()}>
-                <Text className={cn(emptyState().title(), 'font-normal text-text-body text-center mb-0')}>
+              <View className={emptyStyles.root()}>
+                <Text className={cn(emptyStyles.title(), 'font-normal text-text-body text-center mb-0')}>
                   No mystery boxes yet
                 </Text>
-                <Text className={cn(emptyState().detail(), 'opacity-60 mt-2')}>
+                <Text className={cn(emptyStyles.detail(), 'opacity-60 mt-2')}>
                   Mystery boxes will appear here once you earn them.
                 </Text>
               </View>

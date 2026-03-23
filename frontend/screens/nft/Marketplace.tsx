@@ -62,6 +62,9 @@ export default memo(function Marketplace() {
     setSortBy(option);
   }, []);
 
+  const bannerStyles = infoBanner();
+  const emptyStyles = emptyState();
+
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
       <Text className={screenTitle()}>Marketplace</Text>
@@ -152,8 +155,8 @@ export default memo(function Marketplace() {
               showsVerticalScrollIndicator={false}
             >
             {myListings.length > 0 && (
-              <View className={infoBanner().root()}>
-                <Text className={infoBanner().label()}>
+              <View className={bannerStyles.root()}>
+                <Text className={bannerStyles.label()}>
                   💡 These are your NFTs from the Vault currently listed for sale
                 </Text>
               </View>
@@ -184,9 +187,9 @@ export default memo(function Marketplace() {
                   </View>
                 ))
               ) : (
-                <View className={cn(emptyState().root(), 'py-[60px] w-full')}>
-                  <Text className={emptyState().title()}>No active listings</Text>
-                  <Text className={cn(emptyState().detail(), 'mt-1 leading-5')}>
+                <View className={cn(emptyStyles.root(), 'py-[60px] w-full')}>
+                  <Text className={emptyStyles.title()}>No active listings</Text>
+                  <Text className={cn(emptyStyles.detail(), 'mt-1 leading-5')}>
                     You haven't listed any NFTs yet.
                   </Text>
                 </View>

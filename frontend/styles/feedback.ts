@@ -20,12 +20,12 @@ export const infoBanner = tv({
   variants: {
     tone: {
       warning: {
-        root: 'bg-[#fef3c7] border-[#fbbf24]',
-        label: 'text-[#78350f]',
+        root: 'bg-amber-100 border-amber-400',
+        label: 'text-amber-900',
       },
       info: {
-        root: 'bg-[#dbeafe] border-[#3b82f6]',
-        label: 'text-[#1e40af]',
+        root: 'bg-blue-100 border-blue-500',
+        label: 'text-blue-900',
       },
     },
   },
