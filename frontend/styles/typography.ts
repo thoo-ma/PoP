@@ -44,14 +44,3 @@ export const badgeLabel = tv({
   },
   defaultVariants: { size: 'xs' },
 });
-
-export const sectionTitle = tv({
-  base: 'text-base font-bold text-foreground',
-  variants: {
-    spacing: {
-      sm: 'mb-2',
-      md: 'mb-3',
-    },
-  },
-  defaultVariants: { spacing: 'md' },
-});

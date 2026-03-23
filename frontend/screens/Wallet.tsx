@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Dialog, ScrollShadow } from 'heroui-native';
 import { useWallet } from '@/hooks';
+import { dialogPanel } from '@/styles';
 import { colors } from '@/constants';
 
 
@@ -19,17 +20,18 @@ interface WalletProps {
  */
 export default function Wallet({ visible, onClose }: WalletProps) {
   const { poopBalance, loading } = useWallet();
+  const panel = dialogPanel();
 
   return (
     <Dialog isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Dialog.Portal>
         <Dialog.Overlay isCloseOnPress />
-        <Dialog.Content className="mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center">
+        <Dialog.Content className={panel.content()}>
           {/* Close button */}
           <Dialog.Close
             variant="ghost"
             accessibilityLabel="Close wallet"
-            className="absolute top-4 right-4"
+            className={panel.close()}
           />
 
           {/* Header */}

@@ -79,3 +79,19 @@ export const rarityBadge = tv({
     },
   },
 });
+
+// ── Skeleton card ────────────────────────────────────────────────────────────
+// Placeholder shimmer lines used in Vault and Marketplace loading states.
+export const skeletonCard = tv({
+  slots: {
+    image: 'aspect-square w-full rounded-xl',
+    titleLine: 'h-4 w-3/4 rounded-md mt-2',
+    subtitleLine: 'h-3 w-1/2 rounded-md mt-1',
+  },
+});
+
+// ── NFT nav button ───────────────────────────────────────────────────────────
+// Prev / next arrow button used in NFTSelector.
+export const nftNavButton = tv({
+  base: 'w-[52px] h-9 rounded-lg bg-surface-light border border-border-default',
+});

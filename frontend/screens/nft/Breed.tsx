@@ -2,7 +2,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, ScrollShadow, cn } from 'heroui-native';
-import { screenContainer, scrollContent, screenTitle, screenSubtitle, errorMessage } from '@/styles';
+import { screenContainer, scrollContent, screenTitle, screenSubtitle, errorMessage, infoBox } from '@/styles';
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@shared';
@@ -147,7 +147,7 @@ import { nftEvents, canBreed } from '@/utils';
             {canBreedNow ? (
               <BreedOutcomePanel r1={parent1!.rarity} r2={parent2!.rarity} />
             ) : (
-              <View className="w-full bg-default rounded-[14px] border border-dashed border-border p-5 items-center mb-6">
+              <View className={cn(infoBox({ border: 'dashed' }), 'mb-6')}>
                 <Text className="text-[13px] text-muted text-center leading-5">
                   Select both parents to see outcome probabilities
                 </Text>
