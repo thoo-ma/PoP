@@ -8,6 +8,13 @@ if [ -z "$CWD" ]; then
   CWD=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 fi
 
+# Normalize CWD to git top-level so the marker check works even if the
+# agent cwd is a subdirectory of the worktree (e.g. after cd frontend/)
+TOPLEVEL=$(git -C "$CWD" rev-parse --show-toplevel 2>/dev/null || true)
+if [ -n "$TOPLEVEL" ]; then
+  CWD="$TOPLEVEL"
+fi
+
 # Check if we're inside a hook-managed worktree
 if [ -f "$CWD/.agent-worktree-origin" ]; then
   ORIGIN_REPO=$(cat "$CWD/.agent-worktree-origin")

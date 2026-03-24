@@ -43,7 +43,7 @@ WORKTREE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
 # Fetch latest from remote (ignore failures for offline work)
 git fetch origin --quiet 2>/dev/null || true
 
-# PoP uses main — fallback to HEAD only if remote is unreachable
+# PoP uses main — fallback to HEAD if origin/main ref is not present locally
 if git show-ref --verify --quiet "refs/remotes/origin/main"; then
   BASE_BRANCH="origin/main"
 else
