@@ -96,7 +96,7 @@ Getting started guides: `https://heroui.com/docs/native/getting-started/{topic}.
 ### Quick Install
 
 ```bash
-npm i heroui-native react-native-reanimated react-native-gesture-handler react-native-safe-area-context @gorhom/bottom-sheet react-native-svg react-native-worklets tailwind-merge tailwind-variants
+pnpm add heroui-native react-native-reanimated react-native-gesture-handler react-native-safe-area-context @gorhom/bottom-sheet react-native-svg react-native-worklets tailwind-merge tailwind-variants
 ```
 
 ### Framework Setup (Expo - Recommended)
@@ -106,8 +106,8 @@ npm i heroui-native react-native-reanimated react-native-gesture-handler react-n
 ```bash
 npx create-expo-app MyApp
 cd MyApp
-npm i heroui-native uniwind tailwindcss
-npm i react-native-reanimated react-native-gesture-handler react-native-safe-area-context @gorhom/bottom-sheet react-native-svg react-native-worklets tailwind-merge tailwind-variants
+pnpm add heroui-native uniwind tailwindcss
+pnpm add react-native-reanimated react-native-gesture-handler react-native-safe-area-context @gorhom/bottom-sheet react-native-svg react-native-worklets tailwind-merge tailwind-variants
 ```
 
 2. **Create `global.css`:**

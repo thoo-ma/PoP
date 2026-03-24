@@ -49,8 +49,7 @@ Uniwind brings Tailwind CSS v4 to React Native. All core React Native components
 ### Installation
 
 ```bash
-# or other package manager
-bun install uniwind tailwindcss
+pnpm add uniwind tailwindcss
 ```
 
 Requires **Tailwind CSS v4+**.
@@ -691,7 +690,7 @@ Uniwind does **NOT** auto-deduplicate conflicting classNames. This means if the 
 ### Setup
 
 ```bash
-npm install tailwind-merge clsx
+pnpm add tailwind-merge clsx
 ```
 
 ```ts
@@ -1636,7 +1635,7 @@ Package: `"uniwind": "npm:uniwind-pro@rc"` in `package.json`.
 
 2. Install peer dependencies:
    ```bash
-   npm install react-native-nitro-modules react-native-reanimated react-native-worklets
+   pnpm add react-native-nitro-modules react-native-reanimated react-native-worklets
    ```
 
 3. Authenticate: `npx uniwind-pro` (interactive — select "Login with GitHub")
