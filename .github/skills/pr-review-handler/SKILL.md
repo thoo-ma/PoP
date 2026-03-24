@@ -125,9 +125,9 @@ Wait for the human's response before proceeding.
 ### Step 8 — Act on human's decisions
 
 Based on the human's answer:
-- Apply any changes they approved → edit, type-check, commit, push
-- Reply to dismissed comments with the human's reasoning
-- If human chose [c], stop and let them handle it on GitHub
+- **[a] Apply some**: Use `vscode/askQuestions` to present each escalated comment **one at a time**. For each, show the file, line, Copilot's suggestion, and options (Apply / Dismiss / Skip). Apply approved changes → edit, type-check, commit, push. Reply to dismissed comments with the human's reasoning.
+- **[b] Dismiss all**: Reply to every escalated comment on GitHub with the dismissal reasoning.
+- **[c] Human handles**: Stop and let them handle it on GitHub.
 
 ### Step 9 — Review report
 

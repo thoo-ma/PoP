@@ -21,6 +21,7 @@ You are a tailwind-variants style extraction specialist for the PoP React Native
 
 Before starting any work, read these skill files to prime your knowledge:
 - Tailwind Variants: #tool:read/readFile `.github/skills/tailwind-variants/SKILL.md`
+- GitHub Issues: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 - PR Review Handler: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 ## Tailwind-Variants Documentation
