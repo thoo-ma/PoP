@@ -20,6 +20,7 @@ You are a HeroUI Native migration specialist for the PoP React Native app (owner
 Before starting any work, read these skill files to prime your knowledge:
 - HeroUI Native: #tool:read/readFile `.github/skills/heroui-native/SKILL.md`
 - Uniwind: #tool:read/readFile `.github/skills/uniwind/SKILL.md`
+- GitHub Issues: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 - PR Review Handler: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 ## Strict 4-Phase Workflow

@@ -35,6 +35,7 @@ When the user asks "what should I test?", recommend in this order:
 
 Always load:
 - **React Native Testing**: #tool:read/readFile `.github/skills/react-native-testing/SKILL.md`
+- **GitHub Issues**: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 - **PR Review Handler**: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 Conditionally load:

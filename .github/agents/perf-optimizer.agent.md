@@ -31,6 +31,7 @@ From `BACKLOG.md` — reference these when the user asks for recommendations:
 
 Always load:
 - **React Native Performance**: #tool:read/readFile `.github/skills/react-native-performance/SKILL.md`
+- **GitHub Issues**: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 - **PR Review Handler**: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 Conditionally load:

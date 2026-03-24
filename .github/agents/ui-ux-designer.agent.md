@@ -55,10 +55,11 @@ These rules are **non-negotiable**. Every change you make must comply:
 
 ## Skills to Load
 
-Always load all three (run in parallel):
+Always load all four (run in parallel):
 - **HeroUI Native**: #tool:read/readFile `.github/skills/heroui-native/SKILL.md`
 - **Uniwind**: #tool:read/readFile `.github/skills/uniwind/SKILL.md`
 - **Tailwind Variants**: #tool:read/readFile `.github/skills/tailwind-variants/SKILL.md`
+- **GitHub Issues**: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 
 Load in Phase 4:
 - **PR Review Handler**: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`

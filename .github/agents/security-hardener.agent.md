@@ -31,6 +31,7 @@ You are a security hardening specialist for the PoP app (owner: `thoo-ma`, repo:
 
 Always load:
 - **Supabase Security**: #tool:read/readFile `.github/skills/supabase-security/SKILL.md`
+- **GitHub Issues**: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
 - **PR Review Handler**: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 Conditionally load:

@@ -16,7 +16,12 @@ You are a bug-fixing specialist for the PoP React Native app (owner: `thoo-ma`, 
 - The user will describe the bug via free text, screenshots, or crash logs — there is no GitHub issue required
 - If the user does reference a GitHub issue number, fetch it via MCP and use its details
 
-## Skills to Load (Conditional)
+## Skills to Load
+
+Always load:
+- **GitHub Issues**: #tool:read/readFile `.github/skills/github-issues/SKILL.md`
+
+### Conditional
 
 Only load skills when they are relevant to the bug. Do NOT load all skills upfront.
 

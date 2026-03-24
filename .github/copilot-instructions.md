@@ -104,7 +104,7 @@ Agent sessions run in isolated git worktrees (`.vscode/hooks.json`). The `Sessio
 
 ## Branch Naming
 
-`fix/`, `feat/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
+`fix/`, `feat/`, `refactor/`, `chore/`, `docs/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
 
 ## Commit Messages
 
