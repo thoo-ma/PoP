@@ -79,7 +79,7 @@ This installs `expo-av` and `expo-file-system`.
 ### 6. Test the App
 
 ```bash
-pnpm start:dev
+pnpm start
 ```
 
 Navigate through the screens:

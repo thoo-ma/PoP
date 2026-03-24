@@ -18,9 +18,8 @@
 
 ```bash
 cd frontend && pnpm exec tsc --noEmit        # Frontend type-check
-cd dashboard && pnpm exec tsc --noEmit       # Dashboard type-check
-cd frontend && pnpm exec jest --passWithNoTests  # Frontend tests (when configured)
-cd supabase/functions && deno check <function>/index.ts  # Edge function check
+cd ../dashboard && pnpm exec tsc --noEmit    # Dashboard type-check
+cd ../supabase/functions && deno check <function>/index.ts  # Edge function check
 ```
 
 Never force-push. Never skip type-check.
