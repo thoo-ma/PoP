@@ -102,11 +102,11 @@ echo "=== Labeling closed epic issues ==="
 
 # #32 — [Epic] Tailwind-Variants Style Extraction (closed)
 remove_old_labels 32
-label_issue 32 "epic,type: refactor,scope: frontend"
+label_issue 32 "epic,type: refactor,scope: frontend,priority: high,size: XL"
 
 # #9 — [Epic] HeroUI Native Migration (closed)
 remove_old_labels 9
-label_issue 9 "epic,type: refactor,scope: frontend"
+label_issue 9 "epic,type: refactor,scope: frontend,priority: high,size: XL"
 
 echo ""
 echo "=== Done! ==="

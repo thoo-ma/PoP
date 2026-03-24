@@ -54,6 +54,7 @@ gh label delete "duplicate"   --repo "$REPO" --yes 2>/dev/null || true
 gh label delete "invalid"     --repo "$REPO" --yes 2>/dev/null || true
 gh label delete "question"    --repo "$REPO" --yes 2>/dev/null || true
 gh label delete "wontfix"     --repo "$REPO" --yes 2>/dev/null || true
+gh label delete "bug"         --repo "$REPO" --yes 2>/dev/null || true
 
 echo ""
 echo "=== Done! Labels created. ==="
