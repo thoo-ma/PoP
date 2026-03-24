@@ -11,7 +11,7 @@ fi
 # Check if we're inside a hook-managed worktree
 if [ -f "$CWD/.agent-worktree-origin" ]; then
   ORIGIN_REPO=$(cat "$CWD/.agent-worktree-origin")
-  BRANCH=$(git -C "$CWD" branch --show-current 2>/dev/null)
+  BRANCH=$(git -C "$CWD" branch --show-current 2>/dev/null || true)
 
   # Push the branch if there are commits ahead of the base
   if [ -n "$BRANCH" ]; then
@@ -27,6 +27,7 @@ if [ -f "$CWD/.agent-worktree-origin" ]; then
   # Remove the worktree from the original repo
   if [ -d "$ORIGIN_REPO/.git" ] || [ -f "$ORIGIN_REPO/.git" ]; then
     git -C "$ORIGIN_REPO" worktree remove "$CWD" --force 2>/dev/null || true
+    git -C "$ORIGIN_REPO" worktree prune 2>/dev/null || true
   fi
 fi
 
