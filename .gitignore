@@ -43,8 +43,13 @@ pnpm-debug.log*
 /android
 
 # IDE
-.vscode/
 .idea/
+
+# VS Code — ignore user-specific, track shared config
+.vscode/*
+!.vscode/settings.json
+!.vscode/mcp.json
+!.vscode/hooks.json
 *.swp
 *.swo
 *~
@@ -74,3 +79,6 @@ todo
 .vercel
 todo-max
 GAME_CONFIG_BACKLOG.md
+
+# Agent worktree marker
+.agent-worktree-origin

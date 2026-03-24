@@ -98,6 +98,10 @@ console.error('breed-nfts: fetch parents error', fetchError);
 - Migrations: `DEFAULT NOW()` (not `CURRENT_TIMESTAMP`)
 - JavaScript: `new Date().toISOString()` when passing to DB
 
+## Agent Worktrees
+
+Agent sessions run in isolated git worktrees (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory with its own branch and installed deps. The `Stop` hook pushes the branch and removes the worktree. Agents must work inside the worktree path provided in `additionalContext` — never modify the original repo.
+
 ## Branch Naming
 
 `fix/`, `feat/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
