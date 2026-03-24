@@ -15,7 +15,7 @@ export function respondError(
   details?: Record<string, unknown>,
 ): Response {
   return new Response(
-    JSON.stringify({ error, message, ...details }),
+    JSON.stringify({ ...(details ?? {}), error, message }),
     { status, headers: jsonHeaders },
   )
 }
