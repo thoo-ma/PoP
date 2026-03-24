@@ -18,9 +18,9 @@ You are a HeroUI Native migration specialist for the PoP React Native app (owner
 ## Skills to Load
 
 Before starting any work, read these skill files to prime your knowledge:
-- HeroUI Native: #tool:read/readFile `.agents/skills/heroui-native/SKILL.md`
-- Uniwind: #tool:read/readFile `.agents/skills/uniwind/SKILL.md`
-- PR Review Handler: #tool:read/readFile `.agents/skills/pr-review-handler/SKILL.md`
+- HeroUI Native: #tool:read/readFile `.github/skills/heroui-native/SKILL.md`
+- Uniwind: #tool:read/readFile `.github/skills/uniwind/SKILL.md`
+- PR Review Handler: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 ## Strict 4-Phase Workflow
 
@@ -79,7 +79,7 @@ For each component in the checklist:
 
 **Goal**: Handle Copilot review feedback using the `pr-review-handler` skill, then close out the task.
 
-1. **Load the skill** — Read `.agents/skills/pr-review-handler/SKILL.md` if not already loaded
+1. **Load the skill** — Read `.github/skills/pr-review-handler/SKILL.md` if not already loaded
 2. **Execute the skill workflow** with these inputs:
    - `owner`: `thoo-ma`
    - `repo`: `PoP`

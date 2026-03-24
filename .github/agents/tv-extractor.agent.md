@@ -20,8 +20,8 @@ You are a tailwind-variants style extraction specialist for the PoP React Native
 ## Skills to Load
 
 Before starting any work, read these skill files to prime your knowledge:
-- Tailwind Variants: #tool:read/readFile `.agents/skills/tailwind-variants/SKILL.md`
-- PR Review Handler: #tool:read/readFile `.agents/skills/pr-review-handler/SKILL.md`
+- Tailwind Variants: #tool:read/readFile `.github/skills/tailwind-variants/SKILL.md`
+- PR Review Handler: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md`
 
 ## Tailwind-Variants Documentation
 
@@ -48,8 +48,8 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start implemen
 
 1. **Fetch the GitHub issue** — Read the issue via MCP to get the full checklist, recipes to create, and target files
 2. **Load skills + fetch docs** — Run all of the following **in parallel**:
-   - Read `.agents/skills/tailwind-variants/SKILL.md`
-   - Read `.agents/skills/pr-review-handler/SKILL.md`
+   - Read `.github/skills/tailwind-variants/SKILL.md`
+   - Read `.github/skills/pr-review-handler/SKILL.md`
    - Fetch `https://www.tailwind-variants.org/docs/slots`
    - Fetch `https://www.tailwind-variants.org/docs/variants`
    - Fetch `https://www.tailwind-variants.org/docs/composing-components`
@@ -111,7 +111,7 @@ For each target file in the checklist:
 
 **Goal**: Handle Copilot review feedback using the `pr-review-handler` skill, then close out the task.
 
-1. **Load the skill** — Read `.agents/skills/pr-review-handler/SKILL.md` if not already loaded
+1. **Load the skill** — Read `.github/skills/pr-review-handler/SKILL.md` if not already loaded
 2. **Execute the skill workflow** with these inputs:
    - `owner`: `thoo-ma`
    - `repo`: `PoP`
