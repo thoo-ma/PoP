@@ -11,7 +11,7 @@
 //     "editor.formatOnSave": true
 // },
 "chat.mcp.serverSampling": {
-    "pop/.vscode/mcp.json: heroui-native": {
+    "${workspaceFolder}/.vscode/mcp.json: heroui-native": {
         "allowedModels": [
             "copilot/claude-sonnet-4.6"
         ]
