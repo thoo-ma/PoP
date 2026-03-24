@@ -67,7 +67,7 @@ For each component in the checklist:
 
 **Goal**: Validate the work and ship it.
 
-1. **Type-check** — Run `cd frontend && npx tsc --noEmit` to verify zero TS errors
+1. **Type-check** — Run `cd frontend && pnpm exec tsc --noEmit` to verify zero TS errors
 2. **Commit** — Stage all changes with a descriptive commit message referencing the issue number
 3. **Push** — Push to the phase branch (named in the issue, e.g. `heroui/phase-0`)
 4. **Create PR** — Use GitHub MCP to create a pull request:
@@ -85,7 +85,7 @@ For each component in the checklist:
    - `repo`: `PoP`
    - `pullNumber`: the PR created in Phase 3
    - `issueNumber`: the issue being implemented
-   - `typeCheckCommand`: `cd frontend && npx tsc --noEmit`
+   - `typeCheckCommand`: `cd frontend && pnpm exec tsc --noEmit`
 3. **Follow every step in the skill** — do not skip or reinterpret
 4. **Task summary** — After the skill outputs its review report, close out the session with a broader summary:
    - Components migrated (from the issue checklist)

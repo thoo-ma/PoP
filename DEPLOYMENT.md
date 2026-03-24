@@ -69,7 +69,7 @@ supabase functions deploy breed-nfts --project-ref mtnluwkvhkwwxvxdtkgs
 
 ```bash
 cd frontend
-npm install
+pnpm install
 ```
 
 This installs `expo-av` and `expo-file-system`.
@@ -79,7 +79,7 @@ This installs `expo-av` and `expo-file-system`.
 ### 6. Test the App
 
 ```bash
-npm run start:dev
+pnpm start:dev
 ```
 
 Navigate through the screens:

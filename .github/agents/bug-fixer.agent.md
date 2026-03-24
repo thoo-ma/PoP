@@ -91,7 +91,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start fixing b
    - Do NOT add features or "improvements" beyond the fix
    - If the fix spans multiple files, edit them all — the commit should be atomic
 
-3. **Type-check** — Run `cd frontend && npx tsc --noEmit` to verify zero TS errors
+3. **Type-check** — Run `cd frontend && pnpm exec tsc --noEmit` to verify zero TS errors
 
 4. **Explain the fix** — Briefly describe:
    - What was wrong (root cause)
@@ -126,7 +126,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start fixing b
    - `repo`: `PoP`
    - `pullNumber`: the PR created above
    - `issueNumber`: the GitHub issue number (if one was referenced, otherwise omit)
-   - `typeCheckCommand`: `cd frontend && npx tsc --noEmit`
+   - `typeCheckCommand`: `cd frontend && pnpm exec tsc --noEmit`
 
 6. **Follow every step in the skill** — do not skip or reinterpret
 

@@ -7,37 +7,37 @@ Application mobile avec authentification OAuth2 (X/Twitter et Google) via Supaba
 ### 1. **Expo Go** (Développement UI rapide)
 **Usage:** Pour itérer rapidement sur l'UI sans OAuth2
 ```bash
-npm start:go          # Ouvre avec Expo Go
-npm run android:go    # Lance directement sur Android
-npm run ios:go        # Lance directement sur iOS
+pnpm start:go          # Ouvre avec Expo Go
+pnpm android:go        # Lance directement sur Android
+pnpm ios:go            # Lance directement sur iOS
 ```
 **Limitations:** OAuth2 ne fonctionne pas (redirects non supportés)
 
 ### 2. **Dev Build** (Test OAuth2 complet)
 **Usage:** Pour tester l'authentification Supabase OAuth2
 ```bash
-npm run start:dev     # Lance avec dev client
-npm run android       # Compile et lance sur Android
-npm run ios           # Compile et lance sur iOS
+pnpm start:dev         # Lance avec dev client
+pnpm android           # Compile et lance sur Android
+pnpm ios               # Compile et lance sur iOS
 ```
 **Requis:** Un dev build doit être installé sur votre appareil
 
 ## 📦 Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## 🏗️ Créer un Dev Build
 
 ```bash
 # Android
-npm run build:android
+pnpm build:android
 # ou
 eas build --platform android --profile development
 
 # iOS
-npm run build:ios
+pnpm build:ios
 # ou
 eas build --platform ios --profile development
 ```
