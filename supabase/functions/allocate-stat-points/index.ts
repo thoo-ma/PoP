@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -20,29 +21,20 @@ serve(async (req) => {
     const { nft_id, efficiency = 0, resilience = 0, comfort = 0, luck = 0 } = body
 
     if (!nft_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'nft_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'nft_id is required')
     }
 
     // Basic type validation – all deltas must be non-negative integers
     for (const [key, val] of Object.entries({ efficiency, resilience, comfort, luck })) {
       if (!Number.isInteger(val) || val < 0) {
-        return new Response(
-          JSON.stringify({ error: 'Bad Request', message: `${key} must be a non-negative integer` }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
+        return respondError(400, 'Bad Request', `${key} must be a non-negative integer`)
       }
     }
 
     const totalSpend = efficiency + resilience + comfort + luck
 
     if (totalSpend === 0) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'At least one point must be allocated' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'At least one point must be allocated')
     }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
@@ -54,20 +46,13 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'NFT not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
     }
 
     // ── Validation ────────────────────────────────────────────────────────────
     if (totalSpend > nft.stat_points) {
-      return new Response(
-        JSON.stringify({
-          error:   'Insufficient Points',
-          message: `You only have ${nft.stat_points} stat point(s) but tried to spend ${totalSpend}`,
-        }),
-        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return respondError(422, 'Insufficient Points',
+        `You only have ${nft.stat_points} stat point(s) but tried to spend ${totalSpend}`,
       )
     }
 
@@ -78,10 +63,7 @@ serve(async (req) => {
     const newLuck       = nft.luck       + luck
 
     if (newEfficiency > 100 || newResilience > 100 || newComfort > 100 || newLuck > 100) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'A stat cannot exceed 100' }),
-        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(422, 'Bad Request', 'A stat cannot exceed 100')
     }
 
     // ── Persist ───────────────────────────────────────────────────────────────
@@ -101,10 +83,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('allocate-stat-points: update error', updateError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: updateError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', updateError.message)
     }
 
     console.log(
@@ -117,26 +96,19 @@ serve(async (req) => {
     )
 
     // ── Return result ─────────────────────────────────────────────────────────
-    return new Response(
-      JSON.stringify({
-        id:          updated.id,
-        efficiency:  updated.efficiency,
-        resilience:  updated.resilience,
-        comfort:     updated.comfort,
-        luck:        updated.luck,
-        stat_points: updated.stat_points,
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk({
+      id:          updated.id,
+      efficiency:  updated.efficiency,
+      resilience:  updated.resilience,
+      comfort:     updated.comfort,
+      luck:        updated.luck,
+      stat_points: updated.stat_points,
+    })
 
   } catch (err) {
     console.error('allocate-stat-points: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error:   'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

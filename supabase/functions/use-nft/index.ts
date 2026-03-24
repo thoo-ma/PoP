@@ -9,6 +9,7 @@ import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 /**
  * Calculate energy lost for a single use.
@@ -59,10 +60,7 @@ serve(async (req) => {
     const { nft_id } = body
 
     if (!nft_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'nft_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'nft_id is required')
     }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
@@ -74,17 +72,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'NFT not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
     }
 
     if (nft.energy <= 0) {
-      return new Response(
-        JSON.stringify({ error: 'No Energy', message: 'NFT has no energy remaining' }),
-        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(422, 'No Energy', 'NFT has no energy remaining')
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
@@ -92,14 +84,12 @@ serve(async (req) => {
       const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)!
       const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)
       console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
-      return new Response(
-        JSON.stringify({
-          error:                      'on_cooldown',
-          message:                    `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
+      return respondError(429, 'on_cooldown',
+        `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
+        {
           cooldown_ends_at:           endsAt.toISOString(),
           cooldown_remaining_seconds: remaining,
-        }),
-        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        },
       )
     }
 
@@ -145,10 +135,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('use-nft: update error', updateError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: updateError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', updateError.message)
     }
 
     // ── Award POOP currency ───────────────────────────────────────────────────
@@ -186,32 +173,25 @@ serve(async (req) => {
     console.log(`use-nft: loot roll upserted → id=${lootRollId}`)
 
     // ── Return result ─────────────────────────────────────────────────────────
-    return new Response(
-      JSON.stringify({
-        id:           updated.id,
-        energy:       updated.energy,
-        energy_lost:  energyLost,
-        depleted:     updated.energy === 0,
-        xp:           updated.xp,
-        xp_gained:    xpGained,
-        level:        updated.level,
-        leveled_up:   leveledUp,
-        stat_points:  updated.stat_points,
-        poop_earned:  poopEarned,
-        poop_balance: newPoopBalance,
-        loot_roll_id: lootRollId,
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk({
+      id:           updated.id,
+      energy:       updated.energy,
+      energy_lost:  energyLost,
+      depleted:     updated.energy === 0,
+      xp:           updated.xp,
+      xp_gained:    xpGained,
+      level:        updated.level,
+      leveled_up:   leveledUp,
+      stat_points:  updated.stat_points,
+      poop_earned:  poopEarned,
+      poop_balance: newPoopBalance,
+      loot_roll_id: lootRollId,
+    })
 
   } catch (err) {
     console.error('use-nft: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

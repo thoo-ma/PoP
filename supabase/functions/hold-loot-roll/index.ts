@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 /**
  * hold-loot-roll
@@ -33,10 +34,7 @@ serve(async (req) => {
     const { loot_roll_id } = body
 
     if (!loot_roll_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'loot_roll_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'loot_roll_id is required')
     }
 
     // Fetch the row and verify ownership
@@ -48,17 +46,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'Loot roll not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'Loot roll not found or not owned by you')
     }
 
     if (roll.holds >= MAX_HOLDS) {
-      return new Response(
-        JSON.stringify({ error: 'Max Holds Reached', message: `You can only hold up to ${MAX_HOLDS} times` }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Max Holds Reached', `You can only hold up to ${MAX_HOLDS} times`)
     }
 
     const newHolds = roll.holds + 1
@@ -71,27 +63,17 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('hold-loot-roll: update error', updateError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: updateError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', updateError.message)
     }
 
     console.log(`hold-loot-roll: user=${userId} roll=${loot_roll_id} holds=${newHolds}`)
 
-    return new Response(
-      JSON.stringify({ holds: newHolds }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk({ holds: newHolds })
 
   } catch (err) {
     console.error('hold-loot-roll: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

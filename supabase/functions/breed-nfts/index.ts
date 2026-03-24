@@ -6,6 +6,7 @@ import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { breedCost } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
 
@@ -55,17 +56,11 @@ serve(async (req) => {
     const { parent1_id, parent2_id } = body
 
     if (!parent1_id || !parent2_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'parent1_id and parent2_id are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'parent1_id and parent2_id are required')
     }
 
     if (parent1_id === parent2_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'Cannot breed an NFT with itself' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'Cannot breed an NFT with itself')
     }
 
     // ── Fetch & ownership check ───────────────────────────────────────────────
@@ -77,17 +72,11 @@ serve(async (req) => {
 
     if (fetchError) {
       console.error('breed-nfts: fetch parents error', fetchError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: fetchError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', fetchError.message)
     }
 
     if (!parents || parents.length !== 2) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'One or both NFTs not found or not owned by you' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'One or both NFTs not found or not owned by you')
     }
 
     const p1 = parents.find((p: Tables<'nfts'>) => p.id === parent1_id)!
@@ -99,12 +88,8 @@ serve(async (req) => {
     const rankDiff = Math.abs(RARITY_RANK[r1] - RARITY_RANK[r2])
 
     if (rankDiff > 1) {
-      return new Response(
-        JSON.stringify({
-          error: 'Incompatible rarities',
-          message: `Cannot breed ${r1} with ${r2}. Only NFTs of the same or adjacent rarity can be bred together.`,
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return respondError(400, 'Incompatible rarities',
+        `Cannot breed ${r1} with ${r2}. Only NFTs of the same or adjacent rarity can be bred together.`,
       )
     }
 
@@ -115,13 +100,9 @@ serve(async (req) => {
 
     if (p1BreedCount >= BREED_MAX_COUNT || p2BreedCount >= BREED_MAX_COUNT) {
       const exhausted = p1BreedCount >= BREED_MAX_COUNT ? parent1_id : parent2_id
-      return new Response(
-        JSON.stringify({
-          error: 'breed_limit_reached',
-          message: `NFT ${exhausted} has already been bred ${BREED_MAX_COUNT} times and can no longer be used as a parent.`,
-          exhausted_nft_id: exhausted,
-        }),
-        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return respondError(422, 'breed_limit_reached',
+        `NFT ${exhausted} has already been bred ${BREED_MAX_COUNT} times and can no longer be used as a parent.`,
+        { exhausted_nft_id: exhausted },
       )
     }
 
@@ -148,23 +129,18 @@ serve(async (req) => {
 
     if (userFetchError) {
       console.error('breed-nfts: wallet fetch error', userFetchError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: userFetchError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', userFetchError.message)
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
     if (currentPoopBalance < totalBreedCost) {
-      return new Response(
-        JSON.stringify({
-          error: 'insufficient_poop',
-          message: `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentPoopBalance} POOP.`,
+      return respondError(402, 'insufficient_poop',
+        `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentPoopBalance} POOP.`,
+        {
           poop_balance: currentPoopBalance,
           poop_required: totalBreedCost,
           poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
-        }),
-        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        },
       )
     }
 
@@ -190,10 +166,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('breed-nfts: insert error', insertError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: insertError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', insertError.message)
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
@@ -245,19 +218,12 @@ serve(async (req) => {
       poop_balance: newPoopBalance,
     }
 
-    return new Response(
-      JSON.stringify(result),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk(result)
 
   } catch (err) {
     console.error('breed-nfts: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

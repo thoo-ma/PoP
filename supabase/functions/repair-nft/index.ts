@@ -4,6 +4,7 @@ import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -28,17 +29,11 @@ serve(async (req) => {
     const { nft_id, new_energy } = body
 
     if (!nft_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'nft_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'nft_id is required')
     }
 
     if (typeof new_energy !== 'number' || new_energy < 0 || new_energy > MAX_ENERGY) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: `new_energy must be a number between 0 and ${MAX_ENERGY}` }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', `new_energy must be a number between 0 and ${MAX_ENERGY}`)
     }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
@@ -50,19 +45,12 @@ serve(async (req) => {
       .single()
 
     if (fetchNFTError || !nft) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'NFT not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
     }
 
     if (new_energy <= nft.energy) {
-      return new Response(
-        JSON.stringify({
-          error: 'Bad Request',
-          message: `new_energy (${new_energy}) must be greater than current energy (${nft.energy})`,
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return respondError(400, 'Bad Request',
+        `new_energy (${new_energy}) must be greater than current energy (${nft.energy})`,
       )
     }
 
@@ -83,22 +71,14 @@ serve(async (req) => {
 
     if (userFetchError) {
       console.error('repair-nft: wallet fetch error', userFetchError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: userFetchError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', userFetchError.message)
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
     if (currentPoopBalance < poopCost) {
-      return new Response(
-        JSON.stringify({
-          error: 'insufficient_poop',
-          message: `Repairing costs ${poopCost} POOP. You have ${currentPoopBalance} POOP.`,
-          poop_balance: currentPoopBalance,
-          poop_required: poopCost,
-        }),
-        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return respondError(402, 'insufficient_poop',
+        `Repairing costs ${poopCost} POOP. You have ${currentPoopBalance} POOP.`,
+        { poop_balance: currentPoopBalance, poop_required: poopCost },
       )
     }
 
@@ -113,10 +93,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('repair-nft: update error', updateError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: updateError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', updateError.message)
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
@@ -137,24 +114,17 @@ serve(async (req) => {
     )
 
     // ── Return result ─────────────────────────────────────────────────────────
-    return new Response(
-      JSON.stringify({
-        id:           updated.id,
-        energy:       updated.energy,
-        poop_spent:   poopCost,
-        poop_balance: newPoopBalance,
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk({
+      id:           updated.id,
+      energy:       updated.energy,
+      poop_spent:   poopCost,
+      poop_balance: newPoopBalance,
+    })
 
   } catch (err) {
     console.error('repair-nft: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { getUserIdFromToken, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -48,13 +49,7 @@ serve(async (req) => {
     const { audio_base64, threshold = 0.5 } = await req.json()
 
     if (!audio_base64) {
-      return new Response(
-        JSON.stringify({ error: 'Missing audio_base64 in request body' }),
-        { 
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      )
+      return respondError(400, 'Bad Request', 'Missing audio_base64 in request body')
     }
 
     // Check rate limit
@@ -73,17 +68,9 @@ serve(async (req) => {
     }
 
     if (count !== null && count >= detectionsPerDay) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Rate limit exceeded', 
-          message: `You have reached the daily limit of ${detectionsPerDay} detections. Please try again tomorrow.`,
-          limit: detectionsPerDay,
-          current_count: count
-        }),
-        { 
-          status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+      return respondError(429, 'Rate limit exceeded',
+        `You have reached the daily limit of ${detectionsPerDay} detections. Please try again tomorrow.`,
+        { limit: detectionsPerDay, current_count: count },
       )
     }
 
@@ -120,16 +107,7 @@ serve(async (req) => {
     // body, e.g. "Audio too short"). This is a client input problem, so 422 is
     // the correct status — not 500, which implies a server fault.
     if (result.error) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Detection failed',
-          message: result.error
-        }),
-        { 
-          status: 422,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      )
+      return respondError(422, 'Detection failed', result.error)
     }
 
     // Store detection result in database
@@ -150,32 +128,17 @@ serve(async (req) => {
     }
 
     // Return detection result
-    return new Response(
-      JSON.stringify({
-        detected: result.detected,
-        confidence: result.confidence,
-        duration_seconds: result.duration_seconds,
-        top_predictions: result.top_predictions,
-        model_version: result.model_version,
-        threshold_used: result.threshold_used
-      }),
-      { 
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    )
+    return respondOk({
+      detected: result.detected,
+      confidence: result.confidence,
+      duration_seconds: result.duration_seconds,
+      top_predictions: result.top_predictions,
+      model_version: result.model_version,
+      threshold_used: result.threshold_used,
+    })
 
   } catch (error) {
     console.error('Edge Function error:', error)
-    return new Response(
-      JSON.stringify({ 
-        error: 'Internal server error',
-        message: error.message 
-      }),
-      { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    )
+    return respondError(500, 'Internal server error', error.message)
   }
 })
