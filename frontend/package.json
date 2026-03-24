@@ -1,7 +1,6 @@
 {
   "name": "pop",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.32.1",
   "main": "index.ts",
   "scripts": {
     "start": "expo start --dev-client",
@@ -17,6 +16,7 @@
     "gen:types": "supabase gen types typescript --project-id mtnluwkvhkwwxvxdtkgs > ../shared/database.types.ts"
   },
   "dependencies": {
+    "@pop/shared": "workspace:*",
     "@embrace-io/react-native": "^6.6.0",
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.8",

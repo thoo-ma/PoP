@@ -65,21 +65,22 @@ supabase functions deploy breed-nfts --project-ref mtnluwkvhkwwxvxdtkgs
 
 ---
 
-### 5. Install Frontend Dependencies
+### 5. Install Dependencies
+
+From the project root (pnpm workspaces):
 
 ```bash
-cd frontend
 pnpm install
 ```
 
-This installs `expo-av` and `expo-file-system`.
+This installs dependencies for all workspace packages (`frontend/`, `dashboard/`, `shared/`).
 
 ---
 
 ### 6. Test the App
 
 ```bash
-pnpm start
+cd frontend && pnpm start
 ```
 
 Navigate through the screens:

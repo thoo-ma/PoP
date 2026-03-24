@@ -4,6 +4,7 @@
     "strict": true,
     "jsx": "react-native",
     "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],

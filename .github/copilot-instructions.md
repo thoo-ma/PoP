@@ -4,11 +4,13 @@
 
 ## Monorepo Layout
 
+**pnpm workspaces** — single root `pnpm-lock.yaml`, run `pnpm install` from root.
+
 | Directory | Runtime | Key Dependency | Path Alias |
 |---|---|---|---|
-| `frontend/` | React Native + Expo 54 | HeroUI Native, Uniwind (Tailwind v4) | `@/*` → `./` · `@shared` → `../shared/` |
-| `dashboard/` | Next.js 14 (App Router) | Radix UI, Tailwind v3, Zustand | `@/*` → `./src/*` · `@shared/*` → `../shared/*` |
-| `shared/` | Imported by frontend + edge functions + dashboard | Zod | — |
+| `frontend/` | React Native + Expo 54 | HeroUI Native, Uniwind (Tailwind v4) | `@/*` → `./` · `@pop/shared` (workspace) |
+| `dashboard/` | Next.js 14 (App Router) | Radix UI, Tailwind v3, Zustand | `@/*` → `./src/*` · `@pop/shared` (workspace) |
+| `shared/` | `@pop/shared` workspace package — raw TS, no build step | Zod | — |
 | `supabase/` | Deno (Edge Functions) | Supabase JS v2, Zod | Relative: `../../../shared/` |
 | `google-cloud-run/` | Python 3.10 + Flask | TensorFlow, YAMNet | — |
 
@@ -17,8 +19,13 @@
 ## Build & Validate — MANDATORY Before Every Commit
 
 ```bash
+# Install all workspace deps from root
+pnpm install
+
+# Type-check each package
 cd frontend && pnpm exec tsc --noEmit        # Frontend type-check
 cd ../dashboard && pnpm exec tsc --noEmit    # Dashboard type-check
+cd ../shared && pnpm exec tsc --noEmit       # Shared type-check
 cd ../supabase/functions && deno check <function>/index.ts  # Edge function check
 ```
 
