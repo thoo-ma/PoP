@@ -18,6 +18,12 @@ if [ -f "$CWD/.agent-worktree-origin" ]; then
     git -C "$CWD" push origin "$BRANCH" 2>/dev/null || true
   fi
 
+  # Resolve ORIGIN_REPO to git top-level in case it was stored as a subdirectory
+  RESOLVED_ORIGIN=$(git -C "$ORIGIN_REPO" rev-parse --show-toplevel 2>/dev/null || true)
+  if [ -n "$RESOLVED_ORIGIN" ]; then
+    ORIGIN_REPO="$RESOLVED_ORIGIN"
+  fi
+
   # Remove the worktree from the original repo
   if [ -d "$ORIGIN_REPO/.git" ] || [ -f "$ORIGIN_REPO/.git" ]; then
     git -C "$ORIGIN_REPO" worktree remove "$CWD" --force 2>/dev/null || true

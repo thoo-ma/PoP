@@ -10,6 +10,12 @@ if [ -z "$CWD" ]; then
   CWD=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 fi
 
+# Normalize CWD to the git top-level so worktree paths are always based on the repo root
+TOPLEVEL=$(git -C "$CWD" rev-parse --show-toplevel 2>/dev/null || true)
+if [ -n "$TOPLEVEL" ]; then
+  CWD="$TOPLEVEL"
+fi
+
 REPO_NAME=$(basename "$CWD")
 
 # Extract a descriptive slug from the initial prompt if available.
@@ -23,7 +29,10 @@ if [ -n "$RAW_PROMPT" ]; then
     | awk '{for(i=1;i<=5&&i<=NF;i++) printf "%s-", $i}' \
     | sed 's/-$//' \
     | cut -c1-50)
-else
+fi
+
+# Fallback if slug is empty (e.g. prompt was only punctuation/emoji)
+if [ -z "$SLUG" ]; then
   SLUG="task"
 fi
 
@@ -31,45 +40,64 @@ fi
 TASK_ID="${SLUG}-$(date +%H%M%S)"
 WORKTREE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
 
-# Determine base branch (prefer main, fallback to master, then current HEAD)
-BASE_BRANCH="origin/main"
-if ! git rev-parse --verify "$BASE_BRANCH" &>/dev/null; then
-  BASE_BRANCH="origin/master"
-  if ! git rev-parse --verify "$BASE_BRANCH" &>/dev/null; then
-    BASE_BRANCH="HEAD"
-  fi
-fi
-
 # Fetch latest from remote (ignore failures for offline work)
 git fetch origin --quiet 2>/dev/null || true
 
+# Determine base branch AFTER fetch so remote refs are up-to-date
+if git show-ref --verify --quiet "refs/remotes/origin/main"; then
+  BASE_BRANCH="origin/main"
+elif git show-ref --verify --quiet "refs/remotes/origin/master"; then
+  BASE_BRANCH="origin/master"
+else
+  BASE_BRANCH="HEAD"
+fi
+
 # Create the worktree with a new branch
 BRANCH_NAME="agent/${TASK_ID}"
-git worktree add "$WORKTREE_DIR" -b "$BRANCH_NAME" "$BASE_BRANCH" 2>/dev/null
+if ! git worktree add "$WORKTREE_DIR" -b "$BRANCH_NAME" "$BASE_BRANCH"; then
+  echo "worktree-setup: failed to create git worktree at '$WORKTREE_DIR' from base '$BASE_BRANCH'" >&2
+  exit 1
+fi
 
 # Install dependencies in the new worktree
 if [ -f "$WORKTREE_DIR/pnpm-lock.yaml" ]; then
-  (cd "$WORKTREE_DIR" && pnpm install --frozen-lockfile --quiet 2>/dev/null) || true
+  if ! (cd "$WORKTREE_DIR" && pnpm install --frozen-lockfile --quiet); then
+    echo "worktree-setup: WARNING: pnpm install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
+  fi
 elif [ -f "$WORKTREE_DIR/package-lock.json" ]; then
-  (cd "$WORKTREE_DIR" && npm ci --quiet 2>/dev/null) || true
+  if ! (cd "$WORKTREE_DIR" && npm ci --quiet); then
+    echo "worktree-setup: WARNING: npm ci failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
+  fi
 elif [ -f "$WORKTREE_DIR/yarn.lock" ]; then
-  (cd "$WORKTREE_DIR" && yarn install --frozen-lockfile --quiet 2>/dev/null) || true
+  if ! (cd "$WORKTREE_DIR" && yarn install --frozen-lockfile --quiet); then
+    echo "worktree-setup: WARNING: yarn install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
+  fi
 elif [ -f "$WORKTREE_DIR/requirements.txt" ]; then
-  (cd "$WORKTREE_DIR" && pip install -r requirements.txt --quiet 2>/dev/null) || true
+  if ! (cd "$WORKTREE_DIR" && pip install -r requirements.txt --quiet); then
+    echo "worktree-setup: WARNING: pip install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
+  fi
 elif [ -f "$WORKTREE_DIR/go.mod" ]; then
-  (cd "$WORKTREE_DIR" && go mod download 2>/dev/null) || true
+  if ! (cd "$WORKTREE_DIR" && go mod download); then
+    echo "worktree-setup: WARNING: go mod download failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
+  fi
 fi
 
 # Write a marker file so the cleanup script knows this is a hook-managed worktree
 echo "$CWD" > "$WORKTREE_DIR/.agent-worktree-origin"
 
+# Build additionalContext as a JSON-escaped string to handle paths with special characters
+ADDITIONAL_CONTEXT=$(jq -Rn \
+  --arg worktree "$WORKTREE_DIR" \
+  --arg branch "$BRANCH_NAME" \
+  --arg cwd "$CWD" \
+  '"IMPORTANT: You are working in an isolated git worktree for parallel agent safety. Your working directory is: \($worktree) — Branch: \($branch). All file edits, terminal commands, and operations MUST happen inside this directory. Do NOT cd to or modify files in the original repo at \($cwd). When you are done, push your branch and create a PR from '"'"'\($branch)'"'"'."')
+
 # Output JSON that injects context into the agent session.
-# The additionalContext tells the agent where to work.
 cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "IMPORTANT: You are working in an isolated git worktree for parallel agent safety. Your working directory is: ${WORKTREE_DIR} — Branch: ${BRANCH_NAME}. All file edits, terminal commands, and operations MUST happen inside this directory. Do NOT cd to or modify files in the original repo at ${CWD}. When you are done, push your branch and create a PR from '${BRANCH_NAME}'."
+    "additionalContext": ${ADDITIONAL_CONTEXT}
   }
 }
 EOF
