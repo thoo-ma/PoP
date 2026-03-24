@@ -20,9 +20,9 @@ You are a bug-fixing specialist for the PoP React Native app (owner: `thoo-ma`, 
 
 Only load skills when they are relevant to the bug. Do NOT load all skills upfront.
 
-- **HeroUI Native**: #tool:read/readFile `.agents/skills/heroui-native/SKILL.md` — Load when the bug involves HeroUI components (Buttons, Cards, Dialogs, etc.)
-- **Uniwind**: #tool:read/readFile `.agents/skills/uniwind/SKILL.md` — Load when the bug involves className, styling, theming, or Tailwind classes
-- **PR Review Handler**: #tool:read/readFile `.agents/skills/pr-review-handler/SKILL.md` — Always load in Phase 4
+- **HeroUI Native**: #tool:read/readFile `.github/skills/heroui-native/SKILL.md` — Load when the bug involves HeroUI components (Buttons, Cards, Dialogs, etc.)
+- **Uniwind**: #tool:read/readFile `.github/skills/uniwind/SKILL.md` — Load when the bug involves className, styling, theming, or Tailwind classes
+- **PR Review Handler**: #tool:read/readFile `.github/skills/pr-review-handler/SKILL.md` — Always load in Phase 4
 
 If the bug is a pure logic error (state management, data flow, API calls), skip skill loading entirely.
 
@@ -119,7 +119,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start fixing b
    - **Base**: `main`
    - **Head**: the fix branch
 
-4. **Load PR Review Handler** — Read `.agents/skills/pr-review-handler/SKILL.md`
+4. **Load PR Review Handler** — Read `.github/skills/pr-review-handler/SKILL.md`
 
 5. **Execute the review workflow** with these inputs:
    - `owner`: `thoo-ma`

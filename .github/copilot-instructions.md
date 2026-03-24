@@ -112,7 +112,7 @@ Agent sessions run in isolated git worktrees (`.vscode/hooks.json`). The `Sessio
 
 ## PR Workflow
 
-All agents follow a 4-phase workflow ending with PR creation and the `pr-review-handler` skill. See `.agents/skills/pr-review-handler/SKILL.md`.
+All agents follow a 4-phase workflow ending with PR creation and the `pr-review-handler` skill. See `.github/skills/pr-review-handler/SKILL.md`.
 
 ## Backlog
 
