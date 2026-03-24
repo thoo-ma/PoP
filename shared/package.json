@@ -6,5 +6,8 @@
   "types": "index.ts",
   "dependencies": {
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
   }
 }
