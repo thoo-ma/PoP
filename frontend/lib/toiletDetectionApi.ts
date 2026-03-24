@@ -24,17 +24,19 @@ export async function detectToiletFlush(
     if (error) {
       // Parse the structured response body from respondError().
       let body: Record<string, unknown> | null = null;
+      let httpStatus: number | null = null;
       if (error instanceof FunctionsHttpError) {
+        httpStatus = error.context.status;
         try { body = await error.context.json(); } catch { /* leave null */ }
       }
 
       // Rate-limit error (429) — build a typed RateLimitError from the body.
-      if (body?.error && String(body.error).includes('Rate limit')) {
+      if (httpStatus === 429) {
         const rateLimitError: RateLimitError = {
           error: 'rate_limit',
-          message: (body.message as string) ?? String(body.error),
-          limit: (body.limit as number) ?? 0,
-          current_count: (body.current_count as number) ?? 0,
+          message: (body?.message as string) ?? (body?.error as string) ?? 'Rate limit exceeded',
+          limit: (body?.limit as number) ?? 0,
+          current_count: (body?.current_count as number) ?? 0,
         };
         throw rateLimitError;
       }
