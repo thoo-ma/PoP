@@ -3,6 +3,7 @@ import type { NFTRarity as Rarity, NFTType } from '../../../shared/nft.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 // ─── Edge Function entry point ─────────────────────────────────────────────
 
@@ -27,10 +28,7 @@ serve(async (req) => {
     const { box_id } = body
 
     if (!box_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'box_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'box_id is required')
     }
 
     // ── Fetch & ownership check ──────────────────────────────────────────────
@@ -42,17 +40,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !box) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'Mystery box not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'Mystery box not found or not owned by you')
     }
 
     if (box.opened) {
-      return new Response(
-        JSON.stringify({ error: 'Conflict', message: 'This mystery box has already been opened' }),
-        { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(409, 'Conflict', 'This mystery box has already been opened')
     }
 
     // ── Roll the new NFT ─────────────────────────────────────────────────────
@@ -86,10 +78,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('open-mystery-box: insert error', insertError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: insertError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', insertError.message)
     }
 
     // ── Mark box as opened ───────────────────────────────────────────────────
@@ -121,19 +110,12 @@ serve(async (req) => {
       updated_at: created.updated_at,
     }
 
-    return new Response(
-      JSON.stringify(result),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk(result)
 
   } catch (err) {
     console.error('open-mystery-box: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })

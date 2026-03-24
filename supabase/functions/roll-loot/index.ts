@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 
 /**
  * roll-loot
@@ -41,10 +42,7 @@ serve(async (req) => {
     const { loot_roll_id } = body
 
     if (!loot_roll_id) {
-      return new Response(
-        JSON.stringify({ error: 'Bad Request', message: 'loot_roll_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(400, 'Bad Request', 'loot_roll_id is required')
     }
 
     // Fetch and verify ownership
@@ -56,10 +54,7 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return new Response(
-        JSON.stringify({ error: 'Not Found', message: 'Loot roll not found or not owned by you' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(404, 'Not Found', 'Loot roll not found or not owned by you')
     }
 
     const holdsUsed = roll.holds
@@ -87,10 +82,7 @@ serve(async (req) => {
     )
 
     if (!won) {
-      return new Response(
-        JSON.stringify({ won: false, holds_used: holdsUsed }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondOk({ won: false, holds_used: holdsUsed })
     }
 
     // ── Award mystery box ─────────────────────────────────────────────────────
@@ -105,27 +97,17 @@ serve(async (req) => {
 
     if (boxError || !box) {
       console.error('roll-loot: mystery box insert error', boxError)
-      return new Response(
-        JSON.stringify({ error: 'Internal server error', message: boxError?.message ?? 'Failed to award mystery box' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return respondError(500, 'Internal server error', boxError?.message ?? 'Failed to award mystery box')
     }
 
     console.log(`roll-loot: awarded mystery box id=${box.id} rarity=${rarity} to user=${userId}`)
 
-    return new Response(
-      JSON.stringify({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity } }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return respondOk({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity } })
 
   } catch (err) {
     console.error('roll-loot: unexpected error', err)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    return respondError(500, 'Internal server error',
+      err instanceof Error ? err.message : 'Unknown error',
     )
   }
 })
