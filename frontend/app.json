@@ -33,7 +33,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.pop-corporation.pop",
+      "package": "com.popcorporation.pop",
       "intentFilters": [
         {
           "action": "VIEW",
