@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
 
@@ -37,8 +38,16 @@ export function useRollLoot() {
       });
 
       if (fnError) {
+        let message: string = fnError.message;
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            const body = await fnError.context.json();
+            if (body?.message) message = body.message as string;
+            else if (body?.error) message = body.error as string;
+          } catch { /* leave message as-is */ }
+        }
         logError('useRollLoot:Hold', fnError);
-        setError(fnError.message ?? 'Failed to hold loot roll');
+        setError(message ?? 'Failed to hold loot roll');
         return null;
       }
 
@@ -62,8 +71,16 @@ export function useRollLoot() {
       });
 
       if (fnError) {
+        let message: string = fnError.message;
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            const body = await fnError.context.json();
+            if (body?.message) message = body.message as string;
+            else if (body?.error) message = body.error as string;
+          } catch { /* leave message as-is */ }
+        }
         logError('useRollLoot:Roll', fnError);
-        setError(fnError.message ?? 'Failed to roll loot');
+        setError(message ?? 'Failed to roll loot');
         return null;
       }
 
