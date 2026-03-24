@@ -16,7 +16,7 @@ interface MysteryBoxCardProps {
 
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
-    <Card className="w-full mb-4" animation="disable-all">
+    <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
       <View className={cardImageContainer()}>
         <Image
           source={{ uri: box.image_url }}

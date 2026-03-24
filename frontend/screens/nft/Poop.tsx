@@ -540,12 +540,12 @@ export default memo(function Poop() {
                   className="mb-3"
                 />
                 <View
-                  className={cn(detailStyles.root(), 'w-full max-w-[280px] bg-white p-3 border-gray-200')}
+                  className={cn(detailStyles.root(), 'w-[280px] bg-surface border-border')}
                 >
-                  <View className={cn(detailStyles.imageWrap(), 'h-[180px] bg-gray-100 rounded-xl mb-3')}>
+                  <View className={detailStyles.imageWrap()}>
                     <Image
                       source={{ uri: displayNFT.image_url }}
-                      className="w-full h-full"
+                      className="w-full h-[280px] bg-default"
                       resizeMode="cover"
                     />
                     <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
@@ -556,16 +556,22 @@ export default memo(function Poop() {
                     >
                       <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>{displayNFT.type.toUpperCase()}</Text>
                     </View>
+                    <View className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}>
+                      <Text className={cn(badgeLabel(), 'tracking-wide')}>
+                        Energy: {displayNFT.energy}%
+                      </Text>
+                    </View>
                   </View>
-                  <View className={detailStyles.content()}>
-                    <Text className={cn(detailStyles.title(), 'text-gray-700 mb-2.5')}>{formatDisplayName(displayNFT.name)}</Text>
+
+                  <View className={cn(detailStyles.content(), 'p-4')}>
+                    <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>{formatDisplayName(displayNFT.name)}</Text>
                     <NFTProperties
                       efficiency={displayNFT.efficiency}
                       resilience={displayNFT.resilience}
                       comfort={displayNFT.comfort}
                       luck={displayNFT.luck}
                       energy={displayNFT.energy}
-                      mode="detailed"
+                      mode="compact"
                     />
                   </View>
                 </View>
