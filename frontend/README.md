@@ -89,16 +89,16 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=votre_clé_anon
 ## 📝 Commandes Utiles
 
 ```bash
-npm start              # Metro bundler (auto-détecte le mode)
-npm run start:tunnel   # Tunnel pour tester sur device distant
-npm run web            # Lance sur navigateur web
-npm run prebuild       # Génère les dossiers ios/android natifs
+pnpm start              # Metro bundler (auto-détecte le mode)
+pnpm start:tunnel       # Tunnel pour tester sur device distant
+pnpm web                # Lance sur navigateur web
+pnpm prebuild           # Génère les dossiers ios/android natifs
 ```
 
 ## ⚡ Workflow Recommandé
 
-1. **Phase UI:** Utiliser Expo Go (`npm run start:go`)
-2. **Phase Auth:** Builder et installer un dev build, puis `npm run start:dev`
+1. **Phase UI:** Utiliser Expo Go (`pnpm start:go`)
+2. **Phase Auth:** Builder et installer un dev build, puis `pnpm start:dev`
 3. **Testing:** Utiliser le dev build pour les tests complets
 
 ## 🐛 Troubleshooting
@@ -109,8 +109,8 @@ npm run prebuild       # Génère les dossiers ios/android natifs
 - Vérifier que le scheme `pop://` est bien configuré dans app.json
 
 ### Dev client non trouvé
-- Builder un nouveau dev build avec `npm run build:android` ou `npm run build:ios`
+- Builder un nouveau dev build avec `pnpm build:android` ou `pnpm build:ios`
 - Installer le build sur votre appareil
 
 ### Metro bundler ne démarre pas
-- Nettoyer le cache: `npx expo start -c`
+- Nettoyer le cache: `pnpm exec expo start -c`
