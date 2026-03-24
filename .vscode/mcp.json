@@ -1,0 +1,34 @@
+{
+  "servers": {
+    "heroui-native": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@heroui/native-mcp@latest"]
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"]
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "embrace": {
+      "type": "http",
+      "url": "https://mcp.embrace.io/mcp"
+    },
+    "uniwind": {
+      "type": "http",
+      "url": "https://mcp.uniwind.dev/mcp"
+    }
+  }
+}
