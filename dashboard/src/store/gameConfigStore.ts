@@ -2,12 +2,12 @@
 
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
-import { type GameConfigKey } from '@shared/schemas'
+import { type GameConfigKey } from '@pop/shared/schemas'
 import {
   buildGameConfig,
   type FullGameConfig,
   type ConfigSource,
-} from '@shared/gameConfig'
+} from '@pop/shared/gameConfig'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
