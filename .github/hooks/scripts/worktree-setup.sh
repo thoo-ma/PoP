@@ -43,11 +43,9 @@ WORKTREE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
 # Fetch latest from remote (ignore failures for offline work)
 git fetch origin --quiet 2>/dev/null || true
 
-# Determine base branch AFTER fetch so remote refs are up-to-date
+# PoP uses main — fallback to HEAD if origin/main ref is not present locally
 if git show-ref --verify --quiet "refs/remotes/origin/main"; then
   BASE_BRANCH="origin/main"
-elif git show-ref --verify --quiet "refs/remotes/origin/master"; then
-  BASE_BRANCH="origin/master"
 else
   BASE_BRANCH="HEAD"
 fi
@@ -59,27 +57,9 @@ if ! git worktree add "$WORKTREE_DIR" -b "$BRANCH_NAME" "$BASE_BRANCH"; then
   exit 1
 fi
 
-# Install dependencies in the new worktree
-if [ -f "$WORKTREE_DIR/pnpm-lock.yaml" ]; then
-  if ! (cd "$WORKTREE_DIR" && pnpm install --frozen-lockfile --quiet); then
-    echo "worktree-setup: WARNING: pnpm install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
-  fi
-elif [ -f "$WORKTREE_DIR/package-lock.json" ]; then
-  if ! (cd "$WORKTREE_DIR" && npm ci --quiet); then
-    echo "worktree-setup: WARNING: npm ci failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
-  fi
-elif [ -f "$WORKTREE_DIR/yarn.lock" ]; then
-  if ! (cd "$WORKTREE_DIR" && yarn install --frozen-lockfile --quiet); then
-    echo "worktree-setup: WARNING: yarn install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
-  fi
-elif [ -f "$WORKTREE_DIR/requirements.txt" ]; then
-  if ! (cd "$WORKTREE_DIR" && pip install -r requirements.txt --quiet); then
-    echo "worktree-setup: WARNING: pip install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
-  fi
-elif [ -f "$WORKTREE_DIR/go.mod" ]; then
-  if ! (cd "$WORKTREE_DIR" && go mod download); then
-    echo "worktree-setup: WARNING: go mod download failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
-  fi
+# Install pnpm dependencies in the new worktree
+if ! (cd "$WORKTREE_DIR" && pnpm install --frozen-lockfile --prefer-offline --quiet); then
+  echo "worktree-setup: WARNING: pnpm install failed in '$WORKTREE_DIR'. Dependencies may be missing." >&2
 fi
 
 # Write a marker file so the cleanup script knows this is a hook-managed worktree
