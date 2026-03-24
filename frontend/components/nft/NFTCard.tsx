@@ -20,7 +20,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
     : Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100);
 
   return (
-    <Card className="w-full mb-4" animation="disable-all">
+    <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
       {/* Image + badge overlay */}
       <View className={cardImageContainer()}>
         <Image
