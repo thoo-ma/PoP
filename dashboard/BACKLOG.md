@@ -39,7 +39,7 @@ Audit performed: **2026-03-04**
 - **Affected files:** `currency/page.tsx`, `breed/page.tsx`, `stat-points/page.tsx`, `minting/page.tsx`, `energy/page.tsx`, `cooldown/page.tsx`
 
 ### 7. `stat-points/page.tsx` hardcodes `MAX_LEVEL = 20`
-- [ ] Replace with `import { MAX_LEVEL } from '@shared/xp'`
+- [ ] Replace with `import { MAX_LEVEL } from '@pop/shared/xp'`
 - **File:** `src/app/stat-points/page.tsx:16`
 
 ### 8. TypeScript `any` in LazyChart

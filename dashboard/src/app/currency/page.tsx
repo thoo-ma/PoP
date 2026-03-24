@@ -10,7 +10,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { MAX_LEVEL } from '@shared/xp'
+import { MAX_LEVEL } from '@pop/shared/xp'
 
 const TYPES    = ['turbo-flush', 'cruise-seat', 'zen-fortress'] as const
 const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
