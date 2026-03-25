@@ -7,10 +7,10 @@ export { z }
  * Parses and validates a request body against a Zod schema.
  * Returns the parsed data or a 400 Response with a descriptive error message.
  */
-export async function parseBody<T>(
+export async function parseBody<S extends z.ZodTypeAny>(
   req: Request,
-  schema: z.ZodType<T>,
-): Promise<T | Response> {
+  schema: S,
+): Promise<z.infer<S> | Response> {
   let raw: unknown
   try {
     raw = await req.json()
