@@ -4,11 +4,16 @@
   "scripts": {
     "dev:frontend": "pnpm --filter pop run start",
     "dev:dashboard": "pnpm --filter dashboard run dev",
-    "typecheck": "pnpm -r exec tsc --noEmit",
-    "typecheck:frontend": "pnpm --filter pop exec tsc --noEmit",
-    "typecheck:dashboard": "pnpm --filter dashboard exec tsc --noEmit"
+    "typecheck": "turbo typecheck",
+    "build": "turbo build",
+    "lint": "turbo lint"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
+  },
+  "devDependencies": {
+    "turbo": "^2.8.20"
   }
 }

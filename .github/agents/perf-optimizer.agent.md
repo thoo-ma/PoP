@@ -134,7 +134,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start optimisi
    - Move dimension-dependent logic into components (not module scope)
 
 3. **Verify**:
-   - Type-check: `cd frontend && pnpm exec tsc --noEmit`
+   - Type-check: `pnpm exec turbo typecheck --filter=pop`
    - Run tests if they exist: `cd frontend && pnpm exec jest --passWithNoTests`
    - Manually trace the data flow to confirm: no redundant fetches, correct memoisation deps, cleanup runs on unmount
 
@@ -172,7 +172,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start optimisi
    - `repo`: `PoP`
    - `pullNumber`: the PR created above
    - `issueNumber`: the GitHub issue number (if referenced, otherwise omit)
-   - `typeCheckCommand`: `cd frontend && pnpm exec tsc --noEmit`
+   - `typeCheckCommand`: `pnpm exec turbo typecheck --filter=pop`
 
 6. **Follow every step in the skill**
 

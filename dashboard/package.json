@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prewarm": "node scripts/prewarm.mjs"
+    "prewarm": "node scripts/prewarm.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@pop/shared": "workspace:*",
