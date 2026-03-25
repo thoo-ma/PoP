@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Clean Agent Worktrees",
+      "type": "shell",
+      "command": "bash",
+      "args": ["scripts/clean-worktrees.sh"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
