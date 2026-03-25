@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { serve } from "std/http/server"
 import type { NFTRarity as Rarity, NFTType } from '../../../shared/nft.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'

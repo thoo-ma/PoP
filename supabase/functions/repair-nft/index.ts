@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { serve } from "std/http/server"
 import { repairCost } from '../../../shared/currency.ts'
 import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'

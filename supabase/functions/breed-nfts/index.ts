@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { serve } from "std/http/server"
 import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
 import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
