@@ -5,6 +5,13 @@ import { MAX_ENERGY } from '../../../shared/statPoints.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const RepairSchema = z.object({
+  nft_id:     z.string().uuid('nft_id must be a valid UUID'),
+  new_energy: z.number().int().min(0).max(MAX_ENERGY,
+    `new_energy must be between 0 and ${MAX_ENERGY}`),
+})
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -25,16 +32,9 @@ serve(async (req) => {
     console.log(`repair-nft: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
-    const body = await req.json()
-    const { nft_id, new_energy } = body
-
-    if (!nft_id) {
-      return respondError(400, 'Bad Request', 'nft_id is required')
-    }
-
-    if (typeof new_energy !== 'number' || new_energy < 0 || new_energy > MAX_ENERGY) {
-      return respondError(400, 'Bad Request', `new_energy must be a number between 0 and ${MAX_ENERGY}`)
-    }
+    const bodyResult = await parseBody(req, RepairSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { nft_id, new_energy } = bodyResult
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchNFTError } = await supabase
