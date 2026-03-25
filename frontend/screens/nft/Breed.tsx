@@ -64,7 +64,7 @@ import { nftEvents, canBreed } from '@/utils';
   if (nfts.length < 2) {
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <View className={infoBox({ tone: 'info' })}>
+        <View className={infoBox()}>
           <Text className="text-sm text-foreground-500 text-center">
             You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding.
           </Text>

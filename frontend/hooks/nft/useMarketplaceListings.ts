@@ -46,6 +46,7 @@ export function useMarketplaceListings() {
             level,
             xp,
             stat_points,
+            breed_count,
             last_used_at,
             user_id,
             created_at,
