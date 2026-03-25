@@ -1,6 +1,6 @@
-import type { NFTRarity } from '@shared';
-import { RARITY_RANK, BREED_PROBABILITIES } from '@shared';
-import type { BreedPairKey } from '@shared';
+import type { NFTRarity } from '@pop/shared';
+import { RARITY_RANK, BREED_PROBABILITIES } from '@pop/shared';
+import type { BreedPairKey } from '@pop/shared';
 
 
 /**

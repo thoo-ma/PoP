@@ -6,8 +6,8 @@
  */
 
 import type { NFT } from '@/types';
-import { calcCooldownHours } from '@shared';
-import type { CooldownConfig } from '@shared/schemas';
+import { calcCooldownHours } from '@pop/shared';
+import type { CooldownConfig } from '@pop/shared/schemas';
 
 /** Human-readable countdown string, e.g. "2h 34m" or "45m" or "30s". */
 function formatCooldown(totalSeconds: number): string {

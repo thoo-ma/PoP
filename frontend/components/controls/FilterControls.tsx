@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
 import { View } from 'react-native';
 import { Button, TagGroup } from 'heroui-native';
-import type { NFTRarity, NFTType } from '@shared';
-import { RARITIES } from '@shared';
+import type { NFTRarity, NFTType } from '@pop/shared';
+import { RARITIES } from '@pop/shared';
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */

@@ -156,7 +156,7 @@ export const shadows = {
   },
 };
 
-import type { NFTRarity } from '@shared';
+import type { NFTRarity } from '@pop/shared';
 
 export const RARITY_COLORS: Record<NFTRarity, string> = {
   common: '#94a3b8',

@@ -5,7 +5,7 @@ import { Card, Chip, cn } from 'heroui-native';
 import type { NFT } from '@/types/nft';
 import NFTProperties from './NFTProperties';
 import { formatDisplayName } from '@/utils';
-import { MAX_LEVEL, xpThreshold } from '@shared/xp';
+import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp';
 import { badgeLabel, cardImageContainer, badgePosition, cardBody, typeBadge, rarityBadge } from '@/styles';
 
 interface NFTCardProps {

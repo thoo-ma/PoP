@@ -6,7 +6,7 @@ import { screenContainer, scrollContent, gridLayout, emptyState, skeletonCard } 
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks';
 import { NFTCard, MysteryBoxCard, SortControls, FilterControls, ScreenLoader, ScreenError, StatAllocationModal, MysteryBoxRevealModal } from '@/components';
 import { sortNFTs, nftEvents, formatDisplayName } from '@/utils';
-import type { NFTRarity, NFTType, MysteryBox } from '@shared';
+import type { NFTRarity, NFTType, MysteryBox } from '@pop/shared';
 import type { SortOption, NFT } from '@/types';
 import type { AllocateResult } from '@/hooks';
 

@@ -1,5 +1,5 @@
 import type { Session, User } from '@supabase/supabase-js';
-import type { Tables } from '@shared';
+import type { Tables } from '@pop/shared';
 
 /**
  * OAuth provider types

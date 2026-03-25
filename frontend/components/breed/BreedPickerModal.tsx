@@ -2,7 +2,7 @@ import { View, Text, Image, useWindowDimensions } from 'react-native';
 import { BottomSheet, Card, PressableFeedback } from 'heroui-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import type { NFT } from '@/types';
-import type { NFTRarity } from '@shared';
+import type { NFTRarity } from '@pop/shared';
 import { RARITY_COLORS } from '@/constants';
 import { canBreed, formatDisplayName } from '@/utils';
 import { breedPickerCard } from '@/styles';

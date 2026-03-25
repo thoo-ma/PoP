@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import type { MysteryBox } from '@shared';
+import type { MysteryBox } from '@pop/shared';
 
 interface UseMysteryBoxesResult {
   /** Fetched mystery boxes owned by the current user, newest first. */
