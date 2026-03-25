@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "183b321e308ba32b2e015c68ac50a9ce0bf65e8d31610614d7f80ea565714432"
     },
+    "turborepo": {
+      "source": "/tmp/turborepo-skill",
+      "sourceType": "local",
+      "computedHash": "2174b5ef380de7df689c0c1ca95d3c0fcd75672b6ab1ba886e39358cc18296f4"
+    },
     "uniwind": {
       "source": "uni-stack/uniwind",
       "sourceType": "github",
