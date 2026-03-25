@@ -23,9 +23,9 @@
 pnpm install
 
 # Type-check all packages (uses Turborepo — cached, dependency-aware)
-pnpm typecheck                                # All packages (frontend + dashboard + shared)
-turbo typecheck --filter=pop                  # Frontend only
-turbo typecheck --filter=dashboard            # Dashboard only
+pnpm typecheck                                      # All packages (frontend + dashboard + shared)
+pnpm exec turbo typecheck --filter=pop              # Frontend only
+pnpm exec turbo typecheck --filter=dashboard        # Dashboard only
 
 # Edge functions (Deno — not managed by Turbo)
 cd supabase/functions && deno check <function>/index.ts

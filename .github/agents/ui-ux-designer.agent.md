@@ -165,7 +165,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start building
    - [ ] Recipes imported from `@/styles` (barrel)
    - [ ] `cn()` used for all class merging (no template literals)
 
-4. **Type-check** — `turbo typecheck --filter=pop`
+4. **Type-check** — `pnpm exec turbo typecheck --filter=pop`
 
 ### Phase 4: PR + Review
 
@@ -197,7 +197,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start building
    - `repo`: `PoP`
    - `pullNumber`: the PR created above
    - `issueNumber`: the GitHub issue number (if referenced, otherwise omit)
-   - `typeCheckCommand`: `turbo typecheck --filter=pop`
+   - `typeCheckCommand`: `pnpm exec turbo typecheck --filter=pop`
 
 6. **Follow every step in the skill**
 

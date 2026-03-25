@@ -96,7 +96,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start fixing b
    - Do NOT add features or "improvements" beyond the fix
    - If the fix spans multiple files, edit them all — the commit should be atomic
 
-3. **Type-check** — Run `turbo typecheck --filter=pop` to verify zero TS errors
+3. **Type-check** — Run `pnpm exec turbo typecheck --filter=pop` to verify zero TS errors
 
 4. **Explain the fix** — Briefly describe:
    - What was wrong (root cause)
@@ -131,7 +131,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT start fixing b
    - `repo`: `PoP`
    - `pullNumber`: the PR created above
    - `issueNumber`: the GitHub issue number (if one was referenced, otherwise omit)
-   - `typeCheckCommand`: `turbo typecheck --filter=pop`
+   - `typeCheckCommand`: `pnpm exec turbo typecheck --filter=pop`
 
 6. **Follow every step in the skill** — do not skip or reinterpret
 
