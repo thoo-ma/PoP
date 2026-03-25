@@ -10,11 +10,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MAX_LEVEL } from '@pop/shared/xp'
-
-const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
-const RARITY_COLORS: Record<string, string> = {
-  common: '#a3a3a3', rare: '#3b82f6', legendary: '#f59e0b', transcendent: '#a855f7',
-}
+import { RARITIES, RARITY_COLORS } from '@/lib/constants'
 
 export default function StatPointsPanel() {
   const sp               = useGameConfigStore(useShallow((s) => ({ ...s.config.stat_points, ...s.drafts.stat_points })))

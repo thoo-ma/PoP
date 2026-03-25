@@ -11,20 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { MAX_LEVEL } from '@pop/shared/xp'
-
-const TYPES    = ['turbo-flush', 'cruise-seat', 'zen-fortress'] as const
-const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
-const RARITY_COLORS: Record<string, string> = {
-  common:       '#a3a3a3',
-  rare:         '#3b82f6',
-  legendary:    '#f59e0b',
-  transcendent: '#a855f7',
-}
-const TYPE_COLORS: Record<string, string> = {
-  'turbo-flush':  '#ef4444',
-  'cruise-seat':  '#22c55e',
-  'zen-fortress': '#3b82f6',
-}
+import { TYPES, RARITIES, RARITY_COLORS, TYPE_COLORS } from '@/lib/constants'
 
 // ─── Inline compute helpers (avoids .ts extension import issues) ──────────────
 
