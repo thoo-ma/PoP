@@ -116,4 +116,4 @@ All agents follow a 4-phase workflow ending with PR creation and the `pr-review-
 
 ## Backlog
 
-`BACKLOG.md` — Tier 1 = pre-launch security. Tier 2 = architecture. Tier 3 = backend security. Tier 4 = features. Tier 5 = UX. Tier 6 = code quality. Tier 7 = deployment.
+All backlog items are tracked as GitHub Issues. Key epics: #89 (Pre-launch security hardening), #90 (Shared NFT data layer). Use `gh issue list` or the GitHub Issues skill to discover work items.
