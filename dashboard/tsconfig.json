@@ -25,9 +25,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "zod": [
-        "./node_modules/zod"
       ]
     },
     "target": "ES2017"
