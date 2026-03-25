@@ -1,7 +1,7 @@
 /**
  * Cooldown helpers (frontend).
  *
- * Pure constants and math come from @shared/cooldown. This file adds
+ * Pure constants and math come from @pop/shared/cooldown. This file adds
  * getCooldownStatus(), a UI helper that builds a friendly display string.
  */
 
