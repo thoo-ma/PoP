@@ -30,7 +30,7 @@ The calling agent must provide:
 - `owner` / `repo` — GitHub repository
 - `pullNumber` — the PR number
 - `issueNumber` — the related issue number (for commit messages and scoping)
-- `typeCheckCommand` — the command to validate changes (e.g. `cd frontend && pnpm exec tsc --noEmit`)
+- `typeCheckCommand` — the command to validate changes (e.g. `turbo typecheck --filter=pop`)
 
 ## Guiding Principle
 

@@ -187,7 +187,7 @@ For each item in the test plan:
 **Goal**: Run the full suite, ship, and handle review.
 
 1. **Run all tests** — `cd frontend && pnpm exec jest --no-coverage`
-2. **Type-check** — `cd frontend && pnpm exec tsc --noEmit`
+2. **Type-check** — `turbo typecheck --filter=pop`
 3. **Commit** — Message: `test: add tests for <module>` (e.g. `test: add tests for shared/breedProbabilities`)
    - If a GitHub issue exists: include `Fixes #<number>` in the commit body
 4. **Push** — Regular push to branch `test/<module-name>` (e.g. `test/breed-probabilities`)
@@ -203,7 +203,7 @@ For each item in the test plan:
    - `repo`: `PoP`
    - `pullNumber`: the PR created above
    - `issueNumber`: the GitHub issue number (if referenced, otherwise omit)
-   - `typeCheckCommand`: `cd frontend && pnpm exec tsc --noEmit`
+   - `typeCheckCommand`: `turbo typecheck --filter=pop`
 8. **Follow every step in the skill**
 9. **Final summary**:
    - Test files created

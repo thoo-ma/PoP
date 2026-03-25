@@ -22,11 +22,13 @@
 # Install all workspace deps from root
 pnpm install
 
-# Type-check each package
-cd frontend && pnpm exec tsc --noEmit        # Frontend type-check
-cd ../dashboard && pnpm exec tsc --noEmit    # Dashboard type-check
-cd ../shared && pnpm exec tsc --noEmit       # Shared type-check
-cd ../supabase/functions && deno check <function>/index.ts  # Edge function check
+# Type-check all packages (uses Turborepo — cached, dependency-aware)
+pnpm typecheck                                # All packages (frontend + dashboard + shared)
+turbo typecheck --filter=pop                  # Frontend only
+turbo typecheck --filter=dashboard            # Dashboard only
+
+# Edge functions (Deno — not managed by Turbo)
+cd supabase/functions && deno check <function>/index.ts
 ```
 
 Never force-push. Never skip type-check.

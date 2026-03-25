@@ -297,7 +297,7 @@ import { buttonClassNames, cn } from 'heroui-native';
 7. **Export** — Named export from domain file + re-export from `index.ts`
 8. **Replace usages** — Import from `@/styles` and replace inline classNames
 9. **Use cn()** — When merging with external className props or one-off overrides
-10. **Verify** — `cd frontend && pnpm exec tsc --noEmit` must pass with zero errors
+10. **Verify** — `turbo typecheck --filter=pop` must pass with zero errors
 
 ---
 
