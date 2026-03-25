@@ -4,14 +4,14 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/worktree-setup.sh",
+        "bash": ".github/hooks/scripts/session-setup.sh",
         "timeoutSec": 60
       }
     ],
     "sessionEnd": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/worktree-cleanup.sh",
+        "bash": ".github/hooks/scripts/session-cleanup.sh",
         "timeoutSec": 30
       }
     ]
