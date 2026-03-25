@@ -1,4 +1,9 @@
 {
+  // Extends hierarchy:
+  //   tsconfig.base.json  ← this file (strict defaults, shared by all packages)
+  //     shared/tsconfig.json         (no extra compilerOptions)
+  //     dashboard/tsconfig.json      (adds Next.js lib, jsx, paths)
+  //     frontend/tsconfig.json       (adds Expo base, baseUrl, paths for @shared)
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
