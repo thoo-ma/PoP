@@ -15,8 +15,12 @@ if [ -n "$TOPLEVEL" ]; then
 fi
 
 REPO_NAME=$(basename "$CWD")
-TASK_ID="task-$(date +%s)-$$"
-CLONE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
+# Regenerate TASK_ID until we find a free directory (handles orphaned clones from prior crashes)
+while true; do
+  TASK_ID="task-$(date +%s)-$$"
+  CLONE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
+  [ ! -e "$CLONE_DIR" ] && break
+done
 BRANCH_NAME="agent/${TASK_ID}"
 
 if git -C "$CWD" show-ref --verify --quiet "refs/remotes/origin/main"; then

@@ -26,8 +26,9 @@ if [ -f "$CWD/.agent-clone-origin" ]; then
     [ -n "$ORIGIN_PATH" ] && \
     [ "$ORIGIN_PATH" != "$CWD" ] && \
     [ -d "$ORIGIN_PATH/.git" ]; then
-    rm -rf "$CWD"
+    rm -rf "$CWD" || echo "session-cleanup: warning — could not remove $CWD" >&2
   fi
 fi
 
+# Always exit 0: cleanup is best-effort, must not fail the Stop hook
 exit 0
