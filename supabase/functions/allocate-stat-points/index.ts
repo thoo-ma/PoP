@@ -1,6 +1,17 @@
 import { serve } from "std/http/server"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const AllocateSchema = z.object({
+  nft_id:     z.string().uuid('nft_id must be a valid UUID'),
+  efficiency: z.number().int().nonnegative().optional().default(0),
+  resilience: z.number().int().nonnegative().optional().default(0),
+  comfort:    z.number().int().nonnegative().optional().default(0),
+  luck:       z.number().int().nonnegative().optional().default(0),
+}).refine((d) => d.efficiency + d.resilience + d.comfort + d.luck > 0, {
+  message: 'At least one point must be allocated',
+})
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
@@ -17,25 +28,11 @@ serve(async (req) => {
     const { userId, supabase } = auth
 
     // ── Request body ──────────────────────────────────────────────────────────
-    const body = await req.json()
-    const { nft_id, efficiency = 0, resilience = 0, comfort = 0, luck = 0 } = body
-
-    if (!nft_id) {
-      return respondError(400, 'Bad Request', 'nft_id is required')
-    }
-
-    // Basic type validation – all deltas must be non-negative integers
-    for (const [key, val] of Object.entries({ efficiency, resilience, comfort, luck })) {
-      if (!Number.isInteger(val) || val < 0) {
-        return respondError(400, 'Bad Request', `${key} must be a non-negative integer`)
-      }
-    }
+    const bodyResult = await parseBody(req, AllocateSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { nft_id, efficiency, resilience, comfort, luck } = bodyResult
 
     const totalSpend = efficiency + resilience + comfort + luck
-
-    if (totalSpend === 0) {
-      return respondError(400, 'Bad Request', 'At least one point must be allocated')
-    }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase

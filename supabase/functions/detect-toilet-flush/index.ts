@@ -3,6 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 import { getUserIdFromToken, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const DetectSchema = z.object({
+  audio_base64: z.string().min(1, 'audio_base64 cannot be empty'),
+  threshold: z.number().min(0).max(1).optional().default(0.5),
+})
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -46,11 +52,9 @@ serve(async (req) => {
     }
 
     // Get request body
-    const { audio_base64, threshold = 0.5 } = await req.json()
-
-    if (!audio_base64) {
-      return respondError(400, 'Bad Request', 'Missing audio_base64 in request body')
-    }
+    const bodyResult = await parseBody(req, DetectSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { audio_base64, threshold } = bodyResult
 
     // Check rate limit
     const cfg = await getGameConfig(supabaseClient)

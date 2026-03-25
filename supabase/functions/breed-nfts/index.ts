@@ -7,6 +7,15 @@ import { breedCost } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const BreedSchema = z.object({
+  parent1_id: z.string().uuid('parent1_id must be a valid UUID'),
+  parent2_id: z.string().uuid('parent2_id must be a valid UUID'),
+}).refine((d) => d.parent1_id !== d.parent2_id, {
+  message: 'Cannot breed an NFT with itself',
+  path: ['parent2_id'],
+})
 
 // ─── Rarity system ───────────────────────────────────────────────────────────
 
@@ -52,16 +61,9 @@ serve(async (req) => {
     console.log(`breed-nfts: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
-    const body = await req.json()
-    const { parent1_id, parent2_id } = body
-
-    if (!parent1_id || !parent2_id) {
-      return respondError(400, 'Bad Request', 'parent1_id and parent2_id are required')
-    }
-
-    if (parent1_id === parent2_id) {
-      return respondError(400, 'Bad Request', 'Cannot breed an NFT with itself')
-    }
+    const bodyResult = await parseBody(req, BreedSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { parent1_id, parent2_id } = bodyResult
 
     // ── Fetch & ownership check ───────────────────────────────────────────────
     const { data: parents, error: fetchError } = await supabase

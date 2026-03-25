@@ -2,6 +2,11 @@ import { serve } from "std/http/server"
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const HoldLootRollSchema = z.object({
+  loot_roll_id: z.string().uuid('loot_roll_id must be a valid UUID'),
+})
 
 /**
  * hold-loot-roll
@@ -30,12 +35,9 @@ serve(async (req) => {
     const cfg = await getGameConfig(supabase)
     const MAX_HOLDS = cfg.loot_roll.MAX_HOLDS
 
-    const body = await req.json()
-    const { loot_roll_id } = body
-
-    if (!loot_roll_id) {
-      return respondError(400, 'Bad Request', 'loot_roll_id is required')
-    }
+    const bodyResult = await parseBody(req, HoldLootRollSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { loot_roll_id } = bodyResult
 
     // Fetch the row and verify ownership
     const { data: roll, error: fetchError } = await supabase

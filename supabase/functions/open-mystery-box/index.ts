@@ -4,6 +4,11 @@ import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const OpenMysteryBoxSchema = z.object({
+  box_id: z.string().uuid('box_id must be a valid UUID'),
+})
 
 // ─── Edge Function entry point ─────────────────────────────────────────────
 
@@ -24,12 +29,9 @@ serve(async (req) => {
     console.log(`open-mystery-box: user ${userId}`)
 
     // ── Request body ─────────────────────────────────────────────────────────
-    const body = await req.json()
-    const { box_id } = body
-
-    if (!box_id) {
-      return respondError(400, 'Bad Request', 'box_id is required')
-    }
+    const bodyResult = await parseBody(req, OpenMysteryBoxSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { box_id } = bodyResult
 
     // ── Fetch & ownership check ──────────────────────────────────────────────
     const { data: box, error: fetchError } = await supabase

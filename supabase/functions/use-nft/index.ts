@@ -10,6 +10,11 @@ import { calcPoopEarned } from '../../../shared/currency.ts'
 import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
+import { parseBody, z } from '../_shared/validation.ts'
+
+const UseNFTSchema = z.object({
+  nft_id: z.string().uuid('nft_id must be a valid UUID'),
+})
 
 /**
  * Calculate energy lost for a single use.
@@ -56,12 +61,9 @@ serve(async (req) => {
     console.log(`use-nft: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
-    const body = await req.json()
-    const { nft_id } = body
-
-    if (!nft_id) {
-      return respondError(400, 'Bad Request', 'nft_id is required')
-    }
+    const bodyResult = await parseBody(req, UseNFTSchema)
+    if (bodyResult instanceof Response) return bodyResult
+    const { nft_id } = bodyResult
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchError } = await supabase
