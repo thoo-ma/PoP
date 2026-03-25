@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pop-corporation.pop",
+      "bundleIdentifier": "com.popcorporation.pop",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
