@@ -20,7 +20,7 @@ export interface SensorThresholds {
 
 // ─── Sensor difficulty presets ────────────────────────────────────────────────
 
-// @migration: UNCERTAIN — in DB schema (seeded + dashboard-editable) but GAME_CONFIG_BACKLOG labels "decided structural"; resolve before removing
+// @migration: UNCERTAIN — in DB schema (seeded + dashboard-editable) but decided structural in game config audit; resolve before removing
 export const SENSOR_PRESETS: Record<DifficultyMode, SensorThresholds> = {
   easy: {
     MOVEMENT_THRESHOLD: 0.20,
@@ -52,7 +52,7 @@ export function getThresholds(mode: DifficultyMode = 'normal'): SensorThresholds
 
 // ─── Audio detection thresholds per difficulty ────────────────────────────────
 
-// @migration: UNCERTAIN — in DB schema (seeded + dashboard-editable) but GAME_CONFIG_BACKLOG labels "decided structural"; resolve before removing
+// @migration: UNCERTAIN — in DB schema (seeded + dashboard-editable) but decided structural in game config audit; resolve before removing
 export const AUDIO_THRESHOLDS: Record<DifficultyMode, number> = {
   easy: 0.3,
   normal: 0.5,

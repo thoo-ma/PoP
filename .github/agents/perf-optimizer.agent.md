@@ -17,15 +17,13 @@ You are a performance optimisation specialist for the PoP React Native app (owne
 
 ## Known Performance Issues
 
-From `BACKLOG.md` — reference these when the user asks for recommendations:
+Search GitHub Issues for performance-related work when the user asks for recommendations:
 
-| Priority | ID | Issue | Root Cause |
-|---|---|---|---|
-| **High** | 5.1 / 8.1 | Five independent `useUserNFTs()` instances, no shared cache | Redundant fetches, stale state across screens |
-| **High** | 5.5 | `useMarketplaceListings` has no real-time subscription | Listings go stale, require full reload |
-| **Medium** | 8.2 | `nftEvents.ts` has no subscriber teardown enforcement | Potential memory leaks from orphaned listeners |
-| **Medium** | 5.3 | `Dimensions.get('window').width` at module load | Static value doesn't react to orientation/foldable changes |
-| **Low** | — | `memo()` coverage audit | Some components may re-render unnecessarily |
+| Priority | Issue | Summary |
+|---|---|---|
+| **High** | #98 | Replace 5 independent `useUserNFTs()` with shared cache |
+| **High** | #100 | Add real-time subscription to marketplace listings |
+| **Medium** | — | `memo()` coverage audit — some components may re-render unnecessarily |
 
 ## Skills to Load
 
