@@ -8,11 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
-const RARITIES = ['common', 'rare', 'legendary', 'transcendent'] as const
-const RARITY_COLORS: Record<string, string> = {
-  common: '#a3a3a3', rare: '#3b82f6', legendary: '#f59e0b', transcendent: '#a855f7',
-}
+import { RARITIES, RARITY_COLORS } from '@/lib/constants'
 
 const PAIR_KEYS = [
   'common+common',

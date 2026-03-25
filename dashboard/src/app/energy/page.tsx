@@ -9,11 +9,7 @@ import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
-const TYPES = ['turbo-flush', 'cruise-seat', 'zen-fortress'] as const
-const TYPE_COLORS: Record<string, string> = {
-  'turbo-flush': '#ef4444', 'cruise-seat': '#22c55e', 'zen-fortress': '#3b82f6',
-}
+import { TYPES, TYPE_COLORS } from '@/lib/constants'
 
 export default function EnergyPanel() {
   const energy           = useGameConfigStore(useShallow((s) => ({ ...s.config.energy_drain, ...s.drafts.energy_drain })))
