@@ -13,9 +13,21 @@ if [ -n "$TOPLEVEL" ]; then
   CWD="$TOPLEVEL"
 fi
 
-# If this is an agent-managed clone, delete it
+# If this is an agent-managed clone, delete it (with safety checks)
 if [ -f "$CWD/.agent-clone-origin" ]; then
-  rm -rf "$CWD"
+  ORIGIN_PATH=$(cat "$CWD/.agent-clone-origin" 2>/dev/null || true)
+  BASENAME=$(basename "$CWD")
+
+  if \
+    [ -n "$CWD" ] && \
+    [ "$CWD" != "/" ] && \
+    [ -d "$CWD/.git" ] && \
+    [[ "$BASENAME" == *-task-* ]] && \
+    [ -n "$ORIGIN_PATH" ] && \
+    [ "$ORIGIN_PATH" != "$CWD" ] && \
+    [ -d "$ORIGIN_PATH/.git" ]; then
+    rm -rf "$CWD"
+  fi
 fi
 
 exit 0

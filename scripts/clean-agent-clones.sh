@@ -6,7 +6,17 @@ PARENT_DIR=$(dirname "$REPO_DIR")
 REMOVED=0
 
 for dir in "$PARENT_DIR"/*/; do
-  if [ -f "${dir}.agent-clone-origin" ]; then
+  # Skip non-directories and symlinks
+  if [ ! -d "$dir" ]; then
+    continue
+  fi
+  if [ -L "$dir" ]; then
+    echo "Skipping symlink $dir"
+    continue
+  fi
+
+  # Only remove directories that look like agent clones
+  if [ -f "${dir}.agent-clone-origin" ] && [ -d "${dir}.git" ]; then
     echo "Removing $dir"
     rm -rf "$dir" && REMOVED=$((REMOVED + 1)) || echo "Failed to remove $dir"
   fi

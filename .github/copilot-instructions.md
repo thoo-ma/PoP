@@ -102,7 +102,7 @@ console.error('breed-nfts: fetch parents error', fetchError);
 
 ## Agent Sessions
 
-Agent sessions run in isolated `git clone --shared` clones (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory (e.g. `pop-1-task-<timestamp>-<pid>/`) with its own fully independent git ref namespace, its own branch, and installed deps. The `Stop` hook deletes the clone directory. Agents must work inside the clone path provided in `additionalContext` — never modify the original repo.
+Agent sessions run in isolated `git clone --shared` clones (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory (e.g. `${REPO_NAME}-task-<epochSeconds>-<pid>/`) with its own fully independent git ref namespace, its own branch, and installed deps. The `Stop` hook deletes the clone directory. Agents must work inside the clone path provided in `additionalContext` — never modify the original repo.
 
 ## Branch Naming
 
