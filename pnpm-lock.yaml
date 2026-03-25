@@ -100,7 +100,7 @@ importers:
         specifier: ^3.4.1
         version: 3.4.19(yaml@2.8.3)
       typescript:
-        specifier: ^5
+        specifier: ~5.9.3
         version: 5.9.3
 
   frontend:
@@ -200,7 +200,7 @@ importers:
         specifier: ~19.1.10
         version: 19.1.17
       typescript:
-        specifier: ^5.9.3
+        specifier: ~5.9.3
         version: 5.9.3
 
   shared:
@@ -210,7 +210,7 @@ importers:
         version: 3.25.76
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ~5.9.3
         version: 5.9.3
 
 packages:
