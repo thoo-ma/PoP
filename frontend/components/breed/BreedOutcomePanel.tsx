@@ -1,8 +1,8 @@
 import { View, Text } from 'react-native';
 import { Card } from 'heroui-native';
-import type { NFTRarity } from '@shared';
+import type { NFTRarity } from '@pop/shared';
 import { RARITY_COLORS } from '@/constants';
-import { RARITIES } from '@shared';
+import { RARITIES } from '@pop/shared';
 import { getProbabilities } from '@/utils';
 
 /**

@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Image, View } from 'react-native';
 import type { ReactNode } from 'react';
 import { Card, Chip, cn } from 'heroui-native';
-import type { MysteryBox } from '@shared';
+import type { MysteryBox } from '@pop/shared';
 import { RARITY_COLORS } from '@/constants';
 import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
 

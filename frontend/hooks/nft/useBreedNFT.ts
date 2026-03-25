@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import type { MysteryBox } from '@shared';
+import type { MysteryBox } from '@pop/shared';
 import { logError } from '@/utils/errorHelpers';
 
 /**

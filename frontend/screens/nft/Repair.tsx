@@ -5,7 +5,7 @@ import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
 import { screenContainer, scrollContent, nftPickerButton, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody, infoBox } from '@/styles';
 import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
-import { MAX_ENERGY, repairCost } from '@shared';
+import { MAX_ENERGY, repairCost } from '@pop/shared';
 import { nftEvents, formatDisplayName } from '@/utils';
 import { useGameConfig } from '@/store/gameConfigStore';
 

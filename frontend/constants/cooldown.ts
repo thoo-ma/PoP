@@ -1,13 +1,13 @@
 /**
  * Cooldown helpers (frontend).
  *
- * Pure constants and math come from @shared/cooldown. This file adds
+ * Pure constants and math come from @pop/shared/cooldown. This file adds
  * getCooldownStatus(), a UI helper that builds a friendly display string.
  */
 
 import type { NFT } from '@/types';
-import { calcCooldownHours } from '@shared';
-import type { CooldownConfig } from '@shared/schemas';
+import { calcCooldownHours } from '@pop/shared';
+import type { CooldownConfig } from '@pop/shared/schemas';
 
 /** Human-readable countdown string, e.g. "2h 34m" or "45m" or "30s". */
 function formatCooldown(totalSeconds: number): string {

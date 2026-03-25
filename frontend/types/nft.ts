@@ -1,4 +1,4 @@
-import type { Tables } from '@shared';
+import type { Tables } from '@pop/shared';
 
 /**
  * Core NFT type used throughout the app.

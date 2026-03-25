@@ -4,8 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@shared": ["../shared/index.ts"],
-      "@shared/*": ["../shared/*"]
+      "@pop/shared": ["../shared/index.ts"],
+      "@pop/shared/*": ["../shared/*"]
     }
   }
 }

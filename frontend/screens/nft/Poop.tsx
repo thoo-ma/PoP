@@ -6,7 +6,7 @@ import { phaseContainer, challengeHeader, phaseContent, timerText, statusBadge, 
 import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks';
 import { ScreenLoader, ScreenError, NFTSelector, NFTProperties, StatAllocationModal, LootRouletteCard } from '@/components';
 import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils';
-import { getThresholdForDifficulty } from '@shared/sensors';
+import { getThresholdForDifficulty } from '@pop/shared/sensors';
 import { getCooldownStatus } from '@/constants';
 import { useGameConfig } from '@/store/gameConfigStore';
 import type { NFT } from '@/types';
