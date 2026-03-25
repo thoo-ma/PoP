@@ -92,6 +92,15 @@ Epics are parent tracking issues that break down into sub-issues.
 4. Sub-issues should reference the parent: "Part of #<epic-number>" in their body
 5. Give epics `size: XL` (they are always large by definition)
 
+### Blocking & Dependencies
+
+When sub-issues must be executed sequentially (i.e. one depends on another):
+
+1. Add the `blocked` label to every sub-issue that cannot start yet
+2. State the dependency explicitly in the body: "Depends on #<number>"
+3. When the blocking issue is resolved, remove the `blocked` label from the next issue in the chain
+4. Only the **first** sub-issue in a dependency chain should be unblocked at creation time
+
 ---
 
 ## Creating Issues from Agents
