@@ -100,9 +100,9 @@ console.error('breed-nfts: fetch parents error', fetchError);
 - Migrations: `DEFAULT NOW()` (not `CURRENT_TIMESTAMP`)
 - JavaScript: `new Date().toISOString()` when passing to DB
 
-## Agent Worktrees
+## Agent Sessions
 
-Agent sessions run in isolated git worktrees (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory with its own branch and installed deps. The `Stop` hook pushes the branch and removes the worktree. Agents must work inside the worktree path provided in `additionalContext` — never modify the original repo.
+Agent sessions run in isolated `git clone --shared` clones (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory (e.g. `pop-1-task-<timestamp>-<pid>/`) with its own fully independent git ref namespace, its own branch, and installed deps. The `Stop` hook deletes the clone directory. Agents must work inside the clone path provided in `additionalContext` — never modify the original repo.
 
 ## Branch Naming
 
