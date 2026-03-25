@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
+    "incremental": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,
