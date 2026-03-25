@@ -7,6 +7,12 @@ import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
+const RepairSchema = z.object({
+  nft_id:     z.string().uuid('nft_id must be a valid UUID'),
+  new_energy: z.number().int().min(0).max(MAX_ENERGY,
+    `new_energy must be between 0 and ${MAX_ENERGY}`),
+})
+
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
 serve(async (req) => {
@@ -26,11 +32,6 @@ serve(async (req) => {
     console.log(`repair-nft: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
-    const RepairSchema = z.object({
-      nft_id:     z.string().uuid('nft_id must be a valid UUID'),
-      new_energy: z.number().int().min(0).max(MAX_ENERGY,
-        `new_energy must be between 0 and ${MAX_ENERGY}`),
-    })
     const bodyResult = await parseBody(req, RepairSchema)
     if (bodyResult instanceof Response) return bodyResult
     const { nft_id, new_energy } = bodyResult
