@@ -74,11 +74,11 @@ serve(async (req) => {
 
     if (fetchError) {
       console.error('breed-nfts: fetch parents error', fetchError)
-      return respondError(500, 'Internal server error', fetchError.message)
+      return respondError(500, 'internal_error', fetchError.message)
     }
 
     if (!parents || parents.length !== 2) {
-      return respondError(400, 'Bad Request', 'One or both NFTs not found or not owned by you')
+      return respondError(404, 'not_found', 'One or both NFTs not found or not owned by you')
     }
 
     const p1 = parents.find((p: Tables<'nfts'>) => p.id === parent1_id)!
@@ -90,7 +90,7 @@ serve(async (req) => {
     const rankDiff = Math.abs(RARITY_RANK[r1] - RARITY_RANK[r2])
 
     if (rankDiff > 1) {
-      return respondError(400, 'Incompatible rarities',
+      return respondError(422, 'incompatible_rarities',
         `Cannot breed ${r1} with ${r2}. Only NFTs of the same or adjacent rarity can be bred together.`,
       )
     }
@@ -131,7 +131,7 @@ serve(async (req) => {
 
     if (userFetchError) {
       console.error('breed-nfts: wallet fetch error', userFetchError)
-      return respondError(500, 'Internal server error', userFetchError.message)
+      return respondError(500, 'internal_error', userFetchError.message)
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
@@ -168,7 +168,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('breed-nfts: insert error', insertError)
-      return respondError(500, 'Internal server error', insertError.message)
+      return respondError(500, 'internal_error', insertError.message)
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
@@ -224,7 +224,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('breed-nfts: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }

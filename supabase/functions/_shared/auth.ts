@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { respondError } from './responses.ts'
 // deno-lint-ignore no-explicit-any
 type SupabaseClient = ReturnType<typeof createClient>
 
@@ -72,10 +73,7 @@ export async function requireAuth(
 ): Promise<{ userId: string; token: string; supabase: SupabaseClient } | Response> {
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) {
-    return new Response(
-      JSON.stringify({ error: 'Unauthorized', message: 'Missing Authorization header' }),
-      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-    )
+    return respondError(401, 'unauthorized', 'Missing Authorization header')
   }
 
   const token = authHeader.replace('Bearer ', '')
@@ -89,10 +87,7 @@ export async function requireAuth(
   const userId = await getUserIdFromToken(supabase, token, fnName)
 
   if (!userId) {
-    return new Response(
-      JSON.stringify({ error: 'Unauthorized', message: 'Could not extract user from token' }),
-      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-    )
+    return respondError(401, 'unauthorized', 'Could not extract user from token')
   }
 
   return { userId, token, supabase }

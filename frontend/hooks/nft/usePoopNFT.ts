@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
+import type { EdgeFunctionErrorResponse, CooldownDetails } from '@pop/shared';
 
 export interface CooldownError {
   cooldown_ends_at: string;
@@ -59,19 +60,20 @@ export function usePoopNFT() {
 
       if (fnError) {
         let message: string = fnError.message;
-        let body: Record<string, unknown> | null = null;
+        let body: EdgeFunctionErrorResponse | null = null;
         if (fnError instanceof FunctionsHttpError) {
           try {
             body = await fnError.context.json();
-            if (body?.message) message = body.message as string;
-            else if (body?.error) message = body.error as string;
+            if (body?.message) message = body.message;
+            else if (body?.error) message = body.error;
           } catch { /* leave message as-is */ }
         }
         // Structured cooldown error from the server
-        if (body?.error === 'on_cooldown' && body?.cooldown_ends_at) {
+        if (body?.error === 'on_cooldown' && body?.details) {
+          const d = body.details as unknown as CooldownDetails;
           setCooldownError({
-            cooldown_ends_at:           body.cooldown_ends_at as string,
-            cooldown_remaining_seconds: body.cooldown_remaining_seconds as number,
+            cooldown_ends_at:           d.cooldown_ends_at,
+            cooldown_remaining_seconds: d.cooldown_remaining_seconds,
           });
           return null;
         }

@@ -43,12 +43,12 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you')
     }
 
     // ── Validation ────────────────────────────────────────────────────────────
     if (totalSpend > nft.stat_points) {
-      return respondError(422, 'Insufficient Points',
+      return respondError(422, 'insufficient_points',
         `You only have ${nft.stat_points} stat point(s) but tried to spend ${totalSpend}`,
       )
     }
@@ -60,7 +60,7 @@ serve(async (req) => {
     const newLuck       = nft.luck       + luck
 
     if (newEfficiency > 100 || newResilience > 100 || newComfort > 100 || newLuck > 100) {
-      return respondError(422, 'Bad Request', 'A stat cannot exceed 100')
+      return respondError(422, 'stat_cap_exceeded', 'A stat cannot exceed 100')
     }
 
     // ── Persist ───────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('allocate-stat-points: update error', updateError)
-      return respondError(500, 'Internal server error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message)
     }
 
     console.log(
@@ -104,7 +104,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('allocate-stat-points: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }

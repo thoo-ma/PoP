@@ -56,7 +56,7 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return respondError(404, 'Not Found', 'Loot roll not found or not owned by you')
+      return respondError(404, 'not_found', 'Loot roll not found or not owned by you')
     }
 
     const holdsUsed = roll.holds
@@ -99,7 +99,7 @@ serve(async (req) => {
 
     if (boxError || !box) {
       console.error('roll-loot: mystery box insert error', boxError)
-      return respondError(500, 'Internal server error', boxError?.message ?? 'Failed to award mystery box')
+      return respondError(500, 'internal_error', boxError?.message ?? 'Failed to award mystery box')
     }
 
     console.log(`roll-loot: awarded mystery box id=${box.id} rarity=${rarity} to user=${userId}`)
@@ -108,7 +108,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('roll-loot: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }

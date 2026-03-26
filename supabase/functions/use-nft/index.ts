@@ -74,11 +74,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you')
     }
 
     if (nft.energy <= 0) {
-      return respondError(422, 'No Energy', 'NFT has no energy remaining')
+      return respondError(422, 'no_energy', 'NFT has no energy remaining')
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
@@ -137,7 +137,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('use-nft: update error', updateError)
-      return respondError(500, 'Internal server error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message)
     }
 
     // ── Award POOP currency ───────────────────────────────────────────────────
@@ -192,7 +192,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('use-nft: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }

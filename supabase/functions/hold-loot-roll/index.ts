@@ -48,11 +48,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return respondError(404, 'Not Found', 'Loot roll not found or not owned by you')
+      return respondError(404, 'not_found', 'Loot roll not found or not owned by you')
     }
 
     if (roll.holds >= MAX_HOLDS) {
-      return respondError(400, 'Max Holds Reached', `You can only hold up to ${MAX_HOLDS} times`)
+      return respondError(400, 'max_holds_reached', `You can only hold up to ${MAX_HOLDS} times`)
     }
 
     const newHolds = roll.holds + 1
@@ -65,7 +65,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('hold-loot-roll: update error', updateError)
-      return respondError(500, 'Internal server error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message)
     }
 
     console.log(`hold-loot-roll: user=${userId} roll=${loot_roll_id} holds=${newHolds}`)
@@ -74,7 +74,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('hold-loot-roll: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }
