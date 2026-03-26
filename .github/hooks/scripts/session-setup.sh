@@ -15,11 +15,14 @@ if [ -n "$TOPLEVEL" ]; then
 fi
 
 REPO_NAME=$(basename "$CWD")
-# Regenerate TASK_ID until we find a free directory (handles orphaned worktrees from prior crashes)
+# Regenerate TASK_ID until both the directory AND branch name are free
+# (handles orphaned branches from prior crashes where worktree was removed but branch was not)
 while true; do
   TASK_ID="task-$(date +%s)-$$"
   WORKTREE_DIR="$(dirname "$CWD")/${REPO_NAME}-${TASK_ID}"
-  [ ! -e "$WORKTREE_DIR" ] && break
+  [ -e "$WORKTREE_DIR" ] && continue
+  git -C "$CWD" show-ref --verify --quiet "refs/heads/agent/${TASK_ID}" 2>/dev/null && continue
+  break
 done
 BRANCH_NAME="agent/${TASK_ID}"
 

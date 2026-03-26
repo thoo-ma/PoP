@@ -25,7 +25,14 @@ if [ -f "$CWD/.agent-worktree-origin" ]; then
     [ -n "$ORIGIN_REPO" ] && \
     [ "$ORIGIN_REPO" != "$CWD" ] && \
     [ -d "$ORIGIN_REPO/.git" ]; then
-    git -C "$ORIGIN_REPO" worktree remove "$CWD" --force 2>/dev/null || echo "session-cleanup: warning — could not remove worktree $CWD" >&2
+    CURRENT_BRANCH=$(git -C "$CWD" branch --show-current 2>/dev/null || true)
+    if git -C "$ORIGIN_REPO" worktree remove "$CWD" --force 2>/dev/null; then
+      if [ -n "$CURRENT_BRANCH" ] && [[ "$CURRENT_BRANCH" == agent/task-* ]]; then
+        git -C "$ORIGIN_REPO" branch -D "$CURRENT_BRANCH" 2>/dev/null || true
+      fi
+    else
+      echo "session-cleanup: warning — could not remove worktree $CWD" >&2
+    fi
     git -C "$ORIGIN_REPO" worktree prune 2>/dev/null || true
   fi
 fi
