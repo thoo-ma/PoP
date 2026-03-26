@@ -10,6 +10,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 const DIFFICULTIES = ['easy', 'normal', 'strict'] as const
 const DIFF_COLORS: Record<string, string> = {
@@ -47,15 +48,9 @@ export default function SensorsPanel() {
       backgroundColor: 'transparent',
       tooltip: {
         trigger: 'item' as const,
-        backgroundColor: '#1a1a1a',
-        borderColor: '#333',
-        textStyle: { color: '#e5e5e5', fontSize: 12 },
+        ...CHART_TOOLTIP,
       },
-      legend: {
-        data: [...DIFFICULTIES],
-        textStyle: { color: '#a3a3a3', fontSize: 11 },
-        top: 0,
-      },
+      legend: { data: [...DIFFICULTIES], ...CHART_LEGEND },
       radar: {
         indicator: PRESET_FIELDS.map((f) => ({
           name: f.label,
@@ -83,25 +78,20 @@ export default function SensorsPanel() {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'item' as const,
-      backgroundColor: '#1a1a1a',
-      borderColor: '#333',
-      textStyle: { color: '#e5e5e5', fontSize: 12 },
+      ...CHART_TOOLTIP,
     },
     grid: { top: 20, right: 60, bottom: 40, left: 60 },
     xAxis: {
       type: 'category' as const,
       data: [...DIFFICULTIES],
-      axisLine: { lineStyle: { color: '#404040' } },
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
+      ...CHART_AXIS_STYLES,
     },
     yAxis: {
       type: 'value' as const,
       name: 'Threshold (0–1)',
       min: 0, max: 1,
-      nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
-      axisLine: { lineStyle: { color: '#404040' } },
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
-      splitLine: { lineStyle: { color: '#262626' } },
+      ...CHART_AXIS_STYLES,
+      splitLine: CHART_SPLIT_LINE,
     },
     series: [{
       name: 'Audio Threshold',

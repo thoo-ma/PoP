@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function LootRollPanel() {
   const loot             = useGameConfigStore(useShallow((s) => ({ ...s.config.loot_roll, ...s.drafts.loot_roll })))
@@ -31,9 +32,7 @@ export default function LootRollPanel() {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis' as const,
-      backgroundColor: '#1a1a1a',
-      borderColor: '#333',
-      textStyle: { color: '#e5e5e5', fontSize: 12 },
+      ...CHART_TOOLTIP,
       formatter: (params: Array<{ name: string; value: number }>) => {
         const h = params[0]?.name
         const pct = ((params[0]?.value ?? 0) * 100).toFixed(1)
@@ -47,23 +46,20 @@ export default function LootRollPanel() {
       name: 'Holds',
       nameLocation: 'middle' as const,
       nameGap: 28,
-      axisLine: { lineStyle: { color: '#404040' } },
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
-      nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
+      ...CHART_AXIS_STYLES,
     },
     yAxis: {
       type: 'value' as const,
       name: 'Win Probability',
       min: 0,
       max: 1,
-      nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
-      axisLine: { lineStyle: { color: '#404040' } },
+      ...CHART_AXIS_STYLES,
       axisLabel: {
         color: '#a3a3a3',
         fontSize: 11,
         formatter: (v: number) => `${(v * 100).toFixed(0)}%`,
       },
-      splitLine: { lineStyle: { color: '#262626' } },
+      splitLine: CHART_SPLIT_LINE,
     },
     series: [
       {

@@ -9,6 +9,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { RARITIES, RARITY_COLORS } from '@/lib/constants'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 const PAIR_KEYS = [
   'common+common',
@@ -38,28 +39,21 @@ export default function BreedPanel() {
     tooltip: {
       trigger: 'axis' as const,
       axisPointer: { type: 'shadow' as const },
-      backgroundColor: '#1a1a1a',
-      borderColor: '#333',
-      textStyle: { color: '#e5e5e5', fontSize: 12 },
+      ...CHART_TOOLTIP,
     },
-    legend: {
-      data: [...RARITIES],
-      textStyle: { color: '#a3a3a3', fontSize: 11 },
-      top: 0,
-    },
+    legend: { data: [...RARITIES], ...CHART_LEGEND },
     grid: { top: 40, right: 20, bottom: 60, left: 160 },
     xAxis: {
       type: 'value' as const,
       max: 100,
+      ...CHART_AXIS_STYLES,
       axisLabel: { color: '#a3a3a3', fontSize: 11, formatter: (v: number) => `${v}%` },
-      axisLine: { lineStyle: { color: '#404040' } },
-      splitLine: { lineStyle: { color: '#262626' } },
+      splitLine: CHART_SPLIT_LINE,
     },
     yAxis: {
       type: 'category' as const,
       data: [...PAIR_KEYS],
-      axisLine: { lineStyle: { color: '#404040' } },
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
+      ...CHART_AXIS_STYLES,
     },
     series: RARITIES.map((r, i) => ({
       name: r,
