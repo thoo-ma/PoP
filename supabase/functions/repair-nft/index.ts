@@ -45,11 +45,11 @@ serve(async (req) => {
       .single()
 
     if (fetchNFTError || !nft) {
-      return respondError(404, 'Not Found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you')
     }
 
     if (new_energy <= nft.energy) {
-      return respondError(400, 'Bad Request',
+      return respondError(400, 'bad_request',
         `new_energy (${new_energy}) must be greater than current energy (${nft.energy})`,
       )
     }
@@ -71,7 +71,7 @@ serve(async (req) => {
 
     if (userFetchError) {
       console.error('repair-nft: wallet fetch error', userFetchError)
-      return respondError(500, 'Internal server error', userFetchError.message)
+      return respondError(500, 'internal_error', userFetchError.message)
     }
 
     const currentPoopBalance = userRow?.poop_balance ?? 0
@@ -93,7 +93,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('repair-nft: update error', updateError)
-      return respondError(500, 'Internal server error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message)
     }
 
     // ── Deduct POOP ───────────────────────────────────────────────────────────
@@ -123,7 +123,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('repair-nft: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }

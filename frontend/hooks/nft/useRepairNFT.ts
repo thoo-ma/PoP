@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
+import type { EdgeFunctionErrorResponse, InsufficientPoopDetails } from '@pop/shared';
 
 export interface RepairResult {
   id: string;
@@ -45,19 +46,20 @@ export function useRepairNFT() {
 
       if (fnError) {
         let message: string = fnError.message;
-        let body: Record<string, unknown> | null = null;
+        let body: EdgeFunctionErrorResponse | null = null;
         if (fnError instanceof FunctionsHttpError) {
           try {
             body = await fnError.context.json();
-            if (body?.message) message = body.message as string;
-            else if (body?.error) message = body.error as string;
+            if (body?.message) message = body.message;
+            else if (body?.error) message = body.error;
           } catch { /* leave message as-is */ }
         }
         // Structured insufficient POOP error from the server
-        if (body?.error === 'insufficient_poop') {
+        if (body?.error === 'insufficient_poop' && body?.details) {
+          const d = body.details as unknown as InsufficientPoopDetails;
           setInsufficientPoopError({
-            poop_balance:  body.poop_balance  as number,
-            poop_required: body.poop_required as number,
+            poop_balance:  d.poop_balance,
+            poop_required: d.poop_required,
           });
           return null;
         }

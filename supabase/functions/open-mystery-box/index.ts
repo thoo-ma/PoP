@@ -42,11 +42,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !box) {
-      return respondError(404, 'Not Found', 'Mystery box not found or not owned by you')
+      return respondError(404, 'not_found', 'Mystery box not found or not owned by you')
     }
 
     if (box.opened) {
-      return respondError(409, 'Conflict', 'This mystery box has already been opened')
+      return respondError(409, 'conflict', 'This mystery box has already been opened')
     }
 
     // ── Roll the new NFT ─────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('open-mystery-box: insert error', insertError)
-      return respondError(500, 'Internal server error', insertError.message)
+      return respondError(500, 'internal_error', insertError.message)
     }
 
     // ── Mark box as opened ───────────────────────────────────────────────────
@@ -116,7 +116,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('open-mystery-box: unexpected error', err)
-    return respondError(500, 'Internal server error',
+    return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
     )
   }
