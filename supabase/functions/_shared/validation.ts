@@ -15,7 +15,7 @@ export async function parseBody<S extends z.ZodTypeAny>(
   try {
     raw = await req.json()
   } catch {
-    return respondError(400, 'Bad Request', 'Request body must be valid JSON')
+    return respondError(400, 'bad_request', 'Request body must be valid JSON')
   }
 
   const result = schema.safeParse(raw)
@@ -23,7 +23,7 @@ export async function parseBody<S extends z.ZodTypeAny>(
     const first = result.error.errors[0]
     const field = first.path.length > 0 ? first.path.join('.') : 'body'
     const message = `${field}: ${first.message}`
-    return respondError(400, 'Bad Request', message, {
+    return respondError(400, 'bad_request', message, {
       validation_errors: result.error.errors.map((e) => ({
         field: e.path.join('.') || 'body',
         message: e.message,

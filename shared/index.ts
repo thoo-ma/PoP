@@ -5,6 +5,7 @@ export * from './cooldown';
 export * from './currency';
 export * from './database.types';
 export * from './energyDrain';
+export * from './errors';
 export * from './lootRoll';
 export * from './minting';
 export * from './sensors';

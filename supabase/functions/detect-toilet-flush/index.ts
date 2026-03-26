@@ -72,7 +72,7 @@ serve(async (req) => {
     }
 
     if (count !== null && count >= detectionsPerDay) {
-      return respondError(429, 'Rate limit exceeded',
+      return respondError(429, 'rate_limit_exceeded',
         `You have reached the daily limit of ${detectionsPerDay} detections. Please try again tomorrow.`,
         { limit: detectionsPerDay, current_count: count },
       )
@@ -111,7 +111,7 @@ serve(async (req) => {
     // body, e.g. "Audio too short"). This is a client input problem, so 422 is
     // the correct status — not 500, which implies a server fault.
     if (result.error) {
-      return respondError(422, 'Detection failed', result.error)
+      return respondError(422, 'detection_failed', result.error)
     }
 
     // Store detection result in database
@@ -143,6 +143,6 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Edge Function error:', error)
-    return respondError(500, 'Internal server error', error.message)
+    return respondError(500, 'internal_error', error.message)
   }
 })
