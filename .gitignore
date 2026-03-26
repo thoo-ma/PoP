@@ -83,5 +83,5 @@ todo-max
 # Turborepo
 .turbo
 
-# Agent clone marker
-.agent-clone-origin
+# Agent worktree marker
+.agent-worktree-origin
