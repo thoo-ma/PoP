@@ -143,6 +143,7 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Edge Function error:', error)
-    return respondError(500, 'internal_error', error.message)
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return respondError(500, 'internal_error', message)
   }
 })
