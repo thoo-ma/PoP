@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MAX_LEVEL } from '@pop/shared/xp'
 import { TYPES, TYPE_COLORS } from '@/lib/constants'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 function computeCooldown(
   type: string, level: number,
@@ -52,9 +53,7 @@ export default function CooldownPanel() {
       backgroundColor: 'transparent',
       tooltip: {
         trigger: 'axis' as const,
-        backgroundColor: '#1a1a1a',
-        borderColor: '#333',
-        textStyle: { color: '#e5e5e5', fontSize: 12 },
+        ...CHART_TOOLTIP,
         formatter: (params: Array<{ name: string; value: number; seriesName: string; color: string }>) => {
           const lvl = params[0]?.name
           const lines = params.map(
@@ -63,11 +62,7 @@ export default function CooldownPanel() {
           return `Level ${lvl}<br/>${lines.join('<br/>')}`
         },
       },
-      legend: {
-        data: [...TYPES],
-        textStyle: { color: '#a3a3a3', fontSize: 11 },
-        top: 0,
-      },
+      legend: { data: [...TYPES], ...CHART_LEGEND },
       grid: { top: 40, right: 40, bottom: 40, left: 60 },
       xAxis: {
         type: 'category' as const,
@@ -75,17 +70,13 @@ export default function CooldownPanel() {
         name: 'Level',
         nameLocation: 'middle' as const,
         nameGap: 28,
-        axisLine: { lineStyle: { color: '#404040' } },
-        axisLabel: { color: '#a3a3a3', fontSize: 11 },
-        nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
+        ...CHART_AXIS_STYLES,
       },
       yAxis: {
         type: 'value' as const,
         name: 'Hours',
-        nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
-        axisLine: { lineStyle: { color: '#404040' } },
-        axisLabel: { color: '#a3a3a3', fontSize: 11 },
-        splitLine: { lineStyle: { color: '#262626' } },
+        ...CHART_AXIS_STYLES,
+        splitLine: CHART_SPLIT_LINE,
       },
       series,
     }

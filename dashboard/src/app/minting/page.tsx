@@ -10,6 +10,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { RARITIES, RARITY_COLORS } from '@/lib/constants'
+import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function MintingPanel() {
   const minting          = useGameConfigStore(useShallow((s) => ({ ...s.config.minting, ...s.drafts.minting })))
@@ -23,9 +24,7 @@ export default function MintingPanel() {
     tooltip: {
       trigger: 'axis' as const,
       axisPointer: { type: 'shadow' as const },
-      backgroundColor: '#1a1a1a',
-      borderColor: '#333',
-      textStyle: { color: '#e5e5e5', fontSize: 12 },
+      ...CHART_TOOLTIP,
       formatter: (params: Array<{ seriesName: string; value: number; color: string; name: string }>) => {
         const rarity = params[0]?.name ?? ''
         const minV = minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES]?.[0] ?? 0
@@ -38,15 +37,13 @@ export default function MintingPanel() {
       type: 'value' as const,
       min: 0,
       max: 100,
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
-      axisLine: { lineStyle: { color: '#404040' } },
-      splitLine: { lineStyle: { color: '#262626' } },
+      ...CHART_AXIS_STYLES,
+      splitLine: CHART_SPLIT_LINE,
     },
     yAxis: {
       type: 'category' as const,
       data: [...RARITIES].map((r) => r.charAt(0).toUpperCase() + r.slice(1)),
-      axisLine: { lineStyle: { color: '#404040' } },
-      axisLabel: { color: '#a3a3a3', fontSize: 11 },
+      ...CHART_AXIS_STYLES,
     },
     series: [
       {
