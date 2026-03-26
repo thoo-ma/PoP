@@ -1,6 +1,4 @@
-import { corsHeaders } from './auth.ts'
-
-const jsonHeaders = { ...corsHeaders, 'Content-Type': 'application/json' }
+import { jsonHeaders } from './headers.ts'
 
 /** Return a 200 JSON response with CORS headers. */
 export function respondOk(data: unknown): Response {

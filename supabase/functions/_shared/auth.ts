@@ -3,10 +3,7 @@ import { respondError } from './responses.ts'
 // deno-lint-ignore no-explicit-any
 type SupabaseClient = ReturnType<typeof createClient>
 
-export const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+export { corsHeaders } from './headers.ts'
 
 /**
  * Decode a JWT's payload section without verifying the signature.

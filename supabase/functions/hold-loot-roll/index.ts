@@ -52,7 +52,7 @@ serve(async (req) => {
     }
 
     if (roll.holds >= MAX_HOLDS) {
-      return respondError(400, 'max_holds_reached', `You can only hold up to ${MAX_HOLDS} times`)
+      return respondError(422, 'max_holds_reached', `You can only hold up to ${MAX_HOLDS} times`)
     }
 
     const newHolds = roll.holds + 1
