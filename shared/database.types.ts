@@ -313,6 +313,10 @@ export type Database = {
           xp: number
         }[]
       }
+      decrement_poop_balance: {
+        Args: { p_user_id: string; p_amount: number }
+        Returns: number
+      }
       increment_poop_balance: {
         Args: { amount: number; user_id: string }
         Returns: number
