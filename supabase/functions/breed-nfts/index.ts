@@ -122,24 +122,20 @@ serve(async (req) => {
       `total → ${totalBreedCost} POOP`
     )
 
-    // ── POOP balance check ─────────────────────────────────────────────────────
-    const { data: userRow, error: userFetchError } = await supabase
-      .from('users')
-      .select('poop_balance')
-      .eq('id', userId)
-      .single()
+    // ── Atomic POOP deduction ─────────────────────────────────────────────────
+    const { data: newPoopBalance, error: decErr } = await supabase.rpc('decrement_poop_balance', {
+      p_user_id: userId,
+      p_amount:  totalBreedCost,
+    })
 
-    if (userFetchError) {
-      console.error('breed-nfts: wallet fetch error', userFetchError)
-      return respondError(500, 'internal_error', userFetchError.message)
+    if (decErr) {
+      console.error('breed-nfts: poop deduction error', decErr)
+      return respondError(500, 'internal_error', decErr.message)
     }
-
-    const currentPoopBalance = userRow?.poop_balance ?? 0
-    if (currentPoopBalance < totalBreedCost) {
+    if (newPoopBalance === null) {
       return respondError(402, 'insufficient_poop',
-        `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentPoopBalance} POOP.`,
+        `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). Insufficient balance.`,
         {
-          poop_balance: currentPoopBalance,
           poop_required: totalBreedCost,
           poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
         },
@@ -169,18 +165,6 @@ serve(async (req) => {
     if (insertError) {
       console.error('breed-nfts: insert error', insertError)
       return respondError(500, 'internal_error', insertError.message)
-    }
-
-    // ── Deduct POOP ───────────────────────────────────────────────────────────
-    const newPoopBalance = currentPoopBalance - totalBreedCost
-    const { error: poopError } = await supabase
-      .from('users')
-      .update({ poop_balance: newPoopBalance })
-      .eq('id', userId)
-
-    if (poopError) {
-      // Non-fatal: offspring already created; log but don't rollback
-      console.error('breed-nfts: poop deduction error', poopError)
     }
 
     console.log(`breed-nfts: user ${userId} spent ${totalBreedCost} POOP (${p1Cost}+${p2Cost}) → balance ${newPoopBalance}`)

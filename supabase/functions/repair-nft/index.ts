@@ -62,23 +62,20 @@ serve(async (req) => {
     const energyDelta = new_energy - nft.energy
     const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY, cfg.currency)
 
-    // ── POOP balance check ────────────────────────────────────────────────────
-    const { data: userRow, error: userFetchError } = await supabase
-      .from('users')
-      .select('poop_balance')
-      .eq('id', userId)
-      .single()
+    // ── Atomic POOP deduction ─────────────────────────────────────────────────
+    const { data: newPoopBalance, error: decErr } = await supabase.rpc('decrement_poop_balance', {
+      p_user_id: userId,
+      p_amount:  poopCost,
+    })
 
-    if (userFetchError) {
-      console.error('repair-nft: wallet fetch error', userFetchError)
-      return respondError(500, 'internal_error', userFetchError.message)
+    if (decErr) {
+      console.error('repair-nft: poop deduction error', decErr)
+      return respondError(500, 'internal_error', decErr.message)
     }
-
-    const currentPoopBalance = userRow?.poop_balance ?? 0
-    if (currentPoopBalance < poopCost) {
+    if (newPoopBalance === null) {
       return respondError(402, 'insufficient_poop',
-        `Repairing costs ${poopCost} POOP. You have ${currentPoopBalance} POOP.`,
-        { poop_balance: currentPoopBalance, poop_required: poopCost },
+        `Repairing costs ${poopCost} POOP. Insufficient balance.`,
+        { poop_required: poopCost },
       )
     }
 
@@ -94,18 +91,6 @@ serve(async (req) => {
     if (updateError) {
       console.error('repair-nft: update error', updateError)
       return respondError(500, 'internal_error', updateError.message)
-    }
-
-    // ── Deduct POOP ───────────────────────────────────────────────────────────
-    const newPoopBalance = currentPoopBalance - poopCost
-    const { error: poopError } = await supabase
-      .from('users')
-      .update({ poop_balance: newPoopBalance })
-      .eq('id', userId)
-
-    if (poopError) {
-      // Non-fatal: NFT already repaired; log but don't rollback
-      console.error('repair-nft: poop deduction error', poopError)
     }
 
     console.log(
