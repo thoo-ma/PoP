@@ -1,10 +1,12 @@
 import { Text, View } from 'react-native';
 import { Slider, cn } from 'heroui-native';
 import { useState, useEffect } from 'react';
-import { calcReduction, calcBustChance, calcReducedCost } from '@pop/shared/degenBar';
+import { calcReduction, calcBustChance, calcReducedCost, degenBarConfigHash } from '@pop/shared/degenBar';
 import { useGameConfig } from '@/store/gameConfigStore';
 import { infoBox } from '@/styles';
-import type { DegenBarConfig } from '@pop/shared/schemas';
+
+// Re-export for consumers that import the hash helper from this module
+export { degenBarConfigHash } from '@pop/shared/degenBar';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -13,17 +15,6 @@ export type DegenBarProps = {
   onDegenChange: (degenPercent: number) => void;
   disabled?: boolean;
 };
-
-// ─── Hash helper ──────────────────────────────────────────────────────────────
-
-/**
- * Produces a deterministic string fingerprint of the degen_bar config,
- * used to detect server-side config drift.
- */
-export function degenBarConfigHash(cfg: DegenBarConfig): string {
-  const keys = (Object.keys(cfg) as (keyof DegenBarConfig)[]).sort();
-  return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])));
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 

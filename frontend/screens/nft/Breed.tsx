@@ -196,7 +196,15 @@ import { nftEvents, canBreed } from '@/utils';
               {breedLoading
                 ? 'Breeding…'
                 : degenPercent > 0 && totalBreedCost !== null
-                  ? `Breed — ~~${totalBreedCost}~~ ${calcReducedCost(totalBreedCost, degenPercent, cfg.degen_bar)} POOP`
+                  ? (
+                      <Text>
+                        Breed —{' '}
+                        <Text className="line-through text-foreground-500">
+                          {totalBreedCost}
+                        </Text>{' '}
+                        {calcReducedCost(totalBreedCost, degenPercent, cfg.degen_bar)} POOP
+                      </Text>
+                    )
                   : totalBreedCost !== null
                     ? `Breed (${totalBreedCost} POOP)`
                     : 'Breed'}

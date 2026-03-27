@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
 import { useToast } from 'heroui-native';
 import { useGameConfig } from '@/store/gameConfigStore';
-import { degenBarConfigHash } from '@/components/shared/DegenBar';
+import { degenBarConfigHash } from '@pop/shared/degenBar';
 import type { EdgeFunctionErrorResponse, InsufficientPoopDetails, BustedDetails } from '@pop/shared';
 
 export interface RepairResult {

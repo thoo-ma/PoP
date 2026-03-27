@@ -223,7 +223,15 @@ export default memo(function Repair() {
                       : (poopBalance !== null && poopBalance < poopCost)
                       ? `Need ${poopCost} POOP`
                       : degenPercent > 0
-                      ? `Repair — ~~${poopCost}~~ ${calcReducedCost(poopCost, degenPercent, cfg.degen_bar)} POOP`
+                      ? (
+                          <Text>
+                            Repair —{' '}
+                            <Text className="line-through text-foreground-500">
+                              {poopCost}
+                            </Text>{' '}
+                            {calcReducedCost(poopCost, degenPercent, cfg.degen_bar)} POOP
+                          </Text>
+                        )
                       : `Repair (${poopCost} POOP)`}
                   </Button>
                 </>

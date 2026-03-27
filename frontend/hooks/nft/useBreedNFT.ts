@@ -5,7 +5,7 @@ import type { MysteryBox, BustedDetails } from '@pop/shared';
 import { logError } from '@/utils/errorHelpers';
 import { useToast } from 'heroui-native';
 import { useGameConfig } from '@/store/gameConfigStore';
-import { degenBarConfigHash } from '@/components/shared/DegenBar';
+import { degenBarConfigHash } from '@pop/shared/degenBar';
 
 export function useBreedNFT() {
   const [loading, setLoading] = useState<boolean>(false);
