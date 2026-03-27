@@ -5,7 +5,7 @@
  * Higher degen % → bigger cost reduction, higher bust probability.
  *
  * Supabase imports via:   ../../../shared/degenBar.ts
- * Frontend imports via:   @shared  (tsconfig path alias)
+ * Frontend imports via:   @pop/shared/degenBar
  */
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -61,7 +61,8 @@ export function calcBustChance(degenPercent: number, cfg?: DegenBarCfg): number 
   const degenBustScale     = cfg?.DEGEN_BUST_SCALE      ?? DEGEN_BUST_SCALE;
   const degenZoneThreshold = cfg?.DEGEN_ZONE_THRESHOLD  ?? DEGEN_ZONE_THRESHOLD;
 
-  if (degenPercent < degenZoneThreshold) {
+  // Guard: if threshold >= 100 the degen zone is unreachable; stay in SAFE zone.
+  if (degenPercent < degenZoneThreshold || degenZoneThreshold >= 100) {
     return degenPercent * safeBustCoef / 100;
   }
   const f = (degenPercent - degenZoneThreshold) / (100 - degenZoneThreshold);

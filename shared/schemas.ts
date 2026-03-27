@@ -353,7 +353,7 @@ export const DegenBarConfigSchema = z.object({
   SAFE_BUST_COEF:        z.number().min(0).max(1),
   DEGEN_BUST_BASE:       PositiveNumber.max(100),
   DEGEN_BUST_SCALE:      PositiveNumber.max(1000),
-  DEGEN_ZONE_THRESHOLD:  z.number().min(0).max(100),
+  DEGEN_ZONE_THRESHOLD:  z.number().min(0).max(99),
   MAX_REDUCTION:         z.number().min(0).max(1),
 })
 
