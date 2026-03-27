@@ -1,7 +1,7 @@
 CREATE TABLE public.degen_outcomes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id),
-  action TEXT NOT NULL,           -- 'repair' or 'breed'
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  action TEXT NOT NULL CHECK (action IN ('repair', 'breed')),
   degen_percent INTEGER NOT NULL CHECK (degen_percent BETWEEN 1 AND 100),
   busted BOOLEAN NOT NULL,
   base_cost INTEGER NOT NULL,
