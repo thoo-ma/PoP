@@ -5,15 +5,19 @@ on:
     paths:
       - "supabase/functions/**"
       - "shared/**"
+      - ".github/workflows/deno-check.yml"
   pull_request:
     paths:
       - "supabase/functions/**"
       - "shared/**"
+      - ".github/workflows/deno-check.yml"
 
 jobs:
   deno-check:
     name: deno check
     runs-on: ubuntu-latest
+    env:
+      DENO_DIR: ~/.deno
 
     steps:
       - uses: actions/checkout@v4
