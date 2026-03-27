@@ -75,7 +75,7 @@ serve(async (req) => {
     // ── Apply degen bar + POOP decrement ────────────────────────────────────
     console.log(`repair-nft: degen — percent=${degenPercent}`)
     let chargedAmount: number
-    let newBalance: number
+    let newBalance: number | null
     let outcome: { busted: boolean }
     try {
       const result = await applyDegenBar(supabase, userId, poopCost, degenPercent, 'repair', cfg.degen_bar)
@@ -110,7 +110,7 @@ serve(async (req) => {
           poop_balance: newBalance,
           config_hash:  await computeConfigHash(cfg.degen_bar),
         }),
-        { status: 422, headers: { 'Content-Type': 'application/json' } },
+        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
     }
 

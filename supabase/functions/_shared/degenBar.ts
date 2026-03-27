@@ -41,7 +41,7 @@ export function parseDegenPercent(body: unknown): number {
 
 export type DegenBarResult = {
   chargedAmount: number
-  newBalance: number
+  newBalance: number | null
   outcome: DegenOutcome
 }
 
