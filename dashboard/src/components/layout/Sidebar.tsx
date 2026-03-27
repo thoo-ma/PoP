@@ -13,6 +13,7 @@ import {
   Battery,
   Dices,
   Cloud,
+  Activity,
   ChevronRight,
   type LucideIcon,
 } from 'lucide-react'
@@ -48,10 +49,11 @@ const GAME_MECHANICS: NavItem[] = [
 ]
 
 const ECONOMY_ROI: NavItem[] = [
-  { label: 'Currency (POOP)', href: '/currency', icon: Coins  },
-  { label: 'Breeding',        href: '/breed',    icon: Dna    },
-  { label: 'Minting',         href: '/minting',  icon: Layers },
-  { label: 'Loot Roll',       href: '/loot',     icon: Dices  },
+  { label: 'Currency (POOP)', href: '/currency',  icon: Coins    },
+  { label: 'Breeding',        href: '/breed',     icon: Dna      },
+  { label: 'Minting',         href: '/minting',   icon: Layers   },
+  { label: 'Loot Roll',       href: '/loot',      icon: Dices    },
+  { label: 'Degen Bar',       href: '/degen-bar', icon: Activity },
 ]
 
 const NAV_GROUPS: { label: string; icon: LucideIcon; items: NavItem[] }[] = [

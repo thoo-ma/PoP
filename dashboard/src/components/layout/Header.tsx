@@ -26,6 +26,7 @@ const SECTION_LABELS: Record<string, string> = {
   '/energy':     'Energy Drain',
   '/loot':       'Loot Roll',
   '/cloud-run':  'Cloud Run',
+  '/degen-bar':  'Degen Bar',
 }
 
 export function Header() {
