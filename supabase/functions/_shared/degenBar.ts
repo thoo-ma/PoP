@@ -84,6 +84,20 @@ export async function applyDegenBar(
   }
 
   // ── Degen path ─────────────────────────────────────────────────────────────
+
+  // Pre-flight: must be able to cover the worst-case bust cost before we roll.
+  // Prevents retry-bypass: a player with < baseCost could otherwise spam retries
+  // and only ever pay the reduced cost on non-bust rolls.
+  const { data: wallet, error: walletErr } = await supabase
+    .from('users')
+    .select('poop_balance')
+    .eq('id', userId)
+    .single()
+  if (walletErr) throw walletErr
+  if ((wallet?.poop_balance ?? 0) < baseCost) {
+    return { chargedAmount: baseCost, newBalance: null, outcome: { busted: false } }
+  }
+
   const reducedCost = calcReducedCost(baseCost, degenPercent, cfg)
   const outcome     = resolveDegenOutcome(degenPercent, cfg)
   const chargedAmount = outcome.busted ? baseCost : reducedCost
