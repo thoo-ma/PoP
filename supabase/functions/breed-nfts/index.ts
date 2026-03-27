@@ -8,6 +8,7 @@ import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
+import { parseDegenPercent, applyDegenBar, computeConfigHash } from '../_shared/degenBar.ts'
 
 const BreedSchema = z.object({
   parent1_id: z.string().uuid('parent1_id must be a valid UUID'),
@@ -64,6 +65,14 @@ serve(async (req) => {
     const bodyResult = await parseBody(req, BreedSchema)
     if (bodyResult instanceof Response) return bodyResult
     const { parent1_id, parent2_id } = bodyResult
+
+    // ── Degen percent ─────────────────────────────────────────────────────────
+    let degenPercent: number
+    try {
+      degenPercent = parseDegenPercent(bodyResult)
+    } catch {
+      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100')
+    }
 
     // ── Fetch & ownership check ───────────────────────────────────────────────
     const { data: parents, error: fetchError } = await supabase
@@ -122,27 +131,49 @@ serve(async (req) => {
       `total → ${totalBreedCost} POOP`
     )
 
-    // ── Atomic POOP decrement ─────────────────────────────────────────────────
-    const { data: newBalance, error: decErr } = await supabase.rpc('decrement_poop_balance', {
-      p_user_id: userId,
-      p_amount: totalBreedCost,
-    })
-
-    if (decErr) {
-      console.error('breed-nfts: decrement_poop_balance error', decErr)
-      return respondError(500, 'internal_error', decErr.message)
+    // ── Apply degen bar + POOP decrement ─────────────────────────────────────
+    console.log(`breed-nfts: degen — percent=${degenPercent}`)
+    let chargedAmount: number
+    let newBalance: number | null
+    let outcome: { busted: boolean }
+    try {
+      const result = await applyDegenBar(supabase, userId, totalBreedCost, degenPercent, 'breed', cfg.degen_bar)
+      chargedAmount = result.chargedAmount
+      newBalance    = result.newBalance
+      outcome       = result.outcome
+    } catch (degenErr) {
+      console.error('breed-nfts: applyDegenBar error', degenErr)
+      return respondError(500, 'internal_error',
+        degenErr instanceof Error ? degenErr.message : 'Unknown error',
+      )
     }
+
+    console.log(`breed-nfts: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
 
     if (newBalance === null) {
       const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
       const currentBalance = wallet?.poop_balance ?? 0
       return respondError(402, 'insufficient_poop',
-        `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
+        `Breeding costs ${chargedAmount} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
         {
           poop_balance: currentBalance,
-          poop_required: totalBreedCost,
+          poop_required: chargedAmount,
           poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
         },
+      )
+    }
+
+    // ── Bust: charge full price, skip offspring creation ──────────────────────
+    if (outcome.busted) {
+      return new Response(
+        JSON.stringify({
+          error:         'busted',
+          degen_percent: degenPercent,
+          poop_spent:    chargedAmount,
+          poop_balance:  newBalance,
+          config_hash:   await computeConfigHash(cfg.degen_bar),
+        }),
+        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
     }
 
@@ -171,7 +202,7 @@ serve(async (req) => {
       return respondError(500, 'internal_error', insertError.message)
     }
 
-    console.log(`breed-nfts: user ${userId} spent ${totalBreedCost} POOP (${p1Cost}+${p2Cost}) → balance ${newBalance}`)
+    console.log(`breed-nfts: user ${userId} spent ${chargedAmount} POOP (${p1Cost}+${p2Cost}) → balance ${newBalance}`)
 
     // ── Increment breed_count for both parents ────────────────────────────────
     const { error: breedCountError } = await supabase
@@ -203,9 +234,13 @@ serve(async (req) => {
       image_url:    created.image_url,
       opened:       created.opened,
       created_at:   created.created_at,
-      poop_spent:   totalBreedCost,
+      poop_spent:   chargedAmount,
       poop_spent_breakdown: { parent1: p1Cost, parent2: p2Cost },
       poop_balance: newBalance,
+      degen_percent: degenPercent,
+      original_cost: totalBreedCost,
+      reduced_cost:  chargedAmount,
+      config_hash:   await computeConfigHash(cfg.degen_bar),
     }
 
     return respondOk(result)

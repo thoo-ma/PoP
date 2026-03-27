@@ -6,11 +6,13 @@ import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
+import { parseDegenPercent, applyDegenBar, computeConfigHash } from '../_shared/degenBar.ts'
 
 const RepairSchema = z.object({
-  nft_id:     z.string().uuid('nft_id must be a valid UUID'),
-  new_energy: z.number().int().min(0).max(MAX_ENERGY,
+  nft_id:        z.string().uuid('nft_id must be a valid UUID'),
+  new_energy:    z.number().int().min(0).max(MAX_ENERGY,
     `new_energy must be between 0 and ${MAX_ENERGY}`),
+  degen_percent: z.number().int().min(0).max(100).default(0).optional(),
 })
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
@@ -35,6 +37,14 @@ serve(async (req) => {
     const bodyResult = await parseBody(req, RepairSchema)
     if (bodyResult instanceof Response) return bodyResult
     const { nft_id, new_energy } = bodyResult
+
+    // ── Degen percent ─────────────────────────────────────────────────────────
+    let degenPercent: number
+    try {
+      degenPercent = parseDegenPercent(bodyResult)
+    } catch {
+      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100')
+    }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const { data: nft, error: fetchNFTError } = await supabase
@@ -62,23 +72,45 @@ serve(async (req) => {
     const energyDelta = new_energy - nft.energy
     const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY, cfg.currency)
 
-    // ── Atomic POOP decrement ─────────────────────────────────────────────────
-    const { data: newBalance, error: decErr } = await supabase.rpc('decrement_poop_balance', {
-      p_user_id: userId,
-      p_amount: poopCost,
-    })
-
-    if (decErr) {
-      console.error('repair-nft: decrement_poop_balance error', decErr)
-      return respondError(500, 'internal_error', decErr.message)
+    // ── Apply degen bar + POOP decrement ────────────────────────────────────
+    console.log(`repair-nft: degen — percent=${degenPercent}`)
+    let chargedAmount: number
+    let newBalance: number | null
+    let outcome: { busted: boolean }
+    try {
+      const result = await applyDegenBar(supabase, userId, poopCost, degenPercent, 'repair', cfg.degen_bar)
+      chargedAmount = result.chargedAmount
+      newBalance    = result.newBalance
+      outcome       = result.outcome
+    } catch (degenErr) {
+      console.error('repair-nft: applyDegenBar error', degenErr)
+      return respondError(500, 'internal_error',
+        degenErr instanceof Error ? degenErr.message : 'Unknown error',
+      )
     }
+
+    console.log(`repair-nft: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
 
     if (newBalance === null) {
       const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
       const currentBalance = wallet?.poop_balance ?? 0
       return respondError(402, 'insufficient_poop',
-        `Repairing costs ${poopCost} POOP. You have ${currentBalance} POOP.`,
-        { poop_balance: currentBalance, poop_required: poopCost },
+        `Repairing costs ${chargedAmount} POOP. You have ${currentBalance} POOP.`,
+        { poop_balance: currentBalance, poop_required: chargedAmount },
+      )
+    }
+
+    // ── Bust: charge full price, skip energy restore ──────────────────────────
+    if (outcome.busted) {
+      return new Response(
+        JSON.stringify({
+          error:        'busted',
+          degen_percent: degenPercent,
+          poop_spent:   chargedAmount,
+          poop_balance: newBalance,
+          config_hash:  await computeConfigHash(cfg.degen_bar),
+        }),
+        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
     }
 
@@ -98,15 +130,19 @@ serve(async (req) => {
 
     console.log(
       `repair-nft: nft=${nft_id} energy ${nft.energy} → ${updated.energy} | ` +
-      `user ${userId} spent ${poopCost} POOP → balance ${newBalance}`
+      `user ${userId} spent ${chargedAmount} POOP → balance ${newBalance}`
     )
 
     // ── Return result ─────────────────────────────────────────────────────────
     return respondOk({
-      id:           updated.id,
-      energy:       updated.energy,
-      poop_spent:   poopCost,
-      poop_balance: newBalance,
+      id:            updated.id,
+      energy:        updated.energy,
+      poop_spent:    chargedAmount,
+      poop_balance:  newBalance,
+      degen_percent: degenPercent,
+      original_cost: poopCost,
+      reduced_cost:  chargedAmount,
+      config_hash:   await computeConfigHash(cfg.degen_bar),
     })
 
   } catch (err) {
