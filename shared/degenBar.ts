@@ -98,6 +98,6 @@ export function resolveDegenOutcome(degenPercent: number, cfg?: DegenBarCfg): De
  * Used by client-side hooks to detect server-side config drift.
  */
 export function degenBarConfigHash(cfg: DegenBarCfg): string {
-  const keys = (Object.keys(cfg) as (keyof DegenBarCfg)[]).sort();
+  const keys = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const;
   return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])));
 }

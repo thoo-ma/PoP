@@ -7,7 +7,7 @@
  *  - parseDegenPercent(body) → validated integer (0 if omitted)
  *  - applyDegenBar(supabase, userId, baseCost, degenPercent, action, cfg?)
  *      → { chargedAmount, newBalance, outcome }
- *  - computeConfigHash(cfg) → deterministic 8-char hex string
+ *  - computeConfigHash(cfg) → deterministic JSON string fingerprint
  */
 
 import { z } from 'zod'
@@ -130,20 +130,11 @@ export async function applyDegenBar(
 // ─── computeConfigHash ────────────────────────────────────────────────────────
 
 /**
- * Deterministic first-8-hex-chars SHA-256 of the 5 degen_bar config values.
+ * Deterministic JSON string fingerprint of the 5 degen_bar config values.
+ * Key order is explicit and stable so server and client hashes always match.
  * Included in responses so the frontend can detect config drift.
  */
-export async function computeConfigHash(cfg: DegenBarConfig): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(JSON.stringify({
-    SAFE_BUST_COEF:       cfg.SAFE_BUST_COEF,
-    DEGEN_BUST_BASE:      cfg.DEGEN_BUST_BASE,
-    DEGEN_BUST_SCALE:     cfg.DEGEN_BUST_SCALE,
-    DEGEN_ZONE_THRESHOLD: cfg.DEGEN_ZONE_THRESHOLD,
-    MAX_REDUCTION:        cfg.MAX_REDUCTION,
-  }))
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
-  return hashHex.slice(0, 8)
+export function computeConfigHash(cfg: DegenBarConfig): string {
+  const keys = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const
+  return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])))
 }
