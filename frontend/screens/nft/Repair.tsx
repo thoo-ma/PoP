@@ -3,9 +3,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native';
 import { screenContainer, scrollContent, nftPickerButton, badgeLabel, nftDetailCard, overlayBadge, typeBadge, dialogBody, infoBox } from '@/styles';
-import { NFTProperties, ScreenLoader, ScreenError, NFTSelector } from '@/components';
+import { NFTProperties, ScreenLoader, ScreenError, NFTSelector, DegenBar } from '@/components';
 import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks';
 import { MAX_ENERGY, repairCost } from '@pop/shared';
+import { calcReducedCost } from '@pop/shared/degenBar';
 import { nftEvents, formatDisplayName } from '@/utils';
 import { useGameConfig } from '@/store/gameConfigStore';
 
@@ -16,11 +17,12 @@ import { useGameConfig } from '@/store/gameConfigStore';
  */
 export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { repairNFT, loading: updateLoading, error: repairError, insufficientPoopError } = useRepairNFT();
+  const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT();
   const { poopBalance } = useWallet();
   const { config: cfg } = useGameConfig();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [repairAmount, setRepairAmount] = useState(0);
+  const [degenPercent, setDegenPercent] = useState(0);
   const [isRepaired, setIsRepaired] = useState(false);
   const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null);
   const [poopSpent, setPoopSpent] = useState<number | null>(null);
@@ -62,7 +64,7 @@ export default memo(function Repair() {
     if (!selectedNFT || repairAmount === 0) return;
     
     const newEnergy = currentEnergy + Math.round(repairAmount);
-    const result = await repairNFT(selectedNFT.id, newEnergy);
+    const result = await repairNFT(selectedNFT.id, newEnergy, degenPercent);
     
     if (result) {
       setRepairedEnergy(result.energy);
@@ -84,6 +86,7 @@ export default memo(function Repair() {
   const handleReset = () => {
     setSelectedIndex(null);
     setRepairAmount(0);
+    setDegenPercent(0);
     setIsRepaired(false);
     setRepairedEnergy(null);
     setPoopSpent(null);
@@ -172,6 +175,12 @@ export default memo(function Repair() {
               {currentEnergy < MAX_ENERGY && !isRepaired && (
                 <>
                   {/* Repair Controls */}
+                  <DegenBar
+                    baseCost={poopCost}
+                    onDegenChange={setDegenPercent}
+                    disabled={updateLoading}
+                  />
+
                   <View className={cn(infoBox(), 'mb-5')}>
                     <Text className="text-base font-bold text-foreground mb-3">Repair Amount</Text>
                     <View className="items-center mb-2">
@@ -192,6 +201,16 @@ export default memo(function Repair() {
                       </Slider>
                   </View>
 
+                  {/* Bust feedback */}
+                  {bustedResult && (
+                    <View className="w-full mb-3 p-4 rounded-xl bg-red-500/10 border border-red-500 items-center">
+                      <Text className="text-2xl font-bold text-red-500 mb-1">BUST 💀</Text>
+                      <Text className="text-sm text-foreground-500">
+                        You lost {bustedResult.poop_spent} POOP — better luck next time!
+                      </Text>
+                    </View>
+                  )}
+
                   {/* Repair Button */}
                   <Button
                     variant="primary"
@@ -203,6 +222,16 @@ export default memo(function Repair() {
                       ? 'Repairing...'
                       : (poopBalance !== null && poopBalance < poopCost)
                       ? `Need ${poopCost} POOP`
+                      : degenPercent > 0
+                      ? (
+                          <Text>
+                            Repair —{' '}
+                            <Text className="line-through text-foreground-500">
+                              {poopCost}
+                            </Text>{' '}
+                            {calcReducedCost(poopCost, degenPercent, cfg.degen_bar)} POOP
+                          </Text>
+                        )
                       : `Repair (${poopCost} POOP)`}
                   </Button>
                 </>

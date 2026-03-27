@@ -7,6 +7,7 @@ export type { FullGameConfig }
 interface GameConfigContextValue {
   config:  FullGameConfig
   loading: boolean
+  refetch: () => Promise<void>
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -14,6 +15,7 @@ interface GameConfigContextValue {
 const GameConfigContext = createContext<GameConfigContextValue>({
   config:  buildDefaults(),
   loading: true,
+  refetch: async () => {},
 })
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
@@ -29,23 +31,24 @@ export function GameConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<FullGameConfig>(buildDefaults)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const { data } = await supabase.from('game_config').select('key, value')
-        const { config: merged } = buildGameConfig(data ?? [])
-        setConfig(merged)
-      } catch {
-        // network unavailable → keep defaults silently
-      } finally {
-        setLoading(false)
-      }
+  const load = async () => {
+    try {
+      const { data } = await supabase.from('game_config').select('key, value')
+      const { config: merged } = buildGameConfig(data ?? [])
+      setConfig(merged)
+    } catch {
+      // network unavailable → keep defaults silently
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     void load()
   }, [])
 
   return (
-    <GameConfigContext.Provider value={{ config, loading }}>
+    <GameConfigContext.Provider value={{ config, loading, refetch: load }}>
       {children}
     </GameConfigContext.Provider>
   )

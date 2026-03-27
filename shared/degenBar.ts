@@ -92,3 +92,12 @@ export function resolveDegenOutcome(degenPercent: number, cfg?: DegenBarCfg): De
   const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
   return { busted: roll < calcBustChance(degenPercent, cfg) };
 }
+
+/**
+ * Deterministic string fingerprint of a DegenBarCfg value.
+ * Used by client-side hooks to detect server-side config drift.
+ */
+export function degenBarConfigHash(cfg: DegenBarCfg): string {
+  const keys = (Object.keys(cfg) as (keyof DegenBarCfg)[]).sort();
+  return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])));
+}

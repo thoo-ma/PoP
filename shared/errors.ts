@@ -25,6 +25,7 @@ export const EdgeFunctionErrorCode = {
   STAT_CAP_EXCEEDED:    'stat_cap_exceeded',
   MAX_HOLDS_REACHED:    'max_holds_reached',
   DETECTION_FAILED:     'detection_failed',
+  BUSTED:               'busted',
   // 429
   ON_COOLDOWN:          'on_cooldown',
   RATE_LIMIT_EXCEEDED:  'rate_limit_exceeded',
@@ -53,4 +54,9 @@ export interface InsufficientPoopDetails {
 export interface CooldownDetails {
   cooldown_ends_at: string
   cooldown_remaining_seconds: number
+}
+
+export interface BustedDetails {
+  poop_spent: number
+  poop_balance: number
 }
