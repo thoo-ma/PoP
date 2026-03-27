@@ -23,6 +23,7 @@ import {
   type EnergyDrainConfig,
   type LootRollConfig,
   type CloudRunConfig,
+  type DegenBarConfig,
 } from './schemas.ts'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -39,6 +40,7 @@ export type FullGameConfig = {
   energy_drain: EnergyDrainConfig
   loot_roll:    LootRollConfig
   cloud_run:    CloudRunConfig
+  degen_bar:    DegenBarConfig
 }
 
 /** Per-key source tracking: did this value come from the DB or from code defaults? */

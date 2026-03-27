@@ -1,5 +1,6 @@
 export * from './nft';
 export * from './breedProbabilities';
+export * from './degenBar';
 export * from './cloudRun';
 export * from './cooldown';
 export * from './currency';
