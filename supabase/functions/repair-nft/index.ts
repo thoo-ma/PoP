@@ -74,9 +74,11 @@ serve(async (req) => {
     }
 
     if (newBalance === null) {
+      const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
+      const currentBalance = wallet?.poop_balance ?? 0
       return respondError(402, 'insufficient_poop',
-        `Insufficient POOP balance. Repairing costs ${poopCost} POOP.`,
-        { poop_required: poopCost },
+        `Repairing costs ${poopCost} POOP. You have ${currentBalance} POOP.`,
+        { poop_balance: currentBalance, poop_required: poopCost },
       )
     }
 

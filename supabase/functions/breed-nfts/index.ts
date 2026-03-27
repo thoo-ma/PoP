@@ -134,9 +134,12 @@ serve(async (req) => {
     }
 
     if (newBalance === null) {
+      const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
+      const currentBalance = wallet?.poop_balance ?? 0
       return respondError(402, 'insufficient_poop',
-        `Insufficient POOP balance. Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}).`,
+        `Breeding costs ${totalBreedCost} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
         {
+          poop_balance: currentBalance,
           poop_required: totalBreedCost,
           poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
         },
