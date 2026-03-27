@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
+import { logger } from '@/lib/logger'
 import { type GameConfigKey } from '@pop/shared/schemas'
 import {
   buildGameConfig,
@@ -68,7 +69,7 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
       set({ config, sources, loading: false, warnings })
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Failed to load game config'
-      console.error('[gameConfigStore] fetch error:', msg)
+      logger.error('[gameConfigStore] fetch error:', msg)
       set({ error: msg, loading: false })
     }
   },
