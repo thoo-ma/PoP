@@ -46,7 +46,11 @@ All tunable game balance (costs, XP thresholds, cooldowns, probabilities, etc.) 
 
 **Rules**:
 - Never hardcode balance numbers in edge functions or components — import from `shared/` and pass optional `cfg` override
-- When adding a new config key: update `shared/schemas.ts` (Zod schema + defaults) AND `shared/gameConfig.ts` (FullGameConfig type)
+- When adding a new config key, ALL THREE are required:
+  1. `shared/schemas.ts` — Zod schema, defaults, add to `GAME_CONFIG_REGISTRY`
+  2. `shared/gameConfig.ts` — add to `FullGameConfig` type
+  3. `supabase/migrations/` — seed migration to INSERT the new row into `game_config` (follow the pattern in `20260305000001_seed_game_config.sql`: `ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value || public.game_config.value`)
+- Without the seed migration, edge functions fall back to code defaults (no live tuning from dashboard) and the dashboard cannot save overrides
 - `@migration: KEEP` comments in shared/ mean the value is a structural invariant — never move to game_config
 - `@migration: DELETE` means the value should migrate to game_config
 
