@@ -1,0 +1,33 @@
+name: Deno Check (Edge Functions)
+
+on:
+  push:
+    paths:
+      - "supabase/functions/**"
+      - "shared/**"
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - "shared/**"
+
+jobs:
+  deno-check:
+    name: deno check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.deno
+          key: deno-${{ hashFiles('supabase/functions/import_map.json') }}
+          restore-keys: deno-
+
+      - name: Type-check edge functions
+        working-directory: supabase/functions
+        run: deno check --config deno.json */index.ts
