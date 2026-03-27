@@ -18,9 +18,9 @@ import {
 } from '../../../shared/degenBar.ts'
 import type { DegenBarConfig } from '../../../shared/schemas.ts'
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '../../../shared/database.types.ts'
 
-// deno-lint-ignore no-explicit-any
-type SupabaseClient = ReturnType<typeof createClient<any>>
+type SupabaseClient = ReturnType<typeof createClient<Database>>
 
 // ─── parseDegenPercent ────────────────────────────────────────────────────────
 

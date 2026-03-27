@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '../../../shared/database.types.ts'
 import { respondError } from './responses.ts'
-// deno-lint-ignore no-explicit-any
-type SupabaseClient = ReturnType<typeof createClient>
+type SupabaseClient = ReturnType<typeof createClient<Database>>
 
 export { corsHeaders } from './headers.ts'
 
@@ -75,7 +75,7 @@ export async function requireAuth(
 
   const token = authHeader.replace('Bearer ', '')
 
-  const supabase = createClient(
+  const supabase = createClient<Database>(
     Deno.env.get('SUPABASE_URL') ?? '',
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     { auth: { autoRefreshToken: false, persistSession: false } },
