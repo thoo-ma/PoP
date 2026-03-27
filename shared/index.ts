@@ -4,6 +4,7 @@ export * from './cloudRun';
 export * from './cooldown';
 export * from './currency';
 export * from './database.types';
+export * from './degenBar';
 export * from './energyDrain';
 export * from './errors';
 export * from './lootRoll';

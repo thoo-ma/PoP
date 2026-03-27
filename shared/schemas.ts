@@ -338,6 +338,36 @@ export const CLOUD_RUN_DEFAULTS: CloudRunConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// 11. Degen Bar
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import {
+  SAFE_BUST_COEF,
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  MAX_REDUCTION,
+} from './degenBar.ts'
+
+export const DegenBarConfigSchema = z.object({
+  SAFE_BUST_COEF:        z.number().min(0).max(1),
+  DEGEN_BUST_BASE:       z.number().min(0).max(100),
+  DEGEN_BUST_SCALE:      z.number().min(0).max(1_000),
+  DEGEN_ZONE_THRESHOLD:  z.number().min(0).max(100),
+  MAX_REDUCTION:         z.number().min(0).max(1),
+})
+
+export type DegenBarConfig = z.infer<typeof DegenBarConfigSchema>
+
+export const DEGEN_BAR_DEFAULTS: DegenBarConfig = {
+  SAFE_BUST_COEF,
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  MAX_REDUCTION,
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // Master registry — maps game_config row keys to their schema + defaults
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -352,6 +382,7 @@ export const GAME_CONFIG_REGISTRY = {
   energy_drain: { schema: EnergyDrainConfigSchema, defaults: ENERGY_DRAIN_DEFAULTS },
   loot_roll:    { schema: LootRollConfigSchema,    defaults: LOOT_ROLL_DEFAULTS },
   cloud_run:    { schema: CloudRunConfigSchema,    defaults: CLOUD_RUN_DEFAULTS },
+  degen_bar:    { schema: DegenBarConfigSchema,    defaults: DEGEN_BAR_DEFAULTS },
 } as const
 
 export type GameConfigKey = keyof typeof GAME_CONFIG_REGISTRY
