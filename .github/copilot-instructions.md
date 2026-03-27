@@ -104,12 +104,6 @@ console.error('breed-nfts: fetch parents error', fetchError);
 - Migrations: `DEFAULT NOW()` (not `CURRENT_TIMESTAMP`)
 - JavaScript: `new Date().toISOString()` when passing to DB
 
-## Agent Sessions
-
-Agent sessions run in isolated git worktrees (`.vscode/hooks.json`). The `SessionStart` hook creates a sibling directory (e.g. `${REPO_NAME}-task-<epochSeconds>-<pid>/`) with its own branch and working tree. The `Stop` hook removes the worktree. Agents must work inside the worktree path provided in `additionalContext` — never modify the original repo.
-
-⚠️ **Terminal sharing**: Parallel sessions share the same VS Code terminal shell. **Every** terminal command MUST start with `cd <worktree_dir> &&` to avoid cwd races. Never assume the current directory is correct — another session may have changed it between your commands. For git operations, prefer `git -C <worktree_dir> <command>`.
-
 ## Branch Naming
 
 `fix/`, `feat/`, `refactor/`, `chore/`, `docs/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
