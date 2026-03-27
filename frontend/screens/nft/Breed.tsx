@@ -7,8 +7,9 @@ import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks';
 import type { NFT } from '@/types/nft';
 import type { MysteryBox } from '@pop/shared';
 import { breedCost } from '@pop/shared';
+import { calcReducedCost } from '@pop/shared/degenBar';
 import { useGameConfig } from '@/store/gameConfigStore';
-import { MysteryBoxCard, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot } from '@/components';
+import { MysteryBoxCard, ScreenLoader, ScreenError, BreedPickerModal, BreedOutcomePanel, BreedParentSlot, DegenBar } from '@/components';
 import { nftEvents, canBreed } from '@/utils';
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
@@ -18,7 +19,7 @@ import { nftEvents, canBreed } from '@/utils';
  * Displays a probability breakdown and the resulting child NFT on success.
  */export default memo(function Breed() {
   const { nfts, loading, error, refetch } = useUserNFTs();
-  const { breedNFTs, loading: breedLoading, error: breedError } = useBreedNFT();
+  const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT();
   const { poopBalance } = useWallet();
   const { config: cfg } = useGameConfig();
 
@@ -28,6 +29,7 @@ import { nftEvents, canBreed } from '@/utils';
   const [breedResult, setBreedResult] = useState<MysteryBox | null>(null);
   const [resultParent1Url, setResultParent1Url] = useState<string | null>(null);
   const [resultParent2Url, setResultParent2Url] = useState<string | null>(null);
+  const [degenPercent, setDegenPercent] = useState(0);
 
   // When parent1 changes, clear parent2 if it is no longer compatible
   const handleSetParent1 = (nft: NFT) => {
@@ -41,7 +43,7 @@ import { nftEvents, canBreed } from '@/utils';
     if (!parent1 || !parent2) return;
     setResultParent1Url(parent1.image_url);
     setResultParent2Url(parent2.image_url);
-    const newNFT = await breedNFTs(parent1.id, parent2.id);
+    const newNFT = await breedNFTs(parent1.id, parent2.id, degenPercent);
     if (newNFT) {
       setBreedResult(newNFT);
       nftEvents.emit();
@@ -55,6 +57,7 @@ import { nftEvents, canBreed } from '@/utils';
     setBreedResult(null);
     setResultParent1Url(null);
     setResultParent2Url(null);
+    setDegenPercent(0);
   };
 
   // ── Guards ────────────────────────────────────────────────────────────────
@@ -148,7 +151,24 @@ import { nftEvents, canBreed } from '@/utils';
                 </Text>
               </View>
             )}
+            {/* ── Degen Bar ────────────────────────────────────────── */}
+            {totalBreedCost !== null && (
+              <DegenBar
+                baseCost={totalBreedCost}
+                onDegenChange={setDegenPercent}
+                disabled={breedLoading}
+              />
+            )}
 
+            {/* ── Bust feedback ──────────────────────────────────────── */}
+            {bustedResult && (
+              <View className="w-full mb-3 p-4 rounded-xl bg-red-500/10 border border-red-500 items-center">
+                <Text className="text-2xl font-bold text-red-500 mb-1">BUST 💀</Text>
+                <Text className="text-sm text-foreground-500">
+                  You lost {bustedResult.poop_spent} POOP — better luck next time!
+                </Text>
+              </View>
+            )}
             {/* ── Breed error ───────────────────────────────────────────── */}
             {breedError && (
               <Text className={errorMessage()}>{breedError}</Text>
@@ -175,9 +195,11 @@ import { nftEvents, canBreed } from '@/utils';
             >
               {breedLoading
                 ? 'Breeding…'
-                : totalBreedCost !== null
-                  ? `Breed (${totalBreedCost} POOP)`
-                  : 'Breed'}
+                : degenPercent > 0 && totalBreedCost !== null
+                  ? `Breed — ~~${totalBreedCost}~~ ${calcReducedCost(totalBreedCost, degenPercent, cfg.degen_bar)} POOP`
+                  : totalBreedCost !== null
+                    ? `Breed (${totalBreedCost} POOP)`
+                    : 'Breed'}
             </Button>
           </>
         ) : (

@@ -2,7 +2,10 @@ import { useState, useCallback } from 'react';
 import { FunctionsHttpError } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/utils/errorHelpers';
-import type { EdgeFunctionErrorResponse, InsufficientPoopDetails } from '@pop/shared';
+import { useToast } from 'heroui-native';
+import { useGameConfig } from '@/store/gameConfigStore';
+import { degenBarConfigHash } from '@/components/shared/DegenBar';
+import type { EdgeFunctionErrorResponse, InsufficientPoopDetails, BustedDetails } from '@pop/shared';
 
 export interface RepairResult {
   id: string;
@@ -25,23 +28,28 @@ export interface InsufficientPoopError {
  * Replaces the previous direct client-side DB write so that the POOP cost
  * is enforced server-side and cannot be bypassed.
  *
- * @returns A `repairNFT(nftId, newEnergy)` callback resolving to `RepairResult | null`,
- *   async state (`loading`, `error`), and an `insufficientPoopError` object when the
- *   user's wallet doesn't have enough POOP to cover the repair cost.
+ * @returns A `repairNFT(nftId, newEnergy, degenPercent)` callback resolving to `RepairResult | null`,
+ *   async state (`loading`, `error`), `insufficientPoopError`, and `bustedResult` when the
+ *   degen roll busts.
  */
 export function useRepairNFT() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [insufficientPoopError, setInsufficientPoopError] = useState<InsufficientPoopError | null>(null);
+  const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null);
 
-  const repairNFT = useCallback(async (nftId: string, newEnergy: number): Promise<RepairResult | null> => {
+  const { config, refetch: refetchConfig } = useGameConfig();
+  const { toast } = useToast();
+
+  const repairNFT = useCallback(async (nftId: string, newEnergy: number, degenPercent = 0): Promise<RepairResult | null> => {
     try {
       setLoading(true);
       setError(null);
       setInsufficientPoopError(null);
+      setBustedResult(null);
 
       const { data, error: fnError } = await supabase.functions.invoke('repair-nft', {
-        body: { nft_id: nftId, new_energy: newEnergy },
+        body: { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
       });
 
       if (fnError) {
@@ -63,6 +71,15 @@ export function useRepairNFT() {
           });
           return null;
         }
+        // Degen bust
+        if (body?.error === 'busted') {
+          const d = body.details as unknown as BustedDetails | undefined;
+          setBustedResult({
+            poop_spent:   d?.poop_spent   ?? 0,
+            poop_balance: d?.poop_balance ?? 0,
+          });
+          return null;
+        }
         logError('useRepairNFT:Invoke', fnError);
         setError(message);
         return null;
@@ -73,6 +90,17 @@ export function useRepairNFT() {
         return null;
       }
 
+      // Detect config drift
+      const responseHash = (data as { config_hash?: string }).config_hash;
+      if (responseHash && responseHash !== degenBarConfigHash(config.degen_bar)) {
+        void refetchConfig();
+        toast.show({
+          variant: 'default',
+          label: 'Settings updated',
+          description: 'Game settings updated — odds may have changed',
+        });
+      }
+
       return data as RepairResult;
     } catch (err) {
       logError('useRepairNFT:Repair', err);
@@ -81,7 +109,8 @@ export function useRepairNFT() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config.degen_bar, refetchConfig]);
 
-  return { repairNFT, loading, error, insufficientPoopError };
+  return { repairNFT, loading, error, insufficientPoopError, bustedResult };
 }
