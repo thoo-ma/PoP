@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { View, Text } from 'react-native';
-import { Button, Spinner, Dialog, useToast, cn } from 'heroui-native';
-import { screenTitle, screenSubtitle, dialogBody } from '@/styles';
+import { View, Text, Platform } from 'react-native';
+import { Button, Spinner, useToast, cn } from 'heroui-native';
+import { screenTitle, screenSubtitle } from '@/styles';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
@@ -26,7 +26,6 @@ export default function Auth() {
   const [devLoading, setDevLoading] = useState(false);
   const [testLoading, setTestLoading] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
-  const [oauthDialogVisible, setOauthDialogVisible] = useState(false);
 
   const handleDevSignIn = async () => {
     setDevLoading(true);
@@ -81,8 +80,27 @@ export default function Auth() {
     }
   };
 
-  const signInWithProvider = async (_provider: OAuthProvider) => {
-    setOauthDialogVisible(true);
+  const signInWithProvider = async (provider: OAuthProvider) => {
+    setLoading(true);
+    try {
+      const redirectTo = Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback';
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo, skipBrowserRedirect: true },
+      });
+      if (error) throw error;
+      if (data.url) {
+        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+        if (result.type === 'success') {
+          await supabase.auth.exchangeCodeForSession(result.url);
+        }
+      }
+    } catch (err) {
+      logError('Auth:OAuth', err);
+      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,25 +148,6 @@ export default function Auth() {
         onCancel={() => setPasswordModalVisible(false)}
       />
 
-      <Dialog isOpen={oauthDialogVisible} onOpenChange={setOauthDialogVisible}>
-        <Dialog.Portal>
-          <Dialog.Overlay />
-          <Dialog.Content>
-            <Dialog.Close />
-            <View className={dialogBody()}>
-              <Dialog.Title>OAuth Not Available</Dialog.Title>
-              <Dialog.Description>
-                OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode to sign in.
-              </Dialog.Description>
-            </View>
-            <View className="flex-row justify-end">
-              <Button variant="primary" size="sm" onPress={() => setOauthDialogVisible(false)}>
-                OK
-              </Button>
-            </View>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
     </View>
   );
 }
