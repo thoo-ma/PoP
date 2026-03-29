@@ -6,31 +6,8 @@ type SupabaseClient = ReturnType<typeof createClient<Database>>
 export { corsHeaders } from './headers.ts'
 
 /**
- * Decode a JWT's payload section without verifying the signature.
- * Used as a fallback when `supabase.auth.getUser()` fails, e.g. over an Expo
- * Go tunnel.
- *
- * NOTE (backlog 9.4): this trusts the token presentation without signature
- * validation. Remove once the Expo Go tunnel reliability issue is resolved.
- */
-export function decodeJwtSub(token: string): string | null {
-  try {
-    const b64url = token.split('.')[1]
-    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/')
-    const padded = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=')
-    const payload = JSON.parse(atob(padded))
-    return payload?.sub ?? null
-  } catch {
-    return null
-  }
-}
-
-/**
- * Resolve a user ID from a bearer token.
- *
- * 1. Calls `supabase.auth.getUser(token)` — validates the token server-side.
- * 2. Falls back to a client-side JWT payload decode (no signature check) when
- *    the network call fails (see `decodeJwtSub` note above).
+ * Resolve a user ID from a bearer token by calling `supabase.auth.getUser(token)`.
+ * Returns `null` (→ 401) if validation fails for any reason.
  */
 export async function getUserIdFromToken(
   supabase: SupabaseClient,
@@ -44,11 +21,7 @@ export async function getUserIdFromToken(
   } catch (e) {
     console.error(`${fnName}: getUser exception`, e)
   }
-
-  // Fallback: decode JWT payload without a network call
-  const sub = decodeJwtSub(token)
-  if (!sub) console.error(`${fnName}: JWT decode failed`)
-  return sub
+  return null
 }
 
 /**
