@@ -157,7 +157,12 @@ serve(async (req) => {
 
     if (newBalance === null) {
       let currentBalance = 0
-      try { currentBalance = await getWalletBalance(supabase, userId) } catch (_e) { /* non-fatal */ }
+      try {
+        currentBalance = await getWalletBalance(supabase, userId)
+      } catch (walletErr) {
+        console.error('breed-nfts: getWalletBalance error', { userId, error: walletErr })
+        // non-fatal — fall back to default 0 balance for error messaging
+      }
       return respondError(402, 'insufficient_poop',
         `Breeding costs ${chargedAmount} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
         {
