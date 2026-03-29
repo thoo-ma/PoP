@@ -1,14 +1,3 @@
-import type { NFTType } from '@pop/shared';
-import { TYPE_NAMES } from '@pop/shared';
-
-/**
- * Returns a random name slug for the given NFT type.
- */
-export const getRandomName = (type: NFTType): string => {
-  const names = TYPE_NAMES[type];
-  return names[Math.floor(Math.random() * names.length)];
-};
-
 /**
  * Converts a kebab-case name slug into a title-cased display string.
  * e.g. "ancient-egyptian" → "Ancient Egyptian"
