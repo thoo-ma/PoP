@@ -15,12 +15,9 @@
  */
 
 import { buildGameConfig, type FullGameConfig } from '../../../shared/gameConfig.ts'
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from '../../../shared/database.types.ts'
+import type { SupabaseClient } from './auth.ts'
 
 export type { FullGameConfig }
-
-type SupabaseClient = ReturnType<typeof createClient<Database>>
 
 /**
  * Fetch and merge game config from the DB.
