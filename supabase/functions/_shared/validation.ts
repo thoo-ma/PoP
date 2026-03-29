@@ -30,7 +30,8 @@ export async function parseBody<S extends z.ZodTypeAny>(
   let raw: unknown
   try {
     const text = await req.text()
-    if (text.length > maxBytes) {
+    const byteLength = new TextEncoder().encode(text).byteLength
+    if (byteLength > maxBytes) {
       return respondError(413, 'payload_too_large', `Request body must not exceed ${formatBytes(maxBytes)}`)
     }
     raw = JSON.parse(text)
