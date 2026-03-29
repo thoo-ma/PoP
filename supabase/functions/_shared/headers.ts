@@ -1,7 +1,10 @@
-const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') ?? 'http://localhost:3000')
+const _parsed = (Deno.env.get('ALLOWED_ORIGINS') ?? '')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean)
+
+// Fall back to localhost when the env var is absent or empty (dev only).
+const ALLOWED_ORIGINS: string[] = _parsed.length > 0 ? _parsed : ['http://localhost:3000']
 
 /**
  * Build CORS headers for a given request origin.
@@ -23,6 +26,17 @@ export function getCorsHeaders(origin: string | null): Record<string, string> {
   }
 }
 
-// Static fallback used by response helpers (first-allowed-origin).
+/**
+ * Build JSON response headers (CORS + Content-Type) for a given request origin.
+ *
+ * Use this over the static `jsonHeaders` export so that non-OPTIONS responses
+ * echo the actual request origin in Access-Control-Allow-Origin, matching the
+ * behaviour of getCorsHeaders used for preflight.
+ */
+export function getJsonHeaders(origin: string | null): Record<string, string> {
+  return { ...getCorsHeaders(origin), 'Content-Type': 'application/json' }
+}
+
+// Static fallbacks (first-allowed-origin) kept for legacy callers.
 export const corsHeaders = getCorsHeaders(null)
-export const jsonHeaders = { ...corsHeaders, 'Content-Type': 'application/json' }
+export const jsonHeaders = getJsonHeaders(null)

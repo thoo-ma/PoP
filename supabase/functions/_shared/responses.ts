@@ -1,8 +1,8 @@
-import { jsonHeaders } from './headers.ts'
+import { getJsonHeaders } from './headers.ts'
 
 /** Return a 200 JSON response with CORS headers. */
-export function respondOk(data: unknown): Response {
-  return new Response(JSON.stringify(data), { status: 200, headers: jsonHeaders })
+export function respondOk(data: unknown, origin: string | null = null): Response {
+  return new Response(JSON.stringify(data), { status: 200, headers: getJsonHeaders(origin) })
 }
 
 /** Return a JSON error response with CORS headers.
@@ -15,9 +15,10 @@ export function respondError(
   error: string,
   message: string,
   details?: Record<string, unknown>,
+  origin: string | null = null,
 ): Response {
   return new Response(
     JSON.stringify(details ? { error, message, details } : { error, message }),
-    { status, headers: jsonHeaders },
+    { status, headers: getJsonHeaders(origin) },
   )
 }

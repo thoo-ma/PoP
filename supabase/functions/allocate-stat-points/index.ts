@@ -21,6 +21,8 @@ serve(async (req) => {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
+  const origin = req.headers.get('origin')
+
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
     const auth = await requireAuth(req, 'allocate-stat-points')
@@ -43,13 +45,14 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
     }
 
     // ── Validation ────────────────────────────────────────────────────────────
     if (totalSpend > nft.stat_points) {
       return respondError(422, 'insufficient_points',
         `You only have ${nft.stat_points} stat point(s) but tried to spend ${totalSpend}`,
+        undefined, origin,
       )
     }
 
@@ -60,7 +63,7 @@ serve(async (req) => {
     const newLuck       = nft.luck       + luck
 
     if (newEfficiency > 100 || newResilience > 100 || newComfort > 100 || newLuck > 100) {
-      return respondError(422, 'stat_cap_exceeded', 'A stat cannot exceed 100')
+      return respondError(422, 'stat_cap_exceeded', 'A stat cannot exceed 100', undefined, origin)
     }
 
     // ── Persist ───────────────────────────────────────────────────────────────
@@ -80,7 +83,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('allocate-stat-points: update error', updateError)
-      return respondError(500, 'internal_error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message, undefined, origin)
     }
 
     console.log(
@@ -100,12 +103,13 @@ serve(async (req) => {
       comfort:     updated.comfort,
       luck:        updated.luck,
       stat_points: updated.stat_points,
-    })
+    }, origin)
 
   } catch (err) {
     console.error('allocate-stat-points: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })
