@@ -8,7 +8,7 @@ import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent, applyDegenBar, computeConfigHash } from '../_shared/degenBar.ts'
+import { parseDegenPercent, applyDegenBar, computeConfigHash, getWalletBalance } from '../_shared/degenBar.ts'
 
 const BreedSchema = z.object({
   parent1_id:    z.string().uuid('parent1_id must be a valid UUID'),
@@ -156,8 +156,8 @@ serve(async (req) => {
     console.log(`breed-nfts: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
 
     if (newBalance === null) {
-      const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
-      const currentBalance = wallet?.poop_balance ?? 0
+      let currentBalance = 0
+      try { currentBalance = await getWalletBalance(supabase, userId) } catch (_e) { /* non-fatal */ }
       return respondError(402, 'insufficient_poop',
         `Breeding costs ${chargedAmount} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
         {

@@ -18,10 +18,7 @@ import {
   type DegenOutcome,
 } from '../../../shared/degenBar.ts'
 import type { DegenBarConfig } from '../../../shared/schemas.ts'
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from '../../../shared/database.types.ts'
-
-type SupabaseClient = ReturnType<typeof createClient<Database>>
+import type { SupabaseClient } from './auth.ts'
 
 // ─── parseDegenPercent ────────────────────────────────────────────────────────
 
@@ -137,4 +134,21 @@ export async function applyDegenBar(
  */
 export function computeConfigHash(cfg: DegenBarConfig): string {
   return JSON.stringify(Object.fromEntries(DEGEN_BAR_HASH_KEYS.map((k) => [k, cfg[k]])))
+}
+
+// ─── getWalletBalance ─────────────────────────────────────────────────────────
+
+/**
+ * Fetch a user's current POOP balance from the DB.
+ * Throws on DB error so callers can surface a 500 rather than silently
+ * reporting 0 in a 402 response.
+ */
+export async function getWalletBalance(supabase: SupabaseClient, userId: string): Promise<number> {
+  const { data: wallet, error } = await supabase
+    .from('users')
+    .select('poop_balance')
+    .eq('id', userId)
+    .single()
+  if (error) throw error
+  return wallet?.poop_balance ?? 0
 }

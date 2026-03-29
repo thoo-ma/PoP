@@ -6,7 +6,7 @@ import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent, applyDegenBar, computeConfigHash } from '../_shared/degenBar.ts'
+import { parseDegenPercent, applyDegenBar, computeConfigHash, getWalletBalance } from '../_shared/degenBar.ts'
 
 const RepairSchema = z.object({
   nft_id:        z.string().uuid('nft_id must be a valid UUID'),
@@ -96,8 +96,8 @@ serve(async (req) => {
     console.log(`repair-nft: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
 
     if (newBalance === null) {
-      const { data: wallet } = await supabase.from('users').select('poop_balance').eq('id', userId).single()
-      const currentBalance = wallet?.poop_balance ?? 0
+      let currentBalance = 0
+      try { currentBalance = await getWalletBalance(supabase, userId) } catch (_e) { /* non-fatal */ }
       return respondError(402, 'insufficient_poop',
         `Repairing costs ${chargedAmount} POOP. You have ${currentBalance} POOP.`,
         { poop_balance: currentBalance, poop_required: chargedAmount }, origin,
