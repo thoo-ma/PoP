@@ -5,5 +5,5 @@ import { Platform } from 'react-native';
  * @returns Redirect URL string
  */
 export const getRedirectUrl = (): string => {
-  return Platform.OS === 'web' ? window.location.origin : 'pop://';
+  return Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback';
 };
