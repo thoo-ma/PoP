@@ -9,22 +9,8 @@ import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MAX_LEVEL } from '@pop/shared/xp'
+import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
 import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
-
-/**
- * Compute XP threshold for a given level using the formula:
- *   max(floor, round(base + level × linear + level² × quadratic))
- */
-function computeThreshold(
-  level: number,
-  base: number,
-  linear: number,
-  quadratic: number,
-  floor: number,
-): number {
-  return Math.max(floor, Math.round(base + level * linear + Math.pow(level, 2) * quadratic))
-}
 
 export default function XpPanel() {
   const source           = useGameConfigStore((s) => s.sources.xp)
@@ -40,13 +26,7 @@ export default function XpPanel() {
     const uses: number[]       = []
 
     for (let lvl = 1; lvl <= MAX_LEVEL; lvl++) {
-      const threshold = computeThreshold(
-        lvl,
-        xp.XP_FORMULA_BASE,
-        xp.XP_FORMULA_LINEAR,
-        xp.XP_FORMULA_QUADRATIC,
-        xp.XP_FORMULA_FLOOR,
-      )
+      const threshold = xpThreshold(lvl, xp)
       levels.push(lvl)
       thresholds.push(threshold)
       uses.push(Math.ceil(threshold / xp.XP_PER_USE))
