@@ -6,7 +6,9 @@
     "dev:dashboard": "pnpm --filter dashboard run dev",
     "typecheck": "turbo typecheck",
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "biome lint .",
+    "lint:biome": "biome lint .",
+    "format": "biome format --write ."
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -14,6 +16,7 @@
     ]
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.9",
     "turbo": "^2.8.20"
   }
 }

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { supabase } from '@/lib';
-import type { Session } from '@supabase/supabase-js';
-import type { UseAuthReturn } from '@/types';
+import { useCallback, useEffect, useState } from "react";
+import { supabase } from "@/lib";
+import type { Session } from "@supabase/supabase-js";
+import type { UseAuthReturn } from "@/types";
 
 /**
  * Hook to manage the current Supabase auth session.
@@ -46,7 +46,7 @@ export function useAuth(): UseAuthReturn {
   }, []);
 
   const getUserDisplayName = useCallback((): string => {
-    return session?.user.email || session?.user.user_metadata?.name || 'User';
+    return session?.user.email || session?.user.user_metadata?.name || "User";
   }, [session]);
 
   return {

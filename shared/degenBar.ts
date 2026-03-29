@@ -11,11 +11,11 @@
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type DegenBarCfg = {
-  SAFE_BUST_COEF?: number;       // default 0.08
-  DEGEN_BUST_BASE?: number;      // default 2
-  DEGEN_BUST_SCALE?: number;     // default 28
+  SAFE_BUST_COEF?: number; // default 0.08
+  DEGEN_BUST_BASE?: number; // default 2
+  DEGEN_BUST_SCALE?: number; // default 28
   DEGEN_ZONE_THRESHOLD?: number; // default 25
-  MAX_REDUCTION?: number;        // default 0.75
+  MAX_REDUCTION?: number; // default 0.75
 };
 
 export type DegenOutcome = { busted: boolean };
@@ -43,7 +43,7 @@ export const MAX_REDUCTION = 0.75;
  */
 export function calcReduction(degenPercent: number, cfg?: DegenBarCfg): number {
   const maxReduction = cfg?.MAX_REDUCTION ?? MAX_REDUCTION;
-  return Math.min(100, Math.max(0, degenPercent)) * maxReduction / 100;
+  return (Math.min(100, Math.max(0, degenPercent)) * maxReduction) / 100;
 }
 
 /**
@@ -56,14 +56,14 @@ export function calcReduction(degenPercent: number, cfg?: DegenBarCfg): number {
  * @param cfg           Optional DB config override
  */
 export function calcBustChance(degenPercent: number, cfg?: DegenBarCfg): number {
-  const safeBustCoef       = cfg?.SAFE_BUST_COEF        ?? SAFE_BUST_COEF;
-  const degenBustBase      = cfg?.DEGEN_BUST_BASE       ?? DEGEN_BUST_BASE;
-  const degenBustScale     = cfg?.DEGEN_BUST_SCALE      ?? DEGEN_BUST_SCALE;
-  const degenZoneThreshold = cfg?.DEGEN_ZONE_THRESHOLD  ?? DEGEN_ZONE_THRESHOLD;
+  const safeBustCoef = cfg?.SAFE_BUST_COEF ?? SAFE_BUST_COEF;
+  const degenBustBase = cfg?.DEGEN_BUST_BASE ?? DEGEN_BUST_BASE;
+  const degenBustScale = cfg?.DEGEN_BUST_SCALE ?? DEGEN_BUST_SCALE;
+  const degenZoneThreshold = cfg?.DEGEN_ZONE_THRESHOLD ?? DEGEN_ZONE_THRESHOLD;
 
   // Guard: if threshold >= 100 the degen zone is unreachable; stay in SAFE zone.
   if (degenPercent < degenZoneThreshold || degenZoneThreshold >= 100) {
-    return degenPercent * safeBustCoef / 100;
+    return (degenPercent * safeBustCoef) / 100;
   }
   const f = (degenPercent - degenZoneThreshold) / (100 - degenZoneThreshold);
   return (degenBustBase + f * f * degenBustScale) / 100;
@@ -89,12 +89,18 @@ export function calcReducedCost(baseCost: number, degenPercent: number, cfg?: De
  * @param cfg           Optional DB config override
  */
 export function resolveDegenOutcome(degenPercent: number, cfg?: DegenBarCfg): DegenOutcome {
-  const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
+  const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xffffffff;
   return { busted: roll < calcBustChance(degenPercent, cfg) };
 }
 
 /** Canonical key order for the degen bar config fingerprint. Used by both client and server. */
-export const DEGEN_BAR_HASH_KEYS = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const;
+export const DEGEN_BAR_HASH_KEYS = [
+  "SAFE_BUST_COEF",
+  "DEGEN_BUST_BASE",
+  "DEGEN_BUST_SCALE",
+  "DEGEN_ZONE_THRESHOLD",
+  "MAX_REDUCTION",
+] as const;
 
 /**
  * Deterministic string fingerprint of a DegenBarCfg value.

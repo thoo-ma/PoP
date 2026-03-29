@@ -1,18 +1,18 @@
-import 'react-native-gesture-handler';
-import './global.css';
-import { StatusBar } from 'expo-status-bar';
-import { View, FlatList, ViewToken, Dimensions } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useCallback, useRef } from 'react';
-import { useAuth, useUserApproval } from '@/hooks';
-import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader } from '@/components';
-import { InviteCodeScreen, Profile, Wallet } from '@/screens';
-import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation';
-import { colors } from '@/constants';
+import "react-native-gesture-handler";
+import "./global.css";
+import { StatusBar } from "expo-status-bar";
+import { View, FlatList, ViewToken, Dimensions } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useState, useCallback, useRef } from "react";
+import { useAuth, useUserApproval } from "@/hooks";
+import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader } from "@/components";
+import { InviteCodeScreen, Profile, Wallet } from "@/screens";
+import { PAGES, VIEWABILITY_CONFIG } from "@/constants/navigation";
+import { colors } from "@/constants";
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HeroUINativeProvider, Spinner } from 'heroui-native';
-import { GameConfigProvider } from '@/store/gameConfigStore';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { HeroUINativeProvider, Spinner } from "heroui-native";
+import { GameConfigProvider } from "@/store/gameConfigStore";
 
 export default function App() {
   return (
@@ -59,13 +59,13 @@ function AppInner() {
       if (viewableItems.length > 0) {
         setCurrentPage(viewableItems[0].index || 0);
       }
-    }
+    },
   );
 
-  const renderPage = useCallback(({ item }: { item: typeof PAGES[0] }) => {
+  const renderPage = useCallback(({ item }: { item: (typeof PAGES)[0] }) => {
     const Component = item.component;
     return (
-      <View style={{ width: Dimensions.get('window').width, height: '100%' }}>
+      <View style={{ width: Dimensions.get("window").width, height: "100%" }}>
         <Component />
       </View>
     );
@@ -88,12 +88,7 @@ function AppInner() {
   // Session exists but user not approved - show invite code screen (BLOCKING)
   // Anonymous users (dev/test mode) skip invite code
   if (approved !== true && !session.user.is_anonymous) {
-    return (
-      <InviteCodeScreen 
-        onApprovalSuccess={handleApprovalSuccess}
-        onSignOut={handleSignOut}
-      />
-    );
+    return <InviteCodeScreen onApprovalSuccess={handleApprovalSuccess} onSignOut={handleSignOut} />;
   }
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
@@ -108,8 +103,8 @@ function AppInner() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         getItemLayout={(_, index) => ({
-          length: Dimensions.get('window').width,
-          offset: Dimensions.get('window').width * index,
+          length: Dimensions.get("window").width,
+          offset: Dimensions.get("window").width * index,
           index,
         })}
         onViewableItemsChanged={onViewableItemsChangedRef.current}
@@ -122,25 +117,19 @@ function AppInner() {
       />
 
       <ProfileButton onPress={handleOpenProfile} />
-      <ScreenHeader title={PAGES[currentPage]?.title ?? ''} />
+      <ScreenHeader title={PAGES[currentPage]?.title ?? ""} />
       <WalletButton onPress={handleOpenWallet} />
 
-      <PageIndicator 
-        totalPages={PAGES.length} 
-        currentPage={currentPage} 
+      <PageIndicator
+        totalPages={PAGES.length}
+        currentPage={currentPage}
         onPageChange={scrollToPage}
       />
 
-      <Profile 
-        visible={profileVisible}
-        onClose={handleCloseProfile}
-      />
+      <Profile visible={profileVisible} onClose={handleCloseProfile} />
 
-      <Wallet
-        visible={walletVisible}
-        onClose={handleCloseWallet}
-      />
-      
+      <Wallet visible={walletVisible} onClose={handleCloseWallet} />
+
       <StatusBar style="auto" />
     </SafeAreaView>
   );

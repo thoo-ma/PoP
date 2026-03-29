@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
-import { FunctionsHttpError } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import type { NFT } from '@/types/nft';
-import { logError } from '@/utils/errorHelpers';
+import { useState, useCallback } from "react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import type { NFT } from "@/types/nft";
+import { logError } from "@/utils/errorHelpers";
 
 /**
  * Hook to open a mystery box and receive a new toilet NFT.
@@ -21,7 +21,7 @@ export function useOpenMysteryBox() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fnError } = await supabase.functions.invoke('open-mystery-box', {
+      const { data, error: fnError } = await supabase.functions.invoke("open-mystery-box", {
         body: { box_id: boxId },
       });
 
@@ -32,22 +32,24 @@ export function useOpenMysteryBox() {
             const body = await fnError.context.json();
             if (body?.message) message = body.message;
             else if (body?.error) message = body.error;
-          } catch { /* leave message as-is */ }
+          } catch {
+            /* leave message as-is */
+          }
         }
-        logError('useOpenMysteryBox:Invoke', fnError);
+        logError("useOpenMysteryBox:Invoke", fnError);
         setError(message);
         return null;
       }
 
       if (!data) {
-        setError('No data returned from open-mystery-box function');
+        setError("No data returned from open-mystery-box function");
         return null;
       }
 
       return data as NFT;
     } catch (err) {
-      logError('useOpenMysteryBox:Open', err);
-      setError(err instanceof Error ? err.message : 'Failed to open mystery box');
+      logError("useOpenMysteryBox:Open", err);
+      setError(err instanceof Error ? err.message : "Failed to open mystery box");
       return null;
     } finally {
       setLoading(false);

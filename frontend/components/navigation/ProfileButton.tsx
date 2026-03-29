@@ -1,7 +1,7 @@
-import { memo } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { colors } from '@/constants';
-import { Button } from 'heroui-native';
+import { memo } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "@/constants";
+import { Button } from "heroui-native";
 
 interface ProfileButtonProps {
   /** Called when the user taps the profile icon button. */

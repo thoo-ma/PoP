@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import type { Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import type { UseUserApprovalReturn } from '@/types/auth';
-import { logError } from '@/utils/errorHelpers';
+import { useEffect, useState, useCallback } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import type { UseUserApprovalReturn } from "@/types/auth";
+import { logError } from "@/utils/errorHelpers";
 
 /**
  * Hook to manage user approval status.
@@ -23,10 +23,12 @@ export function useUserApproval(session?: Session | null): UseUserApprovalReturn
   const fetchApprovalStatus = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) {
         setApproved(null);
         setLoading(false);
@@ -35,24 +37,24 @@ export function useUserApproval(session?: Session | null): UseUserApprovalReturn
 
       // Query user approval status
       const { data, error } = await supabase
-        .from('users')
-        .select('approved')
-        .eq('id', user.id)
+        .from("users")
+        .select("approved")
+        .eq("id", user.id)
         .single();
 
       if (error) {
         // User might not exist yet (trigger still processing)
-        if (error.code === 'PGRST116') {
+        if (error.code === "PGRST116") {
           setApproved(null);
         } else {
-          logError('UserApproval:Fetch', error);
+          logError("UserApproval:Fetch", error);
           setApproved(null);
         }
       } else {
         setApproved(data?.approved ?? null);
       }
     } catch (error) {
-      logError('UserApproval:Fetch', error);
+      logError("UserApproval:Fetch", error);
       setApproved(null);
     } finally {
       setLoading(false);
@@ -72,10 +74,12 @@ export function useUserApproval(session?: Session | null): UseUserApprovalReturn
     fetchApprovalStatus();
 
     // Listen to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, _session) => {
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, _session) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
         fetchApprovalStatus();
-      } else if (event === 'SIGNED_OUT') {
+      } else if (event === "SIGNED_OUT") {
         setApproved(null);
         setLoading(false);
       }

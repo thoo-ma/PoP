@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { NFT } from '@/types/nft';
-import { logError } from '@/utils/errorHelpers';
+import { useEffect, useState, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
+import type { NFT } from "@/types/nft";
+import { logError } from "@/utils/errorHelpers";
 
 /**
  * Hook to fetch marketplace listings (NFTs from other users).
@@ -19,7 +19,9 @@ export function useMarketplaceListings() {
       setLoading(true);
       setError(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (!user) {
         setListings([]);
@@ -27,7 +29,7 @@ export function useMarketplaceListings() {
       }
 
       const { data: listingsData, error: listingsError } = await supabase
-        .from('marketplace_listings')
+        .from("marketplace_listings")
         .select(`
           nft_id,
           price,
@@ -53,27 +55,27 @@ export function useMarketplaceListings() {
             updated_at
           )
         `)
-        .neq('seller_id', user.id)
-        .order('listed_at', { ascending: false });
+        .neq("seller_id", user.id)
+        .order("listed_at", { ascending: false });
 
       if (listingsError) {
-        logError('useMarketplaceListings:Fetch', listingsError);
+        logError("useMarketplaceListings:Fetch", listingsError);
         setError(listingsError.message);
         setListings([]);
         return;
       }
 
       const enrichedListings: NFT[] = (listingsData ?? [])
-        .filter(listing => listing.nfts !== null)
-        .map(listing => {
+        .filter((listing) => listing.nfts !== null)
+        .map((listing) => {
           const { user_id: _, ...nft } = listing.nfts!;
           return { ...nft, isListed: true as const, price: listing.price };
         });
 
       setListings(enrichedListings);
     } catch (err) {
-      logError('useMarketplaceListings:Fetch', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch listings');
+      logError("useMarketplaceListings:Fetch", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch listings");
       setListings([]);
     } finally {
       setLoading(false);

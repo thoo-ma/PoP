@@ -10,22 +10,22 @@
  */
 
 export const CHART_TOOLTIP = {
-  backgroundColor: '#1a1a1a',
-  borderColor: '#333',
-  textStyle: { color: '#e5e5e5', fontSize: 12 },
-}
+  backgroundColor: "#1a1a1a",
+  borderColor: "#333",
+  textStyle: { color: "#e5e5e5", fontSize: 12 },
+};
 
 export const CHART_LEGEND = {
-  textStyle: { color: '#a3a3a3', fontSize: 11 },
+  textStyle: { color: "#a3a3a3", fontSize: 11 },
   top: 0,
-}
+};
 
 export const CHART_AXIS_STYLES = {
-  axisLine: { lineStyle: { color: '#404040' } },
-  axisLabel: { color: '#a3a3a3', fontSize: 11 },
-  nameTextStyle: { color: '#a3a3a3', fontSize: 12 },
-}
+  axisLine: { lineStyle: { color: "#404040" } },
+  axisLabel: { color: "#a3a3a3", fontSize: 11 },
+  nameTextStyle: { color: "#a3a3a3", fontSize: 12 },
+};
 
 export const CHART_SPLIT_LINE = {
-  lineStyle: { color: '#262626' },
-}
+  lineStyle: { color: "#262626" },
+};

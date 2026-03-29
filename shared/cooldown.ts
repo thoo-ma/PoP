@@ -14,33 +14,33 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTType } from './nft.ts';
+import type { NFTType } from "./nft.ts";
 
 // @migration: DELETE — game_config.cooldown
 export const COOLDOWN_BASES: Record<NFTType, number> = {
-  'turbo-flush':  3,
-  'cruise-seat':  10,
-  'zen-fortress': 22,
+  "turbo-flush": 3,
+  "cruise-seat": 10,
+  "zen-fortress": 22,
 };
 
 // @migration: DELETE — game_config.cooldown
 export const LINEAR_MULT = 0.3;
 // @migration: DELETE — game_config.cooldown
-export const EXP_MULT    = 0.02;
+export const EXP_MULT = 0.02;
 
 // Inline config type — avoids a circular dep with shared/schemas.ts
 type CooldownCfg = {
   COOLDOWN_BASES?: Record<NFTType, number>;
-  LINEAR_MULT?:    number;
-  EXP_MULT?:       number;
+  LINEAR_MULT?: number;
+  EXP_MULT?: number;
 };
 
 /** Cooldown duration in hours for the given type and level. */
 export function calcCooldownHours(type: NFTType, level: number, cfg?: CooldownCfg): number {
-  const bases  = cfg?.COOLDOWN_BASES ?? COOLDOWN_BASES;
-  const linear = cfg?.LINEAR_MULT    ?? LINEAR_MULT;
-  const exp    = cfg?.EXP_MULT       ?? EXP_MULT;
-  const base   = bases[type] ?? bases['cruise-seat'];
+  const bases = cfg?.COOLDOWN_BASES ?? COOLDOWN_BASES;
+  const linear = cfg?.LINEAR_MULT ?? LINEAR_MULT;
+  const exp = cfg?.EXP_MULT ?? EXP_MULT;
+  const base = bases[type] ?? bases["cruise-seat"];
   return base + level * linear + Math.pow(level, 2) * exp;
 }
 

@@ -8,7 +8,7 @@
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type DifficultyMode = 'easy' | 'normal' | 'strict';
+export type DifficultyMode = "easy" | "normal" | "strict";
 
 export interface SensorThresholds {
   MOVEMENT_THRESHOLD: number;
@@ -23,7 +23,7 @@ export interface SensorThresholds {
 // @migration: UNCERTAIN — in DB schema (seeded + dashboard-editable) but marked as structural in the game config audit; resolve before removing
 export const SENSOR_PRESETS: Record<DifficultyMode, SensorThresholds> = {
   easy: {
-    MOVEMENT_THRESHOLD: 0.20,
+    MOVEMENT_THRESHOLD: 0.2,
     ROTATION_THRESHOLD: 0.15,
     STEP_COOLDOWN: 2500,
     GRACE_PERIOD: 800,
@@ -31,7 +31,7 @@ export const SENSOR_PRESETS: Record<DifficultyMode, SensorThresholds> = {
   },
   normal: {
     MOVEMENT_THRESHOLD: 0.15,
-    ROTATION_THRESHOLD: 0.10,
+    ROTATION_THRESHOLD: 0.1,
     STEP_COOLDOWN: 1500,
     GRACE_PERIOD: 500,
     WARNING_COOLDOWN: 1500,
@@ -46,7 +46,7 @@ export const SENSOR_PRESETS: Record<DifficultyMode, SensorThresholds> = {
 };
 
 /** Get sensor thresholds for a given difficulty mode. */
-export function getThresholds(mode: DifficultyMode = 'normal'): SensorThresholds {
+export function getThresholds(mode: DifficultyMode = "normal"): SensorThresholds {
   return SENSOR_PRESETS[mode];
 }
 

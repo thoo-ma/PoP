@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
-import { View } from 'react-native';
-import { Button, Dialog } from 'heroui-native';
-import { dialogBody } from '@/styles';
+import { useRef, useState } from "react";
+import { View } from "react-native";
+import { Button, Dialog } from "heroui-native";
+import { dialogBody } from "@/styles";
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.

@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { View, Text, Platform } from 'react-native';
-import { Button, Spinner, useToast, cn } from 'heroui-native';
-import { screenTitle, screenSubtitle } from '@/styles';
-import { supabase } from '@/lib';
-import * as WebBrowser from 'expo-web-browser';
-import type { OAuthProvider } from '@/types';
-import { getErrorMessage, logError } from '@/utils';
-import OAuthButton from './OAuthButton';
+import { useState } from "react";
+import { View, Text, Platform } from "react-native";
+import { Button, Spinner, useToast, cn } from "heroui-native";
+import { screenTitle, screenSubtitle } from "@/styles";
+import { supabase } from "@/lib";
+import * as WebBrowser from "expo-web-browser";
+import type { OAuthProvider } from "@/types";
+import { getErrorMessage, logError } from "@/utils";
+import OAuthButton from "./OAuthButton";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -30,14 +30,18 @@ export default function Auth() {
       if (error) throw error;
 
       // Seed test NFTs for dev mode (via Edge Function — RPC is service_role only)
-      const { error: seedError } = await supabase.functions.invoke('seed-dev-test-nfts');
+      const { error: seedError } = await supabase.functions.invoke("seed-dev-test-nfts");
       if (seedError) {
-        console.warn('Failed to seed test NFTs:', seedError);
+        console.warn("Failed to seed test NFTs:", seedError);
       }
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
-      logError('Auth:Anonymous', err);
-      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
+      logError("Auth:Anonymous", err);
+      toast.show({
+        variant: "danger",
+        label: "Authentication Error",
+        description: getErrorMessage(err, "Failed to authenticate"),
+      });
     } finally {
       setDevLoading(false);
     }
@@ -50,14 +54,18 @@ export default function Auth() {
       if (error) throw error;
 
       // Seed 1 mystery box of each rarity for test mode
-      const { error: seedError } = await supabase.rpc('seed_test_mystery_boxes');
+      const { error: seedError } = await supabase.rpc("seed_test_mystery_boxes");
       if (seedError) {
-        console.warn('Failed to seed test mystery boxes:', seedError);
+        console.warn("Failed to seed test mystery boxes:", seedError);
       }
       // Success - auth state will automatically update via onAuthStateChange
     } catch (err) {
-      logError('Auth:TestMode', err);
-      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
+      logError("Auth:TestMode", err);
+      toast.show({
+        variant: "danger",
+        label: "Authentication Error",
+        description: getErrorMessage(err, "Failed to authenticate"),
+      });
     } finally {
       setTestLoading(false);
     }
@@ -66,7 +74,7 @@ export default function Auth() {
   const signInWithProvider = async (provider: OAuthProvider) => {
     setLoading(true);
     try {
-      const redirectTo = Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback';
+      const redirectTo = Platform.OS === "web" ? window.location.origin : "pop://auth/callback";
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo, skipBrowserRedirect: true },
@@ -74,13 +82,17 @@ export default function Auth() {
       if (error) throw error;
       if (data.url) {
         const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-        if (result.type === 'success') {
+        if (result.type === "success") {
           await supabase.auth.exchangeCodeForSession(result.url);
         }
       }
     } catch (err) {
-      logError('Auth:OAuth', err);
-      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
+      logError("Auth:OAuth", err);
+      toast.show({
+        variant: "danger",
+        label: "Authentication Error",
+        description: getErrorMessage(err, "Failed to authenticate"),
+      });
     } finally {
       setLoading(false);
     }
@@ -88,8 +100,8 @@ export default function Auth() {
 
   return (
     <View className="flex-1 justify-center p-5 bg-background">
-      <Text className={screenTitle({ spacing: 'sm', color: 'none' })}>Welcome to Pop</Text>
-      <Text className={cn(screenSubtitle({ color: 'gray' }), 'mb-10')}>Sign in to continue</Text>
+      <Text className={screenTitle({ spacing: "sm", color: "none" })}>Welcome to Pop</Text>
+      <Text className={cn(screenSubtitle({ color: "gray" }), "mb-10")}>Sign in to continue</Text>
 
       <Button
         variant="primary"
@@ -99,7 +111,7 @@ export default function Auth() {
         accessibilityLabel="Continue in test mode"
         accessibilityHint="Sign in anonymously with one mystery box of each rarity"
       >
-        {testLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Test Mode)'}
+        {testLoading ? <Spinner size="sm" color="#fff" /> : "Continue (Test Mode)"}
       </Button>
 
       {__DEV__ && (
@@ -111,19 +123,19 @@ export default function Auth() {
           accessibilityLabel="Continue in development mode"
           accessibilityHint="Sign in anonymously with seeded NFTs (dev builds only)"
         >
-          {devLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Dev Mode)'}
+          {devLoading ? <Spinner size="sm" color="#fff" /> : "Continue (Dev Mode)"}
         </Button>
       )}
 
       <OAuthButton
         provider="twitter"
-        onPress={() => signInWithProvider('twitter')}
+        onPress={() => signInWithProvider("twitter")}
         loading={loading}
       />
 
       <OAuthButton
         provider="google"
-        onPress={() => signInWithProvider('google')}
+        onPress={() => signInWithProvider("google")}
         loading={loading}
       />
 
@@ -135,7 +147,8 @@ export default function Auth() {
             <View className={dialogBody()}>
               <Dialog.Title>OAuth Not Available</Dialog.Title>
               <Dialog.Description>
-                OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode to sign in.
+                OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode
+                to sign in.
               </Dialog.Description>
             </View>
             <View className="flex-row justify-end">

@@ -6,7 +6,7 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from './nft.ts';
+import type { NFTRarity } from "./nft.ts";
 
 /**
  * Per-rarity stat ranges for freshly minted (non-bred) NFTs.
@@ -16,8 +16,8 @@ import type { NFTRarity } from './nft.ts';
  */
 // @migration: DELETE — game_config.minting
 export const STAT_RANGES: Record<NFTRarity, [number, number]> = {
-  common:       [40, 70],
-  rare:         [50, 80],
-  legendary:    [60, 90],
+  common: [40, 70],
+  rare: [50, 80],
+  legendary: [60, 90],
   transcendent: [70, 100],
 };

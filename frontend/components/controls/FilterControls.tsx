@@ -1,8 +1,8 @@
-import { memo, useState } from 'react';
-import { View } from 'react-native';
-import { Button, TagGroup } from 'heroui-native';
-import type { NFTRarity, NFTType } from '@pop/shared';
-import { RARITIES } from '@pop/shared';
+import { memo, useState } from "react";
+import { View } from "react-native";
+import { Button, TagGroup } from "heroui-native";
+import type { NFTRarity, NFTType } from "@pop/shared";
+import { RARITIES } from "@pop/shared";
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -17,19 +17,19 @@ interface FilterControlsProps {
   onClearFilters: () => void;
 }
 
-const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+const TYPES: NFTType[] = ["cruise-seat", "turbo-flush", "zen-fortress"];
 
 const RARITY_LABELS: Record<NFTRarity, string> = {
-  'common': 'Com',
-  'rare': 'Rare',
-  'legendary': 'Leg',
-  'transcendent': 'Trans',
+  common: "Com",
+  rare: "Rare",
+  legendary: "Leg",
+  transcendent: "Trans",
 };
 
 const TYPE_LABELS: Record<NFTType, string> = {
-  'cruise-seat': 'Cruise',
-  'turbo-flush': 'Turbo',
-  'zen-fortress': 'Zen',
+  "cruise-seat": "Cruise",
+  "turbo-flush": "Turbo",
+  "zen-fortress": "Zen",
 };
 
 /**

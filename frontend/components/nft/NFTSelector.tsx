@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native';
-import { Button, cn } from 'heroui-native';
-import { nftNavButton } from '@/styles';
+import { View, Text } from "react-native";
+import { Button, cn } from "heroui-native";
+import { nftNavButton } from "@/styles";
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */
@@ -23,7 +23,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
   if (total <= 1) return null;
 
   return (
-    <View className={cn('flex-row items-center justify-center gap-4', className)}>
+    <View className={cn("flex-row items-center justify-center gap-4", className)}>
       <Button
         isIconOnly
         variant="ghost"
@@ -31,7 +31,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         className={nftNavButton()}
         accessibilityLabel="Previous NFT"
       >
-        <Button.Label className="text-[22px] leading-7 text-text-title">{'‹'}</Button.Label>
+        <Button.Label className="text-[22px] leading-7 text-text-title">{"‹"}</Button.Label>
       </Button>
       <Text className="text-sm text-text-body font-medium min-w-12 text-center">
         {current} / {total}
@@ -43,7 +43,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         className={nftNavButton()}
         accessibilityLabel="Next NFT"
       >
-        <Button.Label className="text-[22px] leading-7 text-text-title">{'›'}</Button.Label>
+        <Button.Label className="text-[22px] leading-7 text-text-title">{"›"}</Button.Label>
       </Button>
     </View>
   );

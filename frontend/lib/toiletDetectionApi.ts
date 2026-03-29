@@ -1,7 +1,7 @@
-import { FunctionsHttpError } from '@supabase/supabase-js';
-import { supabase } from './supabase';
-import type { DetectionResult, RateLimitError } from '@/types/audio';
-import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelpers';
+import { FunctionsHttpError } from "@supabase/supabase-js";
+import { supabase } from "./supabase";
+import type { DetectionResult, RateLimitError } from "@/types/audio";
+import { getErrorMessage, logError, isRateLimitError } from "@/utils/errorHelpers";
 
 /**
  * Call Supabase Edge Function to detect toilet flush
@@ -11,14 +11,14 @@ import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelper
  */
 export async function detectToiletFlush(
   audioBase64: string,
-  threshold: number = 0.5
+  threshold: number = 0.5,
 ): Promise<DetectionResult> {
   try {
-    const { data, error } = await supabase.functions.invoke('detect-toilet-flush', {
+    const { data, error } = await supabase.functions.invoke("detect-toilet-flush", {
       body: {
         audio_base64: audioBase64,
-        threshold: threshold
-      }
+        threshold: threshold,
+      },
     });
 
     if (error) {
@@ -27,14 +27,18 @@ export async function detectToiletFlush(
       let httpStatus: number | null = null;
       if (error instanceof FunctionsHttpError) {
         httpStatus = error.context.status;
-        try { body = await error.context.json(); } catch { /* leave null */ }
+        try {
+          body = await error.context.json();
+        } catch {
+          /* leave null */
+        }
       }
 
       // Rate-limit error (429) — build a typed RateLimitError from the body.
       if (httpStatus === 429) {
         const rateLimitError: RateLimitError = {
-          error: 'rate_limit',
-          message: (body?.message as string) ?? (body?.error as string) ?? 'Rate limit exceeded',
+          error: "rate_limit",
+          message: (body?.message as string) ?? (body?.error as string) ?? "Rate limit exceeded",
           limit: (body?.limit as number) ?? 0,
           current_count: (body?.current_count as number) ?? 0,
         };
@@ -42,23 +46,24 @@ export async function detectToiletFlush(
       }
 
       // Any other edge-function error — prefer the human-readable `message`.
-      const detail = (body?.message as string) ?? (body?.error as string) ?? error.message ?? 'Unknown error';
+      const detail =
+        (body?.message as string) ?? (body?.error as string) ?? error.message ?? "Unknown error";
       throw new Error(`Detection failed: ${detail}`);
     }
 
     if (!data) {
-      throw new Error('No data returned from edge function');
+      throw new Error("No data returned from edge function");
     }
 
     return data as DetectionResult;
   } catch (error) {
-    logError('ToiletDetectionAPI', error);
-    
+    logError("ToiletDetectionAPI", error);
+
     // Re-throw if it's a structured error (like rate limit)
     if (isRateLimitError(error)) {
       throw error;
     }
     // Otherwise wrap in generic error
-    throw new Error(getErrorMessage(error, 'Unknown error occurred'));
+    throw new Error(getErrorMessage(error, "Unknown error occurred"));
   }
 }

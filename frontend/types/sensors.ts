@@ -26,7 +26,7 @@ export interface PedometerData {
 /**
  * Challenge status types
  */
-export type ChallengeStatus = 'idle' | 'running' | 'warning';
+export type ChallengeStatus = "idle" | "running" | "warning";
 
 /**
  * Used by useImmobilityChallenge

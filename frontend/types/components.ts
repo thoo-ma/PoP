@@ -1,4 +1,4 @@
-import type { OAuthProvider } from './index';
+import type { OAuthProvider } from "./index";
 
 /**
  * Props for OAuthButton component
@@ -8,5 +8,3 @@ export interface OAuthButtonProps {
   onPress: () => void;
   loading: boolean;
 }
-
-

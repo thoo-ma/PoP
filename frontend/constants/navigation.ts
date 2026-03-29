@@ -1,15 +1,15 @@
-import { Vault, Breed, Marketplace, Repair, Poop } from '@/screens';
-import type { PageConfig } from '@/types';
+import { Vault, Breed, Marketplace, Repair, Poop } from "@/screens";
+import type { PageConfig } from "@/types";
 
 /**
  * Configuration for app pages/screens
  */
 export const PAGES: PageConfig[] = [
-  { id: '1', title: 'Poop', component: Poop },
-  { id: '6', title: 'Vault', component: Vault },
-  { id: '7', title: 'Breed', component: Breed },
-  { id: '8', title: 'Marketplace', component: Marketplace },
-  { id: '9', title: 'Repair', component: Repair },
+  { id: "1", title: "Poop", component: Poop },
+  { id: "6", title: "Vault", component: Vault },
+  { id: "7", title: "Breed", component: Breed },
+  { id: "8", title: "Marketplace", component: Marketplace },
+  { id: "9", title: "Repair", component: Repair },
 ];
 
 /**

@@ -1,6 +1,6 @@
-import { memo } from 'react';
-import { View } from 'react-native';
-import { Alert, Button } from 'heroui-native';
+import { memo } from "react";
+import { View } from "react-native";
+import { Alert, Button } from "heroui-native";
 
 interface ScreenErrorProps {
   title: string;

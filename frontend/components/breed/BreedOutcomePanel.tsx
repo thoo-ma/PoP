@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
-import { Card } from 'heroui-native';
-import type { NFTRarity } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { RARITIES } from '@pop/shared';
-import { getProbabilities } from '@/utils';
+import { View, Text } from "react-native";
+import { Card } from "heroui-native";
+import type { NFTRarity } from "@pop/shared";
+import { RARITY_COLORS } from "@/constants";
+import { RARITIES } from "@pop/shared";
+import { getProbabilities } from "@/utils";
 
 /**
  * Read-only panel that displays the possible rarity outcomes and their

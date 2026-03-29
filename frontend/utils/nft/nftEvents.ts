@@ -14,10 +14,10 @@ class NFTEventEmitter {
    */
   subscribe(callback: NFTUpdateCallback): () => void {
     this.listeners.push(callback);
-    
+
     // Return unsubscribe function
     return () => {
-      this.listeners = this.listeners.filter(listener => listener !== callback);
+      this.listeners = this.listeners.filter((listener) => listener !== callback);
     };
   }
 
@@ -26,7 +26,7 @@ class NFTEventEmitter {
    * Notifies all listeners that NFTs have changed
    */
   emit(): void {
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => listener());
   }
 }
 

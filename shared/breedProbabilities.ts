@@ -6,7 +6,7 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from './nft.ts';
+import type { NFTRarity } from "./nft.ts";
 
 /** Sorted rarity-pair template — both slots are constrained to NFTRarity. */
 type RarityPair<A extends NFTRarity, B extends NFTRarity> = `${A}+${B}`;
@@ -17,13 +17,13 @@ type RarityPair<A extends NFTRarity, B extends NFTRarity> = `${A}+${B}`;
  * and the table below will be a compile-time error.
  */
 export type BreedPairKey =
-  | RarityPair<'common',      'common'>
-  | RarityPair<'common',      'rare'>
-  | RarityPair<'rare',        'rare'>
-  | RarityPair<'rare',        'legendary'>
-  | RarityPair<'legendary',   'legendary'>
-  | RarityPair<'legendary',   'transcendent'>
-  | RarityPair<'transcendent','transcendent'>;
+  | RarityPair<"common", "common">
+  | RarityPair<"common", "rare">
+  | RarityPair<"rare", "rare">
+  | RarityPair<"rare", "legendary">
+  | RarityPair<"legendary", "legendary">
+  | RarityPair<"legendary", "transcendent">
+  | RarityPair<"transcendent", "transcendent">;
 
 /**
  * Maps a sorted rarity-pair key ("lower+higher") to
@@ -31,11 +31,11 @@ export type BreedPairKey =
  */
 // @migration: DELETE — game_config.breed
 export const BREED_PROBABILITIES: Record<BreedPairKey, [number, number, number, number]> = {
-  'common+common':             [97.9,  2.0,  0.1,  0.0],
-  'common+rare':               [65.0, 34.0,  0.9,  0.1],
-  'rare+rare':                 [ 5.0, 92.0,  2.5,  0.5],
-  'rare+legendary':            [ 2.0, 20.0, 75.0,  3.0],
-  'legendary+legendary':       [ 1.0,  9.0, 80.0, 10.0],
-  'legendary+transcendent':    [ 0.5,  4.5, 25.0, 70.0],
-  'transcendent+transcendent': [ 0.1,  1.9,  8.0, 90.0],
+  "common+common": [97.9, 2.0, 0.1, 0.0],
+  "common+rare": [65.0, 34.0, 0.9, 0.1],
+  "rare+rare": [5.0, 92.0, 2.5, 0.5],
+  "rare+legendary": [2.0, 20.0, 75.0, 3.0],
+  "legendary+legendary": [1.0, 9.0, 80.0, 10.0],
+  "legendary+transcendent": [0.5, 4.5, 25.0, 70.0],
+  "transcendent+transcendent": [0.1, 1.9, 8.0, 90.0],
 };

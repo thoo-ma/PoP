@@ -6,21 +6,21 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
+export type NFTType = "cruise-seat" | "turbo-flush" | "zen-fortress";
 
-export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
-
-// @migration: KEEP — structural invariant; never moves to DB
-export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
+export type NFTRarity = "common" | "rare" | "legendary" | "transcendent";
 
 // @migration: KEEP — structural invariant; never moves to DB
-export const NFT_TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+export const RARITIES: NFTRarity[] = ["common", "rare", "legendary", "transcendent"];
+
+// @migration: KEEP — structural invariant; never moves to DB
+export const NFT_TYPES: NFTType[] = ["cruise-seat", "turbo-flush", "zen-fortress"];
 
 // @migration: KEEP — structural invariant; never moves to DB
 export const RARITY_RANK: Record<NFTRarity, number> = {
-  common:       0,
-  rare:         1,
-  legendary:    2,
+  common: 0,
+  rare: 1,
+  legendary: 2,
   transcendent: 3,
 };
 
@@ -36,26 +36,26 @@ export type MysteryBox = {
 /** Maps each NFT type to its available named slugs (matches Supabase storage structure). */
 // @migration: KEEP — structural invariant; never moves to DB
 export const TYPE_NAMES: Record<NFTType, readonly string[]> = {
-  'cruise-seat': [
-    'ancient-egyptian',
-    'ancient-maya-stone',
-    'medieval-castle-garderobe',
-    'prehistoric-stone',
-    'victorian-era-wooden-throne',
+  "cruise-seat": [
+    "ancient-egyptian",
+    "ancient-maya-stone",
+    "medieval-castle-garderobe",
+    "prehistoric-stone",
+    "victorian-era-wooden-throne",
   ],
-  'turbo-flush': [
-    'astronaut-zero-gravity',
-    'portable-construction-site-cabin',
-    'prehistoric-sanitation',
-    'roman-public-latrines',
-    'rustic-forest-outhouse',
-    'squat',
+  "turbo-flush": [
+    "astronaut-zero-gravity",
+    "portable-construction-site-cabin",
+    "prehistoric-sanitation",
+    "roman-public-latrines",
+    "rustic-forest-outhouse",
+    "squat",
   ],
-  'zen-fortress': [
-    'cyberpunk-dystopian',
-    'dubai',
-    'eco-friendly',
-    'futuristic-sci-fi-vacuum',
-    'renaissance-chaise',
+  "zen-fortress": [
+    "cyberpunk-dystopian",
+    "dubai",
+    "eco-friendly",
+    "futuristic-sci-fi-vacuum",
+    "renaissance-chaise",
   ],
 } as const;

@@ -9,7 +9,7 @@ module.exports = ({ config }) => {
   } else {
     // Remove the Embrace plugin when credentials are not set
     config.plugins = config.plugins.filter(
-      (p) => !Array.isArray(p) || !String(p[0]).includes("embrace")
+      (p) => !Array.isArray(p) || !String(p[0]).includes("embrace"),
     );
   }
 

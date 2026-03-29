@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
-import { FunctionsHttpError } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { logError } from '@/utils/errorHelpers';
-import type { EdgeFunctionErrorResponse, CooldownDetails } from '@pop/shared';
+import { useState, useCallback } from "react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import { logError } from "@/utils/errorHelpers";
+import type { EdgeFunctionErrorResponse, CooldownDetails } from "@pop/shared";
 
 export interface CooldownError {
   cooldown_ends_at: string;
@@ -54,7 +54,7 @@ export function usePoopNFT() {
       setError(null);
       setCooldownError(null);
 
-      const { data, error: fnError } = await supabase.functions.invoke('use-nft', {
+      const { data, error: fnError } = await supabase.functions.invoke("use-nft", {
         body: { nft_id: nftId },
       });
 
@@ -66,31 +66,33 @@ export function usePoopNFT() {
             body = await fnError.context.json();
             if (body?.message) message = body.message;
             else if (body?.error) message = body.error;
-          } catch { /* leave message as-is */ }
+          } catch {
+            /* leave message as-is */
+          }
         }
         // Structured cooldown error from the server
-        if (body?.error === 'on_cooldown' && body?.details) {
+        if (body?.error === "on_cooldown" && body?.details) {
           const d = body.details as unknown as CooldownDetails;
           setCooldownError({
-            cooldown_ends_at:           d.cooldown_ends_at,
+            cooldown_ends_at: d.cooldown_ends_at,
             cooldown_remaining_seconds: d.cooldown_remaining_seconds,
           });
           return null;
         }
-        logError('usePoopNFT:Invoke', fnError);
+        logError("usePoopNFT:Invoke", fnError);
         setError(message);
         return null;
       }
 
       if (!data) {
-        setError('No data returned from use-nft function');
+        setError("No data returned from use-nft function");
         return null;
       }
 
       return data as PoopResult;
     } catch (err) {
-      logError('usePoopNFT:Poop', err);
-      setError(err instanceof Error ? err.message : 'Failed to use NFT');
+      logError("usePoopNFT:Poop", err);
+      setError(err instanceof Error ? err.message : "Failed to use NFT");
       return null;
     } finally {
       setLoading(false);

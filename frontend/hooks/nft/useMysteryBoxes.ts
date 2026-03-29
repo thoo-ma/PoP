@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { MysteryBox } from '@pop/shared';
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
+import type { MysteryBox } from "@pop/shared";
 
 interface UseMysteryBoxesResult {
   /** Fetched mystery boxes owned by the current user, newest first. */
@@ -36,18 +36,20 @@ export function useMysteryBoxes(): UseMysteryBoxesResult {
     try {
       // getSession() reads from local storage — fast and reliable on remount.
       // getUser() does a network trip and can return null during token refresh.
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         setBoxes([]);
         return;
       }
 
       const { data, error: fetchError } = await supabase
-        .from('mystery_boxes')
-        .select('id, rarity, image_url, opened, created_at')
-        .eq('user_id', session.user.id)
-        .eq('opened', false)
-        .order('created_at', { ascending: false });
+        .from("mystery_boxes")
+        .select("id, rarity, image_url, opened, created_at")
+        .eq("user_id", session.user.id)
+        .eq("opened", false)
+        .order("created_at", { ascending: false });
 
       if (fetchError) {
         setError(fetchError.message);
@@ -56,7 +58,7 @@ export function useMysteryBoxes(): UseMysteryBoxesResult {
 
       setBoxes((data ?? []) as MysteryBox[]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load mystery boxes');
+      setError(err instanceof Error ? err.message : "Failed to load mystery boxes");
     } finally {
       setLoading(false);
     }
@@ -69,15 +71,15 @@ export function useMysteryBoxes(): UseMysteryBoxesResult {
     // Subscribe to any INSERT/UPDATE on mystery_boxes so the list stays
     // current even when the component stays mounted (e.g. wider windowSize).
     const channel = supabase
-      .channel('mystery-boxes-changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'mystery_boxes' },
-        () => { refetch(); },
-      )
+      .channel("mystery-boxes-changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "mystery_boxes" }, () => {
+        refetch();
+      })
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [refetch]);
 
   return { boxes, loading, error, refetch };

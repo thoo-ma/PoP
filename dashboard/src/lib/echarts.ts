@@ -3,10 +3,10 @@
  * Only registers the chart types and components we actually use,
  * cutting the bundle from ~540 KB to ~180 KB.
  */
-import * as echarts from 'echarts/core'
+import * as echarts from "echarts/core";
 
 // Chart types we use
-import { BarChart, LineChart, RadarChart } from 'echarts/charts'
+import { BarChart, LineChart, RadarChart } from "echarts/charts";
 
 // Components we use
 import {
@@ -15,10 +15,10 @@ import {
   GridComponent,
   LegendComponent,
   RadarComponent,
-} from 'echarts/components'
+} from "echarts/components";
 
 // Renderer
-import { CanvasRenderer } from 'echarts/renderers'
+import { CanvasRenderer } from "echarts/renderers";
 
 echarts.use([
   BarChart,
@@ -30,6 +30,6 @@ echarts.use([
   LegendComponent,
   RadarComponent,
   CanvasRenderer,
-])
+]);
 
-export default echarts
+export default echarts;

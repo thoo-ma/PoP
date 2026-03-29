@@ -1,9 +1,9 @@
-import { View, Text, Image } from 'react-native';
-import { PressableFeedback, Chip } from 'heroui-native';
-import type { NFT } from '@/types/nft';
-import { RARITY_COLORS, colors } from '@/constants';
-import { formatDisplayName } from '@/utils';
-import { badgeLabel } from '@/styles';
+import { View, Text, Image } from "react-native";
+import { PressableFeedback, Chip } from "heroui-native";
+import type { NFT } from "@/types/nft";
+import { RARITY_COLORS, colors } from "@/constants";
+import { formatDisplayName } from "@/utils";
+import { badgeLabel } from "@/styles";
 
 interface BreedParentSlotProps {
   /** The NFT occupying this slot, or `null` when the slot is empty. */
@@ -40,7 +40,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
             </Text>
             <View className="flex-row gap-1">
               <Chip size="sm" style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}>
-                <Chip.Label className={badgeLabel({ size: 'tiny' })}>
+                <Chip.Label className={badgeLabel({ size: "tiny" })}>
                   {nft.rarity.toUpperCase()}
                 </Chip.Label>
               </Chip>

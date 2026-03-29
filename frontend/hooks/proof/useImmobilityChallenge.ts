@@ -1,11 +1,17 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { Accelerometer, Pedometer, Gyroscope } from 'expo-sensors';
-import type { EventSubscription } from 'expo-modules-core';
-import { SENSOR_UPDATE_INTERVAL } from '@/constants';
-import type { UseImmobilityChallengeReturn, AccelerometerData, GyroscopeData, PedometerData, ChallengeStatus } from '@/types';
-import type { DifficultyMode } from '@pop/shared/sensors';
-import { getThresholds } from '@pop/shared/sensors';
-import { logError } from '@/utils/errorHelpers';
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { Accelerometer, Pedometer, Gyroscope } from "expo-sensors";
+import type { EventSubscription } from "expo-modules-core";
+import { SENSOR_UPDATE_INTERVAL } from "@/constants";
+import type {
+  UseImmobilityChallengeReturn,
+  AccelerometerData,
+  GyroscopeData,
+  PedometerData,
+  ChallengeStatus,
+} from "@/types";
+import type { DifficultyMode } from "@pop/shared/sensors";
+import { getThresholds } from "@pop/shared/sensors";
+import { logError } from "@/utils/errorHelpers";
 
 /** Sensor listener subscription, typed via the SDK-exported `EventSubscription` from `expo-modules-core`. */
 type Subscription = EventSubscription;
@@ -22,9 +28,11 @@ type Subscription = EventSubscription;
  * @returns Challenge status, elapsed time, `startChallenge` / `stopChallenge`
  *   callbacks, and sensor-derived flags.
  */
-export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmobilityChallengeReturn => {
+export const useImmobilityChallenge = (
+  mode: DifficultyMode = "normal",
+): UseImmobilityChallengeReturn => {
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [status, setStatus] = useState<ChallengeStatus>('idle');
+  const [status, setStatus] = useState<ChallengeStatus>("idle");
   const [isRunning, setIsRunning] = useState(false);
 
   // Get thresholds for current mode
@@ -96,7 +104,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     if (!mountedRef.current || !isRunningRef.current) return;
 
     // Movement detected - start grace period
-    setStatus('warning');
+    setStatus("warning");
 
     // Clear any existing cooldown
     if (warningCooldownRef.current) {
@@ -112,10 +120,10 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     // Set new grace timeout
     graceTimeoutRef.current = setTimeout(() => {
       if (!mountedRef.current) return;
-      
+
       // Grace period expired - reset challenge
       setIsRunning(false);
-      setStatus('idle');
+      setStatus("idle");
       setElapsedTime(0);
       cleanup();
     }, thresholdsRef.current.GRACE_PERIOD);
@@ -127,7 +135,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       if (!isRunningRef.current) return;
 
       const { x, y, z } = data;
-      
+
       // Calculate movement magnitude (subtract gravity baseline)
       const magnitude = Math.sqrt(x * x + y * y + z * z);
       const movement = Math.abs(magnitude - 1);
@@ -137,16 +145,16 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         handleMovementDetected();
       } else {
         // No movement detected right now
-        
+
         // If we're in warning state and haven't started cooldown yet, start it
-        if (statusRef.current === 'warning' && !warningCooldownRef.current) {
+        if (statusRef.current === "warning" && !warningCooldownRef.current) {
           warningCooldownRef.current = setTimeout(() => {
             if (!mountedRef.current) return;
-            
+
             // Cooldown complete - return to running status
-            setStatus('running');
+            setStatus("running");
             warningCooldownRef.current = null;
-            
+
             // Also clear grace timeout since we're back to immobile
             if (graceTimeoutRef.current) {
               clearTimeout(graceTimeoutRef.current);
@@ -156,7 +164,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         }
       }
     },
-    [handleMovementDetected, cleanup]
+    [handleMovementDetected, cleanup],
   );
 
   // Handle step detection
@@ -165,13 +173,13 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       if (!isRunningRef.current) return;
 
       const currentSteps = result.steps;
-      
+
       // Set initial baseline from first callback
       if (initialStepCountRef.current === null) {
         initialStepCountRef.current = currentSteps;
         return; // Don't trigger on first reading
       }
-      
+
       // Check if steps have increased
       if (currentSteps > initialStepCountRef.current) {
         // Update last step time
@@ -180,13 +188,13 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
 
       // Check if we have recent steps (within cooldown window)
       const timeSinceLastStep = Date.now() - lastStepTimeRef.current;
-      
+
       if (timeSinceLastStep < thresholdsRef.current.STEP_COOLDOWN) {
         // Recent steps detected - trigger movement
         handleMovementDetected();
       }
     },
-    [handleMovementDetected]
+    [handleMovementDetected],
   );
 
   // Handle gyroscope data
@@ -195,7 +203,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       if (!isRunningRef.current) return;
 
       const { x, y, z } = data;
-      
+
       // Calculate rotation magnitude
       const rotationMagnitude = Math.sqrt(x * x + y * y + z * z);
 
@@ -204,16 +212,16 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         handleMovementDetected();
       } else {
         // No rotation detected right now
-        
+
         // If we're in warning state and haven't started cooldown yet, start it
-        if (statusRef.current === 'warning' && !warningCooldownRef.current) {
+        if (statusRef.current === "warning" && !warningCooldownRef.current) {
           warningCooldownRef.current = setTimeout(() => {
             if (!mountedRef.current) return;
-            
+
             // Cooldown complete - return to running status
-            setStatus('running');
+            setStatus("running");
             warningCooldownRef.current = null;
-            
+
             // Also clear grace timeout since we're back to immobile
             if (graceTimeoutRef.current) {
               clearTimeout(graceTimeoutRef.current);
@@ -223,13 +231,13 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
         }
       }
     },
-    [handleMovementDetected, cleanup]
+    [handleMovementDetected, cleanup],
   );
 
   // Start challenge
   const startChallenge = useCallback(() => {
     setIsRunning(true);
-    setStatus('running');
+    setStatus("running");
     setElapsedTime(0);
     startTimeRef.current = Date.now();
 
@@ -247,7 +255,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
   // Stop challenge
   const stopChallenge = useCallback(() => {
     setIsRunning(false);
-    setStatus('idle');
+    setStatus("idle");
     setElapsedTime(0);
     cleanup();
   }, [cleanup]);
@@ -267,9 +275,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     Accelerometer.setUpdateInterval(SENSOR_UPDATE_INTERVAL);
 
     // Subscribe to accelerometer
-    accelerometerSubscriptionRef.current = Accelerometer.addListener(
-      handleAccelerometerData
-    );
+    accelerometerSubscriptionRef.current = Accelerometer.addListener(handleAccelerometerData);
 
     // Cleanup on unmount or when stopping
     return () => {
@@ -296,13 +302,11 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
       try {
         const isAvailable = await Pedometer.isAvailableAsync();
         if (isAvailable) {
-          pedometerSubscriptionRef.current = Pedometer.watchStepCount(
-            handleStepDetection
-          );
+          pedometerSubscriptionRef.current = Pedometer.watchStepCount(handleStepDetection);
         }
       } catch (error) {
         // Silently handle pedometer subscription errors (device may not support it)
-        logError('ImmobilityChallenge:Pedometer', error);
+        logError("ImmobilityChallenge:Pedometer", error);
       }
     };
 
@@ -332,9 +336,7 @@ export const useImmobilityChallenge = (mode: DifficultyMode = 'normal'): UseImmo
     Gyroscope.setUpdateInterval(SENSOR_UPDATE_INTERVAL);
 
     // Subscribe to gyroscope
-    gyroscopeSubscriptionRef.current = Gyroscope.addListener(
-      handleGyroscopeData
-    );
+    gyroscopeSubscriptionRef.current = Gyroscope.addListener(handleGyroscopeData);
 
     // Cleanup on unmount or when stopping
     return () => {

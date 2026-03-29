@@ -1,8 +1,8 @@
-import { memo, useState } from 'react';
-import { View, Text } from 'react-native';
-import { Card, Button, Spinner } from 'heroui-native';
-import { useRollLoot } from '@/hooks';
-import type { RollLootResult } from '@/hooks';
+import { memo, useState } from "react";
+import { View, Text } from "react-native";
+import { Card, Button, Spinner } from "heroui-native";
+import { useRollLoot } from "@/hooks";
+import type { RollLootResult } from "@/hooks";
 
 const MAX_HOLDS = 3;
 const BASE_CHANCE = 10;
@@ -37,7 +37,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
     if (res) {
       setHolds(res.holds);
     } else {
-      setErr('Hold failed. Try rolling instead.');
+      setErr("Hold failed. Try rolling instead.");
     }
   };
 
@@ -47,7 +47,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
     if (res) {
       setResult(res);
     } else {
-      setErr('Something went wrong. Please try again.');
+      setErr("Something went wrong. Please try again.");
     }
   };
 
@@ -64,7 +64,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
 
             {holds > 0 && (
               <Text className="text-sm italic text-stat-efficiency">
-                {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
+                {holds} hold{holds > 1 ? "s" : ""} (+{holds * CHANCE_PER_HOLD}% bonus)
               </Text>
             )}
 
@@ -74,9 +74,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
               </Text>
             )}
 
-            {err && (
-              <Text className="text-sm text-center text-stat-energy">{err}</Text>
-            )}
+            {err && <Text className="text-sm text-center text-stat-energy">{err}</Text>}
 
             <View className="flex-row gap-3 w-full mt-2">
               <Button
@@ -98,11 +96,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                 onPress={handleRoll}
                 isDisabled={!canRoll || loading}
               >
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <Button.Label>Roll!</Button.Label>
-                )}
+                {loading ? <Spinner size="sm" /> : <Button.Label>Roll!</Button.Label>}
               </Button>
             </View>
           </>
@@ -118,7 +112,9 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
             ) : (
               <View className="items-center gap-2 rounded-xl py-4 px-6 w-full bg-surface-light">
                 <Text className="text-xl font-bold text-text-title">No luck this time</Text>
-                <Text className="text-base text-center text-text-body">Better luck on your next flush!</Text>
+                <Text className="text-base text-center text-text-body">
+                  Better luck on your next flush!
+                </Text>
               </View>
             )}
 
@@ -131,4 +127,3 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
     </Card>
   );
 });
-

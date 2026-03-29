@@ -1,15 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native';
-import { validateInviteCode } from '@/lib/inviteCodeApi';
-import { useSignOutDialog } from '@/utils';
-import { useErrorHandler } from '@/hooks';
+import { useState, useRef, useEffect } from "react";
+import { View, Text, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import { Button, Spinner, TextField, Input, Label, Description, FieldError } from "heroui-native";
+import { validateInviteCode } from "@/lib/inviteCodeApi";
+import { useSignOutDialog } from "@/utils";
+import { useErrorHandler } from "@/hooks";
 
 interface InviteCodeScreenProps {
   /** Called after the entered code is validated and the user is approved. */
@@ -24,9 +18,9 @@ interface InviteCodeScreenProps {
  * then calls `onApprovalSuccess` on success.
  */
 export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const { error, handleError, clearError } = useErrorHandler('InviteCode');
+  const { error, handleError, clearError } = useErrorHandler("InviteCode");
   const inputRef = useRef<TextInput>(null);
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
 
@@ -45,7 +39,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
   const handleCodeChange = (text: string) => {
     // Convert to uppercase and filter non-alphanumeric
-    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
     setCode(cleaned.slice(0, 8)); // Limit to 8 characters
     clearError(); // Clear error when user types
   };
@@ -53,7 +47,10 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const handleSubmit = async () => {
     // Validate format before submitting
     if (!isValidFormat(code)) {
-      handleError(new Error('Code must be 8 alphanumeric characters'), 'Code must be 8 alphanumeric characters');
+      handleError(
+        new Error("Code must be 8 alphanumeric characters"),
+        "Code must be 8 alphanumeric characters",
+      );
       return;
     }
 
@@ -65,17 +62,17 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
       if (result.success) {
         // Clear the code input and show success state
-        setCode('');
+        setCode("");
         clearError();
-        
+
         // Success! Notify parent to refresh approval status
         onApprovalSuccess();
       } else {
         // Show specific error message from backend
-        handleError(result.error || 'Invalid invite code', result.error || 'Invalid invite code');
+        handleError(result.error || "Invalid invite code", result.error || "Invalid invite code");
       }
     } catch (err) {
-      handleError(err, 'An unexpected error occurred. Please try again.');
+      handleError(err, "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -89,66 +86,62 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
   return (
     <>
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 justify-center p-5 bg-background"
-    >
-      <View className="flex-1 justify-center">
-        <Text className="text-[28px] font-bold mb-2 text-center text-primary">Welcome! 🎉</Text>
-        <Text className="text-base text-gray-500 mb-10 text-center leading-6">
-          Enter your invite code to access the app
-        </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1 justify-center p-5 bg-background"
+      >
+        <View className="flex-1 justify-center">
+          <Text className="text-[28px] font-bold mb-2 text-center text-primary">Welcome! 🎉</Text>
+          <Text className="text-base text-gray-500 mb-10 text-center leading-6">
+            Enter your invite code to access the app
+          </Text>
 
-        <TextField isInvalid={!!error} className="mb-4">
-          <Label>Invite Code</Label>
-          <Input
-            ref={inputRef}
-            value={code}
-            onChangeText={handleCodeChange}
-            placeholder="ABC12XYZ"
-            maxLength={8}
-            autoCapitalize="characters"
-            autoCorrect={false}
-            autoComplete="off"
-            keyboardType="ascii-capable"
-            returnKeyType="done"
-            accessibilityLabel="Invite code"
-            accessibilityHint="Enter your 8-character invite code"
-            onSubmitEditing={handleSubmit}
-            editable={!loading}
-            className="text-center text-2xl font-semibold tracking-widest uppercase"
-          />
-          <Description>8 alphanumeric characters</Description>
-          {error && <FieldError>{error}</FieldError>}
-        </TextField>
+          <TextField isInvalid={!!error} className="mb-4">
+            <Label>Invite Code</Label>
+            <Input
+              ref={inputRef}
+              value={code}
+              onChangeText={handleCodeChange}
+              placeholder="ABC12XYZ"
+              maxLength={8}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              autoComplete="off"
+              keyboardType="ascii-capable"
+              returnKeyType="done"
+              accessibilityLabel="Invite code"
+              accessibilityHint="Enter your 8-character invite code"
+              onSubmitEditing={handleSubmit}
+              editable={!loading}
+              className="text-center text-2xl font-semibold tracking-widest uppercase"
+            />
+            <Description>8 alphanumeric characters</Description>
+            {error && <FieldError>{error}</FieldError>}
+          </TextField>
 
-        {loading && (
-          <View className="mb-4 items-center">
-            <Spinner size="lg" />
-          </View>
-        )}
+          {loading && (
+            <View className="mb-4 items-center">
+              <Spinner size="lg" />
+            </View>
+          )}
 
-        <Button
-          variant="primary"
-          onPress={handleSubmit}
-          isDisabled={!canSubmit}
-          className="mb-4"
-          accessibilityLabel="Submit invite code"
-          accessibilityHint="Validate and submit your invite code"
-        >
-          {loading ? 'Validating...' : 'Submit'}
-        </Button>
+          <Button
+            variant="primary"
+            onPress={handleSubmit}
+            isDisabled={!canSubmit}
+            className="mb-4"
+            accessibilityLabel="Submit invite code"
+            accessibilityHint="Validate and submit your invite code"
+          >
+            {loading ? "Validating..." : "Submit"}
+          </Button>
 
-        <Button
-          variant="outline"
-          onPress={handleSignOut}
-          isDisabled={loading}
-        >
-          Sign Out
-        </Button>
-      </View>
-    </KeyboardAvoidingView>
-    {signOutDialog}
-  </>
+          <Button variant="outline" onPress={handleSignOut} isDisabled={loading}>
+            Sign Out
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
+      {signOutDialog}
+    </>
   );
 }

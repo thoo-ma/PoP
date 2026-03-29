@@ -1,10 +1,10 @@
-import { memo } from 'react';
-import { Image, View } from 'react-native';
-import type { ReactNode } from 'react';
-import { Card, Chip, cn } from 'heroui-native';
-import type { MysteryBox } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
+import { memo } from "react";
+import { Image, View } from "react-native";
+import type { ReactNode } from "react";
+import { Card, Chip, cn } from "heroui-native";
+import type { MysteryBox } from "@pop/shared";
+import { RARITY_COLORS } from "@/constants";
+import { badgeLabel, cardImageContainer, badgePosition, cardBody } from "@/styles";
 
 interface MysteryBoxCardProps {
   box: MysteryBox;
@@ -18,16 +18,12 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
   return (
     <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
       <View className={cardImageContainer()}>
-        <Image
-          source={{ uri: box.image_url }}
-          className="w-full h-full"
-          resizeMode="cover"
-        />
+        <Image source={{ uri: box.image_url }} className="w-full h-full" resizeMode="cover" />
         {/* Rarity — bottom-right */}
         <Chip
           size="sm"
           variant="primary"
-          className={badgePosition({ position: 'bottomRight' })}
+          className={badgePosition({ position: "bottomRight" })}
           style={{ backgroundColor: RARITY_COLORS[box.rarity] }}
           animation="disable-all"
         >
@@ -39,7 +35,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           <Chip
             size="sm"
             variant="secondary"
-            className={badgePosition({ position: 'topLeft' })}
+            className={badgePosition({ position: "topLeft" })}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-sm font-bold">×{count}</Chip.Label>
@@ -51,7 +47,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           <Chip
             size="sm"
             variant="secondary"
-            className={badgePosition({ position: 'topRight' })}
+            className={badgePosition({ position: "topRight" })}
             animation="disable-all"
           >
             <Chip.Label className="text-white text-xs font-semibold">Opened</Chip.Label>
@@ -62,7 +58,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
       <Card.Body className={cardBody()}>
         <Card.Title className="text-sm font-bold">Mystery Box</Card.Title>
         <Chip size="sm" variant="primary" animation="disable-all">
-          <Chip.Label className={cn(badgeLabel(), 'tracking-wide')}>MYSTERY BOX</Chip.Label>
+          <Chip.Label className={cn(badgeLabel(), "tracking-wide")}>MYSTERY BOX</Chip.Label>
         </Chip>
         {action}
       </Card.Body>

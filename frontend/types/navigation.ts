@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType } from "react";
 
 /**
  * Configuration for a single page/screen in the app
@@ -18,4 +18,3 @@ export interface PageIndicatorProps {
   currentPage: number;
   onPageChange?: (pageIndex: number) => void;
 }
-

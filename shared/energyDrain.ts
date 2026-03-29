@@ -11,7 +11,7 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTType } from './nft.ts';
+import type { NFTType } from "./nft.ts";
 
 /**
  * Per-type energy drain multiplier.
@@ -19,9 +19,9 @@ import type { NFTType } from './nft.ts';
  */
 // @migration: DELETE — game_config.energy_drain
 export const TYPE_DRAIN_MULT: Record<NFTType, number> = {
-  'turbo-flush':  3,
-  'cruise-seat':  1.5,
-  'zen-fortress': 1,
+  "turbo-flush": 3,
+  "cruise-seat": 1.5,
+  "zen-fortress": 1,
 };
 
 /** Minimum of the base energy loss roll (inclusive). */

@@ -8,55 +8,56 @@
  */
 export const EdgeFunctionErrorCode = {
   // 400
-  BAD_REQUEST:          'bad_request',
+  BAD_REQUEST: "bad_request",
   // 401
-  UNAUTHORIZED:         'unauthorized',
+  UNAUTHORIZED: "unauthorized",
   // 402
-  INSUFFICIENT_POOP:    'insufficient_poop',
+  INSUFFICIENT_POOP: "insufficient_poop",
   // 404
-  NOT_FOUND:            'not_found',
+  NOT_FOUND: "not_found",
   // 409
-  CONFLICT:             'conflict',
+  CONFLICT: "conflict",
   // 422
-  NO_ENERGY:            'no_energy',
-  BREED_LIMIT_REACHED:  'breed_limit_reached',
-  INCOMPATIBLE_RARITIES:'incompatible_rarities',
-  INSUFFICIENT_POINTS:  'insufficient_points',
-  STAT_CAP_EXCEEDED:    'stat_cap_exceeded',
-  MAX_HOLDS_REACHED:    'max_holds_reached',
-  DETECTION_FAILED:     'detection_failed',
-  BUSTED:               'busted',
+  NO_ENERGY: "no_energy",
+  BREED_LIMIT_REACHED: "breed_limit_reached",
+  INCOMPATIBLE_RARITIES: "incompatible_rarities",
+  INSUFFICIENT_POINTS: "insufficient_points",
+  STAT_CAP_EXCEEDED: "stat_cap_exceeded",
+  MAX_HOLDS_REACHED: "max_holds_reached",
+  DETECTION_FAILED: "detection_failed",
+  BUSTED: "busted",
   // 429
-  ON_COOLDOWN:          'on_cooldown',
-  RATE_LIMIT_EXCEEDED:  'rate_limit_exceeded',
+  ON_COOLDOWN: "on_cooldown",
+  RATE_LIMIT_EXCEEDED: "rate_limit_exceeded",
   // 500
-  INTERNAL_ERROR:       'internal_error',
-} as const
+  INTERNAL_ERROR: "internal_error",
+} as const;
 
-export type EdgeFunctionErrorCode = typeof EdgeFunctionErrorCode[keyof typeof EdgeFunctionErrorCode]
+export type EdgeFunctionErrorCode =
+  (typeof EdgeFunctionErrorCode)[keyof typeof EdgeFunctionErrorCode];
 
 /** Base error response shape shared by all edge functions. */
 export interface EdgeFunctionErrorResponse {
-  error: EdgeFunctionErrorCode
-  message: string
-  details?: Record<string, unknown>
+  error: EdgeFunctionErrorCode;
+  message: string;
+  details?: Record<string, unknown>;
 }
 
 // ── Per-error detail shapes ──────────────────────────────────────────────────
 
 export interface InsufficientPoopDetails {
-  poop_balance: number
-  poop_required: number
+  poop_balance: number;
+  poop_required: number;
   /** Optional breakdown of costs by item (e.g. for breeding) */
-  poop_required_breakdown?: Record<string, number>
+  poop_required_breakdown?: Record<string, number>;
 }
 
 export interface CooldownDetails {
-  cooldown_ends_at: string
-  cooldown_remaining_seconds: number
+  cooldown_ends_at: string;
+  cooldown_remaining_seconds: number;
 }
 
 export interface BustedDetails {
-  poop_spent: number
-  poop_balance: number
+  poop_spent: number;
+  poop_balance: number;
 }

@@ -1,6 +1,6 @@
-import { memo } from 'react';
-import { Text, View } from 'react-native';
-import { Spinner } from 'heroui-native';
+import { memo } from "react";
+import { Text, View } from "react-native";
+import { Spinner } from "heroui-native";
 
 interface ScreenLoaderProps {
   title?: string;

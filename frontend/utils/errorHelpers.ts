@@ -1,4 +1,4 @@
-import type { RateLimitError } from '@/types/audio';
+import type { RateLimitError } from "@/types/audio";
 
 /**
  * Extract a user-friendly error message from any error type
@@ -6,10 +6,10 @@ import type { RateLimitError } from '@/types/audio';
  * @param fallback - Fallback message if error can't be parsed
  * @returns User-friendly error message
  */
-export function getErrorMessage(error: unknown, fallback = 'An error occurred'): string {
+export function getErrorMessage(error: unknown, fallback = "An error occurred"): string {
   if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
-  if (error && typeof error === 'object' && 'message' in error) {
+  if (typeof error === "string") return error;
+  if (error && typeof error === "object" && "message" in error) {
     return String(error.message);
   }
   return fallback;
@@ -35,9 +35,6 @@ export function logError(context: string, error: unknown): void {
  */
 export function isRateLimitError(error: unknown): error is RateLimitError {
   return (
-    error !== null &&
-    typeof error === 'object' &&
-    'error' in error &&
-    error.error === 'rate_limit'
+    error !== null && typeof error === "object" && "error" in error && error.error === "rate_limit"
   );
 }

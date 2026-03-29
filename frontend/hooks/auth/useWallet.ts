@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import { logError } from '@/utils/errorHelpers';
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import { logError } from "@/utils/errorHelpers";
 
 /**
  * Hook that subscribes to the current user's POOP wallet balance.
@@ -20,13 +20,13 @@ export function useWallet() {
 
   const fetchBalance = async (userId: string) => {
     const { data, error: fetchError } = await supabase
-      .from('users')
-      .select('poop_balance')
-      .eq('id', userId)
+      .from("users")
+      .select("poop_balance")
+      .eq("id", userId)
       .single();
 
     if (fetchError) {
-      logError('useWallet:fetch', fetchError);
+      logError("useWallet:fetch", fetchError);
       setError(fetchError.message);
     } else {
       setPoopBalance(data?.poop_balance ?? 0);
@@ -39,8 +39,13 @@ export function useWallet() {
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setLoading(false); return; }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       userId = user.id;
       await fetchBalance(user.id);
@@ -49,18 +54,18 @@ export function useWallet() {
       channel = supabase
         .channel(`wallet:${userId}`)
         .on(
-          'postgres_changes',
+          "postgres_changes",
           {
-            event:  'UPDATE',
-            schema: 'public',
-            table:  'users',
+            event: "UPDATE",
+            schema: "public",
+            table: "users",
             filter: `id=eq.${userId}`,
           },
           (payload: { new: Record<string, unknown> }) => {
-            if (payload.new && typeof payload.new.poop_balance === 'number') {
+            if (payload.new && typeof payload.new.poop_balance === "number") {
               setPoopBalance(payload.new.poop_balance as number);
             }
-          }
+          },
         )
         .subscribe();
     };
@@ -74,8 +79,13 @@ export function useWallet() {
 
   const refetch = async () => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setLoading(false); return; }
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     await fetchBalance(user.id);
   };
 

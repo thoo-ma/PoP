@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
-import { FunctionsHttpError } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { logError } from '@/utils/errorHelpers';
+import { useState, useCallback } from "react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import { logError } from "@/utils/errorHelpers";
 
 export interface RollLootResult {
   won: boolean;
@@ -33,7 +33,7 @@ export function useRollLoot() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fnError } = await supabase.functions.invoke('hold-loot-roll', {
+      const { data, error: fnError } = await supabase.functions.invoke("hold-loot-roll", {
         body: { loot_roll_id: lootRollId },
       });
 
@@ -44,17 +44,19 @@ export function useRollLoot() {
             const body = await fnError.context.json();
             if (body?.message) message = body.message as string;
             else if (body?.error) message = body.error as string;
-          } catch { /* leave message as-is */ }
+          } catch {
+            /* leave message as-is */
+          }
         }
-        logError('useRollLoot:Hold', fnError);
-        setError(message ?? 'Failed to hold loot roll');
+        logError("useRollLoot:Hold", fnError);
+        setError(message ?? "Failed to hold loot roll");
         return null;
       }
 
       return data as HoldLootResult;
     } catch (err) {
-      logError('useRollLoot:Hold', err);
-      setError(err instanceof Error ? err.message : 'Failed to hold loot roll');
+      logError("useRollLoot:Hold", err);
+      setError(err instanceof Error ? err.message : "Failed to hold loot roll");
       return null;
     } finally {
       setLoading(false);
@@ -66,7 +68,7 @@ export function useRollLoot() {
       setLoading(true);
       setError(null);
 
-      const { data, error: fnError } = await supabase.functions.invoke('roll-loot', {
+      const { data, error: fnError } = await supabase.functions.invoke("roll-loot", {
         body: { loot_roll_id: lootRollId },
       });
 
@@ -77,17 +79,19 @@ export function useRollLoot() {
             const body = await fnError.context.json();
             if (body?.message) message = body.message as string;
             else if (body?.error) message = body.error as string;
-          } catch { /* leave message as-is */ }
+          } catch {
+            /* leave message as-is */
+          }
         }
-        logError('useRollLoot:Roll', fnError);
-        setError(message ?? 'Failed to roll loot');
+        logError("useRollLoot:Roll", fnError);
+        setError(message ?? "Failed to roll loot");
         return null;
       }
 
       return data as RollLootResult;
     } catch (err) {
-      logError('useRollLoot:Roll', err);
-      setError(err instanceof Error ? err.message : 'Failed to roll loot');
+      logError("useRollLoot:Roll", err);
+      setError(err instanceof Error ? err.message : "Failed to roll loot");
       return null;
     } finally {
       setLoading(false);

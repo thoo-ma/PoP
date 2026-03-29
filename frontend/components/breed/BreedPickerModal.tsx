@@ -1,11 +1,11 @@
-import { View, Text, Image, useWindowDimensions } from 'react-native';
-import { BottomSheet, Card, PressableFeedback } from 'heroui-native';
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
-import type { NFT } from '@/types';
-import type { NFTRarity } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { canBreed, formatDisplayName } from '@/utils';
-import { breedPickerCard } from '@/styles';
+import { View, Text, Image, useWindowDimensions } from "react-native";
+import { BottomSheet, Card, PressableFeedback } from "heroui-native";
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import type { NFT } from "@/types";
+import type { NFTRarity } from "@pop/shared";
+import { RARITY_COLORS } from "@/constants";
+import { canBreed, formatDisplayName } from "@/utils";
+import { breedPickerCard } from "@/styles";
 
 const GRID_PADDING = 16;
 const GRID_GAP = 12;
@@ -33,7 +33,13 @@ export interface BreedPickerModalProps {
  * are shown greyed-out and non-interactive.
  */
 export default function BreedPickerModal({
-  visible, title, allNFTs, lockedId, lockedRarity, onSelect, onClose,
+  visible,
+  title,
+  allNFTs,
+  lockedId,
+  lockedRarity,
+  onSelect,
+  onClose,
 }: BreedPickerModalProps) {
   const { width: windowWidth } = useWindowDimensions();
   const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2;
@@ -41,17 +47,23 @@ export default function BreedPickerModal({
   const items = allNFTs.map((nft) => ({
     nft,
     disabled:
-      nft.id === lockedId ||
-      (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
+      nft.id === lockedId || (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
   }));
 
   return (
-    <BottomSheet isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <BottomSheet
+      isOpen={visible}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <BottomSheet.Portal>
         <BottomSheet.Overlay />
-        <BottomSheet.Content snapPoints={['70%']}>
+        <BottomSheet.Content snapPoints={["70%"]}>
           <View className="flex-row justify-between items-center px-5 py-4 border-b border-border">
-            <BottomSheet.Title className="text-lg font-bold text-foreground">{title}</BottomSheet.Title>
+            <BottomSheet.Title className="text-lg font-bold text-foreground">
+              {title}
+            </BottomSheet.Title>
             <BottomSheet.Close />
           </View>
           {lockedRarity && (
@@ -71,12 +83,15 @@ export default function BreedPickerModal({
               const isSelected = lockedId !== undefined && lockedId === item.nft.id;
               const hint = item.disabled
                 ? isSelected
-                  ? 'This NFT is already selected as a parent'
-                  : 'This NFT is incompatible as a parent'
-                : 'Tap to select as parent';
+                  ? "This NFT is already selected as a parent"
+                  : "This NFT is incompatible as a parent"
+                : "Tap to select as parent";
               return (
                 <PressableFeedback
-                  onPress={() => { onSelect(item.nft); onClose(); }}
+                  onPress={() => {
+                    onSelect(item.nft);
+                    onClose();
+                  }}
                   isDisabled={item.disabled}
                   accessibilityRole="button"
                   accessibilityState={{ disabled: item.disabled, selected: isSelected }}
@@ -87,7 +102,11 @@ export default function BreedPickerModal({
                 >
                   <Card className={s.root()} animation="disable-all">
                     <View className={s.image()}>
-                      <Image source={{ uri: item.nft.image_url }} className="w-full h-full" resizeMode="cover" />
+                      <Image
+                        source={{ uri: item.nft.image_url }}
+                        className="w-full h-full"
+                        resizeMode="cover"
+                      />
                       {item.disabled && <View className={s.disabledOverlay()} />}
                       <View
                         className={s.rarityDot()}

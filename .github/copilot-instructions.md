@@ -27,7 +27,11 @@ pnpm typecheck                                      # All packages (frontend + d
 pnpm exec turbo typecheck --filter=pop              # Frontend only
 pnpm exec turbo typecheck --filter=dashboard        # Dashboard only
 
-# Edge functions (Deno — not managed by Turbo)
+# Format & lint with Biome (covers frontend/, shared/, dashboard/src/)
+pnpm format                                         # Auto-fix formatting
+pnpm lint                                           # Lint (biome lint .)
+
+# Edge functions (Deno — not managed by Turbo or Biome)
 cd supabase/functions && deno check <function>/index.ts
 ```
 

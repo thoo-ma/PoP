@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { usePathname } from 'next/navigation'
-import { useGameConfigStore } from '@/store/gameConfigStore'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import { Separator } from '@/components/ui/separator'
+import { usePathname } from "next/navigation";
+import { useGameConfigStore } from "@/store/gameConfigStore";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,30 +13,30 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+} from "@/components/ui/breadcrumb";
 
 const SECTION_LABELS: Record<string, string> = {
-  '/xp':         'XP & Leveling',
-  '/currency':   'Currency (POOP)',
-  '/cooldown':   'Cooldown',
-  '/stat-points':'Stat Points',
-  '/breed':      'Breeding',
-  '/minting':    'Minting',
-  '/sensors':    'Sensors',
-  '/energy':     'Energy Drain',
-  '/loot':       'Loot Roll',
-  '/cloud-run':  'Cloud Run',
-  '/degen-bar':  'Degen Bar',
-}
+  "/xp": "XP & Leveling",
+  "/currency": "Currency (POOP)",
+  "/cooldown": "Cooldown",
+  "/stat-points": "Stat Points",
+  "/breed": "Breeding",
+  "/minting": "Minting",
+  "/sensors": "Sensors",
+  "/energy": "Energy Drain",
+  "/loot": "Loot Roll",
+  "/cloud-run": "Cloud Run",
+  "/degen-bar": "Degen Bar",
+};
 
 export function Header() {
-  const { loading, error, sources, drafts, clearDrafts } = useGameConfigStore()
-  const pathname = usePathname()
-  const section = SECTION_LABELS[pathname] ?? null
+  const { loading, error, sources, drafts, clearDrafts } = useGameConfigStore();
+  const pathname = usePathname();
+  const section = SECTION_LABELS[pathname] ?? null;
 
-  const dbCount    = Object.values(sources).filter((s) => s === 'db').length
-  const totalCount = Object.keys(sources).length
-  const draftCount = Object.keys(drafts).length
+  const dbCount = Object.values(sources).filter((s) => s === "db").length;
+  const totalCount = Object.keys(sources).length;
+  const draftCount = Object.keys(drafts).length;
 
   return (
     <header className="flex h-14 items-center justify-between border-b border-neutral-800 bg-neutral-950 px-4">
@@ -92,5 +92,5 @@ export function Header() {
         </span>
       </div>
     </header>
-  )
+  );
 }
