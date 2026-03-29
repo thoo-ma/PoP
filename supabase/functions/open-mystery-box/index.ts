@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import type { NFTRarity as Rarity, NFTType } from '../../../shared/nft.ts'
+import type { NFTRarity as Rarity } from '../../../shared/nft.ts'
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
