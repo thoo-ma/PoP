@@ -108,7 +108,7 @@ serve(async (req) => {
           degen_percent: degenPercent,
           poop_spent:   chargedAmount,
           poop_balance: newBalance,
-          config_hash:  await computeConfigHash(cfg.degen_bar),
+          config_hash:  computeConfigHash(cfg.degen_bar),
         }),
         { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
@@ -142,7 +142,7 @@ serve(async (req) => {
       degen_percent: degenPercent,
       original_cost: poopCost,
       reduced_cost:  chargedAmount,
-      config_hash:   await computeConfigHash(cfg.degen_bar),
+      config_hash:   computeConfigHash(cfg.degen_bar),
     })
 
   } catch (err) {
