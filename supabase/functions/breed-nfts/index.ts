@@ -165,16 +165,12 @@ serve(async (req) => {
 
     // ── Bust: charge full price, skip offspring creation ──────────────────────
     if (outcome.busted) {
-      return new Response(
-        JSON.stringify({
-          error:         'busted',
-          degen_percent: degenPercent,
-          poop_spent:    chargedAmount,
-          poop_balance:  newBalance,
-          config_hash:   computeConfigHash(cfg.degen_bar),
-        }),
-        { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-      )
+      return respondError(422, 'busted', 'busted', {
+        degen_percent: degenPercent,
+        poop_spent:    chargedAmount,
+        poop_balance:  newBalance,
+        config_hash:   computeConfigHash(cfg.degen_bar),
+      })
     }
 
     // ── Rarity roll ───────────────────────────────────────────────────────────
