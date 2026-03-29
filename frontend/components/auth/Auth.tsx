@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { View, Text } from 'react-native';
-import { Button, Spinner, Dialog, useToast, cn } from 'heroui-native';
-import { screenTitle, screenSubtitle, dialogBody } from '@/styles';
+import { View, Text, Platform } from 'react-native';
+import { Button, Spinner, useToast, cn } from 'heroui-native';
+import { screenTitle, screenSubtitle } from '@/styles';
 import { supabase } from '@/lib';
 import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
@@ -63,8 +63,27 @@ export default function Auth() {
     }
   };
 
-  const signInWithProvider = async (_provider: OAuthProvider) => {
-    setOauthDialogVisible(true);
+  const signInWithProvider = async (provider: OAuthProvider) => {
+    setLoading(true);
+    try {
+      const redirectTo = Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback';
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo, skipBrowserRedirect: true },
+      });
+      if (error) throw error;
+      if (data.url) {
+        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+        if (result.type === 'success') {
+          await supabase.auth.exchangeCodeForSession(result.url);
+        }
+      }
+    } catch (err) {
+      logError('Auth:OAuth', err);
+      toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

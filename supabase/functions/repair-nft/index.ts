@@ -2,7 +2,7 @@ import { serve } from "std/http/server"
 import { repairCost } from '../../../shared/currency.ts'
 import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -20,8 +20,10 @@ const RepairSchema = z.object({
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
@@ -43,7 +45,7 @@ serve(async (req) => {
     try {
       degenPercent = parseDegenPercent(bodyResult)
     } catch {
-      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100')
+      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100', undefined, origin)
     }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
@@ -55,12 +57,13 @@ serve(async (req) => {
       .single()
 
     if (fetchNFTError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
     }
 
     if (new_energy <= nft.energy) {
       return respondError(400, 'bad_request',
         `new_energy (${new_energy}) must be greater than current energy (${nft.energy})`,
+        undefined, origin,
       )
     }
 
@@ -86,6 +89,7 @@ serve(async (req) => {
       console.error('repair-nft: applyDegenBar error', degenErr)
       return respondError(500, 'internal_error',
         degenErr instanceof Error ? degenErr.message : 'Unknown error',
+        undefined, origin,
       )
     }
 
@@ -96,7 +100,7 @@ serve(async (req) => {
       const currentBalance = wallet?.poop_balance ?? 0
       return respondError(402, 'insufficient_poop',
         `Repairing costs ${chargedAmount} POOP. You have ${currentBalance} POOP.`,
-        { poop_balance: currentBalance, poop_required: chargedAmount },
+        { poop_balance: currentBalance, poop_required: chargedAmount }, origin,
       )
     }
 
@@ -107,7 +111,7 @@ serve(async (req) => {
         poop_spent:   chargedAmount,
         poop_balance: newBalance,
         config_hash:  computeConfigHash(cfg.degen_bar),
-      })
+      }, origin)
     }
 
     // ── Persist NFT energy ────────────────────────────────────────────────────
@@ -121,7 +125,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('repair-nft: update error', updateError)
-      return respondError(500, 'internal_error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message, undefined, origin)
     }
 
     console.log(
@@ -139,12 +143,13 @@ serve(async (req) => {
       original_cost: poopCost,
       reduced_cost:  chargedAmount,
       config_hash:   computeConfigHash(cfg.degen_bar),
-    })
+    }, origin)
 
   } catch (err) {
     console.error('repair-nft: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })

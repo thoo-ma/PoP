@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
@@ -33,8 +33,10 @@ const RollLootSchema = z.object({
  */
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     const auth = await requireAuth(req, 'roll-loot')
@@ -56,7 +58,7 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return respondError(404, 'not_found', 'Loot roll not found or not owned by you')
+      return respondError(404, 'not_found', 'Loot roll not found or not owned by you', undefined, origin)
     }
 
     const holdsUsed = roll.holds
@@ -84,7 +86,7 @@ serve(async (req) => {
     )
 
     if (!won) {
-      return respondOk({ won: false, holds_used: holdsUsed })
+      return respondOk({ won: false, holds_used: holdsUsed }, origin)
     }
 
     // ── Award mystery box ─────────────────────────────────────────────────────
@@ -99,17 +101,18 @@ serve(async (req) => {
 
     if (boxError || !box) {
       console.error('roll-loot: mystery box insert error', boxError)
-      return respondError(500, 'internal_error', boxError?.message ?? 'Failed to award mystery box')
+      return respondError(500, 'internal_error', boxError?.message ?? 'Failed to award mystery box', undefined, origin)
     }
 
     console.log(`roll-loot: awarded mystery box id=${box.id} rarity=${rarity} to user=${userId}`)
 
-    return respondOk({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity } })
+    return respondOk({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity } }, origin)
 
   } catch (err) {
     console.error('roll-loot: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })

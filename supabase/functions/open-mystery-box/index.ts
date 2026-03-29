@@ -1,6 +1,6 @@
 import { serve } from "std/http/server"
 import type { NFTRarity as Rarity, NFTType } from '../../../shared/nft.ts'
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
@@ -15,9 +15,9 @@ const OpenMysteryBoxSchema = z.object({
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
-
+  const origin = req.headers.get('origin')
   try {
     // ── Auth ────────────────────────────────────────────────────────────────
     const auth = await requireAuth(req, 'open-mystery-box')
@@ -42,11 +42,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !box) {
-      return respondError(404, 'not_found', 'Mystery box not found or not owned by you')
+      return respondError(404, 'not_found', 'Mystery box not found or not owned by you', undefined, origin)
     }
 
     if (box.opened) {
-      return respondError(409, 'conflict', 'This mystery box has already been opened')
+      return respondError(409, 'conflict', 'This mystery box has already been opened', undefined, origin)
     }
 
     // ── Roll the new NFT ─────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('open-mystery-box: insert error', insertError)
-      return respondError(500, 'internal_error', insertError.message)
+      return respondError(500, 'internal_error', insertError.message, undefined, origin)
     }
 
     // ── Mark box as opened ───────────────────────────────────────────────────
@@ -112,12 +112,13 @@ serve(async (req) => {
       updated_at: created.updated_at,
     }
 
-    return respondOk(result)
+    return respondOk(result, origin)
 
   } catch (err) {
     console.error('open-mystery-box: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })
