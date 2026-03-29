@@ -97,7 +97,12 @@ serve(async (req) => {
 
     if (newBalance === null) {
       let currentBalance = 0
-      try { currentBalance = await getWalletBalance(supabase, userId) } catch (_e) { /* non-fatal */ }
+      try {
+        currentBalance = await getWalletBalance(supabase, userId)
+      } catch (walletErr) {
+        console.error('repair-nft: getWalletBalance error', { userId, error: walletErr })
+        // non-fatal; fall back to 0
+      }
       return respondError(402, 'insufficient_poop',
         `Repairing costs ${chargedAmount} POOP. You have ${currentBalance} POOP.`,
         { poop_balance: currentBalance, poop_required: chargedAmount }, origin,
