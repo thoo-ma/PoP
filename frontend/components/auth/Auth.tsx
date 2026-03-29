@@ -7,17 +7,13 @@ import * as WebBrowser from 'expo-web-browser';
 import type { OAuthProvider } from '@/types';
 import { getErrorMessage, logError } from '@/utils';
 import OAuthButton from './OAuthButton';
-import PasswordPromptModal from './PasswordPromptModal';
 
 WebBrowser.maybeCompleteAuthSession();
-
-// TODO: remove password-gating before public release — EXPO_PUBLIC_ vars are bundled in the JS binary
-const DEV_MODE_PASSWORD = process.env.EXPO_PUBLIC_DEV_MODE_PASSWORD;
 
 /**
  * Auth panel that renders sign-in options:
  * - Test Mode: anonymous sign-in + seeds mystery boxes (always accessible)
- * - Dev Mode: anonymous sign-in + seeds NFTs (password-protected)
+ * - Dev Mode: anonymous sign-in + seeds NFTs (__DEV__ only)
  * - X / Google OAuth: currently disabled (alert shown)
  */
 export default function Auth() {
@@ -25,7 +21,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [devLoading, setDevLoading] = useState(false);
   const [testLoading, setTestLoading] = useState(false);
-  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [oauthDialogVisible, setOauthDialogVisible] = useState(false);
 
   const handleDevSignIn = async () => {
     setDevLoading(true);
@@ -33,8 +29,8 @@ export default function Auth() {
       const { error } = await supabase.auth.signInAnonymously();
       if (error) throw error;
 
-      // Seed test NFTs for dev mode
-      const { error: seedError } = await supabase.rpc('seed_dev_test_nfts');
+      // Seed test NFTs for dev mode (via Edge Function — RPC is service_role only)
+      const { error: seedError } = await supabase.functions.invoke('seed-dev-test-nfts');
       if (seedError) {
         console.warn('Failed to seed test NFTs:', seedError);
       }
@@ -44,19 +40,6 @@ export default function Auth() {
       toast.show({ variant: 'danger', label: 'Authentication Error', description: getErrorMessage(err, 'Failed to authenticate') });
     } finally {
       setDevLoading(false);
-    }
-  };
-
-  const handleDevModePress = () => {
-    setPasswordModalVisible(true);
-  };
-
-  const handlePasswordSubmit = (password: string) => {
-    setPasswordModalVisible(false);
-    if (password === DEV_MODE_PASSWORD) {
-      handleDevSignIn();
-    } else {
-      toast.show({ variant: 'danger', label: 'Access Denied', description: 'Incorrect password.' });
     }
   };
 
@@ -119,16 +102,18 @@ export default function Auth() {
         {testLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Test Mode)'}
       </Button>
 
-      <Button
-        variant="primary"
-        onPress={handleDevModePress}
-        isDisabled={devLoading}
-        className="mb-4"
-        accessibilityLabel="Continue in development mode"
-        accessibilityHint="Sign in anonymously for testing purposes (password required)"
-      >
-        {devLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Dev Mode)'}
-      </Button>
+      {__DEV__ && (
+        <Button
+          variant="primary"
+          onPress={handleDevSignIn}
+          isDisabled={devLoading}
+          className="mb-4"
+          accessibilityLabel="Continue in development mode"
+          accessibilityHint="Sign in anonymously with seeded NFTs (dev builds only)"
+        >
+          {devLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Dev Mode)'}
+        </Button>
+      )}
 
       <OAuthButton
         provider="twitter"
@@ -142,12 +127,25 @@ export default function Auth() {
         loading={loading}
       />
 
-      <PasswordPromptModal
-        visible={passwordModalVisible}
-        onSubmit={handlePasswordSubmit}
-        onCancel={() => setPasswordModalVisible(false)}
-      />
-
+      <Dialog isOpen={oauthDialogVisible} onOpenChange={setOauthDialogVisible}>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Close />
+            <View className={dialogBody()}>
+              <Dialog.Title>OAuth Not Available</Dialog.Title>
+              <Dialog.Description>
+                OAuth authentication is not yet available.{"\n\n"}Please use Test Mode or Dev Mode to sign in.
+              </Dialog.Description>
+            </View>
+            <View className="flex-row justify-end">
+              <Button variant="primary" size="sm" onPress={() => setOauthDialogVisible(false)}>
+                OK
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
     </View>
   );
 }
