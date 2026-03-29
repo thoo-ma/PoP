@@ -93,11 +93,13 @@ export function resolveDegenOutcome(degenPercent: number, cfg?: DegenBarCfg): De
   return { busted: roll < calcBustChance(degenPercent, cfg) };
 }
 
+/** Canonical key order for the degen bar config fingerprint. Used by both client and server. */
+export const DEGEN_BAR_HASH_KEYS = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const;
+
 /**
  * Deterministic string fingerprint of a DegenBarCfg value.
  * Used by client-side hooks to detect server-side config drift.
  */
 export function degenBarConfigHash(cfg: DegenBarCfg): string {
-  const keys = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const;
-  return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])));
+  return JSON.stringify(Object.fromEntries(DEGEN_BAR_HASH_KEYS.map((k) => [k, cfg[k]])));
 }

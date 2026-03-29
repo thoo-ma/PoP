@@ -14,6 +14,7 @@ import { z } from 'zod'
 import {
   calcReducedCost,
   resolveDegenOutcome,
+  DEGEN_BAR_HASH_KEYS,
   type DegenOutcome,
 } from '../../../shared/degenBar.ts'
 import type { DegenBarConfig } from '../../../shared/schemas.ts'
@@ -135,6 +136,5 @@ export async function applyDegenBar(
  * Included in responses so the frontend can detect config drift.
  */
 export function computeConfigHash(cfg: DegenBarConfig): string {
-  const keys = ['SAFE_BUST_COEF', 'DEGEN_BUST_BASE', 'DEGEN_BUST_SCALE', 'DEGEN_ZONE_THRESHOLD', 'MAX_REDUCTION'] as const
-  return JSON.stringify(Object.fromEntries(keys.map((k) => [k, cfg[k]])))
+  return JSON.stringify(Object.fromEntries(DEGEN_BAR_HASH_KEYS.map((k) => [k, cfg[k]])))
 }
