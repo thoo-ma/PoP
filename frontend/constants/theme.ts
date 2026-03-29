@@ -84,78 +84,6 @@ export const colors = {
   warningTextDark: '#78350f',  // deep amber warning/info text (amber-900)
 };
 
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  base: 16,
-  lg: 20,
-  xl: 24,
-  xxl: 32,
-  xxxl: 40,
-} as const;
-
-export const fontSizes = {
-  xxs: 9,
-  xs: 10,
-  sm: 12,
-  md: 14,
-  base: 16,
-  lg: 18,
-  xl: 20,
-  xxl: 24,
-  xxxl: 28,
-  display: 32,
-} as const;
-
-export const fontWeights = {
-  normal: '400' as const,
-  medium: '500' as const,
-  semibold: '600' as const,
-  bold: '700' as const,
-  extrabold: '800' as const,
-};
-
-export const radii = {
-  sm: 6,
-  md: 8,
-  lg: 12,
-  xl: 16,
-  xxl: 20,
-  pill: 24,
-} as const;
-
-export const shadows = {
-  sm: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  md: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  card: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  lg: {
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 10,
-  },
-};
-
 import type { NFTRarity } from '@pop/shared';
 
 export const RARITY_COLORS: Record<NFTRarity, string> = {
@@ -165,26 +93,4 @@ export const RARITY_COLORS: Record<NFTRarity, string> = {
   transcendent: '#a855f7',
 };
 
-export const typography = {
-  title: {
-    fontSize: fontSizes.display,
-    fontWeight: 'bold' as const,
-    marginBottom: spacing.md,
-    textAlign: 'center' as const,
-  },
-  description: {
-    fontSize: fontSizes.base,
-    marginBottom: 48,
-    textAlign: 'center' as const,
-    lineHeight: fontSizes.xxl,
-  },
-};
 
-export const layout = {
-  container: {
-    flex: 1,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    padding: spacing.lg,
-  },
-};

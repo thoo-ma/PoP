@@ -19,9 +19,3 @@ export interface PageIndicatorProps {
   onPageChange?: (pageIndex: number) => void;
 }
 
-/**
- * FlatList viewability configuration
- */
-export interface ViewabilityConfig {
-  itemVisiblePercentThreshold: number;
-}
