@@ -1,7 +1,7 @@
-import { Text, View, Image, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { memo, useState, useCallback, useEffect, useRef } from "react";
-import { Button, Dialog, ScrollShadow, cn } from "heroui-native";
+import { Text, View, Image, ScrollView } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { memo, useState, useCallback, useEffect, useRef } from 'react'
+import { Button, Dialog, ScrollShadow, cn } from 'heroui-native'
 import {
   phaseContainer,
   challengeHeader,
@@ -19,8 +19,8 @@ import {
   overlayBadge,
   typeBadge,
   dialogBody,
-} from "@/styles";
-import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from "@/hooks";
+} from '@/styles'
+import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks'
 import {
   ScreenLoader,
   ScreenError,
@@ -28,29 +28,29 @@ import {
   NFTProperties,
   StatAllocationModal,
   LootRouletteCard,
-} from "@/components";
-import { nftEvents, formatDisplayName, formatConfidencePercentage } from "@/utils";
-import { getThresholdForDifficulty } from "@pop/shared/sensors";
-import { getCooldownStatus } from "@/constants";
-import { useGameConfig } from "@/store/gameConfigStore";
-import type { NFT } from "@/types";
-import type { AllocateResult } from "@/hooks";
+} from '@/components'
+import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils'
+import { getThresholdForDifficulty } from '@pop/shared/sensors'
+import { getCooldownStatus } from '@/constants'
+import { useGameConfig } from '@/store/gameConfigStore'
+import type { NFT } from '@/types'
+import type { AllocateResult } from '@/hooks'
 
-const IMMOBILITY_MS_BY_TYPE: Record<NFT["type"], number> = {
-  "turbo-flush": 5_000,
-  "cruise-seat": 10_000,
-  "zen-fortress": 15_000,
-};
-const GAME_THRESHOLD = getThresholdForDifficulty("normal"); // 0.7
+const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
+  'turbo-flush': 5_000,
+  'cruise-seat': 10_000,
+  'zen-fortress': 15_000,
+}
+const GAME_THRESHOLD = getThresholdForDifficulty('normal') // 0.7
 
 type GamePhase =
-  | "idle"
-  | "countdown"
-  | "immobility"
-  | "prompt"
-  | "recording"
-  | "results"
-  | "roulette";
+  | 'idle'
+  | 'countdown'
+  | 'immobility'
+  | 'prompt'
+  | 'recording'
+  | 'results'
+  | 'roulette'
 
 /**
  * Poop screen — the core gameplay loop of the app.
@@ -67,44 +67,44 @@ type GamePhase =
  */
 export default memo(function Poop() {
   // ── NFT data ──────────────────────────────────────────────
-  const { nfts, loading, error, refetch } = useUserNFTs();
-  const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT();
-  const { config: cfg } = useGameConfig();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null);
+  const { nfts, loading, error, refetch } = useUserNFTs()
+  const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT()
+  const { config: cfg } = useGameConfig()
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null)
   const [poopedXP, setPoopedXP] = useState<{
-    gained: number;
-    level: number;
-    leveledUp: boolean;
-  } | null>(null);
-  const [poopedPoop, setPoopedPoop] = useState<{ earned: number; balance: number } | null>(null);
-  const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null);
-  const [lootRollId, setLootRollId] = useState<string | null>(null);
-  const hasPoopedRef = useRef(false); // guard — call poopNFT exactly once per challenge
+    gained: number
+    level: number
+    leveledUp: boolean
+  } | null>(null)
+  const [poopedPoop, setPoopedPoop] = useState<{ earned: number; balance: number } | null>(null)
+  const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null)
+  const [lootRollId, setLootRollId] = useState<string | null>(null)
+  const hasPoopedRef = useRef(false) // guard — call poopNFT exactly once per challenge
 
   // ── Alert dialog state ─────────────────────────────────────
-  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null);
+  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
 
   // Tick once/s so the cooldown countdown refreshes in the UI
-  const [, setTick] = useState(0);
-  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [, setTick] = useState(0)
+  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
   useEffect(() => {
-    tickRef.current = setInterval(() => setTick((t) => t + 1), 1000);
+    tickRef.current = setInterval(() => setTick((t) => t + 1), 1000)
     return () => {
-      if (tickRef.current) clearInterval(tickRef.current);
-    };
-  }, []);
+      if (tickRef.current) clearInterval(tickRef.current)
+    }
+  }, [])
 
   // ── Challenge state ────────────────────────────────────────
-  const [phase, setPhase] = useState<GamePhase>("idle");
-  const [countdownValue, setCountdownValue] = useState(3);
-  const [gameImmobilityMs, setGameImmobilityMs] = useState(10_000); // set at challenge start
-  const [frozenRemainingTime, setFrozenRemainingTime] = useState<number | null>(null);
-  const [immobilityMessage, setImmobilityMessage] = useState<string | null>(null);
+  const [phase, setPhase] = useState<GamePhase>('idle')
+  const [countdownValue, setCountdownValue] = useState(3)
+  const [gameImmobilityMs, setGameImmobilityMs] = useState(10_000) // set at challenge start
+  const [frozenRemainingTime, setFrozenRemainingTime] = useState<number | null>(null)
+  const [immobilityMessage, setImmobilityMessage] = useState<string | null>(null)
 
   // ── Proof hooks ────────────────────────────────────────────
   const { elapsedTime, status, isRunning, startChallenge, stopChallenge } =
-    useImmobilityChallenge("normal");
+    useImmobilityChallenge('normal')
 
   const {
     isRecording,
@@ -117,233 +117,231 @@ export default memo(function Poop() {
     stopRecording,
     analyzeAudio,
     clearResult,
-  } = useToiletDetection();
+  } = useToiletDetection()
 
   // ── Derived ────────────────────────────────────────────────
-  const displayNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
+  const displayNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null
   const remainingTime =
-    frozenRemainingTime !== null
-      ? frozenRemainingTime
-      : Math.max(0, gameImmobilityMs - elapsedTime);
+    frozenRemainingTime !== null ? frozenRemainingTime : Math.max(0, gameImmobilityMs - elapsedTime)
 
   // ── NFT carousel (disabled during challenge) ───────────────
   // Reset selectedIndex when a background refetch shrinks the nfts array past it,
   // preventing stale non-null assertions from causing a runtime throw.
   useEffect(() => {
     if (selectedIndex !== null && nfts[selectedIndex] === undefined) {
-      setSelectedIndex(null);
+      setSelectedIndex(null)
     }
-  }, [nfts, selectedIndex]);
+  }, [nfts, selectedIndex])
 
   const handleSelectNFT = () => {
-    if (nfts.length === 0) return;
+    if (nfts.length === 0) return
     const ready = nfts.findIndex(
       (n) => n.energy > 0 && !getCooldownStatus(n, cfg.cooldown).isOnCooldown,
-    );
-    const withEnergy = nfts.findIndex((n) => n.energy > 0);
-    setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0);
-  };
+    )
+    const withEnergy = nfts.findIndex((n) => n.energy > 0)
+    setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0)
+  }
 
   const handlePrev = useCallback(() => {
-    if (phase !== "idle") return;
-    setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length);
-    setPoopedEnergy(null);
-    setPoopedXP(null);
-    setPoopedPoop(null);
-    setStatModalData(null);
-  }, [nfts.length, phase]);
+    if (phase !== 'idle') return
+    setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
+    setPoopedEnergy(null)
+    setPoopedXP(null)
+    setPoopedPoop(null)
+    setStatModalData(null)
+  }, [nfts.length, phase])
 
   const handleNext = useCallback(() => {
-    if (phase !== "idle") return;
-    setSelectedIndex((i) => ((i as number) + 1) % nfts.length);
-    setPoopedEnergy(null);
-    setPoopedXP(null);
-    setPoopedPoop(null);
-    setStatModalData(null);
-  }, [nfts.length, phase]);
+    if (phase !== 'idle') return
+    setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
+    setPoopedEnergy(null)
+    setPoopedXP(null)
+    setPoopedPoop(null)
+    setStatModalData(null)
+  }, [nfts.length, phase])
 
   // ── Tap Poop: guards → begin 3-2-1 ────────────────────────
   const handlePoop = () => {
-    if (!displayNFT) return;
+    if (!displayNFT) return
     if (displayNFT.energy <= 0) {
       setAlertDialog({
-        title: "No Energy",
-        message: "This NFT has no energy left. Visit the Repair screen to restore energy.",
-      });
-      return;
+        title: 'No Energy',
+        message: 'This NFT has no energy left. Visit the Repair screen to restore energy.',
+      })
+      return
     }
-    const cooldown = getCooldownStatus(displayNFT, cfg.cooldown);
+    const cooldown = getCooldownStatus(displayNFT, cfg.cooldown)
     if (cooldown.isOnCooldown) {
       setAlertDialog({
-        title: "On Cooldown",
+        title: 'On Cooldown',
         message: `This NFT is resting. Ready in ${cooldown.display}.`,
-      });
-      return;
+      })
+      return
     }
-    hasPoopedRef.current = false;
-    setCountdownValue(3);
-    setGameImmobilityMs(IMMOBILITY_MS_BY_TYPE[displayNFT.type] ?? 10_000);
-    setPhase("countdown");
-  };
+    hasPoopedRef.current = false
+    setCountdownValue(3)
+    setGameImmobilityMs(IMMOBILITY_MS_BY_TYPE[displayNFT.type] ?? 10_000)
+    setPhase('countdown')
+  }
 
   // ── 3-2-1 countdown ───────────────────────────────────────
   useEffect(() => {
-    if (phase !== "countdown") return;
+    if (phase !== 'countdown') return
     const id = setInterval(() => {
       setCountdownValue((v) => {
         if (v <= 1) {
-          clearInterval(id);
-          setFrozenRemainingTime(null);
-          startChallenge();
-          setPhase("immobility");
-          return 1;
+          clearInterval(id)
+          setFrozenRemainingTime(null)
+          startChallenge()
+          setPhase('immobility')
+          return 1
         }
-        return v - 1;
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, [phase, startChallenge]);
+        return v - 1
+      })
+    }, 1000)
+    return () => clearInterval(id)
+  }, [phase, startChallenge])
 
   // ── Immobility phase monitor ───────────────────────────────
   useEffect(() => {
-    if (phase !== "immobility") return;
+    if (phase !== 'immobility') return
 
-    if (status === "warning" && frozenRemainingTime === null) {
-      setFrozenRemainingTime(Math.max(0, gameImmobilityMs - elapsedTime));
+    if (status === 'warning' && frozenRemainingTime === null) {
+      setFrozenRemainingTime(Math.max(0, gameImmobilityMs - elapsedTime))
     }
-    if (status === "running" && frozenRemainingTime !== null) {
-      setFrozenRemainingTime(null);
+    if (status === 'running' && frozenRemainingTime !== null) {
+      setFrozenRemainingTime(null)
     }
-    if (elapsedTime >= gameImmobilityMs && status === "running") {
-      stopChallenge();
-      setPhase("prompt");
-      return;
+    if (elapsedTime >= gameImmobilityMs && status === 'running') {
+      stopChallenge()
+      setPhase('prompt')
+      return
     }
     // Hook reset challenge (grace period expired): isRunning=false, status='idle', elapsedTime=0
-    if (!isRunning && status === "idle" && elapsedTime === 0) {
-      setFrozenRemainingTime(null);
-      setImmobilityMessage("Too much movement — try again!");
-      setPhase("idle");
+    if (!isRunning && status === 'idle' && elapsedTime === 0) {
+      setFrozenRemainingTime(null)
+      setImmobilityMessage('Too much movement — try again!')
+      setPhase('idle')
     }
-  }, [phase, elapsedTime, status, isRunning, frozenRemainingTime, stopChallenge]);
+  }, [phase, elapsedTime, status, isRunning, frozenRemainingTime, stopChallenge])
 
   // Auto-clear the toast after 3 s
   useEffect(() => {
-    if (!immobilityMessage) return;
-    const id = setTimeout(() => setImmobilityMessage(null), 3000);
-    return () => clearTimeout(id);
-  }, [immobilityMessage]);
+    if (!immobilityMessage) return
+    const id = setTimeout(() => setImmobilityMessage(null), 3000)
+    return () => clearTimeout(id)
+  }, [immobilityMessage])
 
   // ── Cancel helpers ─────────────────────────────────────────
   const handleCancelCountdownOrImmobility = () => {
-    stopChallenge();
-    setFrozenRemainingTime(null);
-    setPhase("idle");
-  };
-  const handleCancelPrompt = () => setPhase("idle");
+    stopChallenge()
+    setFrozenRemainingTime(null)
+    setPhase('idle')
+  }
+  const handleCancelPrompt = () => setPhase('idle')
   const handleCancelRecording = () => {
-    clearResult();
-    setPhase("idle");
-  };
+    clearResult()
+    setPhase('idle')
+  }
 
   // ── Prompt → recording ────────────────────────────────────
   const handleStartRecording = () => {
-    setPhase("recording");
-    startRecording();
-  };
+    setPhase('recording')
+    startRecording()
+  }
 
   // Auto-analyze once audioUri is available
   useEffect(() => {
-    if (phase === "recording" && audioUri && !isAnalyzing && !detectionResult) {
-      analyzeAudio(GAME_THRESHOLD);
+    if (phase === 'recording' && audioUri && !isAnalyzing && !detectionResult) {
+      analyzeAudio(GAME_THRESHOLD)
     }
-  }, [phase, audioUri, isAnalyzing, detectionResult, analyzeAudio]);
+  }, [phase, audioUri, isAnalyzing, detectionResult, analyzeAudio])
 
   // Transition to results
   useEffect(() => {
     if (
-      phase === "recording" &&
+      phase === 'recording' &&
       (detectionResult || rateLimitError || (detectionError && !isAnalyzing))
     ) {
-      setPhase("results");
+      setPhase('results')
     }
-  }, [phase, detectionResult, rateLimitError, detectionError, isAnalyzing]);
+  }, [phase, detectionResult, rateLimitError, detectionError, isAnalyzing])
 
   // ── Grant XP on confirmed flush ───────────────────────────
   useEffect(() => {
-    if (phase !== "results") return;
-    if (hasPoopedRef.current) return;
-    if (!detectionResult?.detected) return;
-    if (!displayNFT) return;
+    if (phase !== 'results') return
+    if (hasPoopedRef.current) return
+    if (!detectionResult?.detected) return
+    if (!displayNFT) return
 
-    hasPoopedRef.current = true;
-    (async () => {
-      const result = await poopNFT(displayNFT.id);
+    hasPoopedRef.current = true
+    ;(async () => {
+      const result = await poopNFT(displayNFT.id)
       if (result) {
-        await refetch();
-        nftEvents.emit();
-        setPoopedEnergy({ from: displayNFT.energy, to: result.energy });
+        await refetch()
+        nftEvents.emit()
+        setPoopedEnergy({ from: displayNFT.energy, to: result.energy })
         setPoopedXP({
           gained: result.xp_gained,
           level: result.level,
           leveledUp: result.leveled_up,
-        });
-        setPoopedPoop({ earned: result.poop_earned, balance: result.poop_balance });
-        setLootRollId(result.loot_roll_id ?? null);
+        })
+        setPoopedPoop({ earned: result.poop_earned, balance: result.poop_balance })
+        setLootRollId(result.loot_roll_id ?? null)
         if (result.leveled_up && result.stat_points > 0) {
           setStatModalData({
             nft: { ...displayNFT, stat_points: result.stat_points },
             points: result.stat_points,
-          });
+          })
         }
       } else if (cooldownError) {
-        const rem = cooldownError.cooldown_remaining_seconds;
-        const h = Math.floor(rem / 3600);
-        const m = Math.floor((rem % 3600) / 60);
-        const disp = h > 0 ? `${h}h ${m}m` : `${m}m`;
-        setAlertDialog({ title: "On Cooldown", message: `This NFT is resting. Ready in ${disp}.` });
-        handleFullReset();
+        const rem = cooldownError.cooldown_remaining_seconds
+        const h = Math.floor(rem / 3600)
+        const m = Math.floor((rem % 3600) / 60)
+        const disp = h > 0 ? `${h}h ${m}m` : `${m}m`
+        setAlertDialog({ title: 'On Cooldown', message: `This NFT is resting. Ready in ${disp}.` })
+        handleFullReset()
       }
-    })();
+    })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, detectionResult]);
+  }, [phase, detectionResult])
 
   // ── Master reset ──────────────────────────────────────────
   const handleFullReset = useCallback(() => {
-    clearResult();
-    hasPoopedRef.current = false;
-    setPoopedEnergy(null);
-    setPoopedXP(null);
-    setPoopedPoop(null);
-    setStatModalData(null);
-    setLootRollId(null);
-    setFrozenRemainingTime(null);
-    setImmobilityMessage(null);
-    setPhase("idle");
-  }, [clearResult]);
+    clearResult()
+    hasPoopedRef.current = false
+    setPoopedEnergy(null)
+    setPoopedXP(null)
+    setPoopedPoop(null)
+    setStatModalData(null)
+    setLootRollId(null)
+    setFrozenRemainingTime(null)
+    setImmobilityMessage(null)
+    setPhase('idle')
+  }, [clearResult])
 
   // ── Stat allocation ───────────────────────────────────────
   const handleStatAllocated = useCallback(
     (_result: AllocateResult) => {
-      setStatModalData(null);
-      refetch();
-      nftEvents.emit();
+      setStatModalData(null)
+      refetch()
+      nftEvents.emit()
     },
     [refetch],
-  );
-  const handleStatModalDismiss = useCallback(() => setStatModalData(null), []);
+  )
+  const handleStatModalDismiss = useCallback(() => setStatModalData(null), [])
 
   // ── Early returns ─────────────────────────────────────────
-  if (loading) return <ScreenLoader title="Poop" message="Loading your collection..." />;
-  if (error) return <ScreenError title="Poop" message={`Error: ${error}`} onRetry={refetch} />;
+  if (loading) return <ScreenLoader title="Poop" message="Loading your collection..." />
+  if (error) return <ScreenError title="Poop" message={`Error: ${error}`} onRetry={refetch} />
 
   // ═════════════════════════════════════════════════════════
   // RENDERERS
   // ═════════════════════════════════════════════════════════
 
   const renderChallengeHeader = () => {
-    if (!displayNFT) return null;
-    const headerStyles = challengeHeader();
+    if (!displayNFT) return null
+    const headerStyles = challengeHeader()
     return (
       <View className={headerStyles.root()}>
         <Image
@@ -358,35 +356,35 @@ export default memo(function Poop() {
           </Text>
         </View>
       </View>
-    );
-  };
+    )
+  }
 
   const renderCountdownPhase = () => (
     <View className={phaseContainer()}>
       {renderChallengeHeader()}
       <View className={phaseContent()}>
-        <Text className={timerText({ status: "neutral" })}>{countdownValue}</Text>
+        <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
         <Text className="text-base text-gray-500 font-medium">Get ready…</Text>
       </View>
       <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
         Cancel
       </Button>
     </View>
-  );
+  )
 
   const renderImmobilityPhase = () => {
-    const isWarning = status === "warning";
-    const badgeStyles = statusBadge({ status: isWarning ? "warning" : "ok" });
+    const isWarning = status === 'warning'
+    const badgeStyles = statusBadge({ status: isWarning ? 'warning' : 'ok' })
     return (
       <View className={phaseContainer()}>
         {renderChallengeHeader()}
         <View className={phaseContent()}>
-          <Text className={timerText({ status: isWarning ? "danger" : "normal" })}>
+          <Text className={timerText({ status: isWarning ? 'danger' : 'normal' })}>
             {(remainingTime / 1000).toFixed(1)}s
           </Text>
           <View className={badgeStyles.root()}>
             <Text className={badgeStyles.label()}>
-              {isWarning ? "🔴 Movement detected!" : "🟢 Hold still"}
+              {isWarning ? '🔴 Movement detected!' : '🟢 Hold still'}
             </Text>
           </View>
         </View>
@@ -394,8 +392,8 @@ export default memo(function Poop() {
           Cancel
         </Button>
       </View>
-    );
-  };
+    )
+  }
 
   const renderPromptPhase = () => (
     <View className={phaseContainer()}>
@@ -413,10 +411,10 @@ export default memo(function Poop() {
         Cancel
       </Button>
     </View>
-  );
+  )
 
   const renderRecordingPhase = () => {
-    const recordStyles = recordingIndicator();
+    const recordStyles = recordingIndicator()
     return (
       <View className={phaseContainer()}>
         {renderChallengeHeader()}
@@ -447,12 +445,12 @@ export default memo(function Poop() {
           </Button>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderResultsPhase = () => {
     if (rateLimitError) {
-      const cardStyles = resultCard({ status: "warning" });
+      const cardStyles = resultCard({ status: 'warning' })
       return (
         <View className={phaseContainer()}>
           {renderChallengeHeader()}
@@ -464,10 +462,10 @@ export default memo(function Poop() {
             Done
           </Button>
         </View>
-      );
+      )
     }
     if (detectionError && !detectionResult) {
-      const cardStyles = resultCard({ status: "warning" });
+      const cardStyles = resultCard({ status: 'warning' })
       return (
         <View className={phaseContainer()}>
           {renderChallengeHeader()}
@@ -479,10 +477,10 @@ export default memo(function Poop() {
             Try Again
           </Button>
         </View>
-      );
+      )
     }
     if (detectionResult && !detectionResult.detected) {
-      const cardStyles = resultCard({ status: "failure" });
+      const cardStyles = resultCard({ status: 'failure' })
       return (
         <View className={phaseContainer()}>
           {renderChallengeHeader()}
@@ -496,10 +494,10 @@ export default memo(function Poop() {
             Try Again
           </Button>
         </View>
-      );
+      )
     }
     // Success
-    const cardStyles = resultCard({ status: "success" });
+    const cardStyles = resultCard({ status: 'success' })
     return (
       <View className={phaseContainer()}>
         {renderChallengeHeader()}
@@ -524,7 +522,7 @@ export default memo(function Poop() {
         {lootRollId ? (
           <Button
             variant="primary"
-            onPress={() => setPhase("roulette")}
+            onPress={() => setPhase('roulette')}
             isDisabled={actionLoading}
             className="w-full"
           >
@@ -536,62 +534,62 @@ export default memo(function Poop() {
           </Button>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderRoulettePhase = () => {
     if (!lootRollId) {
       // Fallback: no pending roll (e.g. edge function failed to upsert)
-      handleFullReset();
-      return null;
+      handleFullReset()
+      return null
     }
     return (
       <View className={phaseContainer()}>
         {renderChallengeHeader()}
         <LootRouletteCard lootRollId={lootRollId} onDone={handleFullReset} />
       </View>
-    );
-  };
+    )
+  }
 
   // ═════════════════════════════════════════════════════════
   // IDLE SCREEN
   // ═════════════════════════════════════════════════════════
-  const cooldown = displayNFT ? getCooldownStatus(displayNFT, cfg.cooldown) : null;
-  const onCooldown = cooldown?.isOnCooldown ?? false;
-  const noEnergy = displayNFT ? displayNFT.energy <= 0 : false;
-  const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null;
+  const cooldown = displayNFT ? getCooldownStatus(displayNFT, cfg.cooldown) : null
+  const onCooldown = cooldown?.isOnCooldown ?? false
+  const noEnergy = displayNFT ? displayNFT.energy <= 0 : false
+  const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null
   const buttonLabel = actionLoading
-    ? "Processing..."
+    ? 'Processing...'
     : noEnergy
-      ? "No Energy"
+      ? 'No Energy'
       : onCooldown
         ? `Ready in ${cooldown!.display}`
         : selectedIndex === null
-          ? "Select an NFT"
-          : "Poop";
+          ? 'Select an NFT'
+          : 'Poop'
 
-  const toastStyles = toastBanner();
-  const detailStyles = nftDetailCard();
+  const toastStyles = toastBanner()
+  const detailStyles = nftDetailCard()
 
   return (
     <>
-      {phase !== "idle" ? (
+      {phase !== 'idle' ? (
         // ── Active challenge ───────────────────────────────
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
             className="bg-background"
             contentContainerClassName={cn(
-              scrollContent({ padding: "md", bottomPad: "lg" }),
-              "flex-grow items-center pt-[100px]",
+              scrollContent({ padding: 'md', bottomPad: 'lg' }),
+              'flex-grow items-center pt-[100px]',
             )}
             showsVerticalScrollIndicator={false}
           >
-            {phase === "countdown" && renderCountdownPhase()}
-            {phase === "immobility" && renderImmobilityPhase()}
-            {phase === "prompt" && renderPromptPhase()}
-            {phase === "recording" && renderRecordingPhase()}
-            {phase === "results" && renderResultsPhase()}
-            {phase === "roulette" && renderRoulettePhase()}
+            {phase === 'countdown' && renderCountdownPhase()}
+            {phase === 'immobility' && renderImmobilityPhase()}
+            {phase === 'prompt' && renderPromptPhase()}
+            {phase === 'recording' && renderRecordingPhase()}
+            {phase === 'results' && renderResultsPhase()}
+            {phase === 'roulette' && renderRoulettePhase()}
           </ScrollView>
         </ScrollShadow>
       ) : (
@@ -600,8 +598,8 @@ export default memo(function Poop() {
           <ScrollView
             className="flex-1 bg-white"
             contentContainerClassName={cn(
-              scrollContent({ padding: "md", bottomPad: "lg" }),
-              "flex-grow items-center pt-[100px]",
+              scrollContent({ padding: 'md', bottomPad: 'lg' }),
+              'flex-grow items-center pt-[100px]',
             )}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -622,7 +620,7 @@ export default memo(function Poop() {
                 >
                   <Text className="text-[40px] text-gray-400 mb-3">+</Text>
                   <Button.Label className="text-base text-gray-500 font-semibold">
-                    {nfts.length === 0 ? "No NFTs Available" : "Select NFT from Vault"}
+                    {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
                   </Button.Label>
                 </Button>
               ) : (
@@ -634,39 +632,39 @@ export default memo(function Poop() {
                     onNext={handleNext}
                     className="mb-3"
                   />
-                  <View className={cn(detailStyles.root(), "w-[280px] bg-surface border-border")}>
+                  <View className={cn(detailStyles.root(), 'w-[280px] bg-surface border-border')}>
                     <View className={detailStyles.imageWrap()}>
                       <Image
                         source={{ uri: displayNFT.image_url }}
                         className="w-full h-[280px] bg-default"
                         resizeMode="cover"
                       />
-                      <View className={cn(overlayBadge({ position: "topLeft" }), "bg-indigo-500")}>
-                        <Text className={cn(badgeLabel(), "tracking-wide")}>
+                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
+                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Lv {displayNFT.level}
                         </Text>
                       </View>
                       <View
                         className={cn(
-                          overlayBadge({ position: "bottomLeft" }),
+                          overlayBadge({ position: 'bottomLeft' }),
                           typeBadge({ type: displayNFT.type }),
                         )}
                       >
-                        <Text className={cn(badgeLabel({ size: "sm" }), "tracking-wide")}>
+                        <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
                           {displayNFT.type.toUpperCase()}
                         </Text>
                       </View>
                       <View
-                        className={cn(overlayBadge({ position: "topRight" }), "bg-emerald-500/95")}
+                        className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}
                       >
-                        <Text className={cn(badgeLabel(), "tracking-wide")}>
+                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Energy: {displayNFT.energy}%
                         </Text>
                       </View>
                     </View>
 
-                    <View className={cn(detailStyles.content(), "p-4")}>
-                      <Text className={cn(detailStyles.title(), "text-foreground mb-3")}>
+                    <View className={cn(detailStyles.content(), 'p-4')}>
+                      <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>
                         {formatDisplayName(displayNFT.name)}
                       </Text>
                       <NFTProperties
@@ -688,8 +686,8 @@ export default memo(function Poop() {
               onPress={handlePoop}
               isDisabled={buttonDisabled}
               className="px-12"
-              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown!.display}` : "Start pooping"}
-              accessibilityHint={onCooldown ? "NFT is resting" : "Begin your toilet session"}
+              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown!.display}` : 'Start pooping'}
+              accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
             >
               <Button.Label>{buttonLabel}</Button.Label>
             </Button>
@@ -710,7 +708,7 @@ export default memo(function Poop() {
       <Dialog
         isOpen={alertDialog !== null}
         onOpenChange={(open) => {
-          if (!open) setAlertDialog(null);
+          if (!open) setAlertDialog(null)
         }}
       >
         <Dialog.Portal>
@@ -718,8 +716,8 @@ export default memo(function Poop() {
           <Dialog.Content>
             <Dialog.Close />
             <View className={dialogBody()}>
-              <Dialog.Title>{alertDialog?.title ?? ""}</Dialog.Title>
-              <Dialog.Description>{alertDialog?.message ?? ""}</Dialog.Description>
+              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
+              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
             <View className="flex-row justify-end">
               <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
@@ -730,5 +728,5 @@ export default memo(function Poop() {
         </Dialog.Portal>
       </Dialog>
     </>
-  );
-});
+  )
+})

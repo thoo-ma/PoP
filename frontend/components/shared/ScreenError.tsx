@@ -1,11 +1,11 @@
-import { memo } from "react";
-import { View } from "react-native";
-import { Alert, Button } from "heroui-native";
+import { memo } from 'react'
+import { View } from 'react-native'
+import { Alert, Button } from 'heroui-native'
 
 interface ScreenErrorProps {
-  title: string;
-  message: string;
-  onRetry?: () => void;
+  title: string
+  message: string
+  onRetry?: () => void
 }
 
 export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
@@ -24,5 +24,5 @@ export default memo(function ScreenError({ title, message, onRetry }: ScreenErro
         </Button>
       )}
     </View>
-  );
-});
+  )
+})

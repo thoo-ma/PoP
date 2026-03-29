@@ -3,22 +3,22 @@
  * Allows screens to listen for when NFTs change and need refreshing
  */
 
-type NFTUpdateCallback = () => void;
+type NFTUpdateCallback = () => void
 
 class NFTEventEmitter {
-  private listeners: NFTUpdateCallback[] = [];
+  private listeners: NFTUpdateCallback[] = []
 
   /**
    * Subscribe to NFT update events
    * Returns an unsubscribe function
    */
   subscribe(callback: NFTUpdateCallback): () => void {
-    this.listeners.push(callback);
+    this.listeners.push(callback)
 
     // Return unsubscribe function
     return () => {
-      this.listeners = this.listeners.filter((listener) => listener !== callback);
-    };
+      this.listeners = this.listeners.filter((listener) => listener !== callback)
+    }
   }
 
   /**
@@ -26,8 +26,8 @@ class NFTEventEmitter {
    * Notifies all listeners that NFTs have changed
    */
   emit(): void {
-    this.listeners.forEach((listener) => listener());
+    this.listeners.forEach((listener) => listener())
   }
 }
 
-export const nftEvents = new NFTEventEmitter();
+export const nftEvents = new NFTEventEmitter()

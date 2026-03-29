@@ -1,17 +1,17 @@
-import { Text, View } from "react-native";
-import { useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Avatar, Button, Dialog } from "heroui-native";
-import { useAuth } from "@/hooks";
-import { dialogPanel } from "@/styles";
-import { useSignOutDialog } from "@/utils";
-import { colors } from "@/constants";
+import { Text, View } from 'react-native'
+import { useState } from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Avatar, Button, Dialog } from 'heroui-native'
+import { useAuth } from '@/hooks'
+import { dialogPanel } from '@/styles'
+import { useSignOutDialog } from '@/utils'
+import { colors } from '@/constants'
 
 interface ProfileProps {
   /** Controls the visibility of the profile modal. */
-  visible: boolean;
+  visible: boolean
   /** Called when the user dismisses the profile modal. */
-  onClose: () => void;
+  onClose: () => void
 }
 
 /**
@@ -20,37 +20,37 @@ interface ProfileProps {
  * Provides a sign-out action with a confirmation prompt.
  */
 export default function Profile({ visible, onClose }: ProfileProps) {
-  const { getUserDisplayName, user, signOut } = useAuth();
-  const [isSigningOut, setIsSigningOut] = useState(false);
-  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
+  const { getUserDisplayName, user, signOut } = useAuth()
+  const [isSigningOut, setIsSigningOut] = useState(false)
+  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
 
   const handleSignOut = () => {
     showSignOutDialog(async () => {
-      setIsSigningOut(true);
+      setIsSigningOut(true)
       try {
-        await signOut();
-        onClose();
+        await signOut()
+        onClose()
       } finally {
-        setIsSigningOut(false);
+        setIsSigningOut(false)
       }
-    });
-  };
+    })
+  }
 
   const initials = getUserDisplayName()
-    .split(" ")
+    .split(' ')
     .map((n: string) => n[0])
-    .join("")
+    .join('')
     .slice(0, 2)
-    .toUpperCase();
+    .toUpperCase()
 
-  const panel = dialogPanel();
+  const panel = dialogPanel()
 
   return (
     <>
       <Dialog
         isOpen={visible}
         onOpenChange={(open) => {
-          if (!open) onClose();
+          if (!open) onClose()
         }}
       >
         <Dialog.Portal>
@@ -64,7 +64,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
 
             {/* Avatar */}
             <View className="mt-4 mb-4">
-              <Avatar size="lg" color="accent" alt={getUserDisplayName() || "User avatar"}>
+              <Avatar size="lg" color="accent" alt={getUserDisplayName() || 'User avatar'}>
                 <Avatar.Fallback>
                   {initials || <MaterialIcons name="person" size={28} />}
                 </Avatar.Fallback>
@@ -113,5 +113,5 @@ export default function Profile({ visible, onClose }: ProfileProps) {
       </Dialog>
       {signOutDialog}
     </>
-  );
+  )
 }

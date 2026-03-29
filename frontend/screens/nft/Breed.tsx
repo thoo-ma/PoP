@@ -1,14 +1,14 @@
-import { Text, View, Image, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { memo, useState } from "react";
-import { Button, ScrollShadow, cn } from "heroui-native";
-import { screenContainer, scrollContent, errorMessage, infoBox } from "@/styles";
-import { useUserNFTs, useBreedNFT, useWallet } from "@/hooks";
-import type { NFT } from "@/types/nft";
-import type { MysteryBox } from "@pop/shared";
-import { breedCost } from "@pop/shared";
-import { calcReducedCost } from "@pop/shared/degenBar";
-import { useGameConfig } from "@/store/gameConfigStore";
+import { Text, View, Image, ScrollView } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { memo, useState } from 'react'
+import { Button, ScrollShadow, cn } from 'heroui-native'
+import { screenContainer, scrollContent, errorMessage, infoBox } from '@/styles'
+import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks'
+import type { NFT } from '@/types/nft'
+import type { MysteryBox } from '@pop/shared'
+import { breedCost } from '@pop/shared'
+import { calcReducedCost } from '@pop/shared/degenBar'
+import { useGameConfig } from '@/store/gameConfigStore'
 import {
   MysteryBoxCard,
   ScreenLoader,
@@ -17,8 +17,8 @@ import {
   BreedOutcomePanel,
   BreedParentSlot,
   DegenBar,
-} from "@/components";
-import { nftEvents, canBreed } from "@/utils";
+} from '@/components'
+import { nftEvents, canBreed } from '@/utils'
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 /**
@@ -26,55 +26,55 @@ import { nftEvents, canBreed } from "@/utils";
  * the `breed-nfts` Edge Function to mint a new child NFT.
  * Displays a probability breakdown and the resulting child NFT on success.
  */ export default memo(function Breed() {
-  const { nfts, loading, error, refetch } = useUserNFTs();
-  const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT();
-  const { poopBalance } = useWallet();
-  const { config: cfg } = useGameConfig();
+  const { nfts, loading, error, refetch } = useUserNFTs()
+  const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT()
+  const { poopBalance } = useWallet()
+  const { config: cfg } = useGameConfig()
 
-  const [parent1, setParent1] = useState<NFT | null>(null);
-  const [parent2, setParent2] = useState<NFT | null>(null);
-  const [pickerSlot, setPickerSlot] = useState<1 | 2 | null>(null);
-  const [breedResult, setBreedResult] = useState<MysteryBox | null>(null);
-  const [resultParent1Url, setResultParent1Url] = useState<string | null>(null);
-  const [resultParent2Url, setResultParent2Url] = useState<string | null>(null);
-  const [degenPercent, setDegenPercent] = useState(0);
+  const [parent1, setParent1] = useState<NFT | null>(null)
+  const [parent2, setParent2] = useState<NFT | null>(null)
+  const [pickerSlot, setPickerSlot] = useState<1 | 2 | null>(null)
+  const [breedResult, setBreedResult] = useState<MysteryBox | null>(null)
+  const [resultParent1Url, setResultParent1Url] = useState<string | null>(null)
+  const [resultParent2Url, setResultParent2Url] = useState<string | null>(null)
+  const [degenPercent, setDegenPercent] = useState(0)
 
   // When parent1 changes, clear parent2 if it is no longer compatible
   const handleSetParent1 = (nft: NFT) => {
-    setParent1(nft);
+    setParent1(nft)
     if (parent2 && (parent2.id === nft.id || !canBreed(nft.rarity, parent2.rarity))) {
-      setParent2(null);
+      setParent2(null)
     }
-  };
+  }
 
   const handleBreed = async () => {
-    if (!parent1 || !parent2) return;
-    setResultParent1Url(parent1.image_url);
-    setResultParent2Url(parent2.image_url);
-    const newNFT = await breedNFTs(parent1.id, parent2.id, degenPercent);
+    if (!parent1 || !parent2) return
+    setResultParent1Url(parent1.image_url)
+    setResultParent2Url(parent2.image_url)
+    const newNFT = await breedNFTs(parent1.id, parent2.id, degenPercent)
     if (newNFT) {
-      setBreedResult(newNFT);
-      nftEvents.emit();
+      setBreedResult(newNFT)
+      nftEvents.emit()
     }
     // Error is surfaced inline — no Alert
-  };
+  }
 
   const handleReset = () => {
-    setParent1(null);
-    setParent2(null);
-    setBreedResult(null);
-    setResultParent1Url(null);
-    setResultParent2Url(null);
-    setDegenPercent(0);
-  };
+    setParent1(null)
+    setParent2(null)
+    setBreedResult(null)
+    setResultParent1Url(null)
+    setResultParent2Url(null)
+    setDegenPercent(0)
+  }
 
   // ── Guards ────────────────────────────────────────────────────────────────
-  if (loading) return <ScreenLoader title="Breed" />;
-  if (error) return <ScreenError title="Breed" message={`Error: ${error}`} onRetry={refetch} />;
+  if (loading) return <ScreenLoader title="Breed" />
+  if (error) return <ScreenError title="Breed" message={`Error: ${error}`} onRetry={refetch} />
 
   if (nfts.length < 2) {
     return (
-      <View className={screenContainer({ bg: "default", padTop: "md" })}>
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <View className={infoBox()}>
           <Text className="text-sm text-foreground-500 text-center">
             You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then
@@ -82,34 +82,34 @@ import { nftEvents, canBreed } from "@/utils";
           </Text>
         </View>
       </View>
-    );
+    )
   }
 
-  const canBreedNow = Boolean(parent1 && parent2);
+  const canBreedNow = Boolean(parent1 && parent2)
 
   // Dynamic cost: sum of each parent's individual breedCost, or null when not both selected.
   const totalBreedCost: number | null =
     parent1 && parent2
       ? breedCost(parent1.breed_count ?? 0, parent1.rarity, cfg.currency) +
         breedCost(parent2.breed_count ?? 0, parent2.rarity, cfg.currency)
-      : null;
+      : null
 
   // True if either selected parent has hit the breed cap.
   const atBreedLimit =
     (parent1 !== null && (parent1.breed_count ?? 0) >= cfg.currency.BREED_MAX_COUNT) ||
-    (parent2 !== null && (parent2.breed_count ?? 0) >= cfg.currency.BREED_MAX_COUNT);
+    (parent2 !== null && (parent2.breed_count ?? 0) >= cfg.currency.BREED_MAX_COUNT)
 
   const hasEnoughPoop =
-    poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost;
+    poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <View className={screenContainer({ bg: "default", padTop: "md" })}>
+    <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <ScrollShadow LinearGradientComponent={LinearGradient}>
         <ScrollView
           contentContainerClassName={cn(
-            scrollContent({ padding: "md", bottomPad: "md" }),
-            "items-center w-full",
+            scrollContent({ padding: 'md', bottomPad: 'md' }),
+            'items-center w-full',
           )}
           showsVerticalScrollIndicator={false}
         >
@@ -156,7 +156,7 @@ import { nftEvents, canBreed } from "@/utils";
               {canBreedNow ? (
                 <BreedOutcomePanel r1={parent1!.rarity} r2={parent2!.rarity} />
               ) : (
-                <View className={cn(infoBox({ border: "dashed" }), "mb-6")}>
+                <View className={cn(infoBox({ border: 'dashed' }), 'mb-6')}>
                   <Text className="text-[13px] text-muted text-center leading-5">
                     Select both parents to see outcome probabilities
                   </Text>
@@ -204,17 +204,17 @@ import { nftEvents, canBreed } from "@/utils";
                 className="w-full"
               >
                 {breedLoading ? (
-                  "Breeding…"
+                  'Breeding…'
                 ) : degenPercent > 0 && totalBreedCost !== null ? (
                   <Text>
-                    Breed —{" "}
-                    <Text className="line-through text-foreground-500">{totalBreedCost}</Text>{" "}
+                    Breed —{' '}
+                    <Text className="line-through text-foreground-500">{totalBreedCost}</Text>{' '}
                     {calcReducedCost(totalBreedCost, degenPercent, cfg.degen_bar)} POOP
                   </Text>
                 ) : totalBreedCost !== null ? (
                   `Breed (${totalBreedCost} POOP)`
                 ) : (
-                  "Breed"
+                  'Breed'
                 )}
               </Button>
             </>
@@ -254,5 +254,5 @@ import { nftEvents, canBreed } from "@/utils";
         </ScrollView>
       </ScrollShadow>
     </View>
-  );
-});
+  )
+})

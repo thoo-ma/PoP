@@ -1,87 +1,87 @@
-"use client";
+'use client'
 
-import { useMemo } from "react";
-import LazyChart from "@/components/LazyChart";
-import { useGameConfigStore } from "@/store/gameConfigStore";
-import { useShallow } from "zustand/react/shallow";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { NumberInput } from "@/components/ui/number-input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { RARITIES, RARITY_COLORS } from "@/lib/constants";
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from "@/lib/chartTheme";
+import { useMemo } from 'react'
+import LazyChart from '@/components/LazyChart'
+import { useGameConfigStore } from '@/store/gameConfigStore'
+import { useShallow } from 'zustand/react/shallow'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { NumberInput } from '@/components/ui/number-input'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { RARITIES, RARITY_COLORS } from '@/lib/constants'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 const PAIR_KEYS = [
-  "common+common",
-  "common+rare",
-  "rare+rare",
-  "rare+legendary",
-  "legendary+legendary",
-  "legendary+transcendent",
-  "transcendent+transcendent",
-] as const;
+  'common+common',
+  'common+rare',
+  'rare+rare',
+  'rare+legendary',
+  'legendary+legendary',
+  'legendary+transcendent',
+  'transcendent+transcendent',
+] as const
 
-type PairKey = (typeof PAIR_KEYS)[number];
+type PairKey = (typeof PAIR_KEYS)[number]
 
 function rowSum(row: readonly [number, number, number, number]): number {
-  return row[0] + row[1] + row[2] + row[3];
+  return row[0] + row[1] + row[2] + row[3]
 }
 
 export default function BreedPanel() {
-  const breed = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })));
-  const source = useGameConfigStore((s) => s.sources.breed);
-  const setDraft = useGameConfigStore((s) => s.setDraft);
-  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey);
-  const hasDraft = useGameConfigStore((s) => s.drafts.breed !== undefined);
+  const breed = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })))
+  const source = useGameConfigStore((s) => s.sources.breed)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft = useGameConfigStore((s) => s.drafts.breed !== undefined)
 
   const chartOptions = useMemo(
     () => ({
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       tooltip: {
-        trigger: "axis" as const,
-        axisPointer: { type: "shadow" as const },
+        trigger: 'axis' as const,
+        axisPointer: { type: 'shadow' as const },
         ...CHART_TOOLTIP,
       },
       legend: { data: [...RARITIES], ...CHART_LEGEND },
       grid: { top: 40, right: 20, bottom: 60, left: 160 },
       xAxis: {
-        type: "value" as const,
+        type: 'value' as const,
         max: 100,
         ...CHART_AXIS_STYLES,
-        axisLabel: { color: "#a3a3a3", fontSize: 11, formatter: (v: number) => `${v}%` },
+        axisLabel: { color: '#a3a3a3', fontSize: 11, formatter: (v: number) => `${v}%` },
         splitLine: CHART_SPLIT_LINE,
       },
       yAxis: {
-        type: "category" as const,
+        type: 'category' as const,
         data: [...PAIR_KEYS],
         ...CHART_AXIS_STYLES,
       },
       series: RARITIES.map((r, i) => ({
         name: r,
-        type: "bar" as const,
-        stack: "total",
+        type: 'bar' as const,
+        stack: 'total',
         itemStyle: { color: RARITY_COLORS[r] },
         label: {
           show: true,
-          color: "#fff",
+          color: '#fff',
           fontSize: 10,
-          formatter: (params: { value: number }) => (params.value > 2 ? `${params.value}%` : ""),
+          formatter: (params: { value: number }) => (params.value > 2 ? `${params.value}%` : ''),
         },
         data: PAIR_KEYS.map((key) => breed.BREED_PROBABILITIES[key][i]),
       })),
     }),
     [breed],
-  );
+  )
 
   const handleChange = (pair: PairKey, idx: number, value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num) || num < 0 || num > 100) return;
-    const current = [...breed.BREED_PROBABILITIES[pair]] as [number, number, number, number];
-    current[idx] = num;
-    setDraft("breed", {
+    const num = parseFloat(value)
+    if (isNaN(num) || num < 0 || num > 100) return
+    const current = [...breed.BREED_PROBABILITIES[pair]] as [number, number, number, number]
+    current[idx] = num
+    setDraft('breed', {
       BREED_PROBABILITIES: { ...breed.BREED_PROBABILITIES, [pair]: current },
-    });
-  };
+    })
+  }
 
   return (
     <div className="space-y-6">
@@ -90,18 +90,18 @@ export default function BreedPanel() {
         <Badge
           variant="outline"
           className={
-            source === "db"
-              ? "border-blue-800 text-blue-400 text-[10px]"
-              : "border-neutral-700 text-neutral-500 text-[10px]"
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
-          {source === "db" ? "Live from DB" : "Using defaults"}
+          {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
         {hasDraft && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => clearDraftForKey("breed")}
+            onClick={() => clearDraftForKey('breed')}
             className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
           >
             Reset
@@ -134,9 +134,9 @@ export default function BreedPanel() {
             </thead>
             <tbody>
               {PAIR_KEYS.map((pair) => {
-                const row = breed.BREED_PROBABILITIES[pair];
-                const sum = rowSum(row);
-                const invalid = Math.abs(sum - 100) > 0.01;
+                const row = breed.BREED_PROBABILITIES[pair]
+                const sum = rowSum(row)
+                const invalid = Math.abs(sum - 100) > 0.01
                 return (
                   <tr key={pair} className="border-b border-neutral-800/50">
                     <td className="py-1.5 pr-4 font-mono text-[11px] text-neutral-400">{pair}</td>
@@ -154,12 +154,12 @@ export default function BreedPanel() {
                       </td>
                     ))}
                     <td className="px-2 py-1.5 text-center font-mono text-sm">
-                      <span className={invalid ? "font-bold text-red-400" : "text-neutral-400"}>
+                      <span className={invalid ? 'font-bold text-red-400' : 'text-neutral-400'}>
                         {sum.toFixed(1)}
                       </span>
                     </td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </table>
@@ -190,5 +190,5 @@ export default function BreedPanel() {
         ))}
       </div>
     </div>
-  );
+  )
 }

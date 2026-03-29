@@ -6,7 +6,7 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from "./nft.ts";
+import type { NFTRarity } from './nft.ts'
 
 /**
  * Per-rarity stat ranges for freshly minted (non-bred) NFTs.
@@ -20,4 +20,4 @@ export const STAT_RANGES: Record<NFTRarity, [number, number]> = {
   rare: [50, 80],
   legendary: [60, 90],
   transcendent: [70, 100],
-};
+}

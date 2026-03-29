@@ -1,27 +1,27 @@
-"use client";
+'use client'
 
-import { useGameConfigStore } from "@/store/gameConfigStore";
-import { useShallow } from "zustand/react/shallow";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { NumberInput } from "@/components/ui/number-input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useGameConfigStore } from '@/store/gameConfigStore'
+import { useShallow } from 'zustand/react/shallow'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { NumberInput } from '@/components/ui/number-input'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 export default function CloudRunPanel() {
   const cr = useGameConfigStore(
     useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })),
-  );
-  const source = useGameConfigStore((s) => s.sources.cloud_run);
-  const setDraft = useGameConfigStore((s) => s.setDraft);
-  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey);
-  const hasDraft = useGameConfigStore((s) => s.drafts.cloud_run !== undefined);
+  )
+  const source = useGameConfigStore((s) => s.sources.cloud_run)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft = useGameConfigStore((s) => s.drafts.cloud_run !== undefined)
 
   const handleChange = (field: keyof typeof cr, value: string) => {
-    const num = field === "YAMNET_TOILET_FLUSH_CLASS" ? parseInt(value, 10) : parseFloat(value);
-    if (isNaN(num) || num < 0) return;
-    setDraft("cloud_run", { [field]: num });
-  };
+    const num = field === 'YAMNET_TOILET_FLUSH_CLASS' ? parseInt(value, 10) : parseFloat(value)
+    if (isNaN(num) || num < 0) return
+    setDraft('cloud_run', { [field]: num })
+  }
 
   return (
     <div className="space-y-6">
@@ -30,18 +30,18 @@ export default function CloudRunPanel() {
         <Badge
           variant="outline"
           className={
-            source === "db"
-              ? "border-blue-800 text-blue-400 text-[10px]"
-              : "border-neutral-700 text-neutral-500 text-[10px]"
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
-          {source === "db" ? "Live from DB" : "Using defaults"}
+          {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
         {hasDraft && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => clearDraftForKey("cloud_run")}
+            onClick={() => clearDraftForKey('cloud_run')}
             className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
           >
             Reset
@@ -55,10 +55,10 @@ export default function CloudRunPanel() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-neutral-400">
           <p>
-            These parameters are forwarded per-request from the{" "}
+            These parameters are forwarded per-request from the{' '}
             <code className="rounded bg-neutral-800 px-1 py-0.5 text-xs text-neutral-300">
               detect-toilet-flush
-            </code>{" "}
+            </code>{' '}
             edge function to the Google Cloud Run audio detection service.
           </p>
           <p>
@@ -84,7 +84,7 @@ export default function CloudRunPanel() {
                 min={0}
                 max={999}
                 value={cr.YAMNET_TOILET_FLUSH_CLASS}
-                onChange={(v) => handleChange("YAMNET_TOILET_FLUSH_CLASS", v)}
+                onChange={(v) => handleChange('YAMNET_TOILET_FLUSH_CLASS', v)}
                 className="h-10"
               />
             </div>
@@ -109,7 +109,7 @@ export default function CloudRunPanel() {
                 min={1}
                 max={300}
                 value={cr.MAX_AUDIO_DURATION}
-                onChange={(v) => handleChange("MAX_AUDIO_DURATION", v)}
+                onChange={(v) => handleChange('MAX_AUDIO_DURATION', v)}
                 className="h-10"
               />
             </div>
@@ -134,7 +134,7 @@ export default function CloudRunPanel() {
                 min={0}
                 max={60}
                 value={cr.MIN_AUDIO_DURATION}
-                onChange={(v) => handleChange("MIN_AUDIO_DURATION", v)}
+                onChange={(v) => handleChange('MIN_AUDIO_DURATION', v)}
                 className="h-10"
               />
             </div>
@@ -157,16 +157,16 @@ export default function CloudRunPanel() {
             <tbody>
               {[
                 {
-                  label: "YAMNet class",
+                  label: 'YAMNet class',
                   value: `${cr.YAMNET_TOILET_FLUSH_CLASS} (toilet flush)`,
-                  color: "#3b82f6",
+                  color: '#3b82f6',
                 },
-                { label: "Min duration", value: `${cr.MIN_AUDIO_DURATION}s`, color: "#f59e0b" },
-                { label: "Max duration", value: `${cr.MAX_AUDIO_DURATION}s`, color: "#22c55e" },
+                { label: 'Min duration', value: `${cr.MIN_AUDIO_DURATION}s`, color: '#f59e0b' },
+                { label: 'Max duration', value: `${cr.MAX_AUDIO_DURATION}s`, color: '#22c55e' },
                 {
-                  label: "Valid window",
+                  label: 'Valid window',
                   value: `${cr.MIN_AUDIO_DURATION}s – ${cr.MAX_AUDIO_DURATION}s (${cr.MAX_AUDIO_DURATION - cr.MIN_AUDIO_DURATION}s span)`,
-                  color: "#a3a3a3",
+                  color: '#a3a3a3',
                 },
               ].map((row) => (
                 <tr key={row.label} className="border-b border-neutral-800/50">
@@ -183,5 +183,5 @@ export default function CloudRunPanel() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

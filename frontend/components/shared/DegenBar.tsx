@@ -1,25 +1,25 @@
-import { Text, View } from "react-native";
-import { Slider, cn } from "heroui-native";
-import { useState, useEffect } from "react";
+import { Text, View } from 'react-native'
+import { Slider, cn } from 'heroui-native'
+import { useState, useEffect } from 'react'
 import {
   calcReduction,
   calcBustChance,
   calcReducedCost,
   degenBarConfigHash,
-} from "@pop/shared/degenBar";
-import { useGameConfig } from "@/store/gameConfigStore";
-import { infoBox } from "@/styles";
+} from '@pop/shared/degenBar'
+import { useGameConfig } from '@/store/gameConfigStore'
+import { infoBox } from '@/styles'
 
 // Re-export for consumers that import the hash helper from this module
-export { degenBarConfigHash } from "@pop/shared/degenBar";
+export { degenBarConfigHash } from '@pop/shared/degenBar'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 export type DegenBarProps = {
-  baseCost: number;
-  onDegenChange: (degenPercent: number) => void;
-  disabled?: boolean;
-};
+  baseCost: number
+  onDegenChange: (degenPercent: number) => void
+  disabled?: boolean
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -31,41 +31,41 @@ export type DegenBarProps = {
  * to DEGEN (25–100%) zones.
  */
 export default function DegenBar({ baseCost, onDegenChange, disabled = false }: DegenBarProps) {
-  const { config } = useGameConfig();
-  const cfg = config.degen_bar;
+  const { config } = useGameConfig()
+  const cfg = config.degen_bar
 
-  const [degenPercent, setDegenPercent] = useState(0);
+  const [degenPercent, setDegenPercent] = useState(0)
 
-  const reductionFraction = calcReduction(degenPercent, cfg);
-  const reductionPct = Math.round(reductionFraction * 100);
-  const bustChancePct = Math.round(calcBustChance(degenPercent, cfg) * 100);
-  const reducedCost = calcReducedCost(baseCost, degenPercent, cfg);
+  const reductionFraction = calcReduction(degenPercent, cfg)
+  const reductionPct = Math.round(reductionFraction * 100)
+  const bustChancePct = Math.round(calcBustChance(degenPercent, cfg) * 100)
+  const reducedCost = calcReducedCost(baseCost, degenPercent, cfg)
 
-  const isDegen = degenPercent >= (cfg.DEGEN_ZONE_THRESHOLD ?? 25);
-  const isAtZero = degenPercent === 0;
+  const isDegen = degenPercent >= (cfg.DEGEN_ZONE_THRESHOLD ?? 25)
+  const isAtZero = degenPercent === 0
 
   const handleChange = (v: number | number[]) => {
-    const val = Array.isArray(v) ? (v[0] ?? 0) : v;
-    setDegenPercent(val);
-    onDegenChange(val);
-  };
+    const val = Array.isArray(v) ? (v[0] ?? 0) : v
+    setDegenPercent(val)
+    onDegenChange(val)
+  }
 
   // Notify parent if config changes while slider is non-zero
   useEffect(() => {
     if (degenPercent > 0) {
-      onDegenChange(degenPercent);
+      onDegenChange(degenPercent)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cfg]);
+  }, [cfg])
 
   return (
-    <View className={cn(infoBox(), "mb-5")}>
+    <View className={cn(infoBox(), 'mb-5')}>
       {/* Header row */}
       <View className="flex-row items-center justify-between mb-3">
         <Text className="text-base font-bold text-foreground">Degen Bar</Text>
-        <View className={cn("px-2 py-0.5 rounded-full", isDegen ? "bg-red-500" : "bg-green-600")}>
+        <View className={cn('px-2 py-0.5 rounded-full', isDegen ? 'bg-red-500' : 'bg-green-600')}>
           <Text className="text-xs font-bold text-white">
-            {isDegen ? "DEGEN ZONE" : "SAFE ZONE"}
+            {isDegen ? 'DEGEN ZONE' : 'SAFE ZONE'}
           </Text>
         </View>
       </View>
@@ -81,7 +81,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
         isDisabled={disabled}
       >
         <Slider.Track>
-          <Slider.Fill className={isDegen ? "bg-red-500" : "bg-green-600"} />
+          <Slider.Fill className={isDegen ? 'bg-red-500' : 'bg-green-600'} />
           <Slider.Thumb />
         </Slider.Track>
       </Slider>
@@ -102,7 +102,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
           {/* Bust risk */}
           <View className="flex-1 items-center">
             <Text className="text-xs text-foreground-500 mb-0.5">Bust risk</Text>
-            <Text className={cn("text-sm font-bold", isDegen ? "text-red-500" : "text-yellow-500")}>
+            <Text className={cn('text-sm font-bold', isDegen ? 'text-red-500' : 'text-yellow-500')}>
               {bustChancePct}%
             </Text>
             <Text className="text-xs text-foreground-500 text-center leading-4">
@@ -118,5 +118,5 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
         </Text>
       )}
     </View>
-  );
+  )
 }

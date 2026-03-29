@@ -1,16 +1,16 @@
-import { Text, View, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Dialog, ScrollShadow } from "heroui-native";
-import { useWallet } from "@/hooks";
-import { dialogPanel } from "@/styles";
-import { colors } from "@/constants";
+import { Text, View, ScrollView } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Dialog, ScrollShadow } from 'heroui-native'
+import { useWallet } from '@/hooks'
+import { dialogPanel } from '@/styles'
+import { colors } from '@/constants'
 
 interface WalletProps {
   /** Controls the visibility of the wallet modal. */
-  visible: boolean;
+  visible: boolean
   /** Called when the user dismisses the wallet modal. */
-  onClose: () => void;
+  onClose: () => void
 }
 
 /**
@@ -18,14 +18,14 @@ interface WalletProps {
  * brief explanation of how to earn and spend the currency.
  */
 export default function Wallet({ visible, onClose }: WalletProps) {
-  const { poopBalance, loading } = useWallet();
-  const panel = dialogPanel();
+  const { poopBalance, loading } = useWallet()
+  const panel = dialogPanel()
 
   return (
     <Dialog
       isOpen={visible}
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (!open) onClose()
       }}
     >
       <Dialog.Portal>
@@ -91,5 +91,5 @@ export default function Wallet({ visible, onClose }: WalletProps) {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  );
+  )
 }

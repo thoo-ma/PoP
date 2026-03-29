@@ -1,20 +1,20 @@
-import type { ComponentType } from "react";
+import type { ComponentType } from 'react'
 
 /**
  * Configuration for a single page/screen in the app
  */
 export interface PageConfig {
-  id: string;
-  title: string;
-  component: ComponentType<{}>;
-  isPrimary?: boolean;
+  id: string
+  title: string
+  component: ComponentType<{}>
+  isPrimary?: boolean
 }
 
 /**
  * Props for PageIndicator component
  */
 export interface PageIndicatorProps {
-  totalPages: number;
-  currentPage: number;
-  onPageChange?: (pageIndex: number) => void;
+  totalPages: number
+  currentPage: number
+  onPageChange?: (pageIndex: number) => void
 }

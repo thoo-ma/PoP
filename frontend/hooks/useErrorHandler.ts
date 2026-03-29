@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { getErrorMessage, logError } from "@/utils/errorHelpers";
+import { useState, useCallback } from 'react'
+import { getErrorMessage, logError } from '@/utils/errorHelpers'
 
 /**
  * Custom hook for handling errors consistently across components
@@ -18,7 +18,7 @@ import { getErrorMessage, logError } from "@/utils/errorHelpers";
  * }
  */
 export function useErrorHandler(context: string) {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null)
 
   /**
    * Handle an error by logging it and setting error state
@@ -27,19 +27,19 @@ export function useErrorHandler(context: string) {
    */
   const handleError = useCallback(
     (err: unknown, customMessage?: string) => {
-      logError(context, err);
-      const message = customMessage || getErrorMessage(err);
-      setError(message);
+      logError(context, err)
+      const message = customMessage || getErrorMessage(err)
+      setError(message)
     },
     [context],
-  );
+  )
 
   /**
    * Clear the current error state
    */
   const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+    setError(null)
+  }, [])
 
-  return { error, handleError, clearError };
+  return { error, handleError, clearError }
 }

@@ -1,42 +1,42 @@
-"use client";
+'use client'
 
-import { useMemo } from "react";
-import LazyChart from "@/components/LazyChart";
-import { useGameConfigStore } from "@/store/gameConfigStore";
-import { useShallow } from "zustand/react/shallow";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { NumberInput } from "@/components/ui/number-input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from "@/lib/chartTheme";
+import { useMemo } from 'react'
+import LazyChart from '@/components/LazyChart'
+import { useGameConfigStore } from '@/store/gameConfigStore'
+import { useShallow } from 'zustand/react/shallow'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { NumberInput } from '@/components/ui/number-input'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
-const DIFFICULTIES = ["easy", "normal", "strict"] as const;
+const DIFFICULTIES = ['easy', 'normal', 'strict'] as const
 const DIFF_COLORS: Record<string, string> = {
-  easy: "#22c55e",
-  normal: "#f59e0b",
-  strict: "#ef4444",
-};
+  easy: '#22c55e',
+  normal: '#f59e0b',
+  strict: '#ef4444',
+}
 
 const PRESET_FIELDS = [
-  { key: "MOVEMENT_THRESHOLD", label: "Movement", step: 0.01, unit: "" },
-  { key: "ROTATION_THRESHOLD", label: "Rotation", step: 0.01, unit: "" },
-  { key: "STEP_COOLDOWN", label: "Step Cooldown", step: 100, unit: "ms" },
-  { key: "GRACE_PERIOD", label: "Grace Period", step: 50, unit: "ms" },
-  { key: "WARNING_COOLDOWN", label: "Warning CD", step: 100, unit: "ms" },
-] as const;
+  { key: 'MOVEMENT_THRESHOLD', label: 'Movement', step: 0.01, unit: '' },
+  { key: 'ROTATION_THRESHOLD', label: 'Rotation', step: 0.01, unit: '' },
+  { key: 'STEP_COOLDOWN', label: 'Step Cooldown', step: 100, unit: 'ms' },
+  { key: 'GRACE_PERIOD', label: 'Grace Period', step: 50, unit: 'ms' },
+  { key: 'WARNING_COOLDOWN', label: 'Warning CD', step: 100, unit: 'ms' },
+] as const
 
-type PresetField = (typeof PRESET_FIELDS)[number]["key"];
+type PresetField = (typeof PRESET_FIELDS)[number]['key']
 
 export default function SensorsPanel() {
   const sensors = useGameConfigStore(
     useShallow((s) => ({ ...s.config.sensors, ...s.drafts.sensors })),
-  );
-  const source = useGameConfigStore((s) => s.sources.sensors);
-  const setDraft = useGameConfigStore((s) => s.setDraft);
-  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey);
-  const hasDraft = useGameConfigStore((s) => s.drafts.sensors !== undefined);
+  )
+  const source = useGameConfigStore((s) => s.sources.sensors)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft = useGameConfigStore((s) => s.drafts.sensors !== undefined)
 
   // Radar chart for motion presets (normalise each axis 0–1)
   const radarOptions = useMemo(() => {
@@ -47,11 +47,11 @@ export default function SensorsPanel() {
       STEP_COOLDOWN: 3000,
       GRACE_PERIOD: 1000,
       WARNING_COOLDOWN: 2500,
-    };
+    }
     return {
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       tooltip: {
-        trigger: "item" as const,
+        trigger: 'item' as const,
         ...CHART_TOOLTIP,
       },
       legend: { data: [...DIFFICULTIES], ...CHART_LEGEND },
@@ -60,14 +60,14 @@ export default function SensorsPanel() {
           name: f.label,
           max: maxes[f.key],
         })),
-        axisName: { color: "#a3a3a3", fontSize: 11 },
-        splitLine: { lineStyle: { color: "#333" } },
+        axisName: { color: '#a3a3a3', fontSize: 11 },
+        splitLine: { lineStyle: { color: '#333' } },
         splitArea: { show: false },
-        axisLine: { lineStyle: { color: "#404040" } },
+        axisLine: { lineStyle: { color: '#404040' } },
       },
       series: [
         {
-          type: "radar" as const,
+          type: 'radar' as const,
           data: DIFFICULTIES.map((d) => ({
             name: d,
             value: PRESET_FIELDS.map((f) => sensors.SENSOR_PRESETS[d][f.key]),
@@ -77,25 +77,25 @@ export default function SensorsPanel() {
           })),
         },
       ],
-    };
-  }, [sensors]);
+    }
+  }, [sensors])
 
   const audioChartOptions = useMemo(
     () => ({
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       tooltip: {
-        trigger: "item" as const,
+        trigger: 'item' as const,
         ...CHART_TOOLTIP,
       },
       grid: { top: 20, right: 60, bottom: 40, left: 60 },
       xAxis: {
-        type: "category" as const,
+        type: 'category' as const,
         data: [...DIFFICULTIES],
         ...CHART_AXIS_STYLES,
       },
       yAxis: {
-        type: "value" as const,
-        name: "Threshold (0–1)",
+        type: 'value' as const,
+        name: 'Threshold (0–1)',
         min: 0,
         max: 1,
         ...CHART_AXIS_STYLES,
@@ -103,8 +103,8 @@ export default function SensorsPanel() {
       },
       series: [
         {
-          name: "Audio Threshold",
-          type: "bar" as const,
+          name: 'Audio Threshold',
+          type: 'bar' as const,
           barMaxWidth: 60,
           data: DIFFICULTIES.map((d) => ({
             value: sensors.AUDIO_THRESHOLDS[d],
@@ -112,20 +112,20 @@ export default function SensorsPanel() {
           })),
           label: {
             show: true,
-            position: "top" as const,
-            color: "#e5e5e5",
+            position: 'top' as const,
+            color: '#e5e5e5',
             fontSize: 12,
           },
         },
       ],
     }),
     [sensors],
-  );
+  )
 
   const handlePreset = (difficulty: string, field: PresetField, value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num)) return;
-    setDraft("sensors", {
+    const num = parseFloat(value)
+    if (isNaN(num)) return
+    setDraft('sensors', {
       SENSOR_PRESETS: {
         ...sensors.SENSOR_PRESETS,
         [difficulty]: {
@@ -133,16 +133,16 @@ export default function SensorsPanel() {
           [field]: num,
         },
       },
-    });
-  };
+    })
+  }
 
   const handleAudio = (difficulty: string, value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num) || num < 0 || num > 1) return;
-    setDraft("sensors", {
+    const num = parseFloat(value)
+    if (isNaN(num) || num < 0 || num > 1) return
+    setDraft('sensors', {
       AUDIO_THRESHOLDS: { ...sensors.AUDIO_THRESHOLDS, [difficulty]: num },
-    });
-  };
+    })
+  }
 
   return (
     <div className="space-y-6">
@@ -151,18 +151,18 @@ export default function SensorsPanel() {
         <Badge
           variant="outline"
           className={
-            source === "db"
-              ? "border-blue-800 text-blue-400 text-[10px]"
-              : "border-neutral-700 text-neutral-500 text-[10px]"
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
-          {source === "db" ? "Live from DB" : "Using defaults"}
+          {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
         {hasDraft && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => clearDraftForKey("sensors")}
+            onClick={() => clearDraftForKey('sensors')}
             className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
           >
             Reset
@@ -289,5 +289,5 @@ export default function SensorsPanel() {
         </TabsContent>
       </Tabs>
     </div>
-  );
+  )
 }

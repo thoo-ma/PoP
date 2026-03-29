@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
-import { AppSidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useGameConfigStore } from "@/store/gameConfigStore";
+import { useEffect } from 'react'
+import { AppSidebar } from '@/components/layout/Sidebar'
+import { Header } from '@/components/layout/Header'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const fetch = useGameConfigStore((s) => s.fetch);
-  const error = useGameConfigStore((s) => s.error);
-  const warnings = useGameConfigStore((s) => s.warnings);
+  const fetch = useGameConfigStore((s) => s.fetch)
+  const error = useGameConfigStore((s) => s.error)
+  const warnings = useGameConfigStore((s) => s.warnings)
 
   useEffect(() => {
-    fetch();
-  }, [fetch]);
+    fetch()
+  }, [fetch])
 
   return (
     <SidebarProvider>
@@ -33,14 +33,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {warnings.length > 0 && (
           <div className="border-b border-amber-900/60 bg-amber-950/30 px-6 py-2.5 text-xs text-amber-400">
             <span className="font-semibold">
-              {warnings.length} config row{warnings.length > 1 ? "s" : ""} failed validation
+              {warnings.length} config row{warnings.length > 1 ? 's' : ''} failed validation
             </span>
             <span className="text-amber-500/70"> — using defaults for: </span>
-            <span className="font-mono">{warnings.map((w) => w.split('"')[1]).join(", ")}</span>
+            <span className="font-mono">{warnings.map((w) => w.split('"')[1]).join(', ')}</span>
           </div>
         )}
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

@@ -1,19 +1,19 @@
-import { memo } from "react";
-import { View } from "react-native";
-import { Button, Select } from "heroui-native";
-import type { SortOption } from "@/types";
-import { SORT_OPTIONS } from "@/constants";
-import { capitalize } from "@/utils";
+import { memo } from 'react'
+import { View } from 'react-native'
+import { Button, Select } from 'heroui-native'
+import type { SortOption } from '@/types'
+import { SORT_OPTIONS } from '@/constants'
+import { capitalize } from '@/utils'
 
 interface SortControlsProps {
   /** The field currently used for sorting. */
-  sortBy: SortOption;
+  sortBy: SortOption
   /** Current sort direction. */
-  sortOrder: "asc" | "desc";
+  sortOrder: 'asc' | 'desc'
   /** Called when the user picks a new sort field. */
-  onSortByChange: (option: SortOption) => void;
+  onSortByChange: (option: SortOption) => void
   /** Called when the user toggles the sort direction. */
-  onSortOrderToggle: () => void;
+  onSortOrderToggle: () => void
 }
 
 /**
@@ -26,7 +26,7 @@ function SortControls({ sortBy, sortOrder, onSortByChange, onSortOrderToggle }: 
         <Select
           value={{ value: sortBy, label: capitalize(sortBy) }}
           onValueChange={(opt) => {
-            if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption);
+            if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
           }}
         >
           <Select.Trigger>
@@ -49,12 +49,12 @@ function SortControls({ sortBy, sortOrder, onSortByChange, onSortOrderToggle }: 
         size="sm"
         isIconOnly
         onPress={onSortOrderToggle}
-        accessibilityLabel={`Sort order: ${sortOrder === "desc" ? "descending" : "ascending"}`}
+        accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
       >
-        <Button.Label>{sortOrder === "desc" ? "↓" : "↑"}</Button.Label>
+        <Button.Label>{sortOrder === 'desc' ? '↓' : '↑'}</Button.Label>
       </Button>
     </View>
-  );
+  )
 }
 
-export default memo(SortControls);
+export default memo(SortControls)

@@ -40,41 +40,41 @@
  */
 
 // @migration: KEEP — structural invariant (level cap 1–20); never moves to DB
-export const MAX_LEVEL = 20;
+export const MAX_LEVEL = 20
 // @migration: DELETE — game_config.xp
-export const XP_PER_USE = 15;
+export const XP_PER_USE = 15
 
 // ─── XP formula coefficients ─────────────────────────────────────────────────
 // xpThreshold(level) = max(FLOOR, round(BASE + level × LINEAR + level² × QUADRATIC))
 
 // @migration: DELETE — game_config.xp
-export const XP_FORMULA_BASE = 25;
+export const XP_FORMULA_BASE = 25
 // @migration: DELETE — game_config.xp
-export const XP_FORMULA_LINEAR = 5;
+export const XP_FORMULA_LINEAR = 5
 // @migration: DELETE — game_config.xp
-export const XP_FORMULA_QUADRATIC = 0.3;
+export const XP_FORMULA_QUADRATIC = 0.3
 // @migration: DELETE — game_config.xp
-export const XP_FORMULA_FLOOR = 33;
+export const XP_FORMULA_FLOOR = 33
 
 // Inline config type — avoids a circular dep with shared/schemas.ts
 type XpCfg = {
-  XP_FORMULA_BASE?: number;
-  XP_FORMULA_LINEAR?: number;
-  XP_FORMULA_QUADRATIC?: number;
-  XP_FORMULA_FLOOR?: number;
-};
+  XP_FORMULA_BASE?: number
+  XP_FORMULA_LINEAR?: number
+  XP_FORMULA_QUADRATIC?: number
+  XP_FORMULA_FLOOR?: number
+}
 
 function xpFormula(level: number, cfg?: XpCfg): number {
-  const base = cfg?.XP_FORMULA_BASE ?? XP_FORMULA_BASE;
-  const linear = cfg?.XP_FORMULA_LINEAR ?? XP_FORMULA_LINEAR;
-  const quadratic = cfg?.XP_FORMULA_QUADRATIC ?? XP_FORMULA_QUADRATIC;
-  return Math.round(base + level * linear + Math.pow(level, 2) * quadratic);
+  const base = cfg?.XP_FORMULA_BASE ?? XP_FORMULA_BASE
+  const linear = cfg?.XP_FORMULA_LINEAR ?? XP_FORMULA_LINEAR
+  const quadratic = cfg?.XP_FORMULA_QUADRATIC ?? XP_FORMULA_QUADRATIC
+  return Math.round(base + level * linear + Math.pow(level, 2) * quadratic)
 }
 
 /** XP threshold to advance from `level` to `level + 1`. */
 export function xpThreshold(level: number, cfg?: XpCfg): number {
-  const floor = cfg?.XP_FORMULA_FLOOR ?? XP_FORMULA_FLOOR;
-  return Math.max(floor, xpFormula(level, cfg));
+  const floor = cfg?.XP_FORMULA_FLOOR ?? XP_FORMULA_FLOOR
+  return Math.max(floor, xpFormula(level, cfg))
 }
 
 /**
@@ -87,20 +87,20 @@ export function applyXP(
   gained: number,
   cfg?: XpCfg,
 ): { newXP: number; newLevel: number; leveledUp: boolean; levelsGained: number } {
-  let xp = currentXP + gained;
-  let level = currentLevel;
-  let levelsGained = 0;
+  let xp = currentXP + gained
+  let level = currentLevel
+  let levelsGained = 0
 
   while (level < MAX_LEVEL && xp >= xpThreshold(level, cfg)) {
-    xp -= xpThreshold(level, cfg);
-    level++;
-    levelsGained++;
+    xp -= xpThreshold(level, cfg)
+    level++
+    levelsGained++
   }
 
   // At max level, cap the bar so it never overflows the display maximum.
   if (level === MAX_LEVEL) {
-    xp = Math.min(xp, xpThreshold(MAX_LEVEL, cfg));
+    xp = Math.min(xp, xpThreshold(MAX_LEVEL, cfg))
   }
 
-  return { newXP: xp, newLevel: level, leveledUp: levelsGained > 0, levelsGained };
+  return { newXP: xp, newLevel: level, leveledUp: levelsGained > 0, levelsGained }
 }

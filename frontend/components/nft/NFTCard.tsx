@@ -1,11 +1,11 @@
-import { memo } from "react";
-import { Image, View, Text } from "react-native";
-import type { ReactNode } from "react";
-import { Card, Chip, cn } from "heroui-native";
-import type { NFT } from "@/types/nft";
-import NFTProperties from "./NFTProperties";
-import { formatDisplayName } from "@/utils";
-import { MAX_LEVEL, xpThreshold } from "@pop/shared/xp";
+import { memo } from 'react'
+import { Image, View, Text } from 'react-native'
+import type { ReactNode } from 'react'
+import { Card, Chip, cn } from 'heroui-native'
+import type { NFT } from '@/types/nft'
+import NFTProperties from './NFTProperties'
+import { formatDisplayName } from '@/utils'
+import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
 import {
   badgeLabel,
   cardImageContainer,
@@ -13,17 +13,17 @@ import {
   cardBody,
   typeBadge,
   rarityBadge,
-} from "@/styles";
+} from '@/styles'
 
 interface NFTCardProps {
-  nft: NFT;
+  nft: NFT
   /** Slot for the action area below properties (list button, buy button, price row, etc.) */
-  action?: ReactNode;
+  action?: ReactNode
 }
 
 export default memo(function NFTCard({ nft, action }: NFTCardProps) {
   const xpPct =
-    nft.level >= MAX_LEVEL ? 100 : Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100);
+    nft.level >= MAX_LEVEL ? 100 : Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100)
 
   return (
     <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
@@ -34,7 +34,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         <Chip
           size="sm"
           variant="primary"
-          className={badgePosition({ position: "topLeft" })}
+          className={badgePosition({ position: 'topLeft' })}
           animation="disable-all"
         >
           <Chip.Label className={badgeLabel()}>Lv {nft.level}</Chip.Label>
@@ -45,7 +45,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className={cn(badgePosition({ position: "bottomLeft" }), typeBadge({ type: nft.type }))}
+            className={cn(badgePosition({ position: 'bottomLeft' }), typeBadge({ type: nft.type }))}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>{nft.type.toUpperCase()}</Chip.Label>
@@ -58,7 +58,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             size="sm"
             variant="primary"
             className={cn(
-              badgePosition({ position: "topRight" }),
+              badgePosition({ position: 'topRight' }),
               rarityBadge({ rarity: nft.rarity }),
             )}
             animation="disable-all"
@@ -73,7 +73,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             size="sm"
             variant="primary"
             color="success"
-            className={badgePosition({ position: "topRightOffset" })}
+            className={badgePosition({ position: 'topRightOffset' })}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>Listed</Chip.Label>
@@ -85,7 +85,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <Chip
             size="sm"
             variant="primary"
-            className={badgePosition({ position: "bottomRight" })}
+            className={badgePosition({ position: 'bottomRight' })}
             animation="disable-all"
           >
             <Chip.Label className={badgeLabel()}>+{nft.stat_points} pts</Chip.Label>
@@ -115,5 +115,5 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         {action}
       </Card.Body>
     </Card>
-  );
-});
+  )
+})

@@ -1,2 +1,2 @@
-export * from "./useImmobilityChallenge";
-export * from "./useToiletDetection";
+export * from './useImmobilityChallenge'
+export * from './useToiletDetection'

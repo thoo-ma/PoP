@@ -1,13 +1,13 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { supabase } from "@/lib/supabase";
-import { buildDefaults, buildGameConfig, type FullGameConfig } from "@pop/shared/gameConfig";
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { supabase } from '@/lib/supabase'
+import { buildDefaults, buildGameConfig, type FullGameConfig } from '@pop/shared/gameConfig'
 
-export type { FullGameConfig };
+export type { FullGameConfig }
 
 interface GameConfigContextValue {
-  config: FullGameConfig;
-  loading: boolean;
-  refetch: () => Promise<void>;
+  config: FullGameConfig
+  loading: boolean
+  refetch: () => Promise<void>
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -16,7 +16,7 @@ const GameConfigContext = createContext<GameConfigContextValue>({
   config: buildDefaults(),
   loading: true,
   refetch: async () => {},
-});
+})
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
@@ -28,34 +28,34 @@ const GameConfigContext = createContext<GameConfigContextValue>({
  * hard-coded defaults — no crash, no error state needed in the mobile app.
  */
 export function GameConfigProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState<FullGameConfig>(buildDefaults);
-  const [loading, setLoading] = useState(true);
+  const [config, setConfig] = useState<FullGameConfig>(buildDefaults)
+  const [loading, setLoading] = useState(true)
 
   const load = async () => {
     try {
-      const { data } = await supabase.from("game_config").select("key, value");
-      const { config: merged } = buildGameConfig(data ?? []);
-      setConfig(merged);
+      const { data } = await supabase.from('game_config').select('key, value')
+      const { config: merged } = buildGameConfig(data ?? [])
+      setConfig(merged)
     } catch {
       // network unavailable → keep defaults silently
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    void load();
-  }, []);
+    void load()
+  }, [])
 
   return (
     <GameConfigContext.Provider value={{ config, loading, refetch: load }}>
       {children}
     </GameConfigContext.Provider>
-  );
+  )
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useGameConfig(): GameConfigContextValue {
-  return useContext(GameConfigContext);
+  return useContext(GameConfigContext)
 }

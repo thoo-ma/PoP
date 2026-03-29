@@ -1,41 +1,41 @@
-"use client";
+'use client'
 
-import { create } from "zustand";
-import { supabase } from "@/lib/supabase";
-import { type GameConfigKey } from "@pop/shared/schemas";
-import { buildGameConfig, type FullGameConfig, type ConfigSource } from "@pop/shared/gameConfig";
+import { create } from 'zustand'
+import { supabase } from '@/lib/supabase'
+import { type GameConfigKey } from '@pop/shared/schemas'
+import { buildGameConfig, type FullGameConfig, type ConfigSource } from '@pop/shared/gameConfig'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface GameConfigState {
   /** Validated config — always fully populated (defaults where DB is missing). */
-  config: FullGameConfig;
+  config: FullGameConfig
   /** Per-key source tracking: is the value from DB or from code defaults? */
-  sources: ConfigSource;
+  sources: ConfigSource
   /** Local draft edits (not yet saved to DB). Keyed by config key. */
-  drafts: Partial<FullGameConfig>;
+  drafts: Partial<FullGameConfig>
   /** Loading state */
-  loading: boolean;
+  loading: boolean
   /** Error message (null = no error) */
-  error: string | null;
+  error: string | null
   /** Keys that failed Zod validation (DB row exists but is malformed — using defaults). */
-  warnings: string[];
+  warnings: string[]
 
   // ─── Actions ──────────────────────────────────────────────────────────────
 
   /** Fetch game_config from Supabase, validate with Zod, merge over defaults. */
-  fetch: () => Promise<void>;
+  fetch: () => Promise<void>
   /** Update a draft value locally (does NOT write to DB). */
-  setDraft: <K extends GameConfigKey>(key: K, value: Partial<FullGameConfig[K]>) => void;
+  setDraft: <K extends GameConfigKey>(key: K, value: Partial<FullGameConfig[K]>) => void
   /** Clear all drafts (revert to fetched config). */
-  clearDrafts: () => void;
+  clearDrafts: () => void
   /** Clear the draft for a single config key. */
-  clearDraftForKey: (key: GameConfigKey) => void;
+  clearDraftForKey: (key: GameConfigKey) => void
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
-const _initial = buildGameConfig();
+const _initial = buildGameConfig()
 
 export const useGameConfigStore = create<GameConfigState>((set) => ({
   config: _initial.config,
@@ -46,26 +46,24 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
   warnings: [],
 
   fetch: async () => {
-    set({ loading: true, error: null, warnings: [] });
+    set({ loading: true, error: null, warnings: [] })
 
     if (!supabase) {
-      set({ loading: false, error: "Supabase not configured (missing env vars)" });
-      return;
+      set({ loading: false, error: 'Supabase not configured (missing env vars)' })
+      return
     }
 
     try {
-      const { data: rows, error: dbError } = await supabase
-        .from("game_config")
-        .select("key, value");
+      const { data: rows, error: dbError } = await supabase.from('game_config').select('key, value')
 
-      if (dbError) throw new Error(dbError.message);
+      if (dbError) throw new Error(dbError.message)
 
-      const { config, sources, warnings } = buildGameConfig(rows ?? []);
-      set({ config, sources, loading: false, warnings });
+      const { config, sources, warnings } = buildGameConfig(rows ?? [])
+      set({ config, sources, loading: false, warnings })
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Failed to load game config";
-      console.error("[gameConfigStore] fetch error:", msg);
-      set({ error: msg, loading: false });
+      const msg = e instanceof Error ? e.message : 'Failed to load game config'
+      console.error('[gameConfigStore] fetch error:', msg)
+      set({ error: msg, loading: false })
     }
   },
 
@@ -79,15 +77,15 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
           ...value,
         },
       },
-    }));
+    }))
   },
 
   clearDrafts: () => set({ drafts: {} }),
 
   clearDraftForKey: (key) =>
     set((state) => {
-      const next = { ...state.drafts };
-      delete next[key];
-      return { drafts: next };
+      const next = { ...state.drafts }
+      delete next[key]
+      return { drafts: next }
     }),
-}));
+}))

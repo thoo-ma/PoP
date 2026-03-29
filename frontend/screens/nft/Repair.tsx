@@ -1,7 +1,7 @@
-import { Text, View, Image, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { memo, useState } from "react";
-import { Button, Dialog, ScrollShadow, Slider, cn } from "heroui-native";
+import { Text, View, Image, ScrollView } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { memo, useState } from 'react'
+import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native'
 import {
   screenContainer,
   scrollContent,
@@ -12,13 +12,13 @@ import {
   typeBadge,
   dialogBody,
   infoBox,
-} from "@/styles";
-import { NFTProperties, ScreenLoader, ScreenError, NFTSelector, DegenBar } from "@/components";
-import { useUserNFTs, useRepairNFT, useWallet } from "@/hooks";
-import { MAX_ENERGY, repairCost } from "@pop/shared";
-import { calcReducedCost } from "@pop/shared/degenBar";
-import { nftEvents, formatDisplayName } from "@/utils";
-import { useGameConfig } from "@/store/gameConfigStore";
+} from '@/styles'
+import { NFTProperties, ScreenLoader, ScreenError, NFTSelector, DegenBar } from '@/components'
+import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks'
+import { MAX_ENERGY, repairCost } from '@pop/shared'
+import { calcReducedCost } from '@pop/shared/degenBar'
+import { nftEvents, formatDisplayName } from '@/utils'
+import { useGameConfig } from '@/store/gameConfigStore'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -26,23 +26,23 @@ import { useGameConfig } from "@/store/gameConfigStore";
  * `nftUpdated` event so other screens stay in sync.
  */
 export default memo(function Repair() {
-  const { nfts, loading, error, refetch } = useUserNFTs();
-  const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT();
-  const { poopBalance } = useWallet();
-  const { config: cfg } = useGameConfig();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [repairAmount, setRepairAmount] = useState(0);
-  const [degenPercent, setDegenPercent] = useState(0);
-  const [isRepaired, setIsRepaired] = useState(false);
-  const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null);
-  const [poopSpent, setPoopSpent] = useState<number | null>(null);
+  const { nfts, loading, error, refetch } = useUserNFTs()
+  const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
+  const { poopBalance } = useWallet()
+  const { config: cfg } = useGameConfig()
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [repairAmount, setRepairAmount] = useState(0)
+  const [degenPercent, setDegenPercent] = useState(0)
+  const [isRepaired, setIsRepaired] = useState(false)
+  const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null)
+  const [poopSpent, setPoopSpent] = useState<number | null>(null)
 
   // ── Alert dialog state ─────────────────────────────────────
-  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null);
+  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
 
-  const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null;
-  const currentEnergy = selectedNFT?.energy || 0;
-  const maxRepairPossible = MAX_ENERGY - currentEnergy;
+  const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null
+  const currentEnergy = selectedNFT?.energy || 0
+  const maxRepairPossible = MAX_ENERGY - currentEnergy
   // Cost in POOP, recalculated whenever the slider or selected NFT changes
   const poopCost = selectedNFT
     ? repairCost(
@@ -52,83 +52,83 @@ export default memo(function Repair() {
         MAX_ENERGY,
         cfg.currency,
       )
-    : 0;
-  const detailStyles = nftDetailCard();
+    : 0
+  const detailStyles = nftDetailCard()
 
   const handleSelectNFT = () => {
-    if (nfts.length === 0) return;
+    if (nfts.length === 0) return
     // Start on the first NFT with energy < 100, or index 0
-    const idx = nfts.findIndex((nft) => nft.energy < 100);
-    setSelectedIndex(idx >= 0 ? idx : 0);
-    setIsRepaired(false);
-    setRepairAmount(0);
-  };
+    const idx = nfts.findIndex((nft) => nft.energy < 100)
+    setSelectedIndex(idx >= 0 ? idx : 0)
+    setIsRepaired(false)
+    setRepairAmount(0)
+  }
 
   const handlePrev = () => {
-    if (selectedIndex === null) return;
-    setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length);
-    setIsRepaired(false);
-    setRepairAmount(0);
-  };
+    if (selectedIndex === null) return
+    setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
+    setIsRepaired(false)
+    setRepairAmount(0)
+  }
 
   const handleNext = () => {
-    if (selectedIndex === null) return;
-    setSelectedIndex((i) => ((i as number) + 1) % nfts.length);
-    setIsRepaired(false);
-    setRepairAmount(0);
-  };
+    if (selectedIndex === null) return
+    setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
+    setIsRepaired(false)
+    setRepairAmount(0)
+  }
 
   const handleRepair = async () => {
-    if (!selectedNFT || repairAmount === 0) return;
+    if (!selectedNFT || repairAmount === 0) return
 
-    const newEnergy = currentEnergy + Math.round(repairAmount);
-    const result = await repairNFT(selectedNFT.id, newEnergy, degenPercent);
+    const newEnergy = currentEnergy + Math.round(repairAmount)
+    const result = await repairNFT(selectedNFT.id, newEnergy, degenPercent)
 
     if (result) {
-      setRepairedEnergy(result.energy);
-      setPoopSpent(result.poop_spent);
-      setIsRepaired(true);
-      setRepairAmount(0);
-      await refetch();
-      nftEvents.emit(); // Notify other screens
+      setRepairedEnergy(result.energy)
+      setPoopSpent(result.poop_spent)
+      setIsRepaired(true)
+      setRepairAmount(0)
+      await refetch()
+      nftEvents.emit() // Notify other screens
     } else if (insufficientPoopError) {
       setAlertDialog({
-        title: "Insufficient POOP",
+        title: 'Insufficient POOP',
         message: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
-      });
+      })
     } else {
       setAlertDialog({
-        title: "Repair Failed",
-        message: "Failed to repair NFT. Please try again.",
-      });
+        title: 'Repair Failed',
+        message: 'Failed to repair NFT. Please try again.',
+      })
     }
-  };
+  }
 
   const handleReset = () => {
-    setSelectedIndex(null);
-    setRepairAmount(0);
-    setDegenPercent(0);
-    setIsRepaired(false);
-    setRepairedEnergy(null);
-    setPoopSpent(null);
-  };
+    setSelectedIndex(null)
+    setRepairAmount(0)
+    setDegenPercent(0)
+    setIsRepaired(false)
+    setRepairedEnergy(null)
+    setPoopSpent(null)
+  }
 
   if (loading) {
-    return <ScreenLoader title="Repair" />;
+    return <ScreenLoader title="Repair" />
   }
 
   if (error) {
-    return <ScreenError title="Repair" message={`Error: ${error}`} onRetry={refetch} />;
+    return <ScreenError title="Repair" message={`Error: ${error}`} onRetry={refetch} />
   }
 
   return (
     <>
-      <View className={screenContainer({ bg: "default", padTop: "md" })}>
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <ScrollShadow LinearGradientComponent={LinearGradient}>
           <ScrollView
             contentContainerClassName={cn(
-              scrollContent({ padding: "md", bottomPad: "md" }),
-              "items-center",
+              scrollContent({ padding: 'md', bottomPad: 'md' }),
+              'items-center',
             )}
             showsVerticalScrollIndicator={false}
           >
@@ -141,7 +141,7 @@ export default memo(function Repair() {
               >
                 <Text className="text-[40px] text-muted mb-3">+</Text>
                 <Button.Label className="text-base text-muted font-semibold">
-                  {nfts.length === 0 ? "No NFTs Available" : "Select NFT from Vault"}
+                  {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
                 </Button.Label>
               </Button>
             ) : (
@@ -161,7 +161,7 @@ export default memo(function Repair() {
                   <View
                     className={cn(
                       detailStyles.root(),
-                      "w-[280px] bg-surface mt-5 mb-6 border-border",
+                      'w-[280px] bg-surface mt-5 mb-6 border-border',
                     )}
                   >
                     <View className={detailStyles.imageWrap()}>
@@ -170,32 +170,32 @@ export default memo(function Repair() {
                         className="w-full h-[280px] bg-default"
                         resizeMode="cover"
                       />
-                      <View className={cn(overlayBadge({ position: "topLeft" }), "bg-indigo-500")}>
-                        <Text className={cn(badgeLabel(), "tracking-wide")}>
+                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
+                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Lv {selectedNFT.level}
                         </Text>
                       </View>
                       <View
                         className={cn(
-                          overlayBadge({ position: "bottomLeft" }),
+                          overlayBadge({ position: 'bottomLeft' }),
                           typeBadge({ type: selectedNFT.type }),
                         )}
                       >
-                        <Text className={cn(badgeLabel({ size: "sm" }), "tracking-wide")}>
+                        <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
                           {selectedNFT.type.toUpperCase()}
                         </Text>
                       </View>
                       <View
-                        className={cn(overlayBadge({ position: "topRight" }), "bg-emerald-500/95")}
+                        className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}
                       >
-                        <Text className={cn(badgeLabel(), "tracking-wide")}>
+                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Energy: {currentEnergy + Math.round(repairAmount)}%
                         </Text>
                       </View>
                     </View>
 
-                    <View className={cn(detailStyles.content(), "p-4")}>
-                      <Text className={cn(detailStyles.title(), "text-foreground mb-3")}>
+                    <View className={cn(detailStyles.content(), 'p-4')}>
+                      <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>
                         {formatDisplayName(selectedNFT.name)}
                       </Text>
 
@@ -220,7 +220,7 @@ export default memo(function Repair() {
                       disabled={updateLoading}
                     />
 
-                    <View className={cn(infoBox(), "mb-5")}>
+                    <View className={cn(infoBox(), 'mb-5')}>
                       <Text className="text-base font-bold text-foreground mb-3">
                         Repair Amount
                       </Text>
@@ -266,13 +266,13 @@ export default memo(function Repair() {
                       className="w-full"
                     >
                       {updateLoading ? (
-                        "Repairing..."
+                        'Repairing...'
                       ) : poopBalance !== null && poopBalance < poopCost ? (
                         `Need ${poopCost} POOP`
                       ) : degenPercent > 0 ? (
                         <Text>
-                          Repair —{" "}
-                          <Text className="line-through text-foreground-500">{poopCost}</Text>{" "}
+                          Repair —{' '}
+                          <Text className="line-through text-foreground-500">{poopCost}</Text>{' '}
                           {calcReducedCost(poopCost, degenPercent, cfg.degen_bar)} POOP
                         </Text>
                       ) : (
@@ -322,7 +322,7 @@ export default memo(function Repair() {
       <Dialog
         isOpen={alertDialog !== null}
         onOpenChange={(open) => {
-          if (!open) setAlertDialog(null);
+          if (!open) setAlertDialog(null)
         }}
       >
         <Dialog.Portal>
@@ -330,8 +330,8 @@ export default memo(function Repair() {
           <Dialog.Content>
             <Dialog.Close />
             <View className={dialogBody()}>
-              <Dialog.Title>{alertDialog?.title ?? ""}</Dialog.Title>
-              <Dialog.Description>{alertDialog?.message ?? ""}</Dialog.Description>
+              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
+              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
             <View className="flex-row justify-end">
               <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
@@ -342,5 +342,5 @@ export default memo(function Repair() {
         </Dialog.Portal>
       </Dialog>
     </>
-  );
-});
+  )
+})

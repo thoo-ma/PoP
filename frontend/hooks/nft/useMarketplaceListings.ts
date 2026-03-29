@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/lib/supabase";
-import type { NFT } from "@/types/nft";
-import { logError } from "@/utils/errorHelpers";
+import { useEffect, useState, useCallback } from 'react'
+import { supabase } from '@/lib/supabase'
+import type { NFT } from '@/types/nft'
+import { logError } from '@/utils/errorHelpers'
 
 /**
  * Hook to fetch marketplace listings (NFTs from other users).
@@ -10,26 +10,26 @@ import { logError } from "@/utils/errorHelpers";
  *   and a `fetchListings` callback.
  */
 export function useMarketplaceListings() {
-  const [listings, setListings] = useState<NFT[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [listings, setListings] = useState<NFT[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchListings = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser()
 
       if (!user) {
-        setListings([]);
-        return;
+        setListings([])
+        return
       }
 
       const { data: listingsData, error: listingsError } = await supabase
-        .from("marketplace_listings")
+        .from('marketplace_listings')
         .select(`
           nft_id,
           price,
@@ -55,41 +55,41 @@ export function useMarketplaceListings() {
             updated_at
           )
         `)
-        .neq("seller_id", user.id)
-        .order("listed_at", { ascending: false });
+        .neq('seller_id', user.id)
+        .order('listed_at', { ascending: false })
 
       if (listingsError) {
-        logError("useMarketplaceListings:Fetch", listingsError);
-        setError(listingsError.message);
-        setListings([]);
-        return;
+        logError('useMarketplaceListings:Fetch', listingsError)
+        setError(listingsError.message)
+        setListings([])
+        return
       }
 
       const enrichedListings: NFT[] = (listingsData ?? [])
         .filter((listing) => listing.nfts !== null)
         .map((listing) => {
-          const { user_id: _, ...nft } = listing.nfts!;
-          return { ...nft, isListed: true as const, price: listing.price };
-        });
+          const { user_id: _, ...nft } = listing.nfts!
+          return { ...nft, isListed: true as const, price: listing.price }
+        })
 
-      setListings(enrichedListings);
+      setListings(enrichedListings)
     } catch (err) {
-      logError("useMarketplaceListings:Fetch", err);
-      setError(err instanceof Error ? err.message : "Failed to fetch listings");
-      setListings([]);
+      logError('useMarketplaceListings:Fetch', err)
+      setError(err instanceof Error ? err.message : 'Failed to fetch listings')
+      setListings([])
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
-    fetchListings();
-  }, [fetchListings]);
+    fetchListings()
+  }, [fetchListings])
 
   return {
     listings,
     loading,
     error,
     refetch: fetchListings,
-  };
+  }
 }

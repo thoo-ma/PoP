@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { logError } from "@/utils/errorHelpers";
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
+import { logError } from '@/utils/errorHelpers'
 
 /**
  * Hook that subscribes to the current user's POOP wallet balance.
@@ -14,80 +14,80 @@ import { logError } from "@/utils/errorHelpers";
  *   `null` while loading, and a `number` once fetched.
  */
 export function useWallet() {
-  const [poopBalance, setPoopBalance] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [poopBalance, setPoopBalance] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchBalance = async (userId: string) => {
     const { data, error: fetchError } = await supabase
-      .from("users")
-      .select("poop_balance")
-      .eq("id", userId)
-      .single();
+      .from('users')
+      .select('poop_balance')
+      .eq('id', userId)
+      .single()
 
     if (fetchError) {
-      logError("useWallet:fetch", fetchError);
-      setError(fetchError.message);
+      logError('useWallet:fetch', fetchError)
+      setError(fetchError.message)
     } else {
-      setPoopBalance(data?.poop_balance ?? 0);
+      setPoopBalance(data?.poop_balance ?? 0)
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   useEffect(() => {
-    let userId: string | null = null;
-    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let userId: string | null = null
+    let channel: ReturnType<typeof supabase.channel> | null = null
 
     const init = async () => {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser()
       if (!user) {
-        setLoading(false);
-        return;
+        setLoading(false)
+        return
       }
 
-      userId = user.id;
-      await fetchBalance(user.id);
+      userId = user.id
+      await fetchBalance(user.id)
 
       // Realtime subscription so balance updates reflect immediately
       channel = supabase
         .channel(`wallet:${userId}`)
         .on(
-          "postgres_changes",
+          'postgres_changes',
           {
-            event: "UPDATE",
-            schema: "public",
-            table: "users",
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'users',
             filter: `id=eq.${userId}`,
           },
           (payload: { new: Record<string, unknown> }) => {
-            if (payload.new && typeof payload.new.poop_balance === "number") {
-              setPoopBalance(payload.new.poop_balance as number);
+            if (payload.new && typeof payload.new.poop_balance === 'number') {
+              setPoopBalance(payload.new.poop_balance as number)
             }
           },
         )
-        .subscribe();
-    };
+        .subscribe()
+    }
 
-    init();
+    init()
 
     return () => {
-      if (channel) supabase.removeChannel(channel);
-    };
-  }, []);
+      if (channel) supabase.removeChannel(channel)
+    }
+  }, [])
 
   const refetch = async () => {
-    setLoading(true);
+    setLoading(true)
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser()
     if (!user) {
-      setLoading(false);
-      return;
+      setLoading(false)
+      return
     }
-    await fetchBalance(user.id);
-  };
+    await fetchBalance(user.id)
+  }
 
-  return { poopBalance, loading, error, refetch };
+  return { poopBalance, loading, error, refetch }
 }

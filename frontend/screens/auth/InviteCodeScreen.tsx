@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from "react";
-import { View, Text, TextInput, KeyboardAvoidingView, Platform } from "react-native";
-import { Button, Spinner, TextField, Input, Label, Description, FieldError } from "heroui-native";
-import { validateInviteCode } from "@/lib/inviteCodeApi";
-import { useSignOutDialog } from "@/utils";
-import { useErrorHandler } from "@/hooks";
+import { useState, useRef, useEffect } from 'react'
+import { View, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
+import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native'
+import { validateInviteCode } from '@/lib/inviteCodeApi'
+import { useSignOutDialog } from '@/utils'
+import { useErrorHandler } from '@/hooks'
 
 interface InviteCodeScreenProps {
   /** Called after the entered code is validated and the user is approved. */
-  onApprovalSuccess: () => void;
+  onApprovalSuccess: () => void
   /** Called when the user chooses to sign out from this screen. */
-  onSignOut: () => void;
+  onSignOut: () => void
 }
 
 /**
@@ -18,76 +18,76 @@ interface InviteCodeScreenProps {
  * then calls `onApprovalSuccess` on success.
  */
 export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
-  const [code, setCode] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { error, handleError, clearError } = useErrorHandler("InviteCode");
-  const inputRef = useRef<TextInput>(null);
-  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog();
+  const [code, setCode] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { error, handleError, clearError } = useErrorHandler('InviteCode')
+  const inputRef = useRef<TextInput>(null)
+  const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
 
   // Auto-focus input on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
+      inputRef.current?.focus()
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Validate code format (8 alphanumeric characters)
   const isValidFormat = (text: string): boolean => {
-    return /^[A-Z0-9]{8}$/.test(text);
-  };
+    return /^[A-Z0-9]{8}$/.test(text)
+  }
 
   const handleCodeChange = (text: string) => {
     // Convert to uppercase and filter non-alphanumeric
-    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    setCode(cleaned.slice(0, 8)); // Limit to 8 characters
-    clearError(); // Clear error when user types
-  };
+    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '')
+    setCode(cleaned.slice(0, 8)) // Limit to 8 characters
+    clearError() // Clear error when user types
+  }
 
   const handleSubmit = async () => {
     // Validate format before submitting
     if (!isValidFormat(code)) {
       handleError(
-        new Error("Code must be 8 alphanumeric characters"),
-        "Code must be 8 alphanumeric characters",
-      );
-      return;
+        new Error('Code must be 8 alphanumeric characters'),
+        'Code must be 8 alphanumeric characters',
+      )
+      return
     }
 
-    setLoading(true);
-    clearError();
+    setLoading(true)
+    clearError()
 
     try {
-      const result = await validateInviteCode(code);
+      const result = await validateInviteCode(code)
 
       if (result.success) {
         // Clear the code input and show success state
-        setCode("");
-        clearError();
+        setCode('')
+        clearError()
 
         // Success! Notify parent to refresh approval status
-        onApprovalSuccess();
+        onApprovalSuccess()
       } else {
         // Show specific error message from backend
-        handleError(result.error || "Invalid invite code", result.error || "Invalid invite code");
+        handleError(result.error || 'Invalid invite code', result.error || 'Invalid invite code')
       }
     } catch (err) {
-      handleError(err, "An unexpected error occurred. Please try again.");
+      handleError(err, 'An unexpected error occurred. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleSignOut = () => {
-    showSignOutDialog(onSignOut);
-  };
+    showSignOutDialog(onSignOut)
+  }
 
-  const canSubmit = code.length === 8 && !loading;
+  const canSubmit = code.length === 8 && !loading
 
   return (
     <>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-center p-5 bg-background"
       >
         <View className="flex-1 justify-center">
@@ -133,7 +133,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
             accessibilityLabel="Submit invite code"
             accessibilityHint="Validate and submit your invite code"
           >
-            {loading ? "Validating..." : "Submit"}
+            {loading ? 'Validating...' : 'Submit'}
           </Button>
 
           <Button variant="outline" onPress={handleSignOut} isDisabled={loading}>
@@ -143,5 +143,5 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
       </KeyboardAvoidingView>
       {signOutDialog}
     </>
-  );
+  )
 }

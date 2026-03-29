@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import {
   TrendingUp,
   Coins,
@@ -16,7 +16,7 @@ import {
   Activity,
   ChevronRight,
   type LucideIcon,
-} from "lucide-react";
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -30,35 +30,35 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+} from '@/components/ui/sidebar'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 
-type NavItem = { label: string; href: string; icon: LucideIcon };
+type NavItem = { label: string; href: string; icon: LucideIcon }
 
 const GAME_MECHANICS: NavItem[] = [
-  { label: "XP & Leveling", href: "/xp", icon: TrendingUp },
-  { label: "Cooldown", href: "/cooldown", icon: Timer },
-  { label: "Stat Points", href: "/stat-points", icon: BarChart3 },
-  { label: "Sensors", href: "/sensors", icon: Smartphone },
-  { label: "Energy Drain", href: "/energy", icon: Battery },
-  { label: "Cloud Run", href: "/cloud-run", icon: Cloud },
-];
+  { label: 'XP & Leveling', href: '/xp', icon: TrendingUp },
+  { label: 'Cooldown', href: '/cooldown', icon: Timer },
+  { label: 'Stat Points', href: '/stat-points', icon: BarChart3 },
+  { label: 'Sensors', href: '/sensors', icon: Smartphone },
+  { label: 'Energy Drain', href: '/energy', icon: Battery },
+  { label: 'Cloud Run', href: '/cloud-run', icon: Cloud },
+]
 
 const ECONOMY_ROI: NavItem[] = [
-  { label: "Currency (POOP)", href: "/currency", icon: Coins },
-  { label: "Breeding", href: "/breed", icon: Dna },
-  { label: "Minting", href: "/minting", icon: Layers },
-  { label: "Loot Roll", href: "/loot", icon: Dices },
-  { label: "Degen Bar", href: "/degen-bar", icon: Activity },
-];
+  { label: 'Currency (POOP)', href: '/currency', icon: Coins },
+  { label: 'Breeding', href: '/breed', icon: Dna },
+  { label: 'Minting', href: '/minting', icon: Layers },
+  { label: 'Loot Roll', href: '/loot', icon: Dices },
+  { label: 'Degen Bar', href: '/degen-bar', icon: Activity },
+]
 
 const NAV_GROUPS: { label: string; icon: LucideIcon; items: NavItem[] }[] = [
-  { label: "Game Mechanics", icon: Dices, items: GAME_MECHANICS },
-  { label: "Economy & ROI", icon: Coins, items: ECONOMY_ROI },
-];
+  { label: 'Game Mechanics', icon: Dices, items: GAME_MECHANICS },
+  { label: 'Economy & ROI', icon: Coins, items: ECONOMY_ROI },
+]
 
 export function AppSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <Sidebar collapsible="offcanvas">
@@ -79,7 +79,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {NAV_GROUPS.map((group) => {
-                const isOpen = group.items.some((item) => item.href === pathname);
+                const isOpen = group.items.some((item) => item.href === pathname)
                 return (
                   <Collapsible
                     key={group.label}
@@ -111,12 +111,12 @@ export function AppSidebar() {
                       </CollapsibleContent>
                     </SidebarMenuItem>
                   </Collapsible>
-                );
+                )
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  );
+  )
 }

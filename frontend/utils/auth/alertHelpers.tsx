@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import { View } from "react-native";
-import { Button, Dialog } from "heroui-native";
-import { dialogBody } from "@/styles";
+import { useRef, useState } from 'react'
+import { View } from 'react-native'
+import { Button, Dialog } from 'heroui-native'
+import { dialogBody } from '@/styles'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -9,20 +9,20 @@ import { dialogBody } from "@/styles";
  * and dialog is the JSX element to render in the component tree.
  */
 export function useSignOutDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  const onConfirmRef = useRef<(() => void | Promise<void>) | null>(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const onConfirmRef = useRef<(() => void | Promise<void>) | null>(null)
 
   const show = (onConfirm: () => void | Promise<void>) => {
-    onConfirmRef.current = onConfirm;
-    setIsOpen(true);
-  };
+    onConfirmRef.current = onConfirm
+    setIsOpen(true)
+  }
 
   const handleConfirm = async () => {
-    setIsOpen(false);
+    setIsOpen(false)
     if (onConfirmRef.current) {
-      await onConfirmRef.current();
+      await onConfirmRef.current()
     }
-  };
+  }
 
   const dialog = (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +45,7 @@ export function useSignOutDialog() {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  );
+  )
 
-  return { dialog, show };
+  return { dialog, show }
 }

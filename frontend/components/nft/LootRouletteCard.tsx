@@ -1,16 +1,16 @@
-import { memo, useState } from "react";
-import { View, Text } from "react-native";
-import { Card, Button, Spinner } from "heroui-native";
-import { useRollLoot } from "@/hooks";
-import type { RollLootResult } from "@/hooks";
+import { memo, useState } from 'react'
+import { View, Text } from 'react-native'
+import { Card, Button, Spinner } from 'heroui-native'
+import { useRollLoot } from '@/hooks'
+import type { RollLootResult } from '@/hooks'
 
-const MAX_HOLDS = 3;
-const BASE_CHANCE = 10;
-const CHANCE_PER_HOLD = 10;
+const MAX_HOLDS = 3
+const BASE_CHANCE = 10
+const CHANCE_PER_HOLD = 10
 
 export interface LootRouletteCardProps {
-  lootRollId: string;
-  onDone: () => void;
+  lootRollId: string
+  onDone: () => void
 }
 
 /**
@@ -22,34 +22,34 @@ export interface LootRouletteCardProps {
  * A Reanimated spinning wheel will replace this card in a future iteration.
  */
 export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRouletteCardProps) {
-  const { holdLootRoll, rollLoot, loading } = useRollLoot();
-  const [holds, setHolds] = useState(0);
-  const [result, setResult] = useState<RollLootResult | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const { holdLootRoll, rollLoot, loading } = useRollLoot()
+  const [holds, setHolds] = useState(0)
+  const [result, setResult] = useState<RollLootResult | null>(null)
+  const [err, setErr] = useState<string | null>(null)
 
-  const lootChance = BASE_CHANCE + holds * CHANCE_PER_HOLD;
-  const canHold = holds < MAX_HOLDS && !result;
-  const canRoll = !result;
+  const lootChance = BASE_CHANCE + holds * CHANCE_PER_HOLD
+  const canHold = holds < MAX_HOLDS && !result
+  const canRoll = !result
 
   const handleHold = async () => {
-    setErr(null);
-    const res = await holdLootRoll(lootRollId);
+    setErr(null)
+    const res = await holdLootRoll(lootRollId)
     if (res) {
-      setHolds(res.holds);
+      setHolds(res.holds)
     } else {
-      setErr("Hold failed. Try rolling instead.");
+      setErr('Hold failed. Try rolling instead.')
     }
-  };
+  }
 
   const handleRoll = async () => {
-    setErr(null);
-    const res = await rollLoot(lootRollId);
+    setErr(null)
+    const res = await rollLoot(lootRollId)
     if (res) {
-      setResult(res);
+      setResult(res)
     } else {
-      setErr("Something went wrong. Please try again.");
+      setErr('Something went wrong. Please try again.')
     }
-  };
+  }
 
   return (
     <Card className="mx-4 items-center gap-4" animation="disable-all">
@@ -64,7 +64,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
 
             {holds > 0 && (
               <Text className="text-sm italic text-stat-efficiency">
-                {holds} hold{holds > 1 ? "s" : ""} (+{holds * CHANCE_PER_HOLD}% bonus)
+                {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
               </Text>
             )}
 
@@ -125,5 +125,5 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
         )}
       </Card.Body>
     </Card>
-  );
-});
+  )
+})

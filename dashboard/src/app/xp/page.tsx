@@ -1,151 +1,151 @@
-"use client";
+'use client'
 
-import { useMemo } from "react";
-import LazyChart from "@/components/LazyChart";
-import { useGameConfigStore } from "@/store/gameConfigStore";
-import { useShallow } from "zustand/react/shallow";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { NumberInput } from "@/components/ui/number-input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MAX_LEVEL, xpThreshold } from "@pop/shared/xp";
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from "@/lib/chartTheme";
+import { useMemo } from 'react'
+import LazyChart from '@/components/LazyChart'
+import { useGameConfigStore } from '@/store/gameConfigStore'
+import { useShallow } from 'zustand/react/shallow'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { NumberInput } from '@/components/ui/number-input'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
+import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function XpPanel() {
-  const source = useGameConfigStore((s) => s.sources.xp);
-  const setDraft = useGameConfigStore((s) => s.setDraft);
-  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey);
-  const hasDraft = useGameConfigStore((s) => s.drafts.xp !== undefined);
-  const xp = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })));
+  const source = useGameConfigStore((s) => s.sources.xp)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
+  const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
+  const hasDraft = useGameConfigStore((s) => s.drafts.xp !== undefined)
+  const xp = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })))
 
   // Generate chart data: levels 1–MAX_LEVEL
   const chartData = useMemo(() => {
-    const levels: number[] = [];
-    const thresholds: number[] = [];
-    const uses: number[] = [];
+    const levels: number[] = []
+    const thresholds: number[] = []
+    const uses: number[] = []
 
     for (let lvl = 1; lvl <= MAX_LEVEL; lvl++) {
-      const threshold = xpThreshold(lvl, xp);
-      levels.push(lvl);
-      thresholds.push(threshold);
-      uses.push(Math.ceil(threshold / xp.XP_PER_USE));
+      const threshold = xpThreshold(lvl, xp)
+      levels.push(lvl)
+      thresholds.push(threshold)
+      uses.push(Math.ceil(threshold / xp.XP_PER_USE))
     }
 
-    return { levels, thresholds, uses };
-  }, [xp]);
+    return { levels, thresholds, uses }
+  }, [xp])
 
   // Cumulative XP to reach each level (from level 1)
   const cumulativeData = useMemo(() => {
-    const cumulative: number[] = [];
-    let total = 0;
+    const cumulative: number[] = []
+    let total = 0
     for (const t of chartData.thresholds) {
-      total += t;
-      cumulative.push(total);
+      total += t
+      cumulative.push(total)
     }
-    return cumulative;
-  }, [chartData.thresholds]);
+    return cumulative
+  }, [chartData.thresholds])
 
   const thresholdChartOptions = useMemo(
     () => ({
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       tooltip: {
-        trigger: "axis" as const,
+        trigger: 'axis' as const,
         ...CHART_TOOLTIP,
         formatter: (params: Array<{ name: string; value: number; seriesName: string }>) => {
-          const lvl = params[0]?.name;
-          const lines = params.map((p) => `${p.seriesName}: <b>${p.value.toLocaleString()}</b>`);
-          return `Level ${lvl}<br/>${lines.join("<br/>")}`;
+          const lvl = params[0]?.name
+          const lines = params.map((p) => `${p.seriesName}: <b>${p.value.toLocaleString()}</b>`)
+          return `Level ${lvl}<br/>${lines.join('<br/>')}`
         },
       },
       grid: { top: 40, right: 60, bottom: 40, left: 60 },
       xAxis: {
-        type: "category" as const,
+        type: 'category' as const,
         data: chartData.levels.map(String),
-        name: "Level",
-        nameLocation: "middle" as const,
+        name: 'Level',
+        nameLocation: 'middle' as const,
         nameGap: 28,
         ...CHART_AXIS_STYLES,
       },
       yAxis: [
         {
-          type: "value" as const,
-          name: "XP Required",
+          type: 'value' as const,
+          name: 'XP Required',
           ...CHART_AXIS_STYLES,
           splitLine: CHART_SPLIT_LINE,
         },
         {
-          type: "value" as const,
-          name: "Uses Needed",
+          type: 'value' as const,
+          name: 'Uses Needed',
           ...CHART_AXIS_STYLES,
           splitLine: { show: false },
         },
       ],
       series: [
         {
-          name: "XP Threshold",
-          type: "bar",
+          name: 'XP Threshold',
+          type: 'bar',
           data: chartData.thresholds,
-          itemStyle: { color: "#3b82f6", borderRadius: [2, 2, 0, 0] },
+          itemStyle: { color: '#3b82f6', borderRadius: [2, 2, 0, 0] },
           barMaxWidth: 32,
         },
         {
-          name: "Uses Needed",
-          type: "line",
+          name: 'Uses Needed',
+          type: 'line',
           yAxisIndex: 1,
           data: chartData.uses,
-          lineStyle: { color: "#f59e0b", width: 2 },
-          itemStyle: { color: "#f59e0b" },
-          symbol: "circle",
+          lineStyle: { color: '#f59e0b', width: 2 },
+          itemStyle: { color: '#f59e0b' },
+          symbol: 'circle',
           symbolSize: 5,
         },
       ],
     }),
     [chartData],
-  );
+  )
 
   const cumulativeChartOptions = useMemo(
     () => ({
-      backgroundColor: "transparent",
-      tooltip: { trigger: "axis" as const, ...CHART_TOOLTIP },
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis' as const, ...CHART_TOOLTIP },
       grid: { top: 40, right: 40, bottom: 40, left: 60 },
       xAxis: {
-        type: "category" as const,
+        type: 'category' as const,
         data: chartData.levels.map(String),
-        name: "Level",
-        nameLocation: "middle" as const,
+        name: 'Level',
+        nameLocation: 'middle' as const,
         nameGap: 28,
         ...CHART_AXIS_STYLES,
       },
       yAxis: {
-        type: "value" as const,
-        name: "Cumulative XP",
+        type: 'value' as const,
+        name: 'Cumulative XP',
         ...CHART_AXIS_STYLES,
         splitLine: CHART_SPLIT_LINE,
       },
       series: [
         {
-          name: "Cumulative XP",
-          type: "line",
+          name: 'Cumulative XP',
+          type: 'line',
           data: cumulativeData,
-          areaStyle: { color: "rgba(59, 130, 246, 0.1)" },
-          lineStyle: { color: "#3b82f6", width: 2 },
-          itemStyle: { color: "#3b82f6" },
-          symbol: "circle",
+          areaStyle: { color: 'rgba(59, 130, 246, 0.1)' },
+          lineStyle: { color: '#3b82f6', width: 2 },
+          itemStyle: { color: '#3b82f6' },
+          symbol: 'circle',
           symbolSize: 4,
           smooth: true,
         },
       ],
     }),
     [chartData.levels, cumulativeData],
-  );
+  )
 
   const handleChange = (field: keyof typeof xp, value: string) => {
-    const num = parseFloat(value);
+    const num = parseFloat(value)
     if (!isNaN(num)) {
-      setDraft("xp", { [field]: num });
+      setDraft('xp', { [field]: num })
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -155,18 +155,18 @@ export default function XpPanel() {
         <Badge
           variant="outline"
           className={
-            source === "db"
-              ? "border-blue-800 text-blue-400 text-[10px]"
-              : "border-neutral-700 text-neutral-500 text-[10px]"
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
-          {source === "db" ? "Live from DB" : "Using defaults"}
+          {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
         {hasDraft && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => clearDraftForKey("xp")}
+            onClick={() => clearDraftForKey('xp')}
             className="h-7 px-2 text-[11px] text-amber-400 hover:text-amber-300 hover:bg-amber-950/40"
           >
             Reset
@@ -182,8 +182,8 @@ export default function XpPanel() {
         <CardContent>
           <code className="text-sm text-neutral-400">
             xpThreshold(level) = max(<span className="text-amber-400">{xp.XP_FORMULA_FLOOR}</span>,
-            round(<span className="text-blue-400">{xp.XP_FORMULA_BASE}</span> + level ×{" "}
-            <span className="text-green-400">{xp.XP_FORMULA_LINEAR}</span> + level² ×{" "}
+            round(<span className="text-blue-400">{xp.XP_FORMULA_BASE}</span> + level ×{' '}
+            <span className="text-green-400">{xp.XP_FORMULA_LINEAR}</span> + level² ×{' '}
             <span className="text-purple-400">{xp.XP_FORMULA_QUADRATIC}</span>))
           </code>
         </CardContent>
@@ -200,7 +200,7 @@ export default function XpPanel() {
               <Label className="text-xs text-blue-400">BASE</Label>
               <NumberInput
                 value={xp.XP_FORMULA_BASE}
-                onChange={(v) => handleChange("XP_FORMULA_BASE", v)}
+                onChange={(v) => handleChange('XP_FORMULA_BASE', v)}
               />
             </div>
             <div className="space-y-1.5">
@@ -208,7 +208,7 @@ export default function XpPanel() {
               <NumberInput
                 step={0.1}
                 value={xp.XP_FORMULA_LINEAR}
-                onChange={(v) => handleChange("XP_FORMULA_LINEAR", v)}
+                onChange={(v) => handleChange('XP_FORMULA_LINEAR', v)}
               />
             </div>
             <div className="space-y-1.5">
@@ -216,14 +216,14 @@ export default function XpPanel() {
               <NumberInput
                 step={0.01}
                 value={xp.XP_FORMULA_QUADRATIC}
-                onChange={(v) => handleChange("XP_FORMULA_QUADRATIC", v)}
+                onChange={(v) => handleChange('XP_FORMULA_QUADRATIC', v)}
               />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs text-amber-400">FLOOR</Label>
               <NumberInput
                 value={xp.XP_FORMULA_FLOOR}
-                onChange={(v) => handleChange("XP_FORMULA_FLOOR", v)}
+                onChange={(v) => handleChange('XP_FORMULA_FLOOR', v)}
               />
             </div>
           </div>
@@ -293,5 +293,5 @@ export default function XpPanel() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
