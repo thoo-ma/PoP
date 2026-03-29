@@ -28,12 +28,20 @@ WITH CHECK (
 );
 
 -- ── UPDATE: only the original uploader may modify their objects ─────────────
+--   USING  — guards which rows can be targeted
+--   WITH CHECK — ensures the object cannot be renamed outside the owner's folder
 
 CREATE POLICY "Users can update own objects"
 ON storage.objects FOR UPDATE
 USING (
   bucket_id = 'assets'
-  AND auth.uid() = owner_id
+  AND auth.uid() = owner
+  AND (storage.foldername(name))[1] = auth.uid()::text
+)
+WITH CHECK (
+  bucket_id = 'assets'
+  AND auth.uid() = owner
+  AND (storage.foldername(name))[1] = auth.uid()::text
 );
 
 -- ── DELETE: only the original uploader may remove their objects ─────────────
@@ -42,5 +50,5 @@ CREATE POLICY "Users can delete own objects"
 ON storage.objects FOR DELETE
 USING (
   bucket_id = 'assets'
-  AND auth.uid() = owner_id
+  AND auth.uid() = owner
 );
