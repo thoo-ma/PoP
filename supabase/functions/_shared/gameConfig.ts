@@ -16,11 +16,11 @@
 
 import { buildGameConfig, type FullGameConfig } from '../../../shared/gameConfig.ts'
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '../../../shared/database.types.ts'
 
 export type { FullGameConfig }
 
-// deno-lint-ignore no-explicit-any
-type SupabaseClient = ReturnType<typeof createClient<any>>
+type SupabaseClient = ReturnType<typeof createClient<Database>>
 
 /**
  * Fetch and merge game config from the DB.

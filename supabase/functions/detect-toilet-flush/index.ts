@@ -1,5 +1,6 @@
 import { serve } from "std/http/server"
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '../../../shared/database.types.ts'
 import { getUserIdFromToken, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
@@ -28,7 +29,7 @@ serve(async (req) => {
     }
 
     // Create Supabase client with service role key
-    const supabaseClient = createClient(
+    const supabaseClient = createClient<Database>(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
       {

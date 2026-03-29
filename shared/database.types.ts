@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      degen_outcomes: {
+        Row: {
+          id: string
+          user_id: string
+          action: string
+          degen_percent: number
+          busted: boolean
+          base_cost: number
+          charged_amount: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          action: string
+          degen_percent: number
+          busted: boolean
+          base_cost: number
+          charged_amount: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          action?: string
+          degen_percent?: number
+          busted?: boolean
+          base_cost?: number
+          charged_amount?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       flush_detections: {
         Row: {
           audio_size_kb: number | null
@@ -312,6 +345,10 @@ export type Database = {
           user_id: string
           xp: number
         }[]
+      }
+      decrement_poop_balance: {
+        Args: { p_user_id: string; p_amount: number }
+        Returns: number
       }
       increment_poop_balance: {
         Args: { amount: number; user_id: string }
