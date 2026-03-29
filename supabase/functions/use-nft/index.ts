@@ -7,7 +7,7 @@ import {
 } from '../../../shared/cooldown.ts'
 import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -46,8 +46,10 @@ function calcEnergyLoss(
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
@@ -74,11 +76,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you')
+      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
     }
 
     if (nft.energy <= 0) {
-      return respondError(422, 'no_energy', 'NFT has no energy remaining')
+      return respondError(422, 'no_energy', 'NFT has no energy remaining', undefined, origin)
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
@@ -91,7 +93,7 @@ serve(async (req) => {
         {
           cooldown_ends_at:           endsAt.toISOString(),
           cooldown_remaining_seconds: remaining,
-        },
+        }, origin,
       )
     }
 
@@ -137,7 +139,7 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('use-nft: update error', updateError)
-      return respondError(500, 'internal_error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message, undefined, origin)
     }
 
     // ── Award POOP currency ───────────────────────────────────────────────────
@@ -188,12 +190,13 @@ serve(async (req) => {
       poop_earned:  poopEarned,
       poop_balance: newPoopBalance,
       loot_roll_id: lootRollId,
-    })
+    }, origin)
 
   } catch (err) {
     console.error('use-nft: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })

@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -24,8 +24,10 @@ const HoldLootRollSchema = z.object({
  */
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     const auth = await requireAuth(req, 'hold-loot-roll')
@@ -48,11 +50,11 @@ serve(async (req) => {
       .single()
 
     if (fetchError || !roll) {
-      return respondError(404, 'not_found', 'Loot roll not found or not owned by you')
+      return respondError(404, 'not_found', 'Loot roll not found or not owned by you', undefined, origin)
     }
 
     if (roll.holds >= MAX_HOLDS) {
-      return respondError(422, 'max_holds_reached', `You can only hold up to ${MAX_HOLDS} times`)
+      return respondError(422, 'max_holds_reached', `You can only hold up to ${MAX_HOLDS} times`, undefined, origin)
     }
 
     const newHolds = roll.holds + 1
@@ -65,17 +67,18 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('hold-loot-roll: update error', updateError)
-      return respondError(500, 'internal_error', updateError.message)
+      return respondError(500, 'internal_error', updateError.message, undefined, origin)
     }
 
     console.log(`hold-loot-roll: user=${userId} roll=${loot_roll_id} holds=${newHolds}`)
 
-    return respondOk({ holds: newHolds })
+    return respondOk({ holds: newHolds }, origin)
 
   } catch (err) {
     console.error('hold-loot-roll: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })

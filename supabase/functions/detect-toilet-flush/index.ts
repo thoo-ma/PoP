@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -12,8 +12,10 @@ const DetectSchema = z.object({
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     console.log('=== Edge Function Request Started ===')
@@ -53,7 +55,7 @@ serve(async (req) => {
     if (count !== null && count >= detectionsPerDay) {
       return respondError(429, 'rate_limit_exceeded',
         `You have reached the daily limit of ${detectionsPerDay} detections. Please try again tomorrow.`,
-        { limit: detectionsPerDay, current_count: count },
+        { limit: detectionsPerDay, current_count: count }, origin,
       )
     }
 
@@ -90,7 +92,7 @@ serve(async (req) => {
     // body, e.g. "Audio too short"). This is a client input problem, so 422 is
     // the correct status — not 500, which implies a server fault.
     if (result.error) {
-      return respondError(422, 'detection_failed', result.error)
+      return respondError(422, 'detection_failed', result.error, undefined, origin)
     }
 
     // Store detection result in database
@@ -118,11 +120,11 @@ serve(async (req) => {
       top_predictions: result.top_predictions,
       model_version: result.model_version,
       threshold_used: result.threshold_used,
-    })
+    }, origin)
 
   } catch (error) {
     console.error('Edge Function error:', error)
     const message = error instanceof Error ? error.message : 'Unknown error'
-    return respondError(500, 'internal_error', message)
+    return respondError(500, 'internal_error', message, undefined, origin)
   }
 })

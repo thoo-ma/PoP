@@ -3,7 +3,7 @@ import type { Database } from '../../../shared/database.types.ts'
 import { respondError } from './responses.ts'
 type SupabaseClient = ReturnType<typeof createClient<Database>>
 
-export { corsHeaders } from './headers.ts'
+export { corsHeaders, getCorsHeaders, getJsonHeaders } from './headers.ts'
 
 /**
  * Resolve a user ID from a bearer token by calling `supabase.auth.getUser(token)`.

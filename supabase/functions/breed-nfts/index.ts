@@ -4,7 +4,7 @@ import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { breedCost } from '../../../shared/currency.ts'
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -48,8 +48,10 @@ function rollRarity(r1: Rarity, r2: Rarity, probsMap: Record<BreedPairKey, [numb
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
+
+  const origin = req.headers.get('origin')
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
@@ -84,11 +86,11 @@ serve(async (req) => {
 
     if (fetchError) {
       console.error('breed-nfts: fetch parents error', fetchError)
-      return respondError(500, 'internal_error', fetchError.message)
+      return respondError(500, 'internal_error', fetchError.message, undefined, origin)
     }
 
     if (!parents || parents.length !== 2) {
-      return respondError(404, 'not_found', 'One or both NFTs not found or not owned by you')
+      return respondError(404, 'not_found', 'One or both NFTs not found or not owned by you', undefined, origin)
     }
 
     const p1 = parents.find((p: Tables<'nfts'>) => p.id === parent1_id)!
@@ -102,6 +104,7 @@ serve(async (req) => {
     if (rankDiff > 1) {
       return respondError(422, 'incompatible_rarities',
         `Cannot breed ${r1} with ${r2}. Only NFTs of the same or adjacent rarity can be bred together.`,
+        undefined, origin,
       )
     }
 
@@ -114,7 +117,7 @@ serve(async (req) => {
       const exhausted = p1BreedCount >= BREED_MAX_COUNT ? parent1_id : parent2_id
       return respondError(422, 'breed_limit_reached',
         `NFT ${exhausted} has already been bred ${BREED_MAX_COUNT} times and can no longer be used as a parent.`,
-        { exhausted_nft_id: exhausted },
+        { exhausted_nft_id: exhausted }, origin,
       )
     }
 
@@ -146,6 +149,7 @@ serve(async (req) => {
       console.error('breed-nfts: applyDegenBar error', degenErr)
       return respondError(500, 'internal_error',
         degenErr instanceof Error ? degenErr.message : 'Unknown error',
+        undefined, origin,
       )
     }
 
@@ -160,7 +164,7 @@ serve(async (req) => {
           poop_balance: currentBalance,
           poop_required: chargedAmount,
           poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
-        },
+        }, origin,
       )
     }
 
@@ -171,7 +175,7 @@ serve(async (req) => {
         poop_spent:    chargedAmount,
         poop_balance:  newBalance,
         config_hash:   computeConfigHash(cfg.degen_bar),
-      })
+      }, origin)
     }
 
     // ── Rarity roll ───────────────────────────────────────────────────────────
@@ -196,7 +200,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('breed-nfts: insert error', insertError)
-      return respondError(500, 'internal_error', insertError.message)
+      return respondError(500, 'internal_error', insertError.message, undefined, origin)
     }
 
     console.log(`breed-nfts: user ${userId} spent ${chargedAmount} POOP (${p1Cost}+${p2Cost}) → balance ${newBalance}`)
@@ -240,12 +244,13 @@ serve(async (req) => {
       config_hash:   computeConfigHash(cfg.degen_bar),
     }
 
-    return respondOk(result)
+    return respondOk(result, origin)
 
   } catch (err) {
     console.error('breed-nfts: unexpected error', err)
     return respondError(500, 'internal_error',
       err instanceof Error ? err.message : 'Unknown error',
+      undefined, origin,
     )
   }
 })
