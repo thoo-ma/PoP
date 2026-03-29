@@ -49,6 +49,13 @@ serve(async (req) => {
 
     if (countError) {
       console.error('detect-toilet-flush: rate limit check error', countError)
+      return respondError(
+        500,
+        'rate_limit_check_failed',
+        'Unable to verify your daily detection limit at this time. Please try again later.',
+        undefined,
+        origin,
+      )
     }
 
     if (count !== null && count >= detectionsPerDay) {
