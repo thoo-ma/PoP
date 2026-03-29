@@ -11,8 +11,9 @@ import { parseBody, z } from '../_shared/validation.ts'
 import { parseDegenPercent, applyDegenBar, computeConfigHash } from '../_shared/degenBar.ts'
 
 const BreedSchema = z.object({
-  parent1_id: z.string().uuid('parent1_id must be a valid UUID'),
-  parent2_id: z.string().uuid('parent2_id must be a valid UUID'),
+  parent1_id:    z.string().uuid('parent1_id must be a valid UUID'),
+  parent2_id:    z.string().uuid('parent2_id must be a valid UUID'),
+  degen_percent: z.number().int().min(0).max(100).default(0).optional(),
 }).refine((d) => d.parent1_id !== d.parent2_id, {
   message: 'Cannot breed an NFT with itself',
   path: ['parent2_id'],
