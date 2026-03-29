@@ -16,17 +16,17 @@ import {
 } from '@/components/ui/breadcrumb'
 
 const SECTION_LABELS: Record<string, string> = {
-  '/xp':         'XP & Leveling',
-  '/currency':   'Currency (POOP)',
-  '/cooldown':   'Cooldown',
-  '/stat-points':'Stat Points',
-  '/breed':      'Breeding',
-  '/minting':    'Minting',
-  '/sensors':    'Sensors',
-  '/energy':     'Energy Drain',
-  '/loot':       'Loot Roll',
-  '/cloud-run':  'Cloud Run',
-  '/degen-bar':  'Degen Bar',
+  '/xp': 'XP & Leveling',
+  '/currency': 'Currency (POOP)',
+  '/cooldown': 'Cooldown',
+  '/stat-points': 'Stat Points',
+  '/breed': 'Breeding',
+  '/minting': 'Minting',
+  '/sensors': 'Sensors',
+  '/energy': 'Energy Drain',
+  '/loot': 'Loot Roll',
+  '/cloud-run': 'Cloud Run',
+  '/degen-bar': 'Degen Bar',
 }
 
 export function Header() {
@@ -34,7 +34,7 @@ export function Header() {
   const pathname = usePathname()
   const section = SECTION_LABELS[pathname] ?? null
 
-  const dbCount    = Object.values(sources).filter((s) => s === 'db').length
+  const dbCount = Object.values(sources).filter((s) => s === 'db').length
   const totalCount = Object.keys(sources).length
   const draftCount = Object.keys(drafts).length
 

@@ -20,59 +20,59 @@
   /* ── NFT stat colors ─────────────────────────────────────── */
   --color-stat-efficiency: #3b82f6;
   --color-stat-resilience: #10b981;
-  --color-stat-comfort:    #f59e0b;
-  --color-stat-luck:       #8b5cf6;
-  --color-stat-energy:     #ef4444;
-  --color-stat-level:      #6366f1;
+  --color-stat-comfort: #f59e0b;
+  --color-stat-luck: #8b5cf6;
+  --color-stat-energy: #ef4444;
+  --color-stat-level: #6366f1;
 
   /* ── NFT type colors ──────────────────────────────────────── */
-  --color-type-cruise-seat:   #94a3b8;
-  --color-type-turbo-flush:   #f59e0b;
-  --color-type-zen-fortress:  #8b5cf6;
+  --color-type-cruise-seat: #94a3b8;
+  --color-type-turbo-flush: #f59e0b;
+  --color-type-zen-fortress: #8b5cf6;
 
   /* ── NFT rarity colors ───────────────────────────────────── */
-  --color-rarity-common:       #94a3b8;
-  --color-rarity-rare:         #3b82f6;
-  --color-rarity-legendary:    #f59e0b;
+  --color-rarity-common: #94a3b8;
+  --color-rarity-rare: #3b82f6;
+  --color-rarity-legendary: #f59e0b;
   --color-rarity-transcendent: #a855f7;
 
   /* ── Status & feedback ───────────────────────────────────── */
-  --color-app-success:    #4ade80;
-  --color-app-error:      #dc2626;
-  --color-app-warning:    #ff6b6b;
-  --color-app-info:       #3b82f6;
-  --color-app-mystery:    #7c3aed;
-  --color-app-amber:      #fbbf24;
+  --color-app-success: #4ade80;
+  --color-app-error: #dc2626;
+  --color-app-warning: #ff6b6b;
+  --color-app-info: #3b82f6;
+  --color-app-mystery: #7c3aed;
+  --color-app-amber: #fbbf24;
 
   /* ── Text palette ────────────────────────────────────────── */
-  --color-text-title:    #374151;
-  --color-text-body:     #6b7280;
-  --color-text-light:    #999;
-  --color-text-dark:     #1e293b;
+  --color-text-title: #374151;
+  --color-text-body: #6b7280;
+  --color-text-light: #999;
+  --color-text-dark: #1e293b;
 
   /* ── Surface / background palette ───────────────────────── */
-  --color-surface-bg:        #fff;
-  --color-surface-light:     #f3f4f6;
-  --color-surface-lighter:   #f9fafb;
-  --color-surface-2:         #f8fafc;
-  --color-overlay-dark:      rgba(0, 0, 0, 0.5);
-  --color-overlay-dark-mid:  rgba(0, 0, 0, 0.55);
-  --color-overlay-dark-heavy: rgba(0, 0, 0, 0.70);
+  --color-surface-bg: #fff;
+  --color-surface-light: #f3f4f6;
+  --color-surface-lighter: #f9fafb;
+  --color-surface-2: #f8fafc;
+  --color-overlay-dark: rgba(0, 0, 0, 0.5);
+  --color-overlay-dark-mid: rgba(0, 0, 0, 0.55);
+  --color-overlay-dark-heavy: rgba(0, 0, 0, 0.7);
 
   /* ── Property bar colors ─────────────────────────────────── */
-  --color-property-bg:    #e2e8f0;
-  --color-property-text:  #475569;
+  --color-property-bg: #e2e8f0;
+  --color-property-text: #475569;
   --color-property-value: #1e293b;
 
   /* ── Border / divider ────────────────────────────────────── */
   --color-border-default: #e5e7eb;
-  --color-border-light:   #d1d5db;
+  --color-border-light: #d1d5db;
 
   /* ── Button states ───────────────────────────────────────── */
-  --color-btn-primary:   #000;
+  --color-btn-primary: #000;
   --color-btn-secondary: #d1d5db;
-  --color-btn-success:   #10b981;
-  --color-btn-text:      #fff;
-  --color-btn-text-dark: #1F1F1F;
-  --color-btn-disabled:  #9CA3AF;
+  --color-btn-success: #10b981;
+  --color-btn-text: #fff;
+  --color-btn-text-dark: #1f1f1f;
+  --color-btn-disabled: #9ca3af;
 }

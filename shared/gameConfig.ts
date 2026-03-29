@@ -30,17 +30,17 @@ import {
 
 /** Full validated game config — every key is guaranteed present (defaults fallback). */
 export type FullGameConfig = {
-  currency:     CurrencyConfig
-  cooldown:     CooldownConfig
-  xp:           XpConfig
-  stat_points:  StatPointsConfig
-  breed:        BreedConfig
-  minting:      MintingConfig
-  sensors:      SensorsConfig
+  currency: CurrencyConfig
+  cooldown: CooldownConfig
+  xp: XpConfig
+  stat_points: StatPointsConfig
+  breed: BreedConfig
+  minting: MintingConfig
+  sensors: SensorsConfig
   energy_drain: EnergyDrainConfig
-  loot_roll:    LootRollConfig
-  cloud_run:    CloudRunConfig
-  degen_bar:    DegenBarConfig
+  loot_roll: LootRollConfig
+  cloud_run: CloudRunConfig
+  degen_bar: DegenBarConfig
 }
 
 /** Per-key source tracking: did this value come from the DB or from code defaults? */
@@ -74,16 +74,16 @@ function buildDefaultSources(): ConfigSource {
  *   - `warnings` — human-readable messages for rows that failed Zod validation
  */
 export function buildGameConfig(rows: Array<{ key: string; value: unknown }> = []): {
-  config:   FullGameConfig
-  sources:  ConfigSource
+  config: FullGameConfig
+  sources: ConfigSource
   warnings: string[]
 } {
-  const config   = buildDefaults()
-  const sources  = buildDefaultSources()
+  const config = buildDefaults()
+  const sources = buildDefaultSources()
   const warnings: string[] = []
 
   for (const row of rows) {
-    const key   = row.key as GameConfigKey
+    const key = row.key as GameConfigKey
     const entry = GAME_CONFIG_REGISTRY[key]
     if (!entry) continue
 

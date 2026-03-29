@@ -6,8 +6,8 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from './nft.ts';
-import type { NFTType } from './nft.ts';
+import type { NFTRarity } from './nft.ts'
+import type { NFTType } from './nft.ts'
 
 // ─── Repair cost formula ─────────────────────────────────────────────────────
 // Cost ($) = (REPAIR_COEF_A × level² + REPAIR_COEF_B) × RarityMultiplier
@@ -20,19 +20,19 @@ import type { NFTType } from './nft.ts';
 // half is not yet implemented — the full token amount is charged in POOP only.
 
 // @migration: DELETE — game_config.currency
-export const REPAIR_COEF_A = 0.85;
+export const REPAIR_COEF_A = 0.85
 // @migration: DELETE — game_config.currency
-export const REPAIR_COEF_B = 4.15;
+export const REPAIR_COEF_B = 4.15
 // @migration: DELETE — game_config.currency
-export const REPAIR_USD_PER_TOKEN = 0.002;
+export const REPAIR_USD_PER_TOKEN = 0.002
 
 // @migration: DELETE — game_config.currency
 export const REPAIR_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
-  common:       1.0,
-  rare:         1.2,
-  legendary:    1.5,
+  common: 1.0,
+  rare: 1.2,
+  legendary: 1.5,
   transcendent: 2.0,
-};
+}
 
 /**
  * Repair cost in $POOP tokens for a given NFT and energy amount to restore.
@@ -49,19 +49,19 @@ export function repairCost(
   energyRestored: number,
   maxEnergy: number,
   cfg?: {
-    REPAIR_COEF_A?: number;
-    REPAIR_COEF_B?: number;
-    REPAIR_USD_PER_TOKEN?: number;
-    REPAIR_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+    REPAIR_COEF_A?: number
+    REPAIR_COEF_B?: number
+    REPAIR_USD_PER_TOKEN?: number
+    REPAIR_RARITY_MULTIPLIER?: Record<NFTRarity, number>
   },
 ): number {
-  const a           = cfg?.REPAIR_COEF_A            ?? REPAIR_COEF_A;
-  const b           = cfg?.REPAIR_COEF_B            ?? REPAIR_COEF_B;
-  const usdPerToken = cfg?.REPAIR_USD_PER_TOKEN      ?? REPAIR_USD_PER_TOKEN;
-  const rarityMult  = cfg?.REPAIR_RARITY_MULTIPLIER  ?? REPAIR_RARITY_MULTIPLIER;
-  const fullCostUsd    = (a * Math.pow(level, 2) + b) * rarityMult[rarity];
-  const fullCostTokens = fullCostUsd / usdPerToken;
-  return Math.round((energyRestored / maxEnergy) * fullCostTokens);
+  const a = cfg?.REPAIR_COEF_A ?? REPAIR_COEF_A
+  const b = cfg?.REPAIR_COEF_B ?? REPAIR_COEF_B
+  const usdPerToken = cfg?.REPAIR_USD_PER_TOKEN ?? REPAIR_USD_PER_TOKEN
+  const rarityMult = cfg?.REPAIR_RARITY_MULTIPLIER ?? REPAIR_RARITY_MULTIPLIER
+  const fullCostUsd = (a * Math.pow(level, 2) + b) * rarityMult[rarity]
+  const fullCostTokens = fullCostUsd / usdPerToken
+  return Math.round((energyRestored / maxEnergy) * fullCostTokens)
 }
 
 // ─── Breed cost formula ───────────────────────────────────────────────────────
@@ -85,24 +85,24 @@ export function repairCost(
 
 /** Base breed price in USD at breedCount = 0. */
 // @migration: DELETE — game_config.currency
-export const BREED_BASE_PRICE_USD = 0.20;
+export const BREED_BASE_PRICE_USD = 0.2
 /** Exponential growth rate per breed level. */
 // @migration: DELETE — game_config.currency
-export const BREED_GROWTH_RATE = 2.5;
+export const BREED_GROWTH_RATE = 2.5
 /** USD value of one $POOP token (consistent with REPAIR_USD_PER_TOKEN). */
 // @migration: DELETE — game_config.currency
-export const BREED_USD_PER_TOKEN = 0.002;
+export const BREED_USD_PER_TOKEN = 0.002
 /** Maximum number of times an NFT can be used as a parent (inclusive). */
 // @migration: DELETE — game_config.currency
-export const BREED_MAX_COUNT = 5;
+export const BREED_MAX_COUNT = 5
 
 // @migration: DELETE — game_config.currency
 export const BREED_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
-  common:       1,
-  rare:         8,
-  legendary:    40,
+  common: 1,
+  rare: 8,
+  legendary: 40,
   transcendent: 150,
-};
+}
 
 /**
  * Breed cost in $POOP tokens for a single parent NFT.
@@ -117,18 +117,18 @@ export function breedCost(
   breedCount: number,
   rarity: NFTRarity,
   cfg?: {
-    BREED_BASE_PRICE_USD?: number;
-    BREED_GROWTH_RATE?: number;
-    BREED_USD_PER_TOKEN?: number;
-    BREED_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+    BREED_BASE_PRICE_USD?: number
+    BREED_GROWTH_RATE?: number
+    BREED_USD_PER_TOKEN?: number
+    BREED_RARITY_MULTIPLIER?: Record<NFTRarity, number>
   },
 ): number {
-  const base        = cfg?.BREED_BASE_PRICE_USD    ?? BREED_BASE_PRICE_USD;
-  const growth      = cfg?.BREED_GROWTH_RATE        ?? BREED_GROWTH_RATE;
-  const usdPerToken = cfg?.BREED_USD_PER_TOKEN      ?? BREED_USD_PER_TOKEN;
-  const rarityMult  = cfg?.BREED_RARITY_MULTIPLIER  ?? BREED_RARITY_MULTIPLIER;
-  const costUsd = base * Math.pow(growth, breedCount) * rarityMult[rarity];
-  return Math.round(costUsd / usdPerToken);
+  const base = cfg?.BREED_BASE_PRICE_USD ?? BREED_BASE_PRICE_USD
+  const growth = cfg?.BREED_GROWTH_RATE ?? BREED_GROWTH_RATE
+  const usdPerToken = cfg?.BREED_USD_PER_TOKEN ?? BREED_USD_PER_TOKEN
+  const rarityMult = cfg?.BREED_RARITY_MULTIPLIER ?? BREED_RARITY_MULTIPLIER
+  const costUsd = base * Math.pow(growth, breedCount) * rarityMult[rarity]
+  return Math.round(costUsd / usdPerToken)
 }
 
 // ─── Use reward formula ───────────────────────────────────────────────────────
@@ -140,28 +140,28 @@ export function breedCost(
 
 /** Base reward in USD at level 1. */
 // @migration: DELETE — game_config.currency
-export const REWARD_BASE_PRICE_USD = 0.004;
+export const REWARD_BASE_PRICE_USD = 0.004
 /** Exponential growth rate per level. */
 // @migration: DELETE — game_config.currency
-export const REWARD_GROWTH_RATE = 1.08;
+export const REWARD_GROWTH_RATE = 1.08
 /** USD value of one $POOP token. */
 // @migration: DELETE — game_config.currency
-export const REWARD_USD_PER_TOKEN = 0.002;
+export const REWARD_USD_PER_TOKEN = 0.002
 
 // @migration: DELETE — game_config.currency
 export const REWARD_RARITY_MULTIPLIER: Record<NFTRarity, number> = {
-  common:       1,
-  rare:         2,
-  legendary:    5,
+  common: 1,
+  rare: 2,
+  legendary: 5,
   transcendent: 12,
-};
+}
 
 // @migration: DELETE — game_config.currency
 export const REWARD_TYPE_MULTIPLIER: Record<NFTType, number> = {
-  'turbo-flush':  1.5,
-  'cruise-seat':  1.0,
+  'turbo-flush': 1.5,
+  'cruise-seat': 1.0,
   'zen-fortress': 0.8,
-};
+}
 
 /**
  * POOP tokens earned for a single NFT use.
@@ -176,22 +176,18 @@ export function calcPoopEarned(
   rarity: NFTRarity,
   level: number,
   cfg?: {
-    REWARD_BASE_PRICE_USD?: number;
-    REWARD_GROWTH_RATE?: number;
-    REWARD_USD_PER_TOKEN?: number;
-    REWARD_TYPE_MULTIPLIER?: Record<NFTType, number>;
-    REWARD_RARITY_MULTIPLIER?: Record<NFTRarity, number>;
+    REWARD_BASE_PRICE_USD?: number
+    REWARD_GROWTH_RATE?: number
+    REWARD_USD_PER_TOKEN?: number
+    REWARD_TYPE_MULTIPLIER?: Record<NFTType, number>
+    REWARD_RARITY_MULTIPLIER?: Record<NFTRarity, number>
   },
 ): number {
-  const base        = cfg?.REWARD_BASE_PRICE_USD    ?? REWARD_BASE_PRICE_USD;
-  const growth      = cfg?.REWARD_GROWTH_RATE        ?? REWARD_GROWTH_RATE;
-  const usdPerToken = cfg?.REWARD_USD_PER_TOKEN      ?? REWARD_USD_PER_TOKEN;
-  const typeMult    = cfg?.REWARD_TYPE_MULTIPLIER    ?? REWARD_TYPE_MULTIPLIER;
-  const rarityMult  = cfg?.REWARD_RARITY_MULTIPLIER  ?? REWARD_RARITY_MULTIPLIER;
-  const rewardUsd =
-    base *
-    Math.pow(growth, level - 1) *
-    typeMult[type] *
-    rarityMult[rarity];
-  return Math.max(1, Math.round(rewardUsd / usdPerToken));
+  const base = cfg?.REWARD_BASE_PRICE_USD ?? REWARD_BASE_PRICE_USD
+  const growth = cfg?.REWARD_GROWTH_RATE ?? REWARD_GROWTH_RATE
+  const usdPerToken = cfg?.REWARD_USD_PER_TOKEN ?? REWARD_USD_PER_TOKEN
+  const typeMult = cfg?.REWARD_TYPE_MULTIPLIER ?? REWARD_TYPE_MULTIPLIER
+  const rarityMult = cfg?.REWARD_RARITY_MULTIPLIER ?? REWARD_RARITY_MULTIPLIER
+  const rewardUsd = base * Math.pow(growth, level - 1) * typeMult[type] * rarityMult[rarity]
+  return Math.max(1, Math.round(rewardUsd / usdPerToken))
 }

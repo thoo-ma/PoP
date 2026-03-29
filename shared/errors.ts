@@ -8,32 +8,33 @@
  */
 export const EdgeFunctionErrorCode = {
   // 400
-  BAD_REQUEST:          'bad_request',
+  BAD_REQUEST: 'bad_request',
   // 401
-  UNAUTHORIZED:         'unauthorized',
+  UNAUTHORIZED: 'unauthorized',
   // 402
-  INSUFFICIENT_POOP:    'insufficient_poop',
+  INSUFFICIENT_POOP: 'insufficient_poop',
   // 404
-  NOT_FOUND:            'not_found',
+  NOT_FOUND: 'not_found',
   // 409
-  CONFLICT:             'conflict',
+  CONFLICT: 'conflict',
   // 422
-  NO_ENERGY:            'no_energy',
-  BREED_LIMIT_REACHED:  'breed_limit_reached',
-  INCOMPATIBLE_RARITIES:'incompatible_rarities',
-  INSUFFICIENT_POINTS:  'insufficient_points',
-  STAT_CAP_EXCEEDED:    'stat_cap_exceeded',
-  MAX_HOLDS_REACHED:    'max_holds_reached',
-  DETECTION_FAILED:     'detection_failed',
-  BUSTED:               'busted',
+  NO_ENERGY: 'no_energy',
+  BREED_LIMIT_REACHED: 'breed_limit_reached',
+  INCOMPATIBLE_RARITIES: 'incompatible_rarities',
+  INSUFFICIENT_POINTS: 'insufficient_points',
+  STAT_CAP_EXCEEDED: 'stat_cap_exceeded',
+  MAX_HOLDS_REACHED: 'max_holds_reached',
+  DETECTION_FAILED: 'detection_failed',
+  BUSTED: 'busted',
   // 429
-  ON_COOLDOWN:          'on_cooldown',
-  RATE_LIMIT_EXCEEDED:  'rate_limit_exceeded',
+  ON_COOLDOWN: 'on_cooldown',
+  RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded',
   // 500
-  INTERNAL_ERROR:       'internal_error',
+  INTERNAL_ERROR: 'internal_error',
 } as const
 
-export type EdgeFunctionErrorCode = typeof EdgeFunctionErrorCode[keyof typeof EdgeFunctionErrorCode]
+export type EdgeFunctionErrorCode =
+  (typeof EdgeFunctionErrorCode)[keyof typeof EdgeFunctionErrorCode]
 
 /** Base error response shape shared by all edge functions. */
 export interface EdgeFunctionErrorResponse {

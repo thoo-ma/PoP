@@ -21,54 +21,57 @@ const PAIR_KEYS = [
   'transcendent+transcendent',
 ] as const
 
-type PairKey = typeof PAIR_KEYS[number]
+type PairKey = (typeof PAIR_KEYS)[number]
 
 function rowSum(row: readonly [number, number, number, number]): number {
   return row[0] + row[1] + row[2] + row[3]
 }
 
 export default function BreedPanel() {
-  const breed            = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })))
-  const source           = useGameConfigStore((s) => s.sources.breed)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const breed = useGameConfigStore(useShallow((s) => ({ ...s.config.breed, ...s.drafts.breed })))
+  const source = useGameConfigStore((s) => s.sources.breed)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.breed !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.breed !== undefined)
 
-  const chartOptions = useMemo(() => ({
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'axis' as const,
-      axisPointer: { type: 'shadow' as const },
-      ...CHART_TOOLTIP,
-    },
-    legend: { data: [...RARITIES], ...CHART_LEGEND },
-    grid: { top: 40, right: 20, bottom: 60, left: 160 },
-    xAxis: {
-      type: 'value' as const,
-      max: 100,
-      ...CHART_AXIS_STYLES,
-      axisLabel: { color: '#a3a3a3', fontSize: 11, formatter: (v: number) => `${v}%` },
-      splitLine: CHART_SPLIT_LINE,
-    },
-    yAxis: {
-      type: 'category' as const,
-      data: [...PAIR_KEYS],
-      ...CHART_AXIS_STYLES,
-    },
-    series: RARITIES.map((r, i) => ({
-      name: r,
-      type: 'bar' as const,
-      stack: 'total',
-      itemStyle: { color: RARITY_COLORS[r] },
-      label: {
-        show: true,
-        color: '#fff',
-        fontSize: 10,
-        formatter: (params: { value: number }) => params.value > 2 ? `${params.value}%` : '',
+  const chartOptions = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis' as const,
+        axisPointer: { type: 'shadow' as const },
+        ...CHART_TOOLTIP,
       },
-      data: PAIR_KEYS.map((key) => breed.BREED_PROBABILITIES[key][i]),
-    })),
-  }), [breed])
+      legend: { data: [...RARITIES], ...CHART_LEGEND },
+      grid: { top: 40, right: 20, bottom: 60, left: 160 },
+      xAxis: {
+        type: 'value' as const,
+        max: 100,
+        ...CHART_AXIS_STYLES,
+        axisLabel: { color: '#a3a3a3', fontSize: 11, formatter: (v: number) => `${v}%` },
+        splitLine: CHART_SPLIT_LINE,
+      },
+      yAxis: {
+        type: 'category' as const,
+        data: [...PAIR_KEYS],
+        ...CHART_AXIS_STYLES,
+      },
+      series: RARITIES.map((r, i) => ({
+        name: r,
+        type: 'bar' as const,
+        stack: 'total',
+        itemStyle: { color: RARITY_COLORS[r] },
+        label: {
+          show: true,
+          color: '#fff',
+          fontSize: 10,
+          formatter: (params: { value: number }) => (params.value > 2 ? `${params.value}%` : ''),
+        },
+        data: PAIR_KEYS.map((key) => breed.BREED_PROBABILITIES[key][i]),
+      })),
+    }),
+    [breed],
+  )
 
   const handleChange = (pair: PairKey, idx: number, value: string) => {
     const num = parseFloat(value)
@@ -86,9 +89,11 @@ export default function BreedPanel() {
         <h2 className="text-xl font-semibold text-white">Breeding Probabilities</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'}
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
+          }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
@@ -116,7 +121,11 @@ export default function BreedPanel() {
               <tr className="border-b border-neutral-800 text-[11px] uppercase tracking-wider text-neutral-500">
                 <th className="py-2 pr-4 text-left font-medium">Parent Pair</th>
                 {RARITIES.map((r) => (
-                  <th key={r} className="px-2 py-2 text-center font-medium capitalize" style={{ color: RARITY_COLORS[r] }}>
+                  <th
+                    key={r}
+                    className="px-2 py-2 text-center font-medium capitalize"
+                    style={{ color: RARITY_COLORS[r] }}
+                  >
                     {r}
                   </th>
                 ))}
@@ -162,7 +171,9 @@ export default function BreedPanel() {
 
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-neutral-300">Outcome Distribution</CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">
+            Outcome Distribution
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <LazyChart option={chartOptions} style={{ height: 340 }} />

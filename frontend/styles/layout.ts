@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 // ── Screen container ──────────────────────────────────────────────────────────
 // The top-level View (or ScrollView) wrapper for every screen.
@@ -23,7 +23,7 @@ export const screenContainer = tv({
     },
   },
   defaultVariants: { padX: 'none' },
-});
+})
 
 // ── Scroll content wrapper ────────────────────────────────────────────────────
 // Applied to ScrollView contentContainerClassName across all screens.
@@ -39,7 +39,7 @@ export const scrollContent = tv({
       lg: 'pb-[140px]',
     },
   },
-});
+})
 
 // ── Grid layout ───────────────────────────────────────────────────────────────
 // Two-column NFT / mystery-box grid used in Vault and Marketplace.
@@ -56,11 +56,11 @@ export const gridLayout = tv({
     },
   },
   defaultVariants: { columns: 'two' },
-});
+})
 
 // ── NFT picker button ─────────────────────────────────────────────────────────
 // The dashed-border "Select NFT from Vault" placeholder shown in Poop and
 // Repair before the user picks an NFT.
 export const nftPickerButton = tv({
   base: 'w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-border flex-col mt-5',
-});
+})

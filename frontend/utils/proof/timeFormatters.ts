@@ -4,5 +4,5 @@
  * @returns Formatted percentage string like "85%"
  */
 export const formatConfidencePercentage = (confidence: number): string => {
-  return `${Math.round(confidence * 100)}%`;
-};
+  return `${Math.round(confidence * 100)}%`
+}

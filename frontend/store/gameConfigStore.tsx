@@ -5,7 +5,7 @@ import { buildDefaults, buildGameConfig, type FullGameConfig } from '@pop/shared
 export type { FullGameConfig }
 
 interface GameConfigContextValue {
-  config:  FullGameConfig
+  config: FullGameConfig
   loading: boolean
   refetch: () => Promise<void>
 }
@@ -13,7 +13,7 @@ interface GameConfigContextValue {
 // ─── Context ──────────────────────────────────────────────────────────────────
 
 const GameConfigContext = createContext<GameConfigContextValue>({
-  config:  buildDefaults(),
+  config: buildDefaults(),
   loading: true,
   refetch: async () => {},
 })

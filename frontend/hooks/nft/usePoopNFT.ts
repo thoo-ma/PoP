@@ -1,36 +1,36 @@
-import { useState, useCallback } from 'react';
-import { FunctionsHttpError } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { logError } from '@/utils/errorHelpers';
-import type { EdgeFunctionErrorResponse, CooldownDetails } from '@pop/shared';
+import { useState, useCallback } from 'react'
+import { FunctionsHttpError } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
+import { logError } from '@/utils/errorHelpers'
+import type { EdgeFunctionErrorResponse, CooldownDetails } from '@pop/shared'
 
 export interface CooldownError {
-  cooldown_ends_at: string;
-  cooldown_remaining_seconds: number;
+  cooldown_ends_at: string
+  cooldown_remaining_seconds: number
 }
 
 export interface PoopResult {
-  id: string;
+  id: string
   /** Energy value after the use */
-  energy: number;
-  energy_lost: number;
-  depleted: boolean;
+  energy: number
+  energy_lost: number
+  depleted: boolean
   /** XP within the current level after the use */
-  xp: number;
+  xp: number
   /** XP earned this poop */
-  xp_gained: number;
+  xp_gained: number
   /** Level after the use */
-  level: number;
+  level: number
   /** Whether the NFT leveled up this poop */
-  leveled_up: boolean;
+  leveled_up: boolean
   /** Total unspent stat points on the NFT after this poop */
-  stat_points: number;
+  stat_points: number
   /** POOP currency earned this use */
-  poop_earned: number;
+  poop_earned: number
   /** Updated wallet balance after this use */
-  poop_balance: number;
+  poop_balance: number
   /** ID of the newly created pending loot roll — pass to useRollLoot */
-  loot_roll_id: string | null;
+  loot_roll_id: string | null
 }
 
 /**
@@ -44,58 +44,60 @@ export interface PoopResult {
  *   NFT is still resting (contains `cooldown_ends_at` and `cooldown_remaining_seconds`).
  */
 export function usePoopNFT() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [cooldownError, setCooldownError] = useState<CooldownError | null>(null);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [cooldownError, setCooldownError] = useState<CooldownError | null>(null)
 
   const poopNFT = useCallback(async (nftId: string): Promise<PoopResult | null> => {
     try {
-      setLoading(true);
-      setError(null);
-      setCooldownError(null);
+      setLoading(true)
+      setError(null)
+      setCooldownError(null)
 
       const { data, error: fnError } = await supabase.functions.invoke('use-nft', {
         body: { nft_id: nftId },
-      });
+      })
 
       if (fnError) {
-        let message: string = fnError.message;
-        let body: EdgeFunctionErrorResponse | null = null;
+        let message: string = fnError.message
+        let body: EdgeFunctionErrorResponse | null = null
         if (fnError instanceof FunctionsHttpError) {
           try {
-            body = await fnError.context.json();
-            if (body?.message) message = body.message;
-            else if (body?.error) message = body.error;
-          } catch { /* leave message as-is */ }
+            body = await fnError.context.json()
+            if (body?.message) message = body.message
+            else if (body?.error) message = body.error
+          } catch {
+            /* leave message as-is */
+          }
         }
         // Structured cooldown error from the server
         if (body?.error === 'on_cooldown' && body?.details) {
-          const d = body.details as unknown as CooldownDetails;
+          const d = body.details as unknown as CooldownDetails
           setCooldownError({
-            cooldown_ends_at:           d.cooldown_ends_at,
+            cooldown_ends_at: d.cooldown_ends_at,
             cooldown_remaining_seconds: d.cooldown_remaining_seconds,
-          });
-          return null;
+          })
+          return null
         }
-        logError('usePoopNFT:Invoke', fnError);
-        setError(message);
-        return null;
+        logError('usePoopNFT:Invoke', fnError)
+        setError(message)
+        return null
       }
 
       if (!data) {
-        setError('No data returned from use-nft function');
-        return null;
+        setError('No data returned from use-nft function')
+        return null
       }
 
-      return data as PoopResult;
+      return data as PoopResult
     } catch (err) {
-      logError('usePoopNFT:Poop', err);
-      setError(err instanceof Error ? err.message : 'Failed to use NFT');
-      return null;
+      logError('usePoopNFT:Poop', err)
+      setError(err instanceof Error ? err.message : 'Failed to use NFT')
+      return null
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
-  return { poopNFT, loading, error, cooldownError };
+  return { poopNFT, loading, error, cooldownError }
 }

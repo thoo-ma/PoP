@@ -9,11 +9,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 export default function CloudRunPanel() {
-  const cr               = useGameConfigStore(useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })))
-  const source           = useGameConfigStore((s) => s.sources.cloud_run)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const cr = useGameConfigStore(
+    useShallow((s) => ({ ...s.config.cloud_run, ...s.drafts.cloud_run })),
+  )
+  const source = useGameConfigStore((s) => s.sources.cloud_run)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.cloud_run !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.cloud_run !== undefined)
 
   const handleChange = (field: keyof typeof cr, value: string) => {
     const num = field === 'YAMNET_TOILET_FLUSH_CLASS' ? parseInt(value, 10) : parseFloat(value)
@@ -27,9 +29,11 @@ export default function CloudRunPanel() {
         <h2 className="text-xl font-semibold text-white">Cloud Run</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'}
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
+          }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
@@ -58,8 +62,8 @@ export default function CloudRunPanel() {
             edge function to the Google Cloud Run audio detection service.
           </p>
           <p>
-            The service runs a <strong className="text-neutral-300">YAMNet</strong> model to classify
-            audio and confirm toilet flush events. Changing these values affects detection
+            The service runs a <strong className="text-neutral-300">YAMNet</strong> model to
+            classify audio and confirm toilet flush events. Changing these values affects detection
             sensitivity without redeploying the Python service.
           </p>
         </CardContent>
@@ -85,8 +89,8 @@ export default function CloudRunPanel() {
               />
             </div>
             <p className="text-[11px] text-neutral-600">
-              Toilet flush is YAMNet class {cr.YAMNET_TOILET_FLUSH_CLASS}. Only change if the YAMNet model version changes its class
-              mapping.
+              Toilet flush is YAMNet class {cr.YAMNET_TOILET_FLUSH_CLASS}. Only change if the YAMNet
+              model version changes its class mapping.
             </p>
           </CardContent>
         </Card>
@@ -144,20 +148,34 @@ export default function CloudRunPanel() {
 
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-neutral-300">Current Config Summary</CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">
+            Current Config Summary
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <table className="w-full text-sm">
             <tbody>
               {[
-                { label: 'YAMNet class', value: `${cr.YAMNET_TOILET_FLUSH_CLASS} (toilet flush)`, color: '#3b82f6' },
+                {
+                  label: 'YAMNet class',
+                  value: `${cr.YAMNET_TOILET_FLUSH_CLASS} (toilet flush)`,
+                  color: '#3b82f6',
+                },
                 { label: 'Min duration', value: `${cr.MIN_AUDIO_DURATION}s`, color: '#f59e0b' },
                 { label: 'Max duration', value: `${cr.MAX_AUDIO_DURATION}s`, color: '#22c55e' },
-                { label: 'Valid window', value: `${cr.MIN_AUDIO_DURATION}s – ${cr.MAX_AUDIO_DURATION}s (${cr.MAX_AUDIO_DURATION - cr.MIN_AUDIO_DURATION}s span)`, color: '#a3a3a3' },
+                {
+                  label: 'Valid window',
+                  value: `${cr.MIN_AUDIO_DURATION}s – ${cr.MAX_AUDIO_DURATION}s (${cr.MAX_AUDIO_DURATION - cr.MIN_AUDIO_DURATION}s span)`,
+                  color: '#a3a3a3',
+                },
               ].map((row) => (
                 <tr key={row.label} className="border-b border-neutral-800/50">
-                  <td className="py-2 text-[11px] uppercase tracking-wider text-neutral-500 w-36">{row.label}</td>
-                  <td className="py-2 font-mono text-sm" style={{ color: row.color }}>{row.value}</td>
+                  <td className="py-2 text-[11px] uppercase tracking-wider text-neutral-500 w-36">
+                    {row.label}
+                  </td>
+                  <td className="py-2 font-mono text-sm" style={{ color: row.color }}>
+                    {row.value}
+                  </td>
                 </tr>
               ))}
             </tbody>

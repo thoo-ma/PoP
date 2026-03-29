@@ -1,10 +1,10 @@
-import { memo } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { colors } from '@/constants';
-import { Button } from 'heroui-native';
+import { memo } from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
+import { colors } from '@/constants'
+import { Button } from 'heroui-native'
 
 interface WalletButtonProps {
-  onPress: () => void;
+  onPress: () => void
 }
 
 export default memo(function WalletButton({ onPress }: WalletButtonProps) {
@@ -19,5 +19,5 @@ export default memo(function WalletButton({ onPress }: WalletButtonProps) {
     >
       <MaterialIcons name="account-balance-wallet" size={32} color={colors.primary} />
     </Button>
-  );
-});
+  )
+})

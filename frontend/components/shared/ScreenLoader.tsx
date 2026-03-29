@@ -1,10 +1,10 @@
-import { memo } from 'react';
-import { Text, View } from 'react-native';
-import { Spinner } from 'heroui-native';
+import { memo } from 'react'
+import { Text, View } from 'react-native'
+import { Spinner } from 'heroui-native'
 
 interface ScreenLoaderProps {
-  title?: string;
-  message?: string;
+  title?: string
+  message?: string
 }
 
 export default memo(function ScreenLoader({ message }: ScreenLoaderProps) {
@@ -13,5 +13,5 @@ export default memo(function ScreenLoader({ message }: ScreenLoaderProps) {
       <Spinner size="lg" />
       {message && <Text className="mt-3 text-sm text-gray-500">{message}</Text>}
     </View>
-  );
-});
+  )
+})

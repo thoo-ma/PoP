@@ -1,30 +1,30 @@
-import { View, Text, Image, useWindowDimensions } from 'react-native';
-import { BottomSheet, Card, PressableFeedback } from 'heroui-native';
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
-import type { NFT } from '@/types';
-import type { NFTRarity } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { canBreed, formatDisplayName } from '@/utils';
-import { breedPickerCard } from '@/styles';
+import { View, Text, Image, useWindowDimensions } from 'react-native'
+import { BottomSheet, Card, PressableFeedback } from 'heroui-native'
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import type { NFT } from '@/types'
+import type { NFTRarity } from '@pop/shared'
+import { RARITY_COLORS } from '@/constants'
+import { canBreed, formatDisplayName } from '@/utils'
+import { breedPickerCard } from '@/styles'
 
-const GRID_PADDING = 16;
-const GRID_GAP = 12;
+const GRID_PADDING = 16
+const GRID_GAP = 12
 
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
-  visible: boolean;
+  visible: boolean
   /** Title displayed at the top of the sheet (e.g. "Choose Parent 1"). */
-  title: string;
+  title: string
   /** Full NFT collection to show as selectable items. */
-  allNFTs: NFT[];
+  allNFTs: NFT[]
   /** ID of the NFT already chosen in the other slot — rendered as disabled. */
-  lockedId?: string;
+  lockedId?: string
   /** Rarity of the other slot's NFT — items incompatible with it are disabled. */
-  lockedRarity?: NFTRarity;
+  lockedRarity?: NFTRarity
   /** Called with the chosen NFT when the user taps a valid row. */
-  onSelect: (nft: NFT) => void;
+  onSelect: (nft: NFT) => void
   /** Called when the user dismisses the sheet without selecting. */
-  onClose: () => void;
+  onClose: () => void
 }
 
 /**
@@ -33,25 +33,37 @@ export interface BreedPickerModalProps {
  * are shown greyed-out and non-interactive.
  */
 export default function BreedPickerModal({
-  visible, title, allNFTs, lockedId, lockedRarity, onSelect, onClose,
+  visible,
+  title,
+  allNFTs,
+  lockedId,
+  lockedRarity,
+  onSelect,
+  onClose,
 }: BreedPickerModalProps) {
-  const { width: windowWidth } = useWindowDimensions();
-  const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2;
+  const { width: windowWidth } = useWindowDimensions()
+  const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2
 
   const items = allNFTs.map((nft) => ({
     nft,
     disabled:
-      nft.id === lockedId ||
-      (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
-  }));
+      nft.id === lockedId || (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
+  }))
 
   return (
-    <BottomSheet isOpen={visible} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <BottomSheet
+      isOpen={visible}
+      onOpenChange={(open) => {
+        if (!open) onClose()
+      }}
+    >
       <BottomSheet.Portal>
         <BottomSheet.Overlay />
         <BottomSheet.Content snapPoints={['70%']}>
           <View className="flex-row justify-between items-center px-5 py-4 border-b border-border">
-            <BottomSheet.Title className="text-lg font-bold text-foreground">{title}</BottomSheet.Title>
+            <BottomSheet.Title className="text-lg font-bold text-foreground">
+              {title}
+            </BottomSheet.Title>
             <BottomSheet.Close />
           </View>
           {lockedRarity && (
@@ -67,16 +79,19 @@ export default function BreedPickerModal({
             contentContainerStyle={{ padding: GRID_PADDING, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => {
-              const s = breedPickerCard({ disabled: item.disabled });
-              const isSelected = lockedId !== undefined && lockedId === item.nft.id;
+              const s = breedPickerCard({ disabled: item.disabled })
+              const isSelected = lockedId !== undefined && lockedId === item.nft.id
               const hint = item.disabled
                 ? isSelected
                   ? 'This NFT is already selected as a parent'
                   : 'This NFT is incompatible as a parent'
-                : 'Tap to select as parent';
+                : 'Tap to select as parent'
               return (
                 <PressableFeedback
-                  onPress={() => { onSelect(item.nft); onClose(); }}
+                  onPress={() => {
+                    onSelect(item.nft)
+                    onClose()
+                  }}
                   isDisabled={item.disabled}
                   accessibilityRole="button"
                   accessibilityState={{ disabled: item.disabled, selected: isSelected }}
@@ -87,7 +102,11 @@ export default function BreedPickerModal({
                 >
                   <Card className={s.root()} animation="disable-all">
                     <View className={s.image()}>
-                      <Image source={{ uri: item.nft.image_url }} className="w-full h-full" resizeMode="cover" />
+                      <Image
+                        source={{ uri: item.nft.image_url }}
+                        className="w-full h-full"
+                        resizeMode="cover"
+                      />
                       {item.disabled && <View className={s.disabledOverlay()} />}
                       <View
                         className={s.rarityDot()}
@@ -107,11 +126,11 @@ export default function BreedPickerModal({
                     </View>
                   </Card>
                 </PressableFeedback>
-              );
+              )
             }}
           />
         </BottomSheet.Content>
       </BottomSheet.Portal>
     </BottomSheet>
-  );
+  )
 }

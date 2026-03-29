@@ -1,1 +1,1 @@
-export { default as InviteCodeScreen } from './InviteCodeScreen';
+export { default as InviteCodeScreen } from './InviteCodeScreen'

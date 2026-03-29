@@ -14,53 +14,60 @@ import { RARITIES, RARITY_COLORS } from '@/lib/constants'
 import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function StatPointsPanel() {
-  const sp               = useGameConfigStore(useShallow((s) => ({ ...s.config.stat_points, ...s.drafts.stat_points })))
-  const source           = useGameConfigStore((s) => s.sources.stat_points)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const sp = useGameConfigStore(
+    useShallow((s) => ({ ...s.config.stat_points, ...s.drafts.stat_points })),
+  )
+  const source = useGameConfigStore((s) => s.sources.stat_points)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.stat_points !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.stat_points !== undefined)
 
-  const chartOptions = useMemo(() => ({
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'item' as const,
-      ...CHART_TOOLTIP,
-    },
-    grid: { top: 20, right: 40, bottom: 40, left: 60 },
-    xAxis: {
-      type: 'category' as const,
-      data: [...RARITIES],
-      ...CHART_AXIS_STYLES,
-      axisLabel: {
-        color: '#a3a3a3',
-        fontSize: 11,
-        formatter: (v: string) => v.charAt(0).toUpperCase() + v.slice(1),
+  const chartOptions = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'item' as const,
+        ...CHART_TOOLTIP,
       },
-    },
-    yAxis: {
-      type: 'value' as const,
-      name: 'Points / level',
-      min: 0,
-      ...CHART_AXIS_STYLES,
-      splitLine: CHART_SPLIT_LINE,
-    },
-    series: [{
-      name: 'Stat Points',
-      type: 'bar' as const,
-      barMaxWidth: 60,
-      data: RARITIES.map((r) => ({
-        value: sp.STAT_POINTS_BY_RARITY[r],
-        itemStyle: { color: RARITY_COLORS[r], borderRadius: [3, 3, 0, 0] },
-      })),
-      label: {
-        show: true,
-        position: 'top' as const,
-        color: '#e5e5e5',
-        fontSize: 13,
-        fontWeight: 'bold' as const,
+      grid: { top: 20, right: 40, bottom: 40, left: 60 },
+      xAxis: {
+        type: 'category' as const,
+        data: [...RARITIES],
+        ...CHART_AXIS_STYLES,
+        axisLabel: {
+          color: '#a3a3a3',
+          fontSize: 11,
+          formatter: (v: string) => v.charAt(0).toUpperCase() + v.slice(1),
+        },
       },
-    }],
-  }), [sp])
+      yAxis: {
+        type: 'value' as const,
+        name: 'Points / level',
+        min: 0,
+        ...CHART_AXIS_STYLES,
+        splitLine: CHART_SPLIT_LINE,
+      },
+      series: [
+        {
+          name: 'Stat Points',
+          type: 'bar' as const,
+          barMaxWidth: 60,
+          data: RARITIES.map((r) => ({
+            value: sp.STAT_POINTS_BY_RARITY[r],
+            itemStyle: { color: RARITY_COLORS[r], borderRadius: [3, 3, 0, 0] },
+          })),
+          label: {
+            show: true,
+            position: 'top' as const,
+            color: '#e5e5e5',
+            fontSize: 13,
+            fontWeight: 'bold' as const,
+          },
+        },
+      ],
+    }),
+    [sp],
+  )
 
   const handleChange = (rarity: string, value: string) => {
     const num = parseInt(value, 10)
@@ -77,9 +84,11 @@ export default function StatPointsPanel() {
         <h2 className="text-xl font-semibold text-white">Stat Points</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'}
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
+          }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
@@ -97,13 +106,18 @@ export default function StatPointsPanel() {
 
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-neutral-300">Points per Level-Up by Rarity</CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">
+            Points per Level-Up by Rarity
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4">
             {RARITIES.map((r) => (
               <div key={r} className="space-y-1.5">
-                <Label className="text-xs font-medium capitalize" style={{ color: RARITY_COLORS[r] }}>
+                <Label
+                  className="text-xs font-medium capitalize"
+                  style={{ color: RARITY_COLORS[r] }}
+                >
                   {r}
                 </Label>
                 <NumberInput
@@ -121,7 +135,9 @@ export default function StatPointsPanel() {
 
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-neutral-300">Points per Level-Up</CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">
+            Points per Level-Up
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <LazyChart option={chartOptions} style={{ height: 260 }} />
@@ -139,8 +155,13 @@ export default function StatPointsPanel() {
             {RARITIES.map((r) => {
               const total = sp.STAT_POINTS_BY_RARITY[r] * (MAX_LEVEL - 1)
               return (
-                <div key={r} className="rounded-md border border-neutral-800 bg-neutral-950 p-4 text-center">
-                  <div className="text-[11px] capitalize mb-1" style={{ color: RARITY_COLORS[r] }}>{r}</div>
+                <div
+                  key={r}
+                  className="rounded-md border border-neutral-800 bg-neutral-950 p-4 text-center"
+                >
+                  <div className="text-[11px] capitalize mb-1" style={{ color: RARITY_COLORS[r] }}>
+                    {r}
+                  </div>
                   <div className="text-3xl font-bold text-white">{total}</div>
                   <div className="text-[10px] text-neutral-600 mt-1">total stat pts</div>
                 </div>

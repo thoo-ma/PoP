@@ -1,4 +1,4 @@
-import type { RateLimitError } from '@/types/audio';
+import type { RateLimitError } from '@/types/audio'
 
 /**
  * Extract a user-friendly error message from any error type
@@ -7,12 +7,12 @@ import type { RateLimitError } from '@/types/audio';
  * @returns User-friendly error message
  */
 export function getErrorMessage(error: unknown, fallback = 'An error occurred'): string {
-  if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
   if (error && typeof error === 'object' && 'message' in error) {
-    return String(error.message);
+    return String(error.message)
   }
-  return fallback;
+  return fallback
 }
 
 /**
@@ -21,7 +21,7 @@ export function getErrorMessage(error: unknown, fallback = 'An error occurred'):
  * @param error - The error to log
  */
 export function logError(context: string, error: unknown): void {
-  console.error(`[${context}]`, error);
+  console.error(`[${context}]`, error)
   // Future: Send to Sentry/Bugsnag
   // if (process.env.NODE_ENV === 'production') {
   //   Sentry.captureException(error, { tags: { context } });
@@ -35,9 +35,6 @@ export function logError(context: string, error: unknown): void {
  */
 export function isRateLimitError(error: unknown): error is RateLimitError {
   return (
-    error !== null &&
-    typeof error === 'object' &&
-    'error' in error &&
-    error.error === 'rate_limit'
-  );
+    error !== null && typeof error === 'object' && 'error' in error && error.error === 'rate_limit'
+  )
 }

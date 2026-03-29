@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RewardTab, RepairTab, BreedTab } from '@/components/currency'
 
 export default function CurrencyPanel() {
-  const source           = useGameConfigStore((s) => s.sources.currency)
+  const source = useGameConfigStore((s) => s.sources.currency)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.currency !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.currency !== undefined)
 
   return (
     <div className="space-y-6">
@@ -17,9 +17,10 @@ export default function CurrencyPanel() {
         <h2 className="text-xl font-semibold text-white">Currency ($POOP)</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
@@ -49,9 +50,15 @@ export default function CurrencyPanel() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="reward"><RewardTab /></TabsContent>
-        <TabsContent value="repair"><RepairTab /></TabsContent>
-        <TabsContent value="breed"><BreedTab /></TabsContent>
+        <TabsContent value="reward">
+          <RewardTab />
+        </TabsContent>
+        <TabsContent value="repair">
+          <RepairTab />
+        </TabsContent>
+        <TabsContent value="breed">
+          <BreedTab />
+        </TabsContent>
       </Tabs>
     </div>
   )

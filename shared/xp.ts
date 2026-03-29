@@ -58,15 +58,15 @@ export const XP_FORMULA_FLOOR = 33
 
 // Inline config type — avoids a circular dep with shared/schemas.ts
 type XpCfg = {
-  XP_FORMULA_BASE?:      number;
-  XP_FORMULA_LINEAR?:    number;
-  XP_FORMULA_QUADRATIC?: number;
-  XP_FORMULA_FLOOR?:     number;
-};
+  XP_FORMULA_BASE?: number
+  XP_FORMULA_LINEAR?: number
+  XP_FORMULA_QUADRATIC?: number
+  XP_FORMULA_FLOOR?: number
+}
 
 function xpFormula(level: number, cfg?: XpCfg): number {
-  const base      = cfg?.XP_FORMULA_BASE      ?? XP_FORMULA_BASE
-  const linear    = cfg?.XP_FORMULA_LINEAR    ?? XP_FORMULA_LINEAR
+  const base = cfg?.XP_FORMULA_BASE ?? XP_FORMULA_BASE
+  const linear = cfg?.XP_FORMULA_LINEAR ?? XP_FORMULA_LINEAR
   const quadratic = cfg?.XP_FORMULA_QUADRATIC ?? XP_FORMULA_QUADRATIC
   return Math.round(base + level * linear + Math.pow(level, 2) * quadratic)
 }
@@ -87,7 +87,7 @@ export function applyXP(
   gained: number,
   cfg?: XpCfg,
 ): { newXP: number; newLevel: number; leveledUp: boolean; levelsGained: number } {
-  let xp    = currentXP + gained
+  let xp = currentXP + gained
   let level = currentLevel
   let levelsGained = 0
 

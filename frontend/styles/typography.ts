@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const screenTitle = tv({
   base: 'text-[32px] font-bold text-center',
@@ -15,7 +15,7 @@ export const screenTitle = tv({
     },
   },
   defaultVariants: { spacing: 'md', color: 'accent' },
-});
+})
 
 export const screenSubtitle = tv({
   base: 'text-base text-center',
@@ -31,7 +31,7 @@ export const screenSubtitle = tv({
     },
   },
   defaultVariants: { color: 'muted', spacing: 'sm' },
-});
+})
 
 export const badgeLabel = tv({
   base: 'text-white font-bold',
@@ -43,4 +43,4 @@ export const badgeLabel = tv({
     },
   },
   defaultVariants: { size: 'xs' },
-});
+})

@@ -13,79 +13,88 @@ import { RARITIES, RARITY_COLORS } from '@/lib/constants'
 import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function MintingPanel() {
-  const minting          = useGameConfigStore(useShallow((s) => ({ ...s.config.minting, ...s.drafts.minting })))
-  const source           = useGameConfigStore((s) => s.sources.minting)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const minting = useGameConfigStore(
+    useShallow((s) => ({ ...s.config.minting, ...s.drafts.minting })),
+  )
+  const source = useGameConfigStore((s) => s.sources.minting)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.minting !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.minting !== undefined)
 
-  const chartOptions = useMemo(() => ({
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'axis' as const,
-      axisPointer: { type: 'shadow' as const },
-      ...CHART_TOOLTIP,
-      formatter: (params: Array<{ seriesName: string; value: number; color: string; name: string }>) => {
-        const rarity = params[0]?.name ?? ''
-        const minV = minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES]?.[0] ?? 0
-        const maxV = minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES]?.[1] ?? 0
-        return `${rarity}<br/>Range: <b>${minV} – ${maxV}</b>`
-      },
-    },
-    grid: { top: 20, right: 40, bottom: 40, left: 120 },
-    xAxis: {
-      type: 'value' as const,
-      min: 0,
-      max: 100,
-      ...CHART_AXIS_STYLES,
-      splitLine: CHART_SPLIT_LINE,
-    },
-    yAxis: {
-      type: 'category' as const,
-      data: [...RARITIES].map((r) => r.charAt(0).toUpperCase() + r.slice(1)),
-      ...CHART_AXIS_STYLES,
-    },
-    series: [
-      {
-        name: 'Start',
-        type: 'bar' as const,
-        stack: 'range',
-        itemStyle: { color: 'transparent' },
-        data: RARITIES.map((r) => minting.STAT_RANGES[r]?.[0] ?? 0),
-      },
-      {
-        name: 'Range',
-        type: 'bar' as const,
-        stack: 'range',
-        barMaxWidth: 30,
-        itemStyle: {
-          color: undefined as unknown as string,
-          borderRadius: [0, 4, 4, 0],
+  const chartOptions = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis' as const,
+        axisPointer: { type: 'shadow' as const },
+        ...CHART_TOOLTIP,
+        formatter: (
+          params: Array<{ seriesName: string; value: number; color: string; name: string }>,
+        ) => {
+          const rarity = params[0]?.name ?? ''
+          const minV = minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES]?.[0] ?? 0
+          const maxV = minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES]?.[1] ?? 0
+          return `${rarity}<br/>Range: <b>${minV} – ${maxV}</b>`
         },
-        data: RARITIES.map((r) => ({
-          value: (minting.STAT_RANGES[r]?.[1] ?? 0) - (minting.STAT_RANGES[r]?.[0] ?? 0),
-          itemStyle: { color: RARITY_COLORS[r], borderRadius: [0, 4, 4, 0] },
-        })),
-        label: {
-          show: true,
-          position: 'right' as const,
-          color: '#a3a3a3',
-          fontSize: 11,
-          formatter: (_: unknown, idx?: number) => {
-            if (idx === undefined) return ''
-            const r = RARITIES[idx]
-            if (!r) return ''
-            return `${minting.STAT_RANGES[r]?.[0]} – ${minting.STAT_RANGES[r]?.[1]}`
+      },
+      grid: { top: 20, right: 40, bottom: 40, left: 120 },
+      xAxis: {
+        type: 'value' as const,
+        min: 0,
+        max: 100,
+        ...CHART_AXIS_STYLES,
+        splitLine: CHART_SPLIT_LINE,
+      },
+      yAxis: {
+        type: 'category' as const,
+        data: [...RARITIES].map((r) => r.charAt(0).toUpperCase() + r.slice(1)),
+        ...CHART_AXIS_STYLES,
+      },
+      series: [
+        {
+          name: 'Start',
+          type: 'bar' as const,
+          stack: 'range',
+          itemStyle: { color: 'transparent' },
+          data: RARITIES.map((r) => minting.STAT_RANGES[r]?.[0] ?? 0),
+        },
+        {
+          name: 'Range',
+          type: 'bar' as const,
+          stack: 'range',
+          barMaxWidth: 30,
+          itemStyle: {
+            color: undefined as unknown as string,
+            borderRadius: [0, 4, 4, 0],
+          },
+          data: RARITIES.map((r) => ({
+            value: (minting.STAT_RANGES[r]?.[1] ?? 0) - (minting.STAT_RANGES[r]?.[0] ?? 0),
+            itemStyle: { color: RARITY_COLORS[r], borderRadius: [0, 4, 4, 0] },
+          })),
+          label: {
+            show: true,
+            position: 'right' as const,
+            color: '#a3a3a3',
+            fontSize: 11,
+            formatter: (_: unknown, idx?: number) => {
+              if (idx === undefined) return ''
+              const r = RARITIES[idx]
+              if (!r) return ''
+              return `${minting.STAT_RANGES[r]?.[0]} – ${minting.STAT_RANGES[r]?.[1]}`
+            },
           },
         },
-      },
-    ],
-  }), [minting])
+      ],
+    }),
+    [minting],
+  )
 
   const handleChange = (rarity: string, slot: 0 | 1, value: string) => {
     const num = parseInt(value, 10)
     if (isNaN(num) || num < 0 || num > 100) return
-    const current = [...(minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES] ?? [0, 100])] as [number, number]
+    const current = [
+      ...(minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES] ?? [0, 100]),
+    ] as [number, number]
     current[slot] = num
     // Enforce min ≤ max
     if (slot === 0 && current[0] > current[1]) current[1] = current[0]
@@ -101,9 +110,11 @@ export default function MintingPanel() {
         <h2 className="text-xl font-semibold text-white">Minting Stats</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'}
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
+          }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
         </Badge>
@@ -133,7 +144,9 @@ export default function MintingPanel() {
 
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-neutral-300">Stat Ranges [min, max]</CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">
+            Stat Ranges [min, max]
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4">
@@ -142,7 +155,10 @@ export default function MintingPanel() {
               const invalid = min > max
               return (
                 <div key={r} className="space-y-2">
-                  <Label className="text-xs font-medium capitalize" style={{ color: RARITY_COLORS[r] }}>
+                  <Label
+                    className="text-xs font-medium capitalize"
+                    style={{ color: RARITY_COLORS[r] }}
+                  >
                     {r}
                   </Label>
                   <div className="flex items-center gap-2">

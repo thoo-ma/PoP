@@ -22,11 +22,11 @@ function formatHours(h: number): string {
 }
 
 export default function CooldownPanel() {
-  const cd               = useGameConfigStore(useShallow((s) => ({ ...s.config.cooldown, ...s.drafts.cooldown })))
-  const source           = useGameConfigStore((s) => s.sources.cooldown)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const cd = useGameConfigStore(useShallow((s) => ({ ...s.config.cooldown, ...s.drafts.cooldown })))
+  const source = useGameConfigStore((s) => s.sources.cooldown)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.cooldown !== undefined)
+  const hasDraft = useGameConfigStore((s) => s.drafts.cooldown !== undefined)
 
   const levels = useMemo(() => Array.from({ length: MAX_LEVEL }, (_, i) => i + 1), [])
 
@@ -47,10 +47,13 @@ export default function CooldownPanel() {
       tooltip: {
         trigger: 'axis' as const,
         ...CHART_TOOLTIP,
-        formatter: (params: Array<{ name: string; value: number; seriesName: string; color: string }>) => {
+        formatter: (
+          params: Array<{ name: string; value: number; seriesName: string; color: string }>,
+        ) => {
           const lvl = params[0]?.name
           const lines = params.map(
-            (p) => `<span style="color:${p.color}">●</span> ${p.seriesName}: <b>${formatHours(p.value)}</b>`
+            (p) =>
+              `<span style="color:${p.color}">●</span> ${p.seriesName}: <b>${formatHours(p.value)}</b>`,
           )
           return `Level ${lvl}<br/>${lines.join('<br/>')}`
         },
@@ -96,9 +99,10 @@ export default function CooldownPanel() {
         <h2 className="text-xl font-semibold text-white">Cooldown</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
@@ -140,7 +144,9 @@ export default function CooldownPanel() {
             <div className="grid grid-cols-3 gap-3">
               {TYPES.map((t) => (
                 <div key={t} className="space-y-1">
-                  <Label className="text-[10px]" style={{ color: TYPE_COLORS[t] }}>{t}</Label>
+                  <Label className="text-[10px]" style={{ color: TYPE_COLORS[t] }}>
+                    {t}
+                  </Label>
                   <NumberInput
                     step={0.5}
                     value={cd.COOLDOWN_BASES[t]}
@@ -175,9 +181,7 @@ export default function CooldownPanel() {
       {/* Chart */}
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-neutral-300">
-            Cooldown by Level
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-neutral-300">Cooldown by Level</CardTitle>
         </CardHeader>
         <CardContent>
           <LazyChart option={chartOptions} style={{ height: 360 }} />
@@ -196,7 +200,9 @@ export default function CooldownPanel() {
                 <tr className="border-b border-neutral-800 text-left text-[11px] uppercase tracking-wider text-neutral-500">
                   <th className="px-3 py-2">Level</th>
                   {TYPES.map((t) => (
-                    <th key={t} className="px-3 py-2" style={{ color: TYPE_COLORS[t] }}>{t}</th>
+                    <th key={t} className="px-3 py-2" style={{ color: TYPE_COLORS[t] }}>
+                      {t}
+                    </th>
                   ))}
                 </tr>
               </thead>

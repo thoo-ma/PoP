@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { memo } from 'react';
-import type { PageIndicatorProps } from '@/types';
-import { colors } from '@/constants';
-import { Button } from 'heroui-native';
+import { View, Text } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { memo } from 'react'
+import type { PageIndicatorProps } from '@/types'
+import { colors } from '@/constants'
+import { Button } from 'heroui-native'
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -12,7 +12,7 @@ const PRIMARY_PAGE_ICONS = [
   { index: 2, icon: 'sync' as const, label: 'Breed' },
   { index: 3, icon: 'shopping-cart' as const, label: 'Market' },
   { index: 4, icon: 'construction' as const, label: 'Repair' },
-];
+]
 
 /**
  * Bottom navigation bar showing icon buttons for the five primary pages and
@@ -20,12 +20,14 @@ const PRIMARY_PAGE_ICONS = [
  * Primary page icons are hardcoded to indices 0–4; the More button targets
  * the remaining pages dynamically.
  */
-export default memo(function PageIndicator({ totalPages, currentPage, onPageChange }: PageIndicatorProps) {
+export default memo(function PageIndicator({
+  totalPages,
+  currentPage,
+  onPageChange,
+}: PageIndicatorProps) {
   return (
-      <View className="absolute bottom-10 left-0 right-0 flex-row justify-center items-center">
-      <View
-          className="flex-row bg-[rgba(255,255,255,0.95)] rounded-[24px] px-4 py-[10px] gap-1 shadow-md"
-      >
+    <View className="absolute bottom-10 left-0 right-0 flex-row justify-center items-center">
+      <View className="flex-row bg-[rgba(255,255,255,0.95)] rounded-[24px] px-4 py-[10px] gap-1 shadow-md">
         {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
           <Button
             key={index}
@@ -42,7 +44,11 @@ export default memo(function PageIndicator({ totalPages, currentPage, onPageChan
                 color={currentPage === index ? colors.active : colors.inactive}
               />
               <Text
-                className={currentPage === index ? 'text-[10px] font-bold mt-1' : 'text-[10px] font-medium mt-1'}
+                className={
+                  currentPage === index
+                    ? 'text-[10px] font-bold mt-1'
+                    : 'text-[10px] font-medium mt-1'
+                }
                 style={{ color: currentPage === index ? colors.active : colors.inactive }}
               >
                 {label}
@@ -52,5 +58,5 @@ export default memo(function PageIndicator({ totalPages, currentPage, onPageChan
         ))}
       </View>
     </View>
-  );
-});
+  )
+})

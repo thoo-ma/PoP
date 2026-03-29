@@ -1,16 +1,16 @@
-import { memo, useState } from 'react';
-import { View, Text } from 'react-native';
-import { Card, Button, Spinner } from 'heroui-native';
-import { useRollLoot } from '@/hooks';
-import type { RollLootResult } from '@/hooks';
+import { memo, useState } from 'react'
+import { View, Text } from 'react-native'
+import { Card, Button, Spinner } from 'heroui-native'
+import { useRollLoot } from '@/hooks'
+import type { RollLootResult } from '@/hooks'
 
-const MAX_HOLDS = 3;
-const BASE_CHANCE = 10;
-const CHANCE_PER_HOLD = 10;
+const MAX_HOLDS = 3
+const BASE_CHANCE = 10
+const CHANCE_PER_HOLD = 10
 
 export interface LootRouletteCardProps {
-  lootRollId: string;
-  onDone: () => void;
+  lootRollId: string
+  onDone: () => void
 }
 
 /**
@@ -22,34 +22,34 @@ export interface LootRouletteCardProps {
  * A Reanimated spinning wheel will replace this card in a future iteration.
  */
 export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRouletteCardProps) {
-  const { holdLootRoll, rollLoot, loading } = useRollLoot();
-  const [holds, setHolds] = useState(0);
-  const [result, setResult] = useState<RollLootResult | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const { holdLootRoll, rollLoot, loading } = useRollLoot()
+  const [holds, setHolds] = useState(0)
+  const [result, setResult] = useState<RollLootResult | null>(null)
+  const [err, setErr] = useState<string | null>(null)
 
-  const lootChance = BASE_CHANCE + holds * CHANCE_PER_HOLD;
-  const canHold = holds < MAX_HOLDS && !result;
-  const canRoll = !result;
+  const lootChance = BASE_CHANCE + holds * CHANCE_PER_HOLD
+  const canHold = holds < MAX_HOLDS && !result
+  const canRoll = !result
 
   const handleHold = async () => {
-    setErr(null);
-    const res = await holdLootRoll(lootRollId);
+    setErr(null)
+    const res = await holdLootRoll(lootRollId)
     if (res) {
-      setHolds(res.holds);
+      setHolds(res.holds)
     } else {
-      setErr('Hold failed. Try rolling instead.');
+      setErr('Hold failed. Try rolling instead.')
     }
-  };
+  }
 
   const handleRoll = async () => {
-    setErr(null);
-    const res = await rollLoot(lootRollId);
+    setErr(null)
+    const res = await rollLoot(lootRollId)
     if (res) {
-      setResult(res);
+      setResult(res)
     } else {
-      setErr('Something went wrong. Please try again.');
+      setErr('Something went wrong. Please try again.')
     }
-  };
+  }
 
   return (
     <Card className="mx-4 items-center gap-4" animation="disable-all">
@@ -74,9 +74,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
               </Text>
             )}
 
-            {err && (
-              <Text className="text-sm text-center text-stat-energy">{err}</Text>
-            )}
+            {err && <Text className="text-sm text-center text-stat-energy">{err}</Text>}
 
             <View className="flex-row gap-3 w-full mt-2">
               <Button
@@ -98,11 +96,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                 onPress={handleRoll}
                 isDisabled={!canRoll || loading}
               >
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <Button.Label>Roll!</Button.Label>
-                )}
+                {loading ? <Spinner size="sm" /> : <Button.Label>Roll!</Button.Label>}
               </Button>
             </View>
           </>
@@ -118,7 +112,9 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
             ) : (
               <View className="items-center gap-2 rounded-xl py-4 px-6 w-full bg-surface-light">
                 <Text className="text-xl font-bold text-text-title">No luck this time</Text>
-                <Text className="text-base text-center text-text-body">Better luck on your next flush!</Text>
+                <Text className="text-base text-center text-text-body">
+                  Better luck on your next flush!
+                </Text>
               </View>
             )}
 
@@ -129,6 +125,5 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
         )}
       </Card.Body>
     </Card>
-  );
-});
-
+  )
+})

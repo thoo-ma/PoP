@@ -12,17 +12,26 @@ import { RARITIES, RARITY_COLORS } from '@/lib/constants'
 import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 function computeRepair(
-  level: number, rarity: string, energyPct: number,
-  cfg: { REPAIR_COEF_A: number; REPAIR_COEF_B: number; REPAIR_USD_PER_TOKEN: number;
-         REPAIR_RARITY_MULTIPLIER: Record<string, number> },
+  level: number,
+  rarity: string,
+  energyPct: number,
+  cfg: {
+    REPAIR_COEF_A: number
+    REPAIR_COEF_B: number
+    REPAIR_USD_PER_TOKEN: number
+    REPAIR_RARITY_MULTIPLIER: Record<string, number>
+  },
 ): number {
-  const fullUsd = (cfg.REPAIR_COEF_A * Math.pow(level, 2) + cfg.REPAIR_COEF_B)
-    * (cfg.REPAIR_RARITY_MULTIPLIER[rarity] ?? 1)
-  return Math.round(energyPct * fullUsd / cfg.REPAIR_USD_PER_TOKEN)
+  const fullUsd =
+    (cfg.REPAIR_COEF_A * Math.pow(level, 2) + cfg.REPAIR_COEF_B) *
+    (cfg.REPAIR_RARITY_MULTIPLIER[rarity] ?? 1)
+  return Math.round((energyPct * fullUsd) / cfg.REPAIR_USD_PER_TOKEN)
 }
 
 export function RepairTab() {
-  const cur = useGameConfigStore(useShallow((s) => ({ ...s.config.currency, ...s.drafts.currency })))
+  const cur = useGameConfigStore(
+    useShallow((s) => ({ ...s.config.currency, ...s.drafts.currency })),
+  )
   const setDraft = useGameConfigStore((s) => s.setDraft)
 
   const chartOptions = useMemo(() => {
@@ -96,18 +105,27 @@ export function RepairTab() {
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <Label className="text-xs text-blue-400">COEF_A</Label>
-              <NumberInput step={0.01} value={cur.REPAIR_COEF_A}
-                onChange={(v) => handleChange('REPAIR_COEF_A', v)} />
+              <NumberInput
+                step={0.01}
+                value={cur.REPAIR_COEF_A}
+                onChange={(v) => handleChange('REPAIR_COEF_A', v)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs text-green-400">COEF_B</Label>
-              <NumberInput step={0.01} value={cur.REPAIR_COEF_B}
-                onChange={(v) => handleChange('REPAIR_COEF_B', v)} />
+              <NumberInput
+                step={0.01}
+                value={cur.REPAIR_COEF_B}
+                onChange={(v) => handleChange('REPAIR_COEF_B', v)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs text-amber-400">USD_PER_TOKEN</Label>
-              <NumberInput step={0.0001} value={cur.REPAIR_USD_PER_TOKEN}
-                onChange={(v) => handleChange('REPAIR_USD_PER_TOKEN', v)} />
+              <NumberInput
+                step={0.0001}
+                value={cur.REPAIR_USD_PER_TOKEN}
+                onChange={(v) => handleChange('REPAIR_USD_PER_TOKEN', v)}
+              />
             </div>
           </div>
 
@@ -116,9 +134,15 @@ export function RepairTab() {
             <div className="grid grid-cols-4 gap-3">
               {RARITIES.map((r) => (
                 <div key={r} className="space-y-1">
-                  <Label className="text-[10px]" style={{ color: RARITY_COLORS[r] }}>{r}</Label>
-                  <NumberInput step={0.1} value={cur.REPAIR_RARITY_MULTIPLIER[r]}
-                    onChange={(v) => handleRarityMult(r, v)} size="sm" />
+                  <Label className="text-[10px]" style={{ color: RARITY_COLORS[r] }}>
+                    {r}
+                  </Label>
+                  <NumberInput
+                    step={0.1}
+                    value={cur.REPAIR_RARITY_MULTIPLIER[r]}
+                    onChange={(v) => handleRarityMult(r, v)}
+                    size="sm"
+                  />
                 </div>
               ))}
             </div>

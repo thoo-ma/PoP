@@ -12,19 +12,29 @@ import { TYPES, RARITIES, RARITY_COLORS, TYPE_COLORS } from '@/lib/constants'
 import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 function computeReward(
-  type: string, rarity: string, level: number,
-  cfg: { REWARD_BASE_PRICE_USD: number; REWARD_GROWTH_RATE: number; REWARD_USD_PER_TOKEN: number;
-         REWARD_TYPE_MULTIPLIER: Record<string, number>; REWARD_RARITY_MULTIPLIER: Record<string, number> },
+  type: string,
+  rarity: string,
+  level: number,
+  cfg: {
+    REWARD_BASE_PRICE_USD: number
+    REWARD_GROWTH_RATE: number
+    REWARD_USD_PER_TOKEN: number
+    REWARD_TYPE_MULTIPLIER: Record<string, number>
+    REWARD_RARITY_MULTIPLIER: Record<string, number>
+  },
 ): number {
-  const usd = cfg.REWARD_BASE_PRICE_USD
-    * Math.pow(cfg.REWARD_GROWTH_RATE, level - 1)
-    * (cfg.REWARD_TYPE_MULTIPLIER[type] ?? 1)
-    * (cfg.REWARD_RARITY_MULTIPLIER[rarity] ?? 1)
+  const usd =
+    cfg.REWARD_BASE_PRICE_USD *
+    Math.pow(cfg.REWARD_GROWTH_RATE, level - 1) *
+    (cfg.REWARD_TYPE_MULTIPLIER[type] ?? 1) *
+    (cfg.REWARD_RARITY_MULTIPLIER[rarity] ?? 1)
   return Math.max(1, Math.round(usd / cfg.REWARD_USD_PER_TOKEN))
 }
 
 export function RewardTab() {
-  const cur = useGameConfigStore(useShallow((s) => ({ ...s.config.currency, ...s.drafts.currency })))
+  const cur = useGameConfigStore(
+    useShallow((s) => ({ ...s.config.currency, ...s.drafts.currency })),
+  )
   const setDraft = useGameConfigStore((s) => s.setDraft)
   const [selectedType, setSelectedType] = useState<string>('cruise-seat')
 
@@ -112,18 +122,27 @@ export function RewardTab() {
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <Label className="text-xs text-blue-400">BASE_PRICE_USD</Label>
-              <NumberInput step={0.001} value={cur.REWARD_BASE_PRICE_USD}
-                onChange={(v) => handleChange('REWARD_BASE_PRICE_USD', v)} />
+              <NumberInput
+                step={0.001}
+                value={cur.REWARD_BASE_PRICE_USD}
+                onChange={(v) => handleChange('REWARD_BASE_PRICE_USD', v)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs text-green-400">GROWTH_RATE</Label>
-              <NumberInput step={0.01} value={cur.REWARD_GROWTH_RATE}
-                onChange={(v) => handleChange('REWARD_GROWTH_RATE', v)} />
+              <NumberInput
+                step={0.01}
+                value={cur.REWARD_GROWTH_RATE}
+                onChange={(v) => handleChange('REWARD_GROWTH_RATE', v)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs text-amber-400">USD_PER_TOKEN</Label>
-              <NumberInput step={0.0001} value={cur.REWARD_USD_PER_TOKEN}
-                onChange={(v) => handleChange('REWARD_USD_PER_TOKEN', v)} />
+              <NumberInput
+                step={0.0001}
+                value={cur.REWARD_USD_PER_TOKEN}
+                onChange={(v) => handleChange('REWARD_USD_PER_TOKEN', v)}
+              />
             </div>
           </div>
 
@@ -133,9 +152,15 @@ export function RewardTab() {
             <div className="grid grid-cols-3 gap-3">
               {TYPES.map((t) => (
                 <div key={t} className="space-y-1">
-                  <Label className="text-[10px]" style={{ color: TYPE_COLORS[t] }}>{t}</Label>
-                  <NumberInput step={0.1} value={cur.REWARD_TYPE_MULTIPLIER[t]}
-                    onChange={(v) => handleTypeMult(t, v)} size="sm" />
+                  <Label className="text-[10px]" style={{ color: TYPE_COLORS[t] }}>
+                    {t}
+                  </Label>
+                  <NumberInput
+                    step={0.1}
+                    value={cur.REWARD_TYPE_MULTIPLIER[t]}
+                    onChange={(v) => handleTypeMult(t, v)}
+                    size="sm"
+                  />
                 </div>
               ))}
             </div>
@@ -147,9 +172,15 @@ export function RewardTab() {
             <div className="grid grid-cols-4 gap-3">
               {RARITIES.map((r) => (
                 <div key={r} className="space-y-1">
-                  <Label className="text-[10px]" style={{ color: RARITY_COLORS[r] }}>{r}</Label>
-                  <NumberInput step={0.1} value={cur.REWARD_RARITY_MULTIPLIER[r]}
-                    onChange={(v) => handleRarityMult(r, v)} size="sm" />
+                  <Label className="text-[10px]" style={{ color: RARITY_COLORS[r] }}>
+                    {r}
+                  </Label>
+                  <NumberInput
+                    step={0.1}
+                    value={cur.REWARD_RARITY_MULTIPLIER[r]}
+                    onChange={(v) => handleRarityMult(r, v)}
+                    size="sm"
+                  />
                 </div>
               ))}
             </div>
@@ -161,9 +192,7 @@ export function RewardTab() {
       <Card className="border-neutral-800 bg-neutral-900/50">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-medium text-neutral-300">
-              Reward by Level
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-neutral-300">Reward by Level</CardTitle>
             <div className="flex gap-1">
               {TYPES.map((t) => (
                 <button

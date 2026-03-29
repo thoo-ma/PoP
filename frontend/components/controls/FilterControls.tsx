@@ -1,36 +1,36 @@
-import { memo, useState } from 'react';
-import { View } from 'react-native';
-import { Button, TagGroup } from 'heroui-native';
-import type { NFTRarity, NFTType } from '@pop/shared';
-import { RARITIES } from '@pop/shared';
+import { memo, useState } from 'react'
+import { View } from 'react-native'
+import { Button, TagGroup } from 'heroui-native'
+import type { NFTRarity, NFTType } from '@pop/shared'
+import { RARITIES } from '@pop/shared'
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
-  selectedRarities: NFTRarity[];
+  selectedRarities: NFTRarity[]
   /** Currently active type filters. */
-  selectedTypes: NFTType[];
+  selectedTypes: NFTType[]
   /** Called when the user toggles a rarity chip. */
-  onRarityToggle: (rarity: NFTRarity) => void;
+  onRarityToggle: (rarity: NFTRarity) => void
   /** Called when the user toggles a type chip. */
-  onTypeToggle: (type: NFTType) => void;
+  onTypeToggle: (type: NFTType) => void
   /** Called when the user taps "Clear" to reset all active filters. */
-  onClearFilters: () => void;
+  onClearFilters: () => void
 }
 
-const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress']
 
 const RARITY_LABELS: Record<NFTRarity, string> = {
-  'common': 'Com',
-  'rare': 'Rare',
-  'legendary': 'Leg',
-  'transcendent': 'Trans',
-};
+  common: 'Com',
+  rare: 'Rare',
+  legendary: 'Leg',
+  transcendent: 'Trans',
+}
 
 const TYPE_LABELS: Record<NFTType, string> = {
   'cruise-seat': 'Cruise',
   'turbo-flush': 'Turbo',
   'zen-fortress': 'Zen',
-};
+}
 
 /**
  * Filter chip bar for narrowing an NFT collection by rarity and type.
@@ -43,29 +43,29 @@ function FilterControls({
   onTypeToggle,
   onClearFilters,
 }: FilterControlsProps) {
-  const [showFilters, setShowFilters] = useState(false);
-  const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0;
-  const activeFilterCount = selectedRarities.length + selectedTypes.length;
+  const [showFilters, setShowFilters] = useState(false)
+  const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0
+  const activeFilterCount = selectedRarities.length + selectedTypes.length
 
   const handleRaritySelectionChange = (newKeys: Set<NFTRarity>) => {
-    const prev = new Set(selectedRarities);
+    const prev = new Set(selectedRarities)
     for (const key of newKeys) {
-      if (!prev.has(key)) onRarityToggle(key);
+      if (!prev.has(key)) onRarityToggle(key)
     }
     for (const key of prev) {
-      if (!newKeys.has(key)) onRarityToggle(key);
+      if (!newKeys.has(key)) onRarityToggle(key)
     }
-  };
+  }
 
   const handleTypeSelectionChange = (newKeys: Set<NFTType>) => {
-    const prev = new Set(selectedTypes);
+    const prev = new Set(selectedTypes)
     for (const key of newKeys) {
-      if (!prev.has(key)) onTypeToggle(key);
+      if (!prev.has(key)) onTypeToggle(key)
     }
     for (const key of prev) {
-      if (!newKeys.has(key)) onTypeToggle(key);
+      if (!newKeys.has(key)) onTypeToggle(key)
     }
-  };
+  }
 
   return (
     <View className="px-4 pb-2">
@@ -126,7 +126,7 @@ function FilterControls({
         </View>
       )}
     </View>
-  );
+  )
 }
 
-export default memo(FilterControls);
+export default memo(FilterControls)

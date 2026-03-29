@@ -1,6 +1,6 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Button, Spinner } from 'heroui-native';
-import type { OAuthButtonProps } from '@/types';
+import { AntDesign } from '@expo/vector-icons'
+import { Button, Spinner } from 'heroui-native'
+import type { OAuthButtonProps } from '@/types'
 
 /**
  * Reusable OAuth sign-in button for Google and X (Twitter) providers.
@@ -8,8 +8,8 @@ import type { OAuthButtonProps } from '@/types';
  * while `loading` is true.
  */
 export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
-  const isGoogle = provider === 'google';
-  const label = isGoogle ? 'Continue with Google' : 'Continue with 𝕏';
+  const isGoogle = provider === 'google'
+  const label = isGoogle ? 'Continue with Google' : 'Continue with 𝕏'
 
   return (
     <Button
@@ -24,11 +24,9 @@ export default function OAuthButton({ provider, onPress, loading }: OAuthButtonP
       ) : (
         <>
           {isGoogle && <AntDesign name="google" size={20} color="#1F1F1F" />}
-          <Button.Label className={isGoogle ? 'text-[#1F1F1F]' : ''}>
-            {label}
-          </Button.Label>
+          <Button.Label className={isGoogle ? 'text-[#1F1F1F]' : ''}>{label}</Button.Label>
         </>
       )}
     </Button>
-  );
+  )
 }

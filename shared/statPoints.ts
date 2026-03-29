@@ -6,17 +6,17 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from './nft.ts';
+import type { NFTRarity } from './nft.ts'
 
 /** Number of stat points awarded per level-up, keyed by rarity. */
 // @migration: DELETE — game_config.stat_points
 export const STAT_POINTS_BY_RARITY: Record<NFTRarity, number> = {
-  common:       4,
-  rare:         10,
-  legendary:    14,
+  common: 4,
+  rare: 10,
+  legendary: 14,
   transcendent: 18,
-};
+}
 
 /** Maximum NFT energy value. */
 // @migration: KEEP — structural invariant (stat cap 0–100); never moves to DB
-export const MAX_ENERGY = 100;
+export const MAX_ENERGY = 100

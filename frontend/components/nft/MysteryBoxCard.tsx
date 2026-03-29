@@ -1,28 +1,24 @@
-import { memo } from 'react';
-import { Image, View } from 'react-native';
-import type { ReactNode } from 'react';
-import { Card, Chip, cn } from 'heroui-native';
-import type { MysteryBox } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles';
+import { memo } from 'react'
+import { Image, View } from 'react-native'
+import type { ReactNode } from 'react'
+import { Card, Chip, cn } from 'heroui-native'
+import type { MysteryBox } from '@pop/shared'
+import { RARITY_COLORS } from '@/constants'
+import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles'
 
 interface MysteryBoxCardProps {
-  box: MysteryBox;
+  box: MysteryBox
   /** Number of boxes of this rarity. When > 1, a count badge is shown. */
-  count?: number;
+  count?: number
   /** Slot for the action area below the card header (e.g. an Open button). */
-  action?: ReactNode;
+  action?: ReactNode
 }
 
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
     <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
       <View className={cardImageContainer()}>
-        <Image
-          source={{ uri: box.image_url }}
-          className="w-full h-full"
-          resizeMode="cover"
-        />
+        <Image source={{ uri: box.image_url }} className="w-full h-full" resizeMode="cover" />
         {/* Rarity — bottom-right */}
         <Chip
           size="sm"
@@ -67,5 +63,5 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
         {action}
       </Card.Body>
     </Card>
-  );
-});
+  )
+})

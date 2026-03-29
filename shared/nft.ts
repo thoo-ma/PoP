@@ -6,32 +6,32 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress';
+export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
-export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent';
-
-// @migration: KEEP — structural invariant; never moves to DB
-export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent'];
+export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent'
 
 // @migration: KEEP — structural invariant; never moves to DB
-export const NFT_TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress'];
+export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent']
+
+// @migration: KEEP — structural invariant; never moves to DB
+export const NFT_TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress']
 
 // @migration: KEEP — structural invariant; never moves to DB
 export const RARITY_RANK: Record<NFTRarity, number> = {
-  common:       0,
-  rare:         1,
-  legendary:    2,
+  common: 0,
+  rare: 1,
+  legendary: 2,
   transcendent: 3,
-};
+}
 
 /** A mystery box owned by a user. No stats — utility is deferred. */
 export type MysteryBox = {
-  id: string;
-  rarity: NFTRarity;
-  image_url: string;
-  opened: boolean;
-  created_at: string;
-};
+  id: string
+  rarity: NFTRarity
+  image_url: string
+  opened: boolean
+  created_at: string
+}
 
 /** Maps each NFT type to its available named slugs (matches Supabase storage structure). */
 // @migration: KEEP — structural invariant; never moves to DB
@@ -58,4 +58,4 @@ export const TYPE_NAMES: Record<NFTType, readonly string[]> = {
     'futuristic-sci-fi-vacuum',
     'renaissance-chaise',
   ],
-} as const;
+} as const

@@ -1,11 +1,11 @@
-import { tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 // ── Phase container ──────────────────────────────────────────────────────────
 // Wraps every game phase (countdown, immobility, prompt, recording, results, roulette).
 // Used 8+ times in Poop.tsx across all renderXxxPhase functions.
 export const phaseContainer = tv({
   base: 'w-full items-center pt-3 gap-5',
-});
+})
 
 // ── Challenge header ─────────────────────────────────────────────────────────
 // The NFT info row shown at the top of every active game phase.
@@ -17,13 +17,13 @@ export const challengeHeader = tv({
     name: 'text-[15px] font-bold text-gray-700 mb-0.5',
     subtitle: 'text-xs text-gray-500',
   },
-});
+})
 
 // ── Content block ────────────────────────────────────────────────────────────
 // The central content area inside countdown / immobility phases.
 export const phaseContent = tv({
   base: 'items-center py-6 gap-4',
-});
+})
 
 // ── Big timer text ───────────────────────────────────────────────────────────
 // The large countdown / immobility timer number.
@@ -37,7 +37,7 @@ export const timerText = tv({
     },
   },
   defaultVariants: { status: 'neutral' },
-});
+})
 
 // ── Status badge ─────────────────────────────────────────────────────────────
 // The pill showing "Hold still" / "Movement detected" during immobility phase.
@@ -53,7 +53,7 @@ export const statusBadge = tv({
     },
   },
   defaultVariants: { status: 'ok' },
-});
+})
 
 // ── Result card ──────────────────────────────────────────────────────────────
 // The outcome card shown after flush detection (success/failure/rate-limit/error).
@@ -70,13 +70,13 @@ export const resultCard = tv({
       warning: { root: 'bg-amber-100 border-amber-400' },
     },
   },
-});
+})
 
 // ── Info card ────────────────────────────────────────────────────────────────
 // The white bordered card used for prompt / recording / analyzing states.
 export const infoCard = tv({
   base: 'w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm',
-});
+})
 
 // ── Recording indicator ──────────────────────────────────────────────────────
 // The red dot + "Recording…" row.
@@ -86,7 +86,7 @@ export const recordingIndicator = tv({
     dot: 'w-3 h-3 rounded-full bg-red-500',
     label: 'text-base font-semibold text-gray-700',
   },
-});
+})
 
 // ── Toast banner ─────────────────────────────────────────────────────────────
 // The immobility failure toast ("Too much movement — try again!").
@@ -95,4 +95,4 @@ export const toastBanner = tv({
     root: 'bg-red-100 rounded-[10px] py-2.5 px-4 mb-2 border border-red-300',
     label: 'text-[13px] text-red-700 font-semibold text-center',
   },
-});
+})

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { supabase } from '@/lib';
-import type { Session } from '@supabase/supabase-js';
-import type { UseAuthReturn } from '@/types';
+import { useCallback, useEffect, useState } from 'react'
+import { supabase } from '@/lib'
+import type { Session } from '@supabase/supabase-js'
+import type { UseAuthReturn } from '@/types'
 
 /**
  * Hook to manage the current Supabase auth session.
@@ -13,15 +13,15 @@ import type { UseAuthReturn } from '@/types';
  *   auth helpers (`signOut`, `getUserDisplayName`).
  */
 export function useAuth(): UseAuthReturn {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
+      setSession(session)
+      setLoading(false)
+    })
 
     // Listen to authentication state changes.
     // Also calls setLoading(false) here so that if this listener fires before
@@ -30,24 +30,24 @@ export function useAuth(): UseAuthReturn {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setLoading(false);
-    });
+      setSession(session)
+      setLoading(false)
+    })
 
-    return () => subscription.unsubscribe();
-  }, []);
+    return () => subscription.unsubscribe()
+  }, [])
 
   const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
     if (error) {
-      return { error };
+      return { error }
     }
-    return { error: null };
-  }, []);
+    return { error: null }
+  }, [])
 
   const getUserDisplayName = useCallback((): string => {
-    return session?.user.email || session?.user.user_metadata?.name || 'User';
-  }, [session]);
+    return session?.user.email || session?.user.user_metadata?.name || 'User'
+  }, [session])
 
   return {
     session,
@@ -56,5 +56,5 @@ export function useAuth(): UseAuthReturn {
     getUserDisplayName,
     user: session?.user ?? null,
     isAuthenticated: !!session,
-  };
+  }
 }

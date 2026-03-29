@@ -13,17 +13,17 @@ import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
 import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function XpPanel() {
-  const source           = useGameConfigStore((s) => s.sources.xp)
-  const setDraft         = useGameConfigStore((s) => s.setDraft)
+  const source = useGameConfigStore((s) => s.sources.xp)
+  const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
-  const hasDraft         = useGameConfigStore((s) => s.drafts.xp !== undefined)
-  const xp               = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })))
+  const hasDraft = useGameConfigStore((s) => s.drafts.xp !== undefined)
+  const xp = useGameConfigStore(useShallow((s) => ({ ...s.config.xp, ...s.drafts.xp })))
 
   // Generate chart data: levels 1–MAX_LEVEL
   const chartData = useMemo(() => {
-    const levels: number[]     = []
+    const levels: number[] = []
     const thresholds: number[] = []
-    const uses: number[]       = []
+    const uses: number[] = []
 
     for (let lvl = 1; lvl <= MAX_LEVEL; lvl++) {
       const threshold = xpThreshold(lvl, xp)
@@ -46,95 +46,99 @@ export default function XpPanel() {
     return cumulative
   }, [chartData.thresholds])
 
-  const thresholdChartOptions = useMemo(() => ({
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'axis' as const,
-      ...CHART_TOOLTIP,
-      formatter: (params: Array<{ name: string; value: number; seriesName: string }>) => {
-        const lvl = params[0]?.name
-        const lines = params.map(
-          (p) => `${p.seriesName}: <b>${p.value.toLocaleString()}</b>`
-        )
-        return `Level ${lvl}<br/>${lines.join('<br/>')}`
+  const thresholdChartOptions = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis' as const,
+        ...CHART_TOOLTIP,
+        formatter: (params: Array<{ name: string; value: number; seriesName: string }>) => {
+          const lvl = params[0]?.name
+          const lines = params.map((p) => `${p.seriesName}: <b>${p.value.toLocaleString()}</b>`)
+          return `Level ${lvl}<br/>${lines.join('<br/>')}`
+        },
       },
-    },
-    grid: { top: 40, right: 60, bottom: 40, left: 60 },
-    xAxis: {
-      type: 'category' as const,
-      data: chartData.levels.map(String),
-      name: 'Level',
-      nameLocation: 'middle' as const,
-      nameGap: 28,
-      ...CHART_AXIS_STYLES,
-    },
-    yAxis: [
-      {
+      grid: { top: 40, right: 60, bottom: 40, left: 60 },
+      xAxis: {
+        type: 'category' as const,
+        data: chartData.levels.map(String),
+        name: 'Level',
+        nameLocation: 'middle' as const,
+        nameGap: 28,
+        ...CHART_AXIS_STYLES,
+      },
+      yAxis: [
+        {
+          type: 'value' as const,
+          name: 'XP Required',
+          ...CHART_AXIS_STYLES,
+          splitLine: CHART_SPLIT_LINE,
+        },
+        {
+          type: 'value' as const,
+          name: 'Uses Needed',
+          ...CHART_AXIS_STYLES,
+          splitLine: { show: false },
+        },
+      ],
+      series: [
+        {
+          name: 'XP Threshold',
+          type: 'bar',
+          data: chartData.thresholds,
+          itemStyle: { color: '#3b82f6', borderRadius: [2, 2, 0, 0] },
+          barMaxWidth: 32,
+        },
+        {
+          name: 'Uses Needed',
+          type: 'line',
+          yAxisIndex: 1,
+          data: chartData.uses,
+          lineStyle: { color: '#f59e0b', width: 2 },
+          itemStyle: { color: '#f59e0b' },
+          symbol: 'circle',
+          symbolSize: 5,
+        },
+      ],
+    }),
+    [chartData],
+  )
+
+  const cumulativeChartOptions = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis' as const, ...CHART_TOOLTIP },
+      grid: { top: 40, right: 40, bottom: 40, left: 60 },
+      xAxis: {
+        type: 'category' as const,
+        data: chartData.levels.map(String),
+        name: 'Level',
+        nameLocation: 'middle' as const,
+        nameGap: 28,
+        ...CHART_AXIS_STYLES,
+      },
+      yAxis: {
         type: 'value' as const,
-        name: 'XP Required',
+        name: 'Cumulative XP',
         ...CHART_AXIS_STYLES,
         splitLine: CHART_SPLIT_LINE,
       },
-      {
-        type: 'value' as const,
-        name: 'Uses Needed',
-        ...CHART_AXIS_STYLES,
-        splitLine: { show: false },
-      },
-    ],
-    series: [
-      {
-        name: 'XP Threshold',
-        type: 'bar',
-        data: chartData.thresholds,
-        itemStyle: { color: '#3b82f6', borderRadius: [2, 2, 0, 0] },
-        barMaxWidth: 32,
-      },
-      {
-        name: 'Uses Needed',
-        type: 'line',
-        yAxisIndex: 1,
-        data: chartData.uses,
-        lineStyle: { color: '#f59e0b', width: 2 },
-        itemStyle: { color: '#f59e0b' },
-        symbol: 'circle',
-        symbolSize: 5,
-      },
-    ],
-  }), [chartData])
-
-  const cumulativeChartOptions = useMemo(() => ({
-    backgroundColor: 'transparent',
-    tooltip: { trigger: 'axis' as const, ...CHART_TOOLTIP },
-    grid: { top: 40, right: 40, bottom: 40, left: 60 },
-    xAxis: {
-      type: 'category' as const,
-      data: chartData.levels.map(String),
-      name: 'Level',
-      nameLocation: 'middle' as const,
-      nameGap: 28,
-      ...CHART_AXIS_STYLES,
-    },
-    yAxis: {
-      type: 'value' as const,
-      name: 'Cumulative XP',
-      ...CHART_AXIS_STYLES,
-      splitLine: CHART_SPLIT_LINE,
-    },
-    series: [
-      {
-        name: 'Cumulative XP',
-        type: 'line',
-        data: cumulativeData,
-        areaStyle: { color: 'rgba(59, 130, 246, 0.1)' },
-        lineStyle: { color: '#3b82f6', width: 2 },
-        itemStyle: { color: '#3b82f6' },
-        symbol: 'circle',
-        symbolSize: 4,
-        smooth: true,
-      },
-    ],
-  }), [chartData.levels, cumulativeData])
+      series: [
+        {
+          name: 'Cumulative XP',
+          type: 'line',
+          data: cumulativeData,
+          areaStyle: { color: 'rgba(59, 130, 246, 0.1)' },
+          lineStyle: { color: '#3b82f6', width: 2 },
+          itemStyle: { color: '#3b82f6' },
+          symbol: 'circle',
+          symbolSize: 4,
+          smooth: true,
+        },
+      ],
+    }),
+    [chartData.levels, cumulativeData],
+  )
 
   const handleChange = (field: keyof typeof xp, value: string) => {
     const num = parseFloat(value)
@@ -150,9 +154,10 @@ export default function XpPanel() {
         <h2 className="text-xl font-semibold text-white">XP & Leveling</h2>
         <Badge
           variant="outline"
-          className={source === 'db'
-            ? 'border-blue-800 text-blue-400 text-[10px]'
-            : 'border-neutral-700 text-neutral-500 text-[10px]'
+          className={
+            source === 'db'
+              ? 'border-blue-800 text-blue-400 text-[10px]'
+              : 'border-neutral-700 text-neutral-500 text-[10px]'
           }
         >
           {source === 'db' ? 'Live from DB' : 'Using defaults'}
@@ -232,9 +237,7 @@ export default function XpPanel() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="border-neutral-800 bg-neutral-900/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300">
-              XP per Level
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-neutral-300">XP per Level</CardTitle>
           </CardHeader>
           <CardContent>
             <LazyChart option={thresholdChartOptions} style={{ height: 320 }} />
@@ -274,7 +277,9 @@ export default function XpPanel() {
                 {chartData.levels.map((lvl, i) => (
                   <tr key={lvl} className="border-b border-neutral-800/50 text-neutral-300">
                     <td className="px-3 py-1.5 font-mono text-neutral-400">{lvl}</td>
-                    <td className="px-3 py-1.5 font-mono">{chartData.thresholds[i].toLocaleString()}</td>
+                    <td className="px-3 py-1.5 font-mono">
+                      {chartData.thresholds[i].toLocaleString()}
+                    </td>
                     <td className="px-3 py-1.5 font-mono">{chartData.uses[i]}</td>
                     <td className="px-3 py-1.5 font-mono">{cumulativeData[i].toLocaleString()}</td>
                     <td className="px-3 py-1.5 font-mono">

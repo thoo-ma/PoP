@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
-import { Card } from 'heroui-native';
-import type { NFTRarity } from '@pop/shared';
-import { RARITY_COLORS } from '@/constants';
-import { RARITIES } from '@pop/shared';
-import { getProbabilities } from '@/utils';
+import { View, Text } from 'react-native'
+import { Card } from 'heroui-native'
+import type { NFTRarity } from '@pop/shared'
+import { RARITY_COLORS } from '@/constants'
+import { RARITIES } from '@pop/shared'
+import { getProbabilities } from '@/utils'
 
 /**
  * Read-only panel that displays the possible rarity outcomes and their
@@ -11,7 +11,7 @@ import { getProbabilities } from '@/utils';
  * Zero-probability outcomes are hidden automatically.
  */
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
-  const probs = getProbabilities(r1, r2);
+  const probs = getProbabilities(r1, r2)
   return (
     <Card className="w-full mb-5">
       <Card.Body className="p-4">
@@ -19,8 +19,8 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
           Possible outcomes
         </Card.Title>
         {RARITIES.map((rarity, i) => {
-          const pct = probs[i];
-          if (pct === 0) return null;
+          const pct = probs[i]
+          if (pct === 0) return null
           return (
             <View key={rarity} className="flex-row items-center mb-2 gap-2">
               <View
@@ -38,9 +38,9 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
               </View>
               <Text className="text-sm font-bold text-default-600 w-11 text-right">{pct}%</Text>
             </View>
-          );
+          )
         })}
       </Card.Body>
     </Card>
-  );
+  )
 }

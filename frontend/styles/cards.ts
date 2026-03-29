@@ -1,11 +1,11 @@
-import { tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 // ── Card image container ─────────────────────────────────────────────────────
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,
 // and BreedPickerModal grid items.
 export const cardImageContainer = tv({
   base: 'w-full aspect-square relative',
-});
+})
 
 // ── Badge position ───────────────────────────────────────────────────────────
 // Absolute positioning for Chip badges overlaid on card images.
@@ -20,13 +20,13 @@ export const badgePosition = tv({
       bottomLeft: 'absolute bottom-2 left-2',
     },
   },
-});
+})
 
 // ── Card body ────────────────────────────────────────────────────────────────
 // Standard body padding + gap for NFTCard and MysteryBoxCard.
 export const cardBody = tv({
   base: 'p-2 gap-2',
-});
+})
 
 // ── NFT detail card ──────────────────────────────────────────────────────────
 // The larger NFT card used in the Poop idle screen and the Repair screen.
@@ -37,7 +37,7 @@ export const nftDetailCard = tv({
     content: 'w-full',
     title: 'text-lg font-bold text-center',
   },
-});
+})
 
 // ── Overlay badge ────────────────────────────────────────────────────────────
 // Rounded-lg badge positioned over the NFT detail card image
@@ -51,7 +51,7 @@ export const overlayBadge = tv({
       topRight: 'top-3 right-3',
     },
   },
-});
+})
 
 // ── Type badge ───────────────────────────────────────────────────────────────
 // Background colour by NFT type — replaces the old TYPE_BADGE_STYLES ViewStyle record.
@@ -64,7 +64,7 @@ export const typeBadge = tv({
       'zen-fortress': 'bg-type-zen-fortress',
     },
   },
-});
+})
 
 // ── Rarity badge ─────────────────────────────────────────────────────────────
 // Background colour by NFT rarity — replaces the old RARITY_BADGE_STYLES ViewStyle record.
@@ -78,7 +78,7 @@ export const rarityBadge = tv({
       transcendent: 'bg-rarity-transcendent',
     },
   },
-});
+})
 
 // ── Skeleton card ────────────────────────────────────────────────────────────
 // Placeholder shimmer lines used in Vault and Marketplace loading states.
@@ -88,7 +88,7 @@ export const skeletonCard = tv({
     titleLine: 'h-4 w-3/4 rounded-md mt-2',
     subtitleLine: 'h-3 w-1/2 rounded-md mt-1',
   },
-});
+})
 
 // ── Breed picker card ────────────────────────────────────────────────────────
 // Grid item card used in BreedPickerModal's 2-column NFT list.
@@ -109,10 +109,10 @@ export const breedPickerCard = tv({
     },
   },
   defaultVariants: { disabled: false },
-});
+})
 
 // ── NFT nav button ───────────────────────────────────────────────────────────
 // Prev / next arrow button used in NFTSelector.
 export const nftNavButton = tv({
   base: 'w-[52px] h-9 rounded-lg bg-surface-light border border-border-default',
-});
+})

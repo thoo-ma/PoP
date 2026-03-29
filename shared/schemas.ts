@@ -20,22 +20,22 @@ import { z } from 'zod'
 
 const NFTRarityRecord = <T extends z.ZodTypeAny>(val: T) =>
   z.object({
-    common:       val,
-    rare:         val,
-    legendary:    val,
+    common: val,
+    rare: val,
+    legendary: val,
     transcendent: val,
   })
 
 const NFTTypeRecord = <T extends z.ZodTypeAny>(val: T) =>
   z.object({
-    'turbo-flush':  val,
-    'cruise-seat':  val,
+    'turbo-flush': val,
+    'cruise-seat': val,
     'zen-fortress': val,
   })
 
 const DifficultyRecord = <T extends z.ZodTypeAny>(val: T) =>
   z.object({
-    easy:   val,
+    easy: val,
     normal: val,
     strict: val,
   })
@@ -68,22 +68,22 @@ import {
 
 export const CurrencyConfigSchema = z.object({
   // ─── Use reward ────────────────────────────────────────────────────────────
-  REWARD_BASE_PRICE_USD:    z.number().min(0).max(1),
-  REWARD_GROWTH_RATE:       z.number().min(1).max(5),
-  REWARD_USD_PER_TOKEN:     z.number().min(0.0001).max(1),
-  REWARD_TYPE_MULTIPLIER:   NFTTypeRecord(PositiveNumber.max(100)),
+  REWARD_BASE_PRICE_USD: z.number().min(0).max(1),
+  REWARD_GROWTH_RATE: z.number().min(1).max(5),
+  REWARD_USD_PER_TOKEN: z.number().min(0.0001).max(1),
+  REWARD_TYPE_MULTIPLIER: NFTTypeRecord(PositiveNumber.max(100)),
   REWARD_RARITY_MULTIPLIER: NFTRarityRecord(PositiveNumber.max(1_000)),
   // ─── Repair ────────────────────────────────────────────────────────────────
-  REPAIR_COEF_A:            PositiveNumber.max(100),
-  REPAIR_COEF_B:            PositiveNumber.max(100),
-  REPAIR_USD_PER_TOKEN:     z.number().min(0.0001).max(1),
+  REPAIR_COEF_A: PositiveNumber.max(100),
+  REPAIR_COEF_B: PositiveNumber.max(100),
+  REPAIR_USD_PER_TOKEN: z.number().min(0.0001).max(1),
   REPAIR_RARITY_MULTIPLIER: NFTRarityRecord(PositiveNumber.max(100)),
   // ─── Breed ─────────────────────────────────────────────────────────────────
-  BREED_BASE_PRICE_USD:     PositiveNumber.max(100),
-  BREED_GROWTH_RATE:        z.number().min(1).max(10),
-  BREED_USD_PER_TOKEN:      z.number().min(0.0001).max(1),
-  BREED_MAX_COUNT:          z.number().int().min(1).max(20),
-  BREED_RARITY_MULTIPLIER:  NFTRarityRecord(PositiveNumber.max(1_000)),
+  BREED_BASE_PRICE_USD: PositiveNumber.max(100),
+  BREED_GROWTH_RATE: z.number().min(1).max(10),
+  BREED_USD_PER_TOKEN: z.number().min(0.0001).max(1),
+  BREED_MAX_COUNT: z.number().int().min(1).max(20),
+  BREED_RARITY_MULTIPLIER: NFTRarityRecord(PositiveNumber.max(1_000)),
 })
 
 export type CurrencyConfig = z.infer<typeof CurrencyConfigSchema>
@@ -92,7 +92,7 @@ export const CURRENCY_DEFAULTS: CurrencyConfig = {
   REWARD_BASE_PRICE_USD,
   REWARD_GROWTH_RATE,
   REWARD_USD_PER_TOKEN,
-  REWARD_TYPE_MULTIPLIER:   { ...REWARD_TYPE_MULTIPLIER },
+  REWARD_TYPE_MULTIPLIER: { ...REWARD_TYPE_MULTIPLIER },
   REWARD_RARITY_MULTIPLIER: { ...REWARD_RARITY_MULTIPLIER },
   REPAIR_COEF_A,
   REPAIR_COEF_B,
@@ -102,23 +102,19 @@ export const CURRENCY_DEFAULTS: CurrencyConfig = {
   BREED_GROWTH_RATE,
   BREED_USD_PER_TOKEN,
   BREED_MAX_COUNT,
-  BREED_RARITY_MULTIPLIER:  { ...BREED_RARITY_MULTIPLIER },
+  BREED_RARITY_MULTIPLIER: { ...BREED_RARITY_MULTIPLIER },
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 2. Cooldown
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import {
-  COOLDOWN_BASES,
-  LINEAR_MULT,
-  EXP_MULT,
-} from './cooldown.ts'
+import { COOLDOWN_BASES, LINEAR_MULT, EXP_MULT } from './cooldown.ts'
 
 export const CooldownConfigSchema = z.object({
-  COOLDOWN_BASES: NFTTypeRecord(PositiveNumber.max(168)),   // max 1 week
-  LINEAR_MULT:    PositiveNumber.max(10),
-  EXP_MULT:       PositiveNumber.max(1),
+  COOLDOWN_BASES: NFTTypeRecord(PositiveNumber.max(168)), // max 1 week
+  LINEAR_MULT: PositiveNumber.max(10),
+  EXP_MULT: PositiveNumber.max(1),
 })
 
 export type CooldownConfig = z.infer<typeof CooldownConfigSchema>
@@ -142,11 +138,11 @@ import {
 } from './xp.ts'
 
 export const XpConfigSchema = z.object({
-  XP_PER_USE:           z.number().int().min(1).max(10_000),
-  XP_FORMULA_BASE:      PositiveNumber.max(10_000),
-  XP_FORMULA_LINEAR:    PositiveNumber.max(1_000),
+  XP_PER_USE: z.number().int().min(1).max(10_000),
+  XP_FORMULA_BASE: PositiveNumber.max(10_000),
+  XP_FORMULA_LINEAR: PositiveNumber.max(1_000),
   XP_FORMULA_QUADRATIC: PositiveNumber.max(100),
-  XP_FORMULA_FLOOR:     z.number().int().min(1).max(10_000),
+  XP_FORMULA_FLOOR: z.number().int().min(1).max(10_000),
 })
 
 export type XpConfig = z.infer<typeof XpConfigSchema>
@@ -190,12 +186,12 @@ const ProbabilityTuple = z.tuple([
 
 export const BreedConfigSchema = z.object({
   BREED_PROBABILITIES: z.object({
-    'common+common':             ProbabilityTuple,
-    'common+rare':               ProbabilityTuple,
-    'rare+rare':                 ProbabilityTuple,
-    'rare+legendary':            ProbabilityTuple,
-    'legendary+legendary':       ProbabilityTuple,
-    'legendary+transcendent':    ProbabilityTuple,
+    'common+common': ProbabilityTuple,
+    'common+rare': ProbabilityTuple,
+    'rare+rare': ProbabilityTuple,
+    'rare+legendary': ProbabilityTuple,
+    'legendary+legendary': ProbabilityTuple,
+    'legendary+transcendent': ProbabilityTuple,
     'transcendent+transcendent': ProbabilityTuple,
   }),
 })
@@ -212,10 +208,7 @@ export const BREED_DEFAULTS: BreedConfig = {
 
 import { STAT_RANGES } from './minting.ts'
 
-const StatRange = z.tuple([
-  z.number().int().min(0).max(100),
-  z.number().int().min(0).max(100),
-])
+const StatRange = z.tuple([z.number().int().min(0).max(100), z.number().int().min(0).max(100)])
 
 export const MintingConfigSchema = z.object({
   STAT_RANGES: NFTRarityRecord(StatRange),
@@ -225,9 +218,9 @@ export type MintingConfig = z.infer<typeof MintingConfigSchema>
 
 export const MINTING_DEFAULTS: MintingConfig = {
   STAT_RANGES: {
-    common:       [...STAT_RANGES.common],
-    rare:         [...STAT_RANGES.rare],
-    legendary:    [...STAT_RANGES.legendary],
+    common: [...STAT_RANGES.common],
+    rare: [...STAT_RANGES.rare],
+    legendary: [...STAT_RANGES.legendary],
     transcendent: [...STAT_RANGES.transcendent],
   },
 }
@@ -241,13 +234,13 @@ import { SENSOR_PRESETS, AUDIO_THRESHOLDS } from './sensors.ts'
 const SensorThresholdsSchema = z.object({
   MOVEMENT_THRESHOLD: PositiveNumber.max(10),
   ROTATION_THRESHOLD: PositiveNumber.max(10),
-  STEP_COOLDOWN:      z.number().int().min(0).max(60_000),
-  GRACE_PERIOD:       z.number().int().min(0).max(60_000),
-  WARNING_COOLDOWN:   z.number().int().min(0).max(60_000),
+  STEP_COOLDOWN: z.number().int().min(0).max(60_000),
+  GRACE_PERIOD: z.number().int().min(0).max(60_000),
+  WARNING_COOLDOWN: z.number().int().min(0).max(60_000),
 })
 
 export const SensorsConfigSchema = z.object({
-  SENSOR_PRESETS:   DifficultyRecord(SensorThresholdsSchema),
+  SENSOR_PRESETS: DifficultyRecord(SensorThresholdsSchema),
   AUDIO_THRESHOLDS: DifficultyRecord(z.number().min(0).max(1)),
 })
 
@@ -255,7 +248,7 @@ export type SensorsConfig = z.infer<typeof SensorsConfigSchema>
 
 export const SENSORS_DEFAULTS: SensorsConfig = {
   SENSOR_PRESETS: {
-    easy:   { ...SENSOR_PRESETS.easy },
+    easy: { ...SENSOR_PRESETS.easy },
     normal: { ...SENSOR_PRESETS.normal },
     strict: { ...SENSOR_PRESETS.strict },
   },
@@ -266,11 +259,7 @@ export const SENSORS_DEFAULTS: SensorsConfig = {
 // 8. Energy Drain
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import {
-  TYPE_DRAIN_MULT,
-  ENERGY_ROLL_MIN,
-  ENERGY_ROLL_MAX,
-} from './energyDrain.ts'
+import { TYPE_DRAIN_MULT, ENERGY_ROLL_MIN, ENERGY_ROLL_MAX } from './energyDrain.ts'
 
 export const EnergyDrainConfigSchema = z.object({
   TYPE_DRAIN_MULT: NFTTypeRecord(PositiveNumber.max(100)),
@@ -290,16 +279,12 @@ export const ENERGY_DRAIN_DEFAULTS: EnergyDrainConfig = {
 // 9. Loot Roll
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import {
-  BASE_WIN_PROBABILITY,
-  PER_HOLD_INCREMENT,
-  MAX_HOLDS,
-} from './lootRoll.ts'
+import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT, MAX_HOLDS } from './lootRoll.ts'
 
 export const LootRollConfigSchema = z.object({
   BASE_WIN_PROBABILITY: z.number().min(0).max(1),
-  PER_HOLD_INCREMENT:   z.number().min(0).max(1),
-  MAX_HOLDS:            z.number().int().min(0).max(100),
+  PER_HOLD_INCREMENT: z.number().min(0).max(1),
+  MAX_HOLDS: z.number().int().min(0).max(100),
 })
 
 export type LootRollConfig = z.infer<typeof LootRollConfigSchema>
@@ -323,9 +308,9 @@ import {
 
 export const CloudRunConfigSchema = z.object({
   YAMNET_TOILET_FLUSH_CLASS: z.number().int().min(0).max(999),
-  MAX_AUDIO_DURATION:        PositiveNumber.max(300),
-  MIN_AUDIO_DURATION:        PositiveNumber.max(60),
-  DETECTIONS_PER_DAY:        z.number().int().min(1),
+  MAX_AUDIO_DURATION: PositiveNumber.max(300),
+  MIN_AUDIO_DURATION: PositiveNumber.max(60),
+  DETECTIONS_PER_DAY: z.number().int().min(1),
 })
 
 export type CloudRunConfig = z.infer<typeof CloudRunConfigSchema>
@@ -350,11 +335,11 @@ import {
 } from './degenBar.ts'
 
 export const DegenBarConfigSchema = z.object({
-  SAFE_BUST_COEF:        z.number().min(0).max(1),
-  DEGEN_BUST_BASE:       PositiveNumber.max(100),
-  DEGEN_BUST_SCALE:      PositiveNumber.max(1000),
-  DEGEN_ZONE_THRESHOLD:  z.number().min(0).max(99),
-  MAX_REDUCTION:         z.number().min(0).max(1),
+  SAFE_BUST_COEF: z.number().min(0).max(1),
+  DEGEN_BUST_BASE: PositiveNumber.max(100),
+  DEGEN_BUST_SCALE: PositiveNumber.max(1000),
+  DEGEN_ZONE_THRESHOLD: z.number().min(0).max(99),
+  MAX_REDUCTION: z.number().min(0).max(1),
 })
 
 export type DegenBarConfig = z.infer<typeof DegenBarConfigSchema>
@@ -372,17 +357,17 @@ export const DEGEN_BAR_DEFAULTS: DegenBarConfig = {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const GAME_CONFIG_REGISTRY = {
-  currency:     { schema: CurrencyConfigSchema,    defaults: CURRENCY_DEFAULTS },
-  cooldown:     { schema: CooldownConfigSchema,    defaults: COOLDOWN_DEFAULTS },
-  xp:           { schema: XpConfigSchema,          defaults: XP_DEFAULTS },
-  stat_points:  { schema: StatPointsConfigSchema,  defaults: STAT_POINTS_DEFAULTS },
-  breed:        { schema: BreedConfigSchema,       defaults: BREED_DEFAULTS },
-  minting:      { schema: MintingConfigSchema,     defaults: MINTING_DEFAULTS },
-  sensors:      { schema: SensorsConfigSchema,     defaults: SENSORS_DEFAULTS },
+  currency: { schema: CurrencyConfigSchema, defaults: CURRENCY_DEFAULTS },
+  cooldown: { schema: CooldownConfigSchema, defaults: COOLDOWN_DEFAULTS },
+  xp: { schema: XpConfigSchema, defaults: XP_DEFAULTS },
+  stat_points: { schema: StatPointsConfigSchema, defaults: STAT_POINTS_DEFAULTS },
+  breed: { schema: BreedConfigSchema, defaults: BREED_DEFAULTS },
+  minting: { schema: MintingConfigSchema, defaults: MINTING_DEFAULTS },
+  sensors: { schema: SensorsConfigSchema, defaults: SENSORS_DEFAULTS },
   energy_drain: { schema: EnergyDrainConfigSchema, defaults: ENERGY_DRAIN_DEFAULTS },
-  loot_roll:    { schema: LootRollConfigSchema,    defaults: LOOT_ROLL_DEFAULTS },
-  cloud_run:    { schema: CloudRunConfigSchema,    defaults: CLOUD_RUN_DEFAULTS },
-  degen_bar:    { schema: DegenBarConfigSchema,    defaults: DEGEN_BAR_DEFAULTS },
+  loot_roll: { schema: LootRollConfigSchema, defaults: LOOT_ROLL_DEFAULTS },
+  cloud_run: { schema: CloudRunConfigSchema, defaults: CLOUD_RUN_DEFAULTS },
+  degen_bar: { schema: DegenBarConfigSchema, defaults: DEGEN_BAR_DEFAULTS },
 } as const
 
 export type GameConfigKey = keyof typeof GAME_CONFIG_REGISTRY

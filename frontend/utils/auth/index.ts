@@ -1,1 +1,1 @@
-export * from './alertHelpers';
+export * from './alertHelpers'

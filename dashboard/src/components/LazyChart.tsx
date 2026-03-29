@@ -17,7 +17,7 @@ const ReactEChartsLazy = lazy(() =>
         return <Core echarts={echartsModule.default} {...props} />
       },
     }))
-  })
+  }),
 )
 
 interface LazyChartProps {
@@ -28,10 +28,7 @@ interface LazyChartProps {
 
 function ChartFallback({ style }: { style?: React.CSSProperties }) {
   return (
-    <div
-      style={style}
-      className="flex items-center justify-center text-xs text-neutral-600"
-    >
+    <div style={style} className="flex items-center justify-center text-xs text-neutral-600">
       Loading chart…
     </div>
   )

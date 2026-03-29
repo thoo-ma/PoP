@@ -3,11 +3,7 @@
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
 import { type GameConfigKey } from '@pop/shared/schemas'
-import {
-  buildGameConfig,
-  type FullGameConfig,
-  type ConfigSource,
-} from '@pop/shared/gameConfig'
+import { buildGameConfig, type FullGameConfig, type ConfigSource } from '@pop/shared/gameConfig'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -42,11 +38,11 @@ interface GameConfigState {
 const _initial = buildGameConfig()
 
 export const useGameConfigStore = create<GameConfigState>((set) => ({
-  config:   _initial.config,
-  sources:  _initial.sources,
-  drafts:   {},
-  loading:  true,
-  error:    null,
+  config: _initial.config,
+  sources: _initial.sources,
+  drafts: {},
+  loading: true,
+  error: null,
   warnings: [],
 
   fetch: async () => {
@@ -58,9 +54,7 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
     }
 
     try {
-      const { data: rows, error: dbError } = await supabase
-        .from('game_config')
-        .select('key, value')
+      const { data: rows, error: dbError } = await supabase.from('game_config').select('key, value')
 
       if (dbError) throw new Error(dbError.message)
 
@@ -77,16 +71,21 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
     set((state) => ({
       drafts: {
         ...state.drafts,
-        [key]: { ...state.config[key], ...(state.drafts[key as keyof FullGameConfig] as object | undefined), ...value },
+        [key]: {
+          ...state.config[key],
+          ...(state.drafts[key as keyof FullGameConfig] as object | undefined),
+          ...value,
+        },
       },
     }))
   },
 
   clearDrafts: () => set({ drafts: {} }),
 
-  clearDraftForKey: (key) => set((state) => {
-    const next = { ...state.drafts }
-    delete next[key]
-    return { drafts: next }
-  }),
+  clearDraftForKey: (key) =>
+    set((state) => {
+      const next = { ...state.drafts }
+      delete next[key]
+      return { drafts: next }
+    }),
 }))
