@@ -354,7 +354,7 @@ export type Database = {
         Args: { amount: number; user_id: string }
         Returns: number
       }
-      seed_dev_test_nfts: { Args: never; Returns: Json }
+      seed_dev_test_nfts: { Args: { p_user_id: string }; Returns: Json }
       seed_test_mystery_boxes: { Args: never; Returns: Json }
       validate_and_approve_user: { Args: { p_code: string }; Returns: Json }
     }
