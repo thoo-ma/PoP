@@ -10,16 +10,9 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MAX_LEVEL } from '@pop/shared/xp'
+import { calcCooldownHours } from '@pop/shared/cooldown'
 import { TYPES, TYPE_COLORS } from '@/lib/constants'
 import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
-
-function computeCooldown(
-  type: string, level: number,
-  cfg: { COOLDOWN_BASES: Record<string, number>; LINEAR_MULT: number; EXP_MULT: number },
-): number {
-  const base = cfg.COOLDOWN_BASES[type] ?? 10
-  return base + level * cfg.LINEAR_MULT + Math.pow(level, 2) * cfg.EXP_MULT
-}
 
 function formatHours(h: number): string {
   if (h < 1) return `${Math.round(h * 60)}m`
@@ -41,7 +34,7 @@ export default function CooldownPanel() {
     const series = TYPES.map((t) => ({
       name: t,
       type: 'line' as const,
-      data: levels.map((lvl) => +computeCooldown(t, lvl, cd).toFixed(2)),
+      data: levels.map((lvl) => +calcCooldownHours(t, lvl, cd).toFixed(2)),
       lineStyle: { color: TYPE_COLORS[t], width: 2 },
       itemStyle: { color: TYPE_COLORS[t] },
       symbol: 'circle' as const,
@@ -213,7 +206,7 @@ export default function CooldownPanel() {
                     <td className="px-3 py-1.5 font-mono text-neutral-400">{lvl}</td>
                     {TYPES.map((t) => (
                       <td key={t} className="px-3 py-1.5 font-mono">
-                        {formatHours(computeCooldown(t, lvl, cd))}
+                        {formatHours(calcCooldownHours(t, lvl, cd))}
                       </td>
                     ))}
                   </tr>
