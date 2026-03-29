@@ -31,7 +31,7 @@ serve(async (req) => {
     const { userId, supabase: supabaseClient } = auth
 
     // Get request body
-    const bodyResult = await parseBody(req, DetectSchema)
+    const bodyResult = await parseBody(req, DetectSchema, 10 * 1024 * 1024) // 10 MB — audio_base64 payload
     if (bodyResult instanceof Response) return bodyResult
     const { audio_base64, threshold } = bodyResult
 
