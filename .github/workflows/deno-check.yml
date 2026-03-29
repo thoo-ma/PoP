@@ -32,6 +32,10 @@ jobs:
           key: deno-${{ hashFiles('supabase/functions/import_map.json') }}
           restore-keys: deno-
 
+      - name: Lint edge functions
+        working-directory: supabase/functions
+        run: deno lint
+
       - name: Type-check edge functions
         working-directory: supabase/functions
         run: deno check --config deno.json */index.ts
