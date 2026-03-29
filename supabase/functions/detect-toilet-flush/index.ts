@@ -1,7 +1,5 @@
 import { serve } from "std/http/server"
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from '../../../shared/database.types.ts'
-import { getUserIdFromToken, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, corsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -28,29 +26,9 @@ serve(async (req) => {
       throw new Error('Missing Cloud Run configuration')
     }
 
-    // Create Supabase client with service role key
-    const supabaseClient = createClient<Database>(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
-
-    // Try to get user from JWT (optional for dev mode)
-    const authHeader = req.headers.get('Authorization')
-    let userId = 'anonymous'
-
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '')
-      const resolvedId = await getUserIdFromToken(supabaseClient, token, 'detect-toilet-flush')
-      if (resolvedId) userId = resolvedId
-    } else {
-      console.warn('No Authorization header - proceeding in dev mode')
-    }
+    const auth = await requireAuth(req, 'detect-toilet-flush')
+    if (auth instanceof Response) return auth
+    const { userId, supabase: supabaseClient } = auth
 
     // Get request body
     const bodyResult = await parseBody(req, DetectSchema)
