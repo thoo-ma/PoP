@@ -28,6 +28,7 @@ serve(async (req) => {
     const auth = await requireAuth(req, 'allocate-stat-points')
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
+    console.log('allocate-stat-points: user', userId)
 
     // ── Request body ──────────────────────────────────────────────────────────
     const bodyResult = await parseBody(req, AllocateSchema)

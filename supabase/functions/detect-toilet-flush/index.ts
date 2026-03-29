@@ -18,8 +18,6 @@ serve(async (req) => {
   const origin = req.headers.get('origin')
 
   try {
-    console.log('=== Edge Function Request Started ===')
-    
     // Get Cloud Run configuration from environment
     const CLOUD_RUN_URL = Deno.env.get('CLOUD_RUN_URL')
     const CLOUD_RUN_API_KEY = Deno.env.get('CLOUD_RUN_API_KEY')
@@ -30,7 +28,8 @@ serve(async (req) => {
 
     const auth = await requireAuth(req, 'detect-toilet-flush')
     if (auth instanceof Response) return auth
-    const { userId, supabase: supabaseClient } = auth
+    const { userId, supabase } = auth
+    console.log('detect-toilet-flush: user', userId)
 
     // Get request body
     const bodyResult = await parseBody(req, DetectSchema, 10 * 1024 * 1024) // 10 MB — audio_base64 payload
@@ -38,18 +37,18 @@ serve(async (req) => {
     const { audio_base64, threshold } = bodyResult
 
     // Check rate limit
-    const cfg = await getGameConfig(supabaseClient)
+    const cfg = await getGameConfig(supabase)
     const detectionsPerDay = cfg.cloud_run.DETECTIONS_PER_DAY
 
     // Count user's detections in the last 24 hours
-    const { count, error: countError } = await supabaseClient
+    const { count, error: countError } = await supabase
       .from('flush_detections')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
 
     if (countError) {
-      console.error('Error checking rate limit:', countError)
+      console.error('detect-toilet-flush: rate limit check error', countError)
     }
 
     if (count !== null && count >= detectionsPerDay) {
@@ -63,8 +62,8 @@ serve(async (req) => {
     const audioSizeKb = Math.round((audio_base64.length * 3) / 4 / 1024)
 
     // Forward to Cloud Run
-    console.log('Calling Cloud Run:', CLOUD_RUN_URL)
-    console.log('Audio size:', audioSizeKb, 'KB')
+    console.log('detect-toilet-flush: calling Cloud Run', CLOUD_RUN_URL)
+    console.log('detect-toilet-flush: audio size', audioSizeKb, 'KB')
     
     const cloudRunResponse = await fetch(`${CLOUD_RUN_URL}/detect`, {
       method: 'POST',
@@ -78,11 +77,11 @@ serve(async (req) => {
       })
     })
 
-    console.log('Cloud Run response status:', cloudRunResponse.status)
-    
+    console.log('detect-toilet-flush: Cloud Run response status', cloudRunResponse.status)
+
     if (!cloudRunResponse.ok) {
       const errorText = await cloudRunResponse.text()
-      console.error('Cloud Run error response:', errorText)
+      console.error('detect-toilet-flush: Cloud Run error response', errorText)
       throw new Error(`Cloud Run error: ${cloudRunResponse.status} - ${errorText}`)
     }
 
@@ -96,7 +95,7 @@ serve(async (req) => {
     }
 
     // Store detection result in database
-    const { error: insertError } = await supabaseClient
+    const { error: insertError } = await supabase
       .from('flush_detections')
       .insert({
         user_id: userId,
@@ -108,7 +107,7 @@ serve(async (req) => {
       })
 
     if (insertError) {
-      console.error('Error inserting detection:', insertError)
+      console.error('detect-toilet-flush: insert detection error', insertError)
       // Don't fail the request if DB insert fails, just log it
     }
 
@@ -123,7 +122,7 @@ serve(async (req) => {
     }, origin)
 
   } catch (error) {
-    console.error('Edge Function error:', error)
+    console.error('detect-toilet-flush: error', error)
     const message = error instanceof Error ? error.message : 'Unknown error'
     return respondError(500, 'internal_error', message, undefined, origin)
   }
