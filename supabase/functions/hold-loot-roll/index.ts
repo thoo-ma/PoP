@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -24,7 +24,7 @@ const HoldLootRollSchema = z.object({
  */
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {

@@ -2,7 +2,7 @@ import { serve } from "std/http/server"
 import { repairCost } from '../../../shared/currency.ts'
 import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -20,7 +20,7 @@ const RepairSchema = z.object({
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {

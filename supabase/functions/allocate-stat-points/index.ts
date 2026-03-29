@@ -1,5 +1,5 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -18,7 +18,7 @@ const AllocateSchema = z.object({
 serve(async (req) => {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {
