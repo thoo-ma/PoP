@@ -18,6 +18,10 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+# EAS / Google Play credentials
+service-account-key.json
+google-credentials*.json
+
 # Metro
 .metro-health-check*
 

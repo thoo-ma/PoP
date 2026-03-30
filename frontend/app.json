@@ -14,14 +14,9 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.popcorporation.pop",
       "infoPlist": {
-        "CFBundleURLTypes": [
-          {
-            "CFBundleURLSchemes": ["pop"]
-          }
-        ],
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -31,19 +26,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.popcorporation.pop",
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [
-            {
-              "scheme": "pop"
-            }
-          ],
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
+      "package": "com.popcorporation.pop"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -54,7 +37,7 @@
         "@embrace-io/react-native/lib/app.plugin.js",
         {
           "androidAppId": "64y2w",
-          "iOSAppId": ""
+          "iOSAppId": "qkqsz"
         }
       ]
     ],
@@ -62,6 +45,12 @@
       "eas": {
         "projectId": "667d423a-196d-4a01-bd08-605c23f9f0bc"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/667d423a-196d-4a01-bd08-605c23f9f0bc"
     }
   }
 }
