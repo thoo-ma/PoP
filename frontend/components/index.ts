@@ -11,4 +11,4 @@ export {
   LootRouletteCard,
 } from './nft'
 export { PageIndicator, ProfileButton, WalletButton, ScreenHeader } from './navigation'
-export { ScreenError, ScreenLoader, DegenBar, degenBarConfigHash } from './shared'
+export { ErrorBoundary, ScreenError, ScreenLoader, DegenBar, degenBarConfigHash } from './shared'
