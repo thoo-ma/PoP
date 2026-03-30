@@ -68,7 +68,7 @@ function xpFormula(level: number, cfg?: XpCfg): number {
   const base = cfg?.XP_FORMULA_BASE ?? XP_FORMULA_BASE
   const linear = cfg?.XP_FORMULA_LINEAR ?? XP_FORMULA_LINEAR
   const quadratic = cfg?.XP_FORMULA_QUADRATIC ?? XP_FORMULA_QUADRATIC
-  return Math.round(base + level * linear + Math.pow(level, 2) * quadratic)
+  return Math.round(base + level * linear + level ** 2 * quadratic)
 }
 
 /** XP threshold to advance from `level` to `level + 1`. */

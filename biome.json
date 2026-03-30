@@ -5,11 +5,11 @@
       "frontend/**",
       "shared/**",
       "dashboard/src/**",
-      "!supabase/functions/**",
-      "!google-cloud-run/**",
-      "!**/node_modules/**",
-      "!**/.next/**",
-      "!**/dist/**"
+      "!supabase/functions",
+      "!google-cloud-run",
+      "!**/node_modules",
+      "!**/.next",
+      "!**/dist"
     ]
   },
   "formatter": {

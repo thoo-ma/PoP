@@ -41,7 +41,7 @@ export function calcCooldownHours(type: NFTType, level: number, cfg?: CooldownCf
   const linear = cfg?.LINEAR_MULT ?? LINEAR_MULT
   const exp = cfg?.EXP_MULT ?? EXP_MULT
   const base = bases[type] ?? bases['cruise-seat']
-  return base + level * linear + Math.pow(level, 2) * exp
+  return base + level * linear + level ** 2 * exp
 }
 
 /**

@@ -116,7 +116,7 @@ export function useRepairNFT() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [config.degen_bar, refetchConfig],
+    [config.degen_bar, refetchConfig, toast.show],
   )
 
   return { repairNFT, loading, error, insufficientPoopError, bustedResult }

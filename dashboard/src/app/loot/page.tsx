@@ -91,7 +91,7 @@ export default function LootRollPanel() {
 
   const handleChange = (field: keyof typeof loot, value: string) => {
     const num = field === 'MAX_HOLDS' ? parseInt(value, 10) : parseFloat(value)
-    if (isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) return
     setDraft('loot_roll', { [field]: num })
   }
 

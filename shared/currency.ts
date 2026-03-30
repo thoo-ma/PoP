@@ -59,7 +59,7 @@ export function repairCost(
   const b = cfg?.REPAIR_COEF_B ?? REPAIR_COEF_B
   const usdPerToken = cfg?.REPAIR_USD_PER_TOKEN ?? REPAIR_USD_PER_TOKEN
   const rarityMult = cfg?.REPAIR_RARITY_MULTIPLIER ?? REPAIR_RARITY_MULTIPLIER
-  const fullCostUsd = (a * Math.pow(level, 2) + b) * rarityMult[rarity]
+  const fullCostUsd = (a * level ** 2 + b) * rarityMult[rarity]
   const fullCostTokens = fullCostUsd / usdPerToken
   return Math.round((energyRestored / maxEnergy) * fullCostTokens)
 }
@@ -127,7 +127,7 @@ export function breedCost(
   const growth = cfg?.BREED_GROWTH_RATE ?? BREED_GROWTH_RATE
   const usdPerToken = cfg?.BREED_USD_PER_TOKEN ?? BREED_USD_PER_TOKEN
   const rarityMult = cfg?.BREED_RARITY_MULTIPLIER ?? BREED_RARITY_MULTIPLIER
-  const costUsd = base * Math.pow(growth, breedCount) * rarityMult[rarity]
+  const costUsd = base * growth ** breedCount * rarityMult[rarity]
   return Math.round(costUsd / usdPerToken)
 }
 
@@ -188,6 +188,6 @@ export function calcPoopEarned(
   const usdPerToken = cfg?.REWARD_USD_PER_TOKEN ?? REWARD_USD_PER_TOKEN
   const typeMult = cfg?.REWARD_TYPE_MULTIPLIER ?? REWARD_TYPE_MULTIPLIER
   const rarityMult = cfg?.REWARD_RARITY_MULTIPLIER ?? REWARD_RARITY_MULTIPLIER
-  const rewardUsd = base * Math.pow(growth, level - 1) * typeMult[type] * rarityMult[rarity]
+  const rewardUsd = base * growth ** (level - 1) * typeMult[type] * rarityMult[rarity]
   return Math.max(1, Math.round(rewardUsd / usdPerToken))
 }

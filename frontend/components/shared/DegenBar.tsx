@@ -5,7 +5,6 @@ import {
   calcReduction,
   calcBustChance,
   calcReducedCost,
-  degenBarConfigHash,
 } from '@pop/shared/degenBar'
 import { useGameConfig } from '@/store/gameConfigStore'
 import { infoBox } from '@/styles'
@@ -56,7 +55,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
       onDegenChange(degenPercent)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cfg])
+  }, [degenPercent, onDegenChange])
 
   return (
     <View className={cn(infoBox(), 'mb-5')}>

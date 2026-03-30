@@ -75,7 +75,7 @@ export default function BreedPanel() {
 
   const handleChange = (pair: PairKey, idx: number, value: string) => {
     const num = parseFloat(value)
-    if (isNaN(num) || num < 0 || num > 100) return
+    if (Number.isNaN(num) || num < 0 || num > 100) return
     const current = [...breed.BREED_PROBABILITIES[pair]] as [number, number, number, number]
     current[idx] = num
     setDraft('breed', {
@@ -140,8 +140,8 @@ export default function BreedPanel() {
                 return (
                   <tr key={pair} className="border-b border-neutral-800/50">
                     <td className="py-1.5 pr-4 font-mono text-[11px] text-neutral-400">{pair}</td>
-                    {RARITIES.map((_, idx) => (
-                      <td key={idx} className="px-2 py-1">
+                    {RARITIES.map((rarity, idx) => (
+                      <td key={rarity} className="px-2 py-1">
                         <NumberInput
                           step={0.1}
                           min={0}

@@ -23,7 +23,7 @@ function computeRepair(
   },
 ): number {
   const fullUsd =
-    (cfg.REPAIR_COEF_A * Math.pow(level, 2) + cfg.REPAIR_COEF_B) *
+    (cfg.REPAIR_COEF_A * level ** 2 + cfg.REPAIR_COEF_B) *
     (cfg.REPAIR_RARITY_MULTIPLIER[rarity] ?? 1)
   return Math.round((energyPct * fullUsd) / cfg.REPAIR_USD_PER_TOKEN)
 }
@@ -70,12 +70,12 @@ export function RepairTab() {
 
   const handleChange = (field: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) setDraft('currency', { [field]: num })
+    if (!Number.isNaN(num)) setDraft('currency', { [field]: num })
   }
 
   const handleRarityMult = (rarity: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('currency', {
         REPAIR_RARITY_MULTIPLIER: { ...cur.REPAIR_RARITY_MULTIPLIER, [rarity]: num },
       })

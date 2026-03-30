@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -18,7 +18,7 @@ export function useWallet() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchBalance = async (userId: string) => {
+  const fetchBalance = useCallback(async (userId: string) => {
     const { data, error: fetchError } = await supabase
       .from('users')
       .select('poop_balance')
@@ -32,7 +32,7 @@ export function useWallet() {
       setPoopBalance(data?.poop_balance ?? 0)
     }
     setLoading(false)
-  }
+  }, [])
 
   useEffect(() => {
     let userId: string | null = null
@@ -75,7 +75,7 @@ export function useWallet() {
     return () => {
       if (channel) supabase.removeChannel(channel)
     }
-  }, [])
+  }, [fetchBalance])
 
   const refetch = async () => {
     setLoading(true)
