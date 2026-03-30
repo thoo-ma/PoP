@@ -2,13 +2,11 @@
   "private": true,
   "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "dev:frontend": "pnpm --filter pop run start",
-    "dev:dashboard": "pnpm --filter dashboard run dev",
     "typecheck": "turbo typecheck",
     "build": "turbo build",
     "lint": "biome lint .",
-    "lint:biome": "biome lint .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\""
   },
   "pnpm": {
     "onlyBuiltDependencies": [
