@@ -1,0 +1,28 @@
+project_id = "mtnluwkvhkwwxvxdtkgs"
+
+[functions.allocate-stat-points]
+verify_jwt = false
+
+[functions.breed-nfts]
+verify_jwt = false
+
+[functions.detect-toilet-flush]
+verify_jwt = false
+
+[functions.hold-loot-roll]
+verify_jwt = false
+
+[functions.open-mystery-box]
+verify_jwt = false
+
+[functions.repair-nft]
+verify_jwt = false
+
+[functions.roll-loot]
+verify_jwt = false
+
+[functions.seed-dev-test-nfts]
+verify_jwt = false
+
+[functions.use-nft]
+verify_jwt = false
