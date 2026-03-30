@@ -6,7 +6,7 @@
     "build": "turbo build",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "deploy:functions": "supabase functions deploy --project-ref mtnluwkvhkwwxvxdtkgs"
+    "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\""
   },
   "pnpm": {
     "onlyBuiltDependencies": [
