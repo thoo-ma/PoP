@@ -1,6 +1,6 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react'
 import ScreenError from './ScreenError'
-import { logError } from '../../utils/errorHelpers'
+import { logError } from '@/utils/errorHelpers'
 
 interface Props {
   children: ReactNode
