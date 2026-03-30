@@ -9,6 +9,10 @@ on:
       - "shared/**"
       - ".github/workflows/deploy-edge-functions.yml"
 
+concurrency:
+  group: deploy-edge-functions-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy to Supabase
@@ -19,7 +23,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: v1.187.6
 
       - name: Deploy edge functions
         run: supabase functions deploy --project-ref mtnluwkvhkwwxvxdtkgs
