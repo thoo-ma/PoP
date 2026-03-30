@@ -1,11 +1,11 @@
 import 'react-native-gesture-handler'
 import './global.css'
 import { StatusBar } from 'expo-status-bar'
-import { View, FlatList, ViewToken, Dimensions } from 'react-native'
+import { View, FlatList, type ViewToken, Dimensions } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useState, useCallback, useRef } from 'react'
 import { useAuth, useUserApproval } from '@/hooks'
-import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader } from '@/components'
+import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader, ErrorBoundary } from '@/components'
 import { InviteCodeScreen, Profile, Wallet } from '@/screens'
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
 import { colors } from '@/constants'
@@ -20,7 +20,9 @@ export default function App() {
       <SafeAreaProvider>
         <HeroUINativeProvider>
           <GameConfigProvider>
-            <AppInner />
+            <ErrorBoundary>
+              <AppInner />
+            </ErrorBoundary>
           </GameConfigProvider>
         </HeroUINativeProvider>
       </SafeAreaProvider>
@@ -66,7 +68,9 @@ function AppInner() {
     const Component = item.component
     return (
       <View style={{ width: Dimensions.get('window').width, height: '100%' }}>
-        <Component />
+        <ErrorBoundary>
+          <Component />
+        </ErrorBoundary>
       </View>
     )
   }, [])
@@ -82,13 +86,17 @@ function AppInner() {
 
   // No session - show auth screen
   if (!session) {
-    return <Auth />
+    return <ErrorBoundary><Auth /></ErrorBoundary>
   }
 
   // Session exists but user not approved - show invite code screen (BLOCKING)
   // Anonymous users (dev/test mode) skip invite code
   if (approved !== true && !session.user.is_anonymous) {
-    return <InviteCodeScreen onApprovalSuccess={handleApprovalSuccess} onSignOut={handleSignOut} />
+    return (
+      <ErrorBoundary>
+        <InviteCodeScreen onApprovalSuccess={handleApprovalSuccess} onSignOut={handleSignOut} />
+      </ErrorBoundary>
+    )
   }
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
