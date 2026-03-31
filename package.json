@@ -6,7 +6,10 @@
     "build": "turbo build",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\""
+    "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\"",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -15,6 +18,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
+    "@changesets/changelog-github": "^0.6.0",
+    "@changesets/cli": "^2.30.0",
     "turbo": "^2.8.20"
   }
 }

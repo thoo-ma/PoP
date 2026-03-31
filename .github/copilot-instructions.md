@@ -116,6 +116,50 @@ console.error('breed-nfts: fetch parents error', fetchError);
 
 `<prefix>: <description>` — prefix matches branch type. Include `Fixes #<n>` in body when closing an issue.
 
+## Changeset Convention
+
+Every PR that touches code in a workspace package (`frontend/`, `dashboard/`, `shared/`, `supabase/functions/`) **must** include a `.changeset/<descriptive-slug>.md` file. Agents write this file directly — never run `pnpm changeset` interactively.
+
+### File format
+
+```md
+---
+"pop": patch
+"@pop/shared": minor
+---
+
+Short description of the change (imperative mood).
+```
+
+### Branch prefix → bump type
+
+| Branch prefix | Bump type |
+|---|---|
+| `feat/` | `minor` |
+| `fix/` | `patch` |
+| `security/` | `patch` |
+| `refactor/` | `patch` |
+| `ui/`, `ux/` | `patch` |
+| `perf/` | `patch` |
+| `heroui/`, `tv/` | `patch` |
+| `chore/`, `docs/`, `test/` | create an empty changeset file |
+
+### `@pop/shared` bump guidance
+
+- `minor` — types, schemas, or exported API changed (callers may need updates)
+- `patch` — internal logic only, no API surface change
+
+### Empty changesets
+
+For PRs that don't touch versioned code (CI, docs, config, tests), create an empty changeset file directly:
+
+```md
+---
+---
+```
+
+Save it as `.changeset/<descriptive-slug>.md`. This prevents the Changesets bot from complaining about missing changesets.
+
 ## PR Workflow
 
 All agents follow a 4-phase workflow ending with PR creation and the `pr-review-handler` skill. See `.github/skills/pr-review-handler/SKILL.md`.
