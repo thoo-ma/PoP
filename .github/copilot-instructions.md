@@ -164,6 +164,16 @@ Save it as `.changeset/<descriptive-slug>.md`. This prevents the Changesets bot 
 
 All agents follow a 4-phase workflow ending with PR creation and the `pr-review-handler` skill. See `.github/skills/pr-review-handler/SKILL.md`.
 
+## Skills
+
+<skills>
+<skill>
+<name>operations</name>
+<description>Deployment pipelines, CI/CD workflows, GitHub Environments, secrets management, release process (Changesets), milestone releases, emergency rollback procedures, and cost monitoring. Use when working on GitHub Actions, deployment automation, infrastructure, or incident response. Keywords: deploy, release, CI, CD, workflow, rollback, environment, secrets, pipeline, EAS, Cloud Run, Vercel, Supabase, milestone.</description>
+<file>.github/skills/operations/SKILL.md</file>
+</skill>
+</skills>
+
 ## Backlog
 
 All backlog items are tracked as GitHub Issues. Key epics: #89 (Pre-launch security hardening), #90 (Shared NFT data layer). Use `gh issue list` or the GitHub Issues skill to discover work items.
