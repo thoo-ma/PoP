@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Milestone version (e.g. 1.0.0)'
+        description: 'Milestone version without v prefix (e.g. 1.0.0)'
         required: true
         type: string
       name:
@@ -23,11 +23,26 @@ permissions:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate version format
+        run: |
+          if [[ "${{ inputs.version }}" == v* ]]; then
+            echo "ERROR: version must not include a 'v' prefix (e.g. use '1.0.0', not 'v1.0.0')"
+            exit 1
+          fi
+
       - name: Collect component versions
         id: versions
+        env:
+          MILESTONE_VERSION: ${{ inputs.version }}
+          MILESTONE_NAME: ${{ inputs.name }}
         run: |
           FRONTEND_VERSION=$(node -p "require('./frontend/package.json').version")
           DASHBOARD_VERSION=$(node -p "require('./dashboard/package.json').version")
@@ -40,10 +55,11 @@ jobs:
             CLOUD_RUN_VERSION="unversioned"
           fi
 
-          LATEST_MIGRATION=$(ls -1 supabase/migrations/ | tail -1 | sed 's/\.sql$//')
+          LATEST_MIGRATION_PATH=$(printf '%s\n' supabase/migrations/*.sql | LC_ALL=C sort | tail -n 1)
+          LATEST_MIGRATION=$(basename "$LATEST_MIGRATION_PATH" .sql)
 
           cat <<EOF > release-body.md
-          ## PoP v${{ inputs.version }} — ${{ inputs.name }}
+          ## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}
 
           ### Components
           | Component | Version | Notes |
@@ -62,8 +78,10 @@ jobs:
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MILESTONE_VERSION: ${{ inputs.version }}
+          MILESTONE_NAME: ${{ inputs.name }}
         run: |
-          gh release create "v${{ inputs.version }}" \
-            --title "PoP v${{ inputs.version }} — ${{ inputs.name }}" \
+          gh release create "v${MILESTONE_VERSION}" \
+            --title "PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}" \
             --notes-file release-body.md \
             ${{ inputs.prerelease == true && '--prerelease' || '' }}

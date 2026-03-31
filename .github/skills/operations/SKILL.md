@@ -69,7 +69,8 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 
 Milestone releases mark a **coherent cross-stack snapshot** — e.g. "PoP v1.0.0 is the combination that shipped on launch day." The `v` prefix distinguishes these from Changesets package tags (`pop@1.0.0`).
 
-#### Phase 1 — Manual (always required)
+#### Phase 1 — Manual creation (human edit always required)
+Use this process when drafting manually. The workflow in Phase 2 auto-creates the draft, but the human edit step below is always required regardless.
 1. Go to GitHub → Releases → Draft a new release
 2. Tag: `v1.0.0` (no package prefix)
 3. Title: `PoP v1.0.0 — <tagline>`
@@ -90,7 +91,7 @@ Milestone releases mark a **coherent cross-stack snapshot** — e.g. "PoP v1.0.0
    ### Highlights
    - ...
    ```
-5. Publish (or save as draft and add highlights before publishing)
+5. Publish, then edit the release to add highlights.
 
 #### Phase 2 — Automated (workflow_dispatch)
 Use `.github/workflows/milestone-release.yml` to auto-fill current component versions:
@@ -100,9 +101,9 @@ Use `.github/workflows/milestone-release.yml` to auto-fill current component ver
    - `name` — e.g. `Launch` or `Beta`
    - `prerelease` — check if this is a pre-release
 3. The workflow reads all `package.json` versions, the latest migration filename, and the current commit SHA, then creates a GitHub Release with the table pre-filled.
-4. Open the created release and add highlights before publishing.
+4. Open the created release and add highlights (the release is published immediately — edit it in place).
 
-> Agent runbook: to create a milestone release programmatically, read `frontend/package.json`, `dashboard/package.json`, `shared/package.json`, `google-cloud-run/package.json` for versions; run `git rev-parse --short HEAD` for the commit SHA; list `supabase/migrations/` and take the last entry for the DB migration; compose the body from the template above; then trigger the workflow via `gh workflow run milestone-release.yml -f version=X.Y.Z -f name=<name>`.
+> Agent runbook: to create a milestone release programmatically, read `frontend/package.json`, `dashboard/package.json`, `shared/package.json`, `google-cloud-run/package.json` for versions; run `git rev-parse --short HEAD` for the commit SHA; list `supabase/migrations/` and take the last entry for the DB migration; compose the body from the template above; then trigger the workflow via `gh workflow run milestone-release.yml --ref main -f version=X.Y.Z -f name=<name>`.
 
 ## GitHub Environment & Secrets
 
