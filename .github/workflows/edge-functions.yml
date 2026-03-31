@@ -1,12 +1,6 @@
 name: Edge Functions
 
 on:
-  push:
-    paths:
-      - "supabase/functions/**"
-      - "supabase/config.toml"
-      - "shared/**"
-      - ".github/workflows/edge-functions.yml"
   pull_request:
     paths:
       - "supabase/functions/**"
@@ -44,21 +38,3 @@ jobs:
       - name: Type-check edge functions
         working-directory: supabase/functions
         run: deno check --config deno.json */index.ts
-
-  deploy:
-    name: Deploy to Supabase
-    runs-on: ubuntu-latest
-    needs: deno-check
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: supabase/setup-cli@v1
-        with:
-          version: v1.187.6
-
-      - name: Deploy edge functions
-        run: supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
