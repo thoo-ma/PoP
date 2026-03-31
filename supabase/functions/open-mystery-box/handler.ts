@@ -2,7 +2,7 @@ import type { NFTRarity as Rarity } from '../../../shared/nft.ts'
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
+import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const OpenMysteryBoxSchema = z.object({
