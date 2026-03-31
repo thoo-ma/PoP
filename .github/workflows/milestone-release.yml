@@ -58,22 +58,28 @@ jobs:
           LATEST_MIGRATION_PATH=$(printf '%s\n' supabase/migrations/*.sql | LC_ALL=C sort | tail -n 1)
           LATEST_MIGRATION=$(basename "$LATEST_MIGRATION_PATH" .sql)
 
-          cat <<EOF > release-body.md
-          ## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}
+          if [ -f "supabase/functions/package.json" ]; then
+            EDGE_FUNCTIONS_VERSION=$(node -p "require('./supabase/functions/package.json').version")
+          else
+            EDGE_FUNCTIONS_VERSION="commit ${COMMIT_SHA}"
+          fi
 
-          ### Components
-          | Component | Version | Notes |
-          |---|---|---|
-          | Mobile app | pop@${FRONTEND_VERSION} | |
-          | Dashboard | dashboard@${DASHBOARD_VERSION} | |
-          | Shared | @pop/shared@${SHARED_VERSION} | |
-          | Edge functions | commit ${COMMIT_SHA} | |
-          | Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |
-          | Database | ${LATEST_MIGRATION}.sql | |
+          cat > release-body.md <<EOF
+## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}
 
-          ### Highlights
-          _Edit this release to add highlights._
-          EOF
+### Components
+| Component | Version | Notes |
+|---|---|---|
+| Mobile app | pop@${FRONTEND_VERSION} | |
+| Dashboard | dashboard@${DASHBOARD_VERSION} | |
+| Shared | @pop/shared@${SHARED_VERSION} | |
+| Edge functions | edge-functions@${EDGE_FUNCTIONS_VERSION} | |
+| Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |
+| Database | ${LATEST_MIGRATION}.sql | |
+
+### Highlights
+_Edit this release to add highlights._
+EOF
 
       - name: Create GitHub Release
         env:
