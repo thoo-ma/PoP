@@ -1,10 +1,12 @@
 import { serve } from "std/http/server"
-import { requireAuth, corsHeaders } from '../_shared/auth.ts'
+import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 
 serve(async (req) => {
+  const origin = req.headers.get('origin')
+
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(origin) })
   }
 
   try {
@@ -20,13 +22,13 @@ serve(async (req) => {
 
     if (error) {
       console.error('seed-dev-test-nfts: RPC error', error)
-      return respondError(500, 'seed_failed', 'Failed to seed dev test data')
+      return respondError(500, 'seed_failed', 'Failed to seed dev test data', undefined, origin)
     }
 
     console.log('seed-dev-test-nfts: seeded successfully', data)
-    return respondOk(data)
+    return respondOk(data, origin)
   } catch (err) {
     console.error('seed-dev-test-nfts: unexpected error', err)
-    return respondError(500, 'internal_error', 'Unexpected server error')
+    return respondError(500, 'internal_error', 'Unexpected server error', undefined, origin)
   }
 })
