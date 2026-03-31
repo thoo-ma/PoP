@@ -4,7 +4,10 @@ import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const DetectSchema = z.object({
-  audio_base64: z.string().min(1, 'audio_base64 cannot be empty'),
+  audio_base64: z.string().min(1, 'audio_base64 cannot be empty').refine(
+    (s) => /^[A-Za-z0-9+/]*={0,2}$/.test(s),
+    'Invalid base64 format',
+  ),
   threshold: z.number().min(0).max(1).optional().default(0.5),
 })
 
