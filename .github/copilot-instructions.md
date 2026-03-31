@@ -24,8 +24,8 @@ pnpm install
 
 # Type-check all packages (uses Turborepo — cached, dependency-aware)
 pnpm typecheck                                      # All packages (frontend + dashboard + shared)
-pnpm exec turbo typecheck --filter=pop              # Frontend only
-pnpm exec turbo typecheck --filter=dashboard        # Dashboard only
+pnpm exec turbo run typecheck --filter=pop              # Frontend only
+pnpm exec turbo run typecheck --filter=dashboard        # Dashboard only
 
 # Format & lint with Biome (covers frontend/, shared/, dashboard/src/)
 pnpm format                                         # Auto-fix formatting
