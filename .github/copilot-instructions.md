@@ -37,70 +37,15 @@ cd supabase/functions && deno check <function>/index.ts
 
 Never force-push. Never skip type-check.
 
-## Game Config — The Source of All Balance Numbers
+## Game Config
 
-All tunable game balance (costs, XP thresholds, cooldowns, probabilities, etc.) lives in 10 JSONB rows in the `game_config` Supabase table. The system works as:
-
-1. **Code defaults** in `shared/*.ts` (e.g. `BREED_BASE_PRICE_USD` in `shared/currency.ts`)
-2. **Zod schemas** in `shared/schemas.ts` validate each config key
-3. **`buildGameConfig()`** in `shared/gameConfig.ts` merges DB rows over code defaults — invalid rows log warnings and silently fall back to defaults
-4. **Edge functions** fetch fresh config every request via `getGameConfig(supabase)` — **never cache**
-5. **Frontend** fetches once at app start via `GameConfigProvider` (React Context)
-6. **Dashboard** manages config via Zustand store with draft/save/revert pattern
-
-**Rules**:
-- Never hardcode balance numbers in edge functions or components — import from `shared/` and pass optional `cfg` override
-- When adding a new config key, ALL THREE are required:
-  1. `shared/schemas.ts` — Zod schema, defaults, add to `GAME_CONFIG_REGISTRY`
-  2. `shared/gameConfig.ts` — add to `FullGameConfig` type
-  3. `supabase/migrations/` — seed migration to INSERT the new row into `game_config` (follow the pattern in `20260305000001_seed_game_config.sql`: `ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value || public.game_config.value`)
-- Without the seed migration, edge functions fall back to code defaults (no live tuning from dashboard) and the dashboard cannot save overrides
-- `@migration: KEEP` comments in shared/ mean the value is a structural invariant — never move to game_config
-- `@migration: DELETE` means the value should migrate to game_config
+All tunable game balance lives in the `game_config` Supabase table (JSONB key-value, 1 row per mechanic). Code defaults in `shared/` are merged with DB rows at runtime. Never hardcode balance numbers — see `shared/.instructions.md` for schema conventions and the `cfg` parameter pattern, `supabase/.instructions.md` for the seed migration pattern.
 
 ## Type Safety
 
 - `NFTType` = `'cruise-seat' | 'turbo-flush' | 'zen-fortress'` — not `string`
 - `NFTRarity` = `'common' | 'rare' | 'legendary' | 'transcendent'` — not `string`
-- When pulling from the DB, cast: `data.rarity as NFTRarity` — but prefer Zod validation at boundaries
-- All formula functions accept optional typed `cfg` parameter for DB-overridden values:
-  ```ts
-  export function repairCost(level: number, rarity: NFTRarity, ..., cfg?: RepairCfg): number
-  ```
-
-## Ownership Checks — Every Mutation, Not Just Queries
-
-Every database operation that reads or mutates user data MUST include `.eq('user_id', userId)`:
-
-```ts
-// ✅ Defence-in-depth: both SELECT and UPDATE check ownership
-const { data } = await supabase.from('nfts').select('*').eq('id', nftId).eq('user_id', userId).single();
-await supabase.from('nfts').update({ energy: 100 }).eq('id', nftId).eq('user_id', userId);
-
-// ❌ NEVER trust just the NFT ID from the request body
-const { data } = await supabase.from('nfts').select('*').eq('id', nftId).single(); // Missing user check
-```
-
-## Logging Convention (Edge Functions)
-
-Always prefix with function name and include user context:
-```ts
-console.log('breed-nfts: user', userId);
-console.log('breed-nfts: cost breakdown — parent1 (...) → $100, parent2 (...) → $150, total $250');
-console.error('breed-nfts: fetch parents error', fetchError);
-```
-
-## HTTP Error Semantics (Edge Functions)
-
-| Status | Meaning | When |
-|---|---|---|
-| `400` | Bad Request | Missing required fields, malformed input |
-| `401` | Unauthorized | No/invalid auth token |
-| `402` | Payment Required | Insufficient POOP balance |
-| `404` | Not Found | NFT doesn't exist or not owned by user |
-| `422` | Unprocessable Entity | Valid input but business rule violation (energy 0, breed limit, audio too short) |
-| `429` | Rate Limit / Cooldown | Daily detection limit or NFT cooldown |
-| `500` | Internal Server Error | DB fault, Cloud Run error, unexpected exception |
+- When pulling from the DB, prefer Zod validation at boundaries over manual casting
 
 ## Date/Time
 
