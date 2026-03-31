@@ -29,7 +29,7 @@ export async function handleHoldLootRoll(req: Request): Promise<Response> {
   const origin = req.headers.get('origin')
 
   try {
-    const auth = await requireAuth(req, 'hold-loot-roll')
+    const auth = await requireAuth(req, 'hold-loot-roll', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

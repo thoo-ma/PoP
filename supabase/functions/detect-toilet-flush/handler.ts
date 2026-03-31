@@ -28,7 +28,7 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
       throw new Error('Missing Cloud Run configuration')
     }
 
-    const auth = await requireAuth(req, 'detect-toilet-flush')
+    const auth = await requireAuth(req, 'detect-toilet-flush', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
     console.log('detect-toilet-flush: user', userId)

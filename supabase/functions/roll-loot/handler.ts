@@ -38,7 +38,7 @@ export async function handleRollLoot(req: Request): Promise<Response> {
   const origin = req.headers.get('origin')
 
   try {
-    const auth = await requireAuth(req, 'roll-loot')
+    const auth = await requireAuth(req, 'roll-loot', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

@@ -52,7 +52,7 @@ export async function handleUseNft(req: Request): Promise<Response> {
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'use-nft')
+    const auth = await requireAuth(req, 'use-nft', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

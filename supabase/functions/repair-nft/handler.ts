@@ -26,7 +26,7 @@ export async function handleRepairNft(req: Request): Promise<Response> {
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'repair-nft')
+    const auth = await requireAuth(req, 'repair-nft', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 
