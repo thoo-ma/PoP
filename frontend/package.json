@@ -2,6 +2,8 @@
   "name": "pop",
   "main": "index.ts",
   "scripts": {
+    "start": "expo start --dev-client",
+    "start:tunnel": "expo start --dev-client --tunnel",
     "build:dev:ios": "eas build --platform ios --profile development",
     "build:dev:android": "eas build --platform android --profile development",
     "build:preview": "eas build --platform all --profile preview",
