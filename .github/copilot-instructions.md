@@ -9,7 +9,7 @@
 | Directory | Runtime | Key Dependency | Path Alias |
 |---|---|---|---|
 | `frontend/` | React Native + Expo 54 | HeroUI Native, Uniwind (Tailwind v4) | `@/*` → `./` · `@pop/shared` (workspace) |
-| `dashboard/` | Next.js 14 (App Router) | Radix UI, Tailwind v3, Zustand | `@/*` → `./src/*` · `@pop/shared` (workspace) |
+| `dashboard/` | Next.js 15 (App Router) | Radix UI, Tailwind v3, Zustand | `@/*` → `./src/*` · `@pop/shared` (workspace) |
 | `shared/` | `@pop/shared` workspace package — raw TS, no build step | Zod | — |
 | `supabase/` | Deno (Edge Functions) | Supabase JS v2, Zod | Relative: `../../../shared/` |
 | `google-cloud-run/` | Python 3.10 + Flask | TensorFlow, YAMNet | — |
@@ -119,6 +119,6 @@ All agents follow a 4-phase workflow ending with PR creation and the `pr-review-
 </skill>
 </skills>
 
-## Backlog
+## GitHub Issues
 
-All backlog items are tracked as GitHub Issues. Key epics: #89 (Pre-launch security hardening), #90 (Shared NFT data layer). Use `gh issue list` or the GitHub Issues skill to discover work items.
+Before creating or updating any GitHub issue, load `.github/skills/github-issues/SKILL.md` for label taxonomy, title conventions, and epic patterns.
