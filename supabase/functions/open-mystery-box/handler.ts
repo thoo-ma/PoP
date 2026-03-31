@@ -19,7 +19,7 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
   const origin = req.headers.get('origin')
   try {
     // ── Auth ────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'open-mystery-box')
+    const auth = await requireAuth(req, 'open-mystery-box', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

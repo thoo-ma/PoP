@@ -32,7 +32,7 @@ export async function getUserIdFromToken(
  * HTTP 401 that the caller should return directly:
  *
  * ```ts
- * const auth = await requireAuth(req, 'my-function')
+ * const auth = await requireAuth(req, 'my-function', origin)
  * if (auth instanceof Response) return auth
  * const { userId, supabase } = auth
  * ```
@@ -40,10 +40,11 @@ export async function getUserIdFromToken(
 export async function requireAuth(
   req: Request,
   fnName: string,
+  origin: string | null = null,
 ): Promise<{ userId: string; token: string; supabase: SupabaseClient } | Response> {
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) {
-    return respondError(401, 'unauthorized', 'Missing Authorization header')
+    return respondError(401, 'unauthorized', 'Missing Authorization header', undefined, origin)
   }
 
   const token = authHeader.replace('Bearer ', '')
@@ -57,7 +58,7 @@ export async function requireAuth(
   const userId = await getUserIdFromToken(supabase, token, fnName)
 
   if (!userId) {
-    return respondError(401, 'unauthorized', 'Could not extract user from token')
+    return respondError(401, 'unauthorized', 'Could not extract user from token', undefined, origin)
   }
 
   return { userId, token, supabase }

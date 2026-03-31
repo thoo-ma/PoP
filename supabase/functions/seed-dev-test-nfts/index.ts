@@ -10,7 +10,7 @@ serve(async (req) => {
   }
 
   try {
-    const auth = await requireAuth(req, 'seed-dev-test-nfts')
+    const auth = await requireAuth(req, 'seed-dev-test-nfts', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

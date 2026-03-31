@@ -54,7 +54,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'breed-nfts')
+    const auth = await requireAuth(req, 'breed-nfts', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
 

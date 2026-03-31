@@ -25,7 +25,7 @@ export async function handleAllocateStatPoints(req: Request): Promise<Response> 
 
   try {
     // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'allocate-stat-points')
+    const auth = await requireAuth(req, 'allocate-stat-points', origin)
     if (auth instanceof Response) return auth
     const { userId, supabase } = auth
     console.log('allocate-stat-points: user', userId)
