@@ -186,6 +186,10 @@ def detect():
         # Add audio size to result
         result['audio_size_kb'] = round(len(audio_data) / 1024, 2)
         
+        # Return 422 for client-side audio validation errors
+        if result.get('error'):
+            return jsonify(result), 422
+        
         return jsonify(result), 200
         
     except Exception as e:
