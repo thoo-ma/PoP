@@ -16,7 +16,11 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "node-forge": "^1.4.0",
+      "brace-expansion@<2": "^2.0.2"
+    }
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
