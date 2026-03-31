@@ -8,7 +8,7 @@ import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError } from '../_shared/responses.ts'
+import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const UseNFTSchema = z.object({
@@ -142,6 +142,8 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Award POOP currency ───────────────────────────────────────────────────
+    const warnings: Warning[] = []
+
     const { data: poopData, error: poopError } = await supabase.rpc(
       'increment_poop_balance',
       { user_id: userId, amount: poopEarned },
@@ -150,6 +152,7 @@ export async function handleUseNft(req: Request): Promise<Response> {
     if (poopError) {
       // Non-fatal: log but don't fail the whole request
       console.error('use-nft: poop increment error', poopError)
+      warnings.push({ code: 'poop_reward_failed', detail: poopError.message })
     }
 
     const newPoopBalance: number = (poopData as number) ?? 0
@@ -170,6 +173,7 @@ export async function handleUseNft(req: Request): Promise<Response> {
     if (lootRollError) {
       // Non-fatal: log but don't fail the whole request
       console.error('use-nft: loot roll upsert error', lootRollError)
+      warnings.push({ code: 'loot_roll_failed', detail: lootRollError.message })
     }
 
     const lootRollId: string | null = lootRollData?.id ?? null
@@ -189,6 +193,7 @@ export async function handleUseNft(req: Request): Promise<Response> {
       poop_earned:  poopEarned,
       poop_balance: newPoopBalance,
       loot_roll_id: lootRollId,
+      ...(warnings.length ? { warnings } : {}),
     }, origin)
 
   } catch (err) {

@@ -1,5 +1,8 @@
 import { getJsonHeaders } from './headers.ts'
 
+/** A single structured warning for partial-success responses. */
+export type Warning = { code: string; detail?: string }
+
 /** Return a 200 JSON response with CORS headers. */
 export function respondOk(data: unknown, origin: string | null = null): Response {
   return new Response(JSON.stringify(data), { status: 200, headers: getJsonHeaders(origin) })

@@ -1,6 +1,6 @@
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError } from '../_shared/responses.ts'
+import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const DetectSchema = z.object({
@@ -104,6 +104,8 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
     }
 
     // Store detection result in database
+    const warnings: Warning[] = []
+
     const { error: insertError } = await supabase
       .from('flush_detections')
       .insert({
@@ -118,6 +120,7 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
     if (insertError) {
       console.error('detect-toilet-flush: insert detection error', insertError)
       // Don't fail the request if DB insert fails, just log it
+      warnings.push({ code: 'detection_insert_failed', detail: insertError.message })
     }
 
     // Return detection result
@@ -128,6 +131,7 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
       top_predictions: result.top_predictions,
       model_version: result.model_version,
       threshold_used: result.threshold_used,
+      ...(warnings.length ? { warnings } : {}),
     }, origin)
 
   } catch (error) {

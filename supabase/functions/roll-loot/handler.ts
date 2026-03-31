@@ -1,7 +1,7 @@
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError } from '../_shared/responses.ts'
+import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const RollLootSchema = z.object({
@@ -63,6 +63,8 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     const holdsUsed = roll.holds
 
     // Delete the pending row regardless of outcome
+    const warnings: Warning[] = []
+
     const { error: deleteError } = await supabase
       .from('pending_loot_rolls')
       .delete()
@@ -72,6 +74,7 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     if (deleteError) {
       console.error('roll-loot: delete error', deleteError)
       // Non-fatal; proceed with the roll
+      warnings.push({ code: 'pending_roll_cleanup_failed', detail: deleteError.message })
     }
 
     // ── Server-side roll ──────────────────────────────────────────────────────
@@ -85,7 +88,7 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     )
 
     if (!won) {
-      return respondOk({ won: false, holds_used: holdsUsed }, origin)
+      return respondOk({ won: false, holds_used: holdsUsed, ...(warnings.length ? { warnings } : {}) }, origin)
     }
 
     // ── Award mystery box ─────────────────────────────────────────────────────
@@ -105,7 +108,7 @@ export async function handleRollLoot(req: Request): Promise<Response> {
 
     console.log(`roll-loot: awarded mystery box id=${box.id} rarity=${rarity} to user=${userId}`)
 
-    return respondOk({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity } }, origin)
+    return respondOk({ won: true, holds_used: holdsUsed, box: { id: box.id, rarity: box.rarity }, ...(warnings.length ? { warnings } : {}) }, origin)
 
   } catch (err) {
     console.error('roll-loot: unexpected error', err)
