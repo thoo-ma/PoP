@@ -1,0 +1,45 @@
+name: Cloud Run Deploy
+
+on:
+  push:
+    tags:
+      - 'cloud-run@*'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: yamnet-detector
+          source: google-cloud-run/
+          region: us-central1
+          flags: >-
+            --memory=2Gi
+            --cpu=2
+            --min-instances=1
+            --max-instances=100
+            --timeout=60s
+            --allow-unauthenticated
+          env_vars: |
+            MODEL_VERSION=yamnet-v1
+            API_SECRET_KEY=${{ secrets.CLOUD_RUN_API_KEY }}

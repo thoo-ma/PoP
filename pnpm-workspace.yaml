@@ -3,3 +3,4 @@ packages:
   - dashboard
   - shared
   - supabase/functions
+  - google-cloud-run
