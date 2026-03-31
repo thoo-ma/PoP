@@ -20,3 +20,7 @@ export const STAT_POINTS_BY_RARITY: Record<NFTRarity, number> = {
 /** Maximum NFT energy value. */
 // @migration: KEEP — structural invariant (stat cap 0–100); never moves to DB
 export const MAX_ENERGY = 100
+
+/** Maximum value any individual stat (efficiency, resilience, comfort, luck) can reach. */
+// @migration: KEEP — structural invariant (same as MAX_ENERGY); never moves to DB
+export const MAX_STAT_VALUE = 100
