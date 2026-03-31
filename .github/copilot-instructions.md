@@ -122,5 +122,3 @@ All agents follow a 4-phase workflow ending with PR creation and the `pr-review-
 ## GitHub Issues
 
 Before creating or updating any GitHub issue, load `.github/skills/github-issues/SKILL.md` for label taxonomy, title conventions, and epic patterns.
-
-All issues are tracked as GitHub Issues. Key epics: #89 (Pre-launch security hardening), #90 (Shared NFT data layer). Use `gh issue list` or the GitHub Issues skill to discover work items.
