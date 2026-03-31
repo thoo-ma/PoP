@@ -39,9 +39,9 @@ export const useImmobilityChallenge = (
   const thresholds = useMemo(() => getThresholds(mode), [mode])
 
   const startTimeRef = useRef<number>(0)
-  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null)
-  const graceTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const warningCooldownRef = useRef<NodeJS.Timeout | null>(null)
+  const timerIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const graceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const warningCooldownRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const accelerometerSubscriptionRef = useRef<Subscription | null>(null)
   const pedometerSubscriptionRef = useRef<Subscription | null>(null)
   const gyroscopeSubscriptionRef = useRef<Subscription | null>(null)

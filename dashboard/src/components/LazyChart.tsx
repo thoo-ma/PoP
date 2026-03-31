@@ -12,7 +12,7 @@ import { lazy, Suspense } from 'react'
 const ReactEChartsLazy = lazy(() =>
   import('echarts-for-react/lib/core').then((mod) => {
     return import('@/lib/echarts').then((echartsModule) => ({
-      default: (props: Record<string, unknown>) => {
+      default: (props: any) => {
         const Core = mod.default
         return <Core echarts={echartsModule.default} {...props} />
       },
