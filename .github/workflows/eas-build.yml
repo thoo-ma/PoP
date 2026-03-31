@@ -74,5 +74,5 @@ jobs:
         run: cd frontend && eas build --platform ${{ matrix.platform }} --profile ${{ steps.profile.outputs.value }} --non-interactive
 
       - name: Submit to store
-        if: steps.profile.outputs.value == 'production' && github.event.inputs.skip_submit != 'true'
+        if: steps.profile.outputs.value == 'production' && (github.event_name != 'workflow_dispatch' || github.event.inputs.skip_submit != 'true')
         run: cd frontend && eas submit --platform ${{ matrix.platform }} --profile production --non-interactive

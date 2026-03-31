@@ -58,22 +58,30 @@ jobs:
           LATEST_MIGRATION_PATH=$(printf '%s\n' supabase/migrations/*.sql | LC_ALL=C sort | tail -n 1)
           LATEST_MIGRATION=$(basename "$LATEST_MIGRATION_PATH" .sql)
 
-          cat <<EOF > release-body.md
-          ## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}
+          EDGE_FUNCTIONS_VERSION=""
+          if [ -f "supabase/functions/package.json" ]; then
+            EDGE_FUNCTIONS_VERSION=$(node -p "require('./supabase/functions/package.json').version" 2>/dev/null || true)
+          fi
+          if [ -z "$EDGE_FUNCTIONS_VERSION" ] || [ "$EDGE_FUNCTIONS_VERSION" = "undefined" ]; then
+            EDGE_FUNCTIONS_VERSION="commit ${COMMIT_SHA}"
+          fi
 
-          ### Components
-          | Component | Version | Notes |
-          |---|---|---|
-          | Mobile app | pop@${FRONTEND_VERSION} | |
-          | Dashboard | dashboard@${DASHBOARD_VERSION} | |
-          | Shared | @pop/shared@${SHARED_VERSION} | |
-          | Edge functions | commit ${COMMIT_SHA} | |
-          | Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |
-          | Database | ${LATEST_MIGRATION}.sql | |
-
-          ### Highlights
-          _Edit this release to add highlights._
-          EOF
+          {
+            echo "## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}"
+            echo ""
+            echo "### Components"
+            echo "| Component | Version | Notes |"
+            echo "|---|---|---|"
+            echo "| Mobile app | pop@${FRONTEND_VERSION} | |"
+            echo "| Dashboard | dashboard@${DASHBOARD_VERSION} | |"
+            echo "| Shared | @pop/shared@${SHARED_VERSION} | |"
+            echo "| Edge functions | edge-functions@${EDGE_FUNCTIONS_VERSION} | |"
+            echo "| Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |"
+            echo "| Database | ${LATEST_MIGRATION}.sql | |"
+            echo ""
+            echo "### Highlights"
+            echo "_Edit this release to add highlights._"
+          } > release-body.md
 
       - name: Create GitHub Release
         env:
