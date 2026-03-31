@@ -108,7 +108,7 @@ You MUST follow these phases in order. Do NOT skip phases. Do NOT implement anyt
    - For shared: add or update Zod schemas at API boundaries
 
 3. **Validate**:
-   - Frontend changes: `pnpm exec turbo typecheck --filter=pop`
+   - Frontend changes: `pnpm exec turbo run typecheck --filter=pop`
    - Edge function changes: verify syntax and imports are correct
    - RLS migrations: verify SQL syntax
    - Run `github/run_secret_scanning` on the repo to check for exposed secrets

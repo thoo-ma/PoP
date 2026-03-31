@@ -2,8 +2,8 @@
   "private": true,
   "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "typecheck": "turbo typecheck",
-    "build": "turbo build",
+    "typecheck": "turbo run typecheck",
+    "build": "turbo run build",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\"",
