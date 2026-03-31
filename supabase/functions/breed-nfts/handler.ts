@@ -209,7 +209,8 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
     console.log(`breed-nfts: user ${userId} spent ${chargedAmount} POOP (${p1Cost}+${p2Cost}) → balance ${newBalance}`)
 
-    // ── Increment breed_count for both parents ────────────────────────────────    const warnings: Warning[] = []
+    // ── Increment breed_count for both parents ────────────────────────────────
+    const warnings: Warning[] = []
     const { error: breedCountError } = await supabase
       .from('nfts')
       .update({ breed_count: p1BreedCount + 1 })
