@@ -5,9 +5,9 @@
  * `value` column.  The corresponding `*_DEFAULTS` export is constructed
  * from the live constants in neighbouring files so it can never drift.
  *
- * Structural constants (MAX_LEVEL, MAX_ENERGY, MAX_STAT_VALUE, NFT types
- * and rarities) are NOT included — they are architectural invariants that
- * must never be changed at runtime.
+ * Structural constants (MAX_LEVEL, MAX_ENERGY, MAX_STAT_VALUE, NFT types and
+ * rarities) are NOT included — they are architectural invariants that must
+ * never be changed at runtime.
  *
  * Safety guards (.min / .max) are production sanity checks, NOT dashboard
  * slider ranges.  They block clearly broken values (negative POOP, negative

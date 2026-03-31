@@ -1,6 +1,7 @@
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
+import { MAX_STAT_VALUE } from '../../../shared/statPoints.ts'
 
 const AllocateSchema = z.object({
   nft_id:     z.string().uuid('nft_id must be a valid UUID'),
@@ -62,8 +63,8 @@ export async function handleAllocateStatPoints(req: Request): Promise<Response> 
     const newComfort    = nft.comfort    + comfort
     const newLuck       = nft.luck       + luck
 
-    if (newEfficiency > 100 || newResilience > 100 || newComfort > 100 || newLuck > 100) {
-      return respondError(422, 'stat_cap_exceeded', 'A stat cannot exceed 100', undefined, origin)
+    if (newEfficiency > MAX_STAT_VALUE || newResilience > MAX_STAT_VALUE || newComfort > MAX_STAT_VALUE || newLuck > MAX_STAT_VALUE) {
+      return respondError(422, 'stat_cap_exceeded', `A stat cannot exceed ${MAX_STAT_VALUE}`, undefined, origin)
     }
 
     // ── Persist ───────────────────────────────────────────────────────────────
