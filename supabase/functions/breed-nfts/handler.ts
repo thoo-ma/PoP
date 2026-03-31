@@ -73,7 +73,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     try {
       degenPercent = parseDegenPercent(bodyResult)
     } catch {
-      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100')
+      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100', undefined, origin)
     }
 
     // ── Fetch & ownership check ───────────────────────────────────────────────
