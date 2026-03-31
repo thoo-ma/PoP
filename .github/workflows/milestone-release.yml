@@ -1,0 +1,69 @@
+name: Milestone Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Milestone version (e.g. 1.0.0)'
+        required: true
+        type: string
+      name:
+        description: 'Milestone name (e.g. Launch, Beta)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect component versions
+        id: versions
+        run: |
+          FRONTEND_VERSION=$(node -p "require('./frontend/package.json').version")
+          DASHBOARD_VERSION=$(node -p "require('./dashboard/package.json').version")
+          SHARED_VERSION=$(node -p "require('./shared/package.json').version")
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          if [ -f "google-cloud-run/package.json" ]; then
+            CLOUD_RUN_VERSION=$(node -p "require('./google-cloud-run/package.json').version")
+          else
+            CLOUD_RUN_VERSION="unversioned"
+          fi
+
+          LATEST_MIGRATION=$(ls -1 supabase/migrations/ | tail -1 | sed 's/\.sql$//')
+
+          cat <<EOF > release-body.md
+          ## PoP v${{ inputs.version }} — ${{ inputs.name }}
+
+          ### Components
+          | Component | Version | Notes |
+          |---|---|---|
+          | Mobile app | pop@${FRONTEND_VERSION} | |
+          | Dashboard | dashboard@${DASHBOARD_VERSION} | |
+          | Shared | @pop/shared@${SHARED_VERSION} | |
+          | Edge functions | commit ${COMMIT_SHA} | |
+          | Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |
+          | Database | ${LATEST_MIGRATION}.sql | |
+
+          ### Highlights
+          _Edit this release to add highlights._
+          EOF
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ inputs.version }}" \
+            --title "PoP v${{ inputs.version }} — ${{ inputs.name }}" \
+            --notes-file release-body.md \
+            ${{ inputs.prerelease == true && '--prerelease' || '' }}
