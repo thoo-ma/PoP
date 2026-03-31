@@ -2,7 +2,7 @@ import type { NFTRarity as Rarity } from '../../../shared/nft.ts'
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError } from '../_shared/responses.ts'
+import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
 const OpenMysteryBoxSchema = z.object({
@@ -91,6 +91,7 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
     if (updateError) {
       console.error('open-mystery-box: update box error', updateError)
       // NFT was already created — log but don't fail the request
+      warnings.push({ code: 'box_update_failed', detail: updateError.message })
     }
 
     // ── Return the new NFT ───────────────────────────────────────────────────
@@ -111,7 +112,10 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
       updated_at: created.updated_at,
     }
 
-    return respondOk(result, origin)
+    return respondOk({
+      ...result,
+      ...(warnings.length ? { warnings } : {}),
+    }, origin)
 
   } catch (err) {
     console.error('open-mystery-box: unexpected error', err)

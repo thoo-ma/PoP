@@ -5,7 +5,7 @@ import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { breedCost } from '../../../shared/currency.ts'
 import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
-import { respondOk, respondError } from '../_shared/responses.ts'
+import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { parseDegenPercent, applyDegenBar, computeConfigHash, getWalletBalance } from '../_shared/degenBar.ts'
 
@@ -210,6 +210,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     console.log(`breed-nfts: user ${userId} spent ${chargedAmount} POOP (${p1Cost}+${p2Cost}) → balance ${newBalance}`)
 
     // ── Increment breed_count for both parents ────────────────────────────────
+    const warnings: Warning[] = []
     const { error: breedCountError } = await supabase
       .from('nfts')
       .update({ breed_count: p1BreedCount + 1 })
@@ -218,6 +219,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
     if (breedCountError) {
       console.error('breed-nfts: breed_count increment error (parent1)', breedCountError)
+      warnings.push({ code: 'breed_count_update_failed', detail: breedCountError.message })
     }
 
     const { error: breedCountError2 } = await supabase
@@ -228,6 +230,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
     if (breedCountError2) {
       console.error('breed-nfts: breed_count increment error (parent2)', breedCountError2)
+      warnings.push({ code: 'breed_count_update_failed', detail: breedCountError2.message })
     }
 
     console.log(`breed-nfts: breed_count incremented — parent1=${p1BreedCount + 1} parent2=${p2BreedCount + 1}`)
@@ -246,6 +249,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
       original_cost: totalBreedCost,
       reduced_cost:  chargedAmount,
       config_hash:   computeConfigHash(cfg.degen_bar),
+      ...(warnings.length ? { warnings } : {}),
     }
 
     return respondOk(result, origin)
