@@ -19,7 +19,8 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Workflow:** `.github/workflows/eas-build.yml`
 - **What it does:** EAS build → App Store / Play Store submission
 - **Manual dispatch inputs:** platform (ios/android/all), profile (production/preview), skip_submit (bool)
-- **Manual CLI override:** `cd frontend && eas build --profile production --platform all`
+- **Manual CLI override (build):** `cd frontend && eas build --profile production --platform all`
+- **Manual CLI override (submit):** `cd frontend && eas submit --platform all --latest`
 
 ### Mobile Preview Build
 - **Trigger:** PR labeled `preview-build` OR manual workflow_dispatch
@@ -37,6 +38,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Deployment workflow:** `.github/workflows/deploy-edge-functions.yml`
 - **CI check (PR only):** `.github/workflows/edge-functions.yml` — deno lint + type-check on PRs touching `supabase/functions/**` or `shared/**`
 - **Manual override:** `pnpm deploy:functions`
+- **Function secrets:** The GH Actions workflow only deploys code — it does not inject per-function secrets. Runtime env vars (`CLOUD_RUN_URL`, `CLOUD_RUN_API_KEY` for `detect-toilet-flush`, etc.) must be set separately in Supabase: Dashboard → Edge Functions → Secrets, or via `supabase secrets set <KEY>=<VALUE> --project-ref $SUPABASE_PROJECT_REF`.
 
 ### Cloud Run (YAMNet ML)
 - **Trigger:** Git tag `cloud-run@x.y.z` OR manual workflow_dispatch
@@ -60,7 +62,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 1. PRs include changeset files (`.changeset/<slug>.md`)
 2. Merge to `main` → Changesets bot opens "Version Packages" PR (`chore: version packages`)
 3. Review the version PR (check CHANGELOG, version bumps)
-4. Merge → GitHub Release created per package, git tags pushed
+4. Merge → Changesets workflow runs and creates/pushes git tags per package
 5. Tags trigger platform-specific deploys (EAS for `pop@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
 
 ### Monorepo milestone releases (manual)
@@ -97,7 +99,12 @@ Only `production` environment exists (we have one backend, no staging).
 - **Native rollback:** Submit previous build version via App Store Connect / Play Console
 
 ### Edge functions
-- `git revert <commit> && git push origin main` → auto-redeploys previous version
+- `git revert <commit> && git push origin main` → restores previous code on `main`
+- Redeploy the reverted version via `.github/workflows/deploy-edge-functions.yml`:
+  - Either trigger the workflow manually using **workflow_dispatch** in the GitHub Actions UI
+  - Or create a new tag pointing to the reverted commit and push it, e.g.:
+    - `git tag edge-functions@rollback-<date>`
+    - `git push origin edge-functions@rollback-<date>`
 
 ### Cloud Run
 - GCP Console → Cloud Run → yamnet-detector → Revisions → Route 100% to previous revision
