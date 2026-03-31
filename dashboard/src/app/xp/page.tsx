@@ -10,7 +10,7 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
+import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
 export default function XpPanel() {
   const source = useGameConfigStore((s) => s.sources.xp)
@@ -142,7 +142,7 @@ export default function XpPanel() {
 
   const handleChange = (field: keyof typeof xp, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('xp', { [field]: num })
     }
   }

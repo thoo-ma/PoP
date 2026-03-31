@@ -6,7 +6,7 @@ import type { ComponentType } from 'react'
 export interface PageConfig {
   id: string
   title: string
-  component: ComponentType<{}>
+  component: ComponentType<object>
   isPrimary?: boolean
 }
 

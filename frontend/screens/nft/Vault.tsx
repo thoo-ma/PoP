@@ -195,7 +195,7 @@ export default memo(function Vault() {
         </Tabs.List>
 
         <Tabs.Content value="toilets">
-          <>
+          
             <FilterControls
               selectedRarities={selectedRarities}
               selectedTypes={selectedTypes}
@@ -263,7 +263,7 @@ export default memo(function Vault() {
                 </View>
               </ScrollView>
             </ScrollShadow>
-          </>
+          
         </Tabs.Content>
         <Tabs.Content value="mystery-boxes">
           {boxesLoading ? (

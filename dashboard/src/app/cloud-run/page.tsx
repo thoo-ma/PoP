@@ -19,7 +19,7 @@ export default function CloudRunPanel() {
 
   const handleChange = (field: keyof typeof cr, value: string) => {
     const num = field === 'YAMNET_TOILET_FLUSH_CLASS' ? parseInt(value, 10) : parseFloat(value)
-    if (isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) return
     setDraft('cloud_run', { [field]: num })
   }
 

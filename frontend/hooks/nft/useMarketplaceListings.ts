@@ -68,7 +68,7 @@ export function useMarketplaceListings() {
       const enrichedListings: NFT[] = (listingsData ?? [])
         .filter((listing) => listing.nfts !== null)
         .map((listing) => {
-          const { user_id: _, ...nft } = listing.nfts!
+          const { user_id: _, ...nft } = listing.nfts as NonNullable<typeof listing.nfts>
           return { ...nft, isListed: true as const, price: listing.price }
         })
 

@@ -22,7 +22,7 @@ function computeBreed(
 ): number {
   const usd =
     cfg.BREED_BASE_PRICE_USD *
-    Math.pow(cfg.BREED_GROWTH_RATE, breedCount) *
+    cfg.BREED_GROWTH_RATE ** breedCount *
     (cfg.BREED_RARITY_MULTIPLIER[rarity] ?? 1)
   return Math.round(usd / cfg.BREED_USD_PER_TOKEN)
 }
@@ -67,12 +67,12 @@ export function BreedTab() {
 
   const handleChange = (field: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) setDraft('currency', { [field]: num })
+    if (!Number.isNaN(num)) setDraft('currency', { [field]: num })
   }
 
   const handleRarityMult = (rarity: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('currency', {
         BREED_RARITY_MULTIPLIER: { ...cur.BREED_RARITY_MULTIPLIER, [rarity]: num },
       })
@@ -179,6 +179,7 @@ export function BreedTab() {
               </thead>
               <tbody>
                 {Array.from({ length: cur.BREED_MAX_COUNT + 1 }, (_, i) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: i is the meaningful breed count value
                   <tr key={i} className="border-b border-neutral-800/50 text-neutral-300">
                     <td className="px-3 py-1.5 font-mono text-neutral-400">{i}</td>
                     {RARITIES.map((r) => (

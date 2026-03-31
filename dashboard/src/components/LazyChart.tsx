@@ -12,7 +12,7 @@ import { lazy, Suspense } from 'react'
 const ReactEChartsLazy = lazy(() =>
   import('echarts-for-react/lib/core').then((mod) => {
     return import('@/lib/echarts').then((echartsModule) => ({
-      default: (props: any) => {
+      default: (props: Record<string, unknown>) => {
         const Core = mod.default
         return <Core echarts={echartsModule.default} {...props} />
       },
@@ -21,7 +21,7 @@ const ReactEChartsLazy = lazy(() =>
 )
 
 interface LazyChartProps {
-  option: Record<string, any>
+  option: Record<string, unknown>
   style?: React.CSSProperties
   className?: string
 }

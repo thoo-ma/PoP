@@ -91,7 +91,7 @@ export default function MintingPanel() {
 
   const handleChange = (rarity: string, slot: 0 | 1, value: string) => {
     const num = parseInt(value, 10)
-    if (isNaN(num) || num < 0 || num > 100) return
+    if (Number.isNaN(num) || num < 0 || num > 100) return
     const current = [
       ...(minting.STAT_RANGES[rarity as keyof typeof minting.STAT_RANGES] ?? [0, 100]),
     ] as [number, number]

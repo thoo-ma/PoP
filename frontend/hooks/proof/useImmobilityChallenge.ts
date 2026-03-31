@@ -164,7 +164,7 @@ export const useImmobilityChallenge = (
         }
       }
     },
-    [handleMovementDetected, cleanup],
+    [handleMovementDetected],
   )
 
   // Handle step detection
@@ -231,7 +231,7 @@ export const useImmobilityChallenge = (
         }
       }
     },
-    [handleMovementDetected, cleanup],
+    [handleMovementDetected],
   )
 
   // Start challenge

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { View, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, type TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
 import { useSignOutDialog } from '@/utils'

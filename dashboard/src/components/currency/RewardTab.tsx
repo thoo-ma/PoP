@@ -25,7 +25,7 @@ function computeReward(
 ): number {
   const usd =
     cfg.REWARD_BASE_PRICE_USD *
-    Math.pow(cfg.REWARD_GROWTH_RATE, level - 1) *
+    cfg.REWARD_GROWTH_RATE ** (level - 1) *
     (cfg.REWARD_TYPE_MULTIPLIER[type] ?? 1) *
     (cfg.REWARD_RARITY_MULTIPLIER[rarity] ?? 1)
   return Math.max(1, Math.round(usd / cfg.REWARD_USD_PER_TOKEN))
@@ -74,12 +74,12 @@ export function RewardTab() {
 
   const handleChange = (field: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) setDraft('currency', { [field]: num })
+    if (!Number.isNaN(num)) setDraft('currency', { [field]: num })
   }
 
   const handleTypeMult = (type: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('currency', {
         REWARD_TYPE_MULTIPLIER: { ...cur.REWARD_TYPE_MULTIPLIER, [type]: num },
       })
@@ -88,7 +88,7 @@ export function RewardTab() {
 
   const handleRarityMult = (rarity: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('currency', {
         REWARD_RARITY_MULTIPLIER: { ...cur.REWARD_RARITY_MULTIPLIER, [rarity]: num },
       })
@@ -197,6 +197,7 @@ export function RewardTab() {
               {TYPES.map((t) => (
                 <button
                   key={t}
+                  type="button"
                   onClick={() => setSelectedType(t)}
                   className={`rounded px-2 py-0.5 text-[10px] font-medium transition-colors ${
                     selectedType === t

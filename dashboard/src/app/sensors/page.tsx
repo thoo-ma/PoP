@@ -124,7 +124,7 @@ export default function SensorsPanel() {
 
   const handlePreset = (difficulty: string, field: PresetField, value: string) => {
     const num = parseFloat(value)
-    if (isNaN(num)) return
+    if (Number.isNaN(num)) return
     setDraft('sensors', {
       SENSOR_PRESETS: {
         ...sensors.SENSOR_PRESETS,
@@ -138,7 +138,7 @@ export default function SensorsPanel() {
 
   const handleAudio = (difficulty: string, value: string) => {
     const num = parseFloat(value)
-    if (isNaN(num) || num < 0 || num > 1) return
+    if (Number.isNaN(num) || num < 0 || num > 1) return
     setDraft('sensors', {
       AUDIO_THRESHOLDS: { ...sensors.AUDIO_THRESHOLDS, [difficulty]: num },
     })

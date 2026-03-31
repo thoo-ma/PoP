@@ -48,7 +48,7 @@ export default function DegenBarPanel() {
 
   const handleChange = (field: keyof typeof cfg, value: string) => {
     const num = parseFloat(value)
-    if (isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) return
     setDraft('degen_bar', { [field]: num })
   }
 

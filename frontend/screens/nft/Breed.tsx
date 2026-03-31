@@ -153,8 +153,8 @@ import { nftEvents, canBreed } from '@/utils'
               </View>
 
               {/* ── Outcome probabilities ─────────────────────────────────── */}
-              {canBreedNow ? (
-                <BreedOutcomePanel r1={parent1!.rarity} r2={parent2!.rarity} />
+              {parent1 && parent2 ? (
+                <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
                 <View className={cn(infoBox({ border: 'dashed' }), 'mb-6')}>
                   <Text className="text-[13px] text-muted text-center leading-5">

@@ -223,7 +223,7 @@ export default memo(function Poop() {
       setImmobilityMessage('Too much movement — try again!')
       setPhase('idle')
     }
-  }, [phase, elapsedTime, status, isRunning, frozenRemainingTime, stopChallenge])
+  }, [phase, elapsedTime, status, isRunning, frozenRemainingTime, stopChallenge, gameImmobilityMs])
 
   // Auto-clear the toast after 3 s
   useEffect(() => {
@@ -267,6 +267,20 @@ export default memo(function Poop() {
     }
   }, [phase, detectionResult, rateLimitError, detectionError, isAnalyzing])
 
+  // ── Master reset ──────────────────────────────────────────
+  const handleFullReset = useCallback(() => {
+    clearResult()
+    hasPoopedRef.current = false
+    setPoopedEnergy(null)
+    setPoopedXP(null)
+    setPoopedPoop(null)
+    setStatModalData(null)
+    setLootRollId(null)
+    setFrozenRemainingTime(null)
+    setImmobilityMessage(null)
+    setPhase('idle')
+  }, [clearResult])
+
   // ── Grant XP on confirmed flush ───────────────────────────
   useEffect(() => {
     if (phase !== 'results') return
@@ -304,21 +318,7 @@ export default memo(function Poop() {
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, detectionResult])
-
-  // ── Master reset ──────────────────────────────────────────
-  const handleFullReset = useCallback(() => {
-    clearResult()
-    hasPoopedRef.current = false
-    setPoopedEnergy(null)
-    setPoopedXP(null)
-    setPoopedPoop(null)
-    setStatModalData(null)
-    setLootRollId(null)
-    setFrozenRemainingTime(null)
-    setImmobilityMessage(null)
-    setPhase('idle')
-  }, [clearResult])
+  }, [phase, detectionResult, cooldownError, displayNFT, handleFullReset, poopNFT, refetch])
 
   // ── Stat allocation ───────────────────────────────────────
   const handleStatAllocated = useCallback(
@@ -563,7 +563,7 @@ export default memo(function Poop() {
     : noEnergy
       ? 'No Energy'
       : onCooldown
-        ? `Ready in ${cooldown!.display}`
+        ? `Ready in ${cooldown?.display}`
         : selectedIndex === null
           ? 'Select an NFT'
           : 'Poop'
@@ -686,7 +686,7 @@ export default memo(function Poop() {
               onPress={handlePoop}
               isDisabled={buttonDisabled}
               className="px-12"
-              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown!.display}` : 'Start pooping'}
+              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
               accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
             >
               <Button.Label>{buttonLabel}</Button.Label>

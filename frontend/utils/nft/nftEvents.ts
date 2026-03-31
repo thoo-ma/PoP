@@ -26,7 +26,9 @@ class NFTEventEmitter {
    * Notifies all listeners that NFTs have changed
    */
   emit(): void {
-    this.listeners.forEach((listener) => listener())
+    this.listeners.forEach((listener) => {
+      listener()
+    })
   }
 }
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
 import { buildDefaults, buildGameConfig, type FullGameConfig } from '@pop/shared/gameConfig'
 
@@ -31,7 +31,7 @@ export function GameConfigProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<FullGameConfig>(buildDefaults)
   const [loading, setLoading] = useState(true)
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const { data } = await supabase.from('game_config').select('key, value')
       const { config: merged } = buildGameConfig(data ?? [])
@@ -41,11 +41,11 @@ export function GameConfigProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     void load()
-  }, [])
+  }, [load])
 
   return (
     <GameConfigContext.Provider value={{ config, loading, refetch: load }}>

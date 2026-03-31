@@ -71,7 +71,7 @@ export default function StatPointsPanel() {
 
   const handleChange = (rarity: string, value: string) => {
     const num = parseInt(value, 10)
-    if (!isNaN(num) && num >= 0) {
+    if (!Number.isNaN(num) && num >= 0) {
       setDraft('stat_points', {
         STAT_POINTS_BY_RARITY: { ...sp.STAT_POINTS_BY_RARITY, [rarity]: num },
       })

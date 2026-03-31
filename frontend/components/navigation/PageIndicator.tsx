@@ -21,7 +21,7 @@ const PRIMARY_PAGE_ICONS = [
  * the remaining pages dynamically.
  */
 export default memo(function PageIndicator({
-  totalPages,
+  totalPages: _totalPages,
   currentPage,
   onPageChange,
 }: PageIndicatorProps) {

@@ -32,8 +32,8 @@ export function useBreedNFT() {
           if (fnError instanceof FunctionsHttpError) {
             try {
               body = await fnError.context.json()
-              if ((body as { message?: string })?.message)
-                message = (body as { message?: string }).message!
+              const bodyMsg = (body as { message?: string })?.message
+              if (bodyMsg) message = bodyMsg
               else if (body?.error) message = body.error
             } catch {
               /* leave message as-is */
@@ -79,7 +79,7 @@ export function useBreedNFT() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [config.degen_bar, refetchConfig],
+    [config.degen_bar, refetchConfig, toast.show],
   )
 
   return {

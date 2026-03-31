@@ -1,11 +1,10 @@
 import { Text, View } from 'react-native'
 import { Slider, cn } from 'heroui-native'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   calcReduction,
   calcBustChance,
   calcReducedCost,
-  degenBarConfigHash,
 } from '@pop/shared/degenBar'
 import { useGameConfig } from '@/store/gameConfigStore'
 import { infoBox } from '@/styles'
@@ -49,14 +48,6 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
     setDegenPercent(val)
     onDegenChange(val)
   }
-
-  // Notify parent if config changes while slider is non-zero
-  useEffect(() => {
-    if (degenPercent > 0) {
-      onDegenChange(degenPercent)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cfg])
 
   return (
     <View className={cn(infoBox(), 'mb-5')}>

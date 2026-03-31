@@ -80,7 +80,7 @@ export default function CooldownPanel() {
 
   const handleBase = (type: string, value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       setDraft('cooldown', {
         COOLDOWN_BASES: { ...cd.COOLDOWN_BASES, [type]: num },
       })
@@ -89,7 +89,7 @@ export default function CooldownPanel() {
 
   const handleScalar = (field: 'LINEAR_MULT' | 'EXP_MULT', value: string) => {
     const num = parseFloat(value)
-    if (!isNaN(num)) setDraft('cooldown', { [field]: num })
+    if (!Number.isNaN(num)) setDraft('cooldown', { [field]: num })
   }
 
   return (
