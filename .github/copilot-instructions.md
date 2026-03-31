@@ -142,7 +142,7 @@ Short description of the change (imperative mood).
 | `ui/`, `ux/` | `patch` |
 | `perf/` | `patch` |
 | `heroui/`, `tv/` | `patch` |
-| `chore/`, `docs/`, `test/` | use `pnpm changeset --empty` |
+| `chore/`, `docs/`, `test/` | create an empty changeset file |
 
 ### `@pop/shared` bump guidance
 
@@ -151,13 +151,14 @@ Short description of the change (imperative mood).
 
 ### Empty changesets
 
-For PRs that don't touch versioned code (CI, docs, config, tests), add an empty changeset:
+For PRs that don't touch versioned code (CI, docs, config, tests), create an empty changeset file directly:
 
-```bash
-pnpm changeset --empty
+```md
+---
+---
 ```
 
-This prevents the Changesets bot from complaining about missing changesets.
+Save it as `.changeset/<descriptive-slug>.md`. This prevents the Changesets bot from complaining about missing changesets.
 
 ## PR Workflow
 
