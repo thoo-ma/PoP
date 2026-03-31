@@ -1,0 +1,95 @@
+name: Milestone Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Milestone version without v prefix (e.g. 1.0.0)'
+        required: true
+        type: string
+      name:
+        description: 'Milestone name (e.g. Launch, Beta)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate version format
+        run: |
+          if [[ "${{ inputs.version }}" == v* ]]; then
+            echo "ERROR: version must not include a 'v' prefix (e.g. use '1.0.0', not 'v1.0.0')"
+            exit 1
+          fi
+
+      - name: Collect component versions
+        id: versions
+        env:
+          MILESTONE_VERSION: ${{ inputs.version }}
+          MILESTONE_NAME: ${{ inputs.name }}
+        run: |
+          FRONTEND_VERSION=$(node -p "require('./frontend/package.json').version")
+          DASHBOARD_VERSION=$(node -p "require('./dashboard/package.json').version")
+          SHARED_VERSION=$(node -p "require('./shared/package.json').version")
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          if [ -f "google-cloud-run/package.json" ]; then
+            CLOUD_RUN_VERSION=$(node -p "require('./google-cloud-run/package.json').version")
+          else
+            CLOUD_RUN_VERSION="unversioned"
+          fi
+
+          LATEST_MIGRATION_PATH=$(printf '%s\n' supabase/migrations/*.sql | LC_ALL=C sort | tail -n 1)
+          LATEST_MIGRATION=$(basename "$LATEST_MIGRATION_PATH" .sql)
+
+          EDGE_FUNCTIONS_VERSION=""
+          if [ -f "supabase/functions/package.json" ]; then
+            EDGE_FUNCTIONS_VERSION=$(node -p "require('./supabase/functions/package.json').version" 2>/dev/null || true)
+          fi
+          if [ -z "$EDGE_FUNCTIONS_VERSION" ] || [ "$EDGE_FUNCTIONS_VERSION" = "undefined" ]; then
+            EDGE_FUNCTIONS_VERSION="commit ${COMMIT_SHA}"
+          fi
+
+          {
+            echo "## PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}"
+            echo ""
+            echo "### Components"
+            echo "| Component | Version | Notes |"
+            echo "|---|---|---|"
+            echo "| Mobile app | pop@${FRONTEND_VERSION} | |"
+            echo "| Dashboard | dashboard@${DASHBOARD_VERSION} | |"
+            echo "| Shared | @pop/shared@${SHARED_VERSION} | |"
+            echo "| Edge functions | edge-functions@${EDGE_FUNCTIONS_VERSION} | |"
+            echo "| Cloud Run | cloud-run@${CLOUD_RUN_VERSION} | |"
+            echo "| Database | ${LATEST_MIGRATION}.sql | |"
+            echo ""
+            echo "### Highlights"
+            echo "_Edit this release to add highlights._"
+          } > release-body.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MILESTONE_VERSION: ${{ inputs.version }}
+          MILESTONE_NAME: ${{ inputs.name }}
+        run: |
+          gh release create "v${MILESTONE_VERSION}" \
+            --title "PoP v${MILESTONE_VERSION} — ${MILESTONE_NAME}" \
+            --notes-file release-body.md \
+            ${{ inputs.prerelease == true && '--prerelease' || '' }}
