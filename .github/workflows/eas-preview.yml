@@ -12,6 +12,10 @@ on:
         options: [all, ios, android]
         default: all
 
+concurrency:
+  group: eas-preview-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -19,7 +23,9 @@ jobs:
   preview:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      github.event.label.name == 'preview-build'
+      (github.event_name == 'pull_request' &&
+       github.event.label.name == 'preview-build' &&
+       !github.event.pull_request.head.repo.fork)
     runs-on: ubuntu-latest
     strategy:
       matrix:
