@@ -1,5 +1,5 @@
 import { initHandler } from '../_shared/handlerInit.ts'
-import { fetchOwned } from '../_shared/fetchNFTOwned.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'

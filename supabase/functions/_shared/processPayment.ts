@@ -36,7 +36,7 @@ export async function processPayment(
   degenPercent: number,
   action: 'repair' | 'breed',
   origin: string | null,
-  cfg: DegenBarConfig | undefined,
+  cfg: DegenBarConfig,
   opts?: ProcessPaymentOpts,
 ): Promise<PaymentResult | Response> {
   let chargedAmount: number
@@ -80,7 +80,7 @@ export async function processPayment(
       degen_percent: degenPercent,
       poop_spent:    chargedAmount,
       poop_balance:  newBalance,
-      config_hash:   computeConfigHash(cfg!),
+      config_hash:   computeConfigHash(cfg),
     }, origin)
   }
 

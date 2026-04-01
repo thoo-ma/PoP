@@ -7,7 +7,7 @@ import {
 import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
-import { fetchOwned } from '../_shared/fetchNFTOwned.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'

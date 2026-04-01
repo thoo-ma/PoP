@@ -31,7 +31,11 @@ export async function fetchOwned<T = Record<string, unknown>>(
     .single()
 
   if (error || !data) {
-    return respondError(404, 'not_found', `${table === 'nfts' ? 'NFT' : table === 'mystery_boxes' ? 'Mystery box' : 'Record'} not found or not owned by you`, undefined, origin)
+    const label = table === 'nfts' ? 'NFT'
+      : table === 'mystery_boxes' ? 'Mystery box'
+      : table === 'pending_loot_rolls' ? 'Loot roll'
+      : 'Record'
+    return respondError(404, 'not_found', `${label} not found or not owned by you`, undefined, origin)
   }
 
   return data as T

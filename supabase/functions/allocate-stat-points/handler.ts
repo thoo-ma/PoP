@@ -1,5 +1,5 @@
 import { initHandler } from '../_shared/handlerInit.ts'
-import { fetchOwned } from '../_shared/fetchNFTOwned.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { MAX_STAT_VALUE } from '../../../shared/statPoints.ts'
