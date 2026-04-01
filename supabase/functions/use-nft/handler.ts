@@ -60,7 +60,7 @@ export async function handleUseNft(req: Request): Promise<Response> {
     const { nft_id } = bodyResult
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
-    const nft = await fetchOwned<{ id: string; type: string; rarity: string | null; resilience: number; energy: number; level: number; xp: number; stat_points: number | null; last_used_at: string | null }>(supabase, 'nfts', nft_id, userId, 'id, type, rarity, resilience, energy, level, xp, stat_points, last_used_at', origin)
+    const nft = await fetchOwned<{ id: string; type: NFTType; rarity: NFTRarity | null; resilience: number; energy: number; level: number; xp: number; stat_points: number | null; last_used_at: string | null }>(supabase, 'nfts', nft_id, userId, 'id, type, rarity, resilience, energy, level, xp, stat_points, last_used_at', origin)
     if (nft instanceof Response) return nft
 
     if (nft.energy <= 0) {
@@ -68,9 +68,9 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
-    if (isOnCooldown(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)) {
-      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)!
-      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)
+    if (isOnCooldown(nft.last_used_at, nft.type, nft.level, cfg.cooldown)) {
+      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type, nft.level, cfg.cooldown)!
+      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type, nft.level, cfg.cooldown)
       console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
       return respondError(429, 'on_cooldown',
         `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
@@ -82,14 +82,14 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Energy calculation ────────────────────────────────────────────────────
-    const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy, cfg.energy_drain)
+    const energyLost = calcEnergyLoss(nft.resilience, nft.type, nft.energy, cfg.energy_drain)
     const newEnergy = nft.energy - energyLost
 
     // ── Rarity (used by both POOP reward and stat points) ────────────────────
-    const rarity = (nft.rarity ?? 'common') as NFTRarity
+    const rarity: NFTRarity = nft.rarity ?? 'common'
 
     // ── POOP reward calculation ────────────────────────────────────────────────
-    const poopEarned = calcPoopEarned(nft.type as NFTType, rarity, nft.level, cfg.currency)
+    const poopEarned = calcPoopEarned(nft.type, rarity, nft.level, cfg.currency)
 
     // ── XP calculation ───────────────────────────────────────────────────────
     const xpGained = cfg.xp.XP_PER_USE

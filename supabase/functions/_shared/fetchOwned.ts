@@ -2,7 +2,13 @@ import type { SupabaseClient } from './auth.ts'
 import type { Database } from '../../../shared/database.types.ts'
 import { respondError } from './responses.ts'
 
-type TableName = keyof Database['public']['Tables']
+type TablesWithUserId = {
+  [K in keyof Database['public']['Tables']]: Database['public']['Tables'][K]['Row'] extends { user_id: string }
+    ? K
+    : never
+}[keyof Database['public']['Tables']]
+
+type TableName = TablesWithUserId
 
 /**
  * Fetch a single row from `table` where `id` and `user_id` both match.
