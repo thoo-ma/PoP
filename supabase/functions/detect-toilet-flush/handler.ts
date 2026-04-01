@@ -1,4 +1,4 @@
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -12,12 +12,9 @@ const DetectSchema = z.object({
 })
 
 export async function handleDetectToiletFlush(req: Request): Promise<Response> {
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'detect-toilet-flush')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
     // Get Cloud Run configuration from environment
@@ -28,9 +25,6 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
       throw new Error('Missing Cloud Run configuration')
     }
 
-    const auth = await requireAuth(req, 'detect-toilet-flush', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
     console.log('detect-toilet-flush: user', userId)
 
     // Get request body

@@ -1,19 +1,13 @@
 import { serve } from "std/http/server"
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 
 serve(async (req) => {
-  const origin = req.headers.get('origin')
-
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(origin) })
-  }
+  const init = await initHandler(req, 'seed-dev-test-nfts')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    const auth = await requireAuth(req, 'seed-dev-test-nfts', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
-
     console.log('seed-dev-test-nfts: user', userId)
 
     // Call the RPC via service_role, passing the verified user ID

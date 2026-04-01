@@ -1,11 +1,13 @@
 import { repairCost } from '../../../shared/currency.ts'
 import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
+import { fetchOwned } from '../_shared/fetchNFTOwned.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent, applyDegenBar, computeConfigHash, getWalletBalance } from '../_shared/degenBar.ts'
+import { parseDegenPercent } from '../_shared/degenBar.ts'
+import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
 
 const RepairSchema = z.object({
   nft_id:        z.string().uuid('nft_id must be a valid UUID'),
@@ -17,19 +19,11 @@ const RepairSchema = z.object({
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
 export async function handleRepairNft(req: Request): Promise<Response> {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'repair-nft')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'repair-nft', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
-
     const cfg = await getGameConfig(supabase)
 
     console.log(`repair-nft: user ${userId}`)
@@ -48,16 +42,8 @@ export async function handleRepairNft(req: Request): Promise<Response> {
     }
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
-    const { data: nft, error: fetchNFTError } = await supabase
-      .from('nfts')
-      .select('id, energy, level, rarity')
-      .eq('id', nft_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (fetchNFTError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
-    }
+    const nft = await fetchOwned<{ id: string; energy: number; level: number; rarity: string }>(supabase, 'nfts', nft_id, userId, 'id, energy, level, rarity', origin)
+    if (nft instanceof Response) return nft
 
     if (new_energy <= nft.energy) {
       return respondError(400, 'bad_request',
@@ -76,47 +62,18 @@ export async function handleRepairNft(req: Request): Promise<Response> {
 
     // ── Apply degen bar + POOP decrement ────────────────────────────────────
     console.log(`repair-nft: degen — percent=${degenPercent}`)
-    let chargedAmount: number
-    let newBalance: number | null
-    let outcome: { busted: boolean }
-    try {
-      const result = await applyDegenBar(supabase, userId, poopCost, degenPercent, 'repair', cfg.degen_bar)
-      chargedAmount = result.chargedAmount
-      newBalance    = result.newBalance
-      outcome       = result.outcome
-    } catch (degenErr) {
-      console.error('repair-nft: applyDegenBar error', degenErr)
-      return respondError(500, 'internal_error',
-        degenErr instanceof Error ? degenErr.message : 'Unknown error',
-        undefined, origin,
-      )
-    }
+    const payment = await processPayment(supabase, userId, poopCost, degenPercent, 'repair', origin, cfg.degen_bar, {
+      insufficientMsg: (charged, balance) =>
+        `Repairing costs ${charged} POOP. You have ${balance} POOP.`,
+      insufficientDetails: (charged, balance) => ({
+        poop_balance: balance,
+        poop_required: charged,
+      }),
+    })
+    if (payment instanceof Response) return payment
+    const { chargedAmount, newBalance } = payment
 
-    console.log(`repair-nft: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
-
-    if (newBalance === null) {
-      let currentBalance = 0
-      try {
-        currentBalance = await getWalletBalance(supabase, userId)
-      } catch (walletErr) {
-        console.error('repair-nft: getWalletBalance error', { userId, error: walletErr })
-        // non-fatal; fall back to 0
-      }
-      return respondError(402, 'insufficient_poop',
-        `Repairing costs ${chargedAmount} POOP. You have ${currentBalance} POOP.`,
-        { poop_balance: currentBalance, poop_required: chargedAmount }, origin,
-      )
-    }
-
-    // ── Bust: charge full price, skip energy restore ──────────────────────────
-    if (outcome.busted) {
-      return respondError(422, 'busted', 'busted', {
-        degen_percent: degenPercent,
-        poop_spent:   chargedAmount,
-        poop_balance: newBalance,
-        config_hash:  computeConfigHash(cfg.degen_bar),
-      }, origin)
-    }
+    console.log(`repair-nft: degen — percent=${degenPercent}, charged=${chargedAmount}`)
 
     // ── Persist NFT energy ────────────────────────────────────────────────────
     const { data: updated, error: updateError } = await supabase

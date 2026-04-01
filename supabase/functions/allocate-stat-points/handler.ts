@@ -1,4 +1,5 @@
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
+import { fetchOwned } from '../_shared/fetchNFTOwned.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { MAX_STAT_VALUE } from '../../../shared/statPoints.ts'
@@ -16,18 +17,11 @@ const AllocateSchema = z.object({
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
 export async function handleAllocateStatPoints(req: Request): Promise<Response> {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'allocate-stat-points')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'allocate-stat-points', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
     console.log('allocate-stat-points: user', userId)
 
     // ── Request body ──────────────────────────────────────────────────────────
@@ -38,16 +32,8 @@ export async function handleAllocateStatPoints(req: Request): Promise<Response> 
     const totalSpend = efficiency + resilience + comfort + luck
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
-    const { data: nft, error: fetchError } = await supabase
-      .from('nfts')
-      .select('id, efficiency, resilience, comfort, luck, stat_points')
-      .eq('id', nft_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (fetchError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
-    }
+    const nft = await fetchOwned<{ id: string; efficiency: number; resilience: number; comfort: number; luck: number; stat_points: number }>(supabase, 'nfts', nft_id, userId, 'id, efficiency, resilience, comfort, luck, stat_points', origin)
+    if (nft instanceof Response) return nft
 
     // ── Validation ────────────────────────────────────────────────────────────
     if (totalSpend > nft.stat_points) {
