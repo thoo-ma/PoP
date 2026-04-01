@@ -3,11 +3,12 @@ import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
 import { breedCost } from '../../../shared/currency.ts'
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent, applyDegenBar, computeConfigHash, getWalletBalance } from '../_shared/degenBar.ts'
+import { parseDegenPercent } from '../_shared/degenBar.ts'
+import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
 
 const BreedSchema = z.object({
   parent1_id:    z.string().uuid('parent1_id must be a valid UUID'),
@@ -45,19 +46,11 @@ export function rollRarity(r1: Rarity, r2: Rarity, probsMap: Record<BreedPairKey
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
 export async function handleBreedNfts(req: Request): Promise<Response> {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'breed-nfts')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'breed-nfts', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
-
     // ── Load live game config ─────────────────────────────────────────────────
     const cfg = await getGameConfig(supabase)
 
@@ -136,51 +129,19 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
     // ── Apply degen bar + POOP decrement ─────────────────────────────────────
     console.log(`breed-nfts: degen — percent=${degenPercent}`)
-    let chargedAmount: number
-    let newBalance: number | null
-    let outcome: { busted: boolean }
-    try {
-      const result = await applyDegenBar(supabase, userId, totalBreedCost, degenPercent, 'breed', cfg.degen_bar)
-      chargedAmount = result.chargedAmount
-      newBalance    = result.newBalance
-      outcome       = result.outcome
-    } catch (degenErr) {
-      console.error('breed-nfts: applyDegenBar error', degenErr)
-      return respondError(500, 'internal_error',
-        degenErr instanceof Error ? degenErr.message : 'Unknown error',
-        undefined, origin,
-      )
-    }
+    const payment = await processPayment(supabase, userId, totalBreedCost, degenPercent, 'breed', origin, cfg.degen_bar, {
+      insufficientMsg: (charged, balance) =>
+        `Breeding costs ${charged} POOP (${p1Cost} + ${p2Cost}). You have ${balance} POOP.`,
+      insufficientDetails: (charged, balance) => ({
+        poop_balance: balance,
+        poop_required: charged,
+        poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
+      }),
+    })
+    if (payment instanceof Response) return payment
+    const { chargedAmount, newBalance } = payment
 
-    console.log(`breed-nfts: degen — percent=${degenPercent}, busted=${outcome.busted}, charged=${chargedAmount}`)
-
-    if (newBalance === null) {
-      let currentBalance = 0
-      try {
-        currentBalance = await getWalletBalance(supabase, userId)
-      } catch (walletErr) {
-        console.error('breed-nfts: getWalletBalance error', { userId, error: walletErr })
-        // non-fatal — fall back to default 0 balance for error messaging
-      }
-      return respondError(402, 'insufficient_poop',
-        `Breeding costs ${chargedAmount} POOP (${p1Cost} + ${p2Cost}). You have ${currentBalance} POOP.`,
-        {
-          poop_balance: currentBalance,
-          poop_required: chargedAmount,
-          poop_required_breakdown: { parent1: p1Cost, parent2: p2Cost },
-        }, origin,
-      )
-    }
-
-    // ── Bust: charge full price, skip offspring creation ──────────────────────
-    if (outcome.busted) {
-      return respondError(422, 'busted', 'busted', {
-        degen_percent: degenPercent,
-        poop_spent:    chargedAmount,
-        poop_balance:  newBalance,
-        config_hash:   computeConfigHash(cfg.degen_bar),
-      }, origin)
-    }
+    console.log(`breed-nfts: degen — percent=${degenPercent}, charged=${chargedAmount}`)
 
     // ── Rarity roll ───────────────────────────────────────────────────────────
     const offspringRarity = rollRarity(r1, r2, cfg.breed.BREED_PROBABILITIES)

@@ -1,5 +1,6 @@
 import type { NFTRarity as Rarity } from '../../../shared/nft.ts'
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
@@ -12,17 +13,11 @@ const OpenMysteryBoxSchema = z.object({
 // ─── Edge Function entry point ─────────────────────────────────────────────
 
 export async function handleOpenMysteryBox(req: Request): Promise<Response> {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-  const origin = req.headers.get('origin')
-  try {
-    // ── Auth ────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'open-mystery-box', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
+  const init = await initHandler(req, 'open-mystery-box')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
+  try {
     const cfg = await getGameConfig(supabase)
 
     console.log(`open-mystery-box: user ${userId}`)
@@ -33,16 +28,8 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
     const { box_id } = bodyResult
 
     // ── Fetch & ownership check ──────────────────────────────────────────────
-    const { data: box, error: fetchError } = await supabase
-      .from('mystery_boxes')
-      .select('id, rarity, opened, user_id')
-      .eq('id', box_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (fetchError || !box) {
-      return respondError(404, 'not_found', 'Mystery box not found or not owned by you', undefined, origin)
-    }
+    const box = await fetchOwned<{ id: string; rarity: string; opened: boolean; user_id: string }>(supabase, 'mystery_boxes', box_id, userId, 'id, rarity, opened, user_id', origin)
+    if (box instanceof Response) return box
 
     if (box.opened) {
       return respondError(409, 'conflict', 'This mystery box has already been opened', undefined, origin)

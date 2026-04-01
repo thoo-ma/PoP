@@ -1,4 +1,5 @@
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
@@ -31,17 +32,11 @@ const RollLootSchema = z.object({
  *   404  roll not found / not owned by caller
  */
 export async function handleRollLoot(req: Request): Promise<Response> {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'roll-loot')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    const auth = await requireAuth(req, 'roll-loot', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
-
     const cfg = await getGameConfig(supabase)
 
     const bodyResult = await parseBody(req, RollLootSchema)
@@ -49,16 +44,8 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     const { loot_roll_id } = bodyResult
 
     // Fetch and verify ownership
-    const { data: roll, error: fetchError } = await supabase
-      .from('pending_loot_rolls')
-      .select('id, holds')
-      .eq('id', loot_roll_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (fetchError || !roll) {
-      return respondError(404, 'not_found', 'Loot roll not found or not owned by you', undefined, origin)
-    }
+    const roll = await fetchOwned<{ id: string; holds: number }>(supabase, 'pending_loot_rolls', loot_roll_id, userId, 'id, holds', origin)
+    if (roll instanceof Response) return roll
 
     const holdsUsed = roll.holds
 

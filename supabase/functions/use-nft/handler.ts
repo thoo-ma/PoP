@@ -6,7 +6,8 @@ import {
 } from '../../../shared/cooldown.ts'
 import { applyXP } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
-import { requireAuth, getCorsHeaders } from '../_shared/auth.ts'
+import { initHandler } from '../_shared/handlerInit.ts'
+import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
@@ -43,19 +44,11 @@ export function calcEnergyLoss(
 // ─── Edge Function entry point ────────────────────────────────────────────────
 
 export async function handleUseNft(req: Request): Promise<Response> {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
-  }
-
-  const origin = req.headers.get('origin')
+  const init = await initHandler(req, 'use-nft')
+  if (init instanceof Response) return init
+  const { origin, userId, supabase } = init
 
   try {
-    // ── Auth ──────────────────────────────────────────────────────────────────
-    const auth = await requireAuth(req, 'use-nft', origin)
-    if (auth instanceof Response) return auth
-    const { userId, supabase } = auth
-
     // ── Load live game config (falls back to shared/ defaults) ────────────────
     const cfg = await getGameConfig(supabase)
 
@@ -67,25 +60,17 @@ export async function handleUseNft(req: Request): Promise<Response> {
     const { nft_id } = bodyResult
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
-    const { data: nft, error: fetchError } = await supabase
-      .from('nfts')
-      .select('id, type, rarity, resilience, energy, level, xp, stat_points, last_used_at')
-      .eq('id', nft_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (fetchError || !nft) {
-      return respondError(404, 'not_found', 'NFT not found or not owned by you', undefined, origin)
-    }
+    const nft = await fetchOwned<{ id: string; type: NFTType; rarity: NFTRarity | null; resilience: number; energy: number; level: number; xp: number; stat_points: number | null; last_used_at: string | null }>(supabase, 'nfts', nft_id, userId, 'id, type, rarity, resilience, energy, level, xp, stat_points, last_used_at', origin)
+    if (nft instanceof Response) return nft
 
     if (nft.energy <= 0) {
       return respondError(422, 'no_energy', 'NFT has no energy remaining', undefined, origin)
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
-    if (isOnCooldown(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)) {
-      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)!
-      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type as NFTType, nft.level, cfg.cooldown)
+    if (isOnCooldown(nft.last_used_at, nft.type, nft.level, cfg.cooldown)) {
+      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type, nft.level, cfg.cooldown)!
+      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type, nft.level, cfg.cooldown)
       console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
       return respondError(429, 'on_cooldown',
         `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
@@ -97,14 +82,14 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Energy calculation ────────────────────────────────────────────────────
-    const energyLost = calcEnergyLoss(nft.resilience, nft.type as NFTType, nft.energy, cfg.energy_drain)
+    const energyLost = calcEnergyLoss(nft.resilience, nft.type, nft.energy, cfg.energy_drain)
     const newEnergy = nft.energy - energyLost
 
     // ── Rarity (used by both POOP reward and stat points) ────────────────────
-    const rarity = (nft.rarity ?? 'common') as NFTRarity
+    const rarity: NFTRarity = nft.rarity ?? 'common'
 
     // ── POOP reward calculation ────────────────────────────────────────────────
-    const poopEarned = calcPoopEarned(nft.type as NFTType, rarity, nft.level, cfg.currency)
+    const poopEarned = calcPoopEarned(nft.type, rarity, nft.level, cfg.currency)
 
     // ── XP calculation ───────────────────────────────────────────────────────
     const xpGained = cfg.xp.XP_PER_USE
