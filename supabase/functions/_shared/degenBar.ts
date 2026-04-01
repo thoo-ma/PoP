@@ -2,11 +2,12 @@
  * degenBar — shared helper for edge functions.
  *
  * Wraps the pure formula functions from shared/degenBar.ts into
- * two utilities that are used by repair-nft and breed-nfts:
+ * three utilities that are used by repair-nft and breed-nfts:
  *
  *  - applyDegenBar(supabase, userId, baseCost, degenPercent, action, cfg?)
  *      → { chargedAmount, newBalance, outcome }
  *  - computeConfigHash(cfg) → deterministic JSON string fingerprint
+ *  - getWalletBalance(supabase, userId) → current POOP balance
  */
 
 import {
