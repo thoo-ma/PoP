@@ -7,13 +7,12 @@ import { initHandler } from '../_shared/handlerInit.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent } from '../_shared/degenBar.ts'
 import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
 
 const BreedSchema = z.object({
   parent1_id:    z.string().uuid('parent1_id must be a valid UUID'),
   parent2_id:    z.string().uuid('parent2_id must be a valid UUID'),
-  degen_percent: z.number().int().min(0).max(100).default(0).optional(),
+  degen_percent: z.number().int().min(0).max(100).default(0),
 }).refine((d) => d.parent1_id !== d.parent2_id, {
   message: 'Cannot breed an NFT with itself',
   path: ['parent2_id'],
@@ -59,15 +58,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     // ── Request body ──────────────────────────────────────────────────────────
     const bodyResult = await parseBody(req, BreedSchema)
     if (bodyResult instanceof Response) return bodyResult
-    const { parent1_id, parent2_id } = bodyResult
-
-    // ── Degen percent ─────────────────────────────────────────────────────────
-    let degenPercent: number
-    try {
-      degenPercent = parseDegenPercent(bodyResult)
-    } catch {
-      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100', undefined, origin)
-    }
+    const { parent1_id, parent2_id, degen_percent: degenPercent } = bodyResult
 
     // ── Fetch & ownership check ───────────────────────────────────────────────
     const { data: parents, error: fetchError } = await supabase

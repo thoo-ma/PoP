@@ -6,14 +6,13 @@ import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { parseDegenPercent } from '../_shared/degenBar.ts'
 import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
 
 const RepairSchema = z.object({
   nft_id:        z.string().uuid('nft_id must be a valid UUID'),
   new_energy:    z.number().int().min(0).max(MAX_ENERGY,
     `new_energy must be between 0 and ${MAX_ENERGY}`),
-  degen_percent: z.number().int().min(0).max(100).default(0).optional(),
+  degen_percent: z.number().int().min(0).max(100).default(0),
 })
 
 // ─── Edge Function entry point ────────────────────────────────────────────────
@@ -31,15 +30,7 @@ export async function handleRepairNft(req: Request): Promise<Response> {
     // ── Request body ──────────────────────────────────────────────────────────
     const bodyResult = await parseBody(req, RepairSchema)
     if (bodyResult instanceof Response) return bodyResult
-    const { nft_id, new_energy } = bodyResult
-
-    // ── Degen percent ─────────────────────────────────────────────────────────
-    let degenPercent: number
-    try {
-      degenPercent = parseDegenPercent(bodyResult)
-    } catch {
-      return respondError(400, 'bad_request', 'degen_percent must be an integer between 0 and 100', undefined, origin)
-    }
+    const { nft_id, new_energy, degen_percent: degenPercent } = bodyResult
 
     // ── Fetch NFT & ownership check ───────────────────────────────────────────
     const nft = await fetchOwned<{ id: string; energy: number; level: number; rarity: string }>(supabase, 'nfts', nft_id, userId, 'id, energy, level, rarity', origin)
