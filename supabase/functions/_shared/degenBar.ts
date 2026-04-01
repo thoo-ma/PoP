@@ -2,15 +2,14 @@
  * degenBar — shared helper for edge functions.
  *
  * Wraps the pure formula functions from shared/degenBar.ts into
- * two utilities that are used by repair-nft and breed-nfts:
+ * three utilities that are used by repair-nft and breed-nfts:
  *
- *  - parseDegenPercent(body) → validated integer (0 if omitted)
  *  - applyDegenBar(supabase, userId, baseCost, degenPercent, action, cfg?)
  *      → { chargedAmount, newBalance, outcome }
  *  - computeConfigHash(cfg) → deterministic JSON string fingerprint
+ *  - getWalletBalance(supabase, userId) → current POOP balance
  */
 
-import { z } from 'zod'
 import {
   calcReducedCost,
   resolveDegenOutcome,
@@ -19,21 +18,6 @@ import {
 } from '../../../shared/degenBar.ts'
 import type { DegenBarConfig } from '../../../shared/schemas.ts'
 import type { SupabaseClient } from './auth.ts'
-
-// ─── parseDegenPercent ────────────────────────────────────────────────────────
-
-const DegenPercentSchema = z.object({
-  degen_percent: z.number().int().min(0).max(100).default(0),
-})
-
-/**
- * Parse and validate `degen_percent` from a request body (already decoded).
- * Returns 0 when the field is absent (backward-compatible default).
- * Throws a Zod error on invalid input (caller should catch → 400).
- */
-export function parseDegenPercent(body: unknown): number {
-  return DegenPercentSchema.parse(body).degen_percent
-}
 
 // ─── applyDegenBar ────────────────────────────────────────────────────────────
 
