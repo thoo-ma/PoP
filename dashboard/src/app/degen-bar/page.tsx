@@ -1,14 +1,13 @@
 'use client'
 
+import { calcBustChance, calcReducedCost, calcReduction } from '@pop/shared/degenBar'
 import { useMemo } from 'react'
-import { useGameConfigStore } from '@/store/gameConfigStore'
 import { useShallow } from 'zustand/react/shallow'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
-
-import { Button } from '@/components/ui/button'
-import { calcReduction, calcBustChance, calcReducedCost } from '@pop/shared/degenBar'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 const BASE_COST = 100
 const PREVIEW_LEVELS = [0, 10, 25, 50, 75, 100]

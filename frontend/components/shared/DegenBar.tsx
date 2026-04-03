@@ -1,12 +1,12 @@
-import { Text, View } from 'react-native'
-import { Slider, cn } from 'heroui-native'
-import { useState } from 'react'
 import {
-  calcReduction,
   calcBustChance,
   calcReducedCost,
+  calcReduction,
   DEGEN_ZONE_THRESHOLD,
 } from '@pop/shared/degenBar'
+import { cn, Slider } from 'heroui-native'
+import { useState } from 'react'
+import { Text, View } from 'react-native'
 import { infoBox } from '@/styles'
 
 // Re-export for consumers that import the hash helper from this module

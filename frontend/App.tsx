@@ -1,17 +1,23 @@
 import 'react-native-gesture-handler'
 import './global.css'
 import { StatusBar } from 'expo-status-bar'
-import { View, FlatList, type ViewToken, Dimensions } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { useState, useCallback, useRef } from 'react'
-import { useAuth, useUserApproval } from '@/hooks'
-import { Auth, PageIndicator, ProfileButton, WalletButton, ScreenHeader, ErrorBoundary } from '@/components'
-import { InviteCodeScreen, Profile, Wallet } from '@/screens'
-import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
-import { colors } from '@/constants'
-
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { HeroUINativeProvider, Spinner } from 'heroui-native'
+import { useCallback, useRef, useState } from 'react'
+import { Dimensions, FlatList, View, type ViewToken } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import {
+  Auth,
+  ErrorBoundary,
+  PageIndicator,
+  ProfileButton,
+  ScreenHeader,
+  WalletButton,
+} from '@/components'
+import { colors } from '@/constants'
+import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
+import { useAuth, useUserApproval } from '@/hooks'
+import { InviteCodeScreen, Profile, Wallet } from '@/screens'
 
 export default function App() {
   return (
@@ -83,7 +89,11 @@ function AppInner() {
 
   // No session - show auth screen
   if (!session) {
-    return <ErrorBoundary><Auth /></ErrorBoundary>
+    return (
+      <ErrorBoundary>
+        <Auth />
+      </ErrorBoundary>
+    )
   }
 
   // Session exists but user not approved - show invite code screen (BLOCKING)

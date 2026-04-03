@@ -1,7 +1,7 @@
 'use client'
 
-import { AppSidebar } from '@/components/layout/Sidebar'
 import { Header } from '@/components/layout/Header'
+import { AppSidebar } from '@/components/layout/Sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 export function AppShell({ children }: { children: React.ReactNode }) {

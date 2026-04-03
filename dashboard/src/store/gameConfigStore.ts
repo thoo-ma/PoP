@@ -4,44 +4,77 @@ import { create } from 'zustand'
 
 // ─── Imports: all tunable constants from @pop/shared ──────────────────────────
 
-import {
-  REWARD_BASE_PRICE_USD, REWARD_GROWTH_RATE, REWARD_USD_PER_TOKEN,
-  REWARD_TYPE_MULTIPLIER, REWARD_RARITY_MULTIPLIER,
-  REPAIR_COEF_A, REPAIR_COEF_B, REPAIR_USD_PER_TOKEN, REPAIR_RARITY_MULTIPLIER,
-  BREED_BASE_PRICE_USD, BREED_GROWTH_RATE, BREED_USD_PER_TOKEN,
-  BREED_MAX_COUNT, BREED_RARITY_MULTIPLIER,
-} from '@pop/shared/currency'
-import { COOLDOWN_BASES, LINEAR_MULT, EXP_MULT } from '@pop/shared/cooldown'
-import {
-  XP_PER_USE, XP_FORMULA_BASE, XP_FORMULA_LINEAR,
-  XP_FORMULA_QUADRATIC, XP_FORMULA_FLOOR,
-} from '@pop/shared/xp'
-import { STAT_POINTS_BY_RARITY } from '@pop/shared/statPoints'
 import { BREED_PROBABILITIES } from '@pop/shared/breedProbabilities'
-import { STAT_RANGES } from '@pop/shared/minting'
-import { SENSOR_PRESETS, AUDIO_THRESHOLDS } from '@pop/shared/sensors'
-import { TYPE_DRAIN_MULT, ENERGY_ROLL_MIN, ENERGY_ROLL_MAX } from '@pop/shared/energyDrain'
-import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT, MAX_HOLDS } from '@pop/shared/lootRoll'
 import {
-  YAMNET_TOILET_FLUSH_CLASS, MAX_AUDIO_DURATION,
-  MIN_AUDIO_DURATION, DETECTIONS_PER_DAY,
+  DETECTIONS_PER_DAY,
+  MAX_AUDIO_DURATION,
+  MIN_AUDIO_DURATION,
+  YAMNET_TOILET_FLUSH_CLASS,
 } from '@pop/shared/cloudRun'
+import { COOLDOWN_BASES, EXP_MULT, LINEAR_MULT } from '@pop/shared/cooldown'
 import {
-  SAFE_BUST_COEF, DEGEN_BUST_BASE, DEGEN_BUST_SCALE,
-  DEGEN_ZONE_THRESHOLD, MAX_REDUCTION,
+  BREED_BASE_PRICE_USD,
+  BREED_GROWTH_RATE,
+  BREED_MAX_COUNT,
+  BREED_RARITY_MULTIPLIER,
+  BREED_USD_PER_TOKEN,
+  REPAIR_COEF_A,
+  REPAIR_COEF_B,
+  REPAIR_RARITY_MULTIPLIER,
+  REPAIR_USD_PER_TOKEN,
+  REWARD_BASE_PRICE_USD,
+  REWARD_GROWTH_RATE,
+  REWARD_RARITY_MULTIPLIER,
+  REWARD_TYPE_MULTIPLIER,
+  REWARD_USD_PER_TOKEN,
+} from '@pop/shared/currency'
+import {
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  MAX_REDUCTION,
+  SAFE_BUST_COEF,
 } from '@pop/shared/degenBar'
-
+import { ENERGY_ROLL_MAX, ENERGY_ROLL_MIN, TYPE_DRAIN_MULT } from '@pop/shared/energyDrain'
+import { BASE_WIN_PROBABILITY, MAX_HOLDS, PER_HOLD_INCREMENT } from '@pop/shared/lootRoll'
+import { STAT_RANGES } from '@pop/shared/minting'
 import type {
-  CurrencyConfig, CooldownConfig, XpConfig, StatPointsConfig,
-  BreedConfig, MintingConfig, SensorsConfig, EnergyDrainConfig,
-  LootRollConfig, CloudRunConfig, DegenBarConfig,
+  BreedConfig,
+  CloudRunConfig,
+  CooldownConfig,
+  CurrencyConfig,
+  DegenBarConfig,
+  EnergyDrainConfig,
+  LootRollConfig,
+  MintingConfig,
+  SensorsConfig,
+  StatPointsConfig,
+  XpConfig,
 } from '@pop/shared/schemas'
+import { AUDIO_THRESHOLDS, SENSOR_PRESETS } from '@pop/shared/sensors'
+import { STAT_POINTS_BY_RARITY } from '@pop/shared/statPoints'
+import {
+  XP_FORMULA_BASE,
+  XP_FORMULA_FLOOR,
+  XP_FORMULA_LINEAR,
+  XP_FORMULA_QUADRATIC,
+  XP_PER_USE,
+} from '@pop/shared/xp'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type GameConfigKey =
-  | 'currency' | 'cooldown' | 'xp' | 'stat_points' | 'breed'
-  | 'minting' | 'sensors' | 'energy_drain' | 'loot_roll' | 'cloud_run' | 'degen_bar'
+  | 'currency'
+  | 'cooldown'
+  | 'xp'
+  | 'stat_points'
+  | 'breed'
+  | 'minting'
+  | 'sensors'
+  | 'energy_drain'
+  | 'loot_roll'
+  | 'cloud_run'
+  | 'degen_bar'
 
 export interface GameConfig {
   currency: CurrencyConfig
@@ -75,11 +108,20 @@ interface GameConfigState {
 
 const CONFIG: GameConfig = {
   currency: {
-    REWARD_BASE_PRICE_USD, REWARD_GROWTH_RATE, REWARD_USD_PER_TOKEN,
-    REWARD_TYPE_MULTIPLIER, REWARD_RARITY_MULTIPLIER,
-    REPAIR_COEF_A, REPAIR_COEF_B, REPAIR_USD_PER_TOKEN, REPAIR_RARITY_MULTIPLIER,
-    BREED_BASE_PRICE_USD, BREED_GROWTH_RATE, BREED_USD_PER_TOKEN,
-    BREED_MAX_COUNT, BREED_RARITY_MULTIPLIER,
+    REWARD_BASE_PRICE_USD,
+    REWARD_GROWTH_RATE,
+    REWARD_USD_PER_TOKEN,
+    REWARD_TYPE_MULTIPLIER,
+    REWARD_RARITY_MULTIPLIER,
+    REPAIR_COEF_A,
+    REPAIR_COEF_B,
+    REPAIR_USD_PER_TOKEN,
+    REPAIR_RARITY_MULTIPLIER,
+    BREED_BASE_PRICE_USD,
+    BREED_GROWTH_RATE,
+    BREED_USD_PER_TOKEN,
+    BREED_MAX_COUNT,
+    BREED_RARITY_MULTIPLIER,
   },
   cooldown: { COOLDOWN_BASES, LINEAR_MULT, EXP_MULT },
   xp: { XP_PER_USE, XP_FORMULA_BASE, XP_FORMULA_LINEAR, XP_FORMULA_QUADRATIC, XP_FORMULA_FLOOR },
@@ -89,8 +131,19 @@ const CONFIG: GameConfig = {
   sensors: { SENSOR_PRESETS, AUDIO_THRESHOLDS },
   energy_drain: { TYPE_DRAIN_MULT, ENERGY_ROLL_MIN, ENERGY_ROLL_MAX },
   loot_roll: { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT, MAX_HOLDS },
-  cloud_run: { YAMNET_TOILET_FLUSH_CLASS, MAX_AUDIO_DURATION, MIN_AUDIO_DURATION, DETECTIONS_PER_DAY },
-  degen_bar: { SAFE_BUST_COEF, DEGEN_BUST_BASE, DEGEN_BUST_SCALE, DEGEN_ZONE_THRESHOLD, MAX_REDUCTION },
+  cloud_run: {
+    YAMNET_TOILET_FLUSH_CLASS,
+    MAX_AUDIO_DURATION,
+    MIN_AUDIO_DURATION,
+    DETECTIONS_PER_DAY,
+  },
+  degen_bar: {
+    SAFE_BUST_COEF,
+    DEGEN_BUST_BASE,
+    DEGEN_BUST_SCALE,
+    DEGEN_ZONE_THRESHOLD,
+    MAX_REDUCTION,
+  },
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────

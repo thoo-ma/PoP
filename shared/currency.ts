@@ -6,8 +6,7 @@
  * Frontend imports via:   @shared  (tsconfig path alias)
  */
 
-import type { NFTRarity } from './nft.ts'
-import type { NFTType } from './nft.ts'
+import type { NFTRarity, NFTType } from './nft.ts'
 
 // ─── Repair cost formula ─────────────────────────────────────────────────────
 // Cost ($) = (REPAIR_COEF_A × level² + REPAIR_COEF_B) × RarityMultiplier

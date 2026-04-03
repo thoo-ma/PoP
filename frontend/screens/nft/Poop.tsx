@@ -1,39 +1,39 @@
-import { Text, View, Image, ScrollView } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState, useCallback, useEffect, useRef } from 'react'
-import { Button, Dialog, ScrollShadow, cn } from 'heroui-native'
-import {
-  phaseContainer,
-  challengeHeader,
-  phaseContent,
-  timerText,
-  statusBadge,
-  resultCard,
-  infoCard,
-  recordingIndicator,
-  toastBanner,
-  scrollContent,
-  nftPickerButton,
-  badgeLabel,
-  nftDetailCard,
-  overlayBadge,
-  typeBadge,
-  dialogBody,
-} from '@/styles'
-import { useUserNFTs, usePoopNFT, useImmobilityChallenge, useToiletDetection } from '@/hooks'
-import {
-  ScreenLoader,
-  ScreenError,
-  NFTSelector,
-  NFTProperties,
-  StatAllocationModal,
-  LootRouletteCard,
-} from '@/components'
-import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils'
 import { getThresholdForDifficulty } from '@pop/shared/sensors'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button, cn, Dialog, ScrollShadow } from 'heroui-native'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { Image, ScrollView, Text, View } from 'react-native'
+import {
+  LootRouletteCard,
+  NFTProperties,
+  NFTSelector,
+  ScreenError,
+  ScreenLoader,
+  StatAllocationModal,
+} from '@/components'
 import { getCooldownStatus } from '@/constants'
-import type { NFT } from '@/types'
 import type { AllocateResult } from '@/hooks'
+import { useImmobilityChallenge, usePoopNFT, useToiletDetection, useUserNFTs } from '@/hooks'
+import {
+  badgeLabel,
+  challengeHeader,
+  dialogBody,
+  infoCard,
+  nftDetailCard,
+  nftPickerButton,
+  overlayBadge,
+  phaseContainer,
+  phaseContent,
+  recordingIndicator,
+  resultCard,
+  scrollContent,
+  statusBadge,
+  timerText,
+  toastBanner,
+  typeBadge,
+} from '@/styles'
+import type { NFT } from '@/types'
+import { formatConfidencePercentage, formatDisplayName, nftEvents } from '@/utils'
 
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
   'turbo-flush': 5_000,
@@ -133,9 +133,7 @@ export default memo(function Poop() {
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return
-    const ready = nfts.findIndex(
-      (n) => n.energy > 0 && !getCooldownStatus(n).isOnCooldown,
-    )
+    const ready = nfts.findIndex((n) => n.energy > 0 && !getCooldownStatus(n).isOnCooldown)
     const withEnergy = nfts.findIndex((n) => n.energy > 0)
     setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0)
   }

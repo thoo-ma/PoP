@@ -1,23 +1,23 @@
-import { Text, View, Image, ScrollView } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState } from 'react'
-import { Button, ScrollShadow, cn } from 'heroui-native'
-import { screenContainer, scrollContent, errorMessage, infoBox } from '@/styles'
-import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks'
-import type { NFT } from '@/types/nft'
 import type { MysteryBox } from '@pop/shared'
-import { breedCost, BREED_MAX_COUNT } from '@pop/shared'
+import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button, cn, ScrollShadow } from 'heroui-native'
+import { memo, useState } from 'react'
+import { Image, ScrollView, Text, View } from 'react-native'
 import {
-  MysteryBoxCard,
-  ScreenLoader,
-  ScreenError,
-  BreedPickerModal,
   BreedOutcomePanel,
   BreedParentSlot,
+  BreedPickerModal,
   DegenBar,
+  MysteryBoxCard,
+  ScreenError,
+  ScreenLoader,
 } from '@/components'
-import { nftEvents, canBreed } from '@/utils'
+import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
+import { errorMessage, infoBox, screenContainer, scrollContent } from '@/styles'
+import type { NFT } from '@/types/nft'
+import { canBreed, nftEvents } from '@/utils'
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 /**
@@ -183,8 +183,8 @@ import { nftEvents, canBreed } from '@/utils'
 
               {atBreedLimit && (
                 <Text className={errorMessage()}>
-                  One of the selected NFTs has reached its max breed count (
-                  {BREED_MAX_COUNT}) and cannot be bred again.
+                  One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT}) and
+                  cannot be bred again.
                 </Text>
               )}
 

@@ -1,23 +1,23 @@
-import { Text, View, Image, ScrollView } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState } from 'react'
-import { Button, Dialog, ScrollShadow, Slider, cn } from 'heroui-native'
-import {
-  screenContainer,
-  scrollContent,
-  nftPickerButton,
-  badgeLabel,
-  nftDetailCard,
-  overlayBadge,
-  typeBadge,
-  dialogBody,
-  infoBox,
-} from '@/styles'
-import { NFTProperties, ScreenLoader, ScreenError, NFTSelector, DegenBar } from '@/components'
-import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks'
 import { MAX_ENERGY, repairCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
-import { nftEvents, formatDisplayName } from '@/utils'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button, cn, Dialog, ScrollShadow, Slider } from 'heroui-native'
+import { memo, useState } from 'react'
+import { Image, ScrollView, Text, View } from 'react-native'
+import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from '@/components'
+import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
+import {
+  badgeLabel,
+  dialogBody,
+  infoBox,
+  nftDetailCard,
+  nftPickerButton,
+  overlayBadge,
+  screenContainer,
+  scrollContent,
+  typeBadge,
+} from '@/styles'
+import { formatDisplayName, nftEvents } from '@/utils'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -43,12 +43,7 @@ export default memo(function Repair() {
   const maxRepairPossible = MAX_ENERGY - currentEnergy
   // Cost in POOP, recalculated whenever the slider or selected NFT changes
   const poopCost = selectedNFT
-    ? repairCost(
-        selectedNFT.level,
-        selectedNFT.rarity,
-        Math.round(repairAmount),
-        MAX_ENERGY,
-      )
+    ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY)
     : 0
   const detailStyles = nftDetailCard()
 

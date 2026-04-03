@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react'
+import type { BustedDetails, EdgeFunctionErrorResponse, InsufficientPoopDetails } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import { useCallback, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
-import type { EdgeFunctionErrorResponse, InsufficientPoopDetails, BustedDetails } from '@pop/shared'
 
 export interface RepairResult {
   id: string

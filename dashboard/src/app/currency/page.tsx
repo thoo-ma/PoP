@@ -1,10 +1,10 @@
 'use client'
 
-import { useGameConfigStore } from '@/store/gameConfigStore'
+import { BreedTab, RepairTab, RewardTab } from '@/components/currency'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { RewardTab, RepairTab, BreedTab } from '@/components/currency'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 export default function CurrencyPanel() {
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)

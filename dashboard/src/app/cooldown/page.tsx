@@ -1,18 +1,17 @@
 'use client'
 
+import { calcCooldownHours } from '@pop/shared/cooldown'
+import { MAX_LEVEL } from '@pop/shared/xp'
 import { useMemo } from 'react'
-import LazyChart from '@/components/LazyChart'
-import { useGameConfigStore } from '@/store/gameConfigStore'
 import { useShallow } from 'zustand/react/shallow'
+import LazyChart from '@/components/LazyChart'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
-
-import { Button } from '@/components/ui/button'
-import { MAX_LEVEL } from '@pop/shared/xp'
-import { calcCooldownHours } from '@pop/shared/cooldown'
-import { TYPES, TYPE_COLORS } from '@/lib/constants'
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
+import { CHART_AXIS_STYLES, CHART_LEGEND, CHART_SPLIT_LINE, CHART_TOOLTIP } from '@/lib/chartTheme'
+import { TYPE_COLORS, TYPES } from '@/lib/constants'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 function formatHours(h: number): string {
   if (h < 1) return `${Math.round(h * 60)}m`

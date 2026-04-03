@@ -1,10 +1,6 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { useGameConfigStore } from '@/store/gameConfigStore'
-import { Button } from '@/components/ui/button'
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import { Separator } from '@/components/ui/separator'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +9,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 const SECTION_LABELS: Record<string, string> = {
   '/xp': 'XP & Leveling',
