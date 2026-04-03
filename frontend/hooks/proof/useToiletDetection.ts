@@ -1,16 +1,35 @@
 import { useState, useCallback } from 'react'
-import { Audio } from 'expo-av'
+import {
+  useAudioRecorder,
+  useAudioRecorderState,
+  requestRecordingPermissionsAsync,
+  setAudioModeAsync,
+  IOSOutputFormat,
+  AudioQuality,
+} from 'expo-audio'
+import type { RecordingOptions } from 'expo-audio'
 import * as FileSystem from 'expo-file-system'
 import { detectToiletFlush } from '@/lib/toiletDetectionApi'
 import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '@/types/audio'
 import { isRateLimitError } from '@/utils/errorHelpers'
 import { useErrorHandler } from '@/hooks/useErrorHandler'
 
+/** Mono recording options — smaller file for detection pipeline. */
+const RECORDING_OPTIONS: RecordingOptions = {
+  extension: '.m4a',
+  sampleRate: 44100,
+  numberOfChannels: 1,
+  bitRate: 128000,
+  android: { outputFormat: 'mpeg4', audioEncoder: 'aac' },
+  ios: { outputFormat: IOSOutputFormat.MPEG4AAC, audioQuality: AudioQuality.HIGH },
+  web: { mimeType: 'audio/webm', bitsPerSecond: 128000 },
+}
+
 /**
  * Hook to record audio and submit it to the toilet-flush detection pipeline.
  *
  * Manages the full recording lifecycle: requesting microphone permission,
- * starting/stopping an `expo-av` recording session, handing the base-64
+ * starting/stopping an `expo-audio` recording session, handling the base-64
  * audio to `detectToiletFlush`, and surfacing the detection result or any
  * rate-limit / error state to the caller.
  *
@@ -18,13 +37,14 @@ import { useErrorHandler } from '@/hooks/useErrorHandler'
  *   the last `RateLimitError`, and error state.
  */
 export const useToiletDetection = (): UseToiletDetectionReturn => {
-  const [isRecording, setIsRecording] = useState(false)
+  const recorder = useAudioRecorder(RECORDING_OPTIONS)
+  const recorderState = useAudioRecorderState(recorder)
+
   const [audioUri, setAudioUri] = useState<string | null>(null)
   const [detectionResult, setDetectionResult] = useState<DetectionResult | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const { error, handleError, clearError } = useErrorHandler('ToiletDetection')
   const [rateLimitError, setRateLimitError] = useState<RateLimitError | null>(null)
-  const [recording, setRecording] = useState<Audio.Recording | null>(null)
 
   const startRecording = useCallback(async () => {
     try {
@@ -35,7 +55,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       setAudioUri(null)
 
       // Request permissions
-      const permission = await Audio.requestPermissionsAsync()
+      const permission = await requestRecordingPermissionsAsync()
       if (!permission.granted) {
         if (permission.canAskAgain) {
           handleError(
@@ -54,60 +74,35 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
       }
 
       // Configure audio mode
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
+      await setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
       })
 
-      // Create recording with high quality settings
-      const { recording: newRecording } = await Audio.Recording.createAsync({
-        ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
-        android: {
-          extension: '.m4a',
-          outputFormat: Audio.AndroidOutputFormat.MPEG_4,
-          audioEncoder: Audio.AndroidAudioEncoder.AAC,
-          sampleRate: 44100,
-          numberOfChannels: 1,
-          bitRate: 128000,
-        },
-        ios: {
-          extension: '.m4a',
-          outputFormat: Audio.IOSOutputFormat.MPEG4AAC,
-          audioQuality: Audio.IOSAudioQuality.HIGH,
-          sampleRate: 44100,
-          numberOfChannels: 1,
-          bitRate: 128000,
-        },
-        web: {
-          mimeType: 'audio/webm',
-          bitsPerSecond: 128000,
-        },
-      })
-
-      setRecording(newRecording)
-      setIsRecording(true)
+      // Prepare and start recording
+      await recorder.prepareToRecordAsync()
+      recorder.record()
     } catch (err) {
       handleError(err, 'Failed to start recording')
     }
-  }, [clearError, handleError])
+  }, [clearError, handleError, recorder])
 
   const stopRecording = useCallback(async () => {
     try {
-      if (!recording) {
+      if (!recorderState.isRecording) {
         return
       }
 
-      setIsRecording(false)
-      await recording.stopAndUnloadAsync()
+      await recorder.stop()
 
       // Reset audio mode
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
       })
 
-      const uri = recording.getURI()
+      const uri = recorder.uri
       setAudioUri(uri)
-      setRecording(null)
 
       if (!uri) {
         handleError(new Error('Failed to save recording'), 'Failed to save recording')
@@ -115,7 +110,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
     } catch (err) {
       handleError(err, 'Failed to stop recording')
     }
-  }, [recording, handleError])
+  }, [recorderState.isRecording, recorder, handleError])
 
   const analyzeAudio = useCallback(
     async (threshold: number = 0.5) => {
@@ -160,7 +155,7 @@ export const useToiletDetection = (): UseToiletDetectionReturn => {
   }, [clearError])
 
   return {
-    isRecording,
+    isRecording: recorderState.isRecording,
     audioUri,
     detectionResult,
     isAnalyzing,

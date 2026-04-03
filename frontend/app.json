@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "scheme": "pop",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -25,7 +24,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.popcorporation.pop"
     },
     "web": {
@@ -33,6 +31,13 @@
     },
     "plugins": [
       "expo-web-browser",
+      "expo-font",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
       [
         "@embrace-io/react-native/lib/app.plugin.js",
         {
