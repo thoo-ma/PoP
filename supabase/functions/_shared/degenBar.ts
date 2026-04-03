@@ -14,6 +14,11 @@ import {
   calcReducedCost,
   resolveDegenOutcome,
   DEGEN_BAR_HASH_KEYS,
+  SAFE_BUST_COEF,
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  MAX_REDUCTION,
   type DegenOutcome,
 } from '../../../shared/degenBar.ts'
 import type { DegenBarConfig } from '../../../shared/schemas.ts'
@@ -111,13 +116,21 @@ export async function applyDegenBar(
 
 // ─── computeConfigHash ────────────────────────────────────────────────────────
 
+const DEGEN_BAR_DEFAULTS: DegenBarConfig = {
+  SAFE_BUST_COEF,
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  MAX_REDUCTION,
+}
+
 /**
  * Deterministic JSON string fingerprint of the 5 degen_bar config values.
  * Key order is explicit and stable so server and client hashes always match.
- * Included in responses so the frontend can detect config drift.
  */
-export function computeConfigHash(cfg: DegenBarConfig): string {
-  return JSON.stringify(Object.fromEntries(DEGEN_BAR_HASH_KEYS.map((k) => [k, cfg[k]])))
+export function computeConfigHash(cfg?: DegenBarConfig): string {
+  const c = cfg ?? DEGEN_BAR_DEFAULTS
+  return JSON.stringify(Object.fromEntries(DEGEN_BAR_HASH_KEYS.map((k) => [k, c[k]])))
 }
 
 // ─── getWalletBalance ─────────────────────────────────────────────────────────

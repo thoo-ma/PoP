@@ -1,10 +1,9 @@
 import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/nft.ts'
 import type { Tables } from '../../../shared/database.types.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
-import type { BreedPairKey } from '../../../shared/breedProbabilities.ts'
-import { breedCost } from '../../../shared/currency.ts'
+import { BREED_PROBABILITIES, type BreedPairKey } from '../../../shared/breedProbabilities.ts'
+import { breedCost, BREED_MAX_COUNT } from '../../../shared/currency.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
@@ -50,9 +49,6 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-    // ── Load live game config ─────────────────────────────────────────────────
-    const cfg = await getGameConfig(supabase)
-
     console.log(`breed-nfts: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
@@ -94,7 +90,6 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     // ── Breed count cap check ─────────────────────────────────────────────────
     const p1BreedCount = p1.breed_count ?? 0
     const p2BreedCount = p2.breed_count ?? 0
-    const BREED_MAX_COUNT = cfg.currency.BREED_MAX_COUNT
 
     if (p1BreedCount >= BREED_MAX_COUNT || p2BreedCount >= BREED_MAX_COUNT) {
       const exhausted = p1BreedCount >= BREED_MAX_COUNT ? parent1_id : parent2_id
@@ -107,8 +102,8 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     // ── Dynamic breed cost ────────────────────────────────────────────────────
     // Each parent is charged independently based on its own breed_count and
     // rarity; the session total is the sum of both individual costs.
-    const p1Cost = breedCost(p1BreedCount, r1, cfg.currency)
-    const p2Cost = breedCost(p2BreedCount, r2, cfg.currency)
+    const p1Cost = breedCost(p1BreedCount, r1)
+    const p2Cost = breedCost(p2BreedCount, r2)
     const totalBreedCost = p1Cost + p2Cost
 
     console.log(
@@ -120,7 +115,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
 
     // ── Apply degen bar + POOP decrement ─────────────────────────────────────
     console.log(`breed-nfts: degen — percent=${degenPercent}`)
-    const payment = await processPayment(supabase, userId, totalBreedCost, degenPercent, 'breed', origin, cfg.degen_bar, {
+    const payment = await processPayment(supabase, userId, totalBreedCost, degenPercent, 'breed', origin, undefined, {
       insufficientMsg: (charged, balance) =>
         `Breeding costs ${charged} POOP (${p1Cost} + ${p2Cost}). You have ${balance} POOP.`,
       insufficientDetails: (charged, balance) => ({
@@ -135,7 +130,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
     console.log(`breed-nfts: degen — percent=${degenPercent}, charged=${chargedAmount}`)
 
     // ── Rarity roll ───────────────────────────────────────────────────────────
-    const offspringRarity = rollRarity(r1, r2, cfg.breed.BREED_PROBABILITIES)
+    const offspringRarity = rollRarity(r1, r2, BREED_PROBABILITIES)
 
     console.log(`breed-nfts: ${r1}+${r2} → mystery box (${offspringRarity}) (key: ${rarityKey(r1, r2)})`)
 
@@ -200,7 +195,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
       degen_percent: degenPercent,
       original_cost: totalBreedCost,
       reduced_cost:  chargedAmount,
-      config_hash:   computeConfigHash(cfg.degen_bar),
+      config_hash:   computeConfigHash(),
       ...(warnings.length ? { warnings } : {}),
     }
 

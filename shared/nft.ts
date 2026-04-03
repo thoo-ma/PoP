@@ -10,13 +10,10 @@ export type NFTType = 'cruise-seat' | 'turbo-flush' | 'zen-fortress'
 
 export type NFTRarity = 'common' | 'rare' | 'legendary' | 'transcendent'
 
-// @migration: KEEP — structural invariant; never moves to DB
 export const RARITIES: NFTRarity[] = ['common', 'rare', 'legendary', 'transcendent']
 
-// @migration: KEEP — structural invariant; never moves to DB
 export const NFT_TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress']
 
-// @migration: KEEP — structural invariant; never moves to DB
 export const RARITY_RANK: Record<NFTRarity, number> = {
   common: 0,
   rare: 1,
@@ -34,7 +31,6 @@ export type MysteryBox = {
 }
 
 /** Maps each NFT type to its available named slugs (matches Supabase storage structure). */
-// @migration: KEEP — structural invariant; never moves to DB
 export const TYPE_NAMES: Record<NFTType, readonly string[]> = {
   'cruise-seat': [
     'ancient-egyptian',

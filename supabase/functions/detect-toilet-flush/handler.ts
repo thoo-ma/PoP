@@ -1,5 +1,5 @@
+import { DETECTIONS_PER_DAY } from '../../../shared/cloudRun.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -33,8 +33,7 @@ export async function handleDetectToiletFlush(req: Request): Promise<Response> {
     const { audio_base64, threshold } = bodyResult
 
     // Check rate limit
-    const cfg = await getGameConfig(supabase)
-    const detectionsPerDay = cfg.cloud_run.DETECTIONS_PER_DAY
+    const detectionsPerDay = DETECTIONS_PER_DAY
 
     // Count user's detections in the last 24 hours
     const { count, error: countError } = await supabase

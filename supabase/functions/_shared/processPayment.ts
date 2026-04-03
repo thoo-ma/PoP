@@ -24,7 +24,7 @@ export type ProcessPaymentOpts = {
  * On any error / bust / insufficient-funds: returns a `Response` the caller should return directly.
  *
  * ```ts
- * const payment = await processPayment(supabase, userId, cost, degenPercent, 'repair', origin, cfg.degen_bar)
+ * const payment = await processPayment(supabase, userId, cost, degenPercent, 'repair', origin)
  * if (payment instanceof Response) return payment
  * const { chargedAmount, newBalance } = payment
  * ```
@@ -36,7 +36,7 @@ export async function processPayment(
   degenPercent: number,
   action: 'repair' | 'breed',
   origin: string | null,
-  cfg: DegenBarConfig,
+  cfg?: DegenBarConfig,
   opts?: ProcessPaymentOpts,
 ): Promise<PaymentResult | Response> {
   let chargedAmount: number

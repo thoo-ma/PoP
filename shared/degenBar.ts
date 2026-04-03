@@ -22,15 +22,10 @@ export type DegenOutcome = { busted: boolean }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-/** @migration: DELETE — game_config.degen_bar */
 export const SAFE_BUST_COEF = 0.08
-/** @migration: DELETE — game_config.degen_bar */
 export const DEGEN_BUST_BASE = 2
-/** @migration: DELETE — game_config.degen_bar */
 export const DEGEN_BUST_SCALE = 28
-/** @migration: DELETE — game_config.degen_bar */
 export const DEGEN_ZONE_THRESHOLD = 25
-/** @migration: DELETE — game_config.degen_bar */
 export const MAX_REDUCTION = 0.75
 
 // ─── Formulas ─────────────────────────────────────────────────────────────────

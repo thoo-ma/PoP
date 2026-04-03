@@ -1,71 +1,103 @@
 'use client'
 
 import { create } from 'zustand'
-import { supabase } from '@/lib/supabase'
-import type { GameConfigKey } from '@pop/shared/schemas'
-import { buildGameConfig, type FullGameConfig, type ConfigSource } from '@pop/shared/gameConfig'
+
+// ─── Imports: all tunable constants from @pop/shared ──────────────────────────
+
+import {
+  REWARD_BASE_PRICE_USD, REWARD_GROWTH_RATE, REWARD_USD_PER_TOKEN,
+  REWARD_TYPE_MULTIPLIER, REWARD_RARITY_MULTIPLIER,
+  REPAIR_COEF_A, REPAIR_COEF_B, REPAIR_USD_PER_TOKEN, REPAIR_RARITY_MULTIPLIER,
+  BREED_BASE_PRICE_USD, BREED_GROWTH_RATE, BREED_USD_PER_TOKEN,
+  BREED_MAX_COUNT, BREED_RARITY_MULTIPLIER,
+} from '@pop/shared/currency'
+import { COOLDOWN_BASES, LINEAR_MULT, EXP_MULT } from '@pop/shared/cooldown'
+import {
+  XP_PER_USE, XP_FORMULA_BASE, XP_FORMULA_LINEAR,
+  XP_FORMULA_QUADRATIC, XP_FORMULA_FLOOR,
+} from '@pop/shared/xp'
+import { STAT_POINTS_BY_RARITY } from '@pop/shared/statPoints'
+import { BREED_PROBABILITIES } from '@pop/shared/breedProbabilities'
+import { STAT_RANGES } from '@pop/shared/minting'
+import { SENSOR_PRESETS, AUDIO_THRESHOLDS } from '@pop/shared/sensors'
+import { TYPE_DRAIN_MULT, ENERGY_ROLL_MIN, ENERGY_ROLL_MAX } from '@pop/shared/energyDrain'
+import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT, MAX_HOLDS } from '@pop/shared/lootRoll'
+import {
+  YAMNET_TOILET_FLUSH_CLASS, MAX_AUDIO_DURATION,
+  MIN_AUDIO_DURATION, DETECTIONS_PER_DAY,
+} from '@pop/shared/cloudRun'
+import {
+  SAFE_BUST_COEF, DEGEN_BUST_BASE, DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD, MAX_REDUCTION,
+} from '@pop/shared/degenBar'
+
+import type {
+  CurrencyConfig, CooldownConfig, XpConfig, StatPointsConfig,
+  BreedConfig, MintingConfig, SensorsConfig, EnergyDrainConfig,
+  LootRollConfig, CloudRunConfig, DegenBarConfig,
+} from '@pop/shared/schemas'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export type GameConfigKey =
+  | 'currency' | 'cooldown' | 'xp' | 'stat_points' | 'breed'
+  | 'minting' | 'sensors' | 'energy_drain' | 'loot_roll' | 'cloud_run' | 'degen_bar'
+
+export interface GameConfig {
+  currency: CurrencyConfig
+  cooldown: CooldownConfig
+  xp: XpConfig
+  stat_points: StatPointsConfig
+  breed: BreedConfig
+  minting: MintingConfig
+  sensors: SensorsConfig
+  energy_drain: EnergyDrainConfig
+  loot_roll: LootRollConfig
+  cloud_run: CloudRunConfig
+  degen_bar: DegenBarConfig
+}
+
 interface GameConfigState {
-  /** Validated config — always fully populated (defaults where DB is missing). */
-  config: FullGameConfig
-  /** Per-key source tracking: is the value from DB or from code defaults? */
-  sources: ConfigSource
-  /** Local draft edits (not yet saved to DB). Keyed by config key. */
-  drafts: Partial<FullGameConfig>
-  /** Loading state */
-  loading: boolean
-  /** Error message (null = no error) */
-  error: string | null
-  /** Keys that failed Zod validation (DB row exists but is malformed — using defaults). */
-  warnings: string[]
+  /** Config values — assembled from code constants. */
+  config: GameConfig
+  /** Local draft edits for what-if previews. */
+  drafts: Partial<GameConfig>
 
-  // ─── Actions ──────────────────────────────────────────────────────────────
-
-  /** Fetch game_config from Supabase, validate with Zod, merge over defaults. */
-  fetch: () => Promise<void>
-  /** Update a draft value locally (does NOT write to DB). */
-  setDraft: <K extends GameConfigKey>(key: K, value: Partial<FullGameConfig[K]>) => void
-  /** Clear all drafts (revert to fetched config). */
+  /** Update a draft value locally. */
+  setDraft: <K extends GameConfigKey>(key: K, value: Partial<GameConfig[K]>) => void
+  /** Clear all drafts. */
   clearDrafts: () => void
   /** Clear the draft for a single config key. */
   clearDraftForKey: (key: GameConfigKey) => void
 }
 
+// ─── Static config built from code constants ──────────────────────────────────
+
+const CONFIG: GameConfig = {
+  currency: {
+    REWARD_BASE_PRICE_USD, REWARD_GROWTH_RATE, REWARD_USD_PER_TOKEN,
+    REWARD_TYPE_MULTIPLIER, REWARD_RARITY_MULTIPLIER,
+    REPAIR_COEF_A, REPAIR_COEF_B, REPAIR_USD_PER_TOKEN, REPAIR_RARITY_MULTIPLIER,
+    BREED_BASE_PRICE_USD, BREED_GROWTH_RATE, BREED_USD_PER_TOKEN,
+    BREED_MAX_COUNT, BREED_RARITY_MULTIPLIER,
+  },
+  cooldown: { COOLDOWN_BASES, LINEAR_MULT, EXP_MULT },
+  xp: { XP_PER_USE, XP_FORMULA_BASE, XP_FORMULA_LINEAR, XP_FORMULA_QUADRATIC, XP_FORMULA_FLOOR },
+  stat_points: { STAT_POINTS_BY_RARITY },
+  breed: { BREED_PROBABILITIES },
+  minting: { STAT_RANGES },
+  sensors: { SENSOR_PRESETS, AUDIO_THRESHOLDS },
+  energy_drain: { TYPE_DRAIN_MULT, ENERGY_ROLL_MIN, ENERGY_ROLL_MAX },
+  loot_roll: { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT, MAX_HOLDS },
+  cloud_run: { YAMNET_TOILET_FLUSH_CLASS, MAX_AUDIO_DURATION, MIN_AUDIO_DURATION, DETECTIONS_PER_DAY },
+  degen_bar: { SAFE_BUST_COEF, DEGEN_BUST_BASE, DEGEN_BUST_SCALE, DEGEN_ZONE_THRESHOLD, MAX_REDUCTION },
+}
+
 // ─── Store ────────────────────────────────────────────────────────────────────
 
-const _initial = buildGameConfig()
-
 export const useGameConfigStore = create<GameConfigState>((set) => ({
-  config: _initial.config,
-  sources: _initial.sources,
+  config: CONFIG,
   drafts: {},
-  loading: true,
-  error: null,
-  warnings: [],
-
-  fetch: async () => {
-    set({ loading: true, error: null, warnings: [] })
-
-    if (!supabase) {
-      set({ loading: false, error: 'Supabase not configured (missing env vars)' })
-      return
-    }
-
-    try {
-      const { data: rows, error: dbError } = await supabase.from('game_config').select('key, value')
-
-      if (dbError) throw new Error(dbError.message)
-
-      const { config, sources, warnings } = buildGameConfig(rows ?? [])
-      set({ config, sources, loading: false, warnings })
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Failed to load game config'
-      console.error('[gameConfigStore] fetch error:', msg)
-      set({ error: msg, loading: false })
-    }
-  },
 
   setDraft: (key, value) => {
     set((state) => ({
@@ -73,7 +105,7 @@ export const useGameConfigStore = create<GameConfigState>((set) => ({
         ...state.drafts,
         [key]: {
           ...state.config[key],
-          ...(state.drafts[key as keyof FullGameConfig] as object | undefined),
+          ...(state.drafts[key as keyof GameConfig] as object | undefined),
           ...value,
         },
       },

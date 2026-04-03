@@ -3,17 +3,11 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import type { MysteryBox, BustedDetails } from '@pop/shared'
 import { logError } from '@/utils/errorHelpers'
-import { useToast } from 'heroui-native'
-import { useGameConfig } from '@/store/gameConfigStore'
-import { degenBarConfigHash } from '@pop/shared/degenBar'
 
 export function useBreedNFT() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null)
-
-  const { config, refetch: refetchConfig } = useGameConfig()
-  const { toast } = useToast()
 
   const breedNFTs = useCallback(
     async (parent1Id: string, parent2Id: string, degenPercent = 0) => {
@@ -58,17 +52,6 @@ export function useBreedNFT() {
           return null
         }
 
-        // Detect config drift
-        const responseHash = (data as { config_hash?: string }).config_hash
-        if (responseHash && responseHash !== degenBarConfigHash(config.degen_bar)) {
-          void refetchConfig()
-          toast.show({
-            variant: 'default',
-            label: 'Settings updated',
-            description: 'Game settings updated — odds may have changed',
-          })
-        }
-
         return data as MysteryBox
       } catch (err) {
         logError('useBreedNFT:Breed', err)
@@ -77,9 +60,8 @@ export function useBreedNFT() {
       } finally {
         setLoading(false)
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [config.degen_bar, refetchConfig, toast.show],
+    [],
   )
 
   return {

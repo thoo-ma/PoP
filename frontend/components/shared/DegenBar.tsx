@@ -5,8 +5,8 @@ import {
   calcReduction,
   calcBustChance,
   calcReducedCost,
+  DEGEN_ZONE_THRESHOLD,
 } from '@pop/shared/degenBar'
-import { useGameConfig } from '@/store/gameConfigStore'
 import { infoBox } from '@/styles'
 
 // Re-export for consumers that import the hash helper from this module
@@ -30,17 +30,14 @@ export type DegenBarProps = {
  * to DEGEN (25–100%) zones.
  */
 export default function DegenBar({ baseCost, onDegenChange, disabled = false }: DegenBarProps) {
-  const { config } = useGameConfig()
-  const cfg = config.degen_bar
-
   const [degenPercent, setDegenPercent] = useState(0)
 
-  const reductionFraction = calcReduction(degenPercent, cfg)
+  const reductionFraction = calcReduction(degenPercent)
   const reductionPct = Math.round(reductionFraction * 100)
-  const bustChancePct = Math.round(calcBustChance(degenPercent, cfg) * 100)
-  const reducedCost = calcReducedCost(baseCost, degenPercent, cfg)
+  const bustChancePct = Math.round(calcBustChance(degenPercent) * 100)
+  const reducedCost = calcReducedCost(baseCost, degenPercent)
 
-  const isDegen = degenPercent >= (cfg.DEGEN_ZONE_THRESHOLD ?? 25)
+  const isDegen = degenPercent >= DEGEN_ZONE_THRESHOLD
   const isAtZero = degenPercent === 0
 
   const handleChange = (v: number | number[]) => {

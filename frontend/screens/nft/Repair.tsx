@@ -18,7 +18,6 @@ import { useUserNFTs, useRepairNFT, useWallet } from '@/hooks'
 import { MAX_ENERGY, repairCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
 import { nftEvents, formatDisplayName } from '@/utils'
-import { useGameConfig } from '@/store/gameConfigStore'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -29,7 +28,6 @@ export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
   const { poopBalance } = useWallet()
-  const { config: cfg } = useGameConfig()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [repairAmount, setRepairAmount] = useState(0)
   const [degenPercent, setDegenPercent] = useState(0)
@@ -50,7 +48,6 @@ export default memo(function Repair() {
         selectedNFT.rarity,
         Math.round(repairAmount),
         MAX_ENERGY,
-        cfg.currency,
       )
     : 0
   const detailStyles = nftDetailCard()
@@ -273,7 +270,7 @@ export default memo(function Repair() {
                         <Text>
                           Repair —{' '}
                           <Text className="line-through text-foreground-500">{poopCost}</Text>{' '}
-                          {calcReducedCost(poopCost, degenPercent, cfg.degen_bar)} POOP
+                          {calcReducedCost(poopCost, degenPercent)} POOP
                         </Text>
                       ) : (
                         `Repair (${poopCost} POOP)`

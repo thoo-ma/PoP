@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation'
 import { useGameConfigStore } from '@/store/gameConfigStore'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Separator } from '@/components/ui/separator'
@@ -30,12 +29,10 @@ const SECTION_LABELS: Record<string, string> = {
 }
 
 export function Header() {
-  const { loading, error, sources, drafts, clearDrafts } = useGameConfigStore()
+  const { drafts, clearDrafts } = useGameConfigStore()
   const pathname = usePathname()
   const section = SECTION_LABELS[pathname] ?? null
 
-  const dbCount = Object.values(sources).filter((s) => s === 'db').length
-  const totalCount = Object.keys(sources).length
   const draftCount = Object.keys(drafts).length
 
   return (
@@ -62,16 +59,6 @@ export function Header() {
             )}
           </BreadcrumbList>
         </Breadcrumb>
-        {loading && (
-          <Badge variant="outline" className="border-neutral-700 text-neutral-500 text-[10px]">
-            Loading…
-          </Badge>
-        )}
-        {error && (
-          <Badge variant="destructive" className="text-[10px]">
-            Error: {error}
-          </Badge>
-        )}
       </div>
       <div className="flex items-center gap-4 text-[11px] text-neutral-500">
         {draftCount > 0 && (
@@ -84,12 +71,6 @@ export function Header() {
             Reset all ({draftCount})
           </Button>
         )}
-        <span>
-          <span className="text-neutral-300">{dbCount}</span>/{totalCount} from DB
-        </span>
-        <span>
-          <span className="text-neutral-300">{totalCount - dbCount}</span> using defaults
-        </span>
       </div>
     </header>
   )

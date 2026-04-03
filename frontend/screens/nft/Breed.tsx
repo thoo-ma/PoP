@@ -6,9 +6,8 @@ import { screenContainer, scrollContent, errorMessage, infoBox } from '@/styles'
 import { useUserNFTs, useBreedNFT, useWallet } from '@/hooks'
 import type { NFT } from '@/types/nft'
 import type { MysteryBox } from '@pop/shared'
-import { breedCost } from '@pop/shared'
+import { breedCost, BREED_MAX_COUNT } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
-import { useGameConfig } from '@/store/gameConfigStore'
 import {
   MysteryBoxCard,
   ScreenLoader,
@@ -29,7 +28,6 @@ import { nftEvents, canBreed } from '@/utils'
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT()
   const { poopBalance } = useWallet()
-  const { config: cfg } = useGameConfig()
 
   const [parent1, setParent1] = useState<NFT | null>(null)
   const [parent2, setParent2] = useState<NFT | null>(null)
@@ -90,14 +88,14 @@ import { nftEvents, canBreed } from '@/utils'
   // Dynamic cost: sum of each parent's individual breedCost, or null when not both selected.
   const totalBreedCost: number | null =
     parent1 && parent2
-      ? breedCost(parent1.breed_count ?? 0, parent1.rarity, cfg.currency) +
-        breedCost(parent2.breed_count ?? 0, parent2.rarity, cfg.currency)
+      ? breedCost(parent1.breed_count ?? 0, parent1.rarity) +
+        breedCost(parent2.breed_count ?? 0, parent2.rarity)
       : null
 
   // True if either selected parent has hit the breed cap.
   const atBreedLimit =
-    (parent1 !== null && (parent1.breed_count ?? 0) >= cfg.currency.BREED_MAX_COUNT) ||
-    (parent2 !== null && (parent2.breed_count ?? 0) >= cfg.currency.BREED_MAX_COUNT)
+    (parent1 !== null && (parent1.breed_count ?? 0) >= BREED_MAX_COUNT) ||
+    (parent2 !== null && (parent2.breed_count ?? 0) >= BREED_MAX_COUNT)
 
   const hasEnoughPoop =
     poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost
@@ -186,7 +184,7 @@ import { nftEvents, canBreed } from '@/utils'
               {atBreedLimit && (
                 <Text className={errorMessage()}>
                   One of the selected NFTs has reached its max breed count (
-                  {cfg.currency.BREED_MAX_COUNT}) and cannot be bred again.
+                  {BREED_MAX_COUNT}) and cannot be bred again.
                 </Text>
               )}
 
@@ -209,7 +207,7 @@ import { nftEvents, canBreed } from '@/utils'
                   <Text>
                     Breed —{' '}
                     <Text className="line-through text-foreground-500">{totalBreedCost}</Text>{' '}
-                    {calcReducedCost(totalBreedCost, degenPercent, cfg.degen_bar)} POOP
+                    {calcReducedCost(totalBreedCost, degenPercent)} POOP
                   </Text>
                 ) : totalBreedCost !== null ? (
                   `Breed (${totalBreedCost} POOP)`
