@@ -65,7 +65,7 @@ All tunable game balance lives as exported constants in `shared/` modules (confi
 
 ## Branch Naming
 
-`fix/`, `feat/`, `refactor/`, `chore/`, `docs/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
+`fix/`, `feat/`, `refactor/`, `chore/`, `docs/`, `ui/`, `ux/`, `perf/`, `security/`, `test/`, `tv/`, `heroui/`, `config/` + kebab-case (e.g. `security/harden-cors-origins`). With issue: `security/42-harden-cors`.
 
 ## Commit Messages
 
@@ -97,6 +97,7 @@ Short description of the change (imperative mood).
 | `ui/`, `ux/` | `patch` |
 | `perf/` | `patch` |
 | `heroui/`, `tv/` | `patch` |
+| `config/` | `patch` |
 | `chore/`, `docs/`, `test/` | create an empty changeset file |
 
 ### `@pop/shared` bump guidance
@@ -127,7 +128,22 @@ All agents follow a 4-phase workflow ending with PR creation and the `pr-review-
 <description>Deployment pipelines, CI/CD workflows, GitHub Environments, secrets management, release process (Changesets), milestone releases, emergency rollback procedures, and cost monitoring. Use when working on GitHub Actions, deployment automation, infrastructure, or incident response. Keywords: deploy, release, CI, CD, workflow, rollback, environment, secrets, pipeline, EAS, Cloud Run, Vercel, Supabase, milestone.</description>
 <file>.github/skills/operations/SKILL.md</file>
 </skill>
+<skill>
+<name>game-config</name>
+<description>Game balance config-as-code reference. Maps all 11 config keys to their source files, formula functions, Zod schemas, consumers, structural invariants, and semantic constraints. Use when tuning game balance, reviewing config changes, or understanding downstream impact of constant edits in shared/*.ts. Keywords: game config, balance, tuning, constants, economy, cooldown, XP, currency, breed, loot, degen bar, energy drain, minting, stat points, sensors.</description>
+<file>.github/skills/game-config/SKILL.md</file>
+</skill>
 </skills>
+
+## Agents
+
+<agents>
+<agent>
+<name>config-tuner</name>
+<description>Tune game balance constants in shared/*.ts via natural-language requests or GitHub issues. Mandatory preview before editing. 4-phase workflow: Research → Preview+Confirm → Implement+Verify → PR+Review. Keywords: config, balance, tuning, game config, constants, economy, buff, nerf, rebalance.</description>
+<file>.github/agents/config-tuner.agent.md</file>
+</agent>
+</agents>
 
 ## GitHub Issues
 
