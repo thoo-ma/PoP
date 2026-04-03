@@ -1,7 +1,7 @@
 ---
 name: game-config
 description: "Game balance config-as-code reference for the PoP monorepo. Maps all 11 config keys to their source files, formula functions, Zod schemas, consumers, structural invariants, and semantic constraints. Use when tuning game balance constants, reviewing config changes, or understanding downstream impact. Keywords: game config, balance, tuning, constants, economy, cooldown, XP, currency, breed, loot, degen bar, energy drain, minting, stat points, sensors."
-user-invocable: false
+user-invocable: true
 metadata:
   author: PoP team
   version: "1.0.0"
