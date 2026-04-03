@@ -19,14 +19,14 @@ maps to a source file, formula functions, a Zod schema, and a set of consumers.
 | 1 | **currency** | `shared/currency.ts` | `repairCost()`, `breedCost()`, `calcPoopEarned()` | `CurrencyConfigSchema` |
 | 2 | **cooldown** | `shared/cooldown.ts` | `calcCooldownHours()`, `getCooldownEndsAt()`, `isOnCooldown()`, `cooldownRemainingSeconds()` | `CooldownConfigSchema` |
 | 3 | **xp** | `shared/xp.ts` | `xpThreshold()`, `applyXP()` | `XpConfigSchema` |
-| 4 | **statPoints** | `shared/statPoints.ts` | — | `StatPointsConfigSchema` |
-| 5 | **breedProbabilities** | `shared/breedProbabilities.ts` | — | `BreedConfigSchema` |
+| 4 | **stat_points** | `shared/statPoints.ts` | — | `StatPointsConfigSchema` |
+| 5 | **breed** | `shared/breedProbabilities.ts` | — | `BreedConfigSchema` |
 | 6 | **minting** | `shared/minting.ts` | — | `MintingConfigSchema` |
-| 7 | **energyDrain** | `shared/energyDrain.ts` | — | `EnergyDrainConfigSchema` |
-| 8 | **lootRoll** | `shared/lootRoll.ts` | — | `LootRollConfigSchema` |
-| 9 | **degenBar** | `shared/degenBar.ts` | `calcReduction()`, `calcBustChance()`, `calcReducedCost()`, `resolveDegenOutcome()` | `DegenBarConfigSchema` |
+| 7 | **energy_drain** | `shared/energyDrain.ts` | — | `EnergyDrainConfigSchema` |
+| 8 | **loot_roll** | `shared/lootRoll.ts` | — | `LootRollConfigSchema` |
+| 9 | **degen_bar** | `shared/degenBar.ts` | `calcReduction()`, `calcBustChance()`, `calcReducedCost()`, `resolveDegenOutcome()` | `DegenBarConfigSchema` |
 | 10 | **sensors** | `shared/sensors.ts` | `getThresholds()`, `getThresholdForDifficulty()` | `SensorsConfigSchema` |
-| 11 | **cloudRun** | `shared/cloudRun.ts` | — | `CloudRunConfigSchema` |
+| 11 | **cloud_run** | `shared/cloudRun.ts` | — | `CloudRunConfigSchema` |
 
 ### Key Constants Per Config Key
 
@@ -188,20 +188,20 @@ Which systems consume each config key. The agent must consider downstream impact
 | **currency** | `breed-nfts/handler.ts`, `repair-nft/handler.ts`, `use-nft/handler.ts` | `screens/nft/Breed.tsx`, `screens/nft/Repair.tsx` | `gameConfigStore.ts` |
 | **cooldown** | `use-nft/handler.ts` | `constants/cooldown.ts` | `gameConfigStore.ts`, `cooldown/page.tsx` |
 | **xp** | `use-nft/handler.ts` | `components/nft/NFTCard.tsx` | `gameConfigStore.ts`, `xp/page.tsx` |
-| **statPoints** | `allocate-stat-points/handler.ts`, `repair-nft/handler.ts`, `use-nft/handler.ts` | — | `gameConfigStore.ts`, `stat-points/page.tsx` |
-| **breedProbabilities** | `breed-nfts/handler.ts` | `utils/nft/breedHelpers.ts` | `gameConfigStore.ts` |
+| **stat_points** | `allocate-stat-points/handler.ts`, `repair-nft/handler.ts`, `use-nft/handler.ts` | — | `gameConfigStore.ts`, `stat-points/page.tsx` |
+| **breed** | `breed-nfts/handler.ts` | `utils/nft/breedHelpers.ts` | `gameConfigStore.ts` |
 | **minting** | `_shared/nftHelpers.ts` | — | `gameConfigStore.ts` |
-| **energyDrain** | `use-nft/handler.ts` | — | `gameConfigStore.ts` |
-| **lootRoll** | `hold-loot-roll/handler.ts`, `roll-loot/handler.ts` | — | `gameConfigStore.ts` |
-| **degenBar** | `_shared/degenBar.ts`, `_shared/processPayment.ts` | `components/shared/DegenBar.tsx`, `screens/nft/Breed.tsx`, `screens/nft/Repair.tsx` | `gameConfigStore.ts`, `degen-bar/page.tsx` |
+| **energy_drain** | `use-nft/handler.ts` | — | `gameConfigStore.ts` |
+| **loot_roll** | `hold-loot-roll/handler.ts`, `roll-loot/handler.ts` | — | `gameConfigStore.ts` |
+| **degen_bar** | `_shared/degenBar.ts`, `_shared/processPayment.ts` | `components/shared/DegenBar.tsx`, `screens/nft/Breed.tsx`, `screens/nft/Repair.tsx` | `gameConfigStore.ts`, `degen-bar/page.tsx` |
 | **sensors** | — | `hooks/proof/useImmobilityChallenge.ts`, `screens/nft/Poop.tsx` | `gameConfigStore.ts` |
-| **cloudRun** | `detect-toilet-flush/handler.ts` | — | `gameConfigStore.ts` |
+| **cloud_run** | `detect-toilet-flush/handler.ts` | — | `gameConfigStore.ts` |
 
 ### Impact Severity Guide
 
 | Impact Level | Description | Example |
 |---|---|---|
-| **Low** | Single system, no cross-cutting effects | Changing `DETECTIONS_PER_DAY` (only cloudRun + detect-toilet-flush) |
+| **Low** | Single system, no cross-cutting effects | Changing `DETECTIONS_PER_DAY` (only cloud_run + detect-toilet-flush) |
 | **Medium** | Multiple consumers, but isolated formula | Changing `XP_PER_USE` (edge function + frontend display) |
 | **High** | Cross-cutting economy change | Changing `BREED_RARITY_MULTIPLIER` (affects breed cost, player economy, rarity value) |
 | **Critical** | Multi-key rebalance | Changing currency + breed probabilities + stat points simultaneously |
@@ -216,7 +216,7 @@ Pre-written patterns for common tuning requests. Each recipe lists the constants
 **Constants**: `REPAIR_COEF_A` (reduce), `REPAIR_COEF_B` (reduce), or `REPAIR_RARITY_MULTIPLIER` (reduce per-rarity)
 **Verify**:
 - Compute `repairCost()` for representative inputs (L1 common, L10 rare, L20 legendary) before and after
-- Ensure repair cost never drops below 1 token (function already has `Math.round`)
+- Verify repair cost stays at or above 1 token for representative and edge-case inputs; `Math.round` alone does not guarantee a minimum of 1
 - Check Zod bounds: `REPAIR_COEF_A` max 100, `REPAIR_COEF_B` max 100
 
 ### 2. "Slow down cooldowns"
