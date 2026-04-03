@@ -166,8 +166,8 @@ importers:
         specifier: ~15.0.10
         version: 15.0.10(expo@54.0.33(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))
       heroui-native:
-        specifier: ^1.0.0-rc.4
-        version: 1.0.0(e7799d7018a64b2a216a9a7aeb0559dd)
+        specifier: ^1.0.1
+        version: 1.0.1(e7799d7018a64b2a216a9a7aeb0559dd)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -3093,8 +3093,8 @@ packages:
   hermes-parser@0.33.3:
     resolution: {integrity: sha512-Yg3HgaG4CqgyowtYjX/FsnPAuZdHOqSMtnbpylbptsQ9nwwSKsy6uRWcGO5RK0EqiX12q8HvDWKgeAVajRO5DA==}
 
-  heroui-native@1.0.0:
-    resolution: {integrity: sha512-42EOzB5j+tPGgCCWZMS7GTLkGKaS+KMT/Qi2bTEXm+sST0J4I7JzuWEoBmhM/K/7YNw30Labg5htR4G336s8fg==}
+  heroui-native@1.0.1:
+    resolution: {integrity: sha512-tsOtDysEI4rXOPFQr5rMU0JVsWWHSnmvb03PG8yE2oshut5CjlVOJF3SpmYYvAFq8OY3gNNNa7vjTQvYPSFeUA==}
     peerDependencies:
       '@gorhom/bottom-sheet': ^5.2.8
       react: '>=19.0.0'
@@ -8169,7 +8169,7 @@ snapshots:
     dependencies:
       hermes-estree: 0.33.3
 
-  heroui-native@1.0.0(e7799d7018a64b2a216a9a7aeb0559dd):
+  heroui-native@1.0.1(e7799d7018a64b2a216a9a7aeb0559dd):
     dependencies:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
