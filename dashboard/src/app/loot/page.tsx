@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
-import { Badge } from '@/components/ui/badge'
+
 import { Button } from '@/components/ui/button'
 import { CHART_TOOLTIP, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
 
@@ -15,7 +15,6 @@ export default function LootRollPanel() {
   const loot = useGameConfigStore(
     useShallow((s) => ({ ...s.config.loot_roll, ...s.drafts.loot_roll })),
   )
-  const source = useGameConfigStore((s) => s.sources.loot_roll)
   const setDraft = useGameConfigStore((s) => s.setDraft)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
   const hasDraft = useGameConfigStore((s) => s.drafts.loot_roll !== undefined)
@@ -99,16 +98,6 @@ export default function LootRollPanel() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <h2 className="text-xl font-semibold text-white">Loot Roll</h2>
-        <Badge
-          variant="outline"
-          className={
-            source === 'db'
-              ? 'border-blue-800 text-blue-400 text-[10px]'
-              : 'border-neutral-700 text-neutral-500 text-[10px]'
-          }
-        >
-          {source === 'db' ? 'Live from DB' : 'Using defaults'}
-        </Badge>
         {hasDraft && (
           <Button
             variant="ghost"

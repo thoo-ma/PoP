@@ -1,2 +1,1 @@
-export { GameConfigProvider, useGameConfig } from './gameConfigStore'
-export type { FullGameConfig } from './gameConfigStore'
+// gameConfigStore removed — config-as-code (issue #256)

@@ -2,7 +2,6 @@ import type { NFTRarity as Rarity } from '../../../shared/nft.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -18,8 +17,6 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-    const cfg = await getGameConfig(supabase)
-
     console.log(`open-mystery-box: user ${userId}`)
 
     // ── Request body ─────────────────────────────────────────────────────────
@@ -46,10 +43,10 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
       type,
       rarity,
       image_url:  buildImageUrl(type, name, rarity),
-      efficiency: rollStat(rarity, cfg.minting),
-      resilience: rollStat(rarity, cfg.minting),
-      comfort:    rollStat(rarity, cfg.minting),
-      luck:       rollStat(rarity, cfg.minting),
+      efficiency: rollStat(rarity),
+      resilience: rollStat(rarity),
+      comfort:    rollStat(rarity),
+      luck:       rollStat(rarity),
       energy:     100,
       level:      1,
       xp:         0,

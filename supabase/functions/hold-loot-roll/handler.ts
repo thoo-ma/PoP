@@ -1,6 +1,6 @@
+import { MAX_HOLDS } from '../../../shared/lootRoll.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -28,9 +28,6 @@ export async function handleHoldLootRoll(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-
-    const cfg = await getGameConfig(supabase)
-    const MAX_HOLDS = cfg.loot_roll.MAX_HOLDS
 
     const bodyResult = await parseBody(req, HoldLootRollSchema)
     if (bodyResult instanceof Response) return bodyResult

@@ -32,7 +32,6 @@ import {
 import { nftEvents, formatDisplayName, formatConfidencePercentage } from '@/utils'
 import { getThresholdForDifficulty } from '@pop/shared/sensors'
 import { getCooldownStatus } from '@/constants'
-import { useGameConfig } from '@/store/gameConfigStore'
 import type { NFT } from '@/types'
 import type { AllocateResult } from '@/hooks'
 
@@ -69,7 +68,6 @@ export default memo(function Poop() {
   // ── NFT data ──────────────────────────────────────────────
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT()
-  const { config: cfg } = useGameConfig()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null)
   const [poopedXP, setPoopedXP] = useState<{
@@ -136,7 +134,7 @@ export default memo(function Poop() {
   const handleSelectNFT = () => {
     if (nfts.length === 0) return
     const ready = nfts.findIndex(
-      (n) => n.energy > 0 && !getCooldownStatus(n, cfg.cooldown).isOnCooldown,
+      (n) => n.energy > 0 && !getCooldownStatus(n).isOnCooldown,
     )
     const withEnergy = nfts.findIndex((n) => n.energy > 0)
     setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0)
@@ -170,7 +168,7 @@ export default memo(function Poop() {
       })
       return
     }
-    const cooldown = getCooldownStatus(displayNFT, cfg.cooldown)
+    const cooldown = getCooldownStatus(displayNFT)
     if (cooldown.isOnCooldown) {
       setAlertDialog({
         title: 'On Cooldown',
@@ -554,7 +552,7 @@ export default memo(function Poop() {
   // ═════════════════════════════════════════════════════════
   // IDLE SCREEN
   // ═════════════════════════════════════════════════════════
-  const cooldown = displayNFT ? getCooldownStatus(displayNFT, cfg.cooldown) : null
+  const cooldown = displayNFT ? getCooldownStatus(displayNFT) : null
   const onCooldown = cooldown?.isOnCooldown ?? false
   const noEnergy = displayNFT ? displayNFT.energy <= 0 : false
   const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null

@@ -2,9 +2,6 @@ import { useState, useCallback } from 'react'
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
-import { useToast } from 'heroui-native'
-import { useGameConfig } from '@/store/gameConfigStore'
-import { degenBarConfigHash } from '@pop/shared/degenBar'
 import type { EdgeFunctionErrorResponse, InsufficientPoopDetails, BustedDetails } from '@pop/shared'
 
 export interface RepairResult {
@@ -39,9 +36,6 @@ export function useRepairNFT() {
     null,
   )
   const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null)
-
-  const { config, refetch: refetchConfig } = useGameConfig()
-  const { toast } = useToast()
 
   const repairNFT = useCallback(
     async (nftId: string, newEnergy: number, degenPercent = 0): Promise<RepairResult | null> => {
@@ -95,17 +89,6 @@ export function useRepairNFT() {
           return null
         }
 
-        // Detect config drift
-        const responseHash = (data as { config_hash?: string }).config_hash
-        if (responseHash && responseHash !== degenBarConfigHash(config.degen_bar)) {
-          void refetchConfig()
-          toast.show({
-            variant: 'default',
-            label: 'Settings updated',
-            description: 'Game settings updated — odds may have changed',
-          })
-        }
-
         return data as RepairResult
       } catch (err) {
         logError('useRepairNFT:Repair', err)
@@ -114,9 +97,8 @@ export function useRepairNFT() {
       } finally {
         setLoading(false)
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [config.degen_bar, refetchConfig, toast.show],
+    [],
   )
 
   return { repairNFT, loading, error, insufficientPoopError, bustedResult }

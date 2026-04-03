@@ -49,7 +49,7 @@ Never force-push. Never skip type-check. Never use `--no-verify` to bypass hooks
 
 ## Game Config
 
-All tunable game balance lives in the `game_config` Supabase table (JSONB key-value, 1 row per mechanic). Code defaults in `shared/` are merged with DB rows at runtime. Never hardcode balance numbers — see `shared/.instructions.md` for schema conventions and the `cfg` parameter pattern, `supabase/.instructions.md` for the seed migration pattern.
+All tunable game balance lives as exported constants in `shared/` modules (config-as-code). Formula functions accept an optional `cfg?` parameter with `??` fallback to module constants — see `shared/.instructions.md` for the pattern.
 
 ## Type Safety
 

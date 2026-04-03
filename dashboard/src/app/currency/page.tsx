@@ -1,13 +1,12 @@
 'use client'
 
 import { useGameConfigStore } from '@/store/gameConfigStore'
-import { Badge } from '@/components/ui/badge'
+
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RewardTab, RepairTab, BreedTab } from '@/components/currency'
 
 export default function CurrencyPanel() {
-  const source = useGameConfigStore((s) => s.sources.currency)
   const clearDraftForKey = useGameConfigStore((s) => s.clearDraftForKey)
   const hasDraft = useGameConfigStore((s) => s.drafts.currency !== undefined)
 
@@ -15,16 +14,6 @@ export default function CurrencyPanel() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <h2 className="text-xl font-semibold text-white">Currency ($POOP)</h2>
-        <Badge
-          variant="outline"
-          className={
-            source === 'db'
-              ? 'border-blue-800 text-blue-400 text-[10px]'
-              : 'border-neutral-700 text-neutral-500 text-[10px]'
-          }
-        >
-          {source === 'db' ? 'Live from DB' : 'Using defaults'}
-        </Badge>
         {hasDraft && (
           <Button
             variant="ghost"

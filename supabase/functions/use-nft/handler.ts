@@ -4,11 +4,16 @@ import {
   getCooldownEndsAt,
   cooldownRemainingSeconds,
 } from '../../../shared/cooldown.ts'
-import { applyXP } from '../../../shared/xp.ts'
+import { applyXP, XP_PER_USE } from '../../../shared/xp.ts'
 import { calcPoopEarned } from '../../../shared/currency.ts'
+import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
+import {
+  TYPE_DRAIN_MULT as DEFAULT_TYPE_DRAIN_MULT,
+  ENERGY_ROLL_MIN as DEFAULT_ENERGY_ROLL_MIN,
+  ENERGY_ROLL_MAX as DEFAULT_ENERGY_ROLL_MAX,
+} from '../../../shared/energyDrain.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -31,9 +36,11 @@ export function calcEnergyLoss(
   resilience: number,
   type: NFTType,
   currentEnergy: number,
-  cfg: { TYPE_DRAIN_MULT: Record<NFTType, number>; ENERGY_ROLL_MIN: number; ENERGY_ROLL_MAX: number },
+  cfg?: { TYPE_DRAIN_MULT: Record<NFTType, number>; ENERGY_ROLL_MIN: number; ENERGY_ROLL_MAX: number },
 ): number {
-  const { ENERGY_ROLL_MIN, ENERGY_ROLL_MAX, TYPE_DRAIN_MULT } = cfg
+  const ENERGY_ROLL_MIN = cfg?.ENERGY_ROLL_MIN ?? DEFAULT_ENERGY_ROLL_MIN
+  const ENERGY_ROLL_MAX = cfg?.ENERGY_ROLL_MAX ?? DEFAULT_ENERGY_ROLL_MAX
+  const TYPE_DRAIN_MULT = cfg?.TYPE_DRAIN_MULT ?? DEFAULT_TYPE_DRAIN_MULT
   const baseRoll = ENERGY_ROLL_MIN + Math.random() * (ENERGY_ROLL_MAX - ENERGY_ROLL_MIN) // [min, max)
   const resilienceFactor = 1 - resilience / 100
   const mult = TYPE_DRAIN_MULT[type] ?? 1
@@ -49,9 +56,6 @@ export async function handleUseNft(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-    // ── Load live game config (falls back to shared/ defaults) ────────────────
-    const cfg = await getGameConfig(supabase)
-
     console.log(`use-nft: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
@@ -68,9 +72,9 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Cooldown check ────────────────────────────────────────────────────────
-    if (isOnCooldown(nft.last_used_at, nft.type, nft.level, cfg.cooldown)) {
-      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type, nft.level, cfg.cooldown)!
-      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type, nft.level, cfg.cooldown)
+    if (isOnCooldown(nft.last_used_at, nft.type, nft.level)) {
+      const endsAt    = getCooldownEndsAt(nft.last_used_at, nft.type, nft.level)!
+      const remaining = cooldownRemainingSeconds(nft.last_used_at, nft.type, nft.level)
       console.log(`use-nft: nft=${nft_id} on cooldown until ${endsAt.toISOString()} (${remaining}s remaining)`)
       return respondError(429, 'on_cooldown',
         `This NFT is on cooldown. Try again in ${Math.ceil(remaining / 60)} minute(s).`,
@@ -82,21 +86,21 @@ export async function handleUseNft(req: Request): Promise<Response> {
     }
 
     // ── Energy calculation ────────────────────────────────────────────────────
-    const energyLost = calcEnergyLoss(nft.resilience, nft.type, nft.energy, cfg.energy_drain)
+    const energyLost = calcEnergyLoss(nft.resilience, nft.type, nft.energy)
     const newEnergy = nft.energy - energyLost
 
     // ── Rarity (used by both POOP reward and stat points) ────────────────────
     const rarity: NFTRarity = nft.rarity ?? 'common'
 
     // ── POOP reward calculation ────────────────────────────────────────────────
-    const poopEarned = calcPoopEarned(nft.type, rarity, nft.level, cfg.currency)
+    const poopEarned = calcPoopEarned(nft.type, rarity, nft.level)
 
     // ── XP calculation ───────────────────────────────────────────────────────
-    const xpGained = cfg.xp.XP_PER_USE
-    const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained, cfg.xp)
+    const xpGained = XP_PER_USE
+    const { newXP, newLevel, leveledUp, levelsGained } = applyXP(nft.xp, nft.level, xpGained)
 
     // ── Stat points earned ───────────────────────────────────────────────────
-    const statPointsEarned = levelsGained * (cfg.stat_points.STAT_POINTS_BY_RARITY[rarity] ?? 0)
+    const statPointsEarned = levelsGained * (STAT_POINTS_BY_RARITY[rarity] ?? 0)
     const newStatPoints = (nft.stat_points ?? 0) + statPointsEarned
 
     console.log(

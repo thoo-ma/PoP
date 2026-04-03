@@ -1,7 +1,7 @@
+import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } from '../../../shared/lootRoll.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -37,8 +37,6 @@ export async function handleRollLoot(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-    const cfg = await getGameConfig(supabase)
-
     const bodyResult = await parseBody(req, RollLootSchema)
     if (bodyResult instanceof Response) return bodyResult
     const { loot_roll_id } = bodyResult
@@ -66,7 +64,6 @@ export async function handleRollLoot(req: Request): Promise<Response> {
 
     // ── Server-side roll ──────────────────────────────────────────────────────
     // Probability = BASE_WIN_PROBABILITY + holds × PER_HOLD_INCREMENT
-    const { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } = cfg.loot_roll
     const probability = BASE_WIN_PROBABILITY + holdsUsed * PER_HOLD_INCREMENT
     const won = Math.random() < probability
 

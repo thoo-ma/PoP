@@ -3,7 +3,6 @@ import type { NFTRarity } from '../../../shared/nft.ts'
 import { MAX_ENERGY } from '../../../shared/statPoints.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
-import { getGameConfig } from '../_shared/gameConfig.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
@@ -23,8 +22,6 @@ export async function handleRepairNft(req: Request): Promise<Response> {
   const { origin, userId, supabase } = init
 
   try {
-    const cfg = await getGameConfig(supabase)
-
     console.log(`repair-nft: user ${userId}`)
 
     // ── Request body ──────────────────────────────────────────────────────────
@@ -49,11 +46,11 @@ export async function handleRepairNft(req: Request): Promise<Response> {
     // The $PAPER split from the design is not yet implemented;
     // the full token amount is charged in POOP only.
     const energyDelta = new_energy - nft.energy
-    const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY, cfg.currency)
+    const poopCost = repairCost(nft.level, nft.rarity as NFTRarity, energyDelta, MAX_ENERGY)
 
     // ── Apply degen bar + POOP decrement ────────────────────────────────────
     console.log(`repair-nft: degen — percent=${degenPercent}`)
-    const payment = await processPayment(supabase, userId, poopCost, degenPercent, 'repair', origin, cfg.degen_bar, {
+    const payment = await processPayment(supabase, userId, poopCost, degenPercent, 'repair', origin, undefined, {
       insufficientMsg: (charged, balance) =>
         `Repairing costs ${charged} POOP. You have ${balance} POOP.`,
       insufficientDetails: (charged, balance) => ({
@@ -94,7 +91,7 @@ export async function handleRepairNft(req: Request): Promise<Response> {
       degen_percent: degenPercent,
       original_cost: poopCost,
       reduced_cost:  chargedAmount,
-      config_hash:   computeConfigHash(cfg.degen_bar),
+      config_hash:   computeConfigHash(),
     }, origin)
 
   } catch (err) {

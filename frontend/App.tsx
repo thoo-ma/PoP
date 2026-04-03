@@ -12,18 +12,15 @@ import { colors } from '@/constants'
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { HeroUINativeProvider, Spinner } from 'heroui-native'
-import { GameConfigProvider } from '@/store/gameConfigStore'
 
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <HeroUINativeProvider>
-          <GameConfigProvider>
-            <ErrorBoundary>
-              <AppInner />
-            </ErrorBoundary>
-          </GameConfigProvider>
+          <ErrorBoundary>
+            <AppInner />
+          </ErrorBoundary>
         </HeroUINativeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
