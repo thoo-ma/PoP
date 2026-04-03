@@ -50,6 +50,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Trigger:** Pull requests targeting `main`
 - **Workflow:** `.github/workflows/ci.yml`
 - **What it does:** TypeScript type-check (all workspaces), Biome lint, changeset presence check
+- **Local pre-flight:** Husky `pre-commit` (Biome staged check) and `pre-push` (`pnpm typecheck`) hooks catch most issues locally before code reaches CI
 
 ### Database Migrations
 - **Trigger:** Manual (no CI — intentional for safety)
