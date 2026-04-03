@@ -16,26 +16,36 @@
 
 ⚠️ **frontend/ uses Tailwind v4 (Uniwind)**. **dashboard/ uses Tailwind v3**. They are NOT interchangeable. Do not copy styling patterns between them.
 
-## Build & Validate — MANDATORY Before Every Commit
+## Build & Validate
+
+**Husky git hooks** automate formatting, linting, and type-checking so you don't have to run them manually:
+
+| Hook | What runs | Trigger |
+|---|---|---|
+| `pre-commit` | `pnpm biome check --staged --write --no-errors-on-unmatched` — auto-fixes formatting and lints staged files (<1 s) | Every `git commit` |
+| `pre-push` | `pnpm typecheck` — Turborepo-cached full type-check across all workspaces | Every `git push` |
+
+Hooks are installed automatically when you run `pnpm install` (via the `prepare` script). If hooks are missing, re-run `pnpm install` from the repo root.
+
+### Manual commands (ad-hoc use)
+
+These are the same checks the hooks run. Use them when you want to validate without committing/pushing:
 
 ```bash
-# Install all workspace deps from root
-pnpm install
+pnpm install                                            # Install all workspace deps from root
 
-# Type-check all packages (uses Turborepo — cached, dependency-aware)
-pnpm typecheck                                      # All packages (frontend + dashboard + shared)
+pnpm typecheck                                          # Type-check all packages (Turborepo — cached)
 pnpm exec turbo run typecheck --filter=pop              # Frontend only
 pnpm exec turbo run typecheck --filter=dashboard        # Dashboard only
 
-# Format & lint with Biome (covers frontend/, shared/, dashboard/src/)
-pnpm format                                         # Auto-fix formatting
-pnpm lint                                           # Lint (biome lint .)
+pnpm format                                             # Auto-fix formatting (Biome)
+pnpm lint                                               # Lint (biome lint .)
 
-# Edge functions (Deno — not managed by Turbo or Biome)
+# Edge functions (Deno — not managed by Turbo, Biome, or Husky)
 cd supabase/functions && deno check <function>/index.ts
 ```
 
-Never force-push. Never skip type-check.
+Never force-push. Never skip type-check. Never use `--no-verify` to bypass hooks unless in an emergency — CI is the final safety net, not a substitute for local validation.
 
 ## Game Config
 
