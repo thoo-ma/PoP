@@ -126,12 +126,13 @@ You MUST follow these phases in order. Do NOT skip phases. **Phase 2 (Preview + 
 5. **Create changeset** — Write `.changeset/<descriptive-slug>.md`:
    ```md
    ---
+   "pop": patch
    "@pop/shared": patch
    ---
 
    <Short description of the balance change in imperative mood.>
    ```
-   Config-only changes are always `patch` (internal logic, no API surface change).
+   Config-only changes are always `patch` (internal logic, no API surface change). Both `pop` and `@pop/shared` are bumped because the frontend depends on `@pop/shared`.
 
 6. **Commit** — Stage all changes:
    - Message: `config: <description>` (e.g. `config: reduce repair costs by 20%`)
