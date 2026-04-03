@@ -29,7 +29,7 @@ const RECORDING_OPTIONS: RecordingOptions = {
  * Hook to record audio and submit it to the toilet-flush detection pipeline.
  *
  * Manages the full recording lifecycle: requesting microphone permission,
- * starting/stopping an `expo-audio` recording session, handing the base-64
+ * starting/stopping an `expo-audio` recording session, handling the base-64
  * audio to `detectToiletFlush`, and surfacing the detection result or any
  * rate-limit / error state to the caller.
  *
