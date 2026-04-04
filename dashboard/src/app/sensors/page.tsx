@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -122,7 +123,10 @@ export default function SensorsPanel() {
 
   const handlePreset = (difficulty: string, field: PresetField, value: string) => {
     const num = parseFloat(value)
-    if (Number.isNaN(num)) return
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
+    }
     setDraft('sensors', {
       SENSOR_PRESETS: {
         ...sensors.SENSOR_PRESETS,
@@ -136,7 +140,10 @@ export default function SensorsPanel() {
 
   const handleAudio = (difficulty: string, value: string) => {
     const num = parseFloat(value)
-    if (Number.isNaN(num) || num < 0 || num > 1) return
+    if (Number.isNaN(num) || num < 0 || num > 1) {
+      toast.error('Value must be between 0 and 1')
+      return
+    }
     setDraft('sensors', {
       AUDIO_THRESHOLDS: { ...sensors.AUDIO_THRESHOLDS, [difficulty]: num },
     })

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import LazyChart from '@/components/LazyChart'
 import { useGameConfigStore } from '@/store/gameConfigStore'
 import { useShallow } from 'zustand/react/shallow'
@@ -67,16 +68,22 @@ export function BreedTab() {
 
   const handleChange = (field: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) setDraft('currency', { [field]: num })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
+    }
+    setDraft('currency', { [field]: num })
   }
 
   const handleRarityMult = (rarity: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) {
-      setDraft('currency', {
-        BREED_RARITY_MULTIPLIER: { ...cur.BREED_RARITY_MULTIPLIER, [rarity]: num },
-      })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
     }
+    setDraft('currency', {
+      BREED_RARITY_MULTIPLIER: { ...cur.BREED_RARITY_MULTIPLIER, [rarity]: num },
+    })
   }
 
   return (

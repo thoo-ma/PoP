@@ -3,6 +3,7 @@
 import { calcCooldownHours } from '@pop/shared/cooldown'
 import { MAX_LEVEL } from '@pop/shared/xp'
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -78,16 +79,22 @@ export default function CooldownPanel() {
 
   const handleBase = (type: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) {
-      setDraft('cooldown', {
-        COOLDOWN_BASES: { ...cd.COOLDOWN_BASES, [type]: num },
-      })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
     }
+    setDraft('cooldown', {
+      COOLDOWN_BASES: { ...cd.COOLDOWN_BASES, [type]: num },
+    })
   }
 
   const handleScalar = (field: 'LINEAR_MULT' | 'EXP_MULT', value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) setDraft('cooldown', { [field]: num })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
+    }
+    setDraft('cooldown', { [field]: num })
   }
 
   return (

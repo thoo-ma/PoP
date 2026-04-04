@@ -2,6 +2,7 @@
 
 import { calcBustChance, calcReducedCost, calcReduction } from '@pop/shared/degenBar'
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,7 +47,10 @@ export default function DegenBarPanel() {
 
   const handleChange = (field: keyof typeof cfg, value: string) => {
     const num = parseFloat(value)
-    if (Number.isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be 0 or greater')
+      return
+    }
     setDraft('degen_bar', { [field]: num })
   }
 

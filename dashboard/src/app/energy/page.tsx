@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -75,7 +76,10 @@ export default function EnergyPanel() {
 
   const handleTypeMult = (type: string, value: string) => {
     const num = parseFloat(value)
-    if (Number.isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be 0 or greater')
+      return
+    }
     setDraft('energy_drain', {
       TYPE_DRAIN_MULT: { ...energy.TYPE_DRAIN_MULT, [type]: num },
     })
@@ -83,7 +87,10 @@ export default function EnergyPanel() {
 
   const handleScalar = (field: 'ENERGY_ROLL_MIN' | 'ENERGY_ROLL_MAX', value: string) => {
     const num = parseFloat(value)
-    if (Number.isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be 0 or greater')
+      return
+    }
     setDraft('energy_drain', { [field]: num })
   }
 

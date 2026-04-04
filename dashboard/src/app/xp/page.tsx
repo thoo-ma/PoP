@@ -2,6 +2,7 @@
 
 import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -140,9 +141,11 @@ export default function XpPanel() {
 
   const handleChange = (field: keyof typeof xp, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) {
-      setDraft('xp', { [field]: num })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
     }
+    setDraft('xp', { [field]: num })
   }
 
   return (

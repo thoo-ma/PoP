@@ -2,6 +2,7 @@
 
 import { MAX_LEVEL } from '@pop/shared/xp'
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -69,11 +70,13 @@ export default function StatPointsPanel() {
 
   const handleChange = (rarity: string, value: string) => {
     const num = parseInt(value, 10)
-    if (!Number.isNaN(num) && num >= 0) {
-      setDraft('stat_points', {
-        STAT_POINTS_BY_RARITY: { ...sp.STAT_POINTS_BY_RARITY, [rarity]: num },
-      })
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be a non-negative integer')
+      return
     }
+    setDraft('stat_points', {
+      STAT_POINTS_BY_RARITY: { ...sp.STAT_POINTS_BY_RARITY, [rarity]: num },
+    })
   }
 
   return (

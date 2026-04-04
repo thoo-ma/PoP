@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,7 +18,10 @@ export default function CloudRunPanel() {
 
   const handleChange = (field: keyof typeof cr, value: string) => {
     const num = field === 'YAMNET_TOILET_FLUSH_CLASS' ? parseInt(value, 10) : parseFloat(value)
-    if (Number.isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be 0 or greater')
+      return
+    }
     setDraft('cloud_run', { [field]: num })
   }
 

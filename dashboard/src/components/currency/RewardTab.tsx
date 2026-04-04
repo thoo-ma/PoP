@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 import LazyChart from '@/components/LazyChart'
 import { useGameConfigStore } from '@/store/gameConfigStore'
 import { useShallow } from 'zustand/react/shallow'
@@ -74,25 +75,33 @@ export function RewardTab() {
 
   const handleChange = (field: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) setDraft('currency', { [field]: num })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
+    }
+    setDraft('currency', { [field]: num })
   }
 
   const handleTypeMult = (type: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) {
-      setDraft('currency', {
-        REWARD_TYPE_MULTIPLIER: { ...cur.REWARD_TYPE_MULTIPLIER, [type]: num },
-      })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
     }
+    setDraft('currency', {
+      REWARD_TYPE_MULTIPLIER: { ...cur.REWARD_TYPE_MULTIPLIER, [type]: num },
+    })
   }
 
   const handleRarityMult = (rarity: string, value: string) => {
     const num = parseFloat(value)
-    if (!Number.isNaN(num)) {
-      setDraft('currency', {
-        REWARD_RARITY_MULTIPLIER: { ...cur.REWARD_RARITY_MULTIPLIER, [rarity]: num },
-      })
+    if (Number.isNaN(num)) {
+      toast.error('Please enter a valid number')
+      return
     }
+    setDraft('currency', {
+      REWARD_RARITY_MULTIPLIER: { ...cur.REWARD_RARITY_MULTIPLIER, [rarity]: num },
+    })
   }
 
   return (

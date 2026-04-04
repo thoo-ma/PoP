@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Toaster } from 'sonner'
 import './globals.css'
 import { AppShell } from './AppShell'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-neutral-950 text-neutral-100`}
       >
         <AppShell>{children}</AppShell>
+        <Toaster theme="dark" position="bottom-right" richColors />
       </body>
     </html>
   )

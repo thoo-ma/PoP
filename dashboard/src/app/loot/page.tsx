@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
@@ -89,7 +90,10 @@ export default function LootRollPanel() {
 
   const handleChange = (field: keyof typeof loot, value: string) => {
     const num = field === 'MAX_HOLDS' ? parseInt(value, 10) : parseFloat(value)
-    if (Number.isNaN(num) || num < 0) return
+    if (Number.isNaN(num) || num < 0) {
+      toast.error('Value must be 0 or greater')
+      return
+    }
     setDraft('loot_roll', { [field]: num })
   }
 
