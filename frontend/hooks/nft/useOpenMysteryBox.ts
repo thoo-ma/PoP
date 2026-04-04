@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import type { NFT } from '@/types/nft'
 import { logError } from '@/utils/errorHelpers'
@@ -13,6 +15,7 @@ import { logError } from '@/utils/errorHelpers'
  *   `NFT` or `null`, plus `loading` and `error` state.
  */
 export function useOpenMysteryBox() {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -46,6 +49,8 @@ export function useOpenMysteryBox() {
         return null
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes })
       return data as NFT
     } catch (err) {
       logError('useOpenMysteryBox:Open', err)
@@ -54,7 +59,7 @@ export function useOpenMysteryBox() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [queryClient])
 
   return { openBox, loading, error }
 }

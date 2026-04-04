@@ -17,7 +17,7 @@ import {
   scrollContent,
   typeBadge,
 } from '@/styles'
-import { formatDisplayName, nftEvents } from '@/utils'
+import { formatDisplayName } from '@/utils'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -82,7 +82,6 @@ export default memo(function Repair() {
       setIsRepaired(true)
       setRepairAmount(0)
       await refetch()
-      nftEvents.emit() // Notify other screens
     } else if (insufficientPoopError) {
       setAlertDialog({
         title: 'Insufficient POOP',

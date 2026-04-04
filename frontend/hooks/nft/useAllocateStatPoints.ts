@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -29,6 +31,7 @@ export interface AllocateResult {
  *   plus `loading` and `error` state.
  */
 export function useAllocateStatPoints() {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -69,6 +72,7 @@ export function useAllocateStatPoints() {
           return null
         }
 
+        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
         return data as AllocateResult
       } catch (err) {
         logError('useAllocateStatPoints:allocate', err)
@@ -78,7 +82,7 @@ export function useAllocateStatPoints() {
         setLoading(false)
       }
     },
-    [],
+    [queryClient],
   )
 
   return { allocate, loading, error }

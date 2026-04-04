@@ -1,6 +1,6 @@
 import { Text, View, ScrollView } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState, useEffect, useCallback, useMemo } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native'
 import { screenContainer, scrollContent, gridLayout, emptyState, skeletonCard } from '@/styles'
 import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks'
@@ -14,7 +14,7 @@ import {
   StatAllocationModal,
   MysteryBoxRevealModal,
 } from '@/components'
-import { sortNFTs, nftEvents, formatDisplayName } from '@/utils'
+import { sortNFTs, formatDisplayName } from '@/utils'
 import type { NFTRarity, NFTType, MysteryBox } from '@pop/shared'
 import type { SortOption, NFT } from '@/types'
 import type { AllocateResult } from '@/hooks'
@@ -43,15 +43,6 @@ export default memo(function Vault() {
   const [revealedNFT, setRevealedNFT] = useState<NFT | null>(null)
   const [revealVisible, setRevealVisible] = useState(false)
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
-
-  // Listen for NFT update events from other screens
-  useEffect(() => {
-    const unsubscribe = nftEvents.subscribe(() => {
-      refetch()
-      refetchBoxes()
-    })
-    return unsubscribe
-  }, [refetch, refetchBoxes])
 
   // Filter NFTs based on selected rarities and types
   /** Boxes grouped by rarity, sorted transcendent → common. */
@@ -120,7 +111,6 @@ export default memo(function Vault() {
       const success = await listNFT(nftId, price)
       if (success) {
         refetch()
-        nftEvents.emit()
       }
     },
     [nfts, listNFT, refetch],
@@ -134,7 +124,6 @@ export default memo(function Vault() {
     (_result: AllocateResult) => {
       setStatModalNFT(null)
       refetch()
-      nftEvents.emit()
     },
     [refetch],
   )
@@ -155,7 +144,6 @@ export default memo(function Vault() {
         setRevealVisible(true)
         refetchBoxes()
         refetch()
-        nftEvents.emit()
       }
     },
     [boxes, openBox, refetchBoxes, refetch],

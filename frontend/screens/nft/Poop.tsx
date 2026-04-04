@@ -33,7 +33,7 @@ import {
   typeBadge,
 } from '@/styles'
 import type { NFT } from '@/types'
-import { formatConfidencePercentage, formatDisplayName, nftEvents } from '@/utils'
+import { formatConfidencePercentage, formatDisplayName } from '@/utils'
 
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
   'turbo-flush': 5_000,
@@ -289,7 +289,6 @@ export default memo(function Poop() {
       const result = await poopNFT(displayNFT.id)
       if (result) {
         await refetch()
-        nftEvents.emit()
         setPoopedEnergy({ from: displayNFT.energy, to: result.energy })
         setPoopedXP({
           gained: result.xp_gained,
@@ -321,7 +320,6 @@ export default memo(function Poop() {
     (_result: AllocateResult) => {
       setStatModalData(null)
       refetch()
-      nftEvents.emit()
     },
     [refetch],
   )

@@ -1,10 +1,13 @@
 import type { BustedDetails, MysteryBox } from '@pop/shared'
+import { useQueryClient } from '@tanstack/react-query'
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useCallback, useState } from 'react'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
 export function useBreedNFT() {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null)
@@ -51,6 +54,8 @@ export function useBreedNFT() {
         return null
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes })
       return data as MysteryBox
     } catch (err) {
       logError('useBreedNFT:Breed', err)
@@ -59,7 +64,7 @@ export function useBreedNFT() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [queryClient])
 
   return {
     breedNFTs,

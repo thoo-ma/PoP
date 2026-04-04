@@ -17,7 +17,7 @@ import {
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import { errorMessage, infoBox, screenContainer, scrollContent } from '@/styles'
 import type { NFT } from '@/types/nft'
-import { canBreed, nftEvents } from '@/utils'
+import { canBreed } from '@/utils'
 
 // ─── Main screen ──────────────────────────────────────────────────────────────
 /**
@@ -52,7 +52,6 @@ import { canBreed, nftEvents } from '@/utils'
     const newNFT = await breedNFTs(parent1.id, parent2.id, degenPercent)
     if (newNFT) {
       setBreedResult(newNFT)
-      nftEvents.emit()
     }
     // Error is surfaced inline — no Alert
   }

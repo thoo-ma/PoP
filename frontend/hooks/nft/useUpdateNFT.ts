@@ -1,4 +1,6 @@
 import { useState, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -13,6 +15,7 @@ import { logError } from '@/utils/errorHelpers'
  *   shared `error` string for the most recent failure.
  */
 export function useUpdateNFT() {
+  const queryClient = useQueryClient()
   const [loadingUpdateEnergy, setLoadingUpdateEnergy] = useState<boolean>(false)
   const [loadingListNFT, setLoadingListNFT] = useState<boolean>(false)
   const [loadingUnlistNFT, setLoadingUnlistNFT] = useState<boolean>(false)
@@ -36,6 +39,7 @@ export function useUpdateNFT() {
         return false
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
       return true
     } catch (err) {
       logError('useUpdateNFT:UpdateEnergy', err)
@@ -44,7 +48,7 @@ export function useUpdateNFT() {
     } finally {
       setLoadingUpdateEnergy(false)
     }
-  }, [])
+  }, [queryClient])
 
   const listNFT = useCallback(async (nftId: string, price: string) => {
     try {
@@ -76,6 +80,8 @@ export function useUpdateNFT() {
         return false
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
       return true
     } catch (err) {
       logError('useUpdateNFT:ListNFT', err)
@@ -84,7 +90,7 @@ export function useUpdateNFT() {
     } finally {
       setLoadingListNFT(false)
     }
-  }, [])
+  }, [queryClient])
 
   const unlistNFT = useCallback(async (nftId: string) => {
     try {
@@ -111,6 +117,8 @@ export function useUpdateNFT() {
         return false
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
       return true
     } catch (err) {
       logError('useUpdateNFT:UnlistNFT', err)
@@ -119,7 +127,7 @@ export function useUpdateNFT() {
     } finally {
       setLoadingUnlistNFT(false)
     }
-  }, [])
+  }, [queryClient])
 
   return {
     updateEnergy,

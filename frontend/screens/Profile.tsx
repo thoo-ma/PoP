@@ -1,8 +1,8 @@
 import { Text, View } from 'react-native'
 import { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
-import { Avatar, Button, Dialog } from 'heroui-native'
-import { useAuth } from '@/hooks'
+import { Avatar, Button, Dialog, Spinner } from 'heroui-native'
+import { useAuth, useProfileStats, useUserNFTs } from '@/hooks'
 import { dialogPanel } from '@/styles'
 import { useSignOutDialog } from '@/utils'
 import { colors } from '@/constants'
@@ -21,6 +21,8 @@ interface ProfileProps {
  */
 export default function Profile({ visible, onClose }: ProfileProps) {
   const { getUserDisplayName, user, signOut } = useAuth()
+  const { detections, daysActive, loading: statsLoading } = useProfileStats()
+  const { nfts } = useUserNFTs()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
 
@@ -81,17 +83,25 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             {/* Stats section */}
             <View className="flex-row justify-around items-center w-full py-5 mb-6 bg-default rounded-xl">
               <View className="flex-1 items-center">
-                <Text className="text-xl font-bold text-foreground">0</Text>
+                {statsLoading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <Text className="text-xl font-bold text-foreground">{detections}</Text>
+                )}
                 <Text className="text-sm text-muted">Detections</Text>
               </View>
               <View className="w-px h-8 bg-border" />
               <View className="flex-1 items-center">
-                <Text className="text-xl font-bold text-foreground">0</Text>
+                <Text className="text-xl font-bold text-foreground">{nfts.length}</Text>
                 <Text className="text-sm text-muted">NFTs</Text>
               </View>
               <View className="w-px h-8 bg-border" />
               <View className="flex-1 items-center">
-                <Text className="text-xl font-bold text-foreground">0</Text>
+                {statsLoading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <Text className="text-xl font-bold text-foreground">{daysActive}</Text>
+                )}
                 <Text className="text-sm text-muted">Days Active</Text>
               </View>
             </View>

@@ -12,7 +12,7 @@ import {
 } from '@/styles'
 import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks'
 import { NFTCard, SortControls } from '@/components'
-import { sortNFTs, nftEvents, formatDisplayName } from '@/utils'
+import { sortNFTs, formatDisplayName } from '@/utils'
 import type { SortOption } from '@/types'
 
 type DialogInfo = { title: string; message: string } | null
@@ -55,7 +55,6 @@ export default memo(function Marketplace() {
       const success = await unlistNFT(nftId)
       if (success) {
         await refetchUser()
-        nftEvents.emit()
         setDialog({ title: 'Success', message: 'NFT removed from marketplace' })
       } else {
         setDialog({ title: 'Error', message: 'Failed to unlist NFT' })

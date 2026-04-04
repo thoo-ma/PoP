@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 import type { EdgeFunctionErrorResponse, CooldownDetails } from '@pop/shared'
@@ -44,6 +46,7 @@ export interface PoopResult {
  *   NFT is still resting (contains `cooldown_ends_at` and `cooldown_remaining_seconds`).
  */
 export function usePoopNFT() {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [cooldownError, setCooldownError] = useState<CooldownError | null>(null)
@@ -89,6 +92,7 @@ export function usePoopNFT() {
         return null
       }
 
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
       return data as PoopResult
     } catch (err) {
       logError('usePoopNFT:Poop', err)
@@ -97,7 +101,7 @@ export function usePoopNFT() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [queryClient])
 
   return { poopNFT, loading, error, cooldownError }
 }
