@@ -315,12 +315,9 @@ export default memo(function Poop() {
   }, [phase, detectionResult, cooldownError, displayNFT, handleFullReset, poopNFT])
 
   // ── Stat allocation ───────────────────────────────────────
-  const handleStatAllocated = useCallback(
-    (_result: AllocateResult) => {
-      setStatModalData(null)
-    },
-    [],
-  )
+  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+    setStatModalData(null)
+  }, [])
   const handleStatModalDismiss = useCallback(() => setStatModalData(null), [])
 
   // ── Early returns ─────────────────────────────────────────

@@ -51,6 +51,7 @@ function AppInner() {
   }, [refetch])
 
   const handleSignOut = useCallback(async () => {
+    queryClient.clear()
     await signOut()
   }, [signOut])
 

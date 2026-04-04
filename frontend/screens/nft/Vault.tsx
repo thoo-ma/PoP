@@ -117,12 +117,9 @@ export default memo(function Vault() {
     setStatModalNFT(nft)
   }, [])
 
-  const handleStatAllocated = useCallback(
-    (_result: AllocateResult) => {
-      setStatModalNFT(null)
-    },
-    [],
-  )
+  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+    setStatModalNFT(null)
+  }, [])
 
   const handleStatModalDismiss = useCallback(() => {
     setStatModalNFT(null)
