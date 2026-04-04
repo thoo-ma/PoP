@@ -56,6 +56,7 @@ export function useBreedNFT() {
         }
 
         await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        await queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes })
         return data as MysteryBox
       } catch (err) {
         logError('useBreedNFT:Breed', err)

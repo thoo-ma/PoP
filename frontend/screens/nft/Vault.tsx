@@ -31,7 +31,6 @@ export default memo(function Vault() {
     boxes,
     loading: boxesLoading,
     error: boxesError,
-    refetch: refetchBoxes,
   } = useMysteryBoxes()
   const { openBox, loading: openLoading } = useOpenMysteryBox()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')
@@ -135,10 +134,9 @@ export default memo(function Vault() {
       if (nft) {
         setRevealedNFT(nft)
         setRevealVisible(true)
-        refetchBoxes()
       }
     },
-    [boxes, openBox, refetchBoxes],
+    [boxes, openBox],
   )
 
   const handleRevealClose = useCallback(() => {

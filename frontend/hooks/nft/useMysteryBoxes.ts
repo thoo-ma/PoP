@@ -1,86 +1,41 @@
-import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useQuery } from '@tanstack/react-query'
 import type { MysteryBox } from '@pop/shared'
+import { queryKeys } from '@/constants/queryKeys'
+import { supabase } from '@/lib/supabase'
 
-interface UseMysteryBoxesResult {
-  /** Fetched mystery boxes owned by the current user, newest first. */
-  boxes: MysteryBox[]
-  /** True while the fetch or refetch is in flight. */
-  loading: boolean
-  /** Error message from the last failed fetch, or `null`. */
-  error: string | null
-  /** Re-fetches mystery boxes from Supabase. */
-  refetch: () => Promise<void>
+async function fetchMysteryBoxes(): Promise<MysteryBox[]> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  if (!session) return []
+
+  const { data, error } = await supabase
+    .from('mystery_boxes')
+    .select('id, rarity, image_url, opened, created_at')
+    .eq('user_id', session.user.id)
+    .eq('opened', false)
+    .order('created_at', { ascending: false })
+
+  if (error) throw new Error(error.message)
+  return (data ?? []) as MysteryBox[]
 }
 
 /**
- * Hook to fetch and manage the current user's mystery boxes.
+ * Hook to fetch the current user's unopened mystery boxes via React Query.
  *
- * Fetches all unopened boxes from `mystery_boxes`, ordered newest-first.
- * Uses `getSession()` (local storage read) rather than `getUser()` (network
- * round-trip) to avoid a silent failure on component mount. Also subscribes
- * to Supabase Realtime so the list updates automatically on INSERT.
- *
- * @returns The user's mystery boxes (`boxes`), async state (`loading`, `error`),
- *   and a manual `refetch` callback.
+ * All consumers share a single cache entry (`queryKeys.mysteryBoxes`).
+ * Mutation hooks (breed, open-box) invalidate this key after success.
  */
-export function useMysteryBoxes(): UseMysteryBoxesResult {
-  const [boxes, setBoxes] = useState<MysteryBox[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export function useMysteryBoxes() {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: queryKeys.mysteryBoxes,
+    queryFn: fetchMysteryBoxes,
+  })
 
-  const refetch = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      // getSession() reads from local storage — fast and reliable on remount.
-      // getUser() does a network trip and can return null during token refresh.
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      if (!session) {
-        setBoxes([])
-        return
-      }
-
-      const { data, error: fetchError } = await supabase
-        .from('mystery_boxes')
-        .select('id, rarity, image_url, opened, created_at')
-        .eq('user_id', session.user.id)
-        .eq('opened', false)
-        .order('created_at', { ascending: false })
-
-      if (fetchError) {
-        setError(fetchError.message)
-        return
-      }
-
-      setBoxes((data ?? []) as MysteryBox[])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load mystery boxes')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Initial fetch + realtime subscription for live updates
-  useEffect(() => {
-    refetch()
-
-    // Subscribe to any INSERT/UPDATE on mystery_boxes so the list stays
-    // current even when the component stays mounted (e.g. wider windowSize).
-    const channel = supabase
-      .channel('mystery-boxes-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'mystery_boxes' }, () => {
-        refetch()
-      })
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [refetch])
-
-  return { boxes, loading, error, refetch }
+  return {
+    boxes: data ?? [],
+    loading: isLoading,
+    error: error?.message ?? null,
+    refetch,
+  }
 }

@@ -51,6 +51,7 @@ export function useOpenMysteryBox() {
         }
 
         await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        await queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes })
         return data as NFT
       } catch (err) {
         logError('useOpenMysteryBox:Open', err)
