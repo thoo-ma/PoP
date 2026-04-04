@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler'
 import './global.css'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
 import { HeroUINativeProvider, Spinner } from 'heroui-native'
 import { useCallback, useRef, useState } from 'react'
@@ -17,6 +18,7 @@ import {
 import { colors } from '@/constants'
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
 import { useAuth, useUserApproval } from '@/hooks'
+import { queryClient } from '@/lib/queryClient'
 import { InviteCodeScreen, Profile, Wallet } from '@/screens'
 
 export default function App() {
@@ -24,9 +26,11 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <HeroUINativeProvider>
-          <ErrorBoundary>
-            <AppInner />
-          </ErrorBoundary>
+          <QueryClientProvider client={queryClient}>
+            <ErrorBoundary>
+              <AppInner />
+            </ErrorBoundary>
+          </QueryClientProvider>
         </HeroUINativeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
@@ -47,6 +51,7 @@ function AppInner() {
   }, [refetch])
 
   const handleSignOut = useCallback(async () => {
+    queryClient.clear()
     await signOut()
   }, [signOut])
 

@@ -1,23 +1,23 @@
-import { Text, View, ScrollView } from 'react-native'
+import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState, useEffect, useCallback, useMemo } from 'react'
-import { Button, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native'
-import { screenContainer, scrollContent, gridLayout, emptyState, skeletonCard } from '@/styles'
-import { useUserNFTs, useUpdateNFT, useMysteryBoxes, useOpenMysteryBox } from '@/hooks'
+import { Button, cn, ScrollShadow, Skeleton, Tabs } from 'heroui-native'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { ScrollView, Text, View } from 'react-native'
 import {
-  NFTCard,
-  MysteryBoxCard,
-  SortControls,
   FilterControls,
-  ScreenLoader,
-  ScreenError,
-  StatAllocationModal,
+  MysteryBoxCard,
   MysteryBoxRevealModal,
+  NFTCard,
+  ScreenError,
+  ScreenLoader,
+  SortControls,
+  StatAllocationModal,
 } from '@/components'
-import { sortNFTs, nftEvents, formatDisplayName } from '@/utils'
-import type { NFTRarity, NFTType, MysteryBox } from '@pop/shared'
-import type { SortOption, NFT } from '@/types'
 import type { AllocateResult } from '@/hooks'
+import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
+import { emptyState, gridLayout, screenContainer, scrollContent, skeletonCard } from '@/styles'
+import type { NFT, SortOption } from '@/types'
+import { formatDisplayName, sortNFTs } from '@/utils'
 
 /**
  * Vault screen displaying the user's full NFT and mystery-box collection.
@@ -27,12 +27,7 @@ import type { AllocateResult } from '@/hooks'
 export default memo(function Vault() {
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { listNFT, loadingListNFT: updateLoading } = useUpdateNFT()
-  const {
-    boxes,
-    loading: boxesLoading,
-    error: boxesError,
-    refetch: refetchBoxes,
-  } = useMysteryBoxes()
+  const { boxes, loading: boxesLoading, error: boxesError } = useMysteryBoxes()
   const { openBox, loading: openLoading } = useOpenMysteryBox()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')
   const [sortBy, setSortBy] = useState<SortOption>('efficiency')
@@ -43,15 +38,6 @@ export default memo(function Vault() {
   const [revealedNFT, setRevealedNFT] = useState<NFT | null>(null)
   const [revealVisible, setRevealVisible] = useState(false)
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
-
-  // Listen for NFT update events from other screens
-  useEffect(() => {
-    const unsubscribe = nftEvents.subscribe(() => {
-      refetch()
-      refetchBoxes()
-    })
-    return unsubscribe
-  }, [refetch, refetchBoxes])
 
   // Filter NFTs based on selected rarities and types
   /** Boxes grouped by rarity, sorted transcendent → common. */
@@ -117,27 +103,18 @@ export default memo(function Vault() {
       const nft = nfts.find((n) => n.id === nftId)
       const basePrice = nft ? (nft.efficiency + nft.resilience + nft.comfort + nft.luck) / 400 : 0.5
       const price = `${basePrice.toFixed(1)} ETH`
-      const success = await listNFT(nftId, price)
-      if (success) {
-        refetch()
-        nftEvents.emit()
-      }
+      await listNFT(nftId, price)
     },
-    [nfts, listNFT, refetch],
+    [nfts, listNFT],
   )
 
   const handleOpenStatModal = useCallback((nft: NFT) => {
     setStatModalNFT(nft)
   }, [])
 
-  const handleStatAllocated = useCallback(
-    (_result: AllocateResult) => {
-      setStatModalNFT(null)
-      refetch()
-      nftEvents.emit()
-    },
-    [refetch],
-  )
+  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+    setStatModalNFT(null)
+  }, [])
 
   const handleStatModalDismiss = useCallback(() => {
     setStatModalNFT(null)
@@ -153,12 +130,9 @@ export default memo(function Vault() {
       if (nft) {
         setRevealedNFT(nft)
         setRevealVisible(true)
-        refetchBoxes()
-        refetch()
-        nftEvents.emit()
       }
     },
-    [boxes, openBox, refetchBoxes, refetch],
+    [boxes, openBox],
   )
 
   const handleRevealClose = useCallback(() => {
@@ -195,75 +169,73 @@ export default memo(function Vault() {
         </Tabs.List>
 
         <Tabs.Content value="toilets">
-          
-            <FilterControls
-              selectedRarities={selectedRarities}
-              selectedTypes={selectedTypes}
-              onRarityToggle={handleRarityToggle}
-              onTypeToggle={handleTypeToggle}
-              onClearFilters={handleClearFilters}
-            />
+          <FilterControls
+            selectedRarities={selectedRarities}
+            selectedTypes={selectedTypes}
+            onRarityToggle={handleRarityToggle}
+            onTypeToggle={handleTypeToggle}
+            onClearFilters={handleClearFilters}
+          />
 
-            <SortControls
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              onSortByChange={handleSortByChange}
-              onSortOrderToggle={handleSortOrderToggle}
-            />
+          <SortControls
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortByChange={handleSortByChange}
+            onSortOrderToggle={handleSortOrderToggle}
+          />
 
-            <ScrollShadow LinearGradientComponent={LinearGradient}>
-              <ScrollView
-                contentContainerClassName={cn(
-                  scrollContent({ padding: 'md', bottomPad: 'md' }),
-                  'w-full',
-                )}
-                showsVerticalScrollIndicator={false}
-              >
-                <View className={gridLayout().wrapper()}>
-                  {sortedNfts.map((nft) => (
-                    <View key={nft.id} className={gridLayout().item()}>
-                      <NFTCard
-                        key={nft.id}
-                        nft={nft}
-                        action={
-                          <>
-                            {(nft.stat_points ?? 0) > 0 && (
-                              <Button
-                                variant="secondary"
-                                size="sm"
-                                className="mt-1"
-                                onPress={() => handleOpenStatModal(nft)}
-                                accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
-                              >
-                                <Button.Label>
-                                  ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
-                                </Button.Label>
-                              </Button>
-                            )}
-                            {!nft.isListed ? (
-                              <Button
-                                variant="primary"
-                                size="sm"
-                                className="mt-1"
-                                isDisabled={updateLoading}
-                                onPress={() => handleListNFT(nft.id)}
-                                accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                                accessibilityHint="List this NFT on the marketplace"
-                              >
-                                <Button.Label>
-                                  {updateLoading ? 'Listing...' : 'List for Sale'}
-                                </Button.Label>
-                              </Button>
-                            ) : undefined}
-                          </>
-                        }
-                      />
-                    </View>
-                  ))}
-                </View>
-              </ScrollView>
-            </ScrollShadow>
-          
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'md' }),
+                'w-full',
+              )}
+              showsVerticalScrollIndicator={false}
+            >
+              <View className={gridLayout().wrapper()}>
+                {sortedNfts.map((nft) => (
+                  <View key={nft.id} className={gridLayout().item()}>
+                    <NFTCard
+                      key={nft.id}
+                      nft={nft}
+                      action={
+                        <>
+                          {(nft.stat_points ?? 0) > 0 && (
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              className="mt-1"
+                              onPress={() => handleOpenStatModal(nft)}
+                              accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                            >
+                              <Button.Label>
+                                ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
+                              </Button.Label>
+                            </Button>
+                          )}
+                          {!nft.isListed ? (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="mt-1"
+                              isDisabled={updateLoading}
+                              onPress={() => handleListNFT(nft.id)}
+                              accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                              accessibilityHint="List this NFT on the marketplace"
+                            >
+                              <Button.Label>
+                                {updateLoading ? 'Listing...' : 'List for Sale'}
+                              </Button.Label>
+                            </Button>
+                          ) : undefined}
+                        </>
+                      }
+                    />
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </ScrollShadow>
         </Tabs.Content>
         <Tabs.Content value="mystery-boxes">
           {boxesLoading ? (

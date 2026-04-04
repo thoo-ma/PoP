@@ -1,95 +1,70 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import type { NFT } from '@/types/nft'
-import { logError } from '@/utils/errorHelpers'
+
+async function fetchMarketplaceListings(): Promise<NFT[]> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return []
+
+  const { data, error } = await supabase
+    .from('marketplace_listings')
+    .select(`
+      nft_id,
+      price,
+      listed_at,
+      nfts:nft_id (
+        id,
+        name,
+        image_url,
+        type,
+        rarity,
+        efficiency,
+        resilience,
+        comfort,
+        luck,
+        energy,
+        level,
+        xp,
+        stat_points,
+        breed_count,
+        last_used_at,
+        user_id,
+        created_at,
+        updated_at
+      )
+    `)
+    .neq('seller_id', user.id)
+    .order('listed_at', { ascending: false })
+
+  if (error) throw new Error(error.message)
+
+  return (data ?? [])
+    .filter((listing) => listing.nfts !== null)
+    .map((listing) => {
+      const { user_id: _, ...nft } = listing.nfts as NonNullable<typeof listing.nfts>
+      return { ...nft, isListed: true as const, price: listing.price }
+    })
+}
 
 /**
- * Hook to fetch marketplace listings (NFTs from other users).
+ * Hook to fetch marketplace listings (NFTs from other users) via React Query.
  *
- * @returns Other users' listed NFTs (`listings`), async state (`loading`, `error`),
- *   and a `fetchListings` callback.
+ * All consumers share a single cache entry (`queryKeys.marketplaceListings`).
+ * Mutation hooks (list/unlist) invalidate this key after success.
  */
 export function useMarketplaceListings() {
-  const [listings, setListings] = useState<NFT[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchListings = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) {
-        setListings([])
-        return
-      }
-
-      const { data: listingsData, error: listingsError } = await supabase
-        .from('marketplace_listings')
-        .select(`
-          nft_id,
-          price,
-          listed_at,
-          nfts:nft_id (
-            id,
-            name,
-            image_url,
-            type,
-            rarity,
-            efficiency,
-            resilience,
-            comfort,
-            luck,
-            energy,
-            level,
-            xp,
-            stat_points,
-            breed_count,
-            last_used_at,
-            user_id,
-            created_at,
-            updated_at
-          )
-        `)
-        .neq('seller_id', user.id)
-        .order('listed_at', { ascending: false })
-
-      if (listingsError) {
-        logError('useMarketplaceListings:Fetch', listingsError)
-        setError(listingsError.message)
-        setListings([])
-        return
-      }
-
-      const enrichedListings: NFT[] = (listingsData ?? [])
-        .filter((listing) => listing.nfts !== null)
-        .map((listing) => {
-          const { user_id: _, ...nft } = listing.nfts as NonNullable<typeof listing.nfts>
-          return { ...nft, isListed: true as const, price: listing.price }
-        })
-
-      setListings(enrichedListings)
-    } catch (err) {
-      logError('useMarketplaceListings:Fetch', err)
-      setError(err instanceof Error ? err.message : 'Failed to fetch listings')
-      setListings([])
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchListings()
-  }, [fetchListings])
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: queryKeys.marketplaceListings,
+    queryFn: fetchMarketplaceListings,
+  })
 
   return {
-    listings,
-    loading,
-    error,
-    refetch: fetchListings,
+    listings: data ?? [],
+    loading: isLoading,
+    error: error?.message ?? null,
+    refetch,
   }
 }
