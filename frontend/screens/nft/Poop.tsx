@@ -288,7 +288,6 @@ export default memo(function Poop() {
     ;(async () => {
       const result = await poopNFT(displayNFT.id)
       if (result) {
-        await refetch()
         setPoopedEnergy({ from: displayNFT.energy, to: result.energy })
         setPoopedXP({
           gained: result.xp_gained,
@@ -313,15 +312,14 @@ export default memo(function Poop() {
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, detectionResult, cooldownError, displayNFT, handleFullReset, poopNFT, refetch])
+  }, [phase, detectionResult, cooldownError, displayNFT, handleFullReset, poopNFT])
 
   // ── Stat allocation ───────────────────────────────────────
   const handleStatAllocated = useCallback(
     (_result: AllocateResult) => {
       setStatModalData(null)
-      refetch()
     },
-    [refetch],
+    [],
   )
   const handleStatModalDismiss = useCallback(() => setStatModalData(null), [])
 

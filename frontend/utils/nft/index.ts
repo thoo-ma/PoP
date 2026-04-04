@@ -1,3 +1,3 @@
 export * from './breedHelpers'
-export * from './sortHelpers'
 export * from './nameHelpers'
+export * from './sortHelpers'

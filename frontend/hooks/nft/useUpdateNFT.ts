@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
@@ -21,113 +21,120 @@ export function useUpdateNFT() {
   const [loadingUnlistNFT, setLoadingUnlistNFT] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const updateEnergy = useCallback(async (nftId: string, newEnergy: number) => {
-    try {
-      setLoadingUpdateEnergy(true)
-      setError(null)
+  const updateEnergy = useCallback(
+    async (nftId: string, newEnergy: number) => {
+      try {
+        setLoadingUpdateEnergy(true)
+        setError(null)
 
-      const clampedEnergy = Math.max(0, Math.min(100, newEnergy))
+        const clampedEnergy = Math.max(0, Math.min(100, newEnergy))
 
-      const { error: updateError } = await supabase
-        .from('nfts')
-        .update({ energy: clampedEnergy })
-        .eq('id', nftId)
+        const { error: updateError } = await supabase
+          .from('nfts')
+          .update({ energy: clampedEnergy })
+          .eq('id', nftId)
 
-      if (updateError) {
-        logError('useUpdateNFT:UpdateEnergy', updateError)
-        setError(updateError.message)
+        if (updateError) {
+          logError('useUpdateNFT:UpdateEnergy', updateError)
+          setError(updateError.message)
+          return false
+        }
+
+        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        return true
+      } catch (err) {
+        logError('useUpdateNFT:UpdateEnergy', err)
+        setError(err instanceof Error ? err.message : 'Failed to update energy')
         return false
+      } finally {
+        setLoadingUpdateEnergy(false)
       }
+    },
+    [queryClient],
+  )
 
-      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-      return true
-    } catch (err) {
-      logError('useUpdateNFT:UpdateEnergy', err)
-      setError(err instanceof Error ? err.message : 'Failed to update energy')
-      return false
-    } finally {
-      setLoadingUpdateEnergy(false)
-    }
-  }, [queryClient])
+  const listNFT = useCallback(
+    async (nftId: string, price: string) => {
+      try {
+        setLoadingListNFT(true)
+        setError(null)
 
-  const listNFT = useCallback(async (nftId: string, price: string) => {
-    try {
-      setLoadingListNFT(true)
-      setError(null)
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        if (!user) {
+          setError('Not authenticated')
+          return false
+        }
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        setError('Not authenticated')
+        const { error: listError } = await supabase.from('marketplace_listings').insert({
+          nft_id: nftId,
+          seller_id: user.id,
+          price,
+        })
+
+        if (listError) {
+          logError('useUpdateNFT:ListNFT', listError)
+          // Unique constraint violation — nft_id already has a listing row.
+          setError(
+            listError.code === '23505'
+              ? 'This NFT is already listed on the marketplace.'
+              : listError.message,
+          )
+          return false
+        }
+
+        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        return true
+      } catch (err) {
+        logError('useUpdateNFT:ListNFT', err)
+        setError(err instanceof Error ? err.message : 'Failed to list NFT')
         return false
+      } finally {
+        setLoadingListNFT(false)
       }
+    },
+    [queryClient],
+  )
 
-      const { error: listError } = await supabase.from('marketplace_listings').insert({
-        nft_id: nftId,
-        seller_id: user.id,
-        price,
-      })
+  const unlistNFT = useCallback(
+    async (nftId: string) => {
+      try {
+        setLoadingUnlistNFT(true)
+        setError(null)
 
-      if (listError) {
-        logError('useUpdateNFT:ListNFT', listError)
-        // Unique constraint violation — nft_id already has a listing row.
-        setError(
-          listError.code === '23505'
-            ? 'This NFT is already listed on the marketplace.'
-            : listError.message,
-        )
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        if (!user) {
+          setError('Not authenticated')
+          return false
+        }
+
+        const { error: unlistError } = await supabase
+          .from('marketplace_listings')
+          .delete()
+          .eq('nft_id', nftId)
+          .eq('seller_id', user.id)
+
+        if (unlistError) {
+          logError('useUpdateNFT:UnlistNFT', unlistError)
+          setError(unlistError.message)
+          return false
+        }
+
+        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        return true
+      } catch (err) {
+        logError('useUpdateNFT:UnlistNFT', err)
+        setError(err instanceof Error ? err.message : 'Failed to unlist NFT')
         return false
+      } finally {
+        setLoadingUnlistNFT(false)
       }
-
-      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-      await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
-      return true
-    } catch (err) {
-      logError('useUpdateNFT:ListNFT', err)
-      setError(err instanceof Error ? err.message : 'Failed to list NFT')
-      return false
-    } finally {
-      setLoadingListNFT(false)
-    }
-  }, [queryClient])
-
-  const unlistNFT = useCallback(async (nftId: string) => {
-    try {
-      setLoadingUnlistNFT(true)
-      setError(null)
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
-        setError('Not authenticated')
-        return false
-      }
-
-      const { error: unlistError } = await supabase
-        .from('marketplace_listings')
-        .delete()
-        .eq('nft_id', nftId)
-        .eq('seller_id', user.id)
-
-      if (unlistError) {
-        logError('useUpdateNFT:UnlistNFT', unlistError)
-        setError(unlistError.message)
-        return false
-      }
-
-      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-      await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
-      return true
-    } catch (err) {
-      logError('useUpdateNFT:UnlistNFT', err)
-      setError(err instanceof Error ? err.message : 'Failed to unlist NFT')
-      return false
-    } finally {
-      setLoadingUnlistNFT(false)
-    }
-  }, [queryClient])
+    },
+    [queryClient],
+  )
 
   return {
     updateEnergy,

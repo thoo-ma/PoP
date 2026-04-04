@@ -1,19 +1,19 @@
-import { Text, View, ScrollView } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { memo, useState, useCallback, useMemo } from 'react'
-import { Button, Dialog, Skeleton, Tabs, ScrollShadow, cn } from 'heroui-native'
+import { Button, cn, Dialog, ScrollShadow, Skeleton, Tabs } from 'heroui-native'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { ScrollView, Text, View } from 'react-native'
+import { NFTCard, SortControls } from '@/components'
+import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
+  dialogBody,
+  emptyState,
+  gridLayout,
   screenContainer,
   scrollContent,
-  gridLayout,
-  emptyState,
-  dialogBody,
   skeletonCard,
 } from '@/styles'
-import { useUserNFTs, useMarketplaceListings, useUpdateNFT } from '@/hooks'
-import { NFTCard, SortControls } from '@/components'
-import { sortNFTs, formatDisplayName } from '@/utils'
 import type { SortOption } from '@/types'
+import { formatDisplayName, sortNFTs } from '@/utils'
 
 type DialogInfo = { title: string; message: string } | null
 
@@ -29,7 +29,7 @@ export default memo(function Marketplace() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [dialog, setDialog] = useState<DialogInfo>(null)
   // Fetch user's NFTs for "My Listings" tab
-  const { nfts, loading: userLoading, refetch: refetchUser } = useUserNFTs()
+  const { nfts, loading: userLoading } = useUserNFTs()
   // Fetch marketplace listings from other users
   const { listings: backendListings, loading: marketplaceLoading } = useMarketplaceListings()
   const { unlistNFT, loadingUnlistNFT: updateLoading } = useUpdateNFT()
@@ -54,13 +54,12 @@ export default memo(function Marketplace() {
     async (nftId: string) => {
       const success = await unlistNFT(nftId)
       if (success) {
-        await refetchUser()
         setDialog({ title: 'Success', message: 'NFT removed from marketplace' })
       } else {
         setDialog({ title: 'Error', message: 'Failed to unlist NFT' })
       }
     },
-    [unlistNFT, refetchUser],
+    [unlistNFT],
   )
 
   const handleSortOrderToggle = useCallback(() => {

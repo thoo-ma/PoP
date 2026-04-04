@@ -81,7 +81,6 @@ export default memo(function Repair() {
       setPoopSpent(result.poop_spent)
       setIsRepaired(true)
       setRepairAmount(0)
-      await refetch()
     } else if (insufficientPoopError) {
       setAlertDialog({
         title: 'Insufficient POOP',

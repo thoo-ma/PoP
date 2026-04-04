@@ -1,11 +1,11 @@
-import { Text, View } from 'react-native'
-import { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Avatar, Button, Dialog, Spinner } from 'heroui-native'
+import { useState } from 'react'
+import { Text, View } from 'react-native'
+import { colors } from '@/constants'
 import { useAuth, useProfileStats, useUserNFTs } from '@/hooks'
 import { dialogPanel } from '@/styles'
 import { useSignOutDialog } from '@/utils'
-import { colors } from '@/constants'
 
 interface ProfileProps {
   /** Controls the visibility of the profile modal. */
