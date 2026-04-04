@@ -58,6 +58,6 @@ jobs:
 
       - name: Publish OTA update
         env:
-          EAS_CHANNEL: ${{ inputs.channel || 'production' }}
-          EAS_MESSAGE: ${{ inputs.message || format('OTA {0}', github.sha) }}
+          EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.channel || 'production' }}
+          EAS_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message || format('OTA {0}', github.sha) }}
         run: cd frontend && eas update --channel "$EAS_CHANNEL" --message "$EAS_MESSAGE" --non-interactive
