@@ -3,7 +3,7 @@
   //   tsconfig.base.json  ← this file (strict defaults, shared by all packages)
   //     shared/tsconfig.json         (no extra compilerOptions)
   //     dashboard/tsconfig.json      (adds Next.js lib, jsx, paths)
-  //     frontend/tsconfig.json       (adds Expo base, paths for @shared)
+  //     frontend/tsconfig.json       (adds Expo base, paths for @/* and @pop/shared)
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
