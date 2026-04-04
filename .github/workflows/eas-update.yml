@@ -1,0 +1,63 @@
+name: Mobile OTA Update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'shared/**'
+      - 'frontend/**'
+      # Exclude files that signal native-level changes or version bumps
+      - '!frontend/app.json'
+      - '!frontend/app.config.ts'
+      - '!frontend/eas.json'
+      - '!frontend/package.json'
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Update channel'
+        required: true
+        type: choice
+        options:
+          - production
+          - preview
+        default: production
+      message:
+        description: 'Update message (optional)'
+        required: false
+        type: string
+
+concurrency:
+  group: eas-update-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ota-update:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish OTA update
+        env:
+          EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.channel || 'production' }}
+          EAS_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message || format('OTA {0}', github.sha) }}
+        run: cd frontend && eas update --channel "$EAS_CHANNEL" --message "$EAS_MESSAGE" --non-interactive

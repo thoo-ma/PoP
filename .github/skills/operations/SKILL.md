@@ -22,6 +22,15 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Manual CLI override (build):** `cd frontend && eas build --profile production --platform all`
 - **Manual CLI override (submit):** `cd frontend && eas submit --platform all --latest`
 
+### Mobile OTA Update
+- **Trigger:** Push to `main` that touches `shared/**` or `frontend/**` (best-effort exclusion of native config files — see note below) OR manual workflow_dispatch
+- **Workflow:** `.github/workflows/eas-update.yml`
+- **What it does:** Publishes a JS-only OTA update via `eas update` — no native rebuild needed. Ideal for game config changes (`shared/*.ts`) and frontend-only code changes.
+- **Manual dispatch inputs:** channel (production/preview), message (optional)
+- **Manual CLI override:** `cd frontend && eas update --channel production --message "description"`
+- **Runtime safety:** The `runtimeVersion` policy (`appVersion` in `app.json`) ensures OTA updates only reach clients with a matching native build. If the app version changes (native rebuild), old OTA bundles are ignored.
+- **Path filter note:** GitHub's `paths` negation patterns only prevent the workflow if *no* included path matches. A commit that changes both `shared/currency.ts` and `frontend/package.json` still triggers the workflow because `shared/**` matches. This is harmless — `runtimeVersion` prevents the OTA from reaching clients with mismatched native builds — but the workflow may run on version-bump commits. Acceptable trade-off; use manual dispatch for targeted updates if precision is needed.
+
 ### Mobile Preview Build
 - **Trigger:** PR labeled `preview-build` OR manual workflow_dispatch
 - **Workflow:** `.github/workflows/eas-preview.yml`
