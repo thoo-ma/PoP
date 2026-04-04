@@ -85,6 +85,7 @@ export function useUpdateNFT() {
         }
 
         await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
         return true
       } catch (err) {
         logError('useUpdateNFT:ListNFT', err)
@@ -124,6 +125,7 @@ export function useUpdateNFT() {
         }
 
         await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
         return true
       } catch (err) {
         logError('useUpdateNFT:UnlistNFT', err)

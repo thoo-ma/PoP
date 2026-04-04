@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
 import type { MysteryBox } from '@pop/shared'
+import { useQuery } from '@tanstack/react-query'
 import { queryKeys } from '@/constants/queryKeys'
 import { supabase } from '@/lib/supabase'
 
