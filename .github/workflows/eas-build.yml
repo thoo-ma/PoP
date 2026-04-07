@@ -1,9 +1,6 @@
 name: Mobile App Build & Submit
 
 on:
-  push:
-    tags:
-      - 'pop@*'
   workflow_dispatch:
     inputs:
       platform:
