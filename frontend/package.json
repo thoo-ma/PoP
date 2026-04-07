@@ -18,8 +18,7 @@
     "submit:production:ios": "eas submit --platform ios --profile production",
     "submit:production:android": "eas submit --platform android --profile production",
     "gen:types": "supabase gen types typescript --project-id mtnluwkvhkwwxvxdtkgs > ../shared/database.types.ts",
-    "typecheck": "tsc --noEmit",
-    "version": "node -e \"const p=require('./package.json');const a=require('./app.json');a.expo.version=p.version;a.expo.ios.buildNumber='1';require('fs').writeFileSync('./app.json',JSON.stringify(a,null,2)+'\\n')\" && git add app.json"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@embrace-io/react-native": "^6.6.0",

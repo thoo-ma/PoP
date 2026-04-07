@@ -1,6 +1,8 @@
 import type { ConfigContext, ExpoConfig } from 'expo/config'
+import packageJson from './package.json'
 
 export default ({ config }: ConfigContext): ExpoConfig => {
+  config.version = packageJson.version
   const iOSAppId = process.env.EMBRACE_IOS_APP_ID ?? ''
   const apiToken = process.env.EMBRACE_API_TOKEN ?? ''
 
