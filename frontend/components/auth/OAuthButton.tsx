@@ -2,29 +2,56 @@ import { AntDesign } from '@expo/vector-icons'
 import { Button, Spinner } from 'heroui-native'
 import type { OAuthButtonProps } from '@/types'
 
-/**
- * Reusable OAuth sign-in button for Google and X (Twitter) providers.
- * Renders provider-specific colours, icon, and label; shows a spinner
- * while `loading` is true.
- */
+type OAuthProvider = OAuthButtonProps['provider']
+
+const config = {
+  google: {
+    label: 'Continue with Google',
+    variant: 'outline' as const,
+    textColor: '#1F1F1F',
+    icon: 'google' as const,
+  },
+  twitter: {
+    label: 'Continue with 𝕏',
+    variant: 'primary' as const,
+    textColor: '#fff',
+    icon: undefined,
+  },
+  apple: {
+    label: 'Continue with Apple',
+    variant: 'primary' as const,
+    textColor: '#fff',
+    icon: 'apple' as const,
+  },
+} satisfies Record<
+  OAuthProvider,
+  {
+    label: string
+    variant: 'primary' | 'outline'
+    textColor: string
+    icon: 'google' | 'apple' | undefined
+  }
+>
+
 export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
-  const isGoogle = provider === 'google'
-  const label = isGoogle ? 'Continue with Google' : 'Continue with 𝕏'
+  const { label, variant, textColor, icon } = config[provider]
 
   return (
     <Button
-      variant={isGoogle ? 'outline' : 'primary'}
+      variant={variant}
       onPress={onPress}
       isDisabled={loading}
-      className="mb-4"
+      className={`mb-4 ${provider === 'apple' ? 'bg-black' : ''}`}
       accessibilityLabel={label}
     >
       {loading ? (
-        <Spinner size="sm" color={isGoogle ? '#1F1F1F' : '#fff'} />
+        <Spinner size="sm" color={textColor} />
       ) : (
         <>
-          {isGoogle && <AntDesign name="google" size={20} color="#1F1F1F" />}
-          <Button.Label className={isGoogle ? 'text-[#1F1F1F]' : ''}>{label}</Button.Label>
+          {icon && <AntDesign name={icon} size={20} color={textColor} />}
+          <Button.Label style={variant === 'outline' ? { color: textColor } : undefined}>
+            {label}
+          </Button.Label>
         </>
       )}
     </Button>

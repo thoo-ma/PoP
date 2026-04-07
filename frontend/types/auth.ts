@@ -1,10 +1,10 @@
-import type { Session, User } from '@supabase/supabase-js'
 import type { Tables } from '@pop/shared'
+import type { Session, User } from '@supabase/supabase-js'
 
 /**
  * OAuth provider types
  */
-export type OAuthProvider = 'google' | 'twitter'
+export type OAuthProvider = 'google' | 'twitter' | 'apple'
 
 /**
  * Return type for useAuth hook
