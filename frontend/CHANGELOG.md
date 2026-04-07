@@ -1,5 +1,11 @@
 # pop
 
+## 0.2.1
+
+### Patch Changes
+
+- [#279](https://github.com/thoo-ma/PoP/pull/279) [`81755ab`](https://github.com/thoo-ma/PoP/commit/81755ab4fac831284754004848bca1bd3ab453ab) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Switch EAS to local versioning (appVersionSource: local), sync app.json version to 0.2.0, add buildNumber/versionCode fields, update version script to reset build numbers on version bump, and publish OTA updates to both production and preview channels on push to main.
+
 ## 0.2.0
 
 ### Minor Changes
