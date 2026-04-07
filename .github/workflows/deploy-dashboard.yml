@@ -8,7 +8,7 @@ on:
     inputs:
       reason:
         description: 'Reason for manual deploy'
-        required: true
+        required: false
         type: string
 
 permissions:
