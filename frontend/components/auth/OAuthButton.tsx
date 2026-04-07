@@ -2,11 +2,36 @@ import { AntDesign } from '@expo/vector-icons'
 import { Button, Spinner } from 'heroui-native'
 import type { OAuthButtonProps } from '@/types'
 
+type OAuthProvider = OAuthButtonProps['provider']
+
 const config = {
-  google: { label: 'Continue with Google', variant: 'outline' as const, textColor: '#1F1F1F', icon: 'google' as const },
-  twitter: { label: 'Continue with 𝕏', variant: 'primary' as const, textColor: '#fff', icon: undefined },
-  apple: { label: 'Continue with Apple', variant: 'primary' as const, textColor: '#fff', icon: 'apple' as const },
-} satisfies Record<string, { label: string; variant: 'primary' | 'outline'; textColor: string; icon: 'google' | 'apple' | undefined }>
+  google: {
+    label: 'Continue with Google',
+    variant: 'outline' as const,
+    textColor: '#1F1F1F',
+    icon: 'google' as const,
+  },
+  twitter: {
+    label: 'Continue with 𝕏',
+    variant: 'primary' as const,
+    textColor: '#fff',
+    icon: undefined,
+  },
+  apple: {
+    label: 'Continue with Apple',
+    variant: 'primary' as const,
+    textColor: '#fff',
+    icon: 'apple' as const,
+  },
+} satisfies Record<
+  OAuthProvider,
+  {
+    label: string
+    variant: 'primary' | 'outline'
+    textColor: string
+    icon: 'google' | 'apple' | undefined
+  }
+>
 
 export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
   const { label, variant, textColor, icon } = config[provider]
@@ -24,7 +49,9 @@ export default function OAuthButton({ provider, onPress, loading }: OAuthButtonP
       ) : (
         <>
           {icon && <AntDesign name={icon} size={20} color={textColor} />}
-          <Button.Label className={variant === 'outline' ? `text-[${textColor}]` : ''}>{label}</Button.Label>
+          <Button.Label style={variant === 'outline' ? { color: textColor } : undefined}>
+            {label}
+          </Button.Label>
         </>
       )}
     </Button>
