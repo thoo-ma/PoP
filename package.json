@@ -10,7 +10,7 @@
     "deploy:functions": "supabase functions deploy --project-ref \"$SUPABASE_PROJECT_REF\"",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:publish": "changeset publish",
+    "changeset:publish": "bash scripts/release-tags.sh",
     "version-packages": "changeset version",
     "release-status": "changeset status"
   },

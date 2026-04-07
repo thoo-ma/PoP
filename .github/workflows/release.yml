@@ -8,6 +8,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -30,9 +31,10 @@ jobs:
 
       - uses: changesets/action@v1
         with:
-          publish: pnpm changeset tag
+          publish: bash scripts/release-tags.sh
           version: pnpm changeset version
           title: "chore: version packages"
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

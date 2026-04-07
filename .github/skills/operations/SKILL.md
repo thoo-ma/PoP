@@ -15,7 +15,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 ## Deployment Pipelines
 
 ### Mobile App (iOS + Android)
-- **Trigger:** Git tag `pop@x.y.z` (created by Changesets) OR manual workflow_dispatch
+- **Trigger:** `workflow_dispatch` from release script (on version PR merge) OR git tag `pop@x.y.z` pushed manually OR manual workflow_dispatch
 - **Workflow:** `.github/workflows/eas-build.yml`
 - **What it does:** EAS build → App Store / Play Store submission
 - **Manual dispatch inputs:** platform (ios/android/all), profile (production/preview), skip_submit (bool)
@@ -38,7 +38,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Manual dispatch inputs:** platform (ios/android/all)
 
 ### Dashboard (Next.js)
-- **Trigger:** Git tag `dashboard@x.y.z` (created by Changesets) OR manual workflow_dispatch
+- **Trigger:** `workflow_dispatch` from release script (on version PR merge) OR git tag `dashboard@x.y.z` pushed manually OR manual workflow_dispatch
 - **Workflow:** `.github/workflows/deploy-dashboard.yml`
 - **What it does:** `vercel deploy --prod` via Vercel CLI — build runs on Vercel's servers
 - **Manual dispatch inputs:** reason (required string)
@@ -46,14 +46,14 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Manual override:** Vercel dashboard → Deployments → Redeploy
 
 ### Edge Functions (Supabase)
-- **Deployment trigger:** Git tag `edge-functions@x.y.z` OR manual workflow_dispatch
+- **Deployment trigger:** `workflow_dispatch` from release script (on version PR merge) OR git tag `edge-functions@x.y.z` pushed manually OR manual workflow_dispatch
 - **Deployment workflow:** `.github/workflows/deploy-edge-functions.yml`
 - **CI check (PR only):** `.github/workflows/edge-functions.yml` — deno lint + type-check on PRs touching `supabase/functions/**` or `shared/**`
 - **Manual override:** `pnpm deploy:functions`
 - **Function secrets:** The GH Actions workflow only deploys code — it does not inject per-function secrets. Runtime env vars (`CLOUD_RUN_URL`, `CLOUD_RUN_API_KEY` for `detect-toilet-flush`, etc.) must be set separately in Supabase: Dashboard → Edge Functions → Secrets, or via `supabase secrets set <KEY>=<VALUE> --project-ref $SUPABASE_PROJECT_REF`.
 
 ### Cloud Run (YAMNet ML)
-- **Trigger:** Git tag `cloud-run@x.y.z` OR manual workflow_dispatch
+- **Trigger:** `workflow_dispatch` from release script (on version PR merge) OR git tag `cloud-run@x.y.z` pushed manually OR manual workflow_dispatch
 - **Workflow:** `.github/workflows/cloud-run.yml`
 - **Manual dispatch inputs:** reason (required string)
 - **Manual CLI override:** (see gcloud command in Emergency section)
@@ -71,12 +71,17 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 
 ## Release Process
 
-### Package releases (automated via Changesets)
+### Package releases (automated via Changesets + release-tags script)
 1. PRs include changeset files (`.changeset/<slug>.md`)
 2. Merge to `main` → Changesets bot opens "Version Packages" PR (`chore: version packages`)
 3. Review the version PR (check CHANGELOG, version bumps)
-4. Merge → Changesets workflow runs and creates/pushes git tags per package
-5. Tags trigger platform-specific deploys (EAS for `pop@*`, Dashboard for `dashboard@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
+4. Merge → Release workflow runs `scripts/release-tags.sh` which:
+   a. Creates git tags for each package with a new version (`pop@x.y.z`, `dashboard@x.y.z`, etc.)
+   b. Pushes tags to origin (for audit trail and manual rollback reference)
+   c. Dispatches deploy workflows via `workflow_dispatch` (EAS build for `pop@*`, Dashboard deploy for `dashboard@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
+5. Deploy workflows run and deploy to their respective platforms
+
+> **Why `workflow_dispatch` instead of tag-push triggers?** All packages are `private: true`, so `changeset tag` skips them. And tags pushed with `GITHUB_TOKEN` don't trigger other workflows (GitHub anti-recursion policy). `workflow_dispatch` is exempt from this restriction, so the release script dispatches deploys explicitly. Deploy workflows still support `push.tags` triggers for manual/emergency deploys pushed from a local machine.
 
 ### Monorepo milestone releases
 
