@@ -2,19 +2,19 @@
 
 > **Owner**: `thoo-ma` · **Repo**: `PoP` · **Monorepo** with 5 areas, each has its own `.instructions.md` with area-specific rules. This file contains cross-cutting rules that apply everywhere.
 
+PoP is an NFT-based mobile game where players earn POOP tokens by detecting real-world toilet flushes via on-device audio classification.
+
 ## Monorepo Layout
 
 **pnpm workspaces** — single root `pnpm-lock.yaml`, run `pnpm install` from root.
 
-| Directory | Runtime | Key Dependency | Path Alias |
-|---|---|---|---|
-| `frontend/` | React Native + Expo 54 | HeroUI Native, Uniwind (Tailwind v4) | `@/*` → `./` · `@pop/shared` (workspace) |
-| `dashboard/` | Next.js 15 (App Router) | Radix UI, Tailwind v3, Zustand | `@/*` → `./src/*` · `@pop/shared` (workspace) |
-| `shared/` | `@pop/shared` workspace package — raw TS, no build step | Zod | — |
-| `supabase/` | Deno (Edge Functions) | Supabase JS v2, Zod | Relative: `../../../shared/` |
-| `google-cloud-run/` | Python 3.10 + Flask | TensorFlow, YAMNet | — |
-
-⚠️ **frontend/ uses Tailwind v4 (Uniwind)**. **dashboard/ uses Tailwind v3**. They are NOT interchangeable. Do not copy styling patterns between them.
+| Directory | Runtime | Key Dependency |
+|---|---|---|
+| `frontend/` | React Native + Expo | HeroUI Native, Uniwind (Tailwind v4) |
+| `dashboard/` | Next.js (App Router) | Radix UI, Tailwind v3, Zustand |
+| `shared/` | `@pop/shared` workspace package — raw TS, no build step | Zod |
+| `supabase/` | Deno (Edge Functions) | Supabase JS, Zod |
+| `google-cloud-run/` | Python + Flask | TensorFlow, YAMNet |
 
 ## Build & Validate
 
@@ -27,41 +27,15 @@
 
 Hooks are installed automatically when you run `pnpm install` (via the `prepare` script). If hooks are missing, re-run `pnpm install` from the repo root.
 
-### Manual commands (ad-hoc use)
+Ad-hoc: `pnpm typecheck` (all packages), `pnpm format` (Biome). Edge functions: `cd supabase/functions && deno check <function>/index.ts`.
 
-These are the same checks the hooks run. Use them when you want to validate without committing/pushing:
+Never force-push. Never use `--no-verify` to bypass hooks.
 
-```bash
-pnpm install                                            # Install all workspace deps from root
+## Conventions
 
-pnpm typecheck                                          # Type-check all packages (Turborepo — cached)
-pnpm exec turbo run typecheck --filter=pop              # Frontend only
-pnpm exec turbo run typecheck --filter=dashboard        # Dashboard only
-
-pnpm format                                             # Auto-fix formatting (Biome)
-pnpm lint                                               # Lint (biome lint .)
-
-# Edge functions (Deno — not managed by Turbo, Biome, or Husky)
-cd supabase/functions && deno check <function>/index.ts
-```
-
-Never force-push. Never skip type-check. Never use `--no-verify` to bypass hooks unless in an emergency — CI is the final safety net, not a substitute for local validation.
-
-## Game Config
-
-All tunable game balance lives as exported constants in `shared/` modules (config-as-code). Formula functions accept an optional `cfg?` parameter with `??` fallback to module constants — see `shared/.instructions.md` for the pattern.
-
-## Type Safety
-
-- `NFTType` = `'cruise-seat' | 'turbo-flush' | 'zen-fortress'` — not `string`
-- `NFTRarity` = `'common' | 'rare' | 'legendary' | 'transcendent'` — not `string`
-- When pulling from the DB, prefer Zod validation at boundaries over manual casting
-
-## Date/Time
-
-- Postgres: always `TIMESTAMPTZ` (never `DATE` or `TIMESTAMP`)
-- Migrations: `DEFAULT NOW()` (not `CURRENT_TIMESTAMP`)
-- JavaScript: `new Date().toISOString()` when passing to DB
+- Use discriminated union types (`NFTType`, `NFTRarity`) from `@pop/shared` — never `string`
+- Prefer Zod validation at system boundaries over manual casting
+- JavaScript: `new Date().toISOString()` when passing dates to DB
 
 ## Branch Naming
 
@@ -73,65 +47,55 @@ All tunable game balance lives as exported constants in `shared/` modules (confi
 
 ## Changeset Convention
 
-Every PR that touches code in a workspace package (`frontend/`, `dashboard/`, `shared/`, `supabase/functions/`) **must** include a `.changeset/<descriptive-slug>.md` file. Agents write this file directly — never run `pnpm changeset` interactively.
-
-### File format
-
-```md
----
-"pop": patch
-"@pop/shared": minor
----
-
-Short description of the change (imperative mood).
-```
-
-### Branch prefix → bump type
-
-| Branch prefix | Bump type |
-|---|---|
-| `feat/` | `minor` |
-| `fix/` | `patch` |
-| `security/` | `patch` |
-| `refactor/` | `patch` |
-| `ui/`, `ux/` | `patch` |
-| `perf/` | `patch` |
-| `heroui/`, `tv/` | `patch` |
-| `config/` | `patch` |
-| `chore/`, `docs/`, `test/` | create an empty changeset file |
-
-### `@pop/shared` bump guidance
-
-- `minor` — types, schemas, or exported API changed (callers may need updates)
-- `patch` — internal logic only, no API surface change
-
-### Empty changesets
-
-For PRs that don't touch versioned code (CI, docs, config, tests), create an empty changeset file directly:
-
-```md
----
----
-```
-
-Save it as `.changeset/<descriptive-slug>.md`. This prevents the Changesets bot from complaining about missing changesets.
-
-## PR Workflow
-
-All agents follow a 4-phase workflow ending with PR creation and the `pr-review-handler` skill. See `.github/skills/pr-review-handler/SKILL.md`.
+Every PR that touches workspace code **must** include a changeset. Load `.github/skills/changeset/SKILL.md` for package name mapping, file format, bump rules, and empty changesets.
 
 ## Skills
 
 <skills>
 <skill>
 <name>operations</name>
-<description>Deployment pipelines, CI/CD workflows, GitHub Environments, secrets management, release process (Changesets), milestone releases, emergency rollback procedures, and cost monitoring. Use when working on GitHub Actions, deployment automation, infrastructure, or incident response. Keywords: deploy, release, CI, CD, workflow, rollback, environment, secrets, pipeline, EAS, Cloud Run, Vercel, Supabase, milestone.</description>
+<description>Deployment pipelines, CI/CD, secrets, release process, rollback.</description>
 <file>.github/skills/operations/SKILL.md</file>
 </skill>
 <skill>
 <name>game-config</name>
-<description>Game balance config-as-code reference. Maps all 11 config keys to their source files, formula functions, Zod schemas, consumers, structural invariants, and semantic constraints. Use when tuning game balance, reviewing config changes, or understanding downstream impact of constant edits in shared/*.ts. Keywords: game config, balance, tuning, constants, economy, cooldown, XP, currency, breed, loot, degen bar, energy drain, minting, stat points, sensors.</description>
+<description>Game balance config-as-code reference. Config key map, formulas, Zod schemas, invariants.</description>
 <file>.github/skills/game-config/SKILL.md</file>
+</skill>
+<skill>
+<name>heroui-native</name>
+<description>HeroUI Native component library for React Native.</description>
+<file>.github/skills/heroui-native/SKILL.md</file>
+</skill>
+<skill>
+<name>tailwind-variants</name>
+<description>Tailwind-variants (tv) style extraction for React Native.</description>
+<file>.github/skills/tailwind-variants/SKILL.md</file>
+</skill>
+<skill>
+<name>uniwind</name>
+<description>Uniwind — Tailwind CSS v4 styling for React Native.</description>
+<file>.github/skills/uniwind/SKILL.md</file>
+</skill>
+<skill>
+<name>turborepo</name>
+<description>Turborepo monorepo build system guidance.</description>
+<file>.github/skills/turborepo/SKILL.md</file>
+</skill>
+<skill>
+<name>pr-review-handler</name>
+<description>Handle Copilot code review comments on a PR.</description>
+<file>.github/skills/pr-review-handler/SKILL.md</file>
+</skill>
+<skill>
+<name>github-issues</name>
+<description>GitHub issues management: label taxonomy, title conventions, epic patterns. Load before creating or updating any issue.</description>
+<file>.github/skills/github-issues/SKILL.md</file>
+</skill>
+<skill>
+<name>changeset</name>
+<description>Changeset conventions: package name mapping, file format, bump rules.</description>
+<file>.github/skills/changeset/SKILL.md</file>
 </skill>
 </skills>
 
@@ -140,11 +104,44 @@ All agents follow a 4-phase workflow ending with PR creation and the `pr-review-
 <agents>
 <agent>
 <name>config-tuner</name>
-<description>Tune game balance constants in shared/*.ts via natural-language requests or GitHub issues. Mandatory preview before editing. 4-phase workflow: Research → Preview+Confirm → Implement+Verify → PR+Review. Keywords: config, balance, tuning, game config, constants, economy, buff, nerf, rebalance.</description>
+<description>Tune game balance constants in shared/*.ts.</description>
 <file>.github/agents/config-tuner.agent.md</file>
+</agent>
+<agent>
+<name>bug-fixer</name>
+<description>Debug and fix bugs in the PoP React Native frontend.</description>
+<file>.github/agents/bug-fixer.agent.md</file>
+</agent>
+<agent>
+<name>heroui-migrator</name>
+<description>Migrate React Native components to HeroUI Native.</description>
+<file>.github/agents/heroui-migrator.agent.md</file>
+</agent>
+<agent>
+<name>perf-optimizer</name>
+<description>Profile and optimise React Native app performance.</description>
+<file>.github/agents/perf-optimizer.agent.md</file>
+</agent>
+<agent>
+<name>security-hardener</name>
+<description>Audit and harden security across the PoP stack.</description>
+<file>.github/agents/security-hardener.agent.md</file>
+</agent>
+<agent>
+<name>test-writer</name>
+<description>Write tests for frontend and shared game logic.</description>
+<file>.github/agents/test-writer.agent.md</file>
+</agent>
+<agent>
+<name>tv-extractor</name>
+<description>Extract inline className strings into tv() recipes.</description>
+<file>.github/agents/tv-extractor.agent.md</file>
+</agent>
+<agent>
+<name>ui-ux-designer</name>
+<description>Design and implement UI/UX improvements.</description>
+<file>.github/agents/ui-ux-designer.agent.md</file>
 </agent>
 </agents>
 
-## GitHub Issues
 
-Before creating or updating any GitHub issue, load `.github/skills/github-issues/SKILL.md` for label taxonomy, title conventions, and epic patterns.
