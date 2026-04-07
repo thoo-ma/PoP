@@ -44,6 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -c '.[]' | while read -r pkg; do
             name=$(echo "$pkg" | jq -r '.name')
             version=$(echo "$pkg" | jq -r '.version')
@@ -52,7 +53,7 @@ jobs:
             case "$name" in
               pop)
                 echo "→ Dispatching eas-build.yml ($tag)"
-                gh workflow run eas-build.yml --ref main
+                gh workflow run eas-build.yml --ref main -f platform=all -f profile=production
                 ;;
               dashboard)
                 echo "→ Dispatching deploy-dashboard.yml ($tag)"
