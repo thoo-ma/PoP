@@ -4,7 +4,7 @@ import type { Tables } from '@pop/shared'
 /**
  * OAuth provider types
  */
-export type OAuthProvider = 'google' | 'twitter'
+export type OAuthProvider = 'google' | 'twitter' | 'apple'
 
 /**
  * Return type for useAuth hook
