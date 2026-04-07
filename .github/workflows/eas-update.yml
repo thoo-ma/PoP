@@ -18,9 +18,10 @@ on:
         required: true
         type: choice
         options:
+          - both
           - production
           - preview
-        default: production
+        default: both
       message:
         description: 'Update message (optional)'
         required: false
@@ -58,6 +59,21 @@ jobs:
 
       - name: Publish OTA update
         env:
-          EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.channel || 'production' }}
           EAS_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message || format('OTA {0}', github.sha) }}
-        run: cd frontend && eas update --channel "$EAS_CHANNEL" --message "$EAS_MESSAGE" --non-interactive
+        run: |
+          cd frontend
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INPUT="${{ github.event.inputs.channel }}"
+            if [ "$INPUT" = "both" ]; then
+              CHANNELS="production preview"
+            else
+              CHANNELS="$INPUT"
+            fi
+          else
+            CHANNELS="production preview"
+          fi
+          for ch in $CHANNELS; do
+            echo "::group::Publishing to $ch"
+            eas update --channel "$ch" --message "$EAS_MESSAGE" --non-interactive
+            echo "::endgroup::"
+          done
