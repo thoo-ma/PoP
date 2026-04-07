@@ -15,6 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.popcorporation.pop",
+      "deploymentTarget": "15.1",
       "buildNumber": "1",
       "usesAppleSignIn": true,
       "infoPlist": {
