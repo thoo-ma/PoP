@@ -38,7 +38,10 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 - **Manual dispatch inputs:** platform (ios/android/all)
 
 ### Dashboard (Next.js)
-- **Trigger:** Push to `main` (Vercel auto-deploy)
+- **Trigger:** Git tag `dashboard@x.y.z` (created by Changesets) OR manual workflow_dispatch
+- **Workflow:** `.github/workflows/deploy-dashboard.yml`
+- **What it does:** `vercel deploy --prod` via Vercel CLI — build runs on Vercel's servers
+- **Manual dispatch inputs:** reason (required string)
 - **Dashboard URL:** https://pop-dashboard.vercel.app
 - **Manual override:** Vercel dashboard → Deployments → Redeploy
 
@@ -73,7 +76,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 2. Merge to `main` → Changesets bot opens "Version Packages" PR (`chore: version packages`)
 3. Review the version PR (check CHANGELOG, version bumps)
 4. Merge → Changesets workflow runs and creates/pushes git tags per package
-5. Tags trigger platform-specific deploys (EAS for `pop@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
+5. Tags trigger platform-specific deploys (EAS for `pop@*`, Dashboard for `dashboard@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
 
 ### Monorepo milestone releases
 
@@ -122,6 +125,14 @@ Only `production` environment exists (we have one backend, no staging).
 | Environment | Branch restriction | Secrets |
 |---|---|---|
 | `production` | `main` only | EXPO_TOKEN, GCP_SA_KEY, GCP_PROJECT_ID, CLOUD_RUN_API_KEY, SUPABASE_ACCESS_TOKEN, SUPABASE_PROJECT_REF |
+
+**Repository secrets** (not environment-scoped — accessible to all workflows):
+
+| Secret | Used by |
+|---|---|
+| `VERCEL_TOKEN` | `.github/workflows/deploy-dashboard.yml` |
+| `VERCEL_ORG_ID` | `.github/workflows/deploy-dashboard.yml` |
+| `VERCEL_PROJECT_ID` | `.github/workflows/deploy-dashboard.yml` |
 
 > Note: GitHub Environments are orthogonal to EAS channels (development/preview/production).
 > EAS channels control OTA update branches. GitHub Environments control secret access and deployment tracking. No sync needed.
