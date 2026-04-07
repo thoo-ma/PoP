@@ -75,8 +75,7 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 1. PRs include changeset files (`.changeset/<slug>.md`)
 2. Merge to `main` → Changesets bot opens "Version Packages" PR (`chore: version packages`)
 3. Review the version PR (check CHANGELOG, version bumps)
-4. Merge → Changesets workflow runs and creates/pushes git tags per package
-5. Tags trigger platform-specific deploys (EAS for `pop@*`, Dashboard for `dashboard@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
+4. Merge → Changesets workflow runs `changeset tag` to create/push git tags, then dispatches deploy workflows via `workflow_dispatch` (EAS build for `pop@*`, Dashboard for `dashboard@*`, Cloud Run for `cloud-run@*`, Edge Functions for `edge-functions@*`)
 
 ### Monorepo milestone releases
 

@@ -2,12 +2,13 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: ["$tag"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -29,6 +30,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - uses: changesets/action@v1
+        id: changesets
         with:
           publish: pnpm changeset tag
           version: pnpm changeset version
@@ -36,3 +38,37 @@ jobs:
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dispatch deploy workflows
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -c '.[]' | while read -r pkg; do
+            name=$(echo "$pkg" | jq -r '.name')
+            version=$(echo "$pkg" | jq -r '.version')
+            tag="${name}@${version}"
+
+            case "$name" in
+              pop)
+                echo "→ Dispatching eas-build.yml ($tag)"
+                gh workflow run eas-build.yml --ref "$tag" -f platform=all -f profile=production
+                ;;
+              dashboard)
+                echo "→ Dispatching deploy-dashboard.yml ($tag)"
+                gh workflow run deploy-dashboard.yml --ref "$tag" -f "reason=Release $tag"
+                ;;
+              cloud-run)
+                echo "→ Dispatching cloud-run.yml ($tag)"
+                gh workflow run cloud-run.yml --ref "$tag" -f "reason=Release $tag"
+                ;;
+              edge-functions)
+                echo "→ Dispatching deploy-edge-functions.yml ($tag)"
+                gh workflow run deploy-edge-functions.yml --ref "$tag" -f "reason=Release $tag"
+                ;;
+              *)
+                echo "✓ No deploy for $tag"
+                ;;
+            esac
+          done
