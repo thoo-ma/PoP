@@ -1,2 +1,6 @@
 #!/bin/sh
+STAGED=$(git diff --cached --name-only)
 pnpm biome check --staged --write --no-errors-on-unmatched
+EXIT_CODE=$?
+[ -n "$STAGED" ] && echo "$STAGED" | xargs git add
+exit $EXIT_CODE
