@@ -9,6 +9,9 @@ on:
         description: 'Reason for manual deploy'
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
