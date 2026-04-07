@@ -16,9 +16,9 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 
 ### Mobile App (iOS + Android)
 - **Trigger:** Git tag `pop@x.y.z` (created by Changesets) OR manual workflow_dispatch
-- **Workflow:** `.github/workflows/eas-build.yml`
-- **What it does:** EAS build → App Store / Play Store submission
-- **Manual dispatch inputs:** platform (ios/android/all), profile (production/preview), skip_submit (bool)
+- **Workflow:** `.github/workflows/eas-production.yml`
+- **What it does:** EAS production build → App Store / Play Store submission
+- **Manual dispatch inputs:** platform (ios/android/all), skip_submit (bool)
 - **Manual CLI override (build):** `cd frontend && eas build --profile production --platform all`
 - **Manual CLI override (submit):** `cd frontend && eas submit --platform all --latest`
 

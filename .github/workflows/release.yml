@@ -52,8 +52,8 @@ jobs:
 
             case "$name" in
               pop)
-                echo "→ Dispatching eas-build.yml ($tag)"
-                gh workflow run eas-build.yml --ref "$tag" -f platform=all -f profile=preview
+                echo "→ Dispatching eas-preview.yml ($tag)"
+                gh workflow run eas-preview.yml --ref "$tag" -f platform=all
                 ;;
               dashboard)
                 echo "→ Dispatching deploy-dashboard.yml ($tag)"
