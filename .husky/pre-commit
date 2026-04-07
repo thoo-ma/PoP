@@ -1,2 +1,15 @@
 #!/bin/sh
+STAGED_FILE=$(mktemp)
+trap 'rm -f "$STAGED_FILE"' EXIT
+git diff --cached --name-only --diff-filter=ACMR -z >"$STAGED_FILE"
 pnpm biome check --staged --write --no-errors-on-unmatched
+EXIT_CODE=$?
+RESTAGE_EXIT_CODE=0
+if [ -s "$STAGED_FILE" ]; then
+  git add --pathspec-from-file="$STAGED_FILE" --pathspec-file-nul --
+  RESTAGE_EXIT_CODE=$?
+fi
+if [ "$EXIT_CODE" -ne 0 ]; then
+  exit "$EXIT_CODE"
+fi
+exit "$RESTAGE_EXIT_CODE"
