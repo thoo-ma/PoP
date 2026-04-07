@@ -7,7 +7,7 @@ on:
     inputs:
       reason:
         description: 'Reason for manual deploy'
-        required: true
+        required: false
 
 permissions:
   contents: read
@@ -20,7 +20,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: 2.20.x
+          version: 2.84.2
 
       - name: Deploy edge functions
         run: supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
