@@ -25,7 +25,6 @@ jobs:
           node-version: 22
 
       - name: Deploy to Vercel
-        working-directory: dashboard
         run: npx vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
