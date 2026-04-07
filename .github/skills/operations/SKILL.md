@@ -14,13 +14,19 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 
 ## Deployment Pipelines
 
-### Mobile App (iOS + Android)
-- **Trigger:** Git tag `pop@x.y.z` (created by Changesets) OR manual workflow_dispatch
+### Mobile App — Production (iOS + Android)
+- **Trigger:** Manual workflow_dispatch only
 - **Workflow:** `.github/workflows/eas-production.yml`
 - **What it does:** EAS production build → App Store / Play Store submission
 - **Manual dispatch inputs:** platform (ios/android/all), skip_submit (bool)
 - **Manual CLI override (build):** `cd frontend && eas build --profile production --platform all`
 - **Manual CLI override (submit):** `cd frontend && eas submit --platform all --latest`
+
+### Mobile App — Preview (iOS + Android)
+- **Trigger:** Git tag `pop@x.y.z` (created by Changesets via release.yml), PR label `preview-build`, or manual workflow_dispatch
+- **Workflow:** `.github/workflows/eas-preview.yml`
+- **What it does:** EAS preview build for internal testing (TestFlight / internal track)
+- **Manual dispatch inputs:** platform (ios/android/all)
 
 ### Mobile OTA Update
 - **Trigger:** Push to `main` that touches `shared/**` or `frontend/**` (best-effort exclusion of native config files — see note below) OR manual workflow_dispatch
