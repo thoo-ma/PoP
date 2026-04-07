@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { View, Text, Platform } from 'react-native'
-import { Button, Spinner, useToast, cn } from 'heroui-native'
-import { screenTitle, screenSubtitle } from '@/styles'
-import { supabase } from '@/lib'
-import * as WebBrowser from 'expo-web-browser'
 import * as AppleAuthentication from 'expo-apple-authentication'
+import * as WebBrowser from 'expo-web-browser'
+import { Button, cn, Spinner, useToast } from 'heroui-native'
+import { useState } from 'react'
+import { Platform, Text, View } from 'react-native'
+import { supabase } from '@/lib'
+import { screenSubtitle, screenTitle } from '@/styles'
 import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
 import OAuthButton from './OAuthButton'
@@ -163,11 +163,7 @@ export default function Auth() {
       />
 
       {Platform.OS === 'ios' && (
-        <OAuthButton
-          provider="apple"
-          onPress={handleAppleSignIn}
-          loading={appleLoading}
-        />
+        <OAuthButton provider="apple" onPress={handleAppleSignIn} loading={appleLoading} />
       )}
     </View>
   )
