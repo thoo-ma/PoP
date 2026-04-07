@@ -1,7 +1,6 @@
 {
   "name": "@pop/shared",
   "version": "0.2.0",
-  "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
