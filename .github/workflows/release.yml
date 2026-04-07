@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: ["$tag"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -53,19 +53,19 @@ jobs:
             case "$name" in
               pop)
                 echo "→ Dispatching eas-build.yml ($tag)"
-                gh workflow run eas-build.yml --ref main -f platform=all -f profile=production
+                gh workflow run eas-build.yml --ref "$tag" -f platform=all -f profile=production
                 ;;
               dashboard)
                 echo "→ Dispatching deploy-dashboard.yml ($tag)"
-                gh workflow run deploy-dashboard.yml --ref main -f "reason=Release $tag"
+                gh workflow run deploy-dashboard.yml --ref "$tag" -f "reason=Release $tag"
                 ;;
               cloud-run)
                 echo "→ Dispatching cloud-run.yml ($tag)"
-                gh workflow run cloud-run.yml --ref main -f "reason=Release $tag"
+                gh workflow run cloud-run.yml --ref "$tag" -f "reason=Release $tag"
                 ;;
               edge-functions)
                 echo "→ Dispatching deploy-edge-functions.yml ($tag)"
-                gh workflow run deploy-edge-functions.yml --ref main -f "reason=Release $tag"
+                gh workflow run deploy-edge-functions.yml --ref "$tag" -f "reason=Release $tag"
                 ;;
               *)
                 echo "✓ No deploy for $tag"
