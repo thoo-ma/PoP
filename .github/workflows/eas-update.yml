@@ -11,6 +11,7 @@ on:
       - '!frontend/app.config.ts'
       - '!frontend/eas.json'
       - '!frontend/package.json'
+      - '!shared/package.json'
   workflow_dispatch:
     inputs:
       channel:
@@ -36,7 +37,6 @@ permissions:
 jobs:
   ota-update:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -46,7 +46,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile

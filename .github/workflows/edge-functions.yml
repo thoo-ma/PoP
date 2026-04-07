@@ -11,6 +11,9 @@ concurrency:
   group: edge-functions-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   deno-check:
     name: deno check
