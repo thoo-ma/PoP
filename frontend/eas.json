@@ -8,6 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
+      "environment": "development",
       "ios": {
         "image": "latest"
       }
@@ -15,12 +16,14 @@
     "preview": {
       "distribution": "store",
       "channel": "preview",
+      "environment": "preview",
       "ios": {
         "image": "latest"
       }
     },
     "production": {
       "channel": "production",
+      "environment": "production",
       "ios": {
         "image": "latest"
       }
