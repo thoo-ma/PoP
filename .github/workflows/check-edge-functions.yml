@@ -1,14 +1,14 @@
-name: Edge Functions
+name: Check Edge Functions
 
 on:
   pull_request:
     paths:
       - "supabase/functions/**"
       - "shared/**"
-      - ".github/workflows/edge-functions.yml"
+      - ".github/workflows/check-edge-functions.yml"
 
 concurrency:
-  group: edge-functions-${{ github.ref }}-${{ github.event_name }}
+  group: check-edge-functions-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 permissions:
