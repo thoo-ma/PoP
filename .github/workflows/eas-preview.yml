@@ -62,8 +62,8 @@ jobs:
         run: cd frontend && eas build --platform ios --profile preview --non-interactive
         env:
           EXPO_ASC_API_KEY_PATH: ${{ format('{0}/asc-api-key.p8', runner.temp) }}
-          EXPO_ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
-          EXPO_ASC_API_KEY_ISSUER_ID: ${{ secrets.ASC_API_KEY_ISSUER_ID }}
+          EXPO_ASC_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          EXPO_ASC_ISSUER_ID: ${{ secrets.ASC_API_KEY_ISSUER_ID }}
 
       - name: Build preview (Android)
         if: matrix.platform == 'android'
