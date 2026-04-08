@@ -15,6 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.popcorporation.pop",
+      "appleTeamId": "P963X9Z93K",
       "deploymentTarget": "15.1",
       "buildNumber": "1",
       "usesAppleSignIn": true,
