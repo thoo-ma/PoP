@@ -52,7 +52,7 @@ jobs:
       - name: Write ASC API key
         if: matrix.platform == 'ios'
         run: |
-          printf '%s\n' "$ASC_API_KEY" > "$RUNNER_TEMP/asc-api-key.p8"
+          printf '%b\n' "$ASC_API_KEY" > "$RUNNER_TEMP/asc-api-key.p8"
           chmod 600 "$RUNNER_TEMP/asc-api-key.p8"
         env:
           ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
