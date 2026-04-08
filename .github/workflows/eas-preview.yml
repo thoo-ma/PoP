@@ -49,5 +49,15 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Write ASC API key
+        if: matrix.platform == 'ios'
+        run: echo "$ASC_API_KEY" > $RUNNER_TEMP/asc-api-key.p8
+        env:
+          ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
+
       - name: Build preview
         run: cd frontend && eas build --platform ${{ matrix.platform }} --profile preview --non-interactive
+        env:
+          EXPO_ASC_API_KEY_PATH: ${{ matrix.platform == 'ios' && format('{0}/asc-api-key.p8', runner.temp) || '' }}
+          EXPO_ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          EXPO_ASC_API_KEY_ISSUER_ID: ${{ secrets.ASC_API_KEY_ISSUER_ID }}
