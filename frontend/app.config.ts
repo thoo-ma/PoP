@@ -36,11 +36,15 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     if (config.ios) {
       config.ios.bundleIdentifier = 'com.popcorporation.pop.dev'
     }
+    config.android = config.android ?? {}
+    config.android.package = 'com.popcorporation.pop.dev'
     config.name = 'PoP (Dev)'
   } else if (process.env.APP_VARIANT === 'preview') {
     if (config.ios) {
       config.ios.bundleIdentifier = 'com.popcorporation.pop.prev'
     }
+    config.android = config.android ?? {}
+    config.android.package = 'com.popcorporation.pop.prev'
     config.name = 'PoP (Preview)'
   } else {
     config.name = 'PoP'

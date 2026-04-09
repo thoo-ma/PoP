@@ -9,11 +9,13 @@
       "distribution": "internal",
       "channel": "development",
       "environment": "development",
+      "env": {
+        "APP_VARIANT": "development"
+      },
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0",
-          "APP_VARIANT": "development"
+          "EXPO_USE_PRECOMPILED_MODULES": "0"
         }
       }
     },
@@ -21,11 +23,13 @@
       "distribution": "store",
       "channel": "preview",
       "environment": "preview",
+      "env": {
+        "APP_VARIANT": "preview"
+      },
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0",
-          "APP_VARIANT": "preview"
+          "EXPO_USE_PRECOMPILED_MODULES": "0"
         }
       }
     },
