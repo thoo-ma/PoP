@@ -60,6 +60,11 @@ jobs:
       - name: Publish OTA update
         env:
           EAS_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.message || format('OTA {0}', github.sha) }}
+          # Skip auto-fingerprint so updates are routed by runtimeVersion (appVersion policy)
+          # rather than fingerprint. Without this, OTA updates are only delivered to native
+          # builds whose fingerprint was computed from the exact same commit — breaking
+          # delivery whenever the OTA commit differs from the build commit.
+          EAS_SKIP_AUTO_FINGERPRINT: "1"
         run: |
           cd frontend
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
