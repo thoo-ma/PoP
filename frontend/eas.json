@@ -12,7 +12,8 @@
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0"
+          "EXPO_USE_PRECOMPILED_MODULES": "0",
+          "APP_VARIANT": "development"
         }
       }
     },
@@ -23,7 +24,8 @@
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0"
+          "EXPO_USE_PRECOMPILED_MODULES": "0",
+          "APP_VARIANT": "preview"
         }
       }
     },

@@ -28,10 +28,20 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   } else {
     // Remove the Embrace plugin when credentials are not set
     if (plugins.length) {
-      config.plugins = plugins.filter(
-        (p) => !Array.isArray(p) || !String(p[0]).includes('embrace'),
-      )
+      config.plugins = plugins.filter((p) => !Array.isArray(p) || !String(p[0]).includes('embrace'))
     }
+  }
+
+  if (process.env.APP_VARIANT === 'development') {
+    if (config.ios) {
+      config.ios.bundleIdentifier = 'com.popcorporation.pop.dev'
+    }
+    config.name = 'PoP (Dev)'
+  } else if (process.env.APP_VARIANT === 'preview') {
+    if (config.ios) {
+      config.ios.bundleIdentifier = 'com.popcorporation.pop.prev'
+    }
+    config.name = 'PoP (Preview)'
   }
 
   return config as ExpoConfig
