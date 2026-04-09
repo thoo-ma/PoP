@@ -64,7 +64,16 @@ function AppInner() {
         if (check.isAvailable) {
           const result = await Updates.fetchUpdateAsync()
           Alert.alert('OTA Downloaded', `Manifest ID: ${result.manifest?.id}\nReloading now...`, [
-            { text: 'OK', onPress: () => Updates.reloadAsync() },
+            {
+              text: 'OK',
+              onPress: async () => {
+                try {
+                  await Updates.reloadAsync()
+                } catch (reloadError) {
+                  Alert.alert('OTA Error', String(reloadError))
+                }
+              },
+            },
           ])
         }
       } catch (e) {
