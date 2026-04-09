@@ -1,5 +1,4 @@
 {
-  "//": "EXPO_USE_PRECOMPILED_MODULES=0 on all iOS profiles: SDK 55 ships prebuilt XCFrameworks compiled with Xcode 26.3 (Swift 6.2.4), but EAS 'latest' image only has Xcode 26.2 (Swift 6.2.3) — Swift ABI mismatch fails the build. Remove once EAS adds an Xcode 26.3 image. See https://github.com/expo/expo/issues/44527",
   "cli": {
     "version": ">= 13.2.0",
     "appVersionSource": "local"
