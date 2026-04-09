@@ -2,9 +2,10 @@ import 'react-native-gesture-handler'
 import './global.css'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
+import * as Updates from 'expo-updates'
 import { HeroUINativeProvider, Spinner } from 'heroui-native'
-import { useCallback, useRef, useState } from 'react'
-import { Dimensions, FlatList, View, type ViewToken } from 'react-native'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Alert, Dimensions, FlatList, View, type ViewToken } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import {
@@ -44,6 +45,35 @@ function AppInner() {
   const [profileVisible, setProfileVisible] = useState(false)
   const [walletVisible, setWalletVisible] = useState(false)
   const flatListRef = useRef<FlatList>(null)
+
+  // DEBUG: Show OTA update status on launch (remove after testing)
+  useEffect(() => {
+    async function checkUpdates() {
+      try {
+        const updateId = Updates.updateId ?? 'embedded'
+        const channel = Updates.channel ?? 'unknown'
+        const runtimeVersion = Updates.runtimeVersion ?? 'unknown'
+        const isEmbedded = Updates.isEmbeddedLaunch
+
+        const check = await Updates.checkForUpdateAsync()
+        Alert.alert(
+          'OTA Debug',
+          `Current: ${updateId}\nChannel: ${channel}\nRuntime: ${runtimeVersion}\nEmbedded: ${isEmbedded}\nUpdate available: ${check.isAvailable}`,
+        )
+
+        if (check.isAvailable) {
+          const result = await Updates.fetchUpdateAsync()
+          Alert.alert(
+            'OTA Downloaded',
+            `Manifest ID: ${result.manifest?.id}\nRestart app to apply.`,
+          )
+        }
+      } catch (e) {
+        Alert.alert('OTA Error', String(e))
+      }
+    }
+    checkUpdates()
+  }, [])
 
   const handleApprovalSuccess = useCallback(async () => {
     // After successful code submission, refetch approval status
