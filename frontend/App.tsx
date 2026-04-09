@@ -150,7 +150,7 @@ function AppInner() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <FlatList
         ref={flatListRef}
         data={PAGES}
