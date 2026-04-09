@@ -1,6 +1,6 @@
 export const colors = {
   // Base UI
-  background: '#fff',
+  background: '#f0e6ff',
   primary: '#000',
 
   // Text
