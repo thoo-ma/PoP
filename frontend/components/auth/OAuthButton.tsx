@@ -11,7 +11,7 @@ const config = {
     textColor: '#1F1F1F',
     icon: 'google' as const,
   },
-  twitter: {
+  x: {
     label: 'Continue with 𝕏',
     variant: 'primary' as const,
     textColor: '#fff',

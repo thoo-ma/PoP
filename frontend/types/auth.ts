@@ -4,7 +4,7 @@ import type { Session, User } from '@supabase/supabase-js'
 /**
  * OAuth provider types
  */
-export type OAuthProvider = 'google' | 'twitter' | 'apple'
+export type OAuthProvider = 'google' | 'x' | 'apple'
 
 /**
  * Return type for useAuth hook

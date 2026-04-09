@@ -150,11 +150,7 @@ export default function Auth() {
         </Button>
       )}
 
-      <OAuthButton
-        provider="twitter"
-        onPress={() => signInWithProvider('twitter')}
-        loading={loading}
-      />
+      <OAuthButton provider="x" onPress={() => signInWithProvider('x')} loading={loading} />
 
       <OAuthButton
         provider="google"
