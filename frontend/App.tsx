@@ -46,9 +46,9 @@ function AppInner() {
   const [walletVisible, setWalletVisible] = useState(false)
   const flatListRef = useRef<FlatList>(null)
 
-  // DEBUG: Show OTA update status on launch (remove after testing)
+  // DEBUG: remove after confirming OTA works end-to-end
   useEffect(() => {
-    async function checkUpdates() {
+    async function applyUpdate() {
       try {
         const updateId = Updates.updateId ?? 'embedded'
         const channel = Updates.channel ?? 'unknown'
@@ -63,16 +63,15 @@ function AppInner() {
 
         if (check.isAvailable) {
           const result = await Updates.fetchUpdateAsync()
-          Alert.alert(
-            'OTA Downloaded',
-            `Manifest ID: ${result.manifest?.id}\nRestart app to apply.`,
-          )
+          Alert.alert('OTA Downloaded', `Manifest ID: ${result.manifest?.id}\nReloading now...`, [
+            { text: 'OK', onPress: () => Updates.reloadAsync() },
+          ])
         }
       } catch (e) {
         Alert.alert('OTA Error', String(e))
       }
     }
-    checkUpdates()
+    applyUpdate()
   }, [])
 
   const handleApprovalSuccess = useCallback(async () => {
