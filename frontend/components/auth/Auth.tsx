@@ -13,7 +13,8 @@ WebBrowser.maybeCompleteAuthSession()
 
 export default function Auth() {
   const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
+  const [xLoading, setXLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
   const [appleLoading, setAppleLoading] = useState(false)
@@ -63,7 +64,8 @@ export default function Auth() {
   }
 
   const signInWithProvider = async (provider: OAuthProvider) => {
-    setLoading(true)
+    if (provider === 'x') setXLoading(true)
+    else if (provider === 'google') setGoogleLoading(true)
     try {
       const redirectTo = Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback'
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -88,7 +90,8 @@ export default function Auth() {
         description: getErrorMessage(err, 'Failed to authenticate'),
       })
     } finally {
-      setLoading(false)
+      if (provider === 'x') setXLoading(false)
+      else if (provider === 'google') setGoogleLoading(false)
     }
   }
 
@@ -150,12 +153,12 @@ export default function Auth() {
         </Button>
       )}
 
-      <OAuthButton provider="x" onPress={() => signInWithProvider('x')} loading={loading} />
+      <OAuthButton provider="x" onPress={() => signInWithProvider('x')} loading={xLoading} />
 
       <OAuthButton
         provider="google"
         onPress={() => signInWithProvider('google')}
-        loading={loading}
+        loading={googleLoading}
       />
 
       {Platform.OS === 'ios' && (
