@@ -7,4 +7,5 @@ export interface OAuthButtonProps {
   provider: OAuthProvider
   onPress: () => void
   loading: boolean
+  disabled?: boolean
 }

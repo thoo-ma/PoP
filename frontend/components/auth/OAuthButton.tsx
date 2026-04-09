@@ -33,14 +33,14 @@ const config = {
   }
 >
 
-export default function OAuthButton({ provider, onPress, loading }: OAuthButtonProps) {
+export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
   const { label, variant, textColor, icon } = config[provider]
 
   return (
     <Button
       variant={variant}
       onPress={onPress}
-      isDisabled={loading}
+      isDisabled={disabled ?? loading}
       className={`mb-4 ${provider === 'apple' ? 'bg-black' : ''}`}
       accessibilityLabel={label}
     >

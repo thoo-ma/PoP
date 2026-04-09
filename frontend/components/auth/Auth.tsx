@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { supabase } from '@/lib'
 import { screenSubtitle, screenTitle } from '@/styles'
+import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
 import OAuthButton from './OAuthButton'
 
@@ -12,11 +13,9 @@ WebBrowser.maybeCompleteAuthSession()
 
 export default function Auth() {
   const { toast } = useToast()
-  const [xLoading, setXLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
+  const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
-  const [appleLoading, setAppleLoading] = useState(false)
 
   const handleDevSignIn = async () => {
     setDevLoading(true)
@@ -62,9 +61,8 @@ export default function Auth() {
     }
   }
 
-  const signInWithProvider = async (provider: 'x' | 'google') => {
-    if (provider === 'x') setXLoading(true)
-    else if (provider === 'google') setGoogleLoading(true)
+  const signInWithProvider = async (provider: OAuthProvider) => {
+    setLoadingProvider(provider)
     try {
       const redirectTo = Platform.OS === 'web' ? window.location.origin : 'pop://auth/callback'
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -89,13 +87,12 @@ export default function Auth() {
         description: getErrorMessage(err, 'Failed to authenticate'),
       })
     } finally {
-      if (provider === 'x') setXLoading(false)
-      else if (provider === 'google') setGoogleLoading(false)
+      setLoadingProvider(null)
     }
   }
 
   const handleAppleSignIn = async () => {
-    setAppleLoading(true)
+    setLoadingProvider('apple')
     try {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -119,7 +116,7 @@ export default function Auth() {
         description: getErrorMessage(err, 'Failed to authenticate with Apple'),
       })
     } finally {
-      setAppleLoading(false)
+      setLoadingProvider(null)
     }
   }
 
@@ -152,16 +149,27 @@ export default function Auth() {
         </Button>
       )}
 
-      <OAuthButton provider="x" onPress={() => signInWithProvider('x')} loading={xLoading} />
+      <OAuthButton
+        provider="x"
+        onPress={() => signInWithProvider('x')}
+        loading={loadingProvider === 'x'}
+        disabled={loadingProvider !== null}
+      />
 
       <OAuthButton
         provider="google"
         onPress={() => signInWithProvider('google')}
-        loading={googleLoading}
+        loading={loadingProvider === 'google'}
+        disabled={loadingProvider !== null}
       />
 
       {Platform.OS === 'ios' && (
-        <OAuthButton provider="apple" onPress={handleAppleSignIn} loading={appleLoading} />
+        <OAuthButton
+          provider="apple"
+          onPress={handleAppleSignIn}
+          loading={loadingProvider === 'apple'}
+          disabled={loadingProvider !== null}
+        />
       )}
     </View>
   )
