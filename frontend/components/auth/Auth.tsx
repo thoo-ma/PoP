@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { supabase } from '@/lib'
 import { screenSubtitle, screenTitle } from '@/styles'
-import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
 import OAuthButton from './OAuthButton'
 
