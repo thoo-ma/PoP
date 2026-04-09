@@ -63,7 +63,7 @@ export default function Auth() {
     }
   }
 
-  const signInWithProvider = async (provider: OAuthProvider) => {
+  const signInWithProvider = async (provider: 'x' | 'google') => {
     if (provider === 'x') setXLoading(true)
     else if (provider === 'google') setGoogleLoading(true)
     try {
