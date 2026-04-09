@@ -51,7 +51,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build production
-        run: cd frontend && eas build --platform ${{ matrix.platform }} --profile production --non-interactive
+        run: cd frontend && eas build --platform ${{ matrix.platform }} --profile production --non-interactive --git-commit-hash ${{ github.sha }}
 
       - name: Submit to store
         if: github.event.inputs.skip_submit != 'true'
