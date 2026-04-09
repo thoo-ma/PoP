@@ -79,6 +79,6 @@ jobs:
           fi
           for ch in $CHANNELS; do
             echo "::group::Publishing to $ch"
-            eas update --channel "$ch" --message "$EAS_MESSAGE" --non-interactive
+            eas update --channel "$ch" --environment "$ch" --message "$EAS_MESSAGE" --non-interactive
             echo "::endgroup::"
           done
