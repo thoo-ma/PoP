@@ -1,21 +1,23 @@
 {
-//   "python.defaultInterpreterPath": "${workspaceFolder}/google-cloud-run/tests/venv/bin/python",
-//   "python.terminal.activateEnvironment": true,
-//   "python.terminal.activateEnvInCurrentTerminal": true,
-//   "terminal.integrated.env.linux": {
-//     "VIRTUAL_ENV": "${workspaceFolder}/google-cloud-run/tests/venv",
-//     "PATH": "${workspaceFolder}/google-cloud-run/tests/venv/bin:${env:PATH}"
-//   },
-//   "[python]": {
-//     "editor.defaultFormatter": "ms-python.black-formatter",
-//     "editor.formatOnSave": true
-// },
-"chat.mcp.serverSampling": {
-    "${workspaceFolder}/.vscode/mcp.json: heroui-native": {
-        "allowedModels": [
-            "copilot/claude-sonnet-4.6"
-        ]
-    }
-},
-"github.copilot.chat.agent.runTasks": true
+    //   "python.defaultInterpreterPath": "${workspaceFolder}/google-cloud-run/tests/venv/bin/python",
+    //   "python.terminal.activateEnvironment": true,
+    //   "python.terminal.activateEnvInCurrentTerminal": true,
+    //   "terminal.integrated.env.linux": {
+    //     "VIRTUAL_ENV": "${workspaceFolder}/google-cloud-run/tests/venv",
+    //     "PATH": "${workspaceFolder}/google-cloud-run/tests/venv/bin:${env:PATH}"
+    //   },
+    //   "[python]": {
+    //     "editor.defaultFormatter": "ms-python.black-formatter",
+    //     "editor.formatOnSave": true
+    // },
+    "chat.mcp.serverSampling": {
+        "${workspaceFolder}/.vscode/mcp.json: heroui-native": {
+            "allowedModels": [
+                "copilot/claude-sonnet-4.6"
+            ]
+        }
+    },
+    "css.lint.unknownAtRules": "ignore",
+    "editor.colorDecoratorsActivatedOn": "clickAndHover",
+    "editor.colorDecorators": true
 }
