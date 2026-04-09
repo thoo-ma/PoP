@@ -42,6 +42,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       config.ios.bundleIdentifier = 'com.popcorporation.pop.prev'
     }
     config.name = 'PoP (Preview)'
+  } else {
+    config.name = 'PoP'
   }
 
   return config as ExpoConfig
