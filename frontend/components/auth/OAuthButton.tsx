@@ -40,7 +40,7 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
     <Button
       variant={variant}
       onPress={onPress}
-      isDisabled={disabled ?? loading}
+      isDisabled={disabled || loading}
       className={`mb-4 ${provider === 'apple' ? 'bg-black' : ''}`}
       accessibilityLabel={label}
     >
