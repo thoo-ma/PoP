@@ -16,7 +16,6 @@ import {
   ScreenHeader,
   WalletButton,
 } from '@/components'
-import { colors } from '@/constants'
 import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
 import { useAuth, useUserApproval } from '@/hooks'
 import { queryClient } from '@/lib/queryClient'
@@ -151,7 +150,7 @@ function AppInner() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView className="flex-1 bg-background">
       <FlatList
         ref={flatListRef}
         data={PAGES}
