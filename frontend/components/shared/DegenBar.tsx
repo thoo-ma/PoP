@@ -9,9 +9,6 @@ import { useState } from 'react'
 import { Text, View } from 'react-native'
 import { degenBar, infoBox } from '@/styles'
 
-// Re-export for consumers that import the hash helper from this module
-export { degenBarConfigHash } from '@pop/shared/degenBar'
-
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 export type DegenBarProps = {

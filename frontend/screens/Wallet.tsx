@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { cn, Dialog, ScrollShadow } from 'heroui-native'
 import { ScrollView, Text, View } from 'react-native'
-import { colors } from '@/constants'
+import { useCSSVariable } from 'uniwind'
 import { useWallet } from '@/hooks'
 import { dialogPanel, walletModal } from '@/styles'
 
@@ -19,6 +19,11 @@ interface WalletProps {
  */
 export default function Wallet({ visible, onClose }: WalletProps) {
   const { poopBalance, loading } = useWallet()
+  const [successColor, comfortColor, luckColor] = useCSSVariable([
+    '--color-app-success',
+    '--color-stat-comfort',
+    '--color-stat-luck',
+  ]) as [string, string, string]
   const panel = dialogPanel()
   const w = walletModal()
 
@@ -61,7 +66,7 @@ export default function Wallet({ visible, onClose }: WalletProps) {
               <View className={w.infoSection()}>
                 <Text className={w.infoSectionTitle()}>Earn POOP</Text>
                 <View className={w.infoRow()}>
-                  <MaterialIcons name="check-circle" size={18} color={colors.success} />
+                  <MaterialIcons name="check-circle" size={18} color={successColor} />
                   <Text className={w.infoText()}>
                     <Text className={w.inlineBold()}>Variable POOP</Text> per successful flush
                     (scales with type, rarity &amp; level)
@@ -73,14 +78,14 @@ export default function Wallet({ visible, onClose }: WalletProps) {
               <View>
                 <Text className={w.infoSectionTitle()}>Spend POOP</Text>
                 <View className={cn(w.infoRow(), 'mb-2')}>
-                  <MaterialIcons name="build" size={18} color={colors.comfort} />
+                  <MaterialIcons name="build" size={18} color={comfortColor} />
                   <Text className={w.infoText()}>
                     <Text className={w.inlineBold()}>Variable POOP</Text> per repair (scales with
                     level &amp; rarity)
                   </Text>
                 </View>
                 <View className={w.infoRow()}>
-                  <MaterialIcons name="device-hub" size={18} color={colors.luck} />
+                  <MaterialIcons name="device-hub" size={18} color={luckColor} />
                   <Text className={w.infoText()}>
                     <Text className={w.inlineBold()}>Variable POOP</Text> per breed (scales with
                     rarity &amp; breed count)

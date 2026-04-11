@@ -4,8 +4,8 @@ import * as WebBrowser from 'expo-web-browser'
 import { Button, cn, Spinner, useToast } from 'heroui-native'
 import { useState } from 'react'
 import { Platform, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import OAuthButton from '@/components/auth/OAuthButton'
-import { colors } from '@/constants/theme'
 import { supabase } from '@/lib'
 import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
 import type { OAuthProvider } from '@/types'
@@ -18,6 +18,7 @@ export default function Auth() {
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
+  const onSurface = useCSSVariable('--color-on-surface') as string
   const s = authScreen()
 
   const handleDevSignIn = async () => {
@@ -140,15 +141,10 @@ export default function Auth() {
           feedbackVariant="none"
         >
           {testLoading ? (
-            <Spinner size="sm" color={colors.onSurface} />
+            <Spinner size="sm" color={onSurface} />
           ) : (
             <>
-              <FontAwesome6
-                name="flask"
-                size={16}
-                color={colors.onSurface}
-                style={{ marginRight: 12 }}
-              />
+              <FontAwesome6 name="flask" size={16} color={onSurface} style={{ marginRight: 12 }} />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign in in Test Mode
               </Button.Label>
@@ -166,15 +162,10 @@ export default function Auth() {
             feedbackVariant="none"
           >
             {devLoading ? (
-              <Spinner size="sm" color={colors.onSurface} />
+              <Spinner size="sm" color={onSurface} />
             ) : (
               <>
-                <FontAwesome6
-                  name="code"
-                  size={16}
-                  color={colors.onSurface}
-                  style={{ marginRight: 12 }}
-                />
+                <FontAwesome6 name="code" size={16} color={onSurface} style={{ marginRight: 12 }} />
                 <Button.Label className={tactileButtonText({ variant: 'default' })}>
                   Sign in in Dev Mode
                 </Button.Label>

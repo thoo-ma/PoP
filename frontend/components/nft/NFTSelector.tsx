@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons'
 import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { tv } from 'tailwind-variants'
-import { colors } from '@/constants/theme'
+import { useCSSVariable } from 'uniwind'
 import { nftSelectorCounter } from '@/styles'
 
 // ── Design System Recipes ─────────────────────────────────────────────────────
@@ -36,6 +36,7 @@ interface Props {
  * Renders `null` when `total` is 1 or less (nothing to navigate).
  */
 export default function NFTSelector({ current, total, onPrev, onNext, className }: Props) {
+  const onSurface = useCSSVariable('--color-on-surface') as string
   if (total <= 1) return null
 
   return (
@@ -49,7 +50,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         accessibilityLabel="Previous NFT"
       >
         {/* Pass the icon directly as a child */}
-        <Feather name="chevron-left" size={24} color={colors.onSurface} />
+        <Feather name="chevron-left" size={24} color={onSurface} />
       </Button>
 
       <Text className={nftSelectorCounter()}>
@@ -65,7 +66,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         accessibilityLabel="Next NFT"
       >
         {/* Pass the icon directly as a child */}
-        <Feather name="chevron-right" size={24} color={colors.onSurface} />
+        <Feather name="chevron-right" size={24} color={onSurface} />
       </Button>
     </View>
   )

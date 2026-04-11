@@ -224,19 +224,11 @@ export const propertiesWrapper = tv({
 
 // ── NFT picker placeholder ──────────────────────────────────────────────────────────
 // Empty-state text inside the picker Button when no NFT is selected.
-// Poop uses tint:'gray'; Repair uses the default tint:'muted'.
 export const nftPickerPlaceholder = tv({
   slots: {
-    icon: 'text-[40px] mb-3',
-    label: 'text-base font-semibold',
+    icon: 'text-[40px] mb-3 text-on-surface-variant',
+    label: 'text-base font-semibold text-on-surface-variant',
   },
-  variants: {
-    tint: {
-      gray: { icon: 'text-on-surface-variant', label: 'text-on-surface-variant' },
-      muted: { icon: 'text-on-surface-variant', label: 'text-on-surface-variant' },
-    },
-  },
-  defaultVariants: { tint: 'muted' },
 })
 
 // ── Marketplace item row ──────────────────────────────────────────────────────────

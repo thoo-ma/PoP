@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { Button } from 'heroui-native'
 import { memo } from 'react'
-import { colors } from '@/constants'
+import { useCSSVariable } from 'uniwind'
 import { floatingNavButton } from '@/styles'
 
 interface WalletButtonProps {
@@ -9,6 +9,7 @@ interface WalletButtonProps {
 }
 
 export default memo(function WalletButton({ onPress }: WalletButtonProps) {
+  const primary = useCSSVariable('--color-primary') as string
   return (
     <Button
       isIconOnly
@@ -19,7 +20,7 @@ export default memo(function WalletButton({ onPress }: WalletButtonProps) {
       accessibilityLabel="Wallet"
       accessibilityHint="Opens your wallet and POOP balance"
     >
-      <MaterialIcons name="account-balance-wallet" size={32} color={colors.primary} />
+      <MaterialIcons name="account-balance-wallet" size={32} color={primary} />
     </Button>
   )
 })

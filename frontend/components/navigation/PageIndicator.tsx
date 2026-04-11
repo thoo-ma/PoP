@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Button } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
-import { colors } from '@/constants'
+import { useCSSVariable } from 'uniwind'
 import { pageIndicator } from '@/styles'
 import type { PageIndicatorProps } from '@/types'
 
@@ -26,6 +26,10 @@ export default memo(function PageIndicator({
   currentPage,
   onPageChange,
 }: PageIndicatorProps) {
+  const [active, inactive] = useCSSVariable([
+    '--color-on-surface',
+    '--color-on-surface-variant',
+  ]) as [string, string]
   const s = pageIndicator()
   return (
     <View className={s.wrapper()}>
@@ -43,11 +47,11 @@ export default memo(function PageIndicator({
               <MaterialIcons
                 name={icon}
                 size={26}
-                color={currentPage === index ? colors.active : colors.inactive}
+                color={currentPage === index ? active : inactive}
               />
               <Text
                 className={pageIndicator({ active: currentPage === index }).navLabel()}
-                style={{ color: currentPage === index ? colors.active : colors.inactive }}
+                style={{ color: currentPage === index ? active : inactive }}
               >
                 {label}
               </Text>

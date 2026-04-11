@@ -2,7 +2,7 @@ import type { NFTRarity } from '@pop/shared'
 import { RARITIES } from '@pop/shared'
 import { Card } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { RARITY_COLORS } from '@/constants'
+import { useRarityColors } from '@/hooks'
 import { outcomePanel } from '@/styles'
 import { getProbabilities } from '@/utils'
 
@@ -13,6 +13,7 @@ import { getProbabilities } from '@/utils'
  */
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
   const probs = getProbabilities(r1, r2)
+  const rarityColors = useRarityColors()
   const s = outcomePanel()
   return (
     <Card className={s.root()} animation="disable-all">
@@ -23,12 +24,12 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
           if (pct === 0) return null
           return (
             <View key={rarity} className={s.row()}>
-              <View className={s.dot()} style={{ backgroundColor: RARITY_COLORS[rarity] }} />
+              <View className={s.dot()} style={{ backgroundColor: rarityColors[rarity] }} />
               <Text className={s.label()}>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</Text>
               <View className={s.track()}>
                 <View
                   className={s.fill()}
-                  style={{ width: `${pct}%`, backgroundColor: RARITY_COLORS[rarity] }}
+                  style={{ width: `${pct}%`, backgroundColor: rarityColors[rarity] }}
                 />
               </View>
               <Text className={s.value()}>{pct}%</Text>

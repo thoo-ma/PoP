@@ -1,42 +1,32 @@
 import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
 import { Button, cn, Spinner } from 'heroui-native'
-import { colors } from '@/constants/theme'
+import { useCSSVariable } from 'uniwind'
 import { tactileButton, tactileButtonText } from '@/styles/auth'
 import type { OAuthButtonProps } from '@/types'
 
-const config = {
-  google: {
-    label: 'Sign in with Google',
-    icon: (
-      <AntDesign name="google" size={18} color={colors.onSurface} style={{ marginRight: 12 }} />
-    ),
-  },
-  x: {
-    label: 'Sign in with X',
-    icon: (
-      <FontAwesome6
-        name="x-twitter"
-        size={18}
-        color={colors.onSurface}
-        style={{ marginRight: 12 }}
-      />
-    ),
-  },
-  apple: {
-    label: 'Sign in with Apple',
-    icon: (
+const labels = {
+  google: 'Sign in with Google',
+  x: 'Sign in with X',
+  apple: 'Sign in with Apple',
+} as const
+
+export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
+  const onSurface = useCSSVariable('--color-on-surface') as string
+  const label = labels[provider]
+
+  const icon =
+    provider === 'google' ? (
+      <AntDesign name="google" size={18} color={onSurface} style={{ marginRight: 12 }} />
+    ) : provider === 'x' ? (
+      <FontAwesome6 name="x-twitter" size={18} color={onSurface} style={{ marginRight: 12 }} />
+    ) : (
       <AntDesign
         name="apple"
         size={20}
-        color={colors.onSurface}
+        color={onSurface}
         style={{ marginRight: 12, marginBottom: 2 }}
       />
-    ),
-  },
-}
-
-export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
-  const { label, icon } = config[provider]
+    )
 
   return (
     <Button
@@ -48,7 +38,7 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
       feedbackVariant="none"
     >
       {loading ? (
-        <Spinner size="sm" color={colors.onSurface} />
+        <Spinner size="sm" color={onSurface} />
       ) : (
         <>
           {icon}

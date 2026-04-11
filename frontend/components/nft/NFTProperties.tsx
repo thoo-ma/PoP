@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Text, View } from 'react-native'
-import { colors } from '@/constants'
+import { useCSSVariable } from 'uniwind'
 import { propertiesWrapper, propertyBar } from '@/styles'
 
 interface NFTPropertiesProps {
@@ -51,21 +51,40 @@ function NFTProperties({
   excludeProperties,
 }: NFTPropertiesProps) {
   const isCompact = mode === 'compact'
+  const [efficiencyColor, resilienceColor, comfortColor, luckColor, energyColor] = useCSSVariable([
+    '--color-stat-efficiency',
+    '--color-stat-resilience',
+    '--color-stat-comfort',
+    '--color-stat-luck',
+    '--color-stat-energy',
+  ]) as [string, string, string, string, string]
 
   const filteredProperties = useMemo(() => {
     const properties = [
-      { label: 'Efficiency', value: efficiency, color: colors.efficiency },
-      { label: 'Resilience', value: resilience, color: colors.resilience },
-      { label: 'Comfort', value: comfort, color: colors.comfort },
-      { label: 'Luck', value: luck, color: colors.luck },
+      { label: 'Efficiency', value: efficiency, color: efficiencyColor },
+      { label: 'Resilience', value: resilience, color: resilienceColor },
+      { label: 'Comfort', value: comfort, color: comfortColor },
+      { label: 'Luck', value: luck, color: luckColor },
     ]
     if (energy !== undefined) {
-      properties.push({ label: 'Energy', value: energy, color: colors.energy })
+      properties.push({ label: 'Energy', value: energy, color: energyColor })
     }
     return excludeProperties && excludeProperties.length > 0
       ? properties.filter((prop) => !excludeProperties.includes(prop.label))
       : properties
-  }, [efficiency, resilience, comfort, luck, energy, excludeProperties])
+  }, [
+    efficiency,
+    resilience,
+    comfort,
+    luck,
+    energy,
+    excludeProperties,
+    efficiencyColor,
+    resilienceColor,
+    comfortColor,
+    luckColor,
+    energyColor,
+  ])
 
   return (
     <View className={propertiesWrapper({ mode: isCompact ? 'compact' : 'detailed' })}>
