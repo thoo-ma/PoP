@@ -8,9 +8,9 @@ export const screenTitle = tv({
       md: 'mb-3',
     },
     color: {
-      accent: 'text-text-title',
-      neutral: 'text-gray-700',
-      default: 'text-foreground',
+      accent: 'text-on-surface',
+      neutral: 'text-on-surface',
+      default: 'text-on-surface',
       none: '',
     },
   },
@@ -21,9 +21,9 @@ export const screenSubtitle = tv({
   base: 'text-base text-center',
   variants: {
     color: {
-      muted: 'text-text-body',
-      gray: 'text-gray-500',
-      default: 'text-muted',
+      muted: 'text-on-surface-variant',
+      gray: 'text-on-surface-variant',
+      default: 'text-on-surface-variant',
     },
     spacing: {
       sm: 'mb-4',

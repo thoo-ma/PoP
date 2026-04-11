@@ -34,7 +34,7 @@ export const nftDetailCard = tv({
   slots: {
     root: 'rounded-2xl overflow-hidden shadow-md border',
     imageWrap: 'relative w-full overflow-hidden',
-    image: 'w-full h-[280px] bg-default',
+    image: 'w-full h-[280px] bg-surface-container-low',
     content: 'w-full',
     title: 'text-lg font-bold text-center',
   },
@@ -98,15 +98,15 @@ export const breedPickerCard = tv({
     root: 'overflow-hidden rounded-xl p-0',
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',
-    disabledOverlay: 'absolute inset-0 bg-white/50',
+    disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
     info: 'px-2 pt-1.5 pb-2',
     name: 'text-sm font-semibold',
     rarity: 'text-[11px] font-medium capitalize',
   },
   variants: {
     disabled: {
-      true: { root: 'opacity-40', name: 'text-muted' },
-      false: { root: '', name: 'text-foreground' },
+      true: { root: 'opacity-40', name: 'text-on-surface-variant' },
+      false: { root: '', name: 'text-on-surface' },
     },
   },
   defaultVariants: { disabled: false },
@@ -131,7 +131,7 @@ export const xpBar = tv({
     row: 'flex-row items-center mt-1',
     label: 'text-xs font-semibold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
-    bg: 'h-1 rounded-full overflow-hidden bg-gray-200',
+    bg: 'h-1 rounded-full overflow-hidden bg-surface-container-low',
     fill: 'h-full rounded-full bg-yellow-400',
   },
 })
@@ -167,9 +167,9 @@ export const lootResultPanel = tv({
         body: 'text-emerald-900',
       },
       lost: {
-        root: 'bg-surface-light',
-        title: 'text-xl font-bold text-text-title',
-        body: 'text-text-body',
+        root: 'bg-surface-container-low',
+        title: 'text-xl font-bold text-on-surface',
+        body: 'text-on-surface-variant',
       },
     },
   },
@@ -182,9 +182,9 @@ export const lootResultPanel = tv({
 export const propertyBar = tv({
   slots: {
     root: '',
-    label: 'text-property-text',
+    label: 'text-on-surface-variant',
     barWrap: 'flex-row items-center',
-    bar: 'flex-1 bg-property-bg rounded overflow-hidden',
+    bar: 'flex-1 bg-surface-container-highest rounded overflow-hidden',
     fill: 'h-full rounded',
     value: 'text-right font-semibold',
   },
@@ -195,14 +195,14 @@ export const propertyBar = tv({
         label: 'text-[10px] w-[50px] mr-1',
         barWrap: 'flex-1 gap-1',
         bar: 'h-1.5',
-        value: 'text-[10px] text-property-text w-5',
+        value: 'text-[10px] text-on-surface-variant w-5',
       },
       detailed: {
         root: 'gap-1',
         label: 'text-xs font-semibold mb-0.5',
         barWrap: 'gap-1.5',
         bar: 'h-2',
-        value: 'text-xs text-text-dark font-bold w-[26px]',
+        value: 'text-xs text-on-surface font-bold w-[26px]',
       },
     },
   },
@@ -232,8 +232,8 @@ export const nftPickerPlaceholder = tv({
   },
   variants: {
     tint: {
-      gray: { icon: 'text-gray-400', label: 'text-gray-500' },
-      muted: { icon: 'text-muted', label: 'text-muted' },
+      gray: { icon: 'text-on-surface-variant', label: 'text-on-surface-variant' },
+      muted: { icon: 'text-on-surface-variant', label: 'text-on-surface-variant' },
     },
   },
   defaultVariants: { tint: 'muted' },
@@ -244,6 +244,6 @@ export const nftPickerPlaceholder = tv({
 export const marketplaceItemRow = tv({
   slots: {
     root: 'flex-row justify-between items-center',
-    price: 'text-sm font-bold text-text-title',
+    price: 'text-sm font-bold text-on-surface',
   },
 })
