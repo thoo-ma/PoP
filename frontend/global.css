@@ -67,30 +67,32 @@
 
 /* Bridge HeroUI Native CSS variables to Digital Atelier tokens */
 @layer theme {
-  @variant light {
-    /* Surfaces */
-    --surface: var(--color-surface);
-    --surface-secondary: var(--color-surface-container-low);
-    --surface-tertiary: var(--color-surface-container-highest);
+  :root {
+    @variant light {
+      /* Surfaces */
+      --surface: var(--color-surface);
+      --surface-secondary: var(--color-surface-container-low);
+      --surface-tertiary: var(--color-surface-container-highest);
 
-    /* Text */
-    --foreground: var(--color-on-surface);
-    --muted: var(--color-on-surface-variant);
+      /* Text */
+      --foreground: var(--color-on-surface);
+      --muted: var(--color-on-surface-variant);
 
-    /* Borders */
-    --border: var(--color-outline);
+      /* Borders */
+      --border: var(--color-outline);
 
-    /* Primary interactive (Avatar color="accent", Chip primary, Slider fill) */
-    --accent: var(--color-primary);
-    --accent-foreground: #ffffff;
+      /* Primary interactive (Avatar color="accent", Chip primary, Slider fill) */
+      --accent: var(--color-primary);
+      --accent-foreground: #ffffff;
 
-    /* Dialog / BottomSheet overlay surface */
-    --overlay: var(--color-surface);
+      /* Dialog / BottomSheet overlay surface */
+      --overlay: var(--color-surface);
 
-    /* Text inputs (TextField, CodeInput internals) */
-    --field-background: var(--color-surface-container-low);
-    --field-foreground: var(--color-on-surface);
-    --field-placeholder: var(--color-on-surface-variant);
-    --field-border: var(--color-outline);
+      /* Text inputs (TextField, CodeInput internals) */
+      --field-background: var(--color-surface-container-low);
+      --field-foreground: var(--color-on-surface);
+      --field-placeholder: var(--color-on-surface-variant);
+      --field-border: var(--color-outline);
+    }
   }
 }
