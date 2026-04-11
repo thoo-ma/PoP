@@ -3,7 +3,7 @@ import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, View } from 'react-native'
-import { RARITY_COLORS } from '@/constants'
+import { useRarityColors } from '@/hooks'
 import {
   badgeLabel,
   badgePosition,
@@ -22,6 +22,7 @@ interface MysteryBoxCardProps {
 }
 
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
+  const rarityColors = useRarityColors()
   return (
     <Card className={cardContainer()} animation="disable-all">
       <View className={cardImageContainer()}>
@@ -31,7 +32,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
           size="sm"
           variant="primary"
           className={badgePosition({ position: 'bottomRight' })}
-          style={{ backgroundColor: RARITY_COLORS[box.rarity] }}
+          style={{ backgroundColor: rarityColors[box.rarity] }}
           animation="disable-all"
         >
           <Chip.Label className={badgeLabel()}>{box.rarity.toUpperCase()}</Chip.Label>

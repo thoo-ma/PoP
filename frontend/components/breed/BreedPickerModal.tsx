@@ -2,7 +2,7 @@ import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import type { NFTRarity } from '@pop/shared'
 import { BottomSheet, Card, PressableFeedback } from 'heroui-native'
 import { Image, Text, useWindowDimensions, View } from 'react-native'
-import { RARITY_COLORS } from '@/constants'
+import { useRarityColors } from '@/hooks'
 import { breedPickerCard, pickerModal } from '@/styles'
 import type { NFT } from '@/types'
 import { canBreed, formatDisplayName } from '@/utils'
@@ -42,6 +42,7 @@ export default function BreedPickerModal({
   onClose,
 }: BreedPickerModalProps) {
   const { width: windowWidth } = useWindowDimensions()
+  const rarityColors = useRarityColors()
   const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2
 
   const items = allNFTs.map((nft) => ({
@@ -112,17 +113,14 @@ export default function BreedPickerModal({
                       {item.disabled && <View className={s.disabledOverlay()} />}
                       <View
                         className={s.rarityDot()}
-                        style={{ backgroundColor: RARITY_COLORS[item.nft.rarity] }}
+                        style={{ backgroundColor: rarityColors[item.nft.rarity] }}
                       />
                     </View>
                     <View className={s.info()}>
                       <Text className={s.name()} numberOfLines={1}>
                         {formatDisplayName(item.nft.name)}
                       </Text>
-                      <Text
-                        className={s.rarity()}
-                        style={{ color: RARITY_COLORS[item.nft.rarity] }}
-                      >
+                      <Text className={s.rarity()} style={{ color: rarityColors[item.nft.rarity] }}>
                         {item.nft.rarity}
                       </Text>
                     </View>
