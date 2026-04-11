@@ -17,9 +17,9 @@ export const screenContainer = tv({
       md: 'px-5',
     },
     bg: {
-      surface: 'bg-surface-bg',
+      surface: 'bg-surface',
       default: 'bg-background',
-      white: 'bg-white',
+      white: 'bg-surface',
     },
   },
   defaultVariants: { padX: 'none' },
@@ -62,5 +62,5 @@ export const gridLayout = tv({
 // The dashed-border "Select NFT from Vault" placeholder shown in Poop and
 // Repair before the user picks an NFT.
 export const nftPickerButton = tv({
-  base: 'w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-border flex-col mt-5',
+  base: 'w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-outline flex-col mt-5',
 })

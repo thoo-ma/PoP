@@ -4,16 +4,16 @@ import { tv } from 'tailwind-variants'
 // Tappable NFT slot card used in the Breed screen (filled and empty states).
 export const parentSlot = tv({
   slots: {
-    root: 'flex-1 rounded-[14px] border-2 overflow-hidden bg-content1 shadow-sm',
+    root: 'flex-1 rounded-[14px] border-2 overflow-hidden bg-surface shadow-sm',
     image: 'w-full aspect-square',
     info: 'p-2 pb-1',
-    name: 'text-[13px] font-bold text-foreground mb-1',
+    name: 'text-[13px] font-bold text-on-surface mb-1',
     chipsRow: 'flex-row gap-1',
     hintSection: 'px-2 pb-2',
-    hintText: 'text-xs text-default-400 italic',
-    emptyRoot: 'aspect-square justify-center items-center bg-default-100',
+    hintText: 'text-xs text-on-surface-variant italic',
+    emptyRoot: 'aspect-square justify-center items-center bg-surface-container-low',
     emptyIcon: 'text-[36px] text-default-300 mb-1.5',
-    emptyLabel: 'text-sm text-default-500 text-center px-4 leading-4',
+    emptyLabel: 'text-sm text-on-surface-variant text-center px-4 leading-4',
   },
 })
 
@@ -26,10 +26,10 @@ export const outcomePanel = tv({
     title: 'text-[13px] font-bold uppercase tracking-widest mb-3',
     row: 'flex-row items-center mb-2 gap-2',
     dot: 'w-2.5 h-2.5 rounded-full',
-    label: 'text-[13px] text-foreground font-semibold w-[90px]',
-    track: 'flex-1 h-2 bg-default-100 rounded overflow-hidden',
+    label: 'text-[13px] text-on-surface font-semibold w-[90px]',
+    track: 'flex-1 h-2 bg-surface-container-low rounded overflow-hidden',
     fill: 'h-full rounded',
-    value: 'text-sm font-bold text-default-600 w-11 text-right',
+    value: 'text-sm font-bold text-on-surface w-11 text-right',
   },
 })
 
@@ -39,7 +39,7 @@ export const parentSlotsRow = tv({
   slots: {
     root: 'flex-row items-stretch justify-center mb-6 w-full',
     separator: 'w-[36px] justify-center items-center',
-    separatorText: 'text-[26px] font-bold text-foreground',
+    separatorText: 'text-[26px] font-bold text-on-surface',
   },
 })
 
@@ -48,18 +48,18 @@ export const parentSlotsRow = tv({
 export const breedResultSection = tv({
   slots: {
     root: 'items-center w-full',
-    title: 'text-[26px] font-bold text-foreground mb-5 text-center',
+    title: 'text-[26px] font-bold text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
-    parentImage: 'w-[52px] h-[52px] rounded-lg border border-border',
-    multiplyText: 'text-lg text-muted font-semibold',
-    arrowText: 'text-[22px] text-foreground font-bold',
+    parentImage: 'w-[52px] h-[52px] rounded-lg border border-outline',
+    multiplyText: 'text-lg text-on-surface-variant font-semibold',
+    arrowText: 'text-[22px] text-on-surface font-bold',
   },
 })
 
 // ── Breed cost strikethrough ──────────────────────────────────────────────────
 // Inline strikethrough text for the original cost inside the Breed button label.
 export const breedCostStrikethrough = tv({
-  base: 'line-through text-foreground-500',
+  base: 'line-through text-on-surface-variant',
 })
 // ── Breed info text ───────────────────────────────────────────────────────────────
 // Informational text shown inside info-box containers in the Breed screen.
@@ -68,8 +68,8 @@ export const breedInfoText = tv({
   base: 'text-center',
   variants: {
     size: {
-      base: 'text-sm text-foreground-500',
-      hint: 'text-[13px] text-muted leading-5',
+      base: 'text-sm text-on-surface-variant',
+      hint: 'text-[13px] text-on-surface-variant leading-5',
     },
   },
   defaultVariants: { size: 'base' },
