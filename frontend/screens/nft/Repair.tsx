@@ -8,13 +8,22 @@ import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from 
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   badgeLabel,
+  breedCostStrikethrough,
+  bustMessage,
   dialogBody,
+  dialogFooter,
   infoBox,
   nftDetailCard,
   nftPickerButton,
+  nftPickerPlaceholder,
   overlayBadge,
+  repairAmountBox,
+  repairFullEnergy,
+  repairSuccess,
   screenContainer,
   scrollContent,
+  tactileButton,
+  tactileButtonText,
   typeBadge,
 } from '@/styles'
 import { formatDisplayName } from '@/utils'
@@ -46,6 +55,11 @@ export default memo(function Repair() {
     ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY)
     : 0
   const detailStyles = nftDetailCard()
+  const ra = repairAmountBox()
+  const rs = repairSuccess()
+  const rfe = repairFullEnergy()
+  const bm = bustMessage()
+  const ph = nftPickerPlaceholder()
 
   const handleSelectNFT = () => {
     if (nfts.length === 0) return
@@ -129,8 +143,8 @@ export default memo(function Repair() {
                 isDisabled={nfts.length === 0}
                 className={nftPickerButton()}
               >
-                <Text className="text-[40px] text-muted mb-3">+</Text>
-                <Button.Label className="text-base text-muted font-semibold">
+                <Text className={ph.icon()}>+</Text>
+                <Button.Label className={ph.label()}>
                   {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
                 </Button.Label>
               </Button>
@@ -157,7 +171,7 @@ export default memo(function Repair() {
                     <View className={detailStyles.imageWrap()}>
                       <Image
                         source={{ uri: selectedNFT.image_url }}
-                        className="w-full h-[280px] bg-default"
+                        className={detailStyles.image()}
                         resizeMode="cover"
                       />
                       <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
@@ -211,13 +225,9 @@ export default memo(function Repair() {
                     />
 
                     <View className={cn(infoBox(), 'mb-5')}>
-                      <Text className="text-base font-bold text-foreground mb-3">
-                        Repair Amount
-                      </Text>
-                      <View className="items-center mb-2">
-                        <Text className="text-[32px] font-bold text-green-600">
-                          +{Math.round(repairAmount)}%
-                        </Text>
+                      <Text className={ra.title()}>Repair Amount</Text>
+                      <View className={ra.valueWrap()}>
+                        <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>
                       </View>
                       <Slider
                         className="w-full"
@@ -236,9 +246,9 @@ export default memo(function Repair() {
 
                     {/* Bust feedback */}
                     {bustedResult && (
-                      <View className="w-full mb-3 p-4 rounded-xl bg-red-500/10 border border-red-500 items-center">
-                        <Text className="text-2xl font-bold text-red-500 mb-1">BUST 💀</Text>
-                        <Text className="text-sm text-foreground-500">
+                      <View className={bm.root()}>
+                        <Text className={bm.title()}>BUST 💀</Text>
+                        <Text className={bm.detail()}>
                           You lost {bustedResult.poop_spent} POOP — better luck next time!
                         </Text>
                       </View>
@@ -246,60 +256,67 @@ export default memo(function Repair() {
 
                     {/* Repair Button */}
                     <Button
-                      variant="primary"
+                      variant="ghost"
+                      feedbackVariant="none"
                       onPress={handleRepair}
                       isDisabled={
                         repairAmount === 0 ||
                         updateLoading ||
                         (poopBalance !== null && poopBalance < poopCost)
                       }
-                      className="w-full"
+                      className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
                     >
-                      {updateLoading ? (
-                        'Repairing...'
-                      ) : poopBalance !== null && poopBalance < poopCost ? (
-                        `Need ${poopCost} POOP`
-                      ) : degenPercent > 0 ? (
-                        <Text>
-                          Repair —{' '}
-                          <Text className="line-through text-foreground-500">{poopCost}</Text>{' '}
-                          {calcReducedCost(poopCost, degenPercent)} POOP
-                        </Text>
-                      ) : (
-                        `Repair (${poopCost} POOP)`
-                      )}
+                      <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                        {updateLoading ? (
+                          'Repairing...'
+                        ) : poopBalance !== null && poopBalance < poopCost ? (
+                          `Need ${poopCost} POOP`
+                        ) : degenPercent > 0 ? (
+                          <>
+                            {'Repair — '}
+                            <Text className={breedCostStrikethrough()}>{poopCost}</Text>
+                            {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
+                          </>
+                        ) : (
+                          `Repair (${poopCost} POOP)`
+                        )}
+                      </Button.Label>
                     </Button>
                   </>
                 )}
 
                 {isRepaired && (
-                  <View className="items-center mt-8 bg-green-100 p-6 rounded-2xl border-2 border-green-500">
-                    <Text className="text-2xl font-bold text-green-600 mb-5">
-                      ✓ Repair Complete!
-                    </Text>
+                  <View className={rs.root()}>
+                    <Text className={rs.text()}>✓ Repair Complete!</Text>
                     {repairedEnergy !== null && (
-                      <Text className="text-2xl font-bold text-green-600 mb-5">
-                        Energy: {repairedEnergy}%
-                      </Text>
+                      <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
                     )}
                     {poopSpent !== null && (
-                      <Text className="text-2xl font-bold text-green-600 mb-5">
-                        -{poopSpent} POOP spent
-                      </Text>
+                      <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
                     )}
-                    <Button variant="outline" onPress={handleReset} className="w-full">
-                      Repair Another NFT
+                    <Button
+                      animation="disable-all"
+                      onPress={handleReset}
+                      className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                    >
+                      <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                        Repair Another NFT
+                      </Button.Label>
                     </Button>
                   </View>
                 )}
 
                 {currentEnergy === MAX_ENERGY && !isRepaired && (
-                  <View className="items-center mt-6">
-                    <Text className="text-lg font-semibold text-foreground mb-6 text-center">
-                      This NFT is at full energy!
-                    </Text>
-                    <Button variant="outline" onPress={handleReset} className="w-full">
-                      Select Another NFT
+                  <View className={rfe.root()}>
+                    <Text className={rfe.text()}>This NFT is at full energy!</Text>
+                    <Button
+                      animation="disable-all"
+                      onPress={handleReset}
+                      className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                    >
+                      <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                        Select Another NFT
+                      </Button.Label>
                     </Button>
                   </View>
                 )}
@@ -323,9 +340,17 @@ export default memo(function Repair() {
               <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
-            <View className="flex-row justify-end">
-              <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
-                OK
+            <View className={dialogFooter()}>
+              <Button
+                animation="disable-all"
+                variant="ghost"
+                feedbackVariant="none"
+                onPress={() => setAlertDialog(null)}
+                className={tactileButton({ variant: 'primary', size: 'sm' })}
+              >
+                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
+                  OK
+                </Button.Label>
               </Button>
             </View>
           </Dialog.Content>

@@ -1,9 +1,10 @@
-import { View, Text } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { memo } from 'react'
-import type { PageIndicatorProps } from '@/types'
-import { colors } from '@/constants'
 import { Button } from 'heroui-native'
+import { memo } from 'react'
+import { Text, View } from 'react-native'
+import { colors } from '@/constants'
+import { pageIndicator } from '@/styles'
+import type { PageIndicatorProps } from '@/types'
 
 // Define icons for primary pages only
 const PRIMARY_PAGE_ICONS = [
@@ -25,30 +26,27 @@ export default memo(function PageIndicator({
   currentPage,
   onPageChange,
 }: PageIndicatorProps) {
+  const s = pageIndicator()
   return (
-    <View className="absolute bottom-10 left-0 right-0 flex-row justify-center items-center">
-      <View className="flex-row bg-[rgba(255,255,255,0.95)] rounded-[24px] px-4 py-[10px] gap-1 shadow-md">
+    <View className={s.wrapper()}>
+      <View className={s.rail()}>
         {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
           <Button
             key={index}
             variant="ghost"
             onPress={() => onPageChange?.(index)}
-            className="px-[10px] py-1"
+            className={s.navButton()}
             accessibilityLabel={label}
             accessibilityState={{ selected: currentPage === index }}
           >
-            <View className="items-center">
+            <View className={s.iconContainer()}>
               <MaterialIcons
                 name={icon}
                 size={26}
                 color={currentPage === index ? colors.active : colors.inactive}
               />
               <Text
-                className={
-                  currentPage === index
-                    ? 'text-[10px] font-bold mt-1'
-                    : 'text-[10px] font-medium mt-1'
-                }
+                className={pageIndicator({ active: currentPage === index }).navLabel()}
                 style={{ color: currentPage === index ? colors.active : colors.inactive }}
               >
                 {label}

@@ -1,0 +1,24 @@
+import { tv } from 'tailwind-variants'
+
+export { tactileButton, tactileButtonText } from './buttons'
+
+// ── Auth screen layout ────────────────────────────────────────────────────────
+export const authScreen = tv({
+  slots: {
+    scrim: 'flex-1 bg-background',
+    root: 'flex-1 bg-background px-6 pt-20 pb-8',
+    innerRoot: 'flex-1 px-6 pt-20 pb-8',
+    content: 'flex-1 justify-center',
+    logoWrap: 'items-center mb-8',
+    headline: 'text-[48px] font-black leading-[48px] tracking-tighter text-on-surface text-center',
+    tagline: 'text-[14px] font-bold text-outline text-center mt-4 mb-10',
+    inputWrap: 'mb-8',
+    actionsWrap: 'mt-auto',
+    footer: 'flex-row justify-center gap-6',
+    footerLink: 'border-b border-outline pb-0.5',
+    footerLinkText: 'text-[11px] font-black text-outline uppercase tracking-wider',
+    fieldError: 'text-primary text-center mt-3 font-bold',
+    codeInput:
+      'h-[64px] w-full bg-surface-container-low border-[3px] border-surface-container-highest focus:border-outline rounded-2xl text-center text-[26px] font-black tracking-[0.2em] text-on-surface uppercase',
+  },
+})

@@ -1,7 +1,8 @@
-import { memo } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
-import { colors } from '@/constants'
 import { Button } from 'heroui-native'
+import { memo } from 'react'
+import { colors } from '@/constants'
+import { floatingNavButton } from '@/styles'
 
 interface ProfileButtonProps {
   /** Called when the user taps the profile icon button. */
@@ -17,8 +18,9 @@ export default memo(function ProfileButton({ onPress }: ProfileButtonProps) {
     <Button
       isIconOnly
       variant="ghost"
+      feedbackVariant="none"
       onPress={onPress}
-      className="absolute top-[60px] left-5 z-[100] p-2 bg-[rgba(255,255,255,0.9)] rounded-[20px] shadow-md"
+      className={floatingNavButton({ side: 'left' })}
       accessibilityLabel="Profile"
       accessibilityHint="Opens your profile and settings"
     >

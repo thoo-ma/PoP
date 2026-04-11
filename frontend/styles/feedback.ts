@@ -37,3 +37,85 @@ export const infoBox = tv({
   },
   defaultVariants: { border: 'solid' },
 })
+
+// ── Stat allocation modal ─────────────────────────────────────────────────────
+// Bottom-sheet dialog for allocating stat points after a level-up.
+export const statModal = tv({
+  slots: {
+    content: 'px-6 pt-5 pb-10 rounded-t-3xl',
+    header: 'flex-row items-center justify-between mb-1',
+    title: 'text-lg font-bold text-foreground',
+    description: 'text-sm text-muted mb-5',
+    pointsBox: 'flex-row items-center justify-between bg-default rounded-xl py-2.5 px-4 mb-5',
+    pointsLabel: 'text-sm font-semibold text-muted',
+    pointsValue: 'text-2xl font-extrabold text-foreground',
+    sliderRow: 'mb-4',
+    sliderHeader: 'flex-row items-center justify-between mb-1',
+    statLabel: 'text-sm font-semibold text-muted',
+    statValue: 'text-sm font-bold text-foreground',
+    errorText: 'text-sm text-danger text-center mb-2',
+    buttonRow: 'flex-row gap-3 mt-2',
+  },
+})
+
+// ── Mystery box reveal modal ───────────────────────────────────────────────────
+// Celebration dialog shown after opening a mystery box.
+export const revealModal = tv({
+  slots: {
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center',
+    titleLg: 'text-xl font-extrabold text-foreground mb-1 text-center',
+    titleMd: 'text-base font-bold text-foreground mb-1 text-center',
+    description: 'text-sm text-muted mb-5 text-center',
+    imageContainer: 'w-[70%] aspect-square rounded-xl overflow-hidden bg-default mb-4 relative',
+    rarityOverlay: 'absolute bottom-2 right-2 px-2.5 py-1 rounded-md',
+    rarityText: 'text-white text-xs font-bold tracking-wide',
+  },
+})
+
+// ── Breed picker modal ────────────────────────────────────────────────────────
+// Bottom-sheet header + help text for the NFT parent picker.
+export const pickerModal = tv({
+  slots: {
+    header: 'flex-row justify-between items-center px-5 py-4 border-b border-border',
+    helpText: 'text-sm text-muted px-5 pt-2.5 pb-1 leading-[18px]',
+  },
+})
+
+// ── Bust message ──────────────────────────────────────────────────────────────
+// Degen-bust feedback box — used in both Breed and Repair screens.
+export const bustMessage = tv({
+  slots: {
+    root: 'w-full mb-3 p-4 rounded-xl bg-red-500/10 border border-red-500 items-center',
+    title: 'text-2xl font-bold text-red-500 mb-1',
+    detail: 'text-sm text-foreground-500 text-center',
+  },
+})
+// ── Screen loader ─────────────────────────────────────────────────────────────
+// Full-screen centered spinner shown while data loads.
+export const screenLoader = tv({
+  slots: {
+    root: 'flex-1 bg-background items-center justify-center',
+    message: 'mt-3 text-sm text-gray-500',
+  },
+})
+
+// ── Screen error ───────────────────────────────────────────────────────────────
+// Full-screen centered error alert.
+export const screenError = tv({
+  base: 'flex-1 bg-background items-center justify-center px-6',
+})
+
+// ── Dialog footer row ─────────────────────────────────────────────────────────
+// Right-aligned action row inside alert / confirm dialogs.
+export const dialogFooter = tv({
+  base: 'flex-row justify-end',
+})
+
+// ── Inline error ──────────────────────────────────────────────────────────────
+// Centred error block used when a screen-level ScreenError is too heavy.
+export const inlineError = tv({
+  slots: {
+    root: 'flex-1 justify-center items-center px-6',
+    text: 'text-app-error text-center',
+  },
+})

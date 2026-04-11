@@ -6,11 +6,15 @@ import { NFTCard, SortControls } from '@/components'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
+  dialogFooter,
   emptyState,
   gridLayout,
+  marketplaceItemRow,
   screenContainer,
   scrollContent,
   skeletonCard,
+  tactileButton,
+  tactileButtonText,
 } from '@/styles'
 import type { SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
@@ -72,6 +76,7 @@ export default memo(function Marketplace() {
 
   const emptyStyles = emptyState()
   const skeleton = skeletonCard()
+  const itemRow = marketplaceItemRow()
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -125,16 +130,21 @@ export default memo(function Marketplace() {
                         key={item.id}
                         nft={item}
                         action={
-                          <View className="flex-row justify-between items-center">
-                            <Text className="text-sm font-bold text-text-title">{item.price}</Text>
+                          <View className={itemRow.root()}>
+                            <Text className={itemRow.price()}>{item.price}</Text>
                             <Button
-                              variant="primary"
-                              size="sm"
+                              variant="ghost"
+                              feedbackVariant="none"
                               onPress={handleBuyNFT}
+                              className={tactileButton({ variant: 'primary', size: 'sm' })}
                               accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
                               accessibilityHint="Purchase this NFT"
                             >
-                              <Button.Label>Buy</Button.Label>
+                              <Button.Label
+                                className={tactileButtonText({ variant: 'primary', size: 'sm' })}
+                              >
+                                Buy
+                              </Button.Label>
                             </Button>
                           </View>
                         }
@@ -175,19 +185,18 @@ export default memo(function Marketplace() {
                           key={item.id}
                           nft={item}
                           action={
-                            <View className="flex-row justify-between items-center">
-                              <Text className="text-sm font-bold text-text-title">
-                                {item.price}
-                              </Text>
+                            <View className={itemRow.root()}>
+                              <Text className={itemRow.price()}>{item.price}</Text>
                               <Button
-                                variant="outline"
-                                size="sm"
                                 isDisabled={updateLoading}
                                 onPress={() => handleUnlist(item.id)}
+                                className={tactileButton({ variant: 'outline', size: 'sm' })}
                                 accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
                                 accessibilityHint="Remove this NFT from marketplace"
                               >
-                                <Button.Label>
+                                <Button.Label
+                                  className={tactileButtonText({ variant: 'outline', size: 'sm' })}
+                                >
                                   {updateLoading ? 'Unlisting...' : 'Unlist'}
                                 </Button.Label>
                               </Button>
@@ -225,9 +234,17 @@ export default memo(function Marketplace() {
               <Dialog.Title>{dialog?.title}</Dialog.Title>
               <Dialog.Description>{dialog?.message}</Dialog.Description>
             </View>
-            <View className="flex-row justify-end">
-              <Button variant="primary" size="sm" onPress={() => setDialog(null)}>
-                <Button.Label>OK</Button.Label>
+            <View className={dialogFooter()}>
+              <Button
+                animation="disable-all"
+                variant="ghost"
+                feedbackVariant="none"
+                onPress={() => setDialog(null)}
+                className={tactileButton({ variant: 'primary', size: 'sm' })}
+              >
+                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
+                  OK
+                </Button.Label>
               </Button>
             </View>
           </Dialog.Content>

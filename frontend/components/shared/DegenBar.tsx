@@ -7,7 +7,7 @@ import {
 import { cn, Slider } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
-import { infoBox } from '@/styles'
+import { degenBar, infoBox } from '@/styles'
 
 // Re-export for consumers that import the hash helper from this module
 export { degenBarConfigHash } from '@pop/shared/degenBar'
@@ -39,6 +39,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
 
   const isDegen = degenPercent >= DEGEN_ZONE_THRESHOLD
   const isAtZero = degenPercent === 0
+  const s = degenBar({ zone: isDegen ? 'degen' : 'safe' })
 
   const handleChange = (v: number | number[]) => {
     const val = Array.isArray(v) ? (v[0] ?? 0) : v
@@ -49,12 +50,10 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
   return (
     <View className={cn(infoBox(), 'mb-5')}>
       {/* Header row */}
-      <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-base font-bold text-foreground">Degen Bar</Text>
-        <View className={cn('px-2 py-0.5 rounded-full', isDegen ? 'bg-red-500' : 'bg-green-600')}>
-          <Text className="text-xs font-bold text-white">
-            {isDegen ? 'DEGEN ZONE' : 'SAFE ZONE'}
-          </Text>
+      <View className={s.headerRow()}>
+        <Text className={s.title()}>Degen Bar</Text>
+        <View className={s.zoneBadge()}>
+          <Text className={s.zoneBadgeLabel()}>{isDegen ? 'DEGEN ZONE' : 'SAFE ZONE'}</Text>
         </View>
       </View>
 
@@ -69,41 +68,35 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
         isDisabled={disabled}
       >
         <Slider.Track>
-          <Slider.Fill className={isDegen ? 'bg-red-500' : 'bg-green-600'} />
+          <Slider.Fill className={s.sliderFill()} />
           <Slider.Thumb />
         </Slider.Track>
       </Slider>
 
       {/* Metrics — hidden when slider is at 0 */}
       {!isAtZero && (
-        <View className="flex-row justify-between mt-1">
+        <View className={s.metricsRow()}>
           {/* Cost reduction */}
-          <View className="flex-1 items-center">
-            <Text className="text-xs text-foreground-500 mb-0.5">Cost</Text>
-            <Text className="text-sm font-bold text-green-500">−{reductionPct}%</Text>
-            <Text className="text-xs font-semibold text-foreground">{reducedCost} POOP</Text>
+          <View className={s.metricCol()}>
+            <Text className={s.metricLabel()}>Cost</Text>
+            <Text className={s.costValue()}>−{reductionPct}%</Text>
+            <Text className={s.costSubvalue()}>{reducedCost} POOP</Text>
           </View>
 
           {/* Divider */}
-          <View className="w-px bg-border mx-2" />
+          <View className={s.divider()} />
 
           {/* Bust risk */}
-          <View className="flex-1 items-center">
-            <Text className="text-xs text-foreground-500 mb-0.5">Bust risk</Text>
-            <Text className={cn('text-sm font-bold', isDegen ? 'text-red-500' : 'text-yellow-500')}>
-              {bustChancePct}%
-            </Text>
-            <Text className="text-xs text-foreground-500 text-center leading-4">
-              Pay full on bust
-            </Text>
+          <View className={s.metricCol()}>
+            <Text className={s.metricLabel()}>Bust risk</Text>
+            <Text className={s.bustValue()}>{bustChancePct}%</Text>
+            <Text className={s.bustSubvalue()}>Pay full on bust</Text>
           </View>
         </View>
       )}
 
       {isAtZero && (
-        <Text className="text-xs text-foreground-500 text-center">
-          Drag to reduce cost — higher risk, bigger discount
-        </Text>
+        <Text className={s.hint()}>Drag to reduce cost — higher risk, bigger discount</Text>
       )}
     </View>
   )

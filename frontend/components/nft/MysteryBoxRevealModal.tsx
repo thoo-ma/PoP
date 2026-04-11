@@ -1,8 +1,8 @@
+import { Button, cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
-import { View, Image } from 'react-native'
-import { Button, Dialog, cn } from 'heroui-native'
+import { Image, View } from 'react-native'
+import { rarityBadge, revealModal, tactileButton, tactileButtonText } from '@/styles'
 import type { NFT } from '@/types/nft'
-import { rarityBadge } from '@/styles'
 import { formatDisplayName } from '@/utils'
 
 interface MysteryBoxRevealModalProps {
@@ -24,6 +24,7 @@ export default memo(function MysteryBoxRevealModal({
 }: MysteryBoxRevealModalProps) {
   if (!nft) return null
 
+  const s = revealModal()
   return (
     <Dialog
       isOpen={visible}
@@ -33,42 +34,36 @@ export default memo(function MysteryBoxRevealModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay />
-        <Dialog.Content className="mx-6 rounded-3xl px-6 pt-6 pb-8 items-center">
-          <Dialog.Title className="text-xl font-extrabold text-foreground mb-1 text-center">
-            You got a toilet! 🚽
-          </Dialog.Title>
-          <Dialog.Description className="text-sm text-muted mb-5 text-center">
+        <Dialog.Content className={s.content()}>
+          <Dialog.Title className={s.titleLg()}>You got a toilet! 🚽</Dialog.Title>
+          <Dialog.Description className={s.description()}>
             Your mystery box has been opened
           </Dialog.Description>
 
-          <View className="w-[70%] aspect-square rounded-xl overflow-hidden bg-default mb-4 relative">
+          <View className={s.imageContainer()}>
             <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
-            <View
-              className={cn(
-                'absolute bottom-2 right-2 px-2.5 py-1 rounded-md',
-                rarityBadge({ rarity: nft.rarity }),
-              )}
-            >
-              <Dialog.Description className="text-white text-xs font-bold tracking-wide">
+            <View className={cn(s.rarityOverlay(), rarityBadge({ rarity: nft.rarity }))}>
+              <Dialog.Description className={s.rarityText()}>
                 {nft.rarity.toUpperCase()}
               </Dialog.Description>
             </View>
           </View>
 
-          <Dialog.Title className="text-base font-bold text-foreground mb-1 text-center">
-            {formatDisplayName(nft.name)}
-          </Dialog.Title>
-          <Dialog.Description className="text-sm text-muted mb-5 text-center capitalize">
+          <Dialog.Title className={s.titleMd()}>{formatDisplayName(nft.name)}</Dialog.Title>
+          <Dialog.Description className={cn(s.description(), 'capitalize')}>
             {nft.type.replace(/-/g, ' ')}
           </Dialog.Description>
 
           <Button
-            variant="primary"
-            className="w-full"
+            variant="ghost"
+            feedbackVariant="none"
             onPress={onClose}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
             accessibilityLabel="Close reveal and return to vault"
           >
-            <Button.Label>View in Vault</Button.Label>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              View in Vault
+            </Button.Label>
           </Button>
         </Dialog.Content>
       </Dialog.Portal>

@@ -78,6 +78,79 @@ export const infoCard = tv({
   base: 'w-full bg-white rounded-[14px] p-5 border border-gray-200 items-center gap-2 shadow-sm',
 })
 
+// ── Phase text labels ─────────────────────────────────────────────────────────
+// Small text labels used inside phase render functions in Poop.tsx.
+export const phaseText = tv({
+  slots: {
+    hint: 'text-base text-gray-500 font-medium',
+    promptTitle: 'text-xl font-bold text-green-600 text-center',
+    promptSubtitle: 'text-[13px] text-gray-500 text-center',
+    statusText: 'text-base font-semibold text-gray-700 text-center',
+  },
+})
+
+// ── Repair screen ───────────────────────────────────────────────────────────────
+// Amount slider box inner elements.
+export const repairAmountBox = tv({
+  slots: {
+    title: 'text-base font-bold text-foreground mb-3',
+    valueWrap: 'items-center mb-2',
+    value: 'text-[32px] font-bold text-green-600',
+  },
+})
+
+// Success state shown after a successful repair.
+export const repairSuccess = tv({
+  slots: {
+    root: 'items-center mt-8 bg-green-100 p-6 rounded-2xl border-2 border-green-500',
+    text: 'text-2xl font-bold text-green-600 mb-5',
+  },
+})
+
+// "Full energy" state shown when the selected NFT needs no repair.
+export const repairFullEnergy = tv({
+  slots: {
+    root: 'items-center mt-6',
+    text: 'text-lg font-semibold text-foreground mb-6 text-center',
+  },
+})
+
+// ── DegenBar ─────────────────────────────────────────────────────────────────
+// Risk slider used in Repair and Breed screens.
+export const degenBar = tv({
+  slots: {
+    headerRow: 'flex-row items-center justify-between mb-3',
+    title: 'text-base font-bold text-foreground',
+    zoneBadge: 'px-2 py-0.5 rounded-full',
+    zoneBadgeLabel: 'text-xs font-bold text-white',
+    sliderFill: '',
+    metricsRow: 'flex-row justify-between mt-1',
+    metricCol: 'flex-1 items-center',
+    metricLabel: 'text-xs text-foreground-500 mb-0.5',
+    costValue: 'text-sm font-bold text-green-500',
+    costSubvalue: 'text-xs font-semibold text-foreground',
+    divider: 'w-px bg-border mx-2',
+    bustValue: 'text-sm font-bold',
+    bustSubvalue: 'text-xs text-foreground-500 text-center leading-4',
+    hint: 'text-xs text-foreground-500 text-center',
+  },
+  variants: {
+    zone: {
+      safe: {
+        zoneBadge: 'bg-green-600',
+        sliderFill: 'bg-green-600',
+        bustValue: 'text-yellow-500',
+      },
+      degen: {
+        zoneBadge: 'bg-red-500',
+        sliderFill: 'bg-red-500',
+        bustValue: 'text-red-500',
+      },
+    },
+  },
+  defaultVariants: { zone: 'safe' },
+})
+
 // ── Recording indicator ──────────────────────────────────────────────────────
 // The red dot + "Recording…" row.
 export const recordingIndicator = tv({

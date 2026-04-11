@@ -1,8 +1,9 @@
+import { Button, Select } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
-import { Button, Select } from 'heroui-native'
-import type { SortOption } from '@/types'
 import { SORT_OPTIONS } from '@/constants'
+import { sortControls } from '@/styles'
+import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
 
 interface SortControlsProps {
@@ -20,9 +21,10 @@ interface SortControlsProps {
  * Sort control bar with a field-selector dropdown and an asc/desc toggle.
  */
 function SortControls({ sortBy, sortOrder, onSortByChange, onSortOrderToggle }: SortControlsProps) {
+  const s = sortControls()
   return (
-    <View className="flex-row items-center gap-2 px-4 pb-2">
-      <View className="flex-1">
+    <View className={s.root()}>
+      <View className={s.selectWrapper()}>
         <Select
           value={{ value: sortBy, label: capitalize(sortBy) }}
           onValueChange={(opt) => {

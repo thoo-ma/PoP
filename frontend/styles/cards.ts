@@ -34,6 +34,7 @@ export const nftDetailCard = tv({
   slots: {
     root: 'rounded-2xl overflow-hidden shadow-md border',
     imageWrap: 'relative w-full overflow-hidden',
+    image: 'w-full h-[280px] bg-default',
     content: 'w-full',
     title: 'text-lg font-bold text-center',
   },
@@ -111,8 +112,138 @@ export const breedPickerCard = tv({
   defaultVariants: { disabled: false },
 })
 
-// ── NFT nav button ───────────────────────────────────────────────────────────
-// Prev / next arrow button used in NFTSelector.
-export const nftNavButton = tv({
-  base: 'w-[52px] h-9 rounded-lg bg-surface-light border border-border-default',
+// ── Card container ────────────────────────────────────────────────────────────
+// Standard full-width grid card wrapper — NFTCard and MysteryBoxCard.
+export const cardContainer = tv({
+  base: 'w-full mb-4 overflow-hidden p-0',
+})
+
+// ── Card title (grid card) ────────────────────────────────────────────────────
+// Small bold title used in NFTCard and MysteryBoxCard grid cards.
+export const cardTitle = tv({
+  base: 'text-sm font-bold',
+})
+
+// ── XP bar ────────────────────────────────────────────────────────────────────
+// Level progress bar used in NFTCard.
+export const xpBar = tv({
+  slots: {
+    row: 'flex-row items-center mt-1',
+    label: 'text-xs font-semibold w-5 text-stat-comfort',
+    track: 'flex-1 mx-1',
+    bg: 'h-1 rounded-full overflow-hidden bg-gray-200',
+    fill: 'h-full rounded-full bg-yellow-400',
+  },
+})
+
+// ── Loot roulette card ────────────────────────────────────────────────────────
+// Layout slots for the LootRouletteCard component.
+export const lootCard = tv({
+  slots: {
+    root: 'mx-4 items-center gap-4',
+    body: 'items-center gap-4 w-full',
+    title: 'text-xl font-bold',
+    chanceValue: 'font-bold text-stat-luck',
+    holdText: 'text-sm italic text-stat-efficiency',
+    maxHoldText: 'text-sm italic text-stat-comfort',
+    rollError: 'text-sm text-center text-stat-energy',
+    buttonRow: 'flex-row gap-3 w-full mt-2',
+  },
+})
+
+// ── Loot result panel ─────────────────────────────────────────────────────────
+// Won / lost outcome panel shown after a loot roll.
+export const lootResultPanel = tv({
+  slots: {
+    root: 'items-center gap-2 rounded-xl py-4 px-6 w-full',
+    title: 'text-center',
+    body: 'text-base text-center',
+  },
+  variants: {
+    status: {
+      won: {
+        root: 'bg-green-100',
+        title: 'text-2xl font-extrabold text-emerald-900',
+        body: 'text-emerald-900',
+      },
+      lost: {
+        root: 'bg-surface-light',
+        title: 'text-xl font-bold text-text-title',
+        body: 'text-text-body',
+      },
+    },
+  },
+})
+
+// ── Property bar ──────────────────────────────────────────────────────────────
+// Stat bar row (label + track + value) used in NFTProperties.
+// mode='compact'  → tight single-row layout (used in grid cards)
+// mode='detailed' → stacked layout with larger bar (used in detail views)
+export const propertyBar = tv({
+  slots: {
+    root: '',
+    label: 'text-property-text',
+    barWrap: 'flex-row items-center',
+    bar: 'flex-1 bg-property-bg rounded overflow-hidden',
+    fill: 'h-full rounded',
+    value: 'text-right font-semibold',
+  },
+  variants: {
+    mode: {
+      compact: {
+        root: 'flex-row items-center justify-between',
+        label: 'text-[10px] w-[50px] mr-1',
+        barWrap: 'flex-1 gap-1',
+        bar: 'h-1.5',
+        value: 'text-[10px] text-property-text w-5',
+      },
+      detailed: {
+        root: 'gap-1',
+        label: 'text-xs font-semibold mb-0.5',
+        barWrap: 'gap-1.5',
+        bar: 'h-2',
+        value: 'text-xs text-text-dark font-bold w-[26px]',
+      },
+    },
+  },
+  defaultVariants: { mode: 'compact' },
+})
+
+// ── Properties wrapper ────────────────────────────────────────────────────────
+// Outer container for the NFTProperties list.
+export const propertiesWrapper = tv({
+  base: 'mt-2',
+  variants: {
+    mode: {
+      compact: 'gap-1',
+      detailed: 'gap-2',
+    },
+  },
+  defaultVariants: { mode: 'compact' },
+})
+
+// ── NFT picker placeholder ──────────────────────────────────────────────────────────
+// Empty-state text inside the picker Button when no NFT is selected.
+// Poop uses tint:'gray'; Repair uses the default tint:'muted'.
+export const nftPickerPlaceholder = tv({
+  slots: {
+    icon: 'text-[40px] mb-3',
+    label: 'text-base font-semibold',
+  },
+  variants: {
+    tint: {
+      gray: { icon: 'text-gray-400', label: 'text-gray-500' },
+      muted: { icon: 'text-muted', label: 'text-muted' },
+    },
+  },
+  defaultVariants: { tint: 'muted' },
+})
+
+// ── Marketplace item row ──────────────────────────────────────────────────────────
+// Price + action button row in buy/sell listing cards.
+export const marketplaceItemRow = tv({
+  slots: {
+    root: 'flex-row justify-between items-center',
+    price: 'text-sm font-bold text-text-title',
+  },
 })
