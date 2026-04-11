@@ -18,6 +18,7 @@
   --color-outline: #897266;
   --color-primary: #9b4500;
   --color-primary-container: #ff8c42;
+  --color-on-primary: #ffffff;
   --color-on-surface: #1c1b1a;
   --color-on-surface-variant: #b0a39d;
   --color-badge-level: #6366f1;
@@ -59,35 +60,40 @@
   --color-app-mystery: #7c3aed;
   --color-app-amber: #fbbf24;
 
-  /* ── Text palette ────────────────────────────────────────── */
-  --color-text-title: #374151;
-  --color-text-body: #6b7280;
-  --color-text-light: #999;
-  --color-text-dark: #1e293b;
-
-  /* ── Surface / background palette ───────────────────────── */
-  --color-surface-bg: #fff;
-  --color-surface-light: #f3f4f6;
-  --color-surface-lighter: #f9fafb;
-  --color-surface-2: #f8fafc;
+  /* ── Dark scrims (modal backdrops) ──────────────────────── */
   --color-overlay-dark: rgba(0, 0, 0, 0.5);
   --color-overlay-dark-mid: rgba(0, 0, 0, 0.55);
   --color-overlay-dark-heavy: rgba(0, 0, 0, 0.7);
+}
 
-  /* ── Property bar colors ─────────────────────────────────── */
-  --color-property-bg: #e2e8f0;
-  --color-property-text: #475569;
-  --color-property-value: #1e293b;
+/* Bridge HeroUI Native CSS variables to Digital Atelier tokens */
+@layer theme {
+  :root {
+    @variant light {
+      /* Surfaces */
+      --surface: var(--color-surface);
+      --surface-secondary: var(--color-surface-container-low);
+      --surface-tertiary: var(--color-surface-container-highest);
 
-  /* ── Border / divider ────────────────────────────────────── */
-  --color-border-default: #e5e7eb;
-  --color-border-light: #d1d5db;
+      /* Text */
+      --foreground: var(--color-on-surface);
+      --muted: var(--color-on-surface-variant);
 
-  /* ── Button states ───────────────────────────────────────── */
-  --color-btn-primary: #000;
-  --color-btn-secondary: #d1d5db;
-  --color-btn-success: #10b981;
-  --color-btn-text: #fff;
-  --color-btn-text-dark: #1f1f1f;
-  --color-btn-disabled: #9ca3af;
+      /* Borders */
+      --border: var(--color-outline);
+
+      /* Primary interactive (Avatar color="accent", Chip primary, Slider fill) */
+      --accent: var(--color-primary);
+      --accent-foreground: var(--color-on-primary);
+
+      /* Dialog / BottomSheet overlay surface */
+      --overlay: var(--color-surface);
+
+      /* Text inputs (TextField, CodeInput internals) */
+      --field-background: var(--color-surface-container-low);
+      --field-foreground: var(--color-on-surface);
+      --field-placeholder: var(--color-on-surface-variant);
+      --field-border: var(--color-outline);
+    }
+  }
 }
