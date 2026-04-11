@@ -20,6 +20,9 @@
   --color-primary-container: #ff8c42;
   --color-on-surface: #1c1b1a;
   --color-on-surface-variant: #b0a39d;
+  --color-badge-level: #6366f1;
+  --color-surface-overlay: rgba(253, 249, 246, 0.9);
+  --color-surface-overlay-rail: rgba(253, 249, 246, 0.95);
 
   /* ── 3D Button Accents ───────────────────────────────────── */
   --color-primary-dark: #7a3600;
