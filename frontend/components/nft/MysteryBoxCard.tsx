@@ -65,9 +65,6 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
 
       <Card.Body className={cardBody()}>
         <Card.Title className={cardTitle()}>Mystery Box</Card.Title>
-        <Chip size="sm" variant="primary" animation="disable-all">
-          <Chip.Label className={cn(badgeLabel(), 'tracking-wide')}>MYSTERY BOX</Chip.Label>
-        </Chip>
         {action}
       </Card.Body>
     </Card>
