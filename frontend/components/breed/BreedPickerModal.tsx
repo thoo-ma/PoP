@@ -63,7 +63,7 @@ export default function BreedPickerModal({
         <BottomSheet.Overlay />
         <BottomSheet.Content snapPoints={['70%']}>
           <View className={s.header()}>
-            <BottomSheet.Title className="text-lg font-bold text-foreground">
+            <BottomSheet.Title className="text-lg font-bold text-on-surface">
               {title}
             </BottomSheet.Title>
             <BottomSheet.Close />

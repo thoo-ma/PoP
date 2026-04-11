@@ -287,7 +287,7 @@ export default memo(function Vault() {
                     <Text
                       className={cn(
                         emptyStyles.title(),
-                        'font-normal text-text-body text-center mb-0',
+                        'font-normal text-on-surface-variant text-center mb-0',
                       )}
                     >
                       No mystery boxes yet
