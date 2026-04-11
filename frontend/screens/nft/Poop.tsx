@@ -792,6 +792,8 @@ export default memo(function Poop() {
             <View className={dialogFooter()}>
               <Button
                 animation="disable-all"
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={() => setAlertDialog(null)}
                 className={tactileButton({ variant: 'primary', size: 'sm' })}
               >

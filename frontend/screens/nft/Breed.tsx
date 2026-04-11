@@ -210,6 +210,8 @@ import { canBreed } from '@/utils'
 
               {/* ── Breed button ──────────────────────────────────────────────── */}
               <Button
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
                 className={cn(tactileButton({ variant: 'primary' }), 'w-full')}

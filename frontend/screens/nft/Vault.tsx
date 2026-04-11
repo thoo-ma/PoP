@@ -211,6 +211,8 @@ export default memo(function Vault() {
                         <>
                           {(nft.stat_points ?? 0) > 0 && (
                             <Button
+                              variant="ghost"
+                              feedbackVariant="none"
                               onPress={() => handleOpenStatModal(nft)}
                               className={cn(
                                 tactileButton({ variant: 'secondary', size: 'sm' }),
@@ -227,6 +229,8 @@ export default memo(function Vault() {
                           )}
                           {!nft.isListed ? (
                             <Button
+                              variant="ghost"
+                              feedbackVariant="none"
                               isDisabled={updateLoading}
                               onPress={() => handleListNFT(nft.id)}
                               className={cn(

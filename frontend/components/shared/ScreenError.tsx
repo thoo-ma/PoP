@@ -23,6 +23,8 @@ export default memo(function ScreenError({ title, message, onRetry }: ScreenErro
       {onRetry && (
         <Button
           animation="disable-all"
+          variant="ghost"
+          feedbackVariant="none"
           onPress={onRetry}
           className={cn(tactileButton({ variant: 'primary' }), 'mt-4')}
         >

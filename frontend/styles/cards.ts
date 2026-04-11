@@ -112,12 +112,6 @@ export const breedPickerCard = tv({
   defaultVariants: { disabled: false },
 })
 
-// ── NFT nav button ───────────────────────────────────────────────────────────
-// Prev / next arrow button used in NFTSelector.
-export const nftNavButton = tv({
-  base: 'w-[52px] h-9 rounded-lg bg-surface-light border border-border-default',
-})
-
 // ── Card container ────────────────────────────────────────────────────────────
 // Standard full-width grid card wrapper — NFTCard and MysteryBoxCard.
 export const cardContainer = tv({

@@ -256,6 +256,8 @@ export default memo(function Repair() {
 
                     {/* Repair Button */}
                     <Button
+                      variant="ghost"
+                      feedbackVariant="none"
                       onPress={handleRepair}
                       isDisabled={
                         repairAmount === 0 ||
@@ -341,6 +343,8 @@ export default memo(function Repair() {
             <View className={dialogFooter()}>
               <Button
                 animation="disable-all"
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={() => setAlertDialog(null)}
                 className={tactileButton({ variant: 'primary', size: 'sm' })}
               >

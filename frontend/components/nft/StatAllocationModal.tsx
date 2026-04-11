@@ -148,6 +148,8 @@ export default memo(function StatAllocationModal({
               </Button.Label>
             </Button>
             <Button
+              variant="ghost"
+              feedbackVariant="none"
               onPress={handleConfirm}
               isDisabled={totalSpent === 0 || loading}
               className={cn(tactileButton({ variant: 'primary' }), 'flex-1')}

@@ -133,6 +133,8 @@ export default memo(function Marketplace() {
                           <View className={itemRow.root()}>
                             <Text className={itemRow.price()}>{item.price}</Text>
                             <Button
+                              variant="ghost"
+                              feedbackVariant="none"
                               onPress={handleBuyNFT}
                               className={tactileButton({ variant: 'primary', size: 'sm' })}
                               accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
@@ -235,6 +237,8 @@ export default memo(function Marketplace() {
             <View className={dialogFooter()}>
               <Button
                 animation="disable-all"
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={() => setDialog(null)}
                 className={tactileButton({ variant: 'primary', size: 'sm' })}
               >
