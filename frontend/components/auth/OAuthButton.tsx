@@ -1,57 +1,60 @@
-import { AntDesign } from '@expo/vector-icons'
-import { Button, Spinner } from 'heroui-native'
+import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
+import { Button, cn, Spinner } from 'heroui-native'
+import { colors } from '@/constants/theme'
+import { tactileButton, tactileButtonText } from '@/styles/auth'
 import type { OAuthButtonProps } from '@/types'
 
 type OAuthProvider = OAuthButtonProps['provider']
 
 const config = {
   google: {
-    label: 'Continue with Google',
-    variant: 'outline' as const,
-    textColor: '#1F1F1F',
-    icon: 'google' as const,
+    label: 'Sign in with Google',
+    icon: (
+      <AntDesign name="google" size={18} color={colors.onSurface} style={{ marginRight: 12 }} />
+    ),
   },
   x: {
-    label: 'Continue with 𝕏',
-    variant: 'primary' as const,
-    textColor: '#fff',
-    icon: undefined,
+    label: 'Sign in with X',
+    icon: (
+      <FontAwesome6
+        name="x-twitter"
+        size={18}
+        color={colors.onSurface}
+        style={{ marginRight: 12 }}
+      />
+    ),
   },
   apple: {
-    label: 'Continue with Apple',
-    variant: 'primary' as const,
-    textColor: '#fff',
-    icon: 'apple' as const,
+    label: 'Sign in with Apple',
+    icon: (
+      <AntDesign
+        name="apple"
+        size={20}
+        color={colors.onSurface}
+        style={{ marginRight: 12, marginBottom: 2 }}
+      />
+    ),
   },
-} satisfies Record<
-  OAuthProvider,
-  {
-    label: string
-    variant: 'primary' | 'outline'
-    textColor: string
-    icon: 'google' | 'apple' | undefined
-  }
->
+}
 
 export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
-  const { label, variant, textColor, icon } = config[provider]
+  const { label, icon } = config[provider]
 
   return (
     <Button
-      variant={variant}
       onPress={onPress}
       isDisabled={disabled || loading}
-      className={`mb-4 ${provider === 'apple' ? 'bg-black' : ''}`}
+      className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
       accessibilityLabel={label}
+      variant="ghost"
+      feedbackVariant="none"
     >
       {loading ? (
-        <Spinner size="sm" color={textColor} />
+        <Spinner size="sm" color={colors.onSurface} />
       ) : (
         <>
-          {icon && <AntDesign name={icon} size={20} color={textColor} />}
-          <Button.Label style={variant === 'outline' ? { color: textColor } : undefined}>
-            {label}
-          </Button.Label>
+          {icon}
+          <Button.Label className={tactileButtonText({ variant: 'default' })}>{label}</Button.Label>
         </>
       )}
     </Button>

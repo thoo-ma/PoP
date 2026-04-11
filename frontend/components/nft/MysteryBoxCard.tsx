@@ -1,10 +1,17 @@
+import type { MysteryBox } from '@pop/shared'
+import { Card, Chip, cn } from 'heroui-native'
+import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, View } from 'react-native'
-import type { ReactNode } from 'react'
-import { Card, Chip, cn } from 'heroui-native'
-import type { MysteryBox } from '@pop/shared'
 import { RARITY_COLORS } from '@/constants'
-import { badgeLabel, cardImageContainer, badgePosition, cardBody } from '@/styles'
+import {
+  badgeLabel,
+  badgePosition,
+  cardBody,
+  cardContainer,
+  cardImageContainer,
+  cardTitle,
+} from '@/styles'
 
 interface MysteryBoxCardProps {
   box: MysteryBox
@@ -16,7 +23,7 @@ interface MysteryBoxCardProps {
 
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   return (
-    <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
+    <Card className={cardContainer()} animation="disable-all">
       <View className={cardImageContainer()}>
         <Image source={{ uri: box.image_url }} className="w-full h-full" resizeMode="cover" />
         {/* Rarity — bottom-right */}
@@ -38,7 +45,7 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
             className={badgePosition({ position: 'topLeft' })}
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-sm font-bold">×{count}</Chip.Label>
+            <Chip.Label className={badgeLabel({ size: 'base' })}>×{count}</Chip.Label>
           </Chip>
         )}
 
@@ -50,13 +57,13 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
             className={badgePosition({ position: 'topRight' })}
             animation="disable-all"
           >
-            <Chip.Label className="text-white text-xs font-semibold">Opened</Chip.Label>
+            <Chip.Label className={cn(badgeLabel(), 'font-semibold')}>Opened</Chip.Label>
           </Chip>
         )}
       </View>
 
       <Card.Body className={cardBody()}>
-        <Card.Title className="text-sm font-bold">Mystery Box</Card.Title>
+        <Card.Title className={cardTitle()}>Mystery Box</Card.Title>
         <Chip size="sm" variant="primary" animation="disable-all">
           <Chip.Label className={cn(badgeLabel(), 'tracking-wide')}>MYSTERY BOX</Chip.Label>
         </Chip>

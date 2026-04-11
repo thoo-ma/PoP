@@ -15,7 +15,19 @@ import {
   ScreenLoader,
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
-import { errorMessage, infoBox, screenContainer, scrollContent } from '@/styles'
+import {
+  breedCostStrikethrough,
+  breedInfoText,
+  breedResultSection,
+  bustMessage,
+  errorMessage,
+  infoBox,
+  parentSlotsRow,
+  screenContainer,
+  scrollContent,
+  tactileButton,
+  tactileButtonText,
+} from '@/styles'
 import type { NFT } from '@/types/nft'
 import { canBreed } from '@/utils'
 
@@ -73,7 +85,7 @@ import { canBreed } from '@/utils'
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <View className={infoBox()}>
-          <Text className="text-sm text-foreground-500 text-center">
+          <Text className={breedInfoText()}>
             You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then
             come back to start breeding.
           </Text>
@@ -100,6 +112,9 @@ import { canBreed } from '@/utils'
     poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost
 
   // ── Render ────────────────────────────────────────────────────────────────
+  const bust = bustMessage()
+  const slotsRow = parentSlotsRow()
+  const result = breedResultSection()
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <ScrollShadow LinearGradientComponent={LinearGradient}>
@@ -133,14 +148,14 @@ import { canBreed } from '@/utils'
           {!breedResult ? (
             <>
               {/* ── Parent slots ──────────────────────────────────────────── */}
-              <View className="flex-row items-stretch justify-center mb-6 w-full">
+              <View className={slotsRow.root()}>
                 <BreedParentSlot
                   nft={parent1}
                   label="Choose Parent 1"
                   onPress={() => setPickerSlot(1)}
                 />
-                <View className="w-[36px] justify-center items-center">
-                  <Text className="text-[26px] font-bold text-foreground">×</Text>
+                <View className={slotsRow.separator()}>
+                  <Text className={slotsRow.separatorText()}>×</Text>
                 </View>
                 <BreedParentSlot
                   nft={parent2}
@@ -154,7 +169,7 @@ import { canBreed } from '@/utils'
                 <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
                 <View className={cn(infoBox({ border: 'dashed' }), 'mb-6')}>
-                  <Text className="text-[13px] text-muted text-center leading-5">
+                  <Text className={breedInfoText({ size: 'hint' })}>
                     Select both parents to see outcome probabilities
                   </Text>
                 </View>
@@ -170,9 +185,9 @@ import { canBreed } from '@/utils'
 
               {/* ── Bust feedback ──────────────────────────────────────── */}
               {bustedResult && (
-                <View className="w-full mb-3 p-4 rounded-xl bg-red-500/10 border border-red-500 items-center">
-                  <Text className="text-2xl font-bold text-red-500 mb-1">BUST 💀</Text>
-                  <Text className="text-sm text-foreground-500">
+                <View className={bust.root()}>
+                  <Text className={bust.title()}>BUST 💀</Text>
+                  <Text className={bust.detail()}>
                     You lost {bustedResult.poop_spent} POOP — better luck next time!
                   </Text>
                 </View>
@@ -195,56 +210,55 @@ import { canBreed } from '@/utils'
 
               {/* ── Breed button ──────────────────────────────────────────────── */}
               <Button
-                variant="primary"
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
-                className="w-full"
+                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
               >
-                {breedLoading ? (
-                  'Breeding…'
-                ) : degenPercent > 0 && totalBreedCost !== null ? (
-                  <Text>
-                    Breed —{' '}
-                    <Text className="line-through text-foreground-500">{totalBreedCost}</Text>{' '}
-                    {calcReducedCost(totalBreedCost, degenPercent)} POOP
-                  </Text>
-                ) : totalBreedCost !== null ? (
-                  `Breed (${totalBreedCost} POOP)`
-                ) : (
-                  'Breed'
-                )}
+                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                  {breedLoading ? (
+                    'Breeding…'
+                  ) : degenPercent > 0 && totalBreedCost !== null ? (
+                    <>
+                      {'Breed — '}
+                      <Text className={breedCostStrikethrough()}>{totalBreedCost}</Text>
+                      {` ${calcReducedCost(totalBreedCost, degenPercent)} POOP`}
+                    </>
+                  ) : totalBreedCost !== null ? (
+                    `Breed (${totalBreedCost} POOP)`
+                  ) : (
+                    'Breed'
+                  )}
+                </Button.Label>
               </Button>
             </>
           ) : (
             /* ── Result ───────────────────────────────────────────────────── */
-            <View className="items-center w-full">
-              <Text className="text-[26px] font-bold text-foreground mb-5 text-center">
-                🎉 Mystery Box Earned!
-              </Text>
+            <View className={result.root()}>
+              <Text className={result.title()}>🎉 Mystery Box Earned!</Text>
 
               {/* Parents summary */}
-              <View className="flex-row items-center mb-5 gap-2">
+              <View className={result.parentsRow()}>
                 {resultParent1Url && (
-                  <Image
-                    source={{ uri: resultParent1Url }}
-                    className="w-[52px] h-[52px] rounded-lg border border-border"
-                  />
+                  <Image source={{ uri: resultParent1Url }} className={result.parentImage()} />
                 )}
-                <Text className="text-lg text-muted font-semibold">×</Text>
+                <Text className={result.multiplyText()}>×</Text>
                 {resultParent2Url && (
-                  <Image
-                    source={{ uri: resultParent2Url }}
-                    className="w-[52px] h-[52px] rounded-lg border border-border"
-                  />
+                  <Image source={{ uri: resultParent2Url }} className={result.parentImage()} />
                 )}
-                <Text className="text-[22px] text-foreground font-bold">→</Text>
+                <Text className={result.arrowText()}>→</Text>
               </View>
 
               {/* Mystery box result */}
               <MysteryBoxCard box={breedResult} />
 
-              <Button variant="primary" onPress={handleReset} className="w-full">
-                Breed Again
+              <Button
+                animation="disable-all"
+                onPress={handleReset}
+                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+              >
+                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                  Breed Again
+                </Button.Label>
               </Button>
             </View>
           )}

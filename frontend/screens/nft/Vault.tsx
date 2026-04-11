@@ -15,7 +15,16 @@ import {
 } from '@/components'
 import type { AllocateResult } from '@/hooks'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
-import { emptyState, gridLayout, screenContainer, scrollContent, skeletonCard } from '@/styles'
+import {
+  emptyState,
+  gridLayout,
+  inlineError,
+  screenContainer,
+  scrollContent,
+  skeletonCard,
+  tactileButton,
+  tactileButtonText,
+} from '@/styles'
 import type { NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
 
@@ -202,28 +211,34 @@ export default memo(function Vault() {
                         <>
                           {(nft.stat_points ?? 0) > 0 && (
                             <Button
-                              variant="secondary"
-                              size="sm"
-                              className="mt-1"
                               onPress={() => handleOpenStatModal(nft)}
+                              className={cn(
+                                tactileButton({ variant: 'secondary', size: 'sm' }),
+                                'mt-1',
+                              )}
                               accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
                             >
-                              <Button.Label>
+                              <Button.Label
+                                className={tactileButtonText({ variant: 'secondary', size: 'sm' })}
+                              >
                                 ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
                               </Button.Label>
                             </Button>
                           )}
                           {!nft.isListed ? (
                             <Button
-                              variant="primary"
-                              size="sm"
-                              className="mt-1"
                               isDisabled={updateLoading}
                               onPress={() => handleListNFT(nft.id)}
+                              className={cn(
+                                tactileButton({ variant: 'primary', size: 'sm' }),
+                                'mt-1',
+                              )}
                               accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
                               accessibilityHint="List this NFT on the marketplace"
                             >
-                              <Button.Label>
+                              <Button.Label
+                                className={tactileButtonText({ variant: 'primary', size: 'sm' })}
+                              >
                                 {updateLoading ? 'Listing...' : 'List for Sale'}
                               </Button.Label>
                             </Button>
@@ -249,8 +264,8 @@ export default memo(function Vault() {
               ))}
             </View>
           ) : boxesError ? (
-            <View className="flex-1 justify-center items-center px-6">
-              <Text className="text-app-error text-center">
+            <View className={inlineError().root()}>
+              <Text className={inlineError().text()}>
                 Failed to load mystery boxes: {boxesError}
               </Text>
             </View>
@@ -288,14 +303,19 @@ export default memo(function Vault() {
                             count={group.count}
                             action={
                               <Button
-                                variant="primary"
-                                size="sm"
-                                className="mt-1"
                                 isDisabled={isOpening || openLoading}
                                 onPress={() => handleOpenBox(group.rarity)}
+                                className={cn(
+                                  tactileButton({ variant: 'primary', size: 'sm' }),
+                                  'mt-1',
+                                )}
                                 accessibilityLabel={`Open a ${group.rarity} mystery box`}
                               >
-                                <Button.Label>{isOpening ? 'Opening...' : 'Open'}</Button.Label>
+                                <Button.Label
+                                  className={tactileButtonText({ variant: 'primary', size: 'sm' })}
+                                >
+                                  {isOpening ? 'Opening...' : 'Open'}
+                                </Button.Label>
                               </Button>
                             }
                           />

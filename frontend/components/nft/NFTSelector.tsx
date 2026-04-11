@@ -1,6 +1,21 @@
-import { View, Text } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 import { Button, cn } from 'heroui-native'
-import { nftNavButton } from '@/styles'
+import { Text, View } from 'react-native'
+import { tv } from 'tailwind-variants'
+import { nftSelectorCounter } from '@/styles'
+
+// ── Design System Recipes ─────────────────────────────────────────────────────
+
+const tactileNavButton = tv({
+  base: [
+    'w-[48px] h-[48px] rounded-2xl bg-surface',
+    'border-2 border-surface-container-highest border-b-[4px]',
+    'flex-row items-center justify-center',
+    'active:border-b-2 active:translate-y-[2px]',
+  ],
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */
@@ -23,27 +38,33 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
   if (total <= 1) return null
 
   return (
-    <View className={cn('flex-row items-center justify-center gap-4', className)}>
+    <View className={cn('flex-row items-center justify-center gap-5', className)}>
       <Button
         isIconOnly
         variant="ghost"
+        feedbackVariant="none"
         onPress={onPrev}
-        className={nftNavButton()}
+        className={tactileNavButton()}
         accessibilityLabel="Previous NFT"
       >
-        <Button.Label className="text-[22px] leading-7 text-text-title">{'‹'}</Button.Label>
+        {/* Pass the icon directly as a child */}
+        <Feather name="chevron-left" size={24} color="#1c1b1a" />
       </Button>
-      <Text className="text-sm text-text-body font-medium min-w-12 text-center">
+
+      <Text className={nftSelectorCounter()}>
         {current} / {total}
       </Text>
+
       <Button
         isIconOnly
         variant="ghost"
+        feedbackVariant="none"
         onPress={onNext}
-        className={nftNavButton()}
+        className={tactileNavButton()}
         accessibilityLabel="Next NFT"
       >
-        <Button.Label className="text-[22px] leading-7 text-text-title">{'›'}</Button.Label>
+        {/* Pass the icon directly as a child */}
+        <Feather name="chevron-right" size={24} color="#1c1b1a" />
       </Button>
     </View>
   )

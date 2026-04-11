@@ -1,7 +1,8 @@
-import { memo } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
-import { colors } from '@/constants'
 import { Button } from 'heroui-native'
+import { memo } from 'react'
+import { colors } from '@/constants'
+import { floatingNavButton } from '@/styles'
 
 interface WalletButtonProps {
   onPress: () => void
@@ -12,8 +13,9 @@ export default memo(function WalletButton({ onPress }: WalletButtonProps) {
     <Button
       isIconOnly
       variant="ghost"
+      feedbackVariant="none"
       onPress={onPress}
-      className="absolute top-[60px] right-5 z-[100] p-2 bg-[rgba(255,255,255,0.9)] rounded-[20px] shadow-md"
+      className={floatingNavButton({ side: 'right' })}
       accessibilityLabel="Wallet"
       accessibilityHint="Opens your wallet and POOP balance"
     >

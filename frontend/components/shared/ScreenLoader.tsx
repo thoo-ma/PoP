@@ -1,6 +1,7 @@
+import { Spinner } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
-import { Spinner } from 'heroui-native'
+import { screenLoader } from '@/styles'
 
 interface ScreenLoaderProps {
   title?: string
@@ -8,10 +9,11 @@ interface ScreenLoaderProps {
 }
 
 export default memo(function ScreenLoader({ message }: ScreenLoaderProps) {
+  const s = screenLoader()
   return (
-    <View className="flex-1 bg-background items-center justify-center">
+    <View className={s.root()}>
       <Spinner size="lg" />
-      {message && <Text className="mt-3 text-sm text-gray-500">{message}</Text>}
+      {message && <Text className={s.message()}>{message}</Text>}
     </View>
   )
 })

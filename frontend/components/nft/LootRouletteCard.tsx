@@ -1,8 +1,9 @@
+import { Button, Card, cn, Spinner } from 'heroui-native'
 import { memo, useState } from 'react'
-import { View, Text } from 'react-native'
-import { Card, Button, Spinner } from 'heroui-native'
-import { useRollLoot } from '@/hooks'
+import { Text, View } from 'react-native'
 import type { RollLootResult } from '@/hooks'
+import { useRollLoot } from '@/hooks'
+import { lootCard, lootResultPanel, tactileButton, tactileButtonText } from '@/styles'
 
 const MAX_HOLDS = 3
 const BASE_CHANCE = 10
@@ -26,6 +27,10 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
   const [holds, setHolds] = useState(0)
   const [result, setResult] = useState<RollLootResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
+
+  const cardStyles = lootCard()
+  const wonStyles = lootResultPanel({ status: 'won' })
+  const lostStyles = lootResultPanel({ status: 'lost' })
 
   const lootChance = BASE_CHANCE + holds * CHANCE_PER_HOLD
   const canHold = holds < MAX_HOLDS && !result
@@ -52,74 +57,88 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
   }
 
   return (
-    <Card className="mx-4 items-center gap-4" animation="disable-all">
-      <Card.Body className="items-center gap-4 w-full">
-        <Card.Title className="text-xl font-bold">🎰 Loot Roll</Card.Title>
+    <Card className={cardStyles.root()} animation="disable-all">
+      <Card.Body className={cardStyles.body()}>
+        <Card.Title className={cardStyles.title()}>🎰 Loot Roll</Card.Title>
 
         {!result ? (
           <>
             <Text className="text-base">
-              Loot Chance: <Text className="font-bold text-stat-luck">{lootChance}%</Text>
+              Loot Chance: <Text className={cardStyles.chanceValue()}>{lootChance}%</Text>
             </Text>
 
             {holds > 0 && (
-              <Text className="text-sm italic text-stat-efficiency">
+              <Text className={cardStyles.holdText()}>
                 {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
               </Text>
             )}
 
             {holds === MAX_HOLDS && (
-              <Text className="text-sm italic text-stat-comfort">
-                Max holds reached — now roll!
-              </Text>
+              <Text className={cardStyles.maxHoldText()}>Max holds reached — now roll!</Text>
             )}
 
-            {err && <Text className="text-sm text-center text-stat-energy">{err}</Text>}
+            {err && <Text className={cardStyles.rollError()}>{err}</Text>}
 
-            <View className="flex-row gap-3 w-full mt-2">
+            <View className={cardStyles.buttonRow()}>
               <Button
-                variant="secondary"
-                className="flex-1"
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={handleHold}
                 isDisabled={!canHold || loading}
+                className={cn(tactileButton({ variant: 'secondary' }), 'flex-1')}
               >
                 {loading ? (
                   <Spinner size="sm" />
                 ) : (
-                  <Button.Label>Hold +{CHANCE_PER_HOLD}%</Button.Label>
+                  <Button.Label className={tactileButtonText({ variant: 'secondary' })}>
+                    Hold +{CHANCE_PER_HOLD}%
+                  </Button.Label>
                 )}
               </Button>
 
               <Button
-                variant="primary"
-                className="flex-1"
+                variant="ghost"
+                feedbackVariant="none"
                 onPress={handleRoll}
                 isDisabled={!canRoll || loading}
+                className={cn(tactileButton({ variant: 'primary' }), 'flex-1')}
               >
-                {loading ? <Spinner size="sm" /> : <Button.Label>Roll!</Button.Label>}
+                {loading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                    Roll!
+                  </Button.Label>
+                )}
               </Button>
             </View>
           </>
         ) : (
           <>
             {result.won ? (
-              <View className="items-center gap-2 rounded-xl py-4 px-6 w-full bg-green-100">
-                <Text className="text-2xl font-extrabold text-emerald-900">🎁 You won!</Text>
-                <Text className="text-base text-center text-emerald-900">
+              <View className={wonStyles.root()}>
+                <Text className={wonStyles.title()}>🎁 You won!</Text>
+                <Text className={wonStyles.body()}>
                   A Common Mystery Box has been added to your Vault.
                 </Text>
               </View>
             ) : (
-              <View className="items-center gap-2 rounded-xl py-4 px-6 w-full bg-surface-light">
-                <Text className="text-xl font-bold text-text-title">No luck this time</Text>
-                <Text className="text-base text-center text-text-body">
-                  Better luck on your next flush!
-                </Text>
+              <View className={lostStyles.root()}>
+                <Text className={lostStyles.title()}>No luck this time</Text>
+                <Text className={lostStyles.body()}>Better luck on your next flush!</Text>
               </View>
             )}
 
-            <Button variant="secondary" className="px-8 mt-2" onPress={onDone}>
-              <Button.Label>Done</Button.Label>
+            <Button
+              animation="disable-all"
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={onDone}
+              className={cn(tactileButton({ variant: 'secondary' }), 'px-8 mt-2')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'secondary' })}>
+                Done
+              </Button.Label>
             </Button>
           </>
         )}

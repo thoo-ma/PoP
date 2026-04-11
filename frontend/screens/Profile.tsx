@@ -1,10 +1,10 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { Avatar, Button, Dialog, Spinner } from 'heroui-native'
+import { Avatar, Button, cn, Dialog, Spinner } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
 import { colors } from '@/constants'
 import { useAuth, useProfileStats, useUserNFTs } from '@/hooks'
-import { dialogPanel } from '@/styles'
+import { dialogPanel, profileModal, tactileButton, tactileButtonText } from '@/styles'
 import { useSignOutDialog } from '@/utils'
 
 interface ProfileProps {
@@ -46,6 +46,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
     .toUpperCase()
 
   const panel = dialogPanel()
+  const p = profileModal()
 
   return (
     <>
@@ -65,7 +66,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             />
 
             {/* Avatar */}
-            <View className="mt-4 mb-4">
+            <View className={p.avatarWrap()}>
               <Avatar size="lg" color="accent" alt={getUserDisplayName() || 'User avatar'}>
                 <Avatar.Fallback>
                   {initials || <MaterialIcons name="person" size={28} />}
@@ -74,49 +75,50 @@ export default function Profile({ visible, onClose }: ProfileProps) {
             </View>
 
             {/* User info */}
-            <Dialog.Title className="text-3xl font-bold text-foreground mb-2">Profile</Dialog.Title>
-            <Text className="text-lg font-semibold text-foreground mb-1">
-              {getUserDisplayName()}
-            </Text>
-            {user?.email && <Text className="text-base text-muted mb-6">{user.email}</Text>}
+            <Dialog.Title className={p.title()}>Profile</Dialog.Title>
+            <Text className={p.username()}>{getUserDisplayName()}</Text>
+            {user?.email && <Text className={p.email()}>{user.email}</Text>}
 
             {/* Stats section */}
-            <View className="flex-row justify-around items-center w-full py-5 mb-6 bg-default rounded-xl">
-              <View className="flex-1 items-center">
+            <View className={p.statsRow()}>
+              <View className={p.statCol()}>
                 {statsLoading ? (
                   <Spinner size="sm" />
                 ) : (
-                  <Text className="text-xl font-bold text-foreground">{detections}</Text>
+                  <Text className={p.statValue()}>{detections}</Text>
                 )}
-                <Text className="text-sm text-muted">Detections</Text>
+                <Text className={p.statLabel()}>Detections</Text>
               </View>
-              <View className="w-px h-8 bg-border" />
-              <View className="flex-1 items-center">
-                <Text className="text-xl font-bold text-foreground">{nfts.length}</Text>
-                <Text className="text-sm text-muted">NFTs</Text>
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
+                <Text className={p.statValue()}>{nfts.length}</Text>
+                <Text className={p.statLabel()}>NFTs</Text>
               </View>
-              <View className="w-px h-8 bg-border" />
-              <View className="flex-1 items-center">
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
                 {statsLoading ? (
                   <Spinner size="sm" />
                 ) : (
-                  <Text className="text-xl font-bold text-foreground">{daysActive}</Text>
+                  <Text className={p.statValue()}>{daysActive}</Text>
                 )}
-                <Text className="text-sm text-muted">Days Active</Text>
+                <Text className={p.statLabel()}>Days Active</Text>
               </View>
             </View>
 
             {/* Sign out button */}
             <Button
-              variant="primary"
-              className="w-full mb-2.5"
+              variant="ghost"
+              feedbackVariant="none"
+              className={cn(tactileButton({ variant: 'default' }), 'w-full mb-2.5')}
               onPress={handleSignOut}
               isDisabled={isSigningOut}
               accessibilityLabel="Sign out"
               accessibilityHint="Sign out of your account"
             >
-              <MaterialIcons name="logout" size={18} color={colors.buttonText} />
-              <Button.Label>Sign Out</Button.Label>
+              <MaterialIcons name="logout" size={18} color={colors.onSurface} />
+              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                Sign Out
+              </Button.Label>
             </Button>
           </Dialog.Content>
         </Dialog.Portal>

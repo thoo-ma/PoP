@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { colors } from '@/constants'
+import { propertiesWrapper, propertyBar } from '@/styles'
 
 interface NFTPropertiesProps {
   efficiency: number
@@ -25,40 +26,16 @@ const PropertyBar = memo(function PropertyBar({
   color,
   isCompact,
 }: PropertyBarProps) {
+  const mode = isCompact ? 'compact' : 'detailed'
+  const s = propertyBar({ mode })
   return (
-    <View className={isCompact ? 'flex-row items-center justify-between' : 'gap-1'}>
-      <Text
-        className={
-          isCompact
-            ? 'text-[10px] text-property-text w-[50px] mr-1'
-            : 'text-xs font-semibold text-property-text mb-0.5'
-        }
-      >
-        {label}
-      </Text>
-      <View
-        className={
-          isCompact ? 'flex-1 flex-row items-center gap-1' : 'flex-row items-center gap-1.5'
-        }
-      >
-        <View
-          className={
-            isCompact
-              ? 'flex-1 h-1.5 bg-property-bg rounded overflow-hidden'
-              : 'flex-1 h-2 bg-property-bg rounded overflow-hidden'
-          }
-        >
-          <View className="h-full rounded" style={{ width: `${value}%`, backgroundColor: color }} />
+    <View className={s.root()}>
+      <Text className={s.label()}>{label}</Text>
+      <View className={s.barWrap()}>
+        <View className={s.bar()}>
+          <View className={s.fill()} style={{ width: `${value}%`, backgroundColor: color }} />
         </View>
-        <Text
-          className={
-            isCompact
-              ? 'text-[10px] text-property-text font-semibold w-5 text-right'
-              : 'text-xs text-text-dark font-bold w-[26px] text-right'
-          }
-        >
-          {Math.round(value)}
-        </Text>
+        <Text className={s.value()}>{Math.round(value)}</Text>
       </View>
     </View>
   )
@@ -91,7 +68,7 @@ function NFTProperties({
   }, [efficiency, resilience, comfort, luck, energy, excludeProperties])
 
   return (
-    <View className={isCompact ? 'mt-2 gap-1' : 'mt-2 gap-2'}>
+    <View className={propertiesWrapper({ mode: isCompact ? 'compact' : 'detailed' })}>
       {filteredProperties.map((prop) => (
         <PropertyBar
           key={prop.label}

@@ -1,30 +1,26 @@
-import { useState, useRef, useEffect } from 'react'
-import { View, Text, type TextInput, KeyboardAvoidingView, Platform } from 'react-native'
-import { Button, Spinner, TextField, Input, Label, Description, FieldError } from 'heroui-native'
-import { validateInviteCode } from '@/lib/inviteCodeApi'
-import { useSignOutDialog } from '@/utils'
+import { Feather } from '@expo/vector-icons'
+import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native'
+import { useEffect, useRef, useState } from 'react'
+import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
+import { colors } from '@/constants/theme'
 import { useErrorHandler } from '@/hooks'
+import { validateInviteCode } from '@/lib/inviteCodeApi'
+import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
+import { useSignOutDialog } from '@/utils'
 
 interface InviteCodeScreenProps {
-  /** Called after the entered code is validated and the user is approved. */
   onApprovalSuccess: () => void
-  /** Called when the user chooses to sign out from this screen. */
   onSignOut: () => void
 }
 
-/**
- * Invite-code gate screen shown to authenticated users who are not yet approved.
- * Accepts a 6-character code, validates it via the `validate_invite_code` RPC,
- * then calls `onApprovalSuccess` on success.
- */
 export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: InviteCodeScreenProps) {
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const { error, handleError, clearError } = useErrorHandler('InviteCode')
   const inputRef = useRef<TextInput>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
+  const s = authScreen()
 
-  // Auto-focus input on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       inputRef.current?.focus()
@@ -32,20 +28,17 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
     return () => clearTimeout(timer)
   }, [])
 
-  // Validate code format (8 alphanumeric characters)
   const isValidFormat = (text: string): boolean => {
     return /^[A-Z0-9]{8}$/.test(text)
   }
 
   const handleCodeChange = (text: string) => {
-    // Convert to uppercase and filter non-alphanumeric
     const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '')
-    setCode(cleaned.slice(0, 8)) // Limit to 8 characters
-    clearError() // Clear error when user types
+    setCode(cleaned.slice(0, 8))
+    clearError()
   }
 
   const handleSubmit = async () => {
-    // Validate format before submitting
     if (!isValidFormat(code)) {
       handleError(
         new Error('Code must be 8 alphanumeric characters'),
@@ -59,16 +52,11 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
     try {
       const result = await validateInviteCode(code)
-
       if (result.success) {
-        // Clear the code input and show success state
         setCode('')
         clearError()
-
-        // Success! Notify parent to refresh approval status
         onApprovalSuccess()
       } else {
-        // Show specific error message from backend
         handleError(result.error || 'Invalid invite code', result.error || 'Invalid invite code')
       }
     } catch (err) {
@@ -88,57 +76,99 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
     <>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 justify-center p-5 bg-background"
+        className={s.scrim()}
       >
-        <View className="flex-1 justify-center">
-          <Text className="text-[28px] font-bold mb-2 text-center text-primary">Welcome! 🎉</Text>
-          <Text className="text-base text-gray-500 mb-10 text-center leading-6">
-            Enter your invite code to access the app
+        <View className={s.innerRoot()}>
+          <View className={s.logoWrap()}>
+            <Image
+              source={require('@/assets/icon.png')}
+              className="w-16 h-16 rounded-2xl"
+              resizeMode="contain"
+            />
+          </View>
+
+          <Text className={s.headline()}>
+            ENTER.{'\n'}YOUR.{'\n'}CODE.
           </Text>
 
-          <TextField isInvalid={!!error} className="mb-4">
-            <Label>Invite Code</Label>
-            <Input
-              ref={inputRef}
-              value={code}
-              onChangeText={handleCodeChange}
-              placeholder="ABC12XYZ"
-              maxLength={8}
-              autoCapitalize="characters"
-              autoCorrect={false}
-              autoComplete="off"
-              keyboardType="ascii-capable"
-              returnKeyType="done"
-              accessibilityLabel="Invite code"
-              accessibilityHint="Enter your 8-character invite code"
-              onSubmitEditing={handleSubmit}
-              editable={!loading}
-              className="text-center text-2xl font-semibold tracking-widest uppercase"
-            />
-            <Description>8 alphanumeric characters</Description>
-            {error && <FieldError>{error}</FieldError>}
-          </TextField>
+          <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
 
-          {loading && (
-            <View className="mb-4 items-center">
-              <Spinner size="lg" />
+          <View className={s.inputWrap()}>
+            <TextField isInvalid={!!error}>
+              <Input
+                ref={inputRef}
+                value={code}
+                onChangeText={handleCodeChange}
+                placeholder="ABC12XYZ"
+                placeholderTextColor={colors.onSurfaceVariant}
+                maxLength={8}
+                autoCapitalize="characters"
+                autoCorrect={false}
+                autoComplete="off"
+                keyboardType="ascii-capable"
+                returnKeyType="done"
+                editable={!loading}
+                onSubmitEditing={handleSubmit}
+                className={s.codeInput()}
+              />
+              {error ? <FieldError className={s.fieldError()}>{error}</FieldError> : null}
+            </TextField>
+          </View>
+
+          <View className={s.actionsWrap()}>
+            <Button
+              onPress={handleSubmit}
+              isDisabled={!canSubmit}
+              className={cn(
+                tactileButton({ variant: canSubmit ? 'default' : 'disabled' }),
+                'w-full mb-4',
+              )}
+              accessibilityLabel="Submit invite code"
+              variant="ghost"
+              feedbackVariant="none"
+            >
+              {loading ? (
+                <Spinner size="sm" color={colors.onSurface} />
+              ) : (
+                <Button.Label
+                  className={tactileButtonText({ variant: canSubmit ? 'default' : 'disabled' })}
+                >
+                  Submit Code
+                </Button.Label>
+              )}
+            </Button>
+
+            <Button
+              animation="disable-all"
+              onPress={handleSignOut}
+              isDisabled={loading}
+              className={cn(tactileButton({ variant: 'default' }), 'w-full')}
+              variant="ghost"
+              feedbackVariant="none"
+            >
+              <Feather
+                name="log-out"
+                size={18}
+                color={colors.onSurface}
+                style={{ marginRight: 12 }}
+              />
+              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                Sign Out
+              </Button.Label>
+            </Button>
+          </View>
+
+          <View className={cn(s.footer(), 'mt-8')}>
+            <View className={s.footerLink()}>
+              <Text className={s.footerLinkText()}>Privacy</Text>
             </View>
-          )}
-
-          <Button
-            variant="primary"
-            onPress={handleSubmit}
-            isDisabled={!canSubmit}
-            className="mb-4"
-            accessibilityLabel="Submit invite code"
-            accessibilityHint="Validate and submit your invite code"
-          >
-            {loading ? 'Validating...' : 'Submit'}
-          </Button>
-
-          <Button variant="outline" onPress={handleSignOut} isDisabled={loading}>
-            Sign Out
-          </Button>
+            <View className={s.footerLink()}>
+              <Text className={s.footerLinkText()}>Terms</Text>
+            </View>
+            <View className={s.footerLink()}>
+              <Text className={s.footerLinkText()}>Support</Text>
+            </View>
+          </View>
         </View>
       </KeyboardAvoidingView>
       {signOutDialog}

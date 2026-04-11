@@ -1,9 +1,9 @@
-import { View, Text, Image } from 'react-native'
-import { PressableFeedback, Chip } from 'heroui-native'
+import { Chip, PressableFeedback } from 'heroui-native'
+import { Image, Text, View } from 'react-native'
+import { colors, RARITY_COLORS } from '@/constants'
+import { badgeLabel, parentSlot } from '@/styles'
 import type { NFT } from '@/types/nft'
-import { RARITY_COLORS, colors } from '@/constants'
 import { formatDisplayName } from '@/utils'
-import { badgeLabel } from '@/styles'
 
 interface BreedParentSlotProps {
   /** The NFT occupying this slot, or `null` when the slot is empty. */
@@ -21,24 +21,17 @@ interface BreedParentSlotProps {
  */
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
   const borderColor = nft ? RARITY_COLORS[nft.rarity] : colors.inactive
+  const s = parentSlot()
   return (
-    <PressableFeedback
-      onPress={onPress}
-      className="flex-1 rounded-[14px] border-2 overflow-hidden bg-content1 shadow-sm"
-      style={{ borderColor }}
-    >
+    <PressableFeedback onPress={onPress} className={s.root()} style={{ borderColor }}>
       {nft ? (
         <>
-          <Image
-            source={{ uri: nft.image_url }}
-            className="w-full aspect-square"
-            resizeMode="cover"
-          />
-          <View className="p-2 pb-1">
-            <Text className="text-[13px] font-bold text-foreground mb-1" numberOfLines={1}>
+          <Image source={{ uri: nft.image_url }} className={s.image()} resizeMode="cover" />
+          <View className={s.info()}>
+            <Text className={s.name()} numberOfLines={1}>
               {formatDisplayName(nft.name)}
             </Text>
-            <View className="flex-row gap-1">
+            <View className={s.chipsRow()}>
               <Chip size="sm" style={{ backgroundColor: RARITY_COLORS[nft.rarity] }}>
                 <Chip.Label className={badgeLabel({ size: 'tiny' })}>
                   {nft.rarity.toUpperCase()}
@@ -46,14 +39,14 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
               </Chip>
             </View>
           </View>
-          <View className="px-2 pb-2">
-            <Text className="text-xs text-default-400 italic">tap to change</Text>
+          <View className={s.hintSection()}>
+            <Text className={s.hintText()}>tap to change</Text>
           </View>
         </>
       ) : (
-        <View className="aspect-square justify-center items-center bg-default-100">
-          <Text className="text-[36px] text-default-300 mb-1.5">＋</Text>
-          <Text className="text-sm text-default-500 text-center px-4 leading-4">{label}</Text>
+        <View className={s.emptyRoot()}>
+          <Text className={s.emptyIcon()}>＋</Text>
+          <Text className={s.emptyLabel()}>{label}</Text>
         </View>
       )}
     </PressableFeedback>

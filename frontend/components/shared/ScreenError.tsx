@@ -1,6 +1,8 @@
+import { Alert, Button, cn } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
-import { Alert, Button } from 'heroui-native'
+
+import { screenError, tactileButton, tactileButtonText } from '@/styles'
 
 interface ScreenErrorProps {
   title: string
@@ -10,7 +12,7 @@ interface ScreenErrorProps {
 
 export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
   return (
-    <View className="flex-1 bg-background items-center justify-center px-6">
+    <View className={screenError()}>
       <Alert status="danger">
         <Alert.Indicator />
         <Alert.Content>
@@ -19,8 +21,12 @@ export default memo(function ScreenError({ title, message, onRetry }: ScreenErro
         </Alert.Content>
       </Alert>
       {onRetry && (
-        <Button variant="primary" onPress={onRetry} className="mt-4">
-          Retry
+        <Button
+          animation="disable-all"
+          onPress={onRetry}
+          className={cn(tactileButton({ variant: 'primary' }), 'mt-4')}
+        >
+          <Button.Label className={tactileButtonText({ variant: 'primary' })}>Retry</Button.Label>
         </Button>
       )}
     </View>

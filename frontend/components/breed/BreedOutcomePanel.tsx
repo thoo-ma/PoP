@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native'
-import { Card } from 'heroui-native'
 import type { NFTRarity } from '@pop/shared'
-import { RARITY_COLORS } from '@/constants'
 import { RARITIES } from '@pop/shared'
+import { Card } from 'heroui-native'
+import { Text, View } from 'react-native'
+import { RARITY_COLORS } from '@/constants'
+import { outcomePanel } from '@/styles'
 import { getProbabilities } from '@/utils'
 
 /**
@@ -12,31 +13,25 @@ import { getProbabilities } from '@/utils'
  */
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
   const probs = getProbabilities(r1, r2)
+  const s = outcomePanel()
   return (
-    <Card className="w-full mb-5">
-      <Card.Body className="p-4">
-        <Card.Title className="text-[13px] font-bold uppercase tracking-widest mb-3">
-          Possible outcomes
-        </Card.Title>
+    <Card className={s.root()} animation="disable-all">
+      <Card.Body className={s.body()}>
+        <Card.Title className={s.title()}>Possible outcomes</Card.Title>
         {RARITIES.map((rarity, i) => {
           const pct = probs[i]
           if (pct === 0) return null
           return (
-            <View key={rarity} className="flex-row items-center mb-2 gap-2">
-              <View
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: RARITY_COLORS[rarity] }}
-              />
-              <Text className="text-[13px] text-foreground font-semibold w-[90px]">
-                {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
-              </Text>
-              <View className="flex-1 h-2 bg-default-100 rounded overflow-hidden">
+            <View key={rarity} className={s.row()}>
+              <View className={s.dot()} style={{ backgroundColor: RARITY_COLORS[rarity] }} />
+              <Text className={s.label()}>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</Text>
+              <View className={s.track()}>
                 <View
-                  className="h-full rounded"
+                  className={s.fill()}
                   style={{ width: `${pct}%`, backgroundColor: RARITY_COLORS[rarity] }}
                 />
               </View>
-              <Text className="text-sm font-bold text-default-600 w-11 text-right">{pct}%</Text>
+              <Text className={s.value()}>{pct}%</Text>
             </View>
           )
         })}

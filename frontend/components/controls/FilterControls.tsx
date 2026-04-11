@@ -1,8 +1,9 @@
-import { memo, useState } from 'react'
-import { View } from 'react-native'
-import { Button, TagGroup } from 'heroui-native'
 import type { NFTRarity, NFTType } from '@pop/shared'
 import { RARITIES } from '@pop/shared'
+import { Button, TagGroup } from 'heroui-native'
+import { memo, useState } from 'react'
+import { View } from 'react-native'
+import { filterControls } from '@/styles'
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -46,6 +47,7 @@ function FilterControls({
   const [showFilters, setShowFilters] = useState(false)
   const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0
   const activeFilterCount = selectedRarities.length + selectedTypes.length
+  const s = filterControls()
 
   const handleRaritySelectionChange = (newKeys: Set<NFTRarity>) => {
     const prev = new Set(selectedRarities)
@@ -68,8 +70,8 @@ function FilterControls({
   }
 
   return (
-    <View className="px-4 pb-2">
-      <View className="flex-row items-center justify-between mb-2">
+    <View className={s.root()}>
+      <View className={s.toolbar()}>
         <Button
           variant="ghost"
           size="sm"
@@ -91,7 +93,7 @@ function FilterControls({
       </View>
 
       {showFilters && (
-        <View className="gap-3">
+        <View className={s.panel()}>
           {/* Rarity Filters */}
           <TagGroup
             selectionMode="multiple"
@@ -99,7 +101,7 @@ function FilterControls({
             onSelectionChange={(keys) => handleRaritySelectionChange(keys as Set<NFTRarity>)}
             size="sm"
           >
-            <TagGroup.List className="flex-row flex-wrap gap-2">
+            <TagGroup.List className={s.tagList()}>
               {RARITIES.map((rarity) => (
                 <TagGroup.Item key={rarity} id={rarity}>
                   <TagGroup.ItemLabel>{RARITY_LABELS[rarity]}</TagGroup.ItemLabel>
@@ -115,7 +117,7 @@ function FilterControls({
             onSelectionChange={(keys) => handleTypeSelectionChange(keys as Set<NFTType>)}
             size="sm"
           >
-            <TagGroup.List className="flex-row flex-wrap gap-2">
+            <TagGroup.List className={s.tagList()}>
               {TYPES.map((type) => (
                 <TagGroup.Item key={type} id={type}>
                   <TagGroup.ItemLabel>{TYPE_LABELS[type]}</TagGroup.ItemLabel>

@@ -1,11 +1,11 @@
-import { View, Text, Image, useWindowDimensions } from 'react-native'
-import { BottomSheet, Card, PressableFeedback } from 'heroui-native'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-import type { NFT } from '@/types'
 import type { NFTRarity } from '@pop/shared'
+import { BottomSheet, Card, PressableFeedback } from 'heroui-native'
+import { Image, Text, useWindowDimensions, View } from 'react-native'
 import { RARITY_COLORS } from '@/constants'
+import { breedPickerCard, pickerModal } from '@/styles'
+import type { NFT } from '@/types'
 import { canBreed, formatDisplayName } from '@/utils'
-import { breedPickerCard } from '@/styles'
 
 const GRID_PADDING = 16
 const GRID_GAP = 12
@@ -50,6 +50,8 @@ export default function BreedPickerModal({
       nft.id === lockedId || (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
   }))
 
+  const s = pickerModal()
+
   return (
     <BottomSheet
       isOpen={visible}
@@ -60,14 +62,14 @@ export default function BreedPickerModal({
       <BottomSheet.Portal>
         <BottomSheet.Overlay />
         <BottomSheet.Content snapPoints={['70%']}>
-          <View className="flex-row justify-between items-center px-5 py-4 border-b border-border">
+          <View className={s.header()}>
             <BottomSheet.Title className="text-lg font-bold text-foreground">
               {title}
             </BottomSheet.Title>
             <BottomSheet.Close />
           </View>
           {lockedRarity && (
-            <Text className="text-sm text-muted px-5 pt-2.5 pb-1 leading-[18px]">
+            <Text className={s.helpText()}>
               Greyed-out NFTs are incompatible with your first selection.
             </Text>
           )}

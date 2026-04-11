@@ -1,10 +1,11 @@
-import { memo, useState, useCallback, useMemo } from 'react'
-import { View, Text } from 'react-native'
-import { Button, Dialog, Slider } from 'heroui-native'
+import { Button, cn, Dialog, Slider } from 'heroui-native'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { Text, View } from 'react-native'
+import type { AllocateResult, StatDeltas } from '@/hooks'
+import { useAllocateStatPoints } from '@/hooks'
+import { statModal, tactileButton, tactileButtonText } from '@/styles'
 import type { NFT } from '@/types/nft'
 import { formatDisplayName } from '@/utils'
-import { useAllocateStatPoints } from '@/hooks'
-import type { StatDeltas, AllocateResult } from '@/hooks'
 
 const STAT_KEYS = ['efficiency', 'resilience', 'comfort', 'luck'] as const
 type StatKey = (typeof STAT_KEYS)[number]
@@ -82,6 +83,7 @@ export default memo(function StatAllocationModal({
     [nft, deltas, remaining],
   )
 
+  const s = statModal()
   return (
     <Dialog
       isOpen={visible}
@@ -91,28 +93,28 @@ export default memo(function StatAllocationModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay />
-        <Dialog.Content className="px-6 pt-5 pb-10 rounded-t-3xl">
-          <View className="flex-row items-center justify-between mb-1">
-            <Dialog.Title className="text-lg font-bold text-foreground">🎉 Level Up!</Dialog.Title>
+        <Dialog.Content className={s.content()}>
+          <View className={s.header()}>
+            <Dialog.Title className={s.title()}>🎉 Level Up!</Dialog.Title>
             <Dialog.Close variant="ghost" />
           </View>
 
-          <Dialog.Description className="text-sm text-muted mb-5">
+          <Dialog.Description className={s.description()}>
             Allocate stat points for <Text className="italic">{formatDisplayName(nft.name)}</Text>
           </Dialog.Description>
 
           {/* Points remaining */}
-          <View className="flex-row items-center justify-between bg-default rounded-xl py-2.5 px-4 mb-5">
-            <Text className="text-sm font-semibold text-muted">Points remaining</Text>
-            <Text className="text-2xl font-extrabold text-foreground">{remaining}</Text>
+          <View className={s.pointsBox()}>
+            <Text className={s.pointsLabel()}>Points remaining</Text>
+            <Text className={s.pointsValue()}>{remaining}</Text>
           </View>
 
           {/* Stat sliders */}
           {rows.map(({ key, label, current, delta, sliderMax }) => (
-            <View key={key} className="mb-4">
-              <View className="flex-row items-center justify-between mb-1">
-                <Text className="text-sm font-semibold text-muted">{label}</Text>
-                <Text className="text-sm font-bold text-foreground">
+            <View key={key} className={s.sliderRow()}>
+              <View className={s.sliderHeader()}>
+                <Text className={s.statLabel()}>{label}</Text>
+                <Text className={s.statValue()}>
                   {current}
                   {delta > 0 ? `+${delta}` : ''}
                 </Text>
@@ -132,19 +134,27 @@ export default memo(function StatAllocationModal({
             </View>
           ))}
 
-          {error && <Text className="text-sm text-danger text-center mb-2">{error}</Text>}
+          {error && <Text className={s.errorText()}>{error}</Text>}
 
-          <View className="flex-row gap-3 mt-2">
-            <Button variant="ghost" className="flex-1" onPress={handleDismiss} isDisabled={loading}>
-              <Button.Label>Later</Button.Label>
+          <View className={s.buttonRow()}>
+            <Button
+              animation="disable-all"
+              onPress={handleDismiss}
+              isDisabled={loading}
+              className={cn(tactileButton({ variant: 'outline' }), 'flex-1')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                Later
+              </Button.Label>
             </Button>
             <Button
-              variant="primary"
-              className="flex-1"
               onPress={handleConfirm}
               isDisabled={totalSpent === 0 || loading}
+              className={cn(tactileButton({ variant: 'primary' }), 'flex-1')}
             >
-              <Button.Label>{loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}</Button.Label>
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                {loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
+              </Button.Label>
             </Button>
           </View>
         </Dialog.Content>

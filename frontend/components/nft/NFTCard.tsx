@@ -1,19 +1,22 @@
-import { memo } from 'react'
-import { Image, View, Text } from 'react-native'
-import type { ReactNode } from 'react'
-import { Card, Chip, cn } from 'heroui-native'
-import type { NFT } from '@/types/nft'
-import NFTProperties from './NFTProperties'
-import { formatDisplayName } from '@/utils'
 import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
+import { Card, Chip, cn } from 'heroui-native'
+import type { ReactNode } from 'react'
+import { memo } from 'react'
+import { Image, Text, View } from 'react-native'
 import {
   badgeLabel,
-  cardImageContainer,
   badgePosition,
   cardBody,
-  typeBadge,
+  cardContainer,
+  cardImageContainer,
+  cardTitle,
   rarityBadge,
+  typeBadge,
+  xpBar,
 } from '@/styles'
+import type { NFT } from '@/types/nft'
+import { formatDisplayName } from '@/utils'
+import NFTProperties from './NFTProperties'
 
 interface NFTCardProps {
   nft: NFT
@@ -24,9 +27,10 @@ interface NFTCardProps {
 export default memo(function NFTCard({ nft, action }: NFTCardProps) {
   const xpPct =
     nft.level >= MAX_LEVEL ? 100 : Math.min(100, (nft.xp / xpThreshold(nft.level)) * 100)
+  const xp = xpBar()
 
   return (
-    <Card className="w-full mb-4 overflow-hidden p-0" animation="disable-all">
+    <Card className={cardContainer()} animation="disable-all">
       {/* Image + badge overlay */}
       <View className={cardImageContainer()}>
         <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
@@ -94,7 +98,9 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
       </View>
 
       <Card.Body className={cardBody()}>
-        <Card.Title className="text-sm font-bold min-h-8">{formatDisplayName(nft.name)}</Card.Title>
+        <Card.Title className={cn(cardTitle(), 'min-h-8')}>
+          {formatDisplayName(nft.name)}
+        </Card.Title>
         <NFTProperties
           efficiency={nft.efficiency}
           resilience={nft.resilience}
@@ -104,11 +110,11 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           mode="compact"
         />
         {/* XP bar */}
-        <View className="flex-row items-center mt-1">
-          <Text className="text-xs font-semibold w-5 text-stat-comfort">XP</Text>
-          <View className="flex-1 mx-1">
-            <View className="h-1 rounded-full overflow-hidden bg-gray-200">
-              <View className="h-full rounded-full bg-yellow-400" style={{ width: `${xpPct}%` }} />
+        <View className={xp.row()}>
+          <Text className={xp.label()}>XP</Text>
+          <View className={xp.track()}>
+            <View className={xp.bg()}>
+              <View className={xp.fill()} style={{ width: `${xpPct}%` }} />
             </View>
           </View>
         </View>

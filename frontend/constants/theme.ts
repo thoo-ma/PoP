@@ -1,6 +1,15 @@
+import type { NFTRarity } from '@pop/shared'
+
 export const colors = {
-  // Base UI
-  primary: '#000',
+  // Base UI (Digital Atelier)
+  primary: '#9b4500',
+  background: '#fdf9f6',
+  surface: '#fdf9f6',
+  surfaceContainerLow: '#f7f3f0',
+  surfaceContainerHighest: '#e5e2df',
+  outline: '#897266',
+  onSurface: '#1c1b1a',
+  onSurfaceVariant: '#b0a39d',
 
   // Status colors
   success: '#4ade80',
@@ -13,14 +22,12 @@ export const colors = {
   energy: '#ef4444',
 
   // UI Elements
-  active: '#000',
-  inactive: '#d1d5db',
+  active: '#1c1b1a',
+  inactive: '#b0a39d',
 
   // Button states
   buttonText: '#fff',
 }
-
-import type { NFTRarity } from '@pop/shared'
 
 export const RARITY_COLORS: Record<NFTRarity, string> = {
   common: '#94a3b8',

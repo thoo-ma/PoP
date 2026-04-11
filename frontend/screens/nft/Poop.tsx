@@ -18,16 +18,21 @@ import {
   badgeLabel,
   challengeHeader,
   dialogBody,
+  dialogFooter,
   infoCard,
   nftDetailCard,
   nftPickerButton,
+  nftPickerPlaceholder,
   overlayBadge,
   phaseContainer,
   phaseContent,
+  phaseText,
   recordingIndicator,
   resultCard,
   scrollContent,
   statusBadge,
+  tactileButton,
+  tactileButtonText,
   timerText,
   toastBanner,
   typeBadge,
@@ -353,10 +358,16 @@ export default memo(function Poop() {
       {renderChallengeHeader()}
       <View className={phaseContent()}>
         <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
-        <Text className="text-base text-gray-500 font-medium">Get ready…</Text>
+        <Text className={pt.hint()}>Get ready…</Text>
       </View>
-      <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
-        Cancel
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleCancelCountdownOrImmobility}
+        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
       </Button>
     </View>
   )
@@ -377,8 +388,14 @@ export default memo(function Poop() {
             </Text>
           </View>
         </View>
-        <Button variant="outline" onPress={handleCancelCountdownOrImmobility} className="w-full">
-          Cancel
+        <Button
+          animation="disable-all"
+          variant="ghost"
+          feedbackVariant="none"
+          onPress={handleCancelCountdownOrImmobility}
+          className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+        >
+          <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
         </Button>
       </View>
     )
@@ -388,16 +405,28 @@ export default memo(function Poop() {
     <View className={phaseContainer()}>
       {renderChallengeHeader()}
       <View className={infoCard()}>
-        <Text className="text-xl font-bold text-green-600 text-center">
-          ✓ Immobility confirmed!
-        </Text>
-        <Text className="text-[13px] text-gray-500 text-center">Now record the flush sound</Text>
+        <Text className={pt.promptTitle()}>✓ Immobility confirmed!</Text>
+        <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
       </View>
-      <Button variant="primary" onPress={handleStartRecording} className="w-full">
-        Start Recording
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleStartRecording}
+        className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+          Start Recording
+        </Button.Label>
       </Button>
-      <Button variant="outline" onPress={handleCancelPrompt} className="w-full">
-        Cancel
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleCancelPrompt}
+        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
       </Button>
     </View>
   )
@@ -409,9 +438,7 @@ export default memo(function Poop() {
         {renderChallengeHeader()}
         {isAnalyzing ? (
           <View className={infoCard()}>
-            <Text className="text-base font-semibold text-gray-700 text-center">
-              🔍 Analyzing audio…
-            </Text>
+            <Text className={pt.statusText()}>🔍 Analyzing audio…</Text>
           </View>
         ) : isRecording ? (
           <View className={infoCard()}>
@@ -419,18 +446,34 @@ export default memo(function Poop() {
               <View className={recordStyles.dot()} />
               <Text className={recordStyles.label()}>Recording…</Text>
             </View>
-            <Button variant="primary" onPress={stopRecording} className="w-full">
-              Stop
+            <Button
+              animation="disable-all"
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={stopRecording}
+              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                Stop
+              </Button.Label>
             </Button>
           </View>
         ) : (
           <View className={infoCard()}>
-            <Text className="text-base font-semibold text-gray-700 text-center">Processing…</Text>
+            <Text className={pt.statusText()}>Processing…</Text>
           </View>
         )}
         {!isAnalyzing && (
-          <Button variant="outline" onPress={handleCancelRecording} className="w-full">
-            Cancel
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleCancelRecording}
+            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+              Cancel
+            </Button.Label>
           </Button>
         )}
       </View>
@@ -447,8 +490,14 @@ export default memo(function Poop() {
             <Text className={cardStyles.title()}>Daily limit reached</Text>
             <Text className={cardStyles.detail()}>{rateLimitError.message}</Text>
           </View>
-          <Button variant="primary" onPress={handleFullReset} className="w-full">
-            Done
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
           </Button>
         </View>
       )
@@ -462,8 +511,16 @@ export default memo(function Poop() {
             <Text className={cardStyles.title()}>Something went wrong</Text>
             <Text className={cardStyles.detail()}>{detectionError}</Text>
           </View>
-          <Button variant="primary" onPress={handleFullReset} className="w-full">
-            Try Again
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Try Again
+            </Button.Label>
           </Button>
         </View>
       )
@@ -479,8 +536,16 @@ export default memo(function Poop() {
               Confidence: {formatConfidencePercentage(detectionResult.confidence)}
             </Text>
           </View>
-          <Button variant="primary" onPress={handleFullReset} className="w-full">
-            Try Again
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Try Again
+            </Button.Label>
           </Button>
         </View>
       )
@@ -510,16 +575,25 @@ export default memo(function Poop() {
         </View>
         {lootRollId ? (
           <Button
-            variant="primary"
+            variant="ghost"
+            feedbackVariant="none"
             onPress={() => setPhase('roulette')}
             isDisabled={actionLoading}
-            className="w-full"
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
           >
-            Continue →
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Continue →
+            </Button.Label>
           </Button>
         ) : (
-          <Button variant="primary" onPress={handleFullReset} className="w-full">
-            Done
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
           </Button>
         )}
       </View>
@@ -559,6 +633,9 @@ export default memo(function Poop() {
 
   const toastStyles = toastBanner()
   const detailStyles = nftDetailCard()
+  const ph = nftPickerPlaceholder({ tint: 'gray' })
+
+  const pt = phaseText()
 
   return (
     <>
@@ -585,7 +662,7 @@ export default memo(function Poop() {
         // ── Idle (home) ────────────────────────────────────
         <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
           <ScrollView
-            className="flex-1 bg-white"
+            className="flex-1 bg-background"
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'lg' }),
               'flex-grow items-center pt-[100px]',
@@ -603,12 +680,13 @@ export default memo(function Poop() {
               {selectedIndex === null || !displayNFT ? (
                 <Button
                   variant="ghost"
+                  feedbackVariant="none"
                   onPress={handleSelectNFT}
                   isDisabled={nfts.length === 0}
                   className={nftPickerButton()}
                 >
-                  <Text className="text-[40px] text-gray-400 mb-3">+</Text>
-                  <Button.Label className="text-base text-gray-500 font-semibold">
+                  <Text className={ph.icon()}>+</Text>
+                  <Button.Label className={ph.label()}>
                     {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
                   </Button.Label>
                 </Button>
@@ -625,7 +703,7 @@ export default memo(function Poop() {
                     <View className={detailStyles.imageWrap()}>
                       <Image
                         source={{ uri: displayNFT.image_url }}
-                        className="w-full h-[280px] bg-default"
+                        className={detailStyles.image()}
                         resizeMode="cover"
                       />
                       <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
@@ -671,14 +749,17 @@ export default memo(function Poop() {
             </View>
 
             <Button
-              variant="primary"
+              variant="ghost"
+              feedbackVariant="none"
               onPress={handlePoop}
               isDisabled={buttonDisabled}
-              className="px-12"
+              className={cn(tactileButton({ variant: 'primary' }), 'px-12')}
               accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
               accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
             >
-              <Button.Label>{buttonLabel}</Button.Label>
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                {buttonLabel}
+              </Button.Label>
             </Button>
           </ScrollView>
         </ScrollShadow>
@@ -708,9 +789,15 @@ export default memo(function Poop() {
               <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
-            <View className="flex-row justify-end">
-              <Button variant="primary" size="sm" onPress={() => setAlertDialog(null)}>
-                OK
+            <View className={dialogFooter()}>
+              <Button
+                animation="disable-all"
+                onPress={() => setAlertDialog(null)}
+                className={tactileButton({ variant: 'primary', size: 'sm' })}
+              >
+                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
+                  OK
+                </Button.Label>
               </Button>
             </View>
           </Dialog.Content>

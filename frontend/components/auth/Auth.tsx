@@ -1,13 +1,15 @@
+import { FontAwesome6 } from '@expo/vector-icons'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import * as WebBrowser from 'expo-web-browser'
 import { Button, cn, Spinner, useToast } from 'heroui-native'
 import { useState } from 'react'
 import { Platform, Text, View } from 'react-native'
+import OAuthButton from '@/components/auth/OAuthButton'
+import { colors } from '@/constants/theme'
 import { supabase } from '@/lib'
-import { screenSubtitle, screenTitle } from '@/styles'
+import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
 import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
-import OAuthButton from './OAuthButton'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -16,6 +18,7 @@ export default function Auth() {
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
+  const s = authScreen()
 
   const handleDevSignIn = async () => {
     setDevLoading(true)
@@ -107,7 +110,6 @@ export default function Auth() {
       })
       if (error) throw error
     } catch (err: unknown) {
-      // User cancelled the native sheet — not an error
       if (err instanceof Error && 'code' in err && err.code === 'ERR_REQUEST_CANCELED') return
       logError('Auth:Apple', err)
       toast.show({
@@ -121,56 +123,101 @@ export default function Auth() {
   }
 
   return (
-    <View className="flex-1 justify-center p-5 bg-background">
-      <Text className={screenTitle({ spacing: 'sm', color: 'none' })}>Welcome to Pop</Text>
-      <Text className={cn(screenSubtitle({ color: 'gray' }), 'mb-10')}>Sign in to continue</Text>
+    <View className={s.root()}>
+      <View className={s.content()}>
+        <Text className={s.headline()}>
+          DETECT.{'\n'}FLUSH.{'\n'}EARN.
+        </Text>
 
-      <Button
-        variant="primary"
-        onPress={handleTestSignIn}
-        isDisabled={testLoading}
-        className="mb-4 bg-[#1a6b5a]"
-        accessibilityLabel="Continue in test mode"
-        accessibilityHint="Sign in anonymously with one mystery box of each rarity"
-      >
-        {testLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Test Mode)'}
-      </Button>
+        <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
 
-      {__DEV__ && (
         <Button
-          variant="primary"
-          onPress={handleDevSignIn}
-          isDisabled={devLoading}
-          className="mb-4"
-          accessibilityLabel="Continue in development mode"
-          accessibilityHint="Sign in anonymously with seeded NFTs (dev builds only)"
+          onPress={handleTestSignIn}
+          isDisabled={testLoading}
+          className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
+          accessibilityLabel="Sign in in Test Mode"
+          variant="ghost"
+          feedbackVariant="none"
         >
-          {devLoading ? <Spinner size="sm" color="#fff" /> : 'Continue (Dev Mode)'}
+          {testLoading ? (
+            <Spinner size="sm" color={colors.onSurface} />
+          ) : (
+            <>
+              <FontAwesome6
+                name="flask"
+                size={16}
+                color={colors.onSurface}
+                style={{ marginRight: 12 }}
+              />
+              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                Sign in in Test Mode
+              </Button.Label>
+            </>
+          )}
         </Button>
-      )}
 
-      <OAuthButton
-        provider="x"
-        onPress={() => signInWithProvider('x')}
-        loading={loadingProvider === 'x'}
-        disabled={loadingProvider !== null}
-      />
+        {__DEV__ && (
+          <Button
+            onPress={handleDevSignIn}
+            isDisabled={devLoading}
+            className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
+            accessibilityLabel="Sign in in Dev Mode"
+            variant="ghost"
+            feedbackVariant="none"
+          >
+            {devLoading ? (
+              <Spinner size="sm" color={colors.onSurface} />
+            ) : (
+              <>
+                <FontAwesome6
+                  name="code"
+                  size={16}
+                  color={colors.onSurface}
+                  style={{ marginRight: 12 }}
+                />
+                <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                  Sign in in Dev Mode
+                </Button.Label>
+              </>
+            )}
+          </Button>
+        )}
 
-      <OAuthButton
-        provider="google"
-        onPress={() => signInWithProvider('google')}
-        loading={loadingProvider === 'google'}
-        disabled={loadingProvider !== null}
-      />
-
-      {Platform.OS === 'ios' && (
         <OAuthButton
-          provider="apple"
-          onPress={handleAppleSignIn}
-          loading={loadingProvider === 'apple'}
+          provider="x"
+          onPress={() => signInWithProvider('x')}
+          loading={loadingProvider === 'x'}
           disabled={loadingProvider !== null}
         />
-      )}
+
+        <OAuthButton
+          provider="google"
+          onPress={() => signInWithProvider('google')}
+          loading={loadingProvider === 'google'}
+          disabled={loadingProvider !== null}
+        />
+
+        {Platform.OS === 'ios' && (
+          <OAuthButton
+            provider="apple"
+            onPress={handleAppleSignIn}
+            loading={loadingProvider === 'apple'}
+            disabled={loadingProvider !== null}
+          />
+        )}
+      </View>
+
+      <View className={cn(s.footer(), 'mt-auto pt-8')}>
+        <View className={s.footerLink()}>
+          <Text className={s.footerLinkText()}>Privacy</Text>
+        </View>
+        <View className={s.footerLink()}>
+          <Text className={s.footerLinkText()}>Terms</Text>
+        </View>
+        <View className={s.footerLink()}>
+          <Text className={s.footerLinkText()}>Support</Text>
+        </View>
+      </View>
     </View>
   )
 }
