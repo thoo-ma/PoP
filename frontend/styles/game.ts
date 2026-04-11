@@ -129,7 +129,7 @@ export const degenBar = tv({
     metricLabel: 'text-xs text-on-surface-variant mb-0.5',
     costValue: 'text-sm font-bold text-green-500',
     costSubvalue: 'text-xs font-semibold text-on-surface',
-    divider: 'w-px bg-border mx-2',
+    divider: 'w-px bg-outline mx-2',
     bustValue: 'text-sm font-bold',
     bustSubvalue: 'text-xs text-on-surface-variant text-center leading-4',
     hint: 'text-xs text-on-surface-variant text-center',

@@ -29,7 +29,7 @@ export const outcomePanel = tv({
     label: 'text-[13px] text-on-surface font-semibold w-[90px]',
     track: 'flex-1 h-2 bg-surface-container-low rounded overflow-hidden',
     fill: 'h-full rounded',
-    value: 'text-sm font-bold text-default-600 w-11 text-right',
+    value: 'text-sm font-bold text-on-surface w-11 text-right',
   },
 })
 

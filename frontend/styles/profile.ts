@@ -12,7 +12,7 @@ export const profileModal = tv({
     statCol: 'flex-1 items-center',
     statValue: 'text-xl font-bold text-on-surface',
     statLabel: 'text-sm text-on-surface-variant',
-    statDivider: 'w-px h-8 bg-border',
+    statDivider: 'w-px h-8 bg-outline',
   },
 })
 
