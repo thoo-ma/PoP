@@ -163,7 +163,7 @@ export default memo(function Repair() {
                 {/* Selected NFT Card */}
                 {!isRepaired && selectedNFT && (
                   <View
-                    className={cn(detailStyles.root(), 'w-70 bg-surface mt-5 mb-6 border-border')}
+                    className={cn(detailStyles.root(), 'w-70 bg-surface mt-5 mb-6 border-outline')}
                   >
                     <View className={detailStyles.imageWrap()}>
                       <Image
@@ -171,7 +171,7 @@ export default memo(function Repair() {
                         className={detailStyles.image()}
                         resizeMode="cover"
                       />
-                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
+                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
                         <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Lv {selectedNFT.level}
                         </Text>
@@ -196,7 +196,7 @@ export default memo(function Repair() {
                     </View>
 
                     <View className={cn(detailStyles.content(), 'p-4')}>
-                      <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>
+                      <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
                         {formatDisplayName(selectedNFT.name)}
                       </Text>
 

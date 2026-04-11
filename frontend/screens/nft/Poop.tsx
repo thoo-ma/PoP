@@ -699,14 +699,14 @@ export default memo(function Poop() {
                     onNext={handleNext}
                     className="mb-3"
                   />
-                  <View className={cn(detailStyles.root(), 'w-70 bg-surface border-border')}>
+                  <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
                     <View className={detailStyles.imageWrap()}>
                       <Image
                         source={{ uri: displayNFT.image_url }}
                         className={detailStyles.image()}
                         resizeMode="cover"
                       />
-                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-indigo-500')}>
+                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
                         <Text className={cn(badgeLabel(), 'tracking-wide')}>
                           Lv {displayNFT.level}
                         </Text>
@@ -731,7 +731,7 @@ export default memo(function Poop() {
                     </View>
 
                     <View className={cn(detailStyles.content(), 'p-4')}>
-                      <Text className={cn(detailStyles.title(), 'text-foreground mb-3')}>
+                      <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
                         {formatDisplayName(displayNFT.name)}
                       </Text>
                       <NFTProperties

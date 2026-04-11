@@ -28,7 +28,7 @@ export const dialogPanel = tv({
 // ── Info box ─────────────────────────────────────────────────────────────────
 // Generic rounded container used in Breed (dashed) and Repair (solid).
 export const infoBox = tv({
-  base: 'w-full bg-surface-container-low rounded-2xl p-4 border border-outline',
+  base: 'w-full bg-surface-container-low rounded-2xl p-4 border-[3px] border-outline',
   variants: {
     border: {
       solid: '',
@@ -44,10 +44,10 @@ export const statModal = tv({
   slots: {
     content: 'px-6 pt-5 pb-10 rounded-t-3xl',
     header: 'flex-row items-center justify-between mb-1',
-    title: 'text-lg font-bold text-on-surface',
+    title: 'text-lg font-black text-on-surface',
     description: 'text-sm text-on-surface-variant mb-5',
     pointsBox:
-      'flex-row items-center justify-between bg-surface-container-low rounded-xl py-2.5 px-4 mb-5',
+      'flex-row items-center justify-between bg-surface-container-low rounded-2xl py-2.5 px-4 mb-5',
     pointsLabel: 'text-sm font-semibold text-on-surface-variant',
     pointsValue: 'text-2xl font-extrabold text-on-surface',
     sliderRow: 'mb-4',
@@ -64,8 +64,8 @@ export const statModal = tv({
 export const revealModal = tv({
   slots: {
     content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center',
-    titleLg: 'text-xl font-extrabold text-on-surface mb-1 text-center',
-    titleMd: 'text-base font-bold text-on-surface mb-1 text-center',
+    titleLg: 'text-xl font-black text-on-surface mb-1 text-center',
+    titleMd: 'text-base font-black text-on-surface mb-1 text-center',
     description: 'text-sm text-on-surface-variant mb-5 text-center',
     imageContainer:
       'w-[70%] aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-4 relative',

@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const screenTitle = tv({
-  base: 'text-[32px] font-bold text-center',
+  base: 'text-[32px] font-black text-center',
   variants: {
     spacing: {
       sm: 'mb-2',

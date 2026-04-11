@@ -32,11 +32,11 @@ export const cardBody = tv({
 // The larger NFT card used in the Poop idle screen and the Repair screen.
 export const nftDetailCard = tv({
   slots: {
-    root: 'rounded-2xl overflow-hidden shadow-md border',
+    root: 'rounded-2xl overflow-hidden border-[3px]',
     imageWrap: 'relative w-full overflow-hidden',
     image: 'w-full h-[280px] bg-surface-container-low',
     content: 'w-full',
-    title: 'text-lg font-bold text-center',
+    title: 'text-lg font-black text-center',
   },
 })
 
@@ -132,7 +132,7 @@ export const xpBar = tv({
     label: 'text-xs font-semibold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
     bg: 'h-1 rounded-full overflow-hidden bg-surface-container-low',
-    fill: 'h-full rounded-full bg-yellow-400',
+    fill: 'h-full rounded-full bg-app-amber',
   },
 })
 
@@ -162,9 +162,9 @@ export const lootResultPanel = tv({
   variants: {
     status: {
       won: {
-        root: 'bg-green-100',
-        title: 'text-2xl font-extrabold text-emerald-900',
-        body: 'text-emerald-900',
+        root: 'bg-app-success-container',
+        title: 'text-2xl font-extrabold text-app-success',
+        body: 'text-app-success',
       },
       lost: {
         root: 'bg-surface-container-low',

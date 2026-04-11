@@ -4,10 +4,10 @@ import { tv } from 'tailwind-variants'
 // Tappable NFT slot card used in the Breed screen (filled and empty states).
 export const parentSlot = tv({
   slots: {
-    root: 'flex-1 rounded-[14px] border-2 overflow-hidden bg-surface shadow-sm',
+    root: 'flex-1 rounded-[14px] border-[3px] overflow-hidden bg-surface',
     image: 'w-full aspect-square',
     info: 'p-2 pb-1',
-    name: 'text-[13px] font-bold text-on-surface mb-1',
+    name: 'text-[13px] font-black text-on-surface mb-1',
     chipsRow: 'flex-row gap-1',
     hintSection: 'px-2 pb-2',
     hintText: 'text-xs text-on-surface-variant italic',
@@ -48,7 +48,7 @@ export const parentSlotsRow = tv({
 export const breedResultSection = tv({
   slots: {
     root: 'items-center w-full',
-    title: 'text-[26px] font-bold text-on-surface mb-5 text-center',
+    title: 'text-[26px] font-black text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
     parentImage: 'w-[52px] h-[52px] rounded-lg border border-outline',
     multiplyText: 'text-lg text-on-surface-variant font-semibold',
