@@ -32,11 +32,11 @@ export const cardBody = tv({
 // The larger NFT card used in the Poop idle screen and the Repair screen.
 export const nftDetailCard = tv({
   slots: {
-    root: 'rounded-2xl overflow-hidden shadow-md border',
+    root: 'rounded-2xl overflow-hidden border-[3px]',
     imageWrap: 'relative w-full overflow-hidden',
     image: 'w-full h-[280px] bg-surface-container-low',
     content: 'w-full',
-    title: 'text-lg font-bold text-center',
+    title: 'text-lg font-black text-center',
   },
 })
 

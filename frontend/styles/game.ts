@@ -11,10 +11,10 @@ export const phaseContainer = tv({
 // The NFT info row shown at the top of every active game phase.
 export const challengeHeader = tv({
   slots: {
-    root: 'flex-row items-center w-full bg-surface rounded-[14px] p-3 border border-outline gap-3 shadow-sm',
+    root: 'flex-row items-center w-full bg-surface rounded-[14px] p-3 border-[3px] border-outline gap-3',
     avatar: 'w-14 h-14 rounded-[10px] bg-surface-container-low',
     info: 'flex-1',
-    name: 'text-[15px] font-bold text-on-surface mb-0.5',
+    name: 'text-[15px] font-black text-on-surface mb-0.5',
     subtitle: 'text-xs text-on-surface-variant',
   },
 })
@@ -28,7 +28,7 @@ export const phaseContent = tv({
 // ── Big timer text ───────────────────────────────────────────────────────────
 // The large countdown / immobility timer number.
 export const timerText = tv({
-  base: 'text-[80px] font-extrabold leading-[88px]',
+  base: 'text-[80px] font-black leading-[88px]',
   variants: {
     status: {
       normal: 'text-on-surface',
@@ -59,7 +59,7 @@ export const statusBadge = tv({
 // The outcome card shown after flush detection (success/failure/rate-limit/error).
 export const resultCard = tv({
   slots: {
-    root: 'w-full rounded-2xl p-6 border-2 items-center gap-1.5',
+    root: 'w-full rounded-2xl p-6 border-[3px] items-center gap-1.5',
     title: 'text-[22px] font-bold text-on-surface text-center',
     detail: 'text-sm text-on-surface-variant text-center',
   },
@@ -75,7 +75,7 @@ export const resultCard = tv({
 // ── Info card ────────────────────────────────────────────────────────────────
 // The white bordered card used for prompt / recording / analyzing states.
 export const infoCard = tv({
-  base: 'w-full bg-surface rounded-[14px] p-5 border border-outline items-center gap-2 shadow-sm',
+  base: 'w-full bg-surface rounded-[14px] p-5 border-[3px] border-outline items-center gap-2',
 })
 
 // ── Phase text labels ─────────────────────────────────────────────────────────

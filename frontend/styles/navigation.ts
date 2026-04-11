@@ -3,7 +3,7 @@ import { tv } from 'tailwind-variants'
 // ── Floating nav button ───────────────────────────────────────────────────────
 // Shared recipe for ProfileButton and WalletButton.
 export const floatingNavButton = tv({
-  base: 'absolute top-[60px] z-[100] p-2 bg-surface-overlay rounded-[20px] shadow-md',
+  base: 'absolute top-[60px] z-[100] p-2 bg-surface-overlay rounded-[20px]',
   variants: {
     side: {
       left: 'left-5',
@@ -16,7 +16,7 @@ export const floatingNavButton = tv({
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
-    rail: 'flex-row bg-surface-overlay-rail rounded-[24px] px-4 py-[10px] gap-1 shadow-md',
+    rail: 'flex-row bg-surface-overlay-rail rounded-[24px] px-4 py-[10px] gap-1',
     navButton: 'px-[10px] py-1',
     iconContainer: 'items-center',
     navLabel: 'text-[10px] mt-1',
