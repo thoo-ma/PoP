@@ -28,6 +28,12 @@ If user has lower version, recommend updating to 1.5.0+ for best experience.
 
 Uniwind brings Tailwind CSS v4 to React Native. All core React Native components support the `className` prop out of the box. Styles are compiled at build time — no runtime overhead.
 
+## Documentation
+
+When the information in this skill is insufficient, consult the Uniwind docs.
+An index of all docs pages is at `.github/skills/uniwind/llms.txt`.
+Find the relevant page URL there, then use `fetch_webpage` to retrieve its content.
+
 ## Critical Rules
 
 1. **Tailwind v4 only** — Use `@import 'tailwindcss'` not `@tailwind base`. Tailwind v3 is not supported.
