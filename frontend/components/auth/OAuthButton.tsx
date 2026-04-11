@@ -4,8 +4,6 @@ import { colors } from '@/constants/theme'
 import { tactileButton, tactileButtonText } from '@/styles/auth'
 import type { OAuthButtonProps } from '@/types'
 
-type OAuthProvider = OAuthButtonProps['provider']
-
 const config = {
   google: {
     label: 'Sign in with Google',
