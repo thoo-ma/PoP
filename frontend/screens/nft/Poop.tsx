@@ -699,7 +699,7 @@ export default memo(function Poop() {
                     onNext={handleNext}
                     className="mb-3"
                   />
-                  <View className={cn(detailStyles.root(), 'w-[280px] bg-surface border-border')}>
+                  <View className={cn(detailStyles.root(), 'w-70 bg-surface border-border')}>
                     <View className={detailStyles.imageWrap()}>
                       <Image
                         source={{ uri: displayNFT.image_url }}

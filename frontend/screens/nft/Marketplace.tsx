@@ -206,7 +206,7 @@ export default memo(function Marketplace() {
                       </View>
                     ))
                   ) : (
-                    <View className={cn(emptyStyles.root(), 'py-[60px] w-full')}>
+                    <View className={cn(emptyStyles.root(), 'py-15 w-full')}>
                       <Text className={emptyStyles.title()}>No active listings</Text>
                       <Text className={cn(emptyStyles.detail(), 'mt-1 leading-5')}>
                         You haven't listed any NFTs yet.

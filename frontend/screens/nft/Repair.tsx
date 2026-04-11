@@ -163,10 +163,7 @@ export default memo(function Repair() {
                 {/* Selected NFT Card */}
                 {!isRepaired && selectedNFT && (
                   <View
-                    className={cn(
-                      detailStyles.root(),
-                      'w-[280px] bg-surface mt-5 mb-6 border-border',
-                    )}
+                    className={cn(detailStyles.root(), 'w-70 bg-surface mt-5 mb-6 border-border')}
                   >
                     <View className={detailStyles.imageWrap()}>
                       <Image
