@@ -109,6 +109,8 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
                 returnKeyType="done"
                 editable={!loading}
                 onSubmitEditing={handleSubmit}
+                accessibilityLabel="Invite code"
+                accessibilityHint="Enter your 8-character invite code"
                 className={s.codeInput()}
               />
               {error ? <FieldError className={s.fieldError()}>{error}</FieldError> : null}

@@ -116,7 +116,7 @@ export const repairFullEnergy = tv({
 })
 
 // ── DegenBar ─────────────────────────────────────────────────────────────────
-// Risk slider used in Repair and Breed screens.──
+// Risk slider used in Repair and Breed screens.
 export const degenBar = tv({
   slots: {
     headerRow: 'flex-row items-center justify-between mb-3',
