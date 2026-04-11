@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Avatar, Button, cn, Dialog, Spinner } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
-import { colors } from '@/constants'
+import { useCSSVariable } from 'uniwind'
 import { useAuth, useProfileStats, useUserNFTs } from '@/hooks'
 import { dialogPanel, profileModal, tactileButton, tactileButtonText } from '@/styles'
 import { useSignOutDialog } from '@/utils'
@@ -25,6 +25,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
   const { nfts } = useUserNFTs()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
+  const onSurface = useCSSVariable('--color-on-surface') as string
 
   const handleSignOut = () => {
     showSignOutDialog(async () => {
@@ -115,7 +116,7 @@ export default function Profile({ visible, onClose }: ProfileProps) {
               accessibilityLabel="Sign out"
               accessibilityHint="Sign out of your account"
             >
-              <MaterialIcons name="logout" size={18} color={colors.onSurface} />
+              <MaterialIcons name="logout" size={18} color={onSurface} />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign Out
               </Button.Label>

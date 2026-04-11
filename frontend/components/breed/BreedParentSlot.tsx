@@ -1,6 +1,7 @@
 import { Chip, PressableFeedback } from 'heroui-native'
 import { Image, Text, View } from 'react-native'
-import { colors, RARITY_COLORS } from '@/constants'
+import { useCSSVariable } from 'uniwind'
+import { RARITY_COLORS } from '@/constants'
 import { badgeLabel, parentSlot } from '@/styles'
 import type { NFT } from '@/types/nft'
 import { formatDisplayName } from '@/utils'
@@ -20,7 +21,8 @@ interface BreedParentSlotProps {
  * or a placeholder prompt when empty.
  */
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
-  const borderColor = nft ? RARITY_COLORS[nft.rarity] : colors.inactive
+  const inactive = useCSSVariable('--color-on-surface-variant') as string
+  const borderColor = nft ? RARITY_COLORS[nft.rarity] : inactive
   const s = parentSlot()
   return (
     <PressableFeedback onPress={onPress} className={s.root()} style={{ borderColor }}>

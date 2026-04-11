@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons'
 import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native'
 import { useEffect, useRef, useState } from 'react'
 import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
-import { colors } from '@/constants/theme'
+import { useCSSVariable } from 'uniwind'
 import { useErrorHandler } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
 import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
@@ -19,6 +19,10 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const { error, handleError, clearError } = useErrorHandler('InviteCode')
   const inputRef = useRef<TextInput>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
+  const [onSurface, onSurfaceVariant] = useCSSVariable([
+    '--color-on-surface',
+    '--color-on-surface-variant',
+  ]) as [string, string]
   const s = authScreen()
 
   useEffect(() => {
@@ -100,7 +104,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
                 value={code}
                 onChangeText={handleCodeChange}
                 placeholder="ABC12XYZ"
-                placeholderTextColor={colors.onSurfaceVariant}
+                placeholderTextColor={onSurfaceVariant}
                 maxLength={8}
                 autoCapitalize="characters"
                 autoCorrect={false}
@@ -130,7 +134,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               feedbackVariant="none"
             >
               {loading ? (
-                <Spinner size="sm" color={colors.onSurface} />
+                <Spinner size="sm" color={onSurface} />
               ) : (
                 <Button.Label
                   className={tactileButtonText({ variant: canSubmit ? 'default' : 'disabled' })}
@@ -148,12 +152,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               variant="ghost"
               feedbackVariant="none"
             >
-              <Feather
-                name="log-out"
-                size={18}
-                color={colors.onSurface}
-                style={{ marginRight: 12 }}
-              />
+              <Feather name="log-out" size={18} color={onSurface} style={{ marginRight: 12 }} />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign Out
               </Button.Label>

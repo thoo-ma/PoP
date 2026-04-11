@@ -633,7 +633,7 @@ export default memo(function Poop() {
 
   const toastStyles = toastBanner()
   const detailStyles = nftDetailCard()
-  const ph = nftPickerPlaceholder({ tint: 'gray' })
+  const ph = nftPickerPlaceholder()
 
   const pt = phaseText()
 

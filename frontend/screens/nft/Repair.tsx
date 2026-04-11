@@ -8,8 +8,8 @@ import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from 
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   badgeLabel,
-  breedCostStrikethrough,
   bustMessage,
+  costStrikethrough,
   dialogBody,
   dialogFooter,
   infoBox,
@@ -271,7 +271,7 @@ export default memo(function Repair() {
                         ) : degenPercent > 0 ? (
                           <>
                             {'Repair — '}
-                            <Text className={breedCostStrikethrough()}>{poopCost}</Text>
+                            <Text className={costStrikethrough()}>{poopCost}</Text>
                             {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
                           </>
                         ) : (

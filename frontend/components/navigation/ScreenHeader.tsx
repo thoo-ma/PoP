@@ -9,7 +9,7 @@ interface ScreenHeaderProps {
 export default memo(function ScreenHeader({ title }: ScreenHeaderProps) {
   return (
     <View className={screenHeader()}>
-      <Text className={screenTitle({ spacing: 'sm', color: 'accent' })}>{title}</Text>
+      <Text className={screenTitle({ spacing: 'sm' })}>{title}</Text>
     </View>
   )
 })

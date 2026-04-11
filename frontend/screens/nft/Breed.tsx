@@ -16,10 +16,10 @@ import {
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
-  breedCostStrikethrough,
   breedInfoText,
   breedResultSection,
   bustMessage,
+  costStrikethrough,
   errorMessage,
   infoBox,
   parentSlotsRow,
@@ -222,7 +222,7 @@ import { canBreed } from '@/utils'
                   ) : degenPercent > 0 && totalBreedCost !== null ? (
                     <>
                       {'Breed — '}
-                      <Text className={breedCostStrikethrough()}>{totalBreedCost}</Text>
+                      <Text className={costStrikethrough()}>{totalBreedCost}</Text>
                       {` ${calcReducedCost(totalBreedCost, degenPercent)} POOP`}
                     </>
                   ) : totalBreedCost !== null ? (
