@@ -224,7 +224,6 @@ export const propertiesWrapper = tv({
 
 // ── NFT picker placeholder ──────────────────────────────────────────────────────────
 // Empty-state text inside the picker Button when no NFT is selected.
-// Poop uses tint:'gray'; Repair uses the default tint:'muted'.
 export const nftPickerPlaceholder = tv({
   slots: {
     icon: 'text-[40px] mb-3 text-on-surface-variant',
