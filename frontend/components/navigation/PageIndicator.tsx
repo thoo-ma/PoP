@@ -100,7 +100,13 @@ export default memo(function PageIndicator({ state, navigation }: MaterialTopTab
             routeName={route.name}
             isFocused={state.index === index}
             onPress={() => {
-              if (state.index !== index) {
+              const isFocused = state.index === index
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              })
+              if (!isFocused && !event.defaultPrevented) {
                 navigation.navigate(route.name)
               }
             }}
