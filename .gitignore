@@ -8,7 +8,6 @@ node_modules/
 dist/
 web-build/
 expo-env.d.ts
-frontend/uniwind-types.d.ts
 
 # Native
 .kotlin/
