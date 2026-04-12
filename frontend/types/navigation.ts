@@ -1,20 +1,11 @@
-import type { ComponentType } from 'react'
-
 /**
- * Configuration for a single page/screen in the app
+ * Root tab navigator param list.
+ * Each key is a screen name; `undefined` means no params.
  */
-export interface PageConfig {
-  id: string
-  title: string
-  component: ComponentType<object>
-  isPrimary?: boolean
-}
-
-/**
- * Props for PageIndicator component
- */
-export interface PageIndicatorProps {
-  totalPages: number
-  currentPage: number
-  onPageChange?: (pageIndex: number) => void
+export type RootTabParamList = {
+  Poop: undefined
+  Vault: undefined
+  Breed: undefined
+  Repair: undefined
+  Profile: undefined
 }

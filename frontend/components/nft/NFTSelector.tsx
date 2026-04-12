@@ -1,22 +1,8 @@
 import { Feather } from '@expo/vector-icons'
 import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { tv } from 'tailwind-variants'
 import { useCSSVariable } from 'uniwind'
-import { nftSelectorCounter } from '@/styles'
-
-// ── Design System Recipes ─────────────────────────────────────────────────────
-
-const tactileNavButton = tv({
-  base: [
-    'w-[48px] h-[48px] rounded-2xl bg-surface',
-    'border-2 border-surface-container-highest border-b-[4px]',
-    'flex-row items-center justify-center',
-    'active:border-b-2 active:translate-y-[2px]',
-  ],
-})
-
-// ─────────────────────────────────────────────────────────────────────────────
+import { nftSelectorCounter, tactileNavButton } from '@/styles'
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */

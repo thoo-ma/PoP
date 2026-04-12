@@ -1,7 +1,6 @@
 import { MAX_ENERGY, repairCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Button, cn, Dialog, ScrollShadow, Slider } from 'heroui-native'
+import { Button, cn, Dialog, Slider } from 'heroui-native'
 import { memo, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from '@/components'
@@ -128,10 +127,10 @@ export default memo(function Repair() {
   return (
     <>
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <ScrollShadow LinearGradientComponent={LinearGradient}>
+        <View>
           <ScrollView
             contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'md' }),
+              scrollContent({ padding: 'md', bottomPad: 'default' }),
               'items-center',
             )}
             showsVerticalScrollIndicator={false}
@@ -244,7 +243,7 @@ export default memo(function Repair() {
                     {/* Bust feedback */}
                     {bustedResult && (
                       <View className={bm.root()}>
-                        <Text className={bm.title()}>BUST 💀</Text>
+                        <Text className={bm.title()}>BUST</Text>
                         <Text className={bm.detail()}>
                           You lost {bustedResult.poop_spent} POOP — better luck next time!
                         </Text>
@@ -320,7 +319,7 @@ export default memo(function Repair() {
               </>
             )}
           </ScrollView>
-        </ScrollShadow>
+        </View>
       </View>
 
       <Dialog

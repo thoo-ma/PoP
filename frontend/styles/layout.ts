@@ -34,9 +34,13 @@ export const scrollContent = tv({
       md: 'px-5',
       lg: 'px-6',
     },
+    // default = no tab header above; withHeader = tab bar header present
     bottomPad: {
-      md: 'pb-[120px]',
-      lg: 'pb-[140px]',
+      default: 'pb-[120px]',
+      withHeader: 'pb-[140px]',
+    },
+    align: {
+      center: 'items-center w-full',
     },
   },
 })
@@ -46,6 +50,7 @@ export const scrollContent = tv({
 export const gridLayout = tv({
   slots: {
     wrapper: 'flex-row flex-wrap justify-between w-full',
+    row: 'flex-row justify-between w-full',
     item: '',
   },
   variants: {

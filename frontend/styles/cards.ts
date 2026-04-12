@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,
 // and BreedPickerModal grid items.
 export const cardImageContainer = tv({
-  base: 'w-full aspect-square relative',
+  base: 'w-full aspect-square relative rounded-t-2xl overflow-hidden',
 })
 
 // ── Badge position ───────────────────────────────────────────────────────────
@@ -100,8 +100,8 @@ export const breedPickerCard = tv({
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
     info: 'px-2 pt-1.5 pb-2',
-    name: 'text-sm font-semibold',
-    rarity: 'text-[11px] font-medium capitalize',
+    name: 'text-sm font-bold',
+    rarity: 'text-[11px] font-bold capitalize',
   },
   variants: {
     disabled: {
@@ -115,7 +115,7 @@ export const breedPickerCard = tv({
 // ── Card container ────────────────────────────────────────────────────────────
 // Standard full-width grid card wrapper — NFTCard and MysteryBoxCard.
 export const cardContainer = tv({
-  base: 'w-full mb-4 overflow-hidden p-0',
+  base: 'w-full mb-4 overflow-hidden p-0 border-[3px] border-outline border-b-[5px] rounded-2xl flex-1',
 })
 
 // ── Card title (grid card) ────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ export const cardTitle = tv({
 export const xpBar = tv({
   slots: {
     row: 'flex-row items-center mt-1',
-    label: 'text-xs font-semibold w-5 text-stat-comfort',
+    label: 'text-xs font-bold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
     bg: 'h-1 rounded-full overflow-hidden bg-surface-container-low',
     fill: 'h-full rounded-full bg-app-amber',
@@ -144,9 +144,9 @@ export const lootCard = tv({
     body: 'items-center gap-4 w-full',
     title: 'text-xl font-bold',
     chanceValue: 'font-bold text-stat-luck',
-    holdText: 'text-sm italic text-stat-efficiency',
-    maxHoldText: 'text-sm italic text-stat-comfort',
-    rollError: 'text-sm text-center text-stat-energy',
+    holdText: 'text-sm italic text-stat-efficiency font-bold',
+    maxHoldText: 'text-sm italic text-stat-comfort font-bold',
+    rollError: 'text-sm text-center text-stat-energy font-bold',
     buttonRow: 'flex-row gap-3 w-full mt-2',
   },
 })
@@ -186,7 +186,7 @@ export const propertyBar = tv({
     barWrap: 'flex-row items-center',
     bar: 'flex-1 bg-surface-container-highest rounded overflow-hidden',
     fill: 'h-full rounded',
-    value: 'text-right font-semibold',
+    value: 'text-right font-bold',
   },
   variants: {
     mode: {
@@ -199,7 +199,7 @@ export const propertyBar = tv({
       },
       detailed: {
         root: 'gap-1',
-        label: 'text-xs font-semibold mb-0.5',
+        label: 'text-xs font-bold mb-0.5',
         barWrap: 'gap-1.5',
         bar: 'h-2',
         value: 'text-xs text-on-surface font-bold w-[26px]',
@@ -227,7 +227,7 @@ export const propertiesWrapper = tv({
 export const nftPickerPlaceholder = tv({
   slots: {
     icon: 'text-[40px] mb-3 text-on-surface-variant',
-    label: 'text-base font-semibold text-on-surface-variant',
+    label: 'text-base font-bold text-on-surface-variant',
   },
 })
 

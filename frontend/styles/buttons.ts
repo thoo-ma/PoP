@@ -29,7 +29,7 @@ export const tactileButtonText = tv({
   variants: {
     variant: {
       default: 'text-on-surface',
-      primary: 'text-white',
+      primary: 'text-on-primary',
       outline: 'text-on-surface',
       secondary: 'text-on-surface',
       disabled: 'text-outline',
@@ -43,4 +43,15 @@ export const tactileButtonText = tv({
     variant: 'default',
     size: 'default',
   },
+})
+
+// ── Tactile nav button ────────────────────────────────────────────────────────
+// Square nav arrow button used in NFTSelector.
+export const tactileNavButton = tv({
+  base: [
+    'w-[48px] h-[48px] rounded-2xl bg-surface',
+    'border-2 border-surface-container-highest border-b-[4px]',
+    'flex-row items-center justify-center',
+    'active:border-b-2 active:translate-y-[2px]',
+  ],
 })

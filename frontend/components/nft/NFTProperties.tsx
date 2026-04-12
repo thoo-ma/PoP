@@ -29,7 +29,11 @@ const PropertyBar = memo(function PropertyBar({
   const mode = isCompact ? 'compact' : 'detailed'
   const s = propertyBar({ mode })
   return (
-    <View className={s.root()}>
+    <View
+      className={s.root()}
+      accessibilityLabel={label}
+      accessibilityValue={{ min: 0, max: 100, now: Math.round(value) }}
+    >
       <Text className={s.label()}>{label}</Text>
       <View className={s.barWrap()}>
         <View className={s.bar()}>

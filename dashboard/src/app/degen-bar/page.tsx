@@ -2,7 +2,7 @@
 
 import { calcBustChance, calcReducedCost, calcReduction } from '@pop/shared/degenBar'
 import { useMemo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
+import { useShallow } from 'zustand/shallow'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'

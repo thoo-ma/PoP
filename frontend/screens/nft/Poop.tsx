@@ -1,6 +1,5 @@
 import { getThresholdForDifficulty } from '@pop/shared/sensors'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Button, cn, Dialog, ScrollShadow } from 'heroui-native'
+import { Button, cn, Dialog } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
@@ -641,11 +640,13 @@ export default memo(function Poop() {
     <>
       {phase !== 'idle' ? (
         // ── Active challenge ───────────────────────────────
-        <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+        // bg-background (vs bg-surface): active challenge uses a darker base
+        // to create contrast for countdown/immobility/prompt/results phases.
+        <View className="flex-1">
           <ScrollView
             className="bg-background"
             contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'lg' }),
+              scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
               'flex-grow items-center pt-[100px]',
             )}
             showsVerticalScrollIndicator={false}
@@ -657,14 +658,15 @@ export default memo(function Poop() {
             {phase === 'results' && renderResultsPhase()}
             {phase === 'roulette' && renderRoulettePhase()}
           </ScrollView>
-        </ScrollShadow>
+        </View>
       ) : (
         // ── Idle (home) ────────────────────────────────────
-        <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+        // bg-background: matches active challenge phase for seamless transition.
+        <View className="flex-1">
           <ScrollView
             className="flex-1 bg-background"
             contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'lg' }),
+              scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
               'flex-grow items-center pt-[100px]',
             )}
             showsVerticalScrollIndicator={false}
@@ -762,7 +764,7 @@ export default memo(function Poop() {
               </Button.Label>
             </Button>
           </ScrollView>
-        </ScrollShadow>
+        </View>
       )}
 
       {statModalData && (

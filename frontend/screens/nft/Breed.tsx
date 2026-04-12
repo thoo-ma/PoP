@@ -1,8 +1,7 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Button, cn, ScrollShadow } from 'heroui-native'
+import { Button, cn } from 'heroui-native'
 import { memo, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
@@ -117,12 +116,13 @@ import { canBreed } from '@/utils'
   const result = breedResultSection()
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-      <ScrollShadow LinearGradientComponent={LinearGradient}>
+      <View>
         <ScrollView
-          contentContainerClassName={cn(
-            scrollContent({ padding: 'md', bottomPad: 'md' }),
-            'items-center w-full',
-          )}
+          contentContainerClassName={scrollContent({
+            padding: 'md',
+            bottomPad: 'default',
+            align: 'center',
+          })}
           showsVerticalScrollIndicator={false}
         >
           {/* ── Picker modal ──────────────────────────────────────────────── */}
@@ -186,7 +186,7 @@ import { canBreed } from '@/utils'
               {/* ── Bust feedback ──────────────────────────────────────── */}
               {bustedResult && (
                 <View className={bust.root()}>
-                  <Text className={bust.title()}>BUST 💀</Text>
+                  <Text className={bust.title()}>BUST</Text>
                   <Text className={bust.detail()}>
                     You lost {bustedResult.poop_spent} POOP — better luck next time!
                   </Text>
@@ -265,7 +265,7 @@ import { canBreed } from '@/utils'
             </View>
           )}
         </ScrollView>
-      </ScrollShadow>
+      </View>
     </View>
   )
 })

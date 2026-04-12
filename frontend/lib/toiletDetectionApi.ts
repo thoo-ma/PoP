@@ -1,7 +1,7 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { supabase } from './supabase'
 import type { DetectionResult, RateLimitError } from '@/types/audio'
-import { getErrorMessage, logError, isRateLimitError } from '@/utils/errorHelpers'
+import { getErrorMessage, isRateLimitError, logError } from '@/utils/errorHelpers'
+import { supabase } from './supabase'
 
 /**
  * Call Supabase Edge Function to detect toilet flush

@@ -1,7 +1,7 @@
 export { Auth, OAuthButton } from './auth'
 export { BreedOutcomePanel, BreedParentSlot, BreedPickerModal } from './breed'
 export { FilterControls, SortControls } from './controls'
-export { PageIndicator, ProfileButton, ScreenHeader, WalletButton } from './navigation'
+export { PageIndicator, ScreenHeader } from './navigation'
 export {
   LootRouletteCard,
   MysteryBoxCard,

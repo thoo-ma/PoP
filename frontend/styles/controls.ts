@@ -4,7 +4,8 @@ import { tv } from 'tailwind-variants'
 export const filterControls = tv({
   slots: {
     root: 'px-4 pb-2',
-    toolbar: 'flex-row items-center justify-between mb-2',
+    toolbar: 'flex-row items-center gap-2 mb-2',
+    sortWrapper: 'flex-1',
     panel: 'gap-3',
     tagList: 'flex-row flex-wrap gap-2',
   },

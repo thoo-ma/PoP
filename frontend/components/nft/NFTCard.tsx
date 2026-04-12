@@ -30,9 +30,13 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
   const xp = xpBar()
 
   return (
-    <Card className={cardContainer()} animation="disable-all">
+    <Card
+      className={cardContainer()}
+      animation="disable-all"
+      accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.rarity ?? 'unknown'} rarity, ${nft.type ?? 'unknown'} type`}
+    >
       {/* Image + badge overlay */}
-      <View className={cardImageContainer()}>
+      <Card.Header className={cardImageContainer()}>
         <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
         {/* Level — top-left */}
         <Chip
@@ -95,7 +99,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             <Chip.Label className={badgeLabel()}>+{nft.stat_points} pts</Chip.Label>
           </Chip>
         )}
-      </View>
+      </Card.Header>
 
       <Card.Body className={cardBody()}>
         <Card.Title className={cn(cardTitle(), 'min-h-8')}>

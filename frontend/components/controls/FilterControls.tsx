@@ -1,9 +1,12 @@
 import type { NFTRarity, NFTType } from '@pop/shared'
 import { RARITIES } from '@pop/shared'
-import { Button, TagGroup } from 'heroui-native'
+import { Button, Select, TagGroup } from 'heroui-native'
 import { memo, useState } from 'react'
-import { View } from 'react-native'
-import { filterControls } from '@/styles'
+import { Pressable, Text, View } from 'react-native'
+import { SORT_OPTIONS } from '@/constants'
+import { filterControls, tactileButton, tactileButtonText } from '@/styles'
+import type { SortOption } from '@/types'
+import { capitalize } from '@/utils'
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -16,6 +19,14 @@ interface FilterControlsProps {
   onTypeToggle: (type: NFTType) => void
   /** Called when the user taps "Clear" to reset all active filters. */
   onClearFilters: () => void
+  /** The field currently used for sorting. */
+  sortBy: SortOption
+  /** Current sort direction. */
+  sortOrder: 'asc' | 'desc'
+  /** Called when the user picks a new sort field. */
+  onSortByChange: (option: SortOption) => void
+  /** Called when the user toggles the sort direction. */
+  onSortOrderToggle: () => void
 }
 
 const TYPES: NFTType[] = ['cruise-seat', 'turbo-flush', 'zen-fortress']
@@ -43,6 +54,10 @@ function FilterControls({
   onRarityToggle,
   onTypeToggle,
   onClearFilters,
+  sortBy,
+  sortOrder,
+  onSortByChange,
+  onSortOrderToggle,
 }: FilterControlsProps) {
   const [showFilters, setShowFilters] = useState(false)
   const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0
@@ -71,27 +86,58 @@ function FilterControls({
 
   return (
     <View className={s.root()}>
+      {/* Toolbar: [dropdown] [Filters btn] [arrow] */}
       <View className={s.toolbar()}>
+        {/* Sort dropdown — flex-1 so it fills remaining space */}
+        <View className={s.sortWrapper()}>
+          <Select
+            value={{ value: sortBy, label: capitalize(sortBy) }}
+            onValueChange={(opt) => {
+              if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
+            }}
+          >
+            <Select.Trigger className="bg-surface border border-outline rounded-full">
+              <Select.Value className="font-bold" placeholder="Sort by..." />
+              <Select.TriggerIndicator />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Overlay />
+              <Select.Content presentation="popover" width="trigger">
+                {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
+                  <Select.Item key={option} value={option} label={capitalize(option)} />
+                ))}
+              </Select.Content>
+            </Select.Portal>
+          </Select>
+        </View>
+
+        {/* Filters toggle */}
         <Button
           variant="ghost"
+          feedbackVariant="none"
           size="sm"
           onPress={() => setShowFilters(!showFilters)}
           accessibilityLabel="Toggle filters"
+          className={tactileButton({ variant: 'secondary', size: 'sm' })}
         >
-          <Button.Label>Filters {activeFilterCount > 0 && `(${activeFilterCount})`}</Button.Label>
+          <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
+            Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
+          </Button.Label>
         </Button>
-        {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onPress={onClearFilters}
-            accessibilityLabel="Clear all filters"
-          >
-            <Button.Label>Clear All</Button.Label>
-          </Button>
-        )}
+
+        {/* Sort order arrow */}
+        <Pressable
+          onPress={onSortOrderToggle}
+          accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
+          className={tactileButton({ variant: 'secondary', size: 'sm' })}
+        >
+          <Text className="text-on-surface font-black text-base">
+            {sortOrder === 'desc' ? '↓' : '↑'}
+          </Text>
+        </Pressable>
       </View>
 
+      {/* Filter badges */}
       {showFilters && (
         <View className={s.panel()}>
           {/* Rarity Filters */}
@@ -103,7 +149,11 @@ function FilterControls({
           >
             <TagGroup.List className={s.tagList()}>
               {RARITIES.map((rarity) => (
-                <TagGroup.Item key={rarity} id={rarity}>
+                <TagGroup.Item
+                  key={rarity}
+                  id={rarity}
+                  className="border-[2px] border-outline border-b-[3px] rounded-full"
+                >
                   <TagGroup.ItemLabel>{RARITY_LABELS[rarity]}</TagGroup.ItemLabel>
                 </TagGroup.Item>
               ))}
@@ -119,12 +169,31 @@ function FilterControls({
           >
             <TagGroup.List className={s.tagList()}>
               {TYPES.map((type) => (
-                <TagGroup.Item key={type} id={type}>
+                <TagGroup.Item
+                  key={type}
+                  id={type}
+                  className="border-[2px] border-outline border-b-[3px] rounded-full"
+                >
                   <TagGroup.ItemLabel>{TYPE_LABELS[type]}</TagGroup.ItemLabel>
                 </TagGroup.Item>
               ))}
             </TagGroup.List>
           </TagGroup>
+
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              feedbackVariant="none"
+              size="sm"
+              onPress={onClearFilters}
+              accessibilityLabel="Clear all filters"
+              className={tactileButton({ variant: 'secondary', size: 'sm' })}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
+                Clear All
+              </Button.Label>
+            </Button>
+          )}
         </View>
       )}
     </View>

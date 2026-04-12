@@ -1,39 +1,23 @@
 import { tv } from 'tailwind-variants'
 
-// ── Floating nav button ───────────────────────────────────────────────────────
-// Shared recipe for ProfileButton and WalletButton.
-export const floatingNavButton = tv({
-  base: 'absolute top-[60px] z-[100] p-2 bg-surface-overlay rounded-[20px]',
-  variants: {
-    side: {
-      left: 'left-5',
-      right: 'right-5',
-    },
-  },
-})
-
 // ── Page indicator (bottom nav bar) ──────────────────────────────────────────
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
-    rail: 'flex-row bg-surface-overlay-rail rounded-[24px] px-4 py-[10px] gap-1',
+    rail: 'flex-row bg-surface rounded-[24px] px-4 py-[10px] gap-1 border-[3px] border-outline border-b-[6px]',
     navButton: 'px-[10px] py-1',
     iconContainer: 'items-center',
-    navLabel: 'text-[10px] mt-1',
+    navLabel: 'text-[11px] mt-1',
   },
   variants: {
     active: {
-      true: { navLabel: 'font-bold' },
-      false: { navLabel: 'font-medium' },
+      true: { navLabel: 'font-black' },
+      false: { navLabel: 'font-bold' },
     },
   },
   defaultVariants: { active: false },
 })
 
-// ── Screen header wrapper ─────────────────────────────────────────────────────
-export const screenHeader = tv({
-  base: 'absolute top-[60px] left-0 right-0 z-[99] h-12 items-center justify-center pointer-events-none',
-})
 // ── NFT selector counter ───────────────────────────────────────────────────────────
 // The "1 / 5" counter text shown between the prev / next arrows in NFTSelector.
 export const nftSelectorCounter = tv({
