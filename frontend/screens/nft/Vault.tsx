@@ -278,7 +278,7 @@ export default memo(function Vault() {
                                       size: 'sm',
                                     })}
                                   >
-                                    {updateLoading ? 'Listing...' : 'List for Sale'}
+                                    {updateLoading ? 'Listing...' : 'Sale'}
                                   </Button.Label>
                                 </Button>
                               ) : undefined}
