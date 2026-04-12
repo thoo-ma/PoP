@@ -10,10 +10,10 @@ export const parentSlot = tv({
     name: 'text-[13px] font-black text-on-surface mb-1',
     chipsRow: 'flex-row gap-1',
     hintSection: 'px-2 pb-2',
-    hintText: 'text-xs text-on-surface-variant italic',
+    hintText: 'text-xs text-on-surface-variant italic font-bold',
     emptyRoot: 'aspect-square justify-center items-center bg-surface-container-low',
     emptyIcon: 'text-[36px] text-default-300 mb-1.5',
-    emptyLabel: 'text-sm text-on-surface-variant text-center px-4 leading-4',
+    emptyLabel: 'text-sm text-on-surface-variant text-center px-4 leading-4 font-bold',
   },
 })
 
@@ -26,7 +26,7 @@ export const outcomePanel = tv({
     title: 'text-[13px] font-bold uppercase tracking-widest mb-3',
     row: 'flex-row items-center mb-2 gap-2',
     dot: 'w-2.5 h-2.5 rounded-full',
-    label: 'text-[13px] text-on-surface font-semibold w-[90px]',
+    label: 'text-[13px] text-on-surface font-bold w-[90px]',
     track: 'flex-1 h-2 bg-surface-container-low rounded overflow-hidden',
     fill: 'h-full rounded',
     value: 'text-sm font-bold text-on-surface w-11 text-right',
@@ -51,7 +51,7 @@ export const breedResultSection = tv({
     title: 'text-[26px] font-black text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
     parentImage: 'w-[52px] h-[52px] rounded-lg border border-outline',
-    multiplyText: 'text-lg text-on-surface-variant font-semibold',
+    multiplyText: 'text-lg text-on-surface-variant font-bold',
     arrowText: 'text-[22px] text-on-surface font-bold',
   },
 })
@@ -68,8 +68,8 @@ export const breedInfoText = tv({
   base: 'text-center',
   variants: {
     size: {
-      base: 'text-sm text-on-surface-variant',
-      hint: 'text-[13px] text-on-surface-variant leading-5',
+      base: 'text-sm text-on-surface-variant font-bold',
+      hint: 'text-[13px] text-on-surface-variant leading-5 font-bold',
     },
   },
   defaultVariants: { size: 'base' },

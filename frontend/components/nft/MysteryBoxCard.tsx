@@ -4,14 +4,7 @@ import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, View } from 'react-native'
 import { useRarityColors } from '@/hooks'
-import {
-  badgeLabel,
-  badgePosition,
-  cardBody,
-  cardContainer,
-  cardImageContainer,
-  cardTitle,
-} from '@/styles'
+import { badgeLabel, badgePosition, cardBody, cardContainer, cardImageContainer } from '@/styles'
 
 interface MysteryBoxCardProps {
   box: MysteryBox
@@ -24,31 +17,13 @@ interface MysteryBoxCardProps {
 export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
   const rarityColors = useRarityColors()
   return (
-    <Card className={cardContainer()} animation="disable-all">
-      <View className={cardImageContainer()}>
+    <Card
+      className={cardContainer()}
+      animation="disable-all"
+      accessibilityLabel={`Mystery box, ${box.rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ''}`}
+    >
+      <Card.Header className={cardImageContainer()}>
         <Image source={{ uri: box.image_url }} className="w-full h-full" resizeMode="cover" />
-        {/* Rarity — bottom-right */}
-        <Chip
-          size="sm"
-          variant="primary"
-          className={badgePosition({ position: 'bottomRight' })}
-          style={{ backgroundColor: rarityColors[box.rarity] }}
-          animation="disable-all"
-        >
-          <Chip.Label className={badgeLabel()}>{box.rarity.toUpperCase()}</Chip.Label>
-        </Chip>
-
-        {/* Count — top-left */}
-        {count !== undefined && count > 0 && (
-          <Chip
-            size="sm"
-            variant="secondary"
-            className={badgePosition({ position: 'topLeft' })}
-            animation="disable-all"
-          >
-            <Chip.Label className={badgeLabel({ size: 'base' })}>×{count}</Chip.Label>
-          </Chip>
-        )}
 
         {/* Opened — top-right */}
         {box.opened && (
@@ -58,13 +33,27 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
             className={badgePosition({ position: 'topRight' })}
             animation="disable-all"
           >
-            <Chip.Label className={cn(badgeLabel(), 'font-semibold')}>Opened</Chip.Label>
+            <Chip.Label className={cn(badgeLabel(), 'font-bold')}>Opened</Chip.Label>
           </Chip>
         )}
-      </View>
+      </Card.Header>
 
       <Card.Body className={cardBody()}>
-        <Card.Title className={cardTitle()}>Mystery Box</Card.Title>
+        <View className="flex-row items-center gap-2">
+          {count !== undefined && count > 0 && (
+            <Chip size="sm" variant="primary" animation="disable-all">
+              <Chip.Label className={badgeLabel({ size: 'base' })}>×{count}</Chip.Label>
+            </Chip>
+          )}
+          <Chip
+            size="sm"
+            variant="primary"
+            style={{ backgroundColor: rarityColors[box.rarity] }}
+            animation="disable-all"
+          >
+            <Chip.Label className={badgeLabel()}>{box.rarity.toUpperCase()}</Chip.Label>
+          </Chip>
+        </View>
         {action}
       </Card.Body>
     </Card>

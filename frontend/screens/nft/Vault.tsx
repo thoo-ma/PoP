@@ -1,6 +1,5 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Button, cn, ScrollShadow, Skeleton, Tabs } from 'heroui-native'
+import { Button, cn, Skeleton, Tabs } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -10,7 +9,6 @@ import {
   NFTCard,
   ScreenError,
   ScreenLoader,
-  SortControls,
   StatAllocationModal,
 } from '@/components'
 import type { AllocateResult } from '@/hooks'
@@ -67,6 +65,14 @@ export default memo(function Vault() {
     })
   }, [boxes])
 
+  const boxRows = useMemo(() => {
+    const rows: { rarity: NFTRarity; box: MysteryBox; count: number }[][] = []
+    for (let i = 0; i < groupedBoxes.length; i += 2) {
+      rows.push(groupedBoxes.slice(i, i + 2))
+    }
+    return rows
+  }, [groupedBoxes])
+
   const filteredNfts = useMemo(
     () =>
       nfts.filter((nft) => {
@@ -81,6 +87,14 @@ export default memo(function Vault() {
     () => sortNFTs(filteredNfts, sortBy, sortOrder),
     [filteredNfts, sortBy, sortOrder],
   )
+
+  const nftRows = useMemo(() => {
+    const rows: NFT[][] = []
+    for (let i = 0; i < sortedNfts.length; i += 2) {
+      rows.push(sortedNfts.slice(i, i + 2))
+    }
+    return rows
+  }, [sortedNfts])
 
   const handleRarityToggle = useCallback((rarity: NFTRarity) => {
     setSelectedRarities((prev) =>
@@ -167,13 +181,21 @@ export default memo(function Vault() {
         value={activeTab}
         onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}
       >
-        <Tabs.List className="self-center">
-          <Tabs.Indicator />
+        <Tabs.List className="self-center bg-surface border border-outline rounded-full px-1 py-1">
+          <Tabs.Indicator className="bg-surface-container-low border-2 border-outline border-b-[3px] rounded-full" />
           <Tabs.Trigger value="toilets">
-            <Tabs.Label>Toilets ({nfts.length})</Tabs.Label>
+            {({ isSelected }) => (
+              <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
+                Toilets ({nfts.length})
+              </Tabs.Label>
+            )}
           </Tabs.Trigger>
           <Tabs.Trigger value="mystery-boxes">
-            <Tabs.Label>Mystery Boxes ({boxes.length})</Tabs.Label>
+            {({ isSelected }) => (
+              <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
+                Mystery Boxes ({boxes.length})
+              </Tabs.Label>
+            )}
           </Tabs.Trigger>
         </Tabs.List>
 
@@ -184,77 +206,85 @@ export default memo(function Vault() {
             onRarityToggle={handleRarityToggle}
             onTypeToggle={handleTypeToggle}
             onClearFilters={handleClearFilters}
-          />
-
-          <SortControls
             sortBy={sortBy}
             sortOrder={sortOrder}
             onSortByChange={handleSortByChange}
             onSortOrderToggle={handleSortOrderToggle}
           />
 
-          <ScrollShadow LinearGradientComponent={LinearGradient}>
+          <View>
             <ScrollView
               contentContainerClassName={cn(
-                scrollContent({ padding: 'md', bottomPad: 'md' }),
+                scrollContent({ padding: 'md', bottomPad: 'default' }),
                 'w-full',
               )}
               showsVerticalScrollIndicator={false}
             >
-              <View className={gridLayout().wrapper()}>
-                {sortedNfts.map((nft) => (
-                  <View key={nft.id} className={gridLayout().item()}>
-                    <NFTCard
-                      key={nft.id}
-                      nft={nft}
-                      action={
-                        <>
-                          {(nft.stat_points ?? 0) > 0 && (
-                            <Button
-                              variant="ghost"
-                              feedbackVariant="none"
-                              onPress={() => handleOpenStatModal(nft)}
-                              className={cn(
-                                tactileButton({ variant: 'secondary', size: 'sm' }),
-                                'mt-1',
+              <View className="w-full">
+                {nftRows.map((pair) => (
+                  <View key={pair[0].id} className={gridLayout().row()}>
+                    {pair.map((nft) => (
+                      <View key={nft.id} className={gridLayout().item()}>
+                        <NFTCard
+                          nft={nft}
+                          action={
+                            <>
+                              {(nft.stat_points ?? 0) > 0 && (
+                                <Button
+                                  variant="ghost"
+                                  feedbackVariant="none"
+                                  onPress={() => handleOpenStatModal(nft)}
+                                  className={cn(
+                                    tactileButton({ variant: 'secondary', size: 'sm' }),
+                                    'mt-1',
+                                  )}
+                                  accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                                >
+                                  <Button.Label
+                                    className={tactileButtonText({
+                                      variant: 'secondary',
+                                      size: 'sm',
+                                    })}
+                                  >
+                                    ⚡ Allocate {nft.stat_points} pt
+                                    {nft.stat_points !== 1 ? 's' : ''}
+                                  </Button.Label>
+                                </Button>
                               )}
-                              accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
-                            >
-                              <Button.Label
-                                className={tactileButtonText({ variant: 'secondary', size: 'sm' })}
-                              >
-                                ⚡ Allocate {nft.stat_points} pt{nft.stat_points !== 1 ? 's' : ''}
-                              </Button.Label>
-                            </Button>
-                          )}
-                          {!nft.isListed ? (
-                            <Button
-                              variant="ghost"
-                              feedbackVariant="none"
-                              isDisabled={updateLoading}
-                              onPress={() => handleListNFT(nft.id)}
-                              className={cn(
-                                tactileButton({ variant: 'primary', size: 'sm' }),
-                                'mt-1',
-                              )}
-                              accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                              accessibilityHint="List this NFT on the marketplace"
-                            >
-                              <Button.Label
-                                className={tactileButtonText({ variant: 'primary', size: 'sm' })}
-                              >
-                                {updateLoading ? 'Listing...' : 'List for Sale'}
-                              </Button.Label>
-                            </Button>
-                          ) : undefined}
-                        </>
-                      }
-                    />
+                              {!nft.isListed ? (
+                                <Button
+                                  variant="ghost"
+                                  feedbackVariant="none"
+                                  isDisabled={updateLoading}
+                                  onPress={() => handleListNFT(nft.id)}
+                                  className={cn(
+                                    tactileButton({ variant: 'primary', size: 'sm' }),
+                                    'mt-1',
+                                  )}
+                                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                                  accessibilityHint="List this NFT on the marketplace"
+                                >
+                                  <Button.Label
+                                    className={tactileButtonText({
+                                      variant: 'primary',
+                                      size: 'sm',
+                                    })}
+                                  >
+                                    {updateLoading ? 'Listing...' : 'List for Sale'}
+                                  </Button.Label>
+                                </Button>
+                              ) : undefined}
+                            </>
+                          }
+                        />
+                      </View>
+                    ))}
+                    {pair.length === 1 && <View className={gridLayout().item()} />}
                   </View>
                 ))}
               </View>
             </ScrollView>
-          </ScrollShadow>
+          </View>
         </Tabs.Content>
         <Tabs.Content value="mystery-boxes">
           {boxesLoading ? (
@@ -274,10 +304,10 @@ export default memo(function Vault() {
               </Text>
             </View>
           ) : (
-            <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <View>
               <ScrollView
                 contentContainerClassName={cn(
-                  scrollContent({ padding: 'md', bottomPad: 'md' }),
+                  scrollContent({ padding: 'md', bottomPad: 'default' }),
                   'w-full',
                 )}
                 showsVerticalScrollIndicator={false}
@@ -287,7 +317,7 @@ export default memo(function Vault() {
                     <Text
                       className={cn(
                         emptyStyles.title(),
-                        'font-normal text-on-surface-variant text-center mb-0',
+                        'font-bold text-on-surface-variant text-center mb-0',
                       )}
                     >
                       No mystery boxes yet
@@ -297,39 +327,47 @@ export default memo(function Vault() {
                     </Text>
                   </View>
                 ) : (
-                  <View className={gridLayout().wrapper()}>
-                    {groupedBoxes.map((group) => {
-                      const isOpening = openingRarity === group.rarity
-                      return (
-                        <View key={group.rarity} className={gridLayout().item()}>
-                          <MysteryBoxCard
-                            box={group.box}
-                            count={group.count}
-                            action={
-                              <Button
-                                isDisabled={isOpening || openLoading}
-                                onPress={() => handleOpenBox(group.rarity)}
-                                className={cn(
-                                  tactileButton({ variant: 'primary', size: 'sm' }),
-                                  'mt-1',
-                                )}
-                                accessibilityLabel={`Open a ${group.rarity} mystery box`}
-                              >
-                                <Button.Label
-                                  className={tactileButtonText({ variant: 'primary', size: 'sm' })}
-                                >
-                                  {isOpening ? 'Opening...' : 'Open'}
-                                </Button.Label>
-                              </Button>
-                            }
-                          />
-                        </View>
-                      )
-                    })}
+                  <View className="w-full">
+                    {boxRows.map((pair) => (
+                      <View key={pair[0].rarity} className={gridLayout().row()}>
+                        {pair.map((group) => {
+                          const isOpening = openingRarity === group.rarity
+                          return (
+                            <View key={group.rarity} className={gridLayout().item()}>
+                              <MysteryBoxCard
+                                box={group.box}
+                                count={group.count}
+                                action={
+                                  <Button
+                                    isDisabled={isOpening || openLoading}
+                                    onPress={() => handleOpenBox(group.rarity)}
+                                    className={cn(
+                                      tactileButton({ variant: 'primary', size: 'sm' }),
+                                      'mt-1',
+                                    )}
+                                    accessibilityLabel={`Open a ${group.rarity} mystery box`}
+                                  >
+                                    <Button.Label
+                                      className={tactileButtonText({
+                                        variant: 'primary',
+                                        size: 'sm',
+                                      })}
+                                    >
+                                      {isOpening ? 'Opening...' : 'Open'}
+                                    </Button.Label>
+                                  </Button>
+                                }
+                              />
+                            </View>
+                          )
+                        })}
+                        {pair.length === 1 && <View className={gridLayout().item()} />}
+                      </View>
+                    ))}
                   </View>
                 )}
               </ScrollView>
-            </ScrollShadow>
+            </View>
           )}
         </Tabs.Content>
       </Tabs>

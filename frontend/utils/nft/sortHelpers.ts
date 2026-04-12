@@ -1,4 +1,4 @@
-import type { SortOption, NFT } from '@/types'
+import type { NFT, SortOption } from '@/types'
 
 /**
  * Sort NFTs by a specific property in ascending or descending order

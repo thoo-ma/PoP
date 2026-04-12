@@ -5,9 +5,9 @@
  * getCooldownStatus(), a UI helper that builds a friendly display string.
  */
 
-import type { NFT } from '@/types'
 import { calcCooldownHours } from '@pop/shared'
 import type { CooldownConfig } from '@pop/shared/schemas'
+import type { NFT } from '@/types'
 
 /** Human-readable countdown string, e.g. "2h 34m" or "45m" or "30s". */
 function formatCooldown(totalSeconds: number): string {

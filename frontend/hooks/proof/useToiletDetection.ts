@@ -1,18 +1,18 @@
-import { useState, useCallback } from 'react'
+import type { RecordingOptions } from 'expo-audio'
 import {
-  useAudioRecorder,
-  useAudioRecorderState,
+  AudioQuality,
+  IOSOutputFormat,
   requestRecordingPermissionsAsync,
   setAudioModeAsync,
-  IOSOutputFormat,
-  AudioQuality,
+  useAudioRecorder,
+  useAudioRecorderState,
 } from 'expo-audio'
-import type { RecordingOptions } from 'expo-audio'
 import * as FileSystem from 'expo-file-system'
-import { detectToiletFlush } from '@/lib/toiletDetectionApi'
-import type { UseToiletDetectionReturn, DetectionResult, RateLimitError } from '@/types/audio'
-import { isRateLimitError } from '@/utils/errorHelpers'
+import { useCallback, useState } from 'react'
 import { useErrorHandler } from '@/hooks/useErrorHandler'
+import { detectToiletFlush } from '@/lib/toiletDetectionApi'
+import type { DetectionResult, RateLimitError, UseToiletDetectionReturn } from '@/types/audio'
+import { isRateLimitError } from '@/utils/errorHelpers'
 
 /** Mono recording options — smaller file for detection pipeline. */
 const RECORDING_OPTIONS: RecordingOptions = {

@@ -1,15 +1,15 @@
 'use client'
 
+import { MAX_LEVEL } from '@pop/shared/xp'
 import { useMemo, useState } from 'react'
+import { useShallow } from 'zustand/shallow'
 import LazyChart from '@/components/LazyChart'
-import { useGameConfigStore } from '@/store/gameConfigStore'
-import { useShallow } from 'zustand/react/shallow'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { NumberInput } from '@/components/ui/number-input'
-import { MAX_LEVEL } from '@pop/shared/xp'
-import { TYPES, RARITIES, RARITY_COLORS, TYPE_COLORS } from '@/lib/constants'
-import { CHART_TOOLTIP, CHART_LEGEND, CHART_AXIS_STYLES, CHART_SPLIT_LINE } from '@/lib/chartTheme'
+import { CHART_AXIS_STYLES, CHART_LEGEND, CHART_SPLIT_LINE, CHART_TOOLTIP } from '@/lib/chartTheme'
+import { RARITIES, RARITY_COLORS, TYPE_COLORS, TYPES } from '@/lib/constants'
+import { useGameConfigStore } from '@/store/gameConfigStore'
 
 function computeReward(
   type: string,

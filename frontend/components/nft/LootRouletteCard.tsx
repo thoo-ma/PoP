@@ -56,10 +56,22 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
     }
   }
 
+  const currentState = result
+    ? result.won
+      ? 'won'
+      : 'lost'
+    : holds === MAX_HOLDS
+      ? 'max holds reached'
+      : 'in progress'
+
   return (
-    <Card className={cardStyles.root()} animation="disable-all">
+    <Card
+      className={cardStyles.root()}
+      animation="disable-all"
+      accessibilityLabel={`Loot roulette, ${lootChance}% chance, ${currentState}`}
+    >
       <Card.Body className={cardStyles.body()}>
-        <Card.Title className={cardStyles.title()}>🎰 Loot Roll</Card.Title>
+        <Card.Title className={cardStyles.title()}>Loot Roll</Card.Title>
 
         {!result ? (
           <>

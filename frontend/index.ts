@@ -6,11 +6,13 @@ type GlobalWithErrorUtils = typeof globalThis & {
   }
 }
 const _originalHandler = (globalThis as GlobalWithErrorUtils).ErrorUtils?.getGlobalHandler?.()
-;(globalThis as GlobalWithErrorUtils).ErrorUtils?.setGlobalHandler?.((error: Error, isFatal: boolean) => {
-  console.error('[GLOBAL_ERROR]', isFatal ? 'FATAL' : 'non-fatal', error?.message ?? error)
-  console.error('[GLOBAL_STACK]', (error as { stack?: string })?.stack ?? '(no stack)')
-  if (_originalHandler) _originalHandler(error, isFatal)
-})
+;(globalThis as GlobalWithErrorUtils).ErrorUtils?.setGlobalHandler?.(
+  (error: Error, isFatal: boolean) => {
+    console.error('[GLOBAL_ERROR]', isFatal ? 'FATAL' : 'non-fatal', error?.message ?? error)
+    console.error('[GLOBAL_STACK]', (error as { stack?: string })?.stack ?? '(no stack)')
+    if (_originalHandler) _originalHandler(error, isFatal)
+  },
+)
 
 import { registerRootComponent } from 'expo'
 

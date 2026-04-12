@@ -1,31 +1,90 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { Button } from 'heroui-native'
-import { memo } from 'react'
-import { Text, View } from 'react-native'
+import type { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs'
+import { memo, useLayoutEffect, useRef } from 'react'
+import { Animated, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { pageIndicator } from '@/styles'
-import type { PageIndicatorProps } from '@/types'
 
-// Define icons for primary pages only
-const PRIMARY_PAGE_ICONS = [
-  { index: 0, icon: 'home' as const, label: 'Home' },
-  { index: 1, icon: 'account-balance-wallet' as const, label: 'Vault' },
-  { index: 2, icon: 'sync' as const, label: 'Breed' },
-  { index: 3, icon: 'shopping-cart' as const, label: 'Market' },
-  { index: 4, icon: 'construction' as const, label: 'Repair' },
-]
+const TAB_ICONS: Record<string, keyof typeof MaterialIcons.glyphMap> = {
+  Poop: 'home',
+  Vault: 'account-balance-wallet',
+  Breed: 'sync',
+  Repair: 'construction',
+  Profile: 'account-circle',
+}
 
-/**
- * Bottom navigation bar showing icon buttons for the five primary pages and
- * a "More" button that opens the secondary-page menu.
- * Primary page icons are hardcoded to indices 0–4; the More button targets
- * the remaining pages dynamically.
- */
-export default memo(function PageIndicator({
-  totalPages: _totalPages,
-  currentPage,
-  onPageChange,
-}: PageIndicatorProps) {
+const TAB_LABELS: Record<string, string> = {
+  Poop: 'Home',
+  Vault: 'Vault',
+  Breed: 'Breed',
+  Repair: 'Repair',
+  Profile: 'Profile',
+}
+
+type TabItemProps = {
+  routeKey: string
+  routeName: string
+  isFocused: boolean
+  onPress: () => void
+  activeColor: string
+  inactiveColor: string
+}
+
+const TabItem = memo(function TabItem({
+  routeKey,
+  routeName,
+  isFocused,
+  onPress,
+  activeColor,
+  inactiveColor,
+}: TabItemProps) {
+  const translateY = useRef(new Animated.Value(0)).current
+  const s = pageIndicator()
+  const icon = TAB_ICONS[routeName] ?? 'circle'
+  const label = TAB_LABELS[routeName] ?? routeName
+
+  useLayoutEffect(() => {
+    if (isFocused) {
+      Animated.sequence([
+        Animated.timing(translateY, {
+          toValue: 3,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    }
+  }, [isFocused, translateY])
+
+  return (
+    <Animated.View style={{ transform: [{ translateY }] }}>
+      <Pressable
+        key={routeKey}
+        onPress={onPress}
+        className={s.navButton()}
+        accessibilityLabel={label}
+        accessibilityRole="tab"
+        accessibilityState={{ selected: isFocused }}
+      >
+        <View className={s.iconContainer()}>
+          <MaterialIcons name={icon} size={28} color={isFocused ? activeColor : inactiveColor} />
+          <Text
+            className={pageIndicator({ active: isFocused }).navLabel()}
+            style={{ color: isFocused ? activeColor : inactiveColor }}
+          >
+            {label}
+          </Text>
+        </View>
+      </Pressable>
+    </Animated.View>
+  )
+})
+
+export default memo(function PageIndicator({ state, navigation }: MaterialTopTabBarProps) {
   const [active, inactive] = useCSSVariable([
     '--color-on-surface',
     '--color-on-surface-variant',
@@ -34,29 +93,20 @@ export default memo(function PageIndicator({
   return (
     <View className={s.wrapper()}>
       <View className={s.rail()}>
-        {PRIMARY_PAGE_ICONS.map(({ index, icon, label }) => (
-          <Button
-            key={index}
-            variant="ghost"
-            onPress={() => onPageChange?.(index)}
-            className={s.navButton()}
-            accessibilityLabel={label}
-            accessibilityState={{ selected: currentPage === index }}
-          >
-            <View className={s.iconContainer()}>
-              <MaterialIcons
-                name={icon}
-                size={26}
-                color={currentPage === index ? active : inactive}
-              />
-              <Text
-                className={pageIndicator({ active: currentPage === index }).navLabel()}
-                style={{ color: currentPage === index ? active : inactive }}
-              >
-                {label}
-              </Text>
-            </View>
-          </Button>
+        {state.routes.map((route, index) => (
+          <TabItem
+            key={route.key}
+            routeKey={route.key}
+            routeName={route.name}
+            isFocused={state.index === index}
+            onPress={() => {
+              if (state.index !== index) {
+                navigation.navigate(route.name)
+              }
+            }}
+            activeColor={active}
+            inactiveColor={inactive}
+          />
         ))}
       </View>
     </View>

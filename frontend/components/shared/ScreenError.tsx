@@ -13,11 +13,14 @@ interface ScreenErrorProps {
 export default memo(function ScreenError({ title, message, onRetry }: ScreenErrorProps) {
   return (
     <View className={screenError()}>
-      <Alert status="danger">
+      <Alert
+        status="danger"
+        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+      >
         <Alert.Indicator />
         <Alert.Content>
-          <Alert.Title>{title}</Alert.Title>
-          <Alert.Description>{message}</Alert.Description>
+          <Alert.Title className="font-black">{title}</Alert.Title>
+          <Alert.Description className="font-bold">{message}</Alert.Description>
         </Alert.Content>
       </Alert>
       {onRetry && (

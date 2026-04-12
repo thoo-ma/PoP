@@ -1,6 +1,6 @@
+import type { Session } from '@supabase/supabase-js'
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib'
-import type { Session } from '@supabase/supabase-js'
 import type { UseAuthReturn } from '@/types'
 
 /**

@@ -1,6 +1,5 @@
-import type { NFTRarity } from '@pop/shared'
-import { RARITY_RANK, BREED_PROBABILITIES } from '@pop/shared'
-import type { BreedPairKey } from '@pop/shared'
+import type { BreedPairKey, NFTRarity } from '@pop/shared'
+import { BREED_PROBABILITIES, RARITY_RANK } from '@pop/shared'
 
 /**
  * Returns the [common%, rare%, legendary%, transcendent%] outcome probabilities

@@ -35,7 +35,7 @@ export default memo(function MysteryBoxRevealModal({
       <Dialog.Portal>
         <Dialog.Overlay />
         <Dialog.Content className={s.content()}>
-          <Dialog.Title className={s.titleLg()}>You got a toilet! 🚽</Dialog.Title>
+          <Dialog.Title className={s.titleLg()}>You got a toilet!</Dialog.Title>
           <Dialog.Description className={s.description()}>
             Your mystery box has been opened
           </Dialog.Description>

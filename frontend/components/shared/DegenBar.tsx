@@ -49,7 +49,10 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
       {/* Header row */}
       <View className={s.headerRow()}>
         <Text className={s.title()}>Degen Bar</Text>
-        <View className={s.zoneBadge()}>
+        <View
+          className={s.zoneBadge()}
+          accessibilityValue={{ text: isDegen ? 'DEGEN ZONE' : 'SAFE ZONE' }}
+        >
           <Text className={s.zoneBadgeLabel()}>{isDegen ? 'DEGEN ZONE' : 'SAFE ZONE'}</Text>
         </View>
       </View>
@@ -63,6 +66,8 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
         onChange={handleChange}
         step={1}
         isDisabled={disabled}
+        accessibilityLabel="Degen level"
+        accessibilityValue={{ min: 0, max: 100, now: degenPercent }}
       >
         <Slider.Track>
           <Slider.Fill className={s.sliderFill()} />

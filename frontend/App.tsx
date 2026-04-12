@@ -1,24 +1,22 @@
 import 'react-native-gesture-handler'
 import './global.css'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { NavigationContainer } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
 import { HeroUINativeProvider, Spinner } from 'heroui-native'
-import { useCallback, useRef, useState } from 'react'
-import { Dimensions, FlatList, View, type ViewToken } from 'react-native'
+import { useCallback } from 'react'
+import { View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import {
-  Auth,
-  ErrorBoundary,
-  PageIndicator,
-  ProfileButton,
-  ScreenHeader,
-  WalletButton,
-} from '@/components'
-import { PAGES, VIEWABILITY_CONFIG } from '@/constants/navigation'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Auth, ErrorBoundary, PageIndicator } from '@/components'
 import { useAuth, useUserApproval } from '@/hooks'
 import { queryClient } from '@/lib/queryClient'
-import { InviteCodeScreen, Profile, Wallet } from '@/screens'
+import { InviteCodeScreen, ProfileScreen } from '@/screens'
+import { Breed, Poop, Repair, Vault } from '@/screens/nft'
+import type { RootTabParamList } from '@/types'
+
+const Tab = createMaterialTopTabNavigator<RootTabParamList>()
 
 export default function App() {
   return (
@@ -39,13 +37,7 @@ export default function App() {
 function AppInner() {
   const { session, loading: authLoading, signOut } = useAuth()
   const { approved, loading: approvalLoading, refetch } = useUserApproval(session)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [profileVisible, setProfileVisible] = useState(false)
-  const [walletVisible, setWalletVisible] = useState(false)
-  const flatListRef = useRef<FlatList>(null)
-
   const handleApprovalSuccess = useCallback(async () => {
-    // After successful code submission, refetch approval status
     await refetch()
   }, [refetch])
 
@@ -53,34 +45,6 @@ function AppInner() {
     queryClient.clear()
     await signOut()
   }, [signOut])
-
-  const scrollToPage = useCallback((pageIndex: number) => {
-    flatListRef.current?.scrollToIndex({ index: pageIndex, animated: true })
-  }, [])
-
-  const handleOpenProfile = useCallback(() => setProfileVisible(true), [])
-  const handleCloseProfile = useCallback(() => setProfileVisible(false), [])
-  const handleOpenWallet = useCallback(() => setWalletVisible(true), [])
-  const handleCloseWallet = useCallback(() => setWalletVisible(false), [])
-
-  const onViewableItemsChangedRef = useRef<(info: { viewableItems: ViewToken[] }) => void>(
-    ({ viewableItems }) => {
-      if (viewableItems.length > 0) {
-        setCurrentPage(viewableItems[0].index || 0)
-      }
-    },
-  )
-
-  const renderPage = useCallback(({ item }: { item: (typeof PAGES)[0] }) => {
-    const Component = item.component
-    return (
-      <View style={{ width: Dimensions.get('window').width, height: '100%' }}>
-        <ErrorBoundary>
-          <Component />
-        </ErrorBoundary>
-      </View>
-    )
-  }, [])
 
   // Show loading while checking auth or approval status
   if (authLoading || (session && approvalLoading)) {
@@ -112,44 +76,24 @@ function AppInner() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-background">
-      <FlatList
-        ref={flatListRef}
-        data={PAGES}
-        renderItem={renderPage}
-        keyExtractor={(item) => item.id}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        getItemLayout={(_, index) => ({
-          length: Dimensions.get('window').width,
-          offset: Dimensions.get('window').width * index,
-          index,
-        })}
-        onViewableItemsChanged={onViewableItemsChangedRef.current}
-        viewabilityConfig={VIEWABILITY_CONFIG}
-        bounces={false}
-        windowSize={1}
-        initialNumToRender={1}
-        maxToRenderPerBatch={1}
-        style={{ flex: 1 }}
-      />
-
-      <ProfileButton onPress={handleOpenProfile} />
-      <ScreenHeader title={PAGES[currentPage]?.title ?? ''} />
-      <WalletButton onPress={handleOpenWallet} />
-
-      <PageIndicator
-        totalPages={PAGES.length}
-        currentPage={currentPage}
-        onPageChange={scrollToPage}
-      />
-
-      <Profile visible={profileVisible} onClose={handleCloseProfile} />
-
-      <Wallet visible={walletVisible} onClose={handleCloseWallet} />
-
+    <View style={{ flex: 1 }} className="bg-background">
+      <NavigationContainer>
+        <Tab.Navigator
+          tabBarPosition="bottom"
+          tabBar={(props) => <PageIndicator {...props} />}
+          screenOptions={{
+            swipeEnabled: true,
+            animationEnabled: true,
+          }}
+        >
+          <Tab.Screen name="Poop" component={Poop} />
+          <Tab.Screen name="Vault" component={Vault} />
+          <Tab.Screen name="Breed" component={Breed} />
+          <Tab.Screen name="Repair" component={Repair} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   )
 }

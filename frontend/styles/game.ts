@@ -15,7 +15,7 @@ export const challengeHeader = tv({
     avatar: 'w-14 h-14 rounded-[10px] bg-surface-container-low',
     info: 'flex-1',
     name: 'text-[15px] font-black text-on-surface mb-0.5',
-    subtitle: 'text-xs text-on-surface-variant',
+    subtitle: 'text-xs text-on-surface-variant font-bold',
   },
 })
 
@@ -44,7 +44,7 @@ export const timerText = tv({
 export const statusBadge = tv({
   slots: {
     root: 'py-2 px-[18px] rounded-full',
-    label: 'text-sm font-semibold text-on-surface',
+    label: 'text-sm font-bold text-on-surface',
   },
   variants: {
     status: {
@@ -82,10 +82,10 @@ export const infoCard = tv({
 // Small text labels used inside phase render functions in Poop.tsx.
 export const phaseText = tv({
   slots: {
-    hint: 'text-base text-on-surface-variant font-medium',
+    hint: 'text-base text-on-surface-variant font-bold',
     promptTitle: 'text-xl font-bold text-app-success text-center',
-    promptSubtitle: 'text-[13px] text-on-surface-variant text-center',
-    statusText: 'text-base font-semibold text-on-surface text-center',
+    promptSubtitle: 'text-[13px] text-on-surface-variant text-center font-bold',
+    statusText: 'text-base font-bold text-on-surface text-center',
   },
 })
 
@@ -111,7 +111,7 @@ export const repairSuccess = tv({
 export const repairFullEnergy = tv({
   slots: {
     root: 'items-center mt-6',
-    text: 'text-lg font-semibold text-on-surface mb-6 text-center',
+    text: 'text-lg font-bold text-on-surface mb-6 text-center',
   },
 })
 
@@ -126,13 +126,13 @@ export const degenBar = tv({
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
-    metricLabel: 'text-xs text-on-surface-variant mb-0.5',
+    metricLabel: 'text-xs text-on-surface-variant mb-0.5 font-bold',
     costValue: 'text-sm font-bold text-app-success',
-    costSubvalue: 'text-xs font-semibold text-on-surface',
+    costSubvalue: 'text-xs font-bold text-on-surface',
     divider: 'w-px bg-outline mx-2',
     bustValue: 'text-sm font-bold',
-    bustSubvalue: 'text-xs text-on-surface-variant text-center leading-4',
-    hint: 'text-xs text-on-surface-variant text-center',
+    bustSubvalue: 'text-xs text-on-surface-variant text-center leading-4 font-bold',
+    hint: 'text-xs text-on-surface-variant text-center font-bold',
   },
   variants: {
     zone: {
@@ -157,7 +157,7 @@ export const recordingIndicator = tv({
   slots: {
     root: 'flex-row items-center gap-2 mb-3',
     dot: 'w-3 h-3 rounded-full bg-app-error',
-    label: 'text-base font-semibold text-on-surface',
+    label: 'text-base font-bold text-on-surface',
   },
 })
 
@@ -166,6 +166,6 @@ export const recordingIndicator = tv({
 export const toastBanner = tv({
   slots: {
     root: 'bg-app-error-container rounded-[10px] py-2.5 px-4 mb-2 border border-app-error',
-    label: 'text-[13px] text-app-error font-semibold text-center',
+    label: 'text-[13px] text-app-error font-bold text-center',
   },
 })

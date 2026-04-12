@@ -2,7 +2,7 @@
 
 import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
 import { useMemo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
+import { useShallow } from 'zustand/shallow'
 import LazyChart from '@/components/LazyChart'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
