@@ -46,7 +46,7 @@ jobs:
 
       - uses: expo/expo-github-action@v8
         with:
-          eas-version: latest
+          eas-version: 18.4.0
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Write ASC API key
