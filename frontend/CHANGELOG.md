@@ -1,5 +1,11 @@
 # pop
 
+## 0.3.1
+
+### Patch Changes
+
+- [`2f82f29`](https://github.com/thoo-ma/PoP/commit/2f82f29be14a019e55330a4ba7a73e2cc7a5102b) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Wire useScrollToTop to all tab screens; fix MysteryBoxRevealModal, FilterControls, ProfileScreen, Vault, Breed, and Repair UI polish.
+
 ## 0.3.0
 
 ### Minor Changes
