@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons'
+import { useScrollToTop } from '@react-navigation/native'
 import { Avatar, Button, cn, Spinner } from 'heroui-native'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { LootRouletteCard, MysteryBoxRevealModal, ScreenError, ScreenLoader } from '@/components'
@@ -58,6 +59,9 @@ export default function ProfileScreen() {
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [devPreview, setDevPreview] = useState<DevPreview>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
+  const scrollRef = useRef<ScrollView>(null)
+  useScrollToTop(scrollRef)
+
   const onSurface = useCSSVariable('--color-on-surface') as string
 
   const handleSignOut = () => {
@@ -194,6 +198,7 @@ export default function ProfileScreen() {
     <View className={screenContainer({ bg: 'surface' })}>
       <View className="flex-1">
         <ScrollView
+          ref={scrollRef}
           contentContainerClassName={p.scrollContainer()}
           showsVerticalScrollIndicator={false}
         >

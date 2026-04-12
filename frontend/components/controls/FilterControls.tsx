@@ -96,15 +96,24 @@ function FilterControls({
               if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
             }}
           >
-            <Select.Trigger className="bg-surface border border-outline rounded-full">
-              <Select.Value className="font-bold" placeholder="Sort by..." />
-              <Select.TriggerIndicator />
+            <Select.Trigger className="h-[40px] py-0 bg-surface-container-low border-[3px] border-outline border-b-[6px] rounded-full px-4">
+              <Select.Value className="font-bold text-on-surface" placeholder="Sort by..." />
+              <Select.TriggerIndicator className="text-on-surface" />
             </Select.Trigger>
             <Select.Portal>
               <Select.Overlay />
-              <Select.Content presentation="popover" width="trigger">
+              <Select.Content
+                presentation="popover"
+                width="trigger"
+                className="bg-surface border-[2px] border-outline rounded-2xl overflow-hidden"
+              >
                 {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
-                  <Select.Item key={option} value={option} label={capitalize(option)} />
+                  <Select.Item
+                    key={option}
+                    value={option}
+                    label={capitalize(option)}
+                    className="px-4 py-2"
+                  />
                 ))}
               </Select.Content>
             </Select.Portal>

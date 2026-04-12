@@ -1,8 +1,9 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
+import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn } from 'heroui-native'
-import { memo, useState } from 'react'
+import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
   BreedOutcomePanel,
@@ -36,6 +37,9 @@ import { canBreed } from '@/utils'
  * the `breed-nfts` Edge Function to mint a new child NFT.
  * Displays a probability breakdown and the resulting child NFT on success.
  */ export default memo(function Breed() {
+  const scrollRef = useRef<ScrollView>(null)
+  useScrollToTop(scrollRef)
+
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT()
   const { poopBalance } = useWallet()
@@ -118,6 +122,7 @@ import { canBreed } from '@/utils'
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <View>
         <ScrollView
+          ref={scrollRef}
           contentContainerClassName={scrollContent({
             padding: 'md',
             bottomPad: 'default',

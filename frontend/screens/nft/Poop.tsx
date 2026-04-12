@@ -1,4 +1,5 @@
 import { getThresholdForDifficulty } from '@pop/shared/sensors'
+import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
@@ -82,6 +83,9 @@ export default memo(function Poop() {
   const [poopedPoop, setPoopedPoop] = useState<{ earned: number; balance: number } | null>(null)
   const [statModalData, setStatModalData] = useState<{ nft: NFT; points: number } | null>(null)
   const [lootRollId, setLootRollId] = useState<string | null>(null)
+  const scrollRef = useRef<ScrollView>(null)
+  useScrollToTop(scrollRef)
+
   const hasPoopedRef = useRef(false) // guard — call poopNFT exactly once per challenge
 
   // ── Alert dialog state ─────────────────────────────────────
@@ -644,6 +648,7 @@ export default memo(function Poop() {
         // to create contrast for countdown/immobility/prompt/results phases.
         <View className="flex-1">
           <ScrollView
+            ref={scrollRef}
             className="bg-background"
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'withHeader' }),

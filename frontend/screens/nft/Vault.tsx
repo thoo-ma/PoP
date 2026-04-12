@@ -1,6 +1,7 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
+import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Skeleton, Tabs } from 'heroui-native'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
   FilterControls,
@@ -32,6 +33,11 @@ import { formatDisplayName, sortNFTs } from '@/utils'
  * stat-point allocation via the `StatAllocationModal`.
  */
 export default memo(function Vault() {
+  const nftScrollRef = useRef<ScrollView>(null)
+  const boxScrollRef = useRef<ScrollView>(null)
+  useScrollToTop(nftScrollRef)
+  useScrollToTop(boxScrollRef)
+
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { listNFT, loadingListNFT: updateLoading } = useUpdateNFT()
   const { boxes, loading: boxesLoading, error: boxesError } = useMysteryBoxes()
@@ -214,6 +220,7 @@ export default memo(function Vault() {
 
           <View>
             <ScrollView
+              ref={nftScrollRef}
               contentContainerClassName={cn(
                 scrollContent({ padding: 'md', bottomPad: 'default' }),
                 'w-full',
@@ -306,6 +313,7 @@ export default memo(function Vault() {
           ) : (
             <View>
               <ScrollView
+                ref={boxScrollRef}
                 contentContainerClassName={cn(
                   scrollContent({ padding: 'md', bottomPad: 'default' }),
                   'w-full',

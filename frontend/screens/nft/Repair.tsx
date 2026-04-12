@@ -1,7 +1,8 @@
 import { MAX_ENERGY, repairCost } from '@pop/shared'
 import { calcReducedCost } from '@pop/shared/degenBar'
+import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog, Slider } from 'heroui-native'
-import { memo, useState } from 'react'
+import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
@@ -33,6 +34,9 @@ import { formatDisplayName } from '@/utils'
  * `nftUpdated` event so other screens stay in sync.
  */
 export default memo(function Repair() {
+  const scrollRef = useRef<ScrollView>(null)
+  useScrollToTop(scrollRef)
+
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
   const { poopBalance } = useWallet()
@@ -129,6 +133,7 @@ export default memo(function Repair() {
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <View>
           <ScrollView
+            ref={scrollRef}
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'default' }),
               'items-center',
