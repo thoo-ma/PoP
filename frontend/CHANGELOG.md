@@ -1,5 +1,39 @@
 # pop
 
+## 0.3.0
+
+### Minor Changes
+
+- [#283](https://github.com/thoo-ma/PoP/pull/283) [`ab0990c`](https://github.com/thoo-ma/PoP/commit/ab0990c10283756ec47bba42428fc12c74eeeb44) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Enable Google, X, and Apple OAuth sign-in for alpha release. Fix exchangeCodeForSession bug (parse auth code from callback URL). Add native Apple Sign-In via expo-apple-authentication (iOS only). Remove dead OAuth dialog.
+
+### Patch Changes
+
+- [#317](https://github.com/thoo-ma/PoP/pull/317) [`88c3de4`](https://github.com/thoo-ma/PoP/commit/88c3de4522b9b9a6baf7c97331d068220868c30a) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add app variants: dev client uses `.dev` bundle ID suffix, preview uses `.prev`, so both can coexist on device alongside production.
+
+- [#334](https://github.com/thoo-ma/PoP/pull/334) [`0ba7bef`](https://github.com/thoo-ma/PoP/commit/0ba7befe8b262dd003438a4a9def750134fe5a39) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add Digital Atelier overlay and badge tokens to global.css.
+
+- [#316](https://github.com/thoo-ma/PoP/pull/316) [`549379b`](https://github.com/thoo-ma/PoP/commit/549379b35ce06eb4d25e0921e48fb183a78d1574) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add OTA update handler: check for updates on launch, fetch and reload automatically.
+
+- [#292](https://github.com/thoo-ma/PoP/pull/292) [`46024d6`](https://github.com/thoo-ma/PoP/commit/46024d6dbfbb3b2b4256b84d866b833ec7b16ae1) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Fix iOS deployment target (15.0 → 15.1) to satisfy ExpoModulesCore minimum requirement; set EAS iOS build image to `latest` so all build profiles always use the current Expo-recommended Xcode image (resolves Swift compiler/SDK version mismatch).
+
+- [#297](https://github.com/thoo-ma/PoP/pull/297) [`a8693c4`](https://github.com/thoo-ma/PoP/commit/a8693c4af93d3cef54ef4730f5d39d9780d62420) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Fix X/Twitter OAuth sign-in by using correct provider name 'x' instead of deprecated 'twitter'.
+
+- [#340](https://github.com/thoo-ma/PoP/pull/340) [`ac4a3e6`](https://github.com/thoo-ma/PoP/commit/ac4a3e64179c3cf53c78e3cdf57a02451c57bc80) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Post-redesign frontend audit: fix P0 bugs, remove dead code, migrate color constants to useCSSVariable.
+
+- [#335](https://github.com/thoo-ma/PoP/pull/335) [`f8bf68d`](https://github.com/thoo-ma/PoP/commit/f8bf68dfe36f155a6f59129797f410ff19b00571) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace legacy non-semantic tokens with Digital Atelier semantic tokens across Session B style recipe files ([#333](https://github.com/thoo-ma/PoP/issues/333)).
+
+- [#337](https://github.com/thoo-ma/PoP/pull/337) [`de68461`](https://github.com/thoo-ma/PoP/commit/de68461c825e3fba3263517302413d79ff5d5107) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace non-semantic inline tokens with semantic equivalents in screens and components (session C).
+
+- [#337](https://github.com/thoo-ma/PoP/pull/337) [`2a16a3a`](https://github.com/thoo-ma/PoP/commit/2a16a3a34566ee22abc15d5776b9cb6e5a91cf00) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add app-\*-container status tokens to global.css and migrate status colors in game.ts and cards.ts.
+
+- [#337](https://github.com/thoo-ma/PoP/pull/337) [`43cf795`](https://github.com/thoo-ma/PoP/commit/43cf795dd569da1310265924e12a997390ba09af) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Apply DA typographic and border language across all style recipes: font-black headings, border-[3px] on primary surfaces, shadow removal, and border-radius consistency.
+
+- [#339](https://github.com/thoo-ma/PoP/pull/339) [`efa6a99`](https://github.com/thoo-ma/PoP/commit/efa6a999d3fd212a6c3b98e904cbb81268770962) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Bridge HeroUI Native CSS variables to Digital Atelier tokens via @layer theme in global.css. Remove obsolete design tokens (text palette, legacy surface variants, property bar, border, button) that have zero consumers.
+
+- [#319](https://github.com/thoo-ma/PoP/pull/319) [`c0b1ef7`](https://github.com/thoo-ma/PoP/commit/c0b1ef74b7a374209b01b8167cc5b541238e00d5) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract tv() style recipes, apply theme tokens, and standardise tactile button props across screens.
+
+- [#342](https://github.com/thoo-ma/PoP/pull/342) [`4aeca59`](https://github.com/thoo-ma/PoP/commit/4aeca5919b79f5b6d2faa99cabe8c33328061938) Thanks [@thoo-ma](https://github.com/thoo-ma)! - UI cohesiveness sweep: normalize layout containers, centralize styles, semantic color tokens, extract SortToolbar and ProfileModals, add accessibility labels and values.
+
 ## 0.2.1
 
 ### Patch Changes
