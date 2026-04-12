@@ -11,6 +11,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
+export const SUPABASE_STORAGE_BASE = `${supabaseUrl}/storage/v1/object/public/assets`
+
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: AsyncStorage,

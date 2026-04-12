@@ -1,4 +1,4 @@
-import type { MysteryBox } from '@pop/shared'
+import type { MysteryBox, NFTRarity } from '@pop/shared'
 import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
@@ -7,26 +7,38 @@ import { useRarityColors } from '@/hooks'
 import { badgeLabel, badgePosition, cardBody, cardContainer, cardImageContainer } from '@/styles'
 
 interface MysteryBoxCardProps {
-  box: MysteryBox
-  /** Number of boxes of this rarity. When > 1, a count badge is shown. */
+  /** The rarity this card slot represents. */
+  rarity: NFTRarity
+  /** The actual box object. Null when the player has 0 boxes of this rarity. */
+  box: MysteryBox | null
+  /** Image URL for the mystery box (always provided, even when count is 0). */
+  imageUrl: string
+  /** Number of boxes of this rarity. Always shown, including 0. */
   count?: number
   /** Slot for the action area below the card header (e.g. an Open button). */
   action?: ReactNode
 }
 
-export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCardProps) {
+export default memo(function MysteryBoxCard({
+  rarity,
+  box,
+  imageUrl,
+  count,
+  action,
+}: MysteryBoxCardProps) {
   const rarityColors = useRarityColors()
+  const isEmpty = count === 0
   return (
     <Card
-      className={cardContainer()}
+      className={cn(cardContainer(), isEmpty && 'opacity-40')}
       animation="disable-all"
-      accessibilityLabel={`Mystery box, ${box.rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ''}`}
+      accessibilityLabel={`Mystery box, ${rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ', unavailable'}`}
     >
       <Card.Header className={cardImageContainer()}>
-        <Image source={{ uri: box.image_url }} className="w-full h-full" resizeMode="cover" />
+        <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
 
         {/* Opened — top-right */}
-        {box.opened && (
+        {box?.opened && (
           <Chip
             size="sm"
             variant="secondary"
@@ -40,18 +52,18 @@ export default memo(function MysteryBoxCard({ box, count, action }: MysteryBoxCa
 
       <Card.Body className={cardBody()}>
         <View className="flex-row items-center gap-2">
-          {count !== undefined && count > 0 && (
+          {count !== undefined && (
             <Chip size="sm" variant="primary" animation="disable-all">
-              <Chip.Label className={badgeLabel({ size: 'base' })}>×{count}</Chip.Label>
+              <Chip.Label className={badgeLabel({ size: 'xs' })}>×{count}</Chip.Label>
             </Chip>
           )}
           <Chip
             size="sm"
             variant="primary"
-            style={{ backgroundColor: rarityColors[box.rarity] }}
+            style={{ backgroundColor: rarityColors[rarity] }}
             animation="disable-all"
           >
-            <Chip.Label className={badgeLabel()}>{box.rarity.toUpperCase()}</Chip.Label>
+            <Chip.Label className={badgeLabel({ size: 'xs' })}>{rarity.toUpperCase()}</Chip.Label>
           </Chip>
         </View>
         {action}

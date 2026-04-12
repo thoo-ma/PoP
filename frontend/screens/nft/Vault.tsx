@@ -14,8 +14,8 @@ import {
 } from '@/components'
 import type { AllocateResult } from '@/hooks'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
+import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
-  emptyState,
   gridLayout,
   inlineError,
   screenContainer,
@@ -53,7 +53,7 @@ export default memo(function Vault() {
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
 
   // Filter NFTs based on selected rarities and types
-  /** Boxes grouped by rarity, sorted transcendent → common. */
+  /** Boxes grouped by rarity, sorted transcendent → common. Always includes all 4 rarities. */
   const groupedBoxes = useMemo(() => {
     const RARITY_ORDER: NFTRarity[] = ['transcendent', 'legendary', 'rare', 'common']
     const map = new Map<NFTRarity, { box: MysteryBox; count: number }>()
@@ -65,14 +65,16 @@ export default memo(function Vault() {
         map.set(box.rarity, { box, count: 1 })
       }
     }
-    return RARITY_ORDER.flatMap((r) => {
+    return RARITY_ORDER.map((r) => {
       const entry = map.get(r)
-      return entry ? [{ rarity: r, box: entry.box, count: entry.count }] : []
+      const imageUrl = entry?.box.image_url ?? `${SUPABASE_STORAGE_BASE}/mystery-boxes/${r}.jpg`
+      return { rarity: r, box: entry?.box ?? null, count: entry?.count ?? 0, imageUrl }
     })
   }, [boxes])
 
   const boxRows = useMemo(() => {
-    const rows: { rarity: NFTRarity; box: MysteryBox; count: number }[][] = []
+    const rows: { rarity: NFTRarity; box: MysteryBox | null; count: number; imageUrl: string }[][] =
+      []
     for (let i = 0; i < groupedBoxes.length; i += 2) {
       rows.push(groupedBoxes.slice(i, i + 2))
     }
@@ -176,7 +178,6 @@ export default memo(function Vault() {
     return <ScreenError title="Vault" message={`Failed to load NFTs: ${error}`} onRetry={refetch} />
   }
 
-  const emptyStyles = emptyState()
   const skeleton = skeletonCard()
 
   return (
@@ -187,8 +188,8 @@ export default memo(function Vault() {
         value={activeTab}
         onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}
       >
-        <Tabs.List className="self-center bg-surface border border-outline rounded-full px-1 py-1">
-          <Tabs.Indicator className="bg-surface-container-low border-2 border-outline border-b-[3px] rounded-full" />
+        <Tabs.List className="self-center bg-surface border-[3px] border-outline border-b-[6px] rounded-full px-1 py-1">
+          <Tabs.Indicator className="bg-surface-container-low border-2 border-outline rounded-full" />
           <Tabs.Trigger value="toilets">
             {({ isSelected }) => (
               <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
@@ -320,60 +321,50 @@ export default memo(function Vault() {
                 )}
                 showsVerticalScrollIndicator={false}
               >
-                {boxes.length === 0 ? (
-                  <View className={emptyStyles.root()}>
-                    <Text
-                      className={cn(
-                        emptyStyles.title(),
-                        'font-bold text-on-surface-variant text-center mb-0',
-                      )}
-                    >
-                      No mystery boxes yet
-                    </Text>
-                    <Text className={cn(emptyStyles.detail(), 'opacity-60 mt-2')}>
-                      Mystery boxes will appear here once you earn them.
-                    </Text>
-                  </View>
-                ) : (
-                  <View className="w-full">
-                    {boxRows.map((pair) => (
-                      <View key={pair[0].rarity} className={gridLayout().row()}>
-                        {pair.map((group) => {
-                          const isOpening = openingRarity === group.rarity
-                          return (
-                            <View key={group.rarity} className={gridLayout().item()}>
-                              <MysteryBoxCard
-                                box={group.box}
-                                count={group.count}
-                                action={
-                                  <Button
-                                    isDisabled={isOpening || openLoading}
-                                    onPress={() => handleOpenBox(group.rarity)}
-                                    className={cn(
-                                      tactileButton({ variant: 'primary', size: 'sm' }),
-                                      'mt-1',
-                                    )}
-                                    accessibilityLabel={`Open a ${group.rarity} mystery box`}
+                <View className="w-full">
+                  {boxRows.map((pair) => (
+                    <View key={pair[0].rarity} className={gridLayout().row()}>
+                      {pair.map((group) => {
+                        const isOpening = openingRarity === group.rarity
+                        const isEmpty = group.count === 0
+                        return (
+                          <View key={group.rarity} className={gridLayout().item()}>
+                            <MysteryBoxCard
+                              rarity={group.rarity}
+                              box={group.box}
+                              imageUrl={group.imageUrl}
+                              count={group.count}
+                              action={
+                                <Button
+                                  isDisabled={isEmpty || isOpening || openLoading}
+                                  onPress={() => handleOpenBox(group.rarity)}
+                                  className={cn(
+                                    tactileButton({
+                                      variant: isEmpty ? 'disabled' : 'primary',
+                                      size: 'sm',
+                                    }),
+                                    'mt-1',
+                                  )}
+                                  accessibilityLabel={`Open a ${group.rarity} mystery box`}
+                                >
+                                  <Button.Label
+                                    className={tactileButtonText({
+                                      variant: isEmpty ? 'disabled' : 'primary',
+                                      size: 'sm',
+                                    })}
                                   >
-                                    <Button.Label
-                                      className={tactileButtonText({
-                                        variant: 'primary',
-                                        size: 'sm',
-                                      })}
-                                    >
-                                      {isOpening ? 'Opening...' : 'Open'}
-                                    </Button.Label>
-                                  </Button>
-                                }
-                              />
-                            </View>
-                          )
-                        })}
-                        {pair.length === 1 && <View className={gridLayout().item()} />}
-                      </View>
-                    ))}
-                  </View>
-                )}
+                                    {isOpening ? 'Opening...' : 'Open'}
+                                  </Button.Label>
+                                </Button>
+                              }
+                            />
+                          </View>
+                        )
+                      })}
+                      {pair.length === 1 && <View className={gridLayout().item()} />}
+                    </View>
+                  ))}
+                </View>
               </ScrollView>
             </View>
           )}

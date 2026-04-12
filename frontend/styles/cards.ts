@@ -140,7 +140,7 @@ export const xpBar = tv({
 // Layout slots for the LootRouletteCard component.
 export const lootCard = tv({
   slots: {
-    root: 'mx-4 items-center gap-4',
+    root: 'mx-4 items-center gap-4 border-[3px] border-outline border-b-[5px]',
     body: 'items-center gap-4 w-full',
     title: 'text-xl font-bold',
     chanceValue: 'font-bold text-stat-luck',

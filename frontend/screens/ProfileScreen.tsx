@@ -1,16 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useScrollToTop } from '@react-navigation/native'
-import { Avatar, Button, cn, Spinner } from 'heroui-native'
+import { Alert, Avatar, Button, cn, Spinner } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { LootRouletteCard, MysteryBoxRevealModal, ScreenError, ScreenLoader } from '@/components'
 import { useAuth, useProfileStats, useUserNFTs, useWallet } from '@/hooks'
 import {
-  bustMessage,
   profileModal,
-  repairFullEnergy,
-  repairSuccess,
   screenContainer,
   tactileButton,
   tactileButtonText,
@@ -88,9 +85,6 @@ export default function ProfileScreen() {
   // ── DEV previews ──────────────────────────────────────────────────────────
   if (__DEV__ && devPreview) {
     const dismiss = () => setDevPreview(null)
-    const bm = bustMessage()
-    const rs = repairSuccess()
-    const rfe = repairFullEnergy()
     if (devPreview === 'error')
       return (
         <ScreenError
@@ -120,11 +114,18 @@ export default function ProfileScreen() {
     if (devPreview === 'repair-success')
       return (
         <View className="flex-1 bg-background items-center justify-center px-6 pb-32">
-          <View className={rs.root()}>
-            <Text className={rs.text()}>✓ Repair Complete!</Text>
-            <Text className={rs.text()}>Energy: 100%</Text>
-            <Text className={rs.text()}>-42 POOP spent</Text>
-          </View>
+          <Alert
+            status="success"
+            className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] items-center"
+          >
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title className="font-black">Repair Complete!</Alert.Title>
+              <Alert.Description className="font-bold">
+                Energy: 100% · -42 POOP spent
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
           <Button
             variant="ghost"
             feedbackVariant="none"
@@ -140,9 +141,17 @@ export default function ProfileScreen() {
     if (devPreview === 'repair-full-energy')
       return (
         <View className="flex-1 bg-background items-center justify-center px-6 pb-32">
-          <View className={rfe.root()}>
-            <Text className={rfe.text()}>This NFT is already at full energy!</Text>
-          </View>
+          <Alert
+            status="warning"
+            className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] items-center"
+          >
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Description className="font-bold">
+                This NFT is already at full energy!
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
           <Button
             variant="ghost"
             feedbackVariant="none"
@@ -158,10 +167,18 @@ export default function ProfileScreen() {
     if (devPreview === 'repair-bust' || devPreview === 'breed-bust')
       return (
         <View className="flex-1 bg-background items-center justify-center px-6 pb-32">
-          <View className={bm.root()}>
-            <Text className={bm.title()}>BUST</Text>
-            <Text className={bm.detail()}>You lost 120 POOP — better luck next time!</Text>
-          </View>
+          <Alert
+            status="danger"
+            className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] items-center"
+          >
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title className="font-black">BUST</Alert.Title>
+              <Alert.Description className="font-bold">
+                You lost 120 POOP — better luck next time!
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
           <Button
             variant="ghost"
             feedbackVariant="none"

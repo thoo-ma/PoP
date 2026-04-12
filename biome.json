@@ -3,6 +3,7 @@
   "files": {
     "includes": [
       "frontend/**",
+      "!frontend/uniwind-types.d.ts",
       "shared/**",
       "dashboard/src/**",
       "!supabase/functions",

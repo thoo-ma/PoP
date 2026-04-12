@@ -86,7 +86,7 @@ function FilterControls({
 
   return (
     <View className={s.root()}>
-      {/* Toolbar: [dropdown] [Filters btn] [arrow] */}
+      {/* Toolbar: [dropdown] [arrow] [Filters btn] */}
       <View className={s.toolbar()}>
         {/* Sort dropdown — flex-1 so it fills remaining space */}
         <View className={s.sortWrapper()}>
@@ -120,6 +120,17 @@ function FilterControls({
           </Select>
         </View>
 
+        {/* Sort order arrow */}
+        <Pressable
+          onPress={onSortOrderToggle}
+          accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
+          className={tactileButton({ variant: 'secondary', size: 'sm' })}
+        >
+          <Text className="text-on-surface font-black text-base">
+            {sortOrder === 'desc' ? '↓' : '↑'}
+          </Text>
+        </Pressable>
+
         {/* Filters toggle */}
         <Button
           variant="ghost"
@@ -133,17 +144,6 @@ function FilterControls({
             Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
           </Button.Label>
         </Button>
-
-        {/* Sort order arrow */}
-        <Pressable
-          onPress={onSortOrderToggle}
-          accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
-          className={tactileButton({ variant: 'secondary', size: 'sm' })}
-        >
-          <Text className="text-on-surface font-black text-base">
-            {sortOrder === 'desc' ? '↓' : '↑'}
-          </Text>
-        </Pressable>
       </View>
 
       {/* Filter badges */}

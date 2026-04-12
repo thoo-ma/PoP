@@ -256,7 +256,11 @@ import { canBreed } from '@/utils'
               </View>
 
               {/* Mystery box result */}
-              <MysteryBoxCard box={breedResult} />
+              <MysteryBoxCard
+                rarity={breedResult.rarity}
+                box={breedResult}
+                imageUrl={breedResult.image_url}
+              />
 
               <Button
                 animation="disable-all"

@@ -131,13 +131,14 @@ export default memo(function Repair() {
   return (
     <>
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <View>
+        <View className="w-full">
           <ScrollView
             ref={scrollRef}
-            contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'default' }),
-              'items-center',
-            )}
+            contentContainerClassName={scrollContent({
+              padding: 'md',
+              bottomPad: 'default',
+              align: 'center',
+            })}
             showsVerticalScrollIndicator={false}
           >
             {selectedIndex === null ? (
