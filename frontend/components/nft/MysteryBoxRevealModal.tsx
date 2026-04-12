@@ -1,6 +1,6 @@
 import { Button, cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
-import { Image, View } from 'react-native'
+import { Image, Text, View } from 'react-native'
 import { rarityBadge, revealModal, tactileButton, tactileButtonText } from '@/styles'
 import type { NFT } from '@/types/nft'
 import { formatDisplayName } from '@/utils'
@@ -43,16 +43,12 @@ export default memo(function MysteryBoxRevealModal({
           <View className={s.imageContainer()}>
             <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
             <View className={cn(s.rarityOverlay(), rarityBadge({ rarity: nft.rarity }))}>
-              <Dialog.Description className={s.rarityText()}>
-                {nft.rarity.toUpperCase()}
-              </Dialog.Description>
+              <Text className={s.rarityText()}>{nft.rarity.toUpperCase()}</Text>
             </View>
           </View>
 
-          <Dialog.Title className={s.titleMd()}>{formatDisplayName(nft.name)}</Dialog.Title>
-          <Dialog.Description className={cn(s.description(), 'capitalize')}>
-            {nft.type.replace(/-/g, ' ')}
-          </Dialog.Description>
+          <Text className={s.titleMd()}>{formatDisplayName(nft.name)}</Text>
+          <Text className={cn(s.description(), 'capitalize')}>{nft.type.replace(/-/g, ' ')}</Text>
 
           <Button
             variant="ghost"

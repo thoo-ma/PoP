@@ -1,7 +1,7 @@
-import { Button, Dialog } from 'heroui-native'
+import { Button, cn, Dialog } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
-import { dialogBody } from '@/styles'
+import { dialogBody, signOutDialog, tactileButton, tactileButtonText } from '@/styles'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -24,22 +24,43 @@ export function useSignOutDialog() {
     }
   }
 
+  const s = signOutDialog()
   const dialog = (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Portal>
         <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Close />
+        <Dialog.Content className={s.content()}>
+          <Dialog.Close
+            variant="ghost"
+            feedbackVariant="none"
+            className={cn(
+              tactileButton({ variant: 'default', size: 'sm' }),
+              'self-start w-10 px-0',
+            )}
+          />
           <View className={dialogBody()}>
-            <Dialog.Title>Sign Out</Dialog.Title>
             <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
           </View>
-          <View className="flex-row justify-end gap-3">
-            <Button variant="tertiary" size="sm" onPress={() => setIsOpen(false)}>
-              Cancel
+          <View className={s.buttonRow()}>
+            <Button
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={() => setIsOpen(false)}
+              className={cn(tactileButton({ variant: 'outline' }), 'flex-1')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                Cancel
+              </Button.Label>
             </Button>
-            <Button variant="danger" size="sm" onPress={handleConfirm}>
-              Sign Out
+            <Button
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={handleConfirm}
+              className={cn(tactileButton({ variant: 'default' }), 'flex-1')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                Sign Out
+              </Button.Label>
             </Button>
           </View>
         </Dialog.Content>

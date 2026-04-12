@@ -16,6 +16,15 @@ export const dialogBody = tv({
   base: 'mb-4 gap-1.5',
 })
 
+// ── Sign-out confirmation dialog ──────────────────────────────────────────────
+// Declarative confirm dialog built in useSignOutDialog().
+export const signOutDialog = tv({
+  slots: {
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-[3px] border-outline',
+    buttonRow: 'flex-row gap-3',
+  },
+})
+
 // ── Dialog panel ─────────────────────────────────────────────────────────────
 // Shared Dialog.Content + Dialog.Close styling for Profile and Wallet modals.
 export const dialogPanel = tv({
@@ -63,7 +72,7 @@ export const statModal = tv({
 // Celebration dialog shown after opening a mystery box.
 export const revealModal = tv({
   slots: {
-    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center',
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center border-[3px] border-outline',
     titleLg: 'text-xl font-black text-on-surface mb-1 text-center',
     titleMd: 'text-base font-black text-on-surface mb-1 text-center',
     description: 'text-sm text-on-surface-variant mb-5 text-center font-bold',
