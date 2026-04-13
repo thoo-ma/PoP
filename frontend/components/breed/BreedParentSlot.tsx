@@ -1,6 +1,5 @@
-import { Chip, PressableFeedback } from 'heroui-native'
+import { Chip, cn, PressableFeedback } from 'heroui-native'
 import { Image, Text, View } from 'react-native'
-import { useCSSVariable } from 'uniwind'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, parentSlot } from '@/styles'
 import type { NFT } from '@/types/nft'
@@ -17,16 +16,14 @@ interface BreedParentSlotProps {
 
 /**
  * Tappable card representing one of the two breed parent slots.
- * Shows the selected NFT's image, name, and rarity border colour,
+ * Shows the selected NFT's image, name, and rarity chip,
  * or a placeholder prompt when empty.
  */
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
-  const inactive = useCSSVariable('--color-on-surface-variant') as string
   const rarityColors = useRarityColors()
-  const borderColor = nft ? rarityColors[nft.rarity] : inactive
   const s = parentSlot()
   return (
-    <PressableFeedback onPress={onPress} className={s.root()} style={{ borderColor }}>
+    <PressableFeedback onPress={onPress} className={cn(s.root(), !nft && 'border-dashed')}>
       {nft ? (
         <>
           <Image source={{ uri: nft.image_url }} className={s.image()} resizeMode="cover" />

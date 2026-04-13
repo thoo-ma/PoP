@@ -102,9 +102,9 @@ export default function ProfileScreen() {
               variant="ghost"
               feedbackVariant="none"
               onPress={dismiss}
-              className={cn(tactileButton({ variant: 'default' }), 'w-full')}
+              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
             >
-              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
                 ← Back
               </Button.Label>
             </Button>
@@ -130,9 +130,9 @@ export default function ProfileScreen() {
             variant="ghost"
             feedbackVariant="none"
             onPress={dismiss}
-            className={cn(tactileButton({ variant: 'default' }), 'mt-6 w-full')}
+            className={cn(tactileButton({ variant: 'primary' }), 'mt-6 w-full')}
           >
-            <Button.Label className={tactileButtonText({ variant: 'default' })}>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               ← Back
             </Button.Label>
           </Button>
@@ -156,9 +156,9 @@ export default function ProfileScreen() {
             variant="ghost"
             feedbackVariant="none"
             onPress={dismiss}
-            className={cn(tactileButton({ variant: 'default' }), 'mt-6 w-full')}
+            className={cn(tactileButton({ variant: 'primary' }), 'mt-6 w-full')}
           >
-            <Button.Label className={tactileButtonText({ variant: 'default' })}>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               ← Back
             </Button.Label>
           </Button>
@@ -183,9 +183,9 @@ export default function ProfileScreen() {
             variant="ghost"
             feedbackVariant="none"
             onPress={dismiss}
-            className={cn(tactileButton({ variant: 'default' }), 'mt-6 w-full')}
+            className={cn(tactileButton({ variant: 'primary' }), 'mt-6 w-full')}
           >
-            <Button.Label className={tactileButtonText({ variant: 'default' })}>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               ← Back
             </Button.Label>
           </Button>
@@ -199,9 +199,9 @@ export default function ProfileScreen() {
             variant="ghost"
             feedbackVariant="none"
             onPress={dismiss}
-            className={cn(tactileButton({ variant: 'default' }), 'mt-4 w-full')}
+            className={cn(tactileButton({ variant: 'primary' }), 'mt-4 w-full')}
           >
-            <Button.Label className={tactileButtonText({ variant: 'default' })}>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               ← Back
             </Button.Label>
           </Button>
@@ -310,14 +310,14 @@ export default function ProfileScreen() {
           <Button
             variant="ghost"
             feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'default' }), 'w-full mb-2.5')}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full mb-2.5')}
             onPress={handleSignOut}
             isDisabled={isSigningOut}
             accessibilityLabel="Sign out"
             accessibilityHint="Sign out of your account"
           >
             <MaterialIcons name="logout" size={18} color={onSurface} />
-            <Button.Label className={tactileButtonText({ variant: 'default' })}>
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               Sign Out
             </Button.Label>
           </Button>

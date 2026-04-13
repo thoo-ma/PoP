@@ -24,7 +24,6 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
           if (pct === 0) return null
           return (
             <View key={rarity} className={s.row()}>
-              <View className={s.dot()} style={{ backgroundColor: rarityColors[rarity] }} />
               <Text className={s.label()}>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</Text>
               <View className={s.track()}>
                 <View

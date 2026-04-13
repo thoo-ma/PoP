@@ -720,19 +720,12 @@ export default memo(function Poop() {
                       </View>
                       <View
                         className={cn(
-                          overlayBadge({ position: 'bottomLeft' }),
+                          overlayBadge({ position: 'topRight' }),
                           typeBadge({ type: displayNFT.type }),
                         )}
                       >
                         <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
                           {displayNFT.type.toUpperCase()}
-                        </Text>
-                      </View>
-                      <View
-                        className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}
-                      >
-                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
-                          Energy: {displayNFT.energy}%
                         </Text>
                       </View>
                     </View>

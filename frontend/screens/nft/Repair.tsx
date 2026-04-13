@@ -141,188 +141,187 @@ export default memo(function Repair() {
             })}
             showsVerticalScrollIndicator={false}
           >
-            {selectedIndex === null ? (
-              <Button
-                variant="ghost"
-                onPress={handleSelectNFT}
-                isDisabled={nfts.length === 0}
-                className={nftPickerButton()}
-              >
-                <Text className={ph.icon()}>+</Text>
-                <Button.Label className={ph.label()}>
-                  {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
-                </Button.Label>
-              </Button>
-            ) : (
-              <>
-                {/* NFT Carousel Selector */}
-                {!isRepaired && (
-                  <NFTSelector
-                    current={(selectedIndex as number) + 1}
-                    total={nfts.length}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                    className="mt-5 mb-1"
-                  />
-                )}
-                {/* Selected NFT Card */}
-                {!isRepaired && selectedNFT && (
-                  <View
-                    className={cn(detailStyles.root(), 'w-70 bg-surface mt-5 mb-6 border-outline')}
-                  >
-                    <View className={detailStyles.imageWrap()}>
-                      <Image
-                        source={{ uri: selectedNFT.image_url }}
-                        className={detailStyles.image()}
-                        resizeMode="cover"
-                      />
-                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
-                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
-                          Lv {selectedNFT.level}
-                        </Text>
-                      </View>
-                      <View
-                        className={cn(
-                          overlayBadge({ position: 'bottomLeft' }),
-                          typeBadge({ type: selectedNFT.type }),
-                        )}
-                      >
-                        <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
-                          {selectedNFT.type.toUpperCase()}
-                        </Text>
-                      </View>
-                      <View
-                        className={cn(overlayBadge({ position: 'topRight' }), 'bg-emerald-500/95')}
-                      >
-                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
-                          Energy: {currentEnergy + Math.round(repairAmount)}%
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View className={cn(detailStyles.content(), 'p-4')}>
-                      <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                        {formatDisplayName(selectedNFT.name)}
-                      </Text>
-
-                      <NFTProperties
-                        efficiency={selectedNFT.efficiency}
-                        resilience={selectedNFT.resilience}
-                        comfort={selectedNFT.comfort}
-                        luck={selectedNFT.luck}
-                        energy={currentEnergy + Math.round(repairAmount)}
-                        mode="compact"
-                      />
-                    </View>
-                  </View>
-                )}
-
-                {currentEnergy < MAX_ENERGY && !isRepaired && (
-                  <>
-                    {/* Repair Controls */}
-                    <DegenBar
-                      baseCost={poopCost}
-                      onDegenChange={setDegenPercent}
-                      disabled={updateLoading}
+            {/* NFT picker / card area */}
+            <View className="w-full items-center mb-5">
+              {selectedIndex === null ? (
+                <Button
+                  variant="ghost"
+                  onPress={handleSelectNFT}
+                  isDisabled={nfts.length === 0}
+                  className={nftPickerButton()}
+                >
+                  <Text className={ph.icon()}>+</Text>
+                  <Button.Label className={ph.label()}>
+                    {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
+                  </Button.Label>
+                </Button>
+              ) : (
+                <>
+                  {/* NFT Carousel Selector */}
+                  {!isRepaired && (
+                    <NFTSelector
+                      current={(selectedIndex as number) + 1}
+                      total={nfts.length}
+                      onPrev={handlePrev}
+                      onNext={handleNext}
+                      className="mb-3"
                     />
-
-                    <View className={cn(infoBox(), 'mb-5')}>
-                      <Text className={ra.title()}>Repair Amount</Text>
-                      <View className={ra.valueWrap()}>
-                        <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>
+                  )}
+                  {/* Selected NFT Card */}
+                  {!isRepaired && selectedNFT && (
+                    <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
+                      <View className={detailStyles.imageWrap()}>
+                        <Image
+                          source={{ uri: selectedNFT.image_url }}
+                          className={detailStyles.image()}
+                          resizeMode="cover"
+                        />
+                        <View
+                          className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}
+                        >
+                          <Text className={cn(badgeLabel(), 'tracking-wide')}>
+                            Lv {selectedNFT.level}
+                          </Text>
+                        </View>
+                        <View
+                          className={cn(
+                            overlayBadge({ position: 'topRight' }),
+                            typeBadge({ type: selectedNFT.type }),
+                          )}
+                        >
+                          <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
+                            {selectedNFT.type.toUpperCase()}
+                          </Text>
+                        </View>
                       </View>
-                      <Slider
-                        className="w-full"
-                        minValue={0}
-                        maxValue={maxRepairPossible}
-                        value={repairAmount}
-                        onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
-                        step={1}
-                      >
-                        <Slider.Track>
-                          <Slider.Fill />
-                          <Slider.Thumb />
-                        </Slider.Track>
-                      </Slider>
-                    </View>
 
-                    {/* Bust feedback */}
-                    {bustedResult && (
-                      <View className={bm.root()}>
-                        <Text className={bm.title()}>BUST</Text>
-                        <Text className={bm.detail()}>
-                          You lost {bustedResult.poop_spent} POOP — better luck next time!
+                      <View className={cn(detailStyles.content(), 'p-4')}>
+                        <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
+                          {formatDisplayName(selectedNFT.name)}
                         </Text>
+
+                        <NFTProperties
+                          efficiency={selectedNFT.efficiency}
+                          resilience={selectedNFT.resilience}
+                          comfort={selectedNFT.comfort}
+                          luck={selectedNFT.luck}
+                          energy={currentEnergy + Math.round(repairAmount)}
+                          mode="compact"
+                        />
                       </View>
-                    )}
+                    </View>
+                  )}
 
-                    {/* Repair Button */}
-                    <Button
-                      variant="ghost"
-                      feedbackVariant="none"
-                      onPress={handleRepair}
-                      isDisabled={
-                        repairAmount === 0 ||
-                        updateLoading ||
-                        (poopBalance !== null && poopBalance < poopCost)
-                      }
-                      className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-                    >
-                      <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                        {updateLoading ? (
-                          'Repairing...'
-                        ) : poopBalance !== null && poopBalance < poopCost ? (
-                          `Need ${poopCost} POOP`
-                        ) : degenPercent > 0 ? (
-                          <>
-                            {'Repair — '}
-                            <Text className={costStrikethrough()}>{poopCost}</Text>
-                            {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
-                          </>
-                        ) : (
-                          `Repair (${poopCost} POOP)`
-                        )}
-                      </Button.Label>
-                    </Button>
-                  </>
-                )}
+                  {isRepaired && (
+                    <View className={rs.root()}>
+                      <Text className={rs.text()}>✓ Repair Complete!</Text>
+                      {repairedEnergy !== null && (
+                        <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
+                      )}
+                      {poopSpent !== null && (
+                        <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
+                      )}
+                      <Button
+                        animation="disable-all"
+                        onPress={handleReset}
+                        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                      >
+                        <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                          Repair Another NFT
+                        </Button.Label>
+                      </Button>
+                    </View>
+                  )}
+                </>
+              )}
+            </View>
 
-                {isRepaired && (
-                  <View className={rs.root()}>
-                    <Text className={rs.text()}>✓ Repair Complete!</Text>
-                    {repairedEnergy !== null && (
-                      <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
-                    )}
-                    {poopSpent !== null && (
-                      <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
-                    )}
-                    <Button
-                      animation="disable-all"
-                      onPress={handleReset}
-                      className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-                    >
-                      <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                        Repair Another NFT
-                      </Button.Label>
-                    </Button>
+            {/* Repair controls — only when NFT selected, energy < max, not repaired */}
+            {selectedNFT && currentEnergy < MAX_ENERGY && !isRepaired && (
+              <>
+                <View className={cn(infoBox(), 'mb-5')}>
+                  <Text className={ra.title()}>Repair Amount</Text>
+                  <View className={ra.valueWrap()}>
+                    <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>
                   </View>
-                )}
+                  <Slider
+                    className="w-full"
+                    minValue={0}
+                    maxValue={maxRepairPossible}
+                    value={repairAmount}
+                    onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
+                    step={1}
+                  >
+                    <Slider.Track>
+                      <Slider.Fill />
+                      <Slider.Thumb />
+                    </Slider.Track>
+                  </Slider>
+                </View>
 
-                {currentEnergy === MAX_ENERGY && !isRepaired && (
-                  <View className={rfe.root()}>
-                    <Text className={rfe.text()}>This NFT is at full energy!</Text>
-                    <Button
-                      animation="disable-all"
-                      onPress={handleReset}
-                      className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-                    >
-                      <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                        Select Another NFT
-                      </Button.Label>
-                    </Button>
+                <DegenBar
+                  baseCost={poopCost}
+                  onDegenChange={setDegenPercent}
+                  disabled={updateLoading}
+                />
+
+                {/* Bust feedback */}
+                {bustedResult && (
+                  <View className={bm.root()}>
+                    <Text className={bm.title()}>BUST</Text>
+                    <Text className={bm.detail()}>
+                      You lost {bustedResult.poop_spent} POOP — better luck next time!
+                    </Text>
                   </View>
                 )}
               </>
+            )}
+
+            {/* Full energy state */}
+            {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
+              <View className={rfe.root()}>
+                <Button
+                  animation="disable-all"
+                  onPress={handleReset}
+                  className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                >
+                  <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                    This NFT is at full energy!
+                  </Button.Label>
+                </Button>
+              </View>
+            )}
+
+            {/* Repair button — always shown when not repaired and not full energy */}
+            {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
+              <Button
+                variant="ghost"
+                feedbackVariant="none"
+                onPress={handleRepair}
+                isDisabled={
+                  selectedIndex === null ||
+                  repairAmount === 0 ||
+                  updateLoading ||
+                  (poopBalance !== null && poopBalance < poopCost)
+                }
+                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+              >
+                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                  {updateLoading ? (
+                    'Repairing...'
+                  ) : poopBalance !== null && poopBalance < poopCost ? (
+                    `Need ${poopCost} POOP`
+                  ) : degenPercent > 0 ? (
+                    <>
+                      {'Repair — '}
+                      <Text className={costStrikethrough()}>{poopCost}</Text>
+                      {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
+                    </>
+                  ) : (
+                    `Repair (${poopCost} POOP)`
+                  )}
+                </Button.Label>
+              </Button>
             )}
           </ScrollView>
         </View>
