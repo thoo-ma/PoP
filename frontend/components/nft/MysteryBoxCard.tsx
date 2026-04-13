@@ -4,7 +4,14 @@ import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, View } from 'react-native'
 import { useRarityColors } from '@/hooks'
-import { badgeLabel, badgePosition, cardBody, cardContainer, cardImageContainer } from '@/styles'
+import {
+  badgeLabel,
+  badgePosition,
+  cardBody,
+  cardContainer,
+  cardImageContainer,
+  cardWrapper,
+} from '@/styles'
 
 interface MysteryBoxCardProps {
   /** The rarity this card slot represents. */
@@ -29,45 +36,47 @@ export default memo(function MysteryBoxCard({
   const rarityColors = useRarityColors()
   const isEmpty = count === 0
   return (
-    <Card
-      className={cn(cardContainer(), isEmpty && 'opacity-40')}
-      animation="disable-all"
-      accessibilityLabel={`Mystery box, ${rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ', unavailable'}`}
-    >
-      <Card.Header className={cardImageContainer()}>
-        <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
+    <View className={cn(cardWrapper(), isEmpty && 'opacity-40')}>
+      <Card
+        className={cardContainer()}
+        animation="disable-all"
+        accessibilityLabel={`Mystery box, ${rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ', unavailable'}`}
+      >
+        <Card.Header className={cardImageContainer()}>
+          <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
 
-        {/* Opened — top-right */}
-        {box?.opened && (
-          <Chip
-            size="sm"
-            variant="secondary"
-            className={badgePosition({ position: 'topRight' })}
-            animation="disable-all"
-          >
-            <Chip.Label className={cn(badgeLabel(), 'font-bold')}>Opened</Chip.Label>
-          </Chip>
-        )}
-      </Card.Header>
-
-      <Card.Body className={cardBody()}>
-        <View className="flex-row items-center gap-2">
-          {count !== undefined && (
-            <Chip size="sm" variant="primary" animation="disable-all">
-              <Chip.Label className={badgeLabel({ size: 'xs' })}>×{count}</Chip.Label>
+          {/* Opened — top-right */}
+          {box?.opened && (
+            <Chip
+              size="sm"
+              variant="secondary"
+              className={badgePosition({ position: 'topRight' })}
+              animation="disable-all"
+            >
+              <Chip.Label className={cn(badgeLabel(), 'font-bold')}>Opened</Chip.Label>
             </Chip>
           )}
-          <Chip
-            size="sm"
-            variant="primary"
-            style={{ backgroundColor: rarityColors[rarity] }}
-            animation="disable-all"
-          >
-            <Chip.Label className={badgeLabel({ size: 'xs' })}>{rarity.toUpperCase()}</Chip.Label>
-          </Chip>
-        </View>
-        {action}
-      </Card.Body>
-    </Card>
+        </Card.Header>
+
+        <Card.Body className={cardBody()}>
+          <View className="flex-row items-center gap-2">
+            {count !== undefined && (
+              <Chip size="sm" variant="primary" animation="disable-all">
+                <Chip.Label className={badgeLabel({ size: 'xs' })}>×{count}</Chip.Label>
+              </Chip>
+            )}
+            <Chip
+              size="sm"
+              variant="primary"
+              style={{ backgroundColor: rarityColors[rarity] }}
+              animation="disable-all"
+            >
+              <Chip.Label className={badgeLabel({ size: 'xs' })}>{rarity.toUpperCase()}</Chip.Label>
+            </Chip>
+          </View>
+          {action}
+        </Card.Body>
+      </Card>
+    </View>
   )
 })

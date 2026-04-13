@@ -34,10 +34,11 @@ export const scrollContent = tv({
       md: 'px-5',
       lg: 'px-6',
     },
-    // default = no tab header above; withHeader = tab bar header present
+    // default = no tab header above; withHeader = tab bar header present; xl = extra clearance (vault)
     bottomPad: {
       default: 'pb-[120px]',
       withHeader: 'pb-[140px]',
+      xl: 'pb-[170px]',
     },
     align: {
       center: 'items-center w-full',
@@ -67,5 +68,5 @@ export const gridLayout = tv({
 // The dashed-border "Select NFT from Vault" placeholder shown in Poop and
 // Repair before the user picks an NFT.
 export const nftPickerButton = tv({
-  base: 'w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-outline flex-col mt-5',
+  base: 'w-[240px] h-[360px] rounded-2xl border-2 border-dashed border-outline flex-col',
 })

@@ -7,7 +7,7 @@ interface ScreenHeaderProps {
 }
 
 const SCREEN_TITLES: Record<string, string> = {
-  Poop: 'Poop',
+  Poop: 'Home',
   Vault: 'Vault',
   Breed: 'Breed',
   Repair: 'Repair',
@@ -16,7 +16,7 @@ const SCREEN_TITLES: Record<string, string> = {
 
 export default memo(function ScreenHeader({ title }: ScreenHeaderProps) {
   return (
-    <View className="h-12 items-center justify-center bg-surface">
+    <View className="absolute top-[60px] left-0 right-0 z-[99] h-12 items-center justify-center pointer-events-none">
       <Text className={screenTitle({ spacing: 'sm' })}>{SCREEN_TITLES[title] ?? title}</Text>
     </View>
   )

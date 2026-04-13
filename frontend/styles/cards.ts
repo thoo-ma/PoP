@@ -3,8 +3,11 @@ import { tv } from 'tailwind-variants'
 // ── Card image container ─────────────────────────────────────────────────────
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,
 // and BreedPickerModal grid items.
+// No border-radius here — the inner cardContainer's overflow-hidden + rounded-[13px]
+// handles corner clipping. The outer cardWrapper carries border + rounded-2xl without
+// overflow-hidden so React Native renders the border correctly at the corners.
 export const cardImageContainer = tv({
-  base: 'w-full aspect-square relative rounded-t-2xl overflow-hidden',
+  base: 'w-full aspect-square relative overflow-hidden',
 })
 
 // ── Badge position ───────────────────────────────────────────────────────────
@@ -112,10 +115,19 @@ export const breedPickerCard = tv({
   defaultVariants: { disabled: false },
 })
 
+// ── Card wrapper ─────────────────────────────────────────────────────────────
+// Outer border shell for NFTCard and MysteryBoxCard. Carries the border +
+// border-radius WITHOUT overflow-hidden, so React Native renders the border
+// correctly at the corners (RN clips border when overflow-hidden is also set).
+export const cardWrapper = tv({
+  base: 'w-full mb-4 border-[3px] border-outline border-b-[5px] rounded-2xl flex-1',
+})
+
 // ── Card container ────────────────────────────────────────────────────────────
-// Standard full-width grid card wrapper — NFTCard and MysteryBoxCard.
+// Inner card surface — handles overflow clipping. Radius is 13px (outer 16px
+// minus 3px border) so content is flush with the border's inner edge.
 export const cardContainer = tv({
-  base: 'w-full mb-4 overflow-hidden p-0 border-[3px] border-outline border-b-[5px] rounded-2xl flex-1',
+  base: 'w-full overflow-hidden p-0 rounded-[13px] flex-1',
 })
 
 // ── Card title (grid card) ────────────────────────────────────────────────────

@@ -120,7 +120,25 @@ import { canBreed } from '@/utils'
   const result = breedResultSection()
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-      <View>
+      <BreedPickerModal
+        visible={pickerSlot === 1}
+        title="Choose Parent 1"
+        allNFTs={nfts}
+        lockedId={parent2?.id}
+        lockedRarity={parent2?.rarity}
+        onSelect={handleSetParent1}
+        onClose={() => setPickerSlot(null)}
+      />
+      <BreedPickerModal
+        visible={pickerSlot === 2}
+        title="Choose Parent 2"
+        allNFTs={nfts}
+        lockedId={parent1?.id}
+        lockedRarity={parent1?.rarity}
+        onSelect={setParent2}
+        onClose={() => setPickerSlot(null)}
+      />
+      <View className="w-full flex-1">
         <ScrollView
           ref={scrollRef}
           contentContainerClassName={scrollContent({
@@ -130,26 +148,6 @@ import { canBreed } from '@/utils'
           })}
           showsVerticalScrollIndicator={false}
         >
-          {/* ── Picker modal ──────────────────────────────────────────────── */}
-          <BreedPickerModal
-            visible={pickerSlot === 1}
-            title="Choose Parent 1"
-            allNFTs={nfts}
-            lockedId={parent2?.id}
-            lockedRarity={parent2?.rarity}
-            onSelect={handleSetParent1}
-            onClose={() => setPickerSlot(null)}
-          />
-          <BreedPickerModal
-            visible={pickerSlot === 2}
-            title="Choose Parent 2"
-            allNFTs={nfts}
-            lockedId={parent1?.id}
-            lockedRarity={parent1?.rarity}
-            onSelect={setParent2}
-            onClose={() => setPickerSlot(null)}
-          />
-
           {!breedResult ? (
             <>
               {/* ── Parent slots ──────────────────────────────────────────── */}
@@ -173,7 +171,7 @@ import { canBreed } from '@/utils'
               {parent1 && parent2 ? (
                 <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
-                <View className={cn(infoBox({ border: 'dashed' }), 'mb-6')}>
+                <View className={cn(infoBox(), 'mb-6 items-center')}>
                   <Text className={breedInfoText({ size: 'hint' })}>
                     Select both parents to see outcome probabilities
                   </Text>
