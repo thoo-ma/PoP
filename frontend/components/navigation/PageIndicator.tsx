@@ -1,16 +1,16 @@
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import type { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs'
 import { memo, useLayoutEffect, useRef } from 'react'
 import { Animated, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { pageIndicator } from '@/styles'
 
-const TAB_ICONS: Record<string, keyof typeof MaterialIcons.glyphMap> = {
-  Poop: 'home',
-  Vault: 'account-balance-wallet',
-  Breed: 'sync',
-  Repair: 'construction',
-  Profile: 'account-circle',
+const TAB_ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  Poop: 'emoticon-poop',
+  Vault: 'treasure-chest',
+  Breed: 'flask-round-bottom',
+  Repair: 'hammer-screwdriver',
+  Profile: 'emoticon-happy',
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -71,7 +71,11 @@ const TabItem = memo(function TabItem({
         accessibilityState={{ selected: isFocused }}
       >
         <View className={s.iconContainer()}>
-          <MaterialIcons name={icon} size={28} color={isFocused ? activeColor : inactiveColor} />
+          <MaterialCommunityIcons
+            name={icon}
+            size={28}
+            color={isFocused ? activeColor : inactiveColor}
+          />
           <Text
             className={pageIndicator({ active: isFocused }).navLabel()}
             style={{ color: isFocused ? activeColor : inactiveColor }}
