@@ -95,7 +95,7 @@ export default memo(function StatAllocationModal({
         <Dialog.Overlay />
         <Dialog.Content className={s.content()}>
           <View className={s.header()}>
-            <Dialog.Title className={s.title()}>🎉 Level Up!</Dialog.Title>
+            <Dialog.Title className={s.title()}>Level Up!</Dialog.Title>
             <Dialog.Close variant="ghost" />
           </View>
 

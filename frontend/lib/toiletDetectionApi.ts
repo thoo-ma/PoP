@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import type { DetectionResult, RateLimitError } from '@/types/audio'
-import { getErrorMessage, isRateLimitError, logError } from '@/utils/errorHelpers'
+import { getErrorMessage, isRateLimitError } from '@/utils/errorHelpers'
 import { supabase } from './supabase'
 
 /**
@@ -57,8 +57,6 @@ export async function detectToiletFlush(
 
     return data as DetectionResult
   } catch (error) {
-    logError('ToiletDetectionAPI', error)
-
     // Re-throw if it's a structured error (like rate limit)
     if (isRateLimitError(error)) {
       throw error

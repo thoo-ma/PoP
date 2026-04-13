@@ -129,7 +129,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
           <>
             {result.won ? (
               <View className={wonStyles.root()}>
-                <Text className={wonStyles.title()}>🎁 You won!</Text>
+                <Text className={wonStyles.title()}>You won!</Text>
                 <Text className={wonStyles.body()}>
                   A Common Mystery Box has been added to your Vault.
                 </Text>

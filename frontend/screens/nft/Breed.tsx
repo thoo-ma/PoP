@@ -239,7 +239,7 @@ import { canBreed } from '@/utils'
           ) : (
             /* ── Result ───────────────────────────────────────────────────── */
             <View className={result.root()}>
-              <Text className={result.title()}>🎉 Mystery Box Earned!</Text>
+              <Text className={result.title()}>Mystery Box Earned!</Text>
 
               {/* Parents summary */}
               <View className={result.parentsRow()}>
