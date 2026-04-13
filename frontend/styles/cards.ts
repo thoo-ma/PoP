@@ -3,8 +3,9 @@ import { tv } from 'tailwind-variants'
 // ── Card image container ─────────────────────────────────────────────────────
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,
 // and BreedPickerModal grid items.
-// No border-radius here — the outer Card's overflow-hidden + rounded-2xl
-// handles corner clipping, preventing bg-surface from showing at top corners.
+// No border-radius here — the inner cardContainer's overflow-hidden + rounded-[13px]
+// handles corner clipping. The outer cardWrapper carries border + rounded-2xl without
+// overflow-hidden so React Native renders the border correctly at the corners.
 export const cardImageContainer = tv({
   base: 'w-full aspect-square relative overflow-hidden',
 })
