@@ -42,6 +42,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   } else if (process.env.APP_VARIANT === 'preview') {
     if (config.ios) {
       config.ios.bundleIdentifier = 'com.popcorporation.pop.prev'
+      config.ios.infoPlist = { ...config.ios.infoPlist, ITSAppUsesNonExemptEncryption: false }
     }
     config.android = config.android ?? {}
     config.android.package = 'com.popcorporation.pop.prev'
