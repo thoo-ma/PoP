@@ -263,7 +263,7 @@ export default memo(function Vault() {
                                 <Button
                                   variant="ghost"
                                   feedbackVariant="none"
-                                  isDisabled={updateLoading}
+                                  isDisabled
                                   onPress={() => handleListNFT(nft.id)}
                                   className={cn(
                                     tactileButton({ variant: 'primary', size: 'sm' }),
@@ -278,7 +278,7 @@ export default memo(function Vault() {
                                       size: 'sm',
                                     })}
                                   >
-                                    {updateLoading ? 'Listing...' : 'Sale'}
+                                    Sale
                                   </Button.Label>
                                 </Button>
                               ) : undefined}
