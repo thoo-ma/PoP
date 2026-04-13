@@ -254,12 +254,15 @@ export default memo(function Poop() {
     startRecording()
   }
 
-  // Auto-analyze once audioUri is available
+  // Auto-analyze once audioUri is available.
+  // Guard on !detectionError so a failed attempt does not re-trigger analyzeAudio
+  // (which would call clearError() and wipe the error before the phase transition
+  // to 'results', causing a flash of the success state).
   useEffect(() => {
-    if (phase === 'recording' && audioUri && !isAnalyzing && !detectionResult) {
+    if (phase === 'recording' && audioUri && !isAnalyzing && !detectionResult && !detectionError) {
       analyzeAudio(GAME_THRESHOLD)
     }
-  }, [phase, audioUri, isAnalyzing, detectionResult, analyzeAudio])
+  }, [phase, audioUri, isAnalyzing, detectionResult, detectionError, analyzeAudio])
 
   // Transition to results
   useEffect(() => {
@@ -387,7 +390,7 @@ export default memo(function Poop() {
           </Text>
           <View className={badgeStyles.root()}>
             <Text className={badgeStyles.label()}>
-              {isWarning ? '🔴 Movement detected!' : '🟢 Hold still'}
+              {isWarning ? 'Movement detected!' : 'Hold still'}
             </Text>
           </View>
         </View>
@@ -408,7 +411,7 @@ export default memo(function Poop() {
     <View className={phaseContainer()}>
       {renderChallengeHeader()}
       <View className={infoCard()}>
-        <Text className={pt.promptTitle()}>✓ Immobility confirmed!</Text>
+        <Text className={pt.promptTitle()}>Immobility confirmed!</Text>
         <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
       </View>
       <Button
@@ -441,7 +444,7 @@ export default memo(function Poop() {
         {renderChallengeHeader()}
         {isAnalyzing ? (
           <View className={infoCard()}>
-            <Text className={pt.statusText()}>🔍 Analyzing audio…</Text>
+            <Text className={pt.statusText()}>Analyzing audio…</Text>
           </View>
         ) : isRecording ? (
           <View className={infoCard()}>
@@ -553,13 +556,19 @@ export default memo(function Poop() {
         </View>
       )
     }
+    // Guard: only render success when flush was explicitly confirmed.
+    // Without this check the fallthrough renders "Flush confirmed!" even
+    // when detectionResult is still null (e.g. brief transition render
+    // before detectionError is committed), causing a visible false-positive flash.
+    if (!detectionResult?.detected) return null
+
     // Success
     const cardStyles = resultCard({ status: 'success' })
     return (
       <View className={phaseContainer()}>
         {renderChallengeHeader()}
         <View className={cardStyles.root()}>
-          <Text className={cardStyles.title()}>💧 Flush confirmed!</Text>
+          <Text className={cardStyles.title()}>Flush confirmed!</Text>
           {poopedEnergy && (
             <Text className={cardStyles.detail()}>
               Energy: {poopedEnergy.from} → {poopedEnergy.to}
@@ -569,11 +578,11 @@ export default memo(function Poop() {
             <>
               <Text className={cardStyles.detail()}>+{poopedXP.gained} XP</Text>
               {poopedXP.leveledUp && (
-                <Text className={cardStyles.detail()}>🎉 Level Up! Now Lv {poopedXP.level}</Text>
+                <Text className={cardStyles.detail()}>Level Up! Now Lv {poopedXP.level}</Text>
               )}
             </>
           )}
-          {poopedPoop && <Text className={cardStyles.detail()}>+{poopedPoop.earned} 💩 POOP</Text>}
+          {poopedPoop && <Text className={cardStyles.detail()}>+{poopedPoop.earned} POOP</Text>}
           {actionLoading && <Text className={cardStyles.detail()}>Saving…</Text>}
         </View>
         {lootRollId ? (

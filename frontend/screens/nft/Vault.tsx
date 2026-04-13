@@ -23,6 +23,7 @@ import {
   skeletonCard,
   tactileButton,
   tactileButtonText,
+  tactileNavButton,
 } from '@/styles'
 import type { NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
@@ -51,6 +52,7 @@ export default memo(function Vault() {
   const [revealedNFT, setRevealedNFT] = useState<NFT | null>(null)
   const [revealVisible, setRevealVisible] = useState(false)
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Filter NFTs based on selected rarities and types
   /** Boxes grouped by rarity, sorted transcendent → common. Always includes all 4 rarities. */
@@ -170,6 +172,14 @@ export default memo(function Vault() {
     setRevealVisible(false)
   }, [])
 
+  const handleScrollToTop = useCallback(() => {
+    if (activeTab === 'toilets') {
+      nftScrollRef.current?.scrollTo({ y: 0, animated: true })
+    } else {
+      boxScrollRef.current?.scrollTo({ y: 0, animated: true })
+    }
+  }, [activeTab])
+
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />
   }
@@ -186,7 +196,10 @@ export default memo(function Vault() {
       <Tabs
         className="w-full"
         value={activeTab}
-        onValueChange={(v) => setActiveTab(v as 'toilets' | 'mystery-boxes')}
+        onValueChange={(v) => {
+          setActiveTab(v as 'toilets' | 'mystery-boxes')
+          setShowScrollTop(false)
+        }}
       >
         <Tabs.List className="self-center bg-surface border-[3px] border-outline border-b-[6px] rounded-full px-1 py-1">
           <Tabs.Indicator className="bg-surface-container-low border-2 border-outline rounded-full" />
@@ -228,6 +241,8 @@ export default memo(function Vault() {
             contentInset={{ bottom: 170 }}
             scrollIndicatorInsets={{ bottom: 170 }}
             showsVerticalScrollIndicator={false}
+            onScroll={(e) => setShowScrollTop(e.nativeEvent.contentOffset.y > 600)}
+            scrollEventThrottle={100}
           >
             <View className="w-full">
               {nftRows.map((pair) => (
@@ -255,7 +270,7 @@ export default memo(function Vault() {
                                     size: 'sm',
                                   })}
                                 >
-                                  ⚡ Allocate {nft.stat_points} pt
+                                  Allocate {nft.stat_points} pt
                                   {nft.stat_points !== 1 ? 's' : ''}
                                 </Button.Label>
                               </Button>
@@ -321,6 +336,8 @@ export default memo(function Vault() {
               contentInset={{ bottom: 170 }}
               scrollIndicatorInsets={{ bottom: 170 }}
               showsVerticalScrollIndicator={false}
+              onScroll={(e) => setShowScrollTop(e.nativeEvent.contentOffset.y > 600)}
+              scrollEventThrottle={100}
             >
               <View className="w-full">
                 {boxRows.map((pair) => (
@@ -386,6 +403,21 @@ export default memo(function Vault() {
         nft={revealedNFT}
         onClose={handleRevealClose}
       />
+
+      {showScrollTop && (
+        <Button
+          variant="ghost"
+          feedbackVariant="none"
+          onPress={handleScrollToTop}
+          className={cn(
+            tactileNavButton(),
+            'absolute bottom-44 right-4 border-outline border-b-outline',
+          )}
+          accessibilityLabel="Scroll to top"
+        >
+          <Button.Label className="text-on-surface text-[20px] font-black">↑</Button.Label>
+        </Button>
+      )}
     </View>
   )
 })

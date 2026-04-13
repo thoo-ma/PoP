@@ -214,7 +214,7 @@ export default memo(function Repair() {
 
                   {isRepaired && (
                     <View className={rs.root()}>
-                      <Text className={rs.text()}>✓ Repair Complete!</Text>
+                      <Text className={rs.text()}>Repair Complete!</Text>
                       {repairedEnergy !== null && (
                         <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
                       )}
