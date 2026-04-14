@@ -132,6 +132,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
         <DevMockProvider
           value={{
             userNFTs: { nfts: [MOCK_NFT_READY], loading: false, error: null, refetch: () => {} },
+            wallet: { poopBalance: 1000, loading: false, error: null, refetch: () => {} },
           }}
         >
           <Breed />
