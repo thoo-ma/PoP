@@ -98,7 +98,7 @@ export const skeletonCard = tv({
 // Grid item card used in BreedPickerModal's 2-column NFT list.
 export const breedPickerCard = tv({
   slots: {
-    root: 'overflow-hidden rounded-xl p-0',
+    root: 'overflow-hidden rounded-xl p-0 border-[3px] border-outline',
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
