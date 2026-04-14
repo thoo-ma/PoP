@@ -3,7 +3,7 @@ import { tv } from 'tailwind-variants'
 // ── Profile modal ─────────────────────────────────────────────────────────────
 export const profileModal = tv({
   slots: {
-    scrollContainer: 'flex-grow items-center justify-center px-6 pb-10 pt-4',
+    scrollContainer: 'flex-grow items-center justify-center px-6 pb-32 pt-4',
     avatarWrap: 'mt-4 mb-4 rounded-full border-[3px] border-outline overflow-hidden',
     title: 'text-3xl font-black text-on-surface mb-2',
     username: 'text-lg font-bold text-on-surface mb-1',

@@ -69,7 +69,7 @@ function PreviewShell({ children, onBack }: { children: ReactNode; onBack: () =>
   return (
     <View className="flex-1">
       {children}
-      <View className="absolute bottom-10 left-6 right-6">
+      <View className="absolute bottom-32 left-6 right-6">
         <Button
           variant="ghost"
           feedbackVariant="none"
