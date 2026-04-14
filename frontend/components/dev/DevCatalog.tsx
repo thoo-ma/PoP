@@ -141,8 +141,16 @@ function Section({
 
 // ─── DevCatalog ──────────────────────────────────────────────────────────────
 
-export default function DevCatalog({ onSelect }: { onSelect: (key: string) => void }) {
-  const [expandedSections, setExpandedSections] = useState<Set<number>>(() => new Set([0]))
+export default function DevCatalog({
+  onSelect,
+  initialExpandedSections,
+}: {
+  onSelect: (key: string, sectionIndex: number) => void
+  initialExpandedSections?: Set<number>
+}) {
+  const [expandedSections, setExpandedSections] = useState<Set<number>>(
+    () => initialExpandedSections ?? new Set(),
+  )
 
   const toggleSection = useCallback((index: number) => {
     setExpandedSections((prev) => {
@@ -165,7 +173,7 @@ export default function DevCatalog({ onSelect }: { onSelect: (key: string) => vo
           section={section}
           expanded={expandedSections.has(i)}
           onToggle={() => toggleSection(i)}
-          onSelect={onSelect}
+          onSelect={(key) => onSelect(key, i)}
         />
       ))}
     </View>

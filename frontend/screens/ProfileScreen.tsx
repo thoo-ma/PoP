@@ -35,8 +35,10 @@ export default function ProfileScreen() {
   const { poopBalance, loading: walletLoading } = useWallet()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [activePreview, setActivePreview] = useState<string | null>(null)
+  const [activeSectionIndex, setActiveSectionIndex] = useState<number | null>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
   const scrollRef = useRef<ScrollView>(null)
+  const savedScrollY = useRef<number>(0)
   useScrollToTop(scrollRef)
 
   const onSurface = useCSSVariable('--color-on-surface') as string
@@ -63,7 +65,12 @@ export default function ProfileScreen() {
   const w = walletModal()
 
   if (__DEV__ && activePreview && renderDevPreview) {
-    return renderDevPreview(activePreview, () => setActivePreview(null)) as unknown as ReactElement
+    return renderDevPreview(activePreview, () => {
+      setActivePreview(null)
+      requestAnimationFrame(() => {
+        scrollRef.current?.scrollTo({ y: savedScrollY.current, animated: false })
+      })
+    }) as unknown as ReactElement
   }
 
   return (
@@ -73,6 +80,10 @@ export default function ProfileScreen() {
           ref={scrollRef}
           contentContainerClassName={p.scrollContainer()}
           showsVerticalScrollIndicator={false}
+          onScroll={(e) => {
+            savedScrollY.current = e.nativeEvent.contentOffset.y
+          }}
+          scrollEventThrottle={16}
         >
           {/* Avatar */}
           <View className={p.avatarWrap()}>
@@ -126,7 +137,17 @@ export default function ProfileScreen() {
           </View>
 
           {/* DEV catalog */}
-          {__DEV__ && DevCatalog && <DevCatalog onSelect={setActivePreview} />}
+          {__DEV__ && DevCatalog && (
+            <DevCatalog
+              onSelect={(key, sectionIndex) => {
+                setActiveSectionIndex(sectionIndex)
+                setActivePreview(key)
+              }}
+              initialExpandedSections={
+                activeSectionIndex !== null ? new Set([activeSectionIndex]) : new Set()
+              }
+            />
+          )}
           <Button
             variant="ghost"
             feedbackVariant="none"
