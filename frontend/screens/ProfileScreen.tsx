@@ -69,7 +69,7 @@ export default function ProfileScreen() {
 
   return (
     <View className={screenContainer({ bg: 'surface' })}>
-      <View className="flex-1">
+      <View className="flex-1 w-full">
         <ScrollView
           ref={scrollRef}
           contentContainerClassName={p.scrollContainer()}

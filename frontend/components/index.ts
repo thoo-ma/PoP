@@ -1,5 +1,5 @@
 export { Auth, OAuthButton } from './auth'
-export { BreedOutcomePanel, BreedParentSlot, BreedPickerModal } from './breed'
+export { BreedOutcomePanel, BreedParentSlot, BreedPickerItemCard, BreedPickerModal } from './breed'
 export { FilterControls, SortControls } from './controls'
 export { PageIndicator, ScreenHeader } from './navigation'
 export {
@@ -7,6 +7,7 @@ export {
   MysteryBoxCard,
   MysteryBoxRevealModal,
   NFTCard,
+  NFTDetailCard,
   NFTProperties,
   NFTSelector,
   StatAllocationModal,

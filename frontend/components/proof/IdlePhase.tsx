@@ -1,20 +1,15 @@
 import { Button, cn } from 'heroui-native'
-import { Image, Text, View } from 'react-native'
-import NFTProperties from '@/components/nft/NFTProperties'
+import { Text, View } from 'react-native'
+import { NFTDetailCard } from '@/components'
 import NFTSelector from '@/components/nft/NFTSelector'
 import {
-  badgeLabel,
-  nftDetailCard,
   nftPickerButton,
   nftPickerPlaceholder,
-  overlayBadge,
   tactileButton,
   tactileButtonText,
   toastBanner,
-  typeBadge,
 } from '@/styles'
 import type { NFT } from '@/types'
-import { formatDisplayName } from '@/utils'
 
 type Props = {
   nfts: NFT[]
@@ -46,7 +41,6 @@ export function IdlePhase({
   onPoop,
 }: Props) {
   const toastStyles = toastBanner()
-  const detailStyles = nftDetailCard()
   const ph = nftPickerPlaceholder()
   return (
     <>
@@ -79,41 +73,7 @@ export function IdlePhase({
               onNext={onNext}
               className="mb-3"
             />
-            <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-              <View className={detailStyles.imageWrap()}>
-                <Image
-                  source={{ uri: displayNFT.image_url }}
-                  className={detailStyles.image()}
-                  resizeMode="cover"
-                />
-                <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
-                  <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {displayNFT.level}</Text>
-                </View>
-                <View
-                  className={cn(
-                    overlayBadge({ position: 'topRight' }),
-                    typeBadge({ type: displayNFT.type }),
-                  )}
-                >
-                  <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
-                    {displayNFT.type.toUpperCase()}
-                  </Text>
-                </View>
-              </View>
-              <View className={cn(detailStyles.content(), 'p-4')}>
-                <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                  {formatDisplayName(displayNFT.name)}
-                </Text>
-                <NFTProperties
-                  efficiency={displayNFT.efficiency}
-                  resilience={displayNFT.resilience}
-                  comfort={displayNFT.comfort}
-                  luck={displayNFT.luck}
-                  energy={displayNFT.energy}
-                  mode="compact"
-                />
-              </View>
-            </View>
+            <NFTDetailCard nft={displayNFT} />
           </>
         )}
       </View>

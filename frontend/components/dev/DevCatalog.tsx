@@ -106,7 +106,7 @@ function Section({
   onSelect: (key: string) => void
 }) {
   return (
-    <View className="mb-2">
+    <View className="mb-2 w-full">
       <Pressable
         onPress={onToggle}
         className="flex-row items-center justify-between bg-surface-container-low rounded-xl px-3 py-2.5 border-2 border-outline"
@@ -116,7 +116,7 @@ function Section({
         </Text>
       </Pressable>
       {expanded && (
-        <View className="flex-row flex-wrap gap-2 mt-2">
+        <View className="flex-row flex-wrap gap-2 mt-2 w-full">
           {section.entries.map(([key, label]) => (
             <Button
               key={key}

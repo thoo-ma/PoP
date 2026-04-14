@@ -1,11 +1,11 @@
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import type { NFTRarity } from '@pop/shared'
-import { BottomSheet, Card, PressableFeedback } from 'heroui-native'
-import { Image, Text, useWindowDimensions, View } from 'react-native'
-import { useRarityColors } from '@/hooks'
-import { breedPickerCard, pickerModal } from '@/styles'
+import { BottomSheet } from 'heroui-native'
+import { Text, useWindowDimensions } from 'react-native'
+import { pickerModal } from '@/styles'
 import type { NFT } from '@/types'
-import { canBreed, formatDisplayName } from '@/utils'
+import { canBreed } from '@/utils'
+import BreedPickerItemCard from './BreedPickerItemCard'
 
 const GRID_PADDING = 16
 const GRID_GAP = 12
@@ -38,8 +38,8 @@ export default function BreedPickerModal({
   onSelect,
   onClose,
 }: BreedPickerModalProps) {
+  const s = pickerModal()
   const { width: windowWidth } = useWindowDimensions()
-  const rarityColors = useRarityColors()
   const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2
 
   const items = allNFTs.map((nft) => ({
@@ -47,8 +47,6 @@ export default function BreedPickerModal({
     disabled:
       nft.id === lockedId || (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
   }))
-
-  const s = pickerModal()
 
   return (
     <BottomSheet
@@ -72,53 +70,18 @@ export default function BreedPickerModal({
             columnWrapperStyle={{ gap: GRID_GAP }}
             contentContainerStyle={{ padding: GRID_PADDING, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => {
-              const s = breedPickerCard({ disabled: item.disabled })
-              const isSelected = lockedId !== undefined && lockedId === item.nft.id
-              const hint = item.disabled
-                ? isSelected
-                  ? 'This NFT is already selected as a parent'
-                  : 'This NFT is incompatible as a parent'
-                : 'Tap to select as parent'
-              return (
-                <PressableFeedback
-                  onPress={() => {
-                    onSelect(item.nft)
-                    onClose()
-                  }}
-                  isDisabled={item.disabled}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: item.disabled, selected: isSelected }}
-                  accessibilityLabel={`Select ${formatDisplayName(item.nft.name)}`}
-                  accessibilityHint={hint}
-                  style={{ width: cardWidth }}
-                  className="mb-3"
-                >
-                  <Card className={s.root()} animation="disable-all">
-                    <View className={s.image()}>
-                      <Image
-                        source={{ uri: item.nft.image_url }}
-                        className="w-full h-full"
-                        resizeMode="cover"
-                      />
-                      {item.disabled && <View className={s.disabledOverlay()} />}
-                      <View
-                        className={s.rarityDot()}
-                        style={{ backgroundColor: rarityColors[item.nft.rarity] }}
-                      />
-                    </View>
-                    <View className={s.info()}>
-                      <Text className={s.name()} numberOfLines={1}>
-                        {formatDisplayName(item.nft.name)}
-                      </Text>
-                      <Text className={s.rarity()} style={{ color: rarityColors[item.nft.rarity] }}>
-                        {item.nft.rarity}
-                      </Text>
-                    </View>
-                  </Card>
-                </PressableFeedback>
-              )
-            }}
+            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => (
+              <BreedPickerItemCard
+                nft={item.nft}
+                disabled={item.disabled}
+                isSelected={lockedId !== undefined && lockedId === item.nft.id}
+                width={cardWidth}
+                onPress={() => {
+                  onSelect(item.nft)
+                  onClose()
+                }}
+              />
+            )}
           />
         </BottomSheet.Content>
       </BottomSheet.Portal>

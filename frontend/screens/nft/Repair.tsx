@@ -2,20 +2,17 @@ import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog, Slider } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
-import { Image, ScrollView, Text, View } from 'react-native'
-import { DegenBar, NFTProperties, NFTSelector, ScreenError, ScreenLoader } from '@/components'
+import { ScrollView, Text, View } from 'react-native'
+import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, ScreenLoader } from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
-  badgeLabel,
   bustMessage,
   costStrikethrough,
   dialogBody,
   dialogFooter,
   infoBox,
-  nftDetailCard,
   nftPickerButton,
   nftPickerPlaceholder,
-  overlayBadge,
   repairAmountBox,
   repairFullEnergy,
   repairSuccess,
@@ -23,9 +20,7 @@ import {
   scrollContent,
   tactileButton,
   tactileButtonText,
-  typeBadge,
 } from '@/styles'
-import { formatDisplayName } from '@/utils'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
@@ -56,7 +51,6 @@ export default memo(function Repair() {
   const poopCost = selectedNFT
     ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY)
     : 0
-  const detailStyles = nftDetailCard()
   const ra = repairAmountBox()
   const rs = repairSuccess()
   const rfe = repairFullEnergy()
@@ -168,47 +162,10 @@ export default memo(function Repair() {
                   )}
                   {/* Selected NFT Card */}
                   {!isRepaired && selectedNFT && (
-                    <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-                      <View className={detailStyles.imageWrap()}>
-                        <Image
-                          source={{ uri: selectedNFT.image_url }}
-                          className={detailStyles.image()}
-                          resizeMode="cover"
-                        />
-                        <View
-                          className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}
-                        >
-                          <Text className={cn(badgeLabel(), 'tracking-wide')}>
-                            Lv {selectedNFT.level}
-                          </Text>
-                        </View>
-                        <View
-                          className={cn(
-                            overlayBadge({ position: 'topRight' }),
-                            typeBadge({ type: selectedNFT.type }),
-                          )}
-                        >
-                          <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
-                            {selectedNFT.type.toUpperCase()}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View className={cn(detailStyles.content(), 'p-4')}>
-                        <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                          {formatDisplayName(selectedNFT.name)}
-                        </Text>
-
-                        <NFTProperties
-                          efficiency={selectedNFT.efficiency}
-                          resilience={selectedNFT.resilience}
-                          comfort={selectedNFT.comfort}
-                          luck={selectedNFT.luck}
-                          energy={currentEnergy + Math.round(repairAmount)}
-                          mode="compact"
-                        />
-                      </View>
-                    </View>
+                    <NFTDetailCard
+                      nft={selectedNFT}
+                      energy={currentEnergy + Math.round(repairAmount)}
+                    />
                   )}
 
                   {isRepaired && (
