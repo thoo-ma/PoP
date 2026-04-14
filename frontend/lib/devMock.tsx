@@ -20,13 +20,13 @@ export interface DevMockContextValue {
     nfts: NFT[]
     loading: boolean
     error: string | null
-    refetch: () => void
+    refetch: () => Promise<void>
   }
   wallet?: {
     poopBalance: number | null
     loading: boolean
     error: string | null
-    refetch: () => void
+    refetch: () => Promise<void>
   }
   breedNFT?: {
     breedNFTs: (parent1Id: string, parent2Id: string, degenPercent?: number) => Promise<null>

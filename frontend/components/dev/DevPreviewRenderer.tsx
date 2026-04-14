@@ -131,8 +131,13 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <DevMockProvider
           value={{
-            userNFTs: { nfts: [MOCK_NFT_READY], loading: false, error: null, refetch: () => {} },
-            wallet: { poopBalance: 1000, loading: false, error: null, refetch: () => {} },
+            userNFTs: {
+              nfts: [MOCK_NFT_READY],
+              loading: false,
+              error: null,
+              refetch: async () => {},
+            },
+            wallet: { poopBalance: 1000, loading: false, error: null, refetch: async () => {} },
           }}
         >
           <Breed />
@@ -149,9 +154,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               nfts: [MOCK_NFT_READY, MOCK_NFT_COMMON],
               loading: false,
               error: null,
-              refetch: () => {},
+              refetch: async () => {},
             },
-            wallet: { poopBalance: 1000, loading: false, error: null, refetch: () => {} },
+            wallet: { poopBalance: 1000, loading: false, error: null, refetch: async () => {} },
           }}
         >
           <Breed />
@@ -274,9 +279,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               nfts: [MOCK_NFT_READY, MOCK_NFT_COMMON],
               loading: false,
               error: null,
-              refetch: () => {},
+              refetch: async () => {},
             },
-            wallet: { poopBalance: 380, loading: false, error: null, refetch: () => {} },
+            wallet: { poopBalance: 380, loading: false, error: null, refetch: async () => {} },
             breedNFT: {
               breedNFTs: async () => null,
               loading: false,
@@ -342,9 +347,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               nfts: [MOCK_NFT_READY],
               loading: false,
               error: null,
-              refetch: () => {},
+              refetch: async () => {},
             },
-            wallet: { poopBalance: 500, loading: false, error: null, refetch: () => {} },
+            wallet: { poopBalance: 500, loading: false, error: null, refetch: async () => {} },
           }}
         >
           <Repair />
@@ -357,8 +362,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <DevMockProvider
           value={{
-            userNFTs: { nfts: [], loading: false, error: null, refetch: () => {} },
-            wallet: { poopBalance: 500, loading: false, error: null, refetch: () => {} },
+            userNFTs: { nfts: [], loading: false, error: null, refetch: async () => {} },
+            wallet: { poopBalance: 500, loading: false, error: null, refetch: async () => {} },
           }}
         >
           <Repair />

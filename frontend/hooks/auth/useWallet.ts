@@ -37,7 +37,7 @@ export function useWallet() {
       }
       setLoading(false)
     },
-    [mock],
+    [mock?.wallet],
   )
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function useWallet() {
     return () => {
       if (channel) supabase.removeChannel(channel)
     }
-  }, [fetchBalance, mock])
+  }, [fetchBalance, mock?.wallet])
 
   const refetch = async () => {
     setLoading(true)
