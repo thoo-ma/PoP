@@ -2,16 +2,11 @@ import { getThresholdForDifficulty } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { Image, ScrollView, Text, View } from 'react-native'
 import {
-  ChallengeHeader,
-  CountdownPhase,
-  IdlePhase,
-  ImmobilityPhase,
-  PromptPhase,
-  RecordingPhase,
-  ResultsPhase,
-  RoulettePhase,
+  LootRouletteCard,
+  NFTProperties,
+  NFTSelector,
   ScreenError,
   ScreenLoader,
   StatAllocationModal,
@@ -19,8 +14,31 @@ import {
 import { getCooldownStatus } from '@/constants'
 import type { AllocateResult } from '@/hooks'
 import { useImmobilityChallenge, usePoopNFT, useToiletDetection, useUserNFTs } from '@/hooks'
-import { dialogBody, dialogFooter, scrollContent, tactileButton, tactileButtonText } from '@/styles'
+import {
+  badgeLabel,
+  challengeHeader,
+  dialogBody,
+  dialogFooter,
+  infoCard,
+  nftDetailCard,
+  nftPickerButton,
+  nftPickerPlaceholder,
+  overlayBadge,
+  phaseContainer,
+  phaseContent,
+  phaseText,
+  recordingIndicator,
+  resultCard,
+  scrollContent,
+  statusBadge,
+  tactileButton,
+  tactileButtonText,
+  timerText,
+  toastBanner,
+  typeBadge,
+} from '@/styles'
 import type { NFT } from '@/types'
+import { formatConfidencePercentage, formatDisplayName } from '@/utils'
 
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
   'turbo-flush': 5_000,
@@ -270,13 +288,6 @@ export default memo(function Poop() {
     setPhase('idle')
   }, [clearResult])
 
-  // Fallback: roulette phase entered but no pending roll (edge function failed to upsert)
-  useEffect(() => {
-    if (phase === 'roulette' && !lootRollId) {
-      handleFullReset()
-    }
-  }, [phase, lootRollId, handleFullReset])
-
   // ── Grant XP on confirmed flush ───────────────────────────
   useEffect(() => {
     if (phase !== 'results') return
@@ -325,6 +336,297 @@ export default memo(function Poop() {
   if (error) return <ScreenError title="Poop" message={`Error: ${error}`} onRetry={refetch} />
 
   // ═════════════════════════════════════════════════════════
+  // RENDERERS
+  // ═════════════════════════════════════════════════════════
+
+  const renderChallengeHeader = () => {
+    if (!displayNFT) return null
+    const headerStyles = challengeHeader()
+    return (
+      <View className={headerStyles.root()}>
+        <Image
+          source={{ uri: displayNFT.image_url }}
+          className={headerStyles.avatar()}
+          resizeMode="cover"
+        />
+        <View className={headerStyles.info()}>
+          <Text className={headerStyles.name()}>{formatDisplayName(displayNFT.name)}</Text>
+          <Text className={headerStyles.subtitle()}>
+            Lv {displayNFT.level} · {displayNFT.type}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+
+  const renderCountdownPhase = () => (
+    <View className={phaseContainer()}>
+      {renderChallengeHeader()}
+      <View className={phaseContent()}>
+        <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
+        <Text className={pt.hint()}>Get ready…</Text>
+      </View>
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleCancelCountdownOrImmobility}
+        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
+      </Button>
+    </View>
+  )
+
+  const renderImmobilityPhase = () => {
+    const isWarning = status === 'warning'
+    const badgeStyles = statusBadge({ status: isWarning ? 'warning' : 'ok' })
+    return (
+      <View className={phaseContainer()}>
+        {renderChallengeHeader()}
+        <View className={phaseContent()}>
+          <Text className={timerText({ status: isWarning ? 'danger' : 'normal' })}>
+            {(remainingTime / 1000).toFixed(1)}s
+          </Text>
+          <View className={badgeStyles.root()}>
+            <Text className={badgeStyles.label()}>
+              {isWarning ? 'Movement detected!' : 'Hold still'}
+            </Text>
+          </View>
+        </View>
+        <Button
+          animation="disable-all"
+          variant="ghost"
+          feedbackVariant="none"
+          onPress={handleCancelCountdownOrImmobility}
+          className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+        >
+          <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
+        </Button>
+      </View>
+    )
+  }
+
+  const renderPromptPhase = () => (
+    <View className={phaseContainer()}>
+      {renderChallengeHeader()}
+      <View className={infoCard()}>
+        <Text className={pt.promptTitle()}>Immobility confirmed!</Text>
+        <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
+      </View>
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleStartRecording}
+        className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+          Start Recording
+        </Button.Label>
+      </Button>
+      <Button
+        animation="disable-all"
+        variant="ghost"
+        feedbackVariant="none"
+        onPress={handleCancelPrompt}
+        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+      >
+        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
+      </Button>
+    </View>
+  )
+
+  const renderRecordingPhase = () => {
+    const recordStyles = recordingIndicator()
+    return (
+      <View className={phaseContainer()}>
+        {renderChallengeHeader()}
+        {isAnalyzing ? (
+          <View className={infoCard()}>
+            <Text className={pt.statusText()}>Analyzing audio…</Text>
+          </View>
+        ) : isRecording ? (
+          <View className={infoCard()}>
+            <View className={recordStyles.root()}>
+              <View className={recordStyles.dot()} />
+              <Text className={recordStyles.label()}>Recording…</Text>
+            </View>
+            <Button
+              animation="disable-all"
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={stopRecording}
+              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+            >
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                Stop
+              </Button.Label>
+            </Button>
+          </View>
+        ) : (
+          <View className={infoCard()}>
+            <Text className={pt.statusText()}>Processing…</Text>
+          </View>
+        )}
+        {!isAnalyzing && (
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleCancelRecording}
+            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+              Cancel
+            </Button.Label>
+          </Button>
+        )}
+      </View>
+    )
+  }
+
+  const renderResultsPhase = () => {
+    if (rateLimitError) {
+      const cardStyles = resultCard({ status: 'warning' })
+      return (
+        <View className={phaseContainer()}>
+          {renderChallengeHeader()}
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Daily limit reached</Text>
+            <Text className={cardStyles.detail()}>{rateLimitError.message}</Text>
+          </View>
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
+          </Button>
+        </View>
+      )
+    }
+    if (detectionError && !detectionResult) {
+      const cardStyles = resultCard({ status: 'warning' })
+      return (
+        <View className={phaseContainer()}>
+          {renderChallengeHeader()}
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Something went wrong</Text>
+            <Text className={cardStyles.detail()}>{detectionError}</Text>
+          </View>
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Try Again
+            </Button.Label>
+          </Button>
+        </View>
+      )
+    }
+    if (detectionResult && !detectionResult.detected) {
+      const cardStyles = resultCard({ status: 'failure' })
+      return (
+        <View className={phaseContainer()}>
+          {renderChallengeHeader()}
+          <View className={cardStyles.root()}>
+            <Text className={cardStyles.title()}>Flush not detected</Text>
+            <Text className={cardStyles.detail()}>
+              Confidence: {formatConfidencePercentage(detectionResult.confidence)}
+            </Text>
+          </View>
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Try Again
+            </Button.Label>
+          </Button>
+        </View>
+      )
+    }
+    // Guard: only render success when flush was explicitly confirmed.
+    // Without this check the fallthrough renders "Flush confirmed!" even
+    // when detectionResult is still null (e.g. brief transition render
+    // before detectionError is committed), causing a visible false-positive flash.
+    if (!detectionResult?.detected) return null
+
+    // Success
+    const cardStyles = resultCard({ status: 'success' })
+    return (
+      <View className={phaseContainer()}>
+        {renderChallengeHeader()}
+        <View className={cardStyles.root()}>
+          <Text className={cardStyles.title()}>Flush confirmed!</Text>
+          {poopedEnergy && (
+            <Text className={cardStyles.detail()}>
+              Energy: {poopedEnergy.from} → {poopedEnergy.to}
+            </Text>
+          )}
+          {poopedXP && (
+            <>
+              <Text className={cardStyles.detail()}>+{poopedXP.gained} XP</Text>
+              {poopedXP.leveledUp && (
+                <Text className={cardStyles.detail()}>Level Up! Now Lv {poopedXP.level}</Text>
+              )}
+            </>
+          )}
+          {poopedPoop && <Text className={cardStyles.detail()}>+{poopedPoop.earned} POOP</Text>}
+          {actionLoading && <Text className={cardStyles.detail()}>Saving…</Text>}
+        </View>
+        {lootRollId ? (
+          <Button
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={() => setPhase('roulette')}
+            isDisabled={actionLoading}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              Continue →
+            </Button.Label>
+          </Button>
+        ) : (
+          <Button
+            animation="disable-all"
+            variant="ghost"
+            feedbackVariant="none"
+            onPress={handleFullReset}
+            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          >
+            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
+          </Button>
+        )}
+      </View>
+    )
+  }
+
+  const renderRoulettePhase = () => {
+    if (!lootRollId) {
+      // Fallback: no pending roll (e.g. edge function failed to upsert)
+      handleFullReset()
+      return null
+    }
+    return (
+      <View className={phaseContainer()}>
+        {renderChallengeHeader()}
+        <LootRouletteCard lootRollId={lootRollId} onDone={handleFullReset} />
+      </View>
+    )
+  }
+
+  // ═════════════════════════════════════════════════════════
   // IDLE SCREEN
   // ═════════════════════════════════════════════════════════
   const cooldown = displayNFT ? getCooldownStatus(displayNFT) : null
@@ -340,6 +642,12 @@ export default memo(function Poop() {
         : selectedIndex === null
           ? 'Select an NFT'
           : 'Poop'
+
+  const toastStyles = toastBanner()
+  const detailStyles = nftDetailCard()
+  const ph = nftPickerPlaceholder()
+
+  const pt = phaseText()
 
   return (
     <>
@@ -357,55 +665,12 @@ export default memo(function Poop() {
             )}
             showsVerticalScrollIndicator={false}
           >
-            {phase === 'countdown' && displayNFT && (
-              <CountdownPhase
-                nft={displayNFT}
-                countdownValue={countdownValue}
-                onCancel={handleCancelCountdownOrImmobility}
-              />
-            )}
-            {phase === 'immobility' && displayNFT && (
-              <ImmobilityPhase
-                nft={displayNFT}
-                remainingTime={remainingTime}
-                status={status}
-                onCancel={handleCancelCountdownOrImmobility}
-              />
-            )}
-            {phase === 'prompt' && displayNFT && (
-              <PromptPhase
-                nft={displayNFT}
-                onStartRecording={handleStartRecording}
-                onCancel={handleCancelPrompt}
-              />
-            )}
-            {phase === 'recording' && displayNFT && (
-              <RecordingPhase
-                nft={displayNFT}
-                isRecording={isRecording}
-                isAnalyzing={isAnalyzing}
-                onStop={stopRecording}
-                onCancel={handleCancelRecording}
-              />
-            )}
-            {phase === 'results' && displayNFT && (
-              <ResultsPhase
-                nft={displayNFT}
-                rateLimitError={rateLimitError}
-                detectionError={detectionError}
-                detectionResult={detectionResult}
-                poopedEnergy={poopedEnergy}
-                poopedXP={poopedXP}
-                poopedPoop={poopedPoop}
-                actionLoading={actionLoading}
-                lootRollId={lootRollId}
-                onRoulette={() => setPhase('roulette')}
-                onReset={handleFullReset}
-              />
-            )}
-            {phase === 'roulette' && displayNFT && lootRollId && (
-              <RoulettePhase nft={displayNFT} lootRollId={lootRollId} onDone={handleFullReset} />
-            )}
+            {phase === 'countdown' && renderCountdownPhase()}
+            {phase === 'immobility' && renderImmobilityPhase()}
+            {phase === 'prompt' && renderPromptPhase()}
+            {phase === 'recording' && renderRecordingPhase()}
+            {phase === 'results' && renderResultsPhase()}
+            {phase === 'roulette' && renderRoulettePhase()}
           </ScrollView>
         </View>
       ) : (
@@ -421,20 +686,90 @@ export default memo(function Poop() {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            <IdlePhase
-              nfts={nfts}
-              selectedIndex={selectedIndex}
-              displayNFT={displayNFT}
-              buttonDisabled={buttonDisabled}
-              buttonLabel={buttonLabel}
+            {immobilityMessage && (
+              <View className={toastStyles.root()}>
+                <Text className={toastStyles.label()}>{immobilityMessage}</Text>
+              </View>
+            )}
+
+            <View className="w-full items-center mb-5">
+              {selectedIndex === null || !displayNFT ? (
+                <Button
+                  variant="ghost"
+                  feedbackVariant="none"
+                  onPress={handleSelectNFT}
+                  isDisabled={nfts.length === 0}
+                  className={nftPickerButton()}
+                >
+                  <Text className={ph.icon()}>+</Text>
+                  <Button.Label className={ph.label()}>
+                    {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
+                  </Button.Label>
+                </Button>
+              ) : (
+                <>
+                  <NFTSelector
+                    current={selectedIndex + 1}
+                    total={nfts.length}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                    className="mb-3"
+                  />
+                  <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
+                    <View className={detailStyles.imageWrap()}>
+                      <Image
+                        source={{ uri: displayNFT.image_url }}
+                        className={detailStyles.image()}
+                        resizeMode="cover"
+                      />
+                      <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
+                        <Text className={cn(badgeLabel(), 'tracking-wide')}>
+                          Lv {displayNFT.level}
+                        </Text>
+                      </View>
+                      <View
+                        className={cn(
+                          overlayBadge({ position: 'topRight' }),
+                          typeBadge({ type: displayNFT.type }),
+                        )}
+                      >
+                        <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
+                          {displayNFT.type.toUpperCase()}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View className={cn(detailStyles.content(), 'p-4')}>
+                      <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
+                        {formatDisplayName(displayNFT.name)}
+                      </Text>
+                      <NFTProperties
+                        efficiency={displayNFT.efficiency}
+                        resilience={displayNFT.resilience}
+                        comfort={displayNFT.comfort}
+                        luck={displayNFT.luck}
+                        energy={displayNFT.energy}
+                        mode="compact"
+                      />
+                    </View>
+                  </View>
+                </>
+              )}
+            </View>
+
+            <Button
+              variant="ghost"
+              feedbackVariant="none"
+              onPress={handlePoop}
+              isDisabled={buttonDisabled}
+              className={cn(tactileButton({ variant: 'primary' }), 'px-12')}
               accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
               accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
-              immobilityMessage={immobilityMessage}
-              onSelectNFT={handleSelectNFT}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onPoop={handlePoop}
-            />
+            >
+              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                {buttonLabel}
+              </Button.Label>
+            </Button>
           </ScrollView>
         </View>
       )}
