@@ -7,7 +7,7 @@ import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import type DevCatalogCmp from '@/components/dev/DevCatalog'
 import type renderDevPreviewFn from '@/components/dev/DevPreviewRenderer'
-import { useAuth, useProfileStats, useUserNFTs, useWallet } from '@/hooks'
+import { useAuth, useProfileStats, useSignOutDialog, useUserNFTs, useWallet } from '@/hooks'
 
 // Lazy dev-only requires — Metro dead-strips these from production bundles
 // because __DEV__ is replaced with `false` at build time.
@@ -19,7 +19,6 @@ const renderDevPreview = __DEV__
       .default
   : null
 
-import { useSignOutDialog } from '@/hooks'
 import {
   profileModal,
   screenContainer,
