@@ -1,11 +1,24 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useScrollToTop } from '@react-navigation/native'
 import { Avatar, Button, cn, Spinner } from 'heroui-native'
+import type { ReactElement } from 'react'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { DevCatalog } from '@/components/dev'
+import type DevCatalogCmp from '@/components/dev/DevCatalog'
+import type renderDevPreviewFn from '@/components/dev/DevPreviewRenderer'
 import { useAuth, useProfileStats, useUserNFTs, useWallet } from '@/hooks'
+
+// Lazy dev-only requires — Metro dead-strips these from production bundles
+// because __DEV__ is replaced with `false` at build time.
+const DevCatalog = __DEV__
+  ? (require('@/components/dev/DevCatalog') as { default: typeof DevCatalogCmp }).default
+  : null
+const renderDevPreview = __DEV__
+  ? (require('@/components/dev/DevPreviewRenderer') as { default: typeof renderDevPreviewFn })
+      .default
+  : null
+
 import {
   profileModal,
   screenContainer,
@@ -22,6 +35,7 @@ export default function ProfileScreen() {
   const { nfts } = useUserNFTs()
   const { poopBalance, loading: walletLoading } = useWallet()
   const [isSigningOut, setIsSigningOut] = useState(false)
+  const [activePreview, setActivePreview] = useState<string | null>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
   const scrollRef = useRef<ScrollView>(null)
   useScrollToTop(scrollRef)
@@ -48,6 +62,10 @@ export default function ProfileScreen() {
 
   const p = profileModal()
   const w = walletModal()
+
+  if (__DEV__ && activePreview && renderDevPreview) {
+    return renderDevPreview(activePreview, () => setActivePreview(null)) as unknown as ReactElement
+  }
 
   return (
     <View className={screenContainer({ bg: 'surface' })}>
@@ -109,7 +127,7 @@ export default function ProfileScreen() {
           </View>
 
           {/* DEV catalog */}
-          {__DEV__ && <DevCatalog />}
+          {__DEV__ && DevCatalog && <DevCatalog onSelect={setActivePreview} />}
           <Button
             variant="ghost"
             feedbackVariant="none"

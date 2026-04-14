@@ -2,7 +2,6 @@ import { Button, cn } from 'heroui-native'
 import { useCallback, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { tactileButton, tactileButtonText } from '@/styles'
-import renderDevPreview from './DevPreviewRenderer'
 
 // ─── Catalog definition ──────────────────────────────────────────────────────
 
@@ -142,11 +141,8 @@ function Section({
 
 // ─── DevCatalog ──────────────────────────────────────────────────────────────
 
-export default function DevCatalog() {
-  const [activePreview, setActivePreview] = useState<string | null>(null)
+export default function DevCatalog({ onSelect }: { onSelect: (key: string) => void }) {
   const [expandedSections, setExpandedSections] = useState<Set<number>>(() => new Set([0]))
-
-  const dismiss = useCallback(() => setActivePreview(null), [])
 
   const toggleSection = useCallback((index: number) => {
     setExpandedSections((prev) => {
@@ -156,11 +152,6 @@ export default function DevCatalog() {
       return next
     })
   }, [])
-
-  // ── Active preview ─────────────────────────────────────────────────────
-  if (activePreview) {
-    return renderDevPreview(activePreview, dismiss)
-  }
 
   // ── Catalog grid ───────────────────────────────────────────────────────
   return (
@@ -174,7 +165,7 @@ export default function DevCatalog() {
           section={section}
           expanded={expandedSections.has(i)}
           onToggle={() => toggleSection(i)}
-          onSelect={setActivePreview}
+          onSelect={onSelect}
         />
       ))}
     </View>
