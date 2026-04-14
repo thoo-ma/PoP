@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -14,27 +15,33 @@ import { logError } from '@/utils/errorHelpers'
  *   `null` while loading, and a `number` once fetched.
  */
 export function useWallet() {
+  const mock = useDevMock()
   const [poopBalance, setPoopBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchBalance = useCallback(async (userId: string) => {
-    const { data, error: fetchError } = await supabase
-      .from('users')
-      .select('poop_balance')
-      .eq('id', userId)
-      .single()
+  const fetchBalance = useCallback(
+    async (userId: string) => {
+      if (mock?.wallet) return
+      const { data, error: fetchError } = await supabase
+        .from('users')
+        .select('poop_balance')
+        .eq('id', userId)
+        .single()
 
-    if (fetchError) {
-      logError('useWallet:fetch', fetchError)
-      setError(fetchError.message)
-    } else {
-      setPoopBalance(data?.poop_balance ?? 0)
-    }
-    setLoading(false)
-  }, [])
+      if (fetchError) {
+        logError('useWallet:fetch', fetchError)
+        setError(fetchError.message)
+      } else {
+        setPoopBalance(data?.poop_balance ?? 0)
+      }
+      setLoading(false)
+    },
+    [mock],
+  )
 
   useEffect(() => {
+    if (mock?.wallet) return
     let userId: string | null = null
     let channel: ReturnType<typeof supabase.channel> | null = null
 
@@ -75,7 +82,7 @@ export function useWallet() {
     return () => {
       if (channel) supabase.removeChannel(channel)
     }
-  }, [fetchBalance])
+  }, [fetchBalance, mock])
 
   const refetch = async () => {
     setLoading(true)
@@ -89,5 +96,6 @@ export function useWallet() {
     await fetchBalance(user.id)
   }
 
+  if (mock?.wallet) return mock.wallet
   return { poopBalance, loading, error, refetch }
 }

@@ -5,46 +5,40 @@ import { Image, Text, View } from 'react-native'
 import {
   BreedOutcomePanel,
   BreedParentSlot,
+  CountdownPhase,
   DegenBar,
+  IdlePhase,
+  ImmobilityPhase,
   LootRouletteCard,
   MysteryBoxCard,
   MysteryBoxRevealModal,
   NFTCard,
   NFTDetailCard,
+  PromptPhase,
+  RecordingPhase,
+  ResultsPhase,
   ScreenError,
   ScreenLoader,
 } from '@/components'
+import { DevMockProvider } from '@/lib/devMock'
+import { Breed, Repair } from '@/screens/nft'
 import {
-  breedInfoText,
   breedResultSection,
-  bustMessage,
-  challengeHeader,
   emptyState,
   errorMessage,
   gridLayout,
   infoBox,
-  infoCard,
   inlineError,
   marketplaceItemRow,
-  nftPickerButton,
-  nftPickerPlaceholder,
   parentSlotsRow,
-  phaseContainer,
-  phaseContent,
-  phaseText,
-  recordingIndicator,
   repairAmountBox,
   repairFullEnergy,
   repairSuccess,
-  resultCard,
   screenContainer,
   skeletonCard,
-  statusBadge,
   tactileButton,
   tactileButtonText,
-  timerText,
 } from '@/styles'
-import { formatDisplayName } from '@/utils'
 import {
   MOCK_BOXES,
   MOCK_NFT_COMMON,
@@ -76,23 +70,6 @@ function PreviewShell({ children, onBack }: { children: ReactNode; onBack: () =>
             ← Back to Catalog
           </Button.Label>
         </Button>
-      </View>
-    </View>
-  )
-}
-
-/** Static mock challenge header — reused by Poop phase previews. */
-function MockChallengeHeader() {
-  const nft = MOCK_NFT_READY
-  const s = challengeHeader()
-  return (
-    <View className={s.root()}>
-      <Image source={{ uri: nft.image_url }} className={s.avatar()} resizeMode="cover" />
-      <View className={s.info()}>
-        <Text className={s.name()}>{formatDisplayName(nft.name)}</Text>
-        <Text className={s.subtitle()}>
-          Lv {nft.level} · {nft.type}
-        </Text>
       </View>
     </View>
   )
@@ -152,50 +129,34 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'breed:need-2-nfts')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className={infoBox()}>
-            <Text className={breedInfoText()}>
-              You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then
-              come back to start breeding.
-            </Text>
-          </View>
-        </View>
+        <DevMockProvider
+          value={{
+            userNFTs: { nfts: [MOCK_NFT_READY], loading: false, error: null, refetch: () => {} },
+          }}
+        >
+          <Breed />
+        </DevMockProvider>
       </PreviewShell>
     )
 
-  if (key === 'breed:idle-no-parents') {
-    const slotsRow = parentSlotsRow()
+  if (key === 'breed:idle-no-parents')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className="w-full flex-1 px-5">
-            <View className={slotsRow.root()}>
-              <BreedParentSlot nft={null} label="Choose Parent 1" onPress={() => {}} />
-              <View className={slotsRow.separator()}>
-                <Text className={slotsRow.separatorText()}>×</Text>
-              </View>
-              <BreedParentSlot nft={null} label="Choose Parent 2" onPress={() => {}} />
-            </View>
-            <View className={cn(infoBox(), 'mb-6 items-center')}>
-              <Text className={breedInfoText({ size: 'hint' })}>
-                Select both parents to see outcome probabilities
-              </Text>
-            </View>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              isDisabled
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Breed
-              </Button.Label>
-            </Button>
-          </View>
-        </View>
+        <DevMockProvider
+          value={{
+            userNFTs: {
+              nfts: [MOCK_NFT_READY, MOCK_NFT_COMMON],
+              loading: false,
+              error: null,
+              refetch: () => {},
+            },
+            wallet: { poopBalance: 1000, loading: false, error: null, refetch: () => {} },
+          }}
+        >
+          <Breed />
+        </DevMockProvider>
       </PreviewShell>
     )
-  }
 
   if (key === 'breed:parents-selected') {
     const p1 = MOCK_NFT_READY
@@ -303,13 +264,30 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     )
   }
 
-  if (key === 'breed:bust-inline') {
+  if (key === 'breed:bust-inline')
     return (
       <PreviewShell onBack={dismiss}>
-        <ScreenError title="BUST" message="You lost 120 POOP — better luck next time!" />
+        <DevMockProvider
+          value={{
+            userNFTs: {
+              nfts: [MOCK_NFT_READY, MOCK_NFT_COMMON],
+              loading: false,
+              error: null,
+              refetch: () => {},
+            },
+            wallet: { poopBalance: 380, loading: false, error: null, refetch: () => {} },
+            breedNFT: {
+              breedNFTs: async () => null,
+              loading: false,
+              error: null,
+              bustedResult: { poop_spent: 120, poop_balance: 380 },
+            },
+          }}
+        >
+          <Breed />
+        </DevMockProvider>
       </PreviewShell>
     )
-  }
 
   if (key === 'breed:result') {
     const box = mockMysteryBox('rare', 1)
@@ -354,37 +332,38 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   // REPAIR
   // ════════════════════════════════════════════════════════════════════════════
 
-  if (key === 'repair:no-nft-placeholder') {
-    const ph = nftPickerPlaceholder()
+  if (key === 'repair:no-nft-placeholder')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className="w-full items-center px-5 pt-10">
-            <Button variant="ghost" className={nftPickerButton()} onPress={() => {}}>
-              <Text className={ph.icon()}>+</Text>
-              <Text className={ph.label()}>Select NFT from Vault</Text>
-            </Button>
-          </View>
-        </View>
+        <DevMockProvider
+          value={{
+            userNFTs: {
+              nfts: [MOCK_NFT_READY],
+              loading: false,
+              error: null,
+              refetch: () => {},
+            },
+            wallet: { poopBalance: 500, loading: false, error: null, refetch: () => {} },
+          }}
+        >
+          <Repair />
+        </DevMockProvider>
       </PreviewShell>
     )
-  }
 
-  if (key === 'repair:no-nfts') {
-    const ph = nftPickerPlaceholder()
+  if (key === 'repair:no-nfts')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className="w-full items-center px-5 pt-10">
-            <Button variant="ghost" isDisabled className={nftPickerButton()} onPress={() => {}}>
-              <Text className={ph.icon()}>+</Text>
-              <Text className={ph.label()}>No NFTs Available</Text>
-            </Button>
-          </View>
-        </View>
+        <DevMockProvider
+          value={{
+            userNFTs: { nfts: [], loading: false, error: null, refetch: () => {} },
+            wallet: { poopBalance: 500, loading: false, error: null, refetch: () => {} },
+          }}
+        >
+          <Repair />
+        </DevMockProvider>
       </PreviewShell>
     )
-  }
 
   if (key === 'repair:nft-selected') {
     const nft = { ...MOCK_NFT_READY, energy: 40 }
@@ -468,362 +447,236 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     )
   }
 
-  if (key === 'repair:bust-inline') {
-    const bm = bustMessage()
+  if (key === 'repair:bust-inline')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className="w-full flex-1 px-5 items-center justify-center">
-            <View className={bm.root()}>
-              <Text className={bm.title()}>BUST</Text>
-              <Text className={bm.detail()}>You lost 42 POOP — better luck next time!</Text>
-            </View>
-          </View>
-        </View>
+        <ScreenError title="BUST" message="You lost 42 POOP — better luck next time!" />
       </PreviewShell>
     )
-  }
 
   // ════════════════════════════════════════════════════════════════════════════
   // POOP — game phases
   // ════════════════════════════════════════════════════════════════════════════
 
-  if (key === 'poop:no-nfts') {
-    const ph = nftPickerPlaceholder()
+  if (key === 'poop:no-nfts')
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            isDisabled
-            className={nftPickerButton()}
-            onPress={() => {}}
-          >
-            <Text className={ph.icon()}>+</Text>
-            <Text className={ph.label()}>No NFTs Available</Text>
-          </Button>
+          <IdlePhase
+            nfts={[]}
+            selectedIndex={null}
+            displayNFT={null}
+            buttonDisabled
+            buttonLabel="Poop"
+            accessibilityLabel="Poop"
+            accessibilityHint=""
+            immobilityMessage={null}
+            onSelectNFT={() => {}}
+            onPrev={() => {}}
+            onNext={() => {}}
+            onPoop={() => {}}
+          />
         </View>
       </PreviewShell>
     )
-  }
 
-  if (key === 'poop:idle-ready') {
-    const nft = MOCK_NFT_READY
+  if (key === 'poop:idle-ready')
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <NFTDetailCard nft={nft} />
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-5')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Poop</Button.Label>
-          </Button>
+          <IdlePhase
+            nfts={[MOCK_NFT_READY]}
+            selectedIndex={0}
+            displayNFT={MOCK_NFT_READY}
+            buttonDisabled={false}
+            buttonLabel="Poop"
+            accessibilityLabel="Poop"
+            accessibilityHint=""
+            immobilityMessage={null}
+            onSelectNFT={() => {}}
+            onPrev={() => {}}
+            onNext={() => {}}
+            onPoop={() => {}}
+          />
         </View>
       </PreviewShell>
     )
-  }
 
-  if (key === 'poop:idle-cooldown') {
-    const nft = MOCK_NFT_COOLDOWN
+  if (key === 'poop:idle-cooldown')
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <NFTDetailCard nft={nft} />
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            isDisabled
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-5')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Ready in 2h 15m
-            </Button.Label>
-          </Button>
+          <IdlePhase
+            nfts={[MOCK_NFT_COOLDOWN]}
+            selectedIndex={0}
+            displayNFT={MOCK_NFT_COOLDOWN}
+            buttonDisabled
+            buttonLabel="On Cooldown"
+            accessibilityLabel="On Cooldown"
+            accessibilityHint=""
+            immobilityMessage={null}
+            onSelectNFT={() => {}}
+            onPrev={() => {}}
+            onNext={() => {}}
+            onPoop={() => {}}
+          />
         </View>
       </PreviewShell>
     )
-  }
 
-  if (key === 'poop:idle-no-energy') {
-    const nft = MOCK_NFT_NO_ENERGY
+  if (key === 'poop:idle-no-energy')
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <NFTDetailCard nft={nft} energy={0} />
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            isDisabled
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-5')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              No Energy
-            </Button.Label>
-          </Button>
+          <IdlePhase
+            nfts={[MOCK_NFT_NO_ENERGY]}
+            selectedIndex={0}
+            displayNFT={MOCK_NFT_NO_ENERGY}
+            buttonDisabled
+            buttonLabel="No Energy"
+            accessibilityLabel="No Energy"
+            accessibilityHint=""
+            immobilityMessage={null}
+            onSelectNFT={() => {}}
+            onPrev={() => {}}
+            onNext={() => {}}
+            onPoop={() => {}}
+          />
         </View>
       </PreviewShell>
     )
-  }
 
-  if (key === 'poop:countdown') {
-    const pt = phaseText()
+  if (key === 'poop:countdown')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={phaseContent()}>
-            <Text className={timerText({ status: 'neutral' })}>3</Text>
-            <Text className={pt.hint()}>Get ready…</Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-              Cancel
-            </Button.Label>
-          </Button>
-        </View>
+        <CountdownPhase nft={MOCK_NFT_READY} countdownValue={3} onCancel={dismiss} />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:immobility-ok') {
-    const badge = statusBadge({ status: 'ok' })
+  if (key === 'poop:immobility-ok')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={phaseContent()}>
-            <Text className={timerText({ status: 'normal' })}>8.5s</Text>
-            <View className={badge.root()}>
-              <Text className={badge.label()}>Hold still</Text>
-            </View>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-              Cancel
-            </Button.Label>
-          </Button>
-        </View>
+        <ImmobilityPhase
+          nft={MOCK_NFT_READY}
+          remainingTime={8500}
+          status="running"
+          onCancel={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:immobility-warning') {
-    const badge = statusBadge({ status: 'warning' })
+  if (key === 'poop:immobility-warning')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={phaseContent()}>
-            <Text className={timerText({ status: 'danger' })}>6.2s</Text>
-            <View className={badge.root()}>
-              <Text className={badge.label()}>Movement detected!</Text>
-            </View>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-              Cancel
-            </Button.Label>
-          </Button>
-        </View>
+        <ImmobilityPhase
+          nft={MOCK_NFT_READY}
+          remainingTime={6200}
+          status="warning"
+          onCancel={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:prompt') {
-    const pt = phaseText()
+  if (key === 'poop:prompt')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={infoCard()}>
-            <Text className={pt.promptTitle()}>Immobility confirmed!</Text>
-            <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Start Recording
-            </Button.Label>
-          </Button>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-              Cancel
-            </Button.Label>
-          </Button>
-        </View>
+        <PromptPhase nft={MOCK_NFT_READY} onStartRecording={() => {}} onCancel={dismiss} />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:recording') {
-    const rec = recordingIndicator()
+  if (key === 'poop:recording')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={infoCard()}>
-            <View className={rec.root()}>
-              <View className={rec.dot()} />
-              <Text className={rec.label()}>Recording…</Text>
-            </View>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-              onPress={() => {}}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Stop
-              </Button.Label>
-            </Button>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-              Cancel
-            </Button.Label>
-          </Button>
-        </View>
+        <RecordingPhase
+          nft={MOCK_NFT_READY}
+          isRecording
+          isAnalyzing={false}
+          onStop={() => {}}
+          onCancel={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:result-not-detected') {
-    const card = resultCard({ status: 'failure' })
+  if (key === 'poop:result-not-detected')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={card.root()}>
-            <Text className={card.title()}>Flush not detected</Text>
-            <Text className={card.detail()}>Confidence: 23%</Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Try Again
-            </Button.Label>
-          </Button>
-        </View>
+        <ResultsPhase
+          nft={MOCK_NFT_READY}
+          detectionResult={{ detected: false, confidence: 0.32, duration_seconds: 3 }}
+          rateLimitError={null}
+          detectionError={null}
+          poopedEnergy={null}
+          poopedXP={null}
+          poopedPoop={null}
+          actionLoading={false}
+          lootRollId={null}
+          onRoulette={() => {}}
+          onReset={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:result-success') {
-    const card = resultCard({ status: 'success' })
+  if (key === 'poop:result-success')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={card.root()}>
-            <Text className={card.title()}>Flush confirmed!</Text>
-            <Text className={card.detail()}>Energy: 80 → 72</Text>
-            <Text className={card.detail()}>+15 XP</Text>
-            <Text className={card.detail()}>Level Up! Now Lv 6</Text>
-            <Text className={card.detail()}>+8 POOP</Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Continue →
-            </Button.Label>
-          </Button>
-        </View>
+        <ResultsPhase
+          nft={MOCK_NFT_READY}
+          detectionResult={{ detected: true, confidence: 0.97, duration_seconds: 3 }}
+          poopedEnergy={{ from: 80, to: 72 }}
+          poopedXP={{ gained: 15, level: 5, leveledUp: false }}
+          poopedPoop={{ earned: 8, balance: 388 }}
+          rateLimitError={null}
+          detectionError={null}
+          actionLoading={false}
+          lootRollId={null}
+          onRoulette={() => {}}
+          onReset={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:result-rate-limit') {
-    const card = resultCard({ status: 'warning' })
+  if (key === 'poop:result-rate-limit')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={card.root()}>
-            <Text className={card.title()}>Daily limit reached</Text>
-            <Text className={card.detail()}>
-              You've used all 10 daily detections. Come back tomorrow!
-            </Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
-          </Button>
-        </View>
+        <ResultsPhase
+          nft={MOCK_NFT_READY}
+          detectionResult={null}
+          rateLimitError={{
+            error: 'rate_limit_exceeded',
+            message: "You've used all 10 daily detections. Come back tomorrow!",
+            limit: 10,
+            current_count: 10,
+          }}
+          detectionError={null}
+          poopedEnergy={null}
+          poopedXP={null}
+          poopedPoop={null}
+          actionLoading={false}
+          lootRollId={null}
+          onRoulette={() => {}}
+          onReset={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
-  if (key === 'poop:result-error') {
-    const card = resultCard({ status: 'warning' })
+  if (key === 'poop:result-error')
     return (
       <PhaseShell onBack={dismiss}>
-        <View className={phaseContainer()}>
-          <MockChallengeHeader />
-          <View className={card.root()}>
-            <Text className={card.title()}>Something went wrong</Text>
-            <Text className={card.detail()}>Network error: request timed out</Text>
-          </View>
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            onPress={() => {}}
-          >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Try Again
-            </Button.Label>
-          </Button>
-        </View>
+        <ResultsPhase
+          nft={MOCK_NFT_READY}
+          detectionResult={null}
+          rateLimitError={null}
+          detectionError="Network error: request timed out"
+          poopedEnergy={null}
+          poopedXP={null}
+          poopedPoop={null}
+          actionLoading={false}
+          lootRollId={null}
+          onRoulette={() => {}}
+          onReset={dismiss}
+        />
       </PhaseShell>
     )
-  }
 
   // ════════════════════════════════════════════════════════════════════════════
   // VAULT
