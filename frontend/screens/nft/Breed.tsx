@@ -122,7 +122,6 @@ import { canBreed } from '@/utils'
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <BreedPickerModal
         visible={pickerSlot === 1}
-        title="Choose Parent 1"
         allNFTs={nfts}
         lockedId={parent2?.id}
         lockedRarity={parent2?.rarity}
@@ -131,7 +130,6 @@ import { canBreed } from '@/utils'
       />
       <BreedPickerModal
         visible={pickerSlot === 2}
-        title="Choose Parent 2"
         allNFTs={nfts}
         lockedId={parent1?.id}
         lockedRarity={parent1?.rarity}

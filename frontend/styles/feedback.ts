@@ -87,7 +87,6 @@ export const revealModal = tv({
 // Bottom-sheet header + help text for the NFT parent picker.
 export const pickerModal = tv({
   slots: {
-    header: 'flex-row justify-between items-center px-5 py-4 border-b border-outline',
     helpText: 'text-sm text-on-surface-variant px-5 pt-2.5 pb-1 leading-[18px] font-bold',
   },
 })

@@ -13,8 +13,6 @@ const GRID_GAP = 12
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
   visible: boolean
-  /** Title displayed at the top of the sheet (e.g. "Choose Parent 1"). */
-  title: string
   /** Full NFT collection to show as selectable items. */
   allNFTs: NFT[]
   /** ID of the NFT already chosen in the other slot — rendered as disabled. */
@@ -34,7 +32,6 @@ export interface BreedPickerModalProps {
  */
 export default function BreedPickerModal({
   visible,
-  title,
   allNFTs,
   lockedId,
   lockedRarity,
@@ -63,12 +60,6 @@ export default function BreedPickerModal({
       <BottomSheet.Portal>
         <BottomSheet.Overlay />
         <BottomSheet.Content snapPoints={['70%']}>
-          <View className={s.header()}>
-            <BottomSheet.Title className="text-lg font-bold text-on-surface">
-              {title}
-            </BottomSheet.Title>
-            <BottomSheet.Close />
-          </View>
           {lockedRarity && (
             <Text className={s.helpText()}>
               Greyed-out NFTs are incompatible with your first selection.
