@@ -40,7 +40,7 @@ export default memo(function Vault() {
   useScrollToTop(boxScrollRef)
 
   const { nfts, loading, error, refetch } = useUserNFTs()
-  const { listNFT, loadingListNFT: updateLoading } = useUpdateNFT()
+  const { listNFT } = useUpdateNFT()
   const { boxes, loading: boxesLoading, error: boxesError } = useMysteryBoxes()
   const { openBox, loading: openLoading } = useOpenMysteryBox()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')

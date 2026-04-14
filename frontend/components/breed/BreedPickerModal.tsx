@@ -1,7 +1,7 @@
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import type { NFTRarity } from '@pop/shared'
 import { BottomSheet } from 'heroui-native'
-import { Text, useWindowDimensions, View } from 'react-native'
+import { Text, useWindowDimensions } from 'react-native'
 import { BreedPickerItemCard } from '@/components'
 import { pickerModal } from '@/styles'
 import type { NFT } from '@/types'
