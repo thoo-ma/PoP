@@ -11,4 +11,14 @@ export {
   NFTSelector,
   StatAllocationModal,
 } from './nft'
+export {
+  ChallengeHeader,
+  CountdownPhase,
+  IdlePhase,
+  ImmobilityPhase,
+  PromptPhase,
+  RecordingPhase,
+  ResultsPhase,
+  RoulettePhase,
+} from './proof'
 export { DegenBar, ErrorBoundary, ScreenError, ScreenLoader } from './shared'
