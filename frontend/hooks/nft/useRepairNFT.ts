@@ -3,6 +3,7 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
+import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -32,6 +33,7 @@ export interface InsufficientPoopError {
  *   degen roll busts.
  */
 export function useRepairNFT() {
+  const mock = useDevMock()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -42,6 +44,7 @@ export function useRepairNFT() {
 
   const repairNFT = useCallback(
     async (nftId: string, newEnergy: number, degenPercent = 0): Promise<RepairResult | null> => {
+      if (mock?.repairNFT) return null
       try {
         setLoading(true)
         setError(null)
@@ -102,8 +105,9 @@ export function useRepairNFT() {
         setLoading(false)
       }
     },
-    [queryClient],
+    [queryClient, mock],
   )
 
+  if (mock?.repairNFT) return mock.repairNFT
   return { repairNFT, loading, error, insufficientPoopError, bustedResult }
 }

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { queryKeys } from '@/constants'
+import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
 import type { NFT } from '@/types'
 import { logError } from '@/utils/errorHelpers'
@@ -40,11 +41,14 @@ async function fetchUserNFTs(): Promise<NFT[]> {
  *   and a `refetch` callback.
  */
 export function useUserNFTs() {
+  const mock = useDevMock()
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.userNFTs,
     queryFn: fetchUserNFTs,
+    enabled: !mock?.userNFTs,
   })
 
+  if (mock?.userNFTs) return mock.userNFTs
   return {
     nfts: data ?? [],
     loading: isLoading,

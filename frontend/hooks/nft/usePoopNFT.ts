@@ -3,6 +3,7 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
+import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
@@ -46,6 +47,7 @@ export interface PoopResult {
  *   NFT is still resting (contains `cooldown_ends_at` and `cooldown_remaining_seconds`).
  */
 export function usePoopNFT() {
+  const mock = useDevMock()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -53,6 +55,7 @@ export function usePoopNFT() {
 
   const poopNFT = useCallback(
     async (nftId: string): Promise<PoopResult | null> => {
+      if (mock?.poopNFT) return null
       try {
         setLoading(true)
         setError(null)
@@ -103,8 +106,9 @@ export function usePoopNFT() {
         setLoading(false)
       }
     },
-    [queryClient],
+    [queryClient, mock],
   )
 
+  if (mock?.poopNFT) return mock.poopNFT
   return { poopNFT, loading, error, cooldownError }
 }

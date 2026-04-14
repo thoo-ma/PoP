@@ -3,10 +3,12 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
+import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 
 export function useBreedNFT() {
+  const mock = useDevMock()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -14,6 +16,7 @@ export function useBreedNFT() {
 
   const breedNFTs = useCallback(
     async (parent1Id: string, parent2Id: string, degenPercent = 0) => {
+      if (mock?.breedNFT) return null
       try {
         setLoading(true)
         setError(null)
@@ -66,9 +69,10 @@ export function useBreedNFT() {
         setLoading(false)
       }
     },
-    [queryClient],
+    [queryClient, mock],
   )
 
+  if (mock?.breedNFT) return mock.breedNFT
   return {
     breedNFTs,
     loading,
