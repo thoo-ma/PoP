@@ -262,7 +262,7 @@ export default memo(function Vault() {
                                 tactileButton({ variant: 'secondary', size: 'sm' }),
                                 'mt-1',
                               )}
-                              accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                              accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
                             >
                               <Button.Label
                                 className={tactileButtonText({
