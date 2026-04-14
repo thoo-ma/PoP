@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import LootRouletteCard from '@/components/nft/LootRouletteCard'
+import { LootRouletteCard } from '@/components'
 import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
 import { ChallengeHeader } from './ChallengeHeader'

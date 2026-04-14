@@ -2,7 +2,7 @@ import { Chip, cn, PressableFeedback } from 'heroui-native'
 import { Image, Text, View } from 'react-native'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, parentSlot } from '@/styles'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 
 interface BreedParentSlotProps {

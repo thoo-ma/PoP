@@ -12,7 +12,6 @@ import {
   ScreenLoader,
   StatAllocationModal,
 } from '@/components'
-import type { AllocateResult } from '@/hooks'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
 import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
@@ -25,7 +24,7 @@ import {
   tactileButtonText,
   tactileNavButton,
 } from '@/styles'
-import type { NFT, SortOption } from '@/types'
+import type { AllocateResult, NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
 
 /**

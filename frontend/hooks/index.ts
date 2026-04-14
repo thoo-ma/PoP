@@ -1,6 +1,5 @@
 export * from './auth'
 export * from './nft'
+export * from './profile'
 export * from './proof'
 export * from './useErrorHandler'
-export * from './useProfileStats'
-export * from './useRarityColors'

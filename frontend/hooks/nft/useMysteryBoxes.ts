@@ -1,6 +1,6 @@
 import type { MysteryBox } from '@pop/shared'
 import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 
 async function fetchMysteryBoxes(): Promise<MysteryBox[]> {

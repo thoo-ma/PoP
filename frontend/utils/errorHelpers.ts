@@ -1,4 +1,4 @@
-import type { RateLimitError } from '@/types/audio'
+import type { RateLimitError } from '@/types'
 
 /**
  * Extract a user-friendly error message from any error type

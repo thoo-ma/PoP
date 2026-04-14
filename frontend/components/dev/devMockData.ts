@@ -1,6 +1,6 @@
 import type { MysteryBox, NFTRarity } from '@pop/shared'
 import { BREED_MAX_COUNT } from '@pop/shared'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 
 const IMG = (color: string, label: string) =>
   `https://placehold.co/400x400/${color}/white?text=${encodeURIComponent(label)}`

@@ -1,10 +1,9 @@
 import { Button, cn, Dialog, Slider } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
-import type { AllocateResult, StatDeltas } from '@/hooks'
 import { useAllocateStatPoints } from '@/hooks'
 import { statModal, tactileButton, tactileButtonText } from '@/styles'
-import type { NFT } from '@/types/nft'
+import type { AllocateResult, NFT, StatDeltas } from '@/types'
 import { formatDisplayName } from '@/utils'
 
 const STAT_KEYS = ['efficiency', 'resilience', 'comfort', 'luck'] as const

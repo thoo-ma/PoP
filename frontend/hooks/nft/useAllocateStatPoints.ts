@@ -1,25 +1,10 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
+import type { AllocateResult, StatDeltas } from '@/types'
 import { logError } from '@/utils/errorHelpers'
-
-export interface StatDeltas {
-  efficiency: number
-  resilience: number
-  comfort: number
-  luck: number
-}
-
-export interface AllocateResult {
-  id: string
-  efficiency: number
-  resilience: number
-  comfort: number
-  luck: number
-  stat_points: number
-}
 
 /**
  * Hook to spend unspent stat points on an NFT.

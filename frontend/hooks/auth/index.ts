@@ -1,3 +1,3 @@
 export * from './useAuth'
+export * from './useSignOutDialog'
 export * from './useUserApproval'
-export * from './useWallet'

@@ -26,7 +26,7 @@ import {
   tactileButton,
   tactileButtonText,
 } from '@/styles'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 import { canBreed } from '@/utils'
 
 // ─── Main screen ──────────────────────────────────────────────────────────────

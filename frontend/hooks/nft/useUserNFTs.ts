@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 import { logError } from '@/utils/errorHelpers'
 
 async function fetchUserNFTs(): Promise<NFT[]> {

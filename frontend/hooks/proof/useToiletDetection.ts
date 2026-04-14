@@ -9,9 +9,9 @@ import {
 } from 'expo-audio'
 import * as FileSystem from 'expo-file-system'
 import { useCallback, useState } from 'react'
-import { useErrorHandler } from '@/hooks/useErrorHandler'
+import { useErrorHandler } from '@/hooks'
 import { detectToiletFlush } from '@/lib/toiletDetectionApi'
-import type { DetectionResult, RateLimitError, UseToiletDetectionReturn } from '@/types/audio'
+import type { DetectionResult, RateLimitError, UseToiletDetectionReturn } from '@/types'
 import { isRateLimitError } from '@/utils/errorHelpers'
 
 /** Mono recording options — smaller file for detection pipeline. */
