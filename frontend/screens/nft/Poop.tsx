@@ -68,6 +68,7 @@ export default memo(function Poop() {
   useScrollToTop(scrollRef)
 
   const hasPoopedRef = useRef(false) // guard — call poopNFT exactly once per challenge
+  const activeNFTRef = useRef<NFT | null>(null) // snapshot of the NFT that started the challenge
 
   // ── Alert dialog state ─────────────────────────────────────
   const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
@@ -164,6 +165,7 @@ export default memo(function Poop() {
       return
     }
     hasPoopedRef.current = false
+    activeNFTRef.current = displayNFT
     setCountdownValue(3)
     setGameImmobilityMs(IMMOBILITY_MS_BY_TYPE[displayNFT.type] ?? 10_000)
     setPhase('countdown')
@@ -204,6 +206,7 @@ export default memo(function Poop() {
     }
     // Hook reset challenge (grace period expired): isRunning=false, status='idle', elapsedTime=0
     if (!isRunning && status === 'idle' && elapsedTime === 0) {
+      activeNFTRef.current = null
       setFrozenRemainingTime(null)
       setImmobilityMessage('Too much movement — try again!')
       setPhase('idle')
@@ -219,12 +222,17 @@ export default memo(function Poop() {
 
   // ── Cancel helpers ─────────────────────────────────────────
   const handleCancelCountdownOrImmobility = () => {
+    activeNFTRef.current = null
     stopChallenge()
     setFrozenRemainingTime(null)
     setPhase('idle')
   }
-  const handleCancelPrompt = () => setPhase('idle')
+  const handleCancelPrompt = () => {
+    activeNFTRef.current = null
+    setPhase('idle')
+  }
   const handleCancelRecording = () => {
+    activeNFTRef.current = null
     clearResult()
     setPhase('idle')
   }
@@ -259,6 +267,7 @@ export default memo(function Poop() {
   const handleFullReset = useCallback(() => {
     clearResult()
     hasPoopedRef.current = false
+    activeNFTRef.current = null
     setPoopedEnergy(null)
     setPoopedXP(null)
     setPoopedPoop(null)
@@ -281,13 +290,14 @@ export default memo(function Poop() {
     if (phase !== 'results') return
     if (hasPoopedRef.current) return
     if (!detectionResult?.detected) return
-    if (!displayNFT) return
+    if (!activeNFTRef.current) return
 
     hasPoopedRef.current = true
+    const snapshotNFT = activeNFTRef.current
     ;(async () => {
-      const result = await poopNFT(displayNFT.id)
+      const result = await poopNFT(snapshotNFT.id)
       if (result) {
-        setPoopedEnergy({ from: displayNFT.energy, to: result.energy })
+        setPoopedEnergy({ from: snapshotNFT.energy, to: result.energy })
         setPoopedXP({
           gained: result.xp_gained,
           level: result.level,
@@ -297,7 +307,7 @@ export default memo(function Poop() {
         setLootRollId(result.loot_roll_id ?? null)
         if (result.leveled_up && result.stat_points > 0) {
           setStatModalData({
-            nft: { ...displayNFT, stat_points: result.stat_points },
+            nft: { ...snapshotNFT, stat_points: result.stat_points },
             points: result.stat_points,
           })
         }
@@ -311,7 +321,7 @@ export default memo(function Poop() {
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, detectionResult, cooldownError, displayNFT, handleFullReset, poopNFT])
+  }, [phase, detectionResult, cooldownError, handleFullReset, poopNFT])
 
   // ── Stat allocation ───────────────────────────────────────
   const handleStatAllocated = useCallback((_result: AllocateResult) => {
@@ -356,40 +366,40 @@ export default memo(function Poop() {
             )}
             showsVerticalScrollIndicator={false}
           >
-            {phase === 'countdown' && displayNFT && (
+            {phase === 'countdown' && activeNFTRef.current && (
               <CountdownPhase
-                nft={displayNFT}
+                nft={activeNFTRef.current}
                 countdownValue={countdownValue}
                 onCancel={handleCancelCountdownOrImmobility}
               />
             )}
-            {phase === 'immobility' && displayNFT && (
+            {phase === 'immobility' && activeNFTRef.current && (
               <ImmobilityPhase
-                nft={displayNFT}
+                nft={activeNFTRef.current}
                 remainingTime={remainingTime}
                 status={status}
                 onCancel={handleCancelCountdownOrImmobility}
               />
             )}
-            {phase === 'prompt' && displayNFT && (
+            {phase === 'prompt' && activeNFTRef.current && (
               <PromptPhase
-                nft={displayNFT}
+                nft={activeNFTRef.current}
                 onStartRecording={handleStartRecording}
                 onCancel={handleCancelPrompt}
               />
             )}
-            {phase === 'recording' && displayNFT && (
+            {phase === 'recording' && activeNFTRef.current && (
               <RecordingPhase
-                nft={displayNFT}
+                nft={activeNFTRef.current}
                 isRecording={isRecording}
                 isAnalyzing={isAnalyzing}
                 onStop={stopRecording}
                 onCancel={handleCancelRecording}
               />
             )}
-            {phase === 'results' && displayNFT && (
+            {phase === 'results' && activeNFTRef.current && (
               <ResultsPhase
-                nft={displayNFT}
+                nft={activeNFTRef.current}
                 rateLimitError={rateLimitError}
                 detectionError={detectionError}
                 detectionResult={detectionResult}
@@ -402,8 +412,12 @@ export default memo(function Poop() {
                 onReset={handleFullReset}
               />
             )}
-            {phase === 'roulette' && displayNFT && lootRollId && (
-              <RoulettePhase nft={displayNFT} lootRollId={lootRollId} onDone={handleFullReset} />
+            {phase === 'roulette' && activeNFTRef.current && lootRollId && (
+              <RoulettePhase
+                nft={activeNFTRef.current}
+                lootRollId={lootRollId}
+                onDone={handleFullReset}
+              />
             )}
           </ScrollView>
         </View>
