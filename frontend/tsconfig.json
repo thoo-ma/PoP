@@ -3,8 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@pop/shared": ["../shared/index.ts"],
-      "@pop/shared/*": ["../shared/*"]
+      "@pop/shared": ["../shared/src/index.ts"],
+      "@pop/shared/*": ["../shared/src/*"]
     }
   }
 }
