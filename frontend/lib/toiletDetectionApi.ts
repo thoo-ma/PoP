@@ -1,5 +1,5 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import type { DetectionResult, RateLimitError } from '@/types/audio'
+import type { DetectionResult, RateLimitError } from '@/types'
 import { getErrorMessage, isRateLimitError } from '@/utils/errorHelpers'
 import { supabase } from './supabase'
 

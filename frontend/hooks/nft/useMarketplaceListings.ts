@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 
 async function fetchMarketplaceListings(): Promise<NFT[]> {
   const {

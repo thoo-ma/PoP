@@ -1,7 +1,6 @@
 import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { NFTDetailCard } from '@/components'
-import NFTSelector from '@/components/nft/NFTSelector'
+import { NFTDetailCard, NFTSelector } from '@/components'
 import {
   nftPickerButton,
   nftPickerPlaceholder,

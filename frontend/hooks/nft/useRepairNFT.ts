@@ -2,7 +2,7 @@ import type { BustedDetails, EdgeFunctionErrorResponse, InsufficientPoopDetails 
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 

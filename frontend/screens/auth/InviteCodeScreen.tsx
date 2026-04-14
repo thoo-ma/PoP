@@ -3,10 +3,9 @@ import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native
 import { useEffect, useRef, useState } from 'react'
 import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { useErrorHandler } from '@/hooks'
+import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
 import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
-import { useSignOutDialog } from '@/utils'
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void

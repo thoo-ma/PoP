@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '@/constants/queryKeys'
+import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
 

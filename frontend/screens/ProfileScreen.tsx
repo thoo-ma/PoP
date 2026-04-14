@@ -19,6 +19,7 @@ const renderDevPreview = __DEV__
       .default
   : null
 
+import { useSignOutDialog } from '@/hooks'
 import {
   profileModal,
   screenContainer,
@@ -26,7 +27,6 @@ import {
   tactileButtonText,
   walletModal,
 } from '@/styles'
-import { useSignOutDialog } from '@/utils'
 import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {

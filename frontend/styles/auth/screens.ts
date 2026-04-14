@@ -1,7 +1,5 @@
 import { tv } from 'tailwind-variants'
 
-export { tactileButton, tactileButtonText } from './buttons'
-
 // ── Auth screen layout ────────────────────────────────────────────────────────
 export const authScreen = tv({
   slots: {

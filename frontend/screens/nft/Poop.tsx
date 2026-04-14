@@ -16,10 +16,9 @@ import {
   StatAllocationModal,
 } from '@/components'
 import { getCooldownStatus } from '@/constants'
-import type { AllocateResult } from '@/hooks'
 import { useImmobilityChallenge, usePoopNFT, useToiletDetection, useUserNFTs } from '@/hooks'
 import { dialogBody, dialogFooter, scrollContent, tactileButton, tactileButtonText } from '@/styles'
-import type { NFT } from '@/types'
+import type { AllocateResult, NFT } from '@/types'
 
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
   'turbo-flush': 5_000,

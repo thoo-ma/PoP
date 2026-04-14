@@ -2,7 +2,7 @@ import { Button, cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
 import { Image, Text, View } from 'react-native'
 import { rarityBadge, revealModal, tactileButton, tactileButtonText } from '@/styles'
-import type { NFT } from '@/types/nft'
+import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 
 interface MysteryBoxRevealModalProps {
