@@ -10,12 +10,11 @@ import {
   MysteryBoxCard,
   MysteryBoxRevealModal,
   NFTCard,
-  NFTProperties,
+  NFTDetailCard,
   ScreenError,
   ScreenLoader,
 } from '@/components'
 import {
-  badgeLabel,
   breedInfoText,
   breedResultSection,
   bustMessage,
@@ -27,10 +26,8 @@ import {
   infoCard,
   inlineError,
   marketplaceItemRow,
-  nftDetailCard,
   nftPickerButton,
   nftPickerPlaceholder,
-  overlayBadge,
   parentSlotsRow,
   phaseContainer,
   phaseContent,
@@ -46,7 +43,6 @@ import {
   tactileButton,
   tactileButtonText,
   timerText,
-  typeBadge,
 } from '@/styles'
 import { formatDisplayName } from '@/utils'
 import {
@@ -392,47 +388,12 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'repair:nft-selected') {
     const nft = { ...MOCK_NFT_READY, energy: 40 }
-    const detailStyles = nftDetailCard()
     const ra = repairAmountBox()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5">
-            <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-              <View className={detailStyles.imageWrap()}>
-                <Image
-                  source={{ uri: nft.image_url }}
-                  className={detailStyles.image()}
-                  resizeMode="cover"
-                />
-                <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
-                  <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {nft.level}</Text>
-                </View>
-                <View
-                  className={cn(
-                    overlayBadge({ position: 'topRight' }),
-                    typeBadge({ type: nft.type }),
-                  )}
-                >
-                  <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
-                    {nft.type.toUpperCase()}
-                  </Text>
-                </View>
-              </View>
-              <View className={cn(detailStyles.content(), 'p-4')}>
-                <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                  {formatDisplayName(nft.name)}
-                </Text>
-                <NFTProperties
-                  efficiency={nft.efficiency}
-                  resilience={nft.resilience}
-                  comfort={nft.comfort}
-                  luck={nft.luck}
-                  energy={nft.energy + 30}
-                  mode="compact"
-                />
-              </View>
-            </View>
+            <NFTDetailCard nft={nft} energy={nft.energy + 30} />
             <View className={cn(infoBox(), 'mb-5 mt-5')}>
               <Text className={ra.title()}>Repair Amount</Text>
               <View className={ra.valueWrap()}>
@@ -549,45 +510,10 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'poop:idle-ready') {
     const nft = MOCK_NFT_READY
-    const detailStyles = nftDetailCard()
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-            <View className={detailStyles.imageWrap()}>
-              <Image
-                source={{ uri: nft.image_url }}
-                className={detailStyles.image()}
-                resizeMode="cover"
-              />
-              <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
-                <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {nft.level}</Text>
-              </View>
-              <View
-                className={cn(
-                  overlayBadge({ position: 'topRight' }),
-                  typeBadge({ type: nft.type }),
-                )}
-              >
-                <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
-                  {nft.type.toUpperCase()}
-                </Text>
-              </View>
-            </View>
-            <View className={cn(detailStyles.content(), 'p-4')}>
-              <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                {formatDisplayName(nft.name)}
-              </Text>
-              <NFTProperties
-                efficiency={nft.efficiency}
-                resilience={nft.resilience}
-                comfort={nft.comfort}
-                luck={nft.luck}
-                energy={nft.energy}
-                mode="compact"
-              />
-            </View>
-          </View>
+          <NFTDetailCard nft={nft} />
           <Button
             variant="ghost"
             feedbackVariant="none"
@@ -603,32 +529,10 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'poop:idle-cooldown') {
     const nft = MOCK_NFT_COOLDOWN
-    const detailStyles = nftDetailCard()
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-            <View className={detailStyles.imageWrap()}>
-              <Image
-                source={{ uri: nft.image_url }}
-                className={detailStyles.image()}
-                resizeMode="cover"
-              />
-            </View>
-            <View className={cn(detailStyles.content(), 'p-4')}>
-              <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                {formatDisplayName(nft.name)}
-              </Text>
-              <NFTProperties
-                efficiency={nft.efficiency}
-                resilience={nft.resilience}
-                comfort={nft.comfort}
-                luck={nft.luck}
-                energy={nft.energy}
-                mode="compact"
-              />
-            </View>
-          </View>
+          <NFTDetailCard nft={nft} />
           <Button
             variant="ghost"
             feedbackVariant="none"
@@ -647,32 +551,10 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'poop:idle-no-energy') {
     const nft = MOCK_NFT_NO_ENERGY
-    const detailStyles = nftDetailCard()
     return (
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
-          <View className={cn(detailStyles.root(), 'w-70 bg-surface border-outline')}>
-            <View className={detailStyles.imageWrap()}>
-              <Image
-                source={{ uri: nft.image_url }}
-                className={detailStyles.image()}
-                resizeMode="cover"
-              />
-            </View>
-            <View className={cn(detailStyles.content(), 'p-4')}>
-              <Text className={cn(detailStyles.title(), 'text-on-surface mb-3')}>
-                {formatDisplayName(nft.name)}
-              </Text>
-              <NFTProperties
-                efficiency={nft.efficiency}
-                resilience={nft.resilience}
-                comfort={nft.comfort}
-                luck={nft.luck}
-                energy={0}
-                mode="compact"
-              />
-            </View>
-          </View>
+          <NFTDetailCard nft={nft} energy={0} />
           <Button
             variant="ghost"
             feedbackVariant="none"
