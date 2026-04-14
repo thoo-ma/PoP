@@ -84,7 +84,7 @@ export const revealModal = tv({
 })
 
 // ── Breed picker modal ────────────────────────────────────────────────────────
-// Bottom-sheet header + help text for the NFT parent picker.
+// Bottom-sheet help text for the NFT parent picker.
 export const pickerModal = tv({
   slots: {
     helpText: 'text-sm text-on-surface-variant px-5 pt-2.5 pb-1 leading-[18px] font-bold',
