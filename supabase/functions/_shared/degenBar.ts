@@ -20,8 +20,8 @@ import {
   DEGEN_ZONE_THRESHOLD,
   MAX_REDUCTION,
   type DegenOutcome,
-} from '../../../shared/degenBar.ts'
-import type { DegenBarConfig } from '../../../shared/schemas.ts'
+} from '../../../shared/src/degenBar.ts'
+import type { DegenBarConfig } from '../../../shared/src/schemas.ts'
 import type { SupabaseClient } from './auth.ts'
 
 // ─── applyDegenBar ────────────────────────────────────────────────────────────

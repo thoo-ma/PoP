@@ -1,17 +1,17 @@
-import type { NFTType, NFTRarity } from '../../../shared/nft.ts'
+import type { NFTType, NFTRarity } from '../../../shared/src/nft.ts'
 import {
   isOnCooldown,
   getCooldownEndsAt,
   cooldownRemainingSeconds,
-} from '../../../shared/cooldown.ts'
-import { applyXP, XP_PER_USE } from '../../../shared/xp.ts'
-import { calcPoopEarned } from '../../../shared/currency.ts'
-import { STAT_POINTS_BY_RARITY } from '../../../shared/statPoints.ts'
+} from '../../../shared/src/cooldown.ts'
+import { applyXP, XP_PER_USE } from '../../../shared/src/xp.ts'
+import { calcPoopEarned } from '../../../shared/src/currency.ts'
+import { STAT_POINTS_BY_RARITY } from '../../../shared/src/statPoints.ts'
 import {
   TYPE_DRAIN_MULT as DEFAULT_TYPE_DRAIN_MULT,
   ENERGY_ROLL_MIN as DEFAULT_ENERGY_ROLL_MIN,
   ENERGY_ROLL_MAX as DEFAULT_ENERGY_ROLL_MAX,
-} from '../../../shared/energyDrain.ts'
+} from '../../../shared/src/energyDrain.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'

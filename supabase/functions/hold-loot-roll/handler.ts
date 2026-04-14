@@ -1,4 +1,4 @@
-import { MAX_HOLDS } from '../../../shared/lootRoll.ts'
+import { MAX_HOLDS } from '../../../shared/src/lootRoll.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'

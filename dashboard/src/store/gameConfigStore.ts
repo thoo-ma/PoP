@@ -4,20 +4,29 @@ import { create } from 'zustand'
 
 // ─── Imports: all tunable constants from @pop/shared ──────────────────────────
 
-import { BREED_PROBABILITIES } from '@pop/shared/breedProbabilities'
 import {
-  DETECTIONS_PER_DAY,
-  MAX_AUDIO_DURATION,
-  MIN_AUDIO_DURATION,
-  YAMNET_TOILET_FLUSH_CLASS,
-} from '@pop/shared/cloudRun'
-import { COOLDOWN_BASES, EXP_MULT, LINEAR_MULT } from '@pop/shared/cooldown'
-import {
+  AUDIO_THRESHOLDS,
+  BASE_WIN_PROBABILITY,
   BREED_BASE_PRICE_USD,
   BREED_GROWTH_RATE,
   BREED_MAX_COUNT,
+  BREED_PROBABILITIES,
   BREED_RARITY_MULTIPLIER,
   BREED_USD_PER_TOKEN,
+  COOLDOWN_BASES,
+  DEGEN_BUST_BASE,
+  DEGEN_BUST_SCALE,
+  DEGEN_ZONE_THRESHOLD,
+  DETECTIONS_PER_DAY,
+  ENERGY_ROLL_MAX,
+  ENERGY_ROLL_MIN,
+  EXP_MULT,
+  LINEAR_MULT,
+  MAX_AUDIO_DURATION,
+  MAX_HOLDS,
+  MAX_REDUCTION,
+  MIN_AUDIO_DURATION,
+  PER_HOLD_INCREMENT,
   REPAIR_COEF_A,
   REPAIR_COEF_B,
   REPAIR_RARITY_MULTIPLIER,
@@ -27,17 +36,18 @@ import {
   REWARD_RARITY_MULTIPLIER,
   REWARD_TYPE_MULTIPLIER,
   REWARD_USD_PER_TOKEN,
-} from '@pop/shared/currency'
-import {
-  DEGEN_BUST_BASE,
-  DEGEN_BUST_SCALE,
-  DEGEN_ZONE_THRESHOLD,
-  MAX_REDUCTION,
   SAFE_BUST_COEF,
-} from '@pop/shared/degenBar'
-import { ENERGY_ROLL_MAX, ENERGY_ROLL_MIN, TYPE_DRAIN_MULT } from '@pop/shared/energyDrain'
-import { BASE_WIN_PROBABILITY, MAX_HOLDS, PER_HOLD_INCREMENT } from '@pop/shared/lootRoll'
-import { STAT_RANGES } from '@pop/shared/minting'
+  SENSOR_PRESETS,
+  STAT_POINTS_BY_RARITY,
+  STAT_RANGES,
+  TYPE_DRAIN_MULT,
+  XP_FORMULA_BASE,
+  XP_FORMULA_FLOOR,
+  XP_FORMULA_LINEAR,
+  XP_FORMULA_QUADRATIC,
+  XP_PER_USE,
+  YAMNET_TOILET_FLUSH_CLASS,
+} from '@pop/shared'
 import type {
   BreedConfig,
   CloudRunConfig,
@@ -51,15 +61,6 @@ import type {
   StatPointsConfig,
   XpConfig,
 } from '@pop/shared/schemas'
-import { AUDIO_THRESHOLDS, SENSOR_PRESETS } from '@pop/shared/sensors'
-import { STAT_POINTS_BY_RARITY } from '@pop/shared/statPoints'
-import {
-  XP_FORMULA_BASE,
-  XP_FORMULA_FLOOR,
-  XP_FORMULA_LINEAR,
-  XP_FORMULA_QUADRATIC,
-  XP_PER_USE,
-} from '@pop/shared/xp'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

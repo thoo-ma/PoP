@@ -1,5 +1,5 @@
-import { TYPE_NAMES, NFT_TYPES, type NFTRarity as Rarity, type NFTType } from '../../../shared/nft.ts'
-import { STAT_RANGES } from '../../../shared/minting.ts'
+import { TYPE_NAMES, NFT_TYPES, type NFTRarity as Rarity, type NFTType } from '../../../shared/src/nft.ts'
+import { STAT_RANGES } from '../../../shared/src/minting.ts'
 
 export { STAT_RANGES }
 

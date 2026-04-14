@@ -1,5 +1,5 @@
-import type { DifficultyMode } from '@pop/shared/sensors'
-import { getThresholds } from '@pop/shared/sensors'
+import type { DifficultyMode } from '@pop/shared'
+import { getThresholds } from '@pop/shared'
 import type { EventSubscription } from 'expo-modules-core'
 import { Accelerometer, Gyroscope, Pedometer } from 'expo-sensors'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'

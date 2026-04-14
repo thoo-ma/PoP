@@ -1,9 +1,4 @@
-import {
-  calcBustChance,
-  calcReducedCost,
-  calcReduction,
-  DEGEN_ZONE_THRESHOLD,
-} from '@pop/shared/degenBar'
+import { calcBustChance, calcReducedCost, calcReduction, DEGEN_ZONE_THRESHOLD } from '@pop/shared'
 import { cn, Slider } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'

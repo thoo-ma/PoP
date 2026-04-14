@@ -2,7 +2,7 @@ import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { respondOk, respondError } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
-import { MAX_STAT_VALUE } from '../../../shared/statPoints.ts'
+import { MAX_STAT_VALUE } from '../../../shared/src/statPoints.ts'
 
 const AllocateSchema = z.object({
   nft_id:     z.string().uuid('nft_id must be a valid UUID'),

@@ -1,4 +1,4 @@
-import type { DegenBarConfig } from '../../../shared/schemas.ts'
+import type { DegenBarConfig } from '../../../shared/src/schemas.ts'
 import type { SupabaseClient } from './auth.ts'
 import { applyDegenBar, getWalletBalance, computeConfigHash } from './degenBar.ts'
 import { respondError } from './responses.ts'

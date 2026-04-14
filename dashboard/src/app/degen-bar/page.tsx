@@ -1,6 +1,6 @@
 'use client'
 
-import { calcBustChance, calcReducedCost, calcReduction } from '@pop/shared/degenBar'
+import { calcBustChance, calcReducedCost, calcReduction } from '@pop/shared'
 import { useMemo } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { Button } from '@/components/ui/button'
