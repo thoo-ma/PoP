@@ -72,7 +72,8 @@ GitHub Actions, environments, secrets, releases, or emergency procedures.
 
 ### Database Migrations
 - **Trigger:** Manual (no CI — intentional for safety)
-- **Command:** `supabase db push`
+- **Command:** `supabase db push` (must be run from `supabase/` — `cd supabase/ && supabase db push`)
+- **Credentials:** copy `supabase/.env.example` → `supabase/.env` and fill in `SUPABASE_DB_PASSWORD`
 - ⚠️ Always review migration SQL before pushing
 
 ## Release Process
@@ -163,7 +164,7 @@ Only `production` environment exists (we have one backend, no staging).
 - Vercel dashboard → Deployments → previous deploy → Promote to Production
 
 ### Database migration
-- Write a reverse migration in `supabase/migrations/` and `supabase db push`
+- Write a reverse migration in `supabase/migrations/` and run `cd supabase/ && supabase db push` (credentials in `supabase/.env`)
 - ⚠️ No automatic rollback — always test migrations carefully
 
 ## Cost Overview
