@@ -1,6 +1,6 @@
 'use client'
 
-import { MAX_LEVEL } from '@pop/shared/xp'
+import { MAX_LEVEL } from '@pop/shared'
 import { useMemo } from 'react'
 import { useShallow } from 'zustand/shallow'
 import LazyChart from '@/components/LazyChart'

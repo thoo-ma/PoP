@@ -1,4 +1,4 @@
-import { MAX_LEVEL, xpThreshold } from '@pop/shared/xp'
+import { MAX_LEVEL, xpThreshold } from '@pop/shared'
 import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'

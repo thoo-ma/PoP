@@ -1,5 +1,5 @@
 import type { SupabaseClient } from './auth.ts'
-import type { Database } from '../../../shared/database.types.ts'
+import type { Database } from '../../../shared/src/database.types.ts'
 import { respondError } from './responses.ts'
 
 type TablesWithUserId = {

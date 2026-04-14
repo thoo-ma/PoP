@@ -1,4 +1,4 @@
-import { getThresholdForDifficulty } from '@pop/shared/sensors'
+import { getThresholdForDifficulty } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'

@@ -1,6 +1,5 @@
 import type { MysteryBox } from '@pop/shared'
-import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
-import { calcReducedCost } from '@pop/shared/degenBar'
+import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
@@ -18,7 +17,6 @@ import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   breedInfoText,
   breedResultSection,
-  bustMessage,
   costStrikethrough,
   errorMessage,
   infoBox,
@@ -115,7 +113,6 @@ import { canBreed } from '@/utils'
     poopBalance === null || totalBreedCost === null || poopBalance >= totalBreedCost
 
   // ── Render ────────────────────────────────────────────────────────────────
-  const bust = bustMessage()
   const slotsRow = parentSlotsRow()
   const result = breedResultSection()
   return (
@@ -186,12 +183,10 @@ import { canBreed } from '@/utils'
 
               {/* ── Bust feedback ──────────────────────────────────────── */}
               {bustedResult && (
-                <View className={bust.root()}>
-                  <Text className={bust.title()}>BUST</Text>
-                  <Text className={bust.detail()}>
-                    You lost {bustedResult.poop_spent} POOP — better luck next time!
-                  </Text>
-                </View>
+                <ScreenError
+                  title="BUST"
+                  message={`You lost ${bustedResult.poop_spent} POOP — better luck next time!`}
+                />
               )}
               {/* ── Breed error ───────────────────────────────────────────── */}
               {breedError && <Text className={errorMessage()}>{breedError}</Text>}
@@ -204,9 +199,10 @@ import { canBreed } from '@/utils'
               )}
 
               {!hasEnoughPoop && (
-                <Text className={errorMessage()}>
-                  Insufficient POOP — you need {totalBreedCost} POOP to breed.
-                </Text>
+                <ScreenError
+                  title="Insufficient POOP"
+                  message={`You need ${totalBreedCost} POOP to breed.`}
+                />
               )}
 
               {/* ── Breed button ──────────────────────────────────────────────── */}

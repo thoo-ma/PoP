@@ -1,5 +1,4 @@
-import { MAX_ENERGY, repairCost } from '@pop/shared'
-import { calcReducedCost } from '@pop/shared/degenBar'
+import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog, Slider } from 'heroui-native'
 import { memo, useRef, useState } from 'react'

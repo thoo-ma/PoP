@@ -1,4 +1,4 @@
-import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } from '../../../shared/lootRoll.ts'
+import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } from '../../../shared/src/lootRoll.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'

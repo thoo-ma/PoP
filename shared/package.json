@@ -4,11 +4,11 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "exports": {
-    ".": "./index.ts",
-    "./*": "./*.ts"
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
   },
   "dependencies": {
     "zod": "^3.24.1"

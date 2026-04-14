@@ -1,4 +1,4 @@
-import { DETECTIONS_PER_DAY } from '../../../shared/cloudRun.ts'
+import { DETECTIONS_PER_DAY } from '../../../shared/src/cloudRun.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'

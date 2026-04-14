@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import type { Database } from '../../../shared/database.types.ts'
+import type { Database } from '../../../shared/src/database.types.ts'
 import { respondError } from './responses.ts'
 export type SupabaseClient = ReturnType<typeof createClient<Database>>
 
