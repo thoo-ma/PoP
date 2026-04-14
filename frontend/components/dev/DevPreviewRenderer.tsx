@@ -290,9 +290,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <BreedParentSlot nft={p2} label="Choose Parent 2" onPress={() => {}} />
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
-            <Text className={errorMessage()}>
-              Insufficient POOP — you need {cost} POOP to breed.
-            </Text>
+            <ScreenError title="Insufficient POOP" message={`You need ${cost} POOP to breed.`} />
             <Button
               variant="ghost"
               feedbackVariant="none"
@@ -310,17 +308,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'breed:bust-inline') {
-    const bm = bustMessage()
     return (
       <PreviewShell onBack={dismiss}>
-        <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-          <View className="w-full flex-1 px-5 items-center justify-center">
-            <View className={bm.root()}>
-              <Text className={bm.title()}>BUST</Text>
-              <Text className={bm.detail()}>You lost 120 POOP — better luck next time!</Text>
-            </View>
-          </View>
-        </View>
+        <ScreenError title="BUST" message="You lost 120 POOP — better luck next time!" />
       </PreviewShell>
     )
   }

@@ -253,28 +253,27 @@ export default memo(function Vault() {
                         nft={nft}
                         action={
                           <>
-                            {(nft.stat_points ?? 0) > 0 && (
-                              <Button
-                                variant="ghost"
-                                feedbackVariant="none"
-                                onPress={() => handleOpenStatModal(nft)}
-                                className={cn(
-                                  tactileButton({ variant: 'secondary', size: 'sm' }),
-                                  'mt-1',
-                                )}
-                                accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                            <Button
+                              variant="ghost"
+                              feedbackVariant="none"
+                              isDisabled={(nft.stat_points ?? 0) === 0}
+                              onPress={() => handleOpenStatModal(nft)}
+                              className={cn(
+                                tactileButton({ variant: 'secondary', size: 'sm' }),
+                                'mt-1',
+                              )}
+                              accessibilityLabel={`Allocate ${nft.stat_points} stat point(s) for ${formatDisplayName(nft.name)}`}
+                            >
+                              <Button.Label
+                                className={tactileButtonText({
+                                  variant: 'secondary',
+                                  size: 'sm',
+                                })}
                               >
-                                <Button.Label
-                                  className={tactileButtonText({
-                                    variant: 'secondary',
-                                    size: 'sm',
-                                  })}
-                                >
-                                  Allocate {nft.stat_points} pt
-                                  {nft.stat_points !== 1 ? 's' : ''}
-                                </Button.Label>
-                              </Button>
-                            )}
+                                Allocate {nft.stat_points ?? 0} pt
+                                {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
+                              </Button.Label>
+                            </Button>
                             {!nft.isListed ? (
                               <Button
                                 variant="ghost"
