@@ -59,7 +59,7 @@ jobs:
 
       - name: Build preview (iOS)
         if: matrix.platform == 'ios'
-        run: cd frontend && eas build --platform ios --profile preview --non-interactive --auto-submit
+        run: cd frontend && eas build --platform ios --profile preview --non-interactive
         env:
           EXPO_ASC_API_KEY_PATH: ${{ format('{0}/asc-api-key.p8', runner.temp) }}
           EXPO_ASC_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
@@ -67,9 +67,17 @@ jobs:
           EXPO_APPLE_TEAM_ID: P963X9Z93K
           EXPO_APPLE_TEAM_TYPE: INDIVIDUAL
 
+      - name: Submit preview (iOS)
+        if: matrix.platform == 'ios'
+        run: cd frontend && eas submit --platform ios --profile preview --latest --non-interactive
+
       - name: Build preview (Android)
         if: matrix.platform == 'android'
-        run: cd frontend && eas build --platform android --profile preview --non-interactive --auto-submit
+        run: cd frontend && eas build --platform android --profile preview --non-interactive
+
+      - name: Submit preview (Android)
+        if: matrix.platform == 'android'
+        run: cd frontend && eas submit --platform android --profile preview --latest --non-interactive
 
       - name: Clean up ASC API key
         if: matrix.platform == 'ios' && always()
