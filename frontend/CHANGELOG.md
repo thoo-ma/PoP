@@ -1,5 +1,30 @@
 # pop
 
+## 0.4.0
+
+### Minor Changes
+
+- [#354](https://github.com/thoo-ma/PoP/pull/354) [`1ebda5c`](https://github.com/thoo-ma/PoP/commit/1ebda5c489148266b1fa1916532d3099d992962c) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add DevMockContext for auto-syncing dev previews. Introduce `DevMockProvider` and `useDevMock` in `frontend/lib/devMock.tsx`. Guard five Supabase-calling hooks (`useUserNFTs`, `useBreedNFT`, `useRepairNFT`, `useWallet`, `usePoopNFT`) so they short-circuit and return mock data when a `DevMockProvider` is in the tree. Replace ~40 hand-built JSX blocks in `DevPreviewRenderer` with real phase components (`IdlePhase`, `CountdownPhase`, `ImmobilityPhase`, `PromptPhase`, `RecordingPhase`, `ResultsPhase`) and real screens wrapped in `DevMockProvider` (`Breed`, `Repair`), so dev previews auto-sync whenever source components change.
+
+### Patch Changes
+
+- [#349](https://github.com/thoo-ma/PoP/pull/349) [`92e7c5b`](https://github.com/thoo-ma/PoP/commit/92e7c5b03b0085c20112e57a3544b47c964cdb7a) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Style BreedPickerModal cards with app-standard borders, remove title and bar separator.
+
+- [#345](https://github.com/thoo-ma/PoP/pull/345) [`6687a02`](https://github.com/thoo-ma/PoP/commit/6687a02320a6ece894b1be195676a2dc6e405598) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Fix card border clipping and float screen header; tighten breed/outcome panel spacing.
+
+- [#348](https://github.com/thoo-ma/PoP/pull/348) [`91f4d45`](https://github.com/thoo-ma/PoP/commit/91f4d451de07c1c019fa9c3365c162b9c8eddde7) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add Dev Catalog to Profile tab — collapsible sections of UI state previews covering all screens and hard-to-reach states (cooldown, no-energy, breed guard, all Poop game phases, etc.).
+
+- [#352](https://github.com/thoo-ma/PoP/pull/352) [`00116a8`](https://github.com/thoo-ma/PoP/commit/00116a8443c38bb6e143d83c772439e7d9ba9f2c) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract BreedPickerItemCard and NFTDetailCard into standalone sub-components.
+
+- [#355](https://github.com/thoo-ma/PoP/pull/355) [`a9631d3`](https://github.com/thoo-ma/PoP/commit/a9631d31b9dd68eb2baa19c3cb74d01878f6b5c1) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Reorganise frontend architecture: domain subfolders for styles/ and hooks/, single source of truth for sort taxonomy, normalise barrel imports.
+
+- [#351](https://github.com/thoo-ma/PoP/pull/351) [`427789a`](https://github.com/thoo-ma/PoP/commit/427789a0ad06e47e98357c5b09efd0b38ae8d1af) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract Poop screen phase renderers into standalone sub-components under components/proof/.
+
+- [#350](https://github.com/thoo-ma/PoP/pull/350) [`b6c08f8`](https://github.com/thoo-ma/PoP/commit/b6c08f87eb26afd2404ebf85176b15fe783b289c) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Move shared source files into src/, consolidate sub-path imports to barrel.
+
+- Updated dependencies [[`b6c08f8`](https://github.com/thoo-ma/PoP/commit/b6c08f87eb26afd2404ebf85176b15fe783b289c)]:
+  - @pop/shared@0.2.1
+
 ## 0.3.1
 
 ### Patch Changes
