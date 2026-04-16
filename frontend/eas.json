@@ -10,7 +10,8 @@
       "channel": "development",
       "environment": "development",
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "development",
+        "EAS_USE_CACHE": "1"
       },
       "ios": {
         "image": "latest",
@@ -24,7 +25,8 @@
       "channel": "preview",
       "environment": "preview",
       "env": {
-        "APP_VARIANT": "preview"
+        "APP_VARIANT": "preview",
+        "EAS_USE_CACHE": "1"
       },
       "ios": {
         "image": "latest",
@@ -36,6 +38,9 @@
     "production": {
       "channel": "production",
       "environment": "production",
+      "env": {
+        "EAS_USE_CACHE": "1"
+      },
       "ios": {
         "image": "latest",
         "env": {
