@@ -34,7 +34,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   }
 
   const handleCodeChange = (text: string) => {
-    setCode(text)
+    setCode(text.toUpperCase().replace(/[^A-Z0-9]/g, ''))
     clearError()
   }
 
