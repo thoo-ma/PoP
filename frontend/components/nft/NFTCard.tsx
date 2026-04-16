@@ -89,18 +89,6 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
               <Chip.Label className={badgeLabel()}>Listed</Chip.Label>
             </Chip>
           )}
-
-          {/* Stat points — bottom-right */}
-          {(nft.stat_points ?? 0) > 0 && (
-            <Chip
-              size="sm"
-              variant="primary"
-              className={badgePosition({ position: 'bottomRight' })}
-              animation="disable-all"
-            >
-              <Chip.Label className={badgeLabel()}>+{nft.stat_points} pts</Chip.Label>
-            </Chip>
-          )}
         </Card.Header>
 
         <Card.Body className={cardBody()}>
