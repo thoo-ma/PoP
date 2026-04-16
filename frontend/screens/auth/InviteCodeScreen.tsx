@@ -1,11 +1,20 @@
 import { Feather } from '@expo/vector-icons'
-import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native'
-import { useEffect, useRef, useState } from 'react'
-import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
+import {
+  Button,
+  cn,
+  FieldError,
+  InputOTP,
+  LinkButton,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+  Spinner,
+} from 'heroui-native'
+import { useState } from 'react'
+import { Image, KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import { TactileButton } from '@/components'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
-import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
+import { authScreen, tactileButtonText } from '@/styles/auth'
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void
@@ -16,28 +25,16 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const { error, handleError, clearError } = useErrorHandler('InviteCode')
-  const inputRef = useRef<TextInput>(null)
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
-  const [onSurface, onSurfaceVariant] = useCSSVariable([
-    '--color-on-surface',
-    '--color-on-surface-variant',
-  ]) as [string, string]
+  const onSurface = useCSSVariable('--color-on-surface') as string
   const s = authScreen()
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      inputRef.current?.focus()
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [])
 
   const isValidFormat = (text: string): boolean => {
     return /^[A-Z0-9]{8}$/.test(text)
   }
 
   const handleCodeChange = (text: string) => {
-    const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '')
-    setCode(cleaned.slice(0, 8))
+    setCode(text.toUpperCase().replace(/[^A-Z0-9]/g, ''))
     clearError()
   }
 
@@ -97,77 +94,69 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
           <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
 
           <View className={s.inputWrap()}>
-            <TextField isInvalid={!!error}>
-              <Input
-                ref={inputRef}
-                value={code}
-                onChangeText={handleCodeChange}
-                placeholder="ABC12XYZ"
-                placeholderTextColor={onSurfaceVariant}
-                maxLength={8}
-                autoCapitalize="characters"
-                autoCorrect={false}
-                autoComplete="off"
-                keyboardType="ascii-capable"
-                returnKeyType="done"
-                editable={!loading}
-                onSubmitEditing={handleSubmit}
-                accessibilityLabel="Invite code"
-                accessibilityHint="Enter your 8-character invite code"
-                className={s.codeInput()}
-              />
-              {error ? <FieldError className={s.fieldError()}>{error}</FieldError> : null}
-            </TextField>
+            <InputOTP
+              maxLength={8}
+              value={code}
+              onChange={handleCodeChange}
+              onComplete={handleSubmit}
+              pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+              inputMode="text"
+              isInvalid={!!error}
+              isDisabled={loading}
+              pasteTransformer={(text) => text.toUpperCase().replace(/[^A-Z0-9]/g, '')}
+              textInputProps={{ autoCapitalize: 'characters' }}
+            >
+              <InputOTP.Group>
+                <InputOTP.Slot index={0} />
+                <InputOTP.Slot index={1} />
+                <InputOTP.Slot index={2} />
+                <InputOTP.Slot index={3} />
+              </InputOTP.Group>
+              <InputOTP.Separator />
+              <InputOTP.Group>
+                <InputOTP.Slot index={4} />
+                <InputOTP.Slot index={5} />
+                <InputOTP.Slot index={6} />
+                <InputOTP.Slot index={7} />
+              </InputOTP.Group>
+            </InputOTP>
+            {error ? <FieldError className={s.fieldError()}>{error}</FieldError> : null}
           </View>
 
           <View className={s.actionsWrap()}>
-            <Button
+            <TactileButton
+              variant={canSubmit ? 'default' : 'disabled'}
               onPress={handleSubmit}
               isDisabled={!canSubmit}
-              className={cn(
-                tactileButton({ variant: canSubmit ? 'default' : 'disabled' }),
-                'w-full mb-4',
-              )}
+              className="w-full mb-4"
               accessibilityLabel="Submit invite code"
-              variant="ghost"
-              feedbackVariant="none"
             >
-              {loading ? (
-                <Spinner size="sm" color={onSurface} />
-              ) : (
-                <Button.Label
-                  className={tactileButtonText({ variant: canSubmit ? 'default' : 'disabled' })}
-                >
-                  Submit Code
-                </Button.Label>
-              )}
-            </Button>
+              {loading ? <Spinner size="sm" color={onSurface} /> : 'Submit Code'}
+            </TactileButton>
 
-            <Button
+            <TactileButton
               animation="disable-all"
               onPress={handleSignOut}
               isDisabled={loading}
-              className={cn(tactileButton({ variant: 'default' }), 'w-full')}
-              variant="ghost"
-              feedbackVariant="none"
+              className="w-full"
             >
               <Feather name="log-out" size={18} color={onSurface} style={{ marginRight: 12 }} />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign Out
               </Button.Label>
-            </Button>
+            </TactileButton>
           </View>
 
           <View className={cn(s.footer(), 'mt-8')}>
-            <View className={s.footerLink()}>
-              <Text className={s.footerLinkText()}>Privacy</Text>
-            </View>
-            <View className={s.footerLink()}>
-              <Text className={s.footerLinkText()}>Terms</Text>
-            </View>
-            <View className={s.footerLink()}>
-              <Text className={s.footerLinkText()}>Support</Text>
-            </View>
+            <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/privacy')}>
+              <LinkButton.Label className={s.footerLinkText()}>Privacy</LinkButton.Label>
+            </LinkButton>
+            <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/terms')}>
+              <LinkButton.Label className={s.footerLinkText()}>Terms</LinkButton.Label>
+            </LinkButton>
+            <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/support')}>
+              <LinkButton.Label className={s.footerLinkText()}>Support</LinkButton.Label>
+            </LinkButton>
           </View>
         </View>
       </KeyboardAvoidingView>

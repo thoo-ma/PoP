@@ -1,7 +1,7 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn } from 'heroui-native'
+import { Button, cn, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
@@ -12,6 +12,7 @@ import {
   MysteryBoxCard,
   ScreenError,
   ScreenLoader,
+  TactileButton,
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
@@ -23,7 +24,6 @@ import {
   parentSlotsRow,
   screenContainer,
   scrollContent,
-  tactileButton,
   tactileButtonText,
 } from '@/styles'
 import type { NFT } from '@/types'
@@ -41,6 +41,7 @@ import { canBreed } from '@/utils'
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT()
   const { poopBalance } = useWallet()
+  const { toast } = useToast()
 
   const [parent1, setParent1] = useState<NFT | null>(null)
   const [parent2, setParent2] = useState<NFT | null>(null)
@@ -65,6 +66,11 @@ import { canBreed } from '@/utils'
     const newNFT = await breedNFTs(parent1.id, parent2.id, degenPercent)
     if (newNFT) {
       setBreedResult(newNFT)
+      toast.show({
+        variant: 'success',
+        label: 'Breed Successful',
+        description: 'A mystery box has been added to your vault!',
+      })
     }
     // Error is surfaced inline — no Alert
   }
@@ -206,12 +212,11 @@ import { canBreed } from '@/utils'
               )}
 
               {/* ── Breed button ──────────────────────────────────────────────── */}
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="primary"
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
                 <Button.Label className={tactileButtonText({ variant: 'primary' })}>
                   {breedLoading ? (
@@ -228,7 +233,7 @@ import { canBreed } from '@/utils'
                     'Breed'
                   )}
                 </Button.Label>
-              </Button>
+              </TactileButton>
             </>
           ) : (
             /* ── Result ───────────────────────────────────────────────────── */
@@ -254,15 +259,14 @@ import { canBreed } from '@/utils'
                 imageUrl={breedResult.image_url}
               />
 
-              <Button
+              <TactileButton
                 animation="disable-all"
+                variant="primary"
                 onPress={handleReset}
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                  Breed Again
-                </Button.Label>
-              </Button>
+                Breed Again
+              </TactileButton>
             </View>
           )}
         </ScrollView>

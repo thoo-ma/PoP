@@ -1,15 +1,16 @@
 import { FontAwesome6 } from '@expo/vector-icons'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import * as WebBrowser from 'expo-web-browser'
-import { Button, cn, Spinner, useToast } from 'heroui-native'
+import { Button, cn, LinkButton, Spinner, useToast } from 'heroui-native'
 import { useState } from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Linking, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import OAuthButton from '@/components/auth/OAuthButton'
 import { supabase } from '@/lib'
-import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
+import { authScreen, tactileButtonText } from '@/styles/auth'
 import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -132,13 +133,11 @@ export default function Auth() {
 
         <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
 
-        <Button
+        <TactileButton
           onPress={handleTestSignIn}
           isDisabled={testLoading}
-          className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
+          className="w-full mb-4"
           accessibilityLabel="Sign in in Test Mode"
-          variant="ghost"
-          feedbackVariant="none"
         >
           {testLoading ? (
             <Spinner size="sm" color={onSurface} />
@@ -150,16 +149,14 @@ export default function Auth() {
               </Button.Label>
             </>
           )}
-        </Button>
+        </TactileButton>
 
         {__DEV__ && (
-          <Button
+          <TactileButton
             onPress={handleDevSignIn}
             isDisabled={devLoading}
-            className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
+            className="w-full mb-4"
             accessibilityLabel="Sign in in Dev Mode"
-            variant="ghost"
-            feedbackVariant="none"
           >
             {devLoading ? (
               <Spinner size="sm" color={onSurface} />
@@ -171,7 +168,7 @@ export default function Auth() {
                 </Button.Label>
               </>
             )}
-          </Button>
+          </TactileButton>
         )}
 
         <OAuthButton
@@ -199,15 +196,15 @@ export default function Auth() {
       </View>
 
       <View className={cn(s.footer(), 'mt-auto pt-8')}>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Privacy</Text>
-        </View>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Terms</Text>
-        </View>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Support</Text>
-        </View>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/privacy')}>
+          <LinkButton.Label className={s.footerLinkText()}>Privacy</LinkButton.Label>
+        </LinkButton>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/terms')}>
+          <LinkButton.Label className={s.footerLinkText()}>Terms</LinkButton.Label>
+        </LinkButton>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/support')}>
+          <LinkButton.Label className={s.footerLinkText()}>Support</LinkButton.Label>
+        </LinkButton>
       </View>
     </View>
   )

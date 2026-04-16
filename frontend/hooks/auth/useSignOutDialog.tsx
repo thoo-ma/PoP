@@ -1,7 +1,8 @@
-import { Button, cn, Dialog } from 'heroui-native'
+import { cn, Dialog } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
-import { dialogBody, signOutDialog, tactileButton, tactileButtonText } from '@/styles'
+import { TactileButton } from '@/components'
+import { dialogBody, signOutDialog, tactileButton } from '@/styles'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -42,26 +43,12 @@ export function useSignOutDialog() {
             <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
           </View>
           <View className={s.buttonRow()}>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              onPress={() => setIsOpen(false)}
-              className={cn(tactileButton({ variant: 'outline' }), 'flex-1')}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                Cancel
-              </Button.Label>
-            </Button>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              onPress={handleConfirm}
-              className={cn(tactileButton({ variant: 'default' }), 'flex-1')}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'default' })}>
-                Sign Out
-              </Button.Label>
-            </Button>
+            <TactileButton variant="outline" onPress={() => setIsOpen(false)} className="flex-1">
+              Cancel
+            </TactileButton>
+            <TactileButton variant="default" onPress={handleConfirm} className="flex-1">
+              Sign Out
+            </TactileButton>
           </View>
         </Dialog.Content>
       </Dialog.Portal>

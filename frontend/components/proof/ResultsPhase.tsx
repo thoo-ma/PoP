@@ -1,8 +1,8 @@
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { phaseContainer, resultCard, tactileButton, tactileButtonText } from '@/styles'
+import { phaseContainer, resultCard } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import { formatConfidencePercentage } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -41,15 +41,14 @@ export function ResultsPhase({
           <Text className={cardStyles.title()}>Daily limit reached</Text>
           <Text className={cardStyles.detail()}>{rateLimitError.message}</Text>
         </View>
-        <Button
+        <TactileButton
           animation="disable-all"
-          variant="ghost"
-          feedbackVariant="none"
+          variant="primary"
           onPress={onReset}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
-        </Button>
+          Done
+        </TactileButton>
       </View>
     )
   }
@@ -62,17 +61,14 @@ export function ResultsPhase({
           <Text className={cardStyles.title()}>Something went wrong</Text>
           <Text className={cardStyles.detail()}>{detectionError}</Text>
         </View>
-        <Button
+        <TactileButton
           animation="disable-all"
-          variant="ghost"
-          feedbackVariant="none"
+          variant="primary"
           onPress={onReset}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-            Try Again
-          </Button.Label>
-        </Button>
+          Try Again
+        </TactileButton>
       </View>
     )
   }
@@ -87,17 +83,14 @@ export function ResultsPhase({
             Confidence: {formatConfidencePercentage(detectionResult.confidence)}
           </Text>
         </View>
-        <Button
+        <TactileButton
           animation="disable-all"
-          variant="ghost"
-          feedbackVariant="none"
+          variant="primary"
           onPress={onReset}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-            Try Again
-          </Button.Label>
-        </Button>
+          Try Again
+        </TactileButton>
       </View>
     )
   }
@@ -131,27 +124,23 @@ export function ResultsPhase({
         {actionLoading && <Text className={cardStyles.detail()}>Saving…</Text>}
       </View>
       {lootRollId ? (
-        <Button
-          variant="ghost"
-          feedbackVariant="none"
+        <TactileButton
+          variant="primary"
           onPress={onRoulette}
           isDisabled={actionLoading}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-            Continue →
-          </Button.Label>
-        </Button>
+          Continue →
+        </TactileButton>
       ) : (
-        <Button
+        <TactileButton
           animation="disable-all"
-          variant="ghost"
-          feedbackVariant="none"
+          variant="primary"
           onPress={onReset}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>Done</Button.Label>
-        </Button>
+          Done
+        </TactileButton>
       )}
     </View>
   )

@@ -1,14 +1,9 @@
-import { Button, cn } from 'heroui-native'
+import { Button } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
-import {
-  nftPickerButton,
-  nftPickerPlaceholder,
-  tactileButton,
-  tactileButtonText,
-  toastBanner,
-} from '@/styles'
+import { nftPickerButton, nftPickerPlaceholder, toastBanner } from '@/styles'
 import type { NFT } from '@/types'
+import TactileButton from '../shared/TactileButton'
 
 type Props = {
   nfts: NFT[]
@@ -77,19 +72,16 @@ export function IdlePhase({
         )}
       </View>
 
-      <Button
-        variant="ghost"
-        feedbackVariant="none"
+      <TactileButton
+        variant="primary"
         onPress={onPoop}
         isDisabled={buttonDisabled}
-        className={cn(tactileButton({ variant: 'primary' }), 'px-12')}
+        className="px-12"
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}
       >
-        <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-          {buttonLabel}
-        </Button.Label>
-      </Button>
+        {buttonLabel}
+      </TactileButton>
     </>
   )
 }

@@ -1,9 +1,10 @@
-import { Button, Card, cn, Spinner } from 'heroui-native'
+import { Card, Spinner, useToast } from 'heroui-native'
 import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
 import type { RollLootResult } from '@/hooks'
 import { useRollLoot } from '@/hooks'
-import { lootCard, lootResultPanel, tactileButton, tactileButtonText } from '@/styles'
+import { lootCard, lootResultPanel } from '@/styles'
+import TactileButton from '../shared/TactileButton'
 
 const MAX_HOLDS = 3
 const BASE_CHANCE = 10
@@ -24,6 +25,7 @@ export interface LootRouletteCardProps {
  */
 export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRouletteCardProps) {
   const { holdLootRoll, rollLoot, loading } = useRollLoot()
+  const { toast } = useToast()
   const [holds, setHolds] = useState(0)
   const [result, setResult] = useState<RollLootResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
@@ -43,6 +45,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
       setHolds(res.holds)
     } else {
       setErr('Hold failed. Try rolling instead.')
+      toast.show({ variant: 'danger', label: 'Hold Failed', description: 'Try rolling instead.' })
     }
   }
 
@@ -53,6 +56,16 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
       setResult(res)
     } else {
       setErr('Something went wrong. Please try again.')
+      toast.show({
+        variant: 'danger',
+        label: 'Roll Failed',
+        description: 'Something went wrong. Please try again.',
+        actionLabel: 'Retry',
+        onActionPress: ({ hide }) => {
+          hide()
+          handleRoll()
+        },
+      })
     }
   }
 
@@ -92,37 +105,23 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
             {err && <Text className={cardStyles.rollError()}>{err}</Text>}
 
             <View className={cardStyles.buttonRow()}>
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="secondary"
                 onPress={handleHold}
                 isDisabled={!canHold || loading}
-                className={cn(tactileButton({ variant: 'secondary' }), 'flex-1')}
+                className="flex-1"
               >
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <Button.Label className={tactileButtonText({ variant: 'secondary' })}>
-                    Hold +{CHANCE_PER_HOLD}%
-                  </Button.Label>
-                )}
-              </Button>
+                {loading ? <Spinner size="sm" /> : `Hold +${CHANCE_PER_HOLD}%`}
+              </TactileButton>
 
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="primary"
                 onPress={handleRoll}
                 isDisabled={!canRoll || loading}
-                className={cn(tactileButton({ variant: 'primary' }), 'flex-1')}
+                className="flex-1"
               >
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                    Roll!
-                  </Button.Label>
-                )}
-              </Button>
+                {loading ? <Spinner size="sm" /> : 'Roll!'}
+              </TactileButton>
             </View>
           </>
         ) : (
@@ -141,17 +140,14 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
               </View>
             )}
 
-            <Button
+            <TactileButton
               animation="disable-all"
-              variant="ghost"
-              feedbackVariant="none"
+              variant="secondary"
               onPress={onDone}
-              className={cn(tactileButton({ variant: 'secondary' }), 'px-8 mt-2')}
+              className="px-8 mt-2"
             >
-              <Button.Label className={tactileButtonText({ variant: 'secondary' })}>
-                Done
-              </Button.Label>
-            </Button>
+              Done
+            </TactileButton>
           </>
         )}
       </Card.Body>

@@ -1,15 +1,20 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Dialog, Slider } from 'heroui-native'
+import { Button, cn, Slider, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, ScreenLoader } from '@/components'
+import {
+  DegenBar,
+  NFTDetailCard,
+  NFTSelector,
+  ScreenError,
+  ScreenLoader,
+  TactileButton,
+} from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   bustMessage,
   costStrikethrough,
-  dialogBody,
-  dialogFooter,
   infoBox,
   nftPickerButton,
   nftPickerPlaceholder,
@@ -18,7 +23,6 @@ import {
   repairSuccess,
   screenContainer,
   scrollContent,
-  tactileButton,
   tactileButtonText,
 } from '@/styles'
 
@@ -34,15 +38,13 @@ export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
   const { poopBalance } = useWallet()
+  const { toast } = useToast()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [repairAmount, setRepairAmount] = useState(0)
   const [degenPercent, setDegenPercent] = useState(0)
   const [isRepaired, setIsRepaired] = useState(false)
   const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null)
   const [poopSpent, setPoopSpent] = useState<number | null>(null)
-
-  // ── Alert dialog state ─────────────────────────────────────
-  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
 
   const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null
   const currentEnergy = selectedNFT?.energy || 0
@@ -92,14 +94,21 @@ export default memo(function Repair() {
       setIsRepaired(true)
       setRepairAmount(0)
     } else if (insufficientPoopError) {
-      setAlertDialog({
-        title: 'Insufficient POOP',
-        message: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
+      toast.show({
+        variant: 'danger',
+        label: 'Insufficient POOP',
+        description: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
       })
     } else {
-      setAlertDialog({
-        title: 'Repair Failed',
-        message: 'Failed to repair NFT. Please try again.',
+      toast.show({
+        variant: 'danger',
+        label: 'Repair Failed',
+        description: 'Failed to repair NFT. Please try again.',
+        actionLabel: 'Retry',
+        onActionPress: ({ hide }) => {
+          hide()
+          handleRepair()
+        },
       })
     }
   }
@@ -177,15 +186,14 @@ export default memo(function Repair() {
                       {poopSpent !== null && (
                         <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
                       )}
-                      <Button
+                      <TactileButton
                         animation="disable-all"
+                        variant="outline"
                         onPress={handleReset}
-                        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                        className="w-full"
                       >
-                        <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                          Repair Another NFT
-                        </Button.Label>
-                      </Button>
+                        Repair Another NFT
+                      </TactileButton>
                     </View>
                   )}
                 </>
@@ -236,23 +244,21 @@ export default memo(function Repair() {
             {/* Full energy state */}
             {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
               <View className={rfe.root()}>
-                <Button
+                <TactileButton
                   animation="disable-all"
+                  variant="outline"
                   onPress={handleReset}
-                  className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                  className="w-full"
                 >
-                  <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                    This NFT is at full energy!
-                  </Button.Label>
-                </Button>
+                  This NFT is at full energy!
+                </TactileButton>
               </View>
             )}
 
             {/* Repair button — always shown when not repaired and not full energy */}
             {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="primary"
                 onPress={handleRepair}
                 isDisabled={
                   selectedIndex === null ||
@@ -260,7 +266,7 @@ export default memo(function Repair() {
                   updateLoading ||
                   (poopBalance !== null && poopBalance < poopCost)
                 }
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
                 <Button.Label className={tactileButtonText({ variant: 'primary' })}>
                   {updateLoading ? (
@@ -277,42 +283,11 @@ export default memo(function Repair() {
                     `Repair (${poopCost} POOP)`
                   )}
                 </Button.Label>
-              </Button>
+              </TactileButton>
             )}
           </ScrollView>
         </View>
       </View>
-
-      <Dialog
-        isOpen={alertDialog !== null}
-        onOpenChange={(open) => {
-          if (!open) setAlertDialog(null)
-        }}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay />
-          <Dialog.Content>
-            <Dialog.Close />
-            <View className={dialogBody()}>
-              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
-              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
-            </View>
-            <View className={dialogFooter()}>
-              <Button
-                animation="disable-all"
-                variant="ghost"
-                feedbackVariant="none"
-                onPress={() => setAlertDialog(null)}
-                className={tactileButton({ variant: 'primary', size: 'sm' })}
-              >
-                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
-                  OK
-                </Button.Label>
-              </Button>
-            </View>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
     </>
   )
 })

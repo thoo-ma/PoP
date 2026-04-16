@@ -22,4 +22,5 @@ export {
   ResultsPhase,
   RoulettePhase,
 } from './proof'
-export { DegenBar, ErrorBoundary, ScreenError, ScreenLoader } from './shared'
+export type { TactileButtonProps } from './shared'
+export { DegenBar, ErrorBoundary, ScreenError, ScreenLoader, TactileButton } from './shared'

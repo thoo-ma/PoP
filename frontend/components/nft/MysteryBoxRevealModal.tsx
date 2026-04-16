@@ -1,9 +1,10 @@
-import { Button, cn, Dialog } from 'heroui-native'
+import { cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
 import { Image, Text, View } from 'react-native'
-import { rarityBadge, revealModal, tactileButton, tactileButtonText } from '@/styles'
+import { rarityBadge, revealModal } from '@/styles'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 
 interface MysteryBoxRevealModalProps {
   visible: boolean
@@ -50,17 +51,14 @@ export default memo(function MysteryBoxRevealModal({
           <Text className={s.titleMd()}>{formatDisplayName(nft.name)}</Text>
           <Text className={cn(s.description(), 'capitalize')}>{nft.type.replace(/-/g, ' ')}</Text>
 
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
+          <TactileButton
+            variant="primary"
             onPress={onClose}
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+            className="w-full"
             accessibilityLabel="Close reveal and return to vault"
           >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              View in Vault
-            </Button.Label>
-          </Button>
+            View in Vault
+          </TactileButton>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
