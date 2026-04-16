@@ -1,4 +1,4 @@
-import { Button, cn, Dialog, Skeleton, Tabs } from 'heroui-native'
+import { Button, cn, Dialog, SearchField, Skeleton, Tabs } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { NFTCard, SortControls } from '@/components'
@@ -31,6 +31,7 @@ export default memo(function Marketplace() {
   const [sortBy, setSortBy] = useState<SortOption>('efficiency')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [dialog, setDialog] = useState<DialogInfo>(null)
+  const [searchQuery, setSearchQuery] = useState('')
   // Fetch user's NFTs for "My Listings" tab
   const { nfts, loading: userLoading } = useUserNFTs()
   // Fetch marketplace listings from other users
@@ -41,12 +42,26 @@ export default memo(function Marketplace() {
   const myListings = useMemo(() => nfts.filter((nft) => nft.isListed), [nfts])
 
   const sortedMarketplaceListings = useMemo(
-    () => sortNFTs(backendListings, sortBy, sortOrder),
-    [backendListings, sortBy, sortOrder],
+    () =>
+      sortNFTs(
+        backendListings.filter(
+          (nft) => searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+        sortBy,
+        sortOrder,
+      ),
+    [backendListings, sortBy, sortOrder, searchQuery],
   )
   const sortedMyListings = useMemo(
-    () => sortNFTs(myListings, sortBy, sortOrder),
-    [myListings, sortBy, sortOrder],
+    () =>
+      sortNFTs(
+        myListings.filter(
+          (nft) => searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+        sortBy,
+        sortOrder,
+      ),
+    [myListings, sortBy, sortOrder, searchQuery],
   )
 
   const marketplaceRows = useMemo(() => {
@@ -110,6 +125,14 @@ export default memo(function Marketplace() {
             <Tabs.Label>My Listings ({myListings.length})</Tabs.Label>
           </Tabs.Trigger>
         </Tabs.List>
+
+        <SearchField value={searchQuery} onChange={setSearchQuery} className="px-4 pb-2">
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder="Search NFTs..." />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
 
         <SortControls
           sortBy={sortBy}

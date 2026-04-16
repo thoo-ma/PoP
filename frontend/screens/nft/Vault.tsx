@@ -1,6 +1,6 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, Tabs } from 'heroui-native'
+import { Button, cn, SearchField, Skeleton, Tabs } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -52,6 +52,7 @@ export default memo(function Vault() {
   const [revealVisible, setRevealVisible] = useState(false)
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Filter NFTs based on selected rarities and types
   /** Boxes grouped by rarity, sorted transcendent → common. Always includes all 4 rarities. */
@@ -87,9 +88,11 @@ export default memo(function Vault() {
       nfts.filter((nft) => {
         const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity)
         const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type)
-        return matchesRarity && matchesType
+        const matchesSearch =
+          searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase())
+        return matchesRarity && matchesType && matchesSearch
       }),
-    [nfts, selectedRarities, selectedTypes],
+    [nfts, selectedRarities, selectedTypes, searchQuery],
   )
 
   const sortedNfts = useMemo(
@@ -219,6 +222,13 @@ export default memo(function Vault() {
         </Tabs.List>
 
         <Tabs.Content value="toilets">
+          <SearchField value={searchQuery} onChange={setSearchQuery} className="px-4 pb-2">
+            <SearchField.Group>
+              <SearchField.SearchIcon />
+              <SearchField.Input placeholder="Search NFTs..." />
+              <SearchField.ClearButton />
+            </SearchField.Group>
+          </SearchField>
           <FilterControls
             selectedRarities={selectedRarities}
             selectedTypes={selectedTypes}
