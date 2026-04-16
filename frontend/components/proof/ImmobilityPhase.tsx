@@ -1,14 +1,7 @@
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import {
-  phaseContainer,
-  phaseContent,
-  statusBadge,
-  tactileButton,
-  tactileButtonText,
-  timerText,
-} from '@/styles'
+import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
 import type { ChallengeStatus, NFT } from '@/types'
+import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -34,15 +27,14 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
           </Text>
         </View>
       </View>
-      <Button
+      <TactileButton
         animation="disable-all"
-        variant="ghost"
-        feedbackVariant="none"
+        variant="outline"
         onPress={onCancel}
-        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+        className="w-full"
       >
-        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
-      </Button>
+        Cancel
+      </TactileButton>
     </View>
   )
 }

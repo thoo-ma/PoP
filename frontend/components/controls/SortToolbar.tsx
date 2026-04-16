@@ -1,10 +1,11 @@
 import { Select } from 'heroui-native'
 import { memo } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { View } from 'react-native'
 import { SORT_OPTIONS } from '@/constants'
-import { sortControls, tactileButton } from '@/styles'
+import { sortControls } from '@/styles'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 
 interface SortToolbarProps {
   /** The field currently used for sorting. */
@@ -56,15 +57,14 @@ function SortToolbar({
         </Select>
       </View>
 
-      <Pressable
+      <TactileButton
+        variant="secondary"
+        size="sm"
         onPress={onSortOrderToggle}
         accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
-        className={tactileButton({ variant: 'secondary', size: 'sm' })}
       >
-        <Text className="text-on-surface font-black text-base">
-          {sortOrder === 'desc' ? '↓' : '↑'}
-        </Text>
-      </Pressable>
+        {sortOrder === 'desc' ? '↓' : '↑'}
+      </TactileButton>
     </View>
   )
 }

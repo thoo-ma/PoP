@@ -1,10 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useScrollToTop } from '@react-navigation/native'
-import { Avatar, Button, cn, Spinner } from 'heroui-native'
+import { Avatar, Button, Spinner } from 'heroui-native'
 import type { ReactElement } from 'react'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import { TactileButton } from '@/components'
 import type DevCatalogCmp from '@/components/dev/DevCatalog'
 import type renderDevPreviewFn from '@/components/dev/DevPreviewRenderer'
 import { useAuth, useProfileStats, useSignOutDialog, useUserNFTs, useWallet } from '@/hooks'
@@ -19,13 +20,7 @@ const renderDevPreview = __DEV__
       .default
   : null
 
-import {
-  profileModal,
-  screenContainer,
-  tactileButton,
-  tactileButtonText,
-  walletModal,
-} from '@/styles'
+import { profileModal, screenContainer, tactileButtonText, walletModal } from '@/styles'
 import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {
@@ -148,10 +143,9 @@ export default function ProfileScreen() {
               }
             />
           )}
-          <Button
-            variant="ghost"
-            feedbackVariant="none"
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full mb-2.5')}
+          <TactileButton
+            variant="primary"
+            className="w-full mb-2.5"
             onPress={handleSignOut}
             isDisabled={isSigningOut}
             accessibilityLabel="Sign out"
@@ -161,7 +155,7 @@ export default function ProfileScreen() {
             <Button.Label className={tactileButtonText({ variant: 'primary' })}>
               Sign Out
             </Button.Label>
-          </Button>
+          </TactileButton>
         </ScrollView>
       </View>
       <ProfileModals signOutDialog={signOutDialog} />

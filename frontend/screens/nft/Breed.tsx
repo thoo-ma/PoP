@@ -12,6 +12,7 @@ import {
   MysteryBoxCard,
   ScreenError,
   ScreenLoader,
+  TactileButton,
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
@@ -23,7 +24,6 @@ import {
   parentSlotsRow,
   screenContainer,
   scrollContent,
-  tactileButton,
   tactileButtonText,
 } from '@/styles'
 import type { NFT } from '@/types'
@@ -206,12 +206,11 @@ import { canBreed } from '@/utils'
               )}
 
               {/* ── Breed button ──────────────────────────────────────────────── */}
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="primary"
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
                 <Button.Label className={tactileButtonText({ variant: 'primary' })}>
                   {breedLoading ? (
@@ -228,7 +227,7 @@ import { canBreed } from '@/utils'
                     'Breed'
                   )}
                 </Button.Label>
-              </Button>
+              </TactileButton>
             </>
           ) : (
             /* ── Result ───────────────────────────────────────────────────── */
@@ -254,15 +253,14 @@ import { canBreed } from '@/utils'
                 imageUrl={breedResult.image_url}
               />
 
-              <Button
+              <TactileButton
                 animation="disable-all"
+                variant="primary"
                 onPress={handleReset}
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                  Breed Again
-                </Button.Label>
-              </Button>
+                Breed Again
+              </TactileButton>
             </View>
           )}
         </ScrollView>

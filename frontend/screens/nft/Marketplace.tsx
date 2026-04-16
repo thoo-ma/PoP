@@ -1,7 +1,7 @@
-import { Button, cn, Dialog, Skeleton, Tabs } from 'heroui-native'
+import { cn, Dialog, Skeleton, Tabs } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { NFTCard, SortControls } from '@/components'
+import { NFTCard, SortControls, TactileButton } from '@/components'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
@@ -12,8 +12,6 @@ import {
   screenContainer,
   scrollContent,
   skeletonCard,
-  tactileButton,
-  tactileButtonText,
 } from '@/styles'
 import type { NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
@@ -148,23 +146,15 @@ export default memo(function Marketplace() {
                             action={
                               <View className={itemRow.root()}>
                                 <Text className={itemRow.price()}>{item.price}</Text>
-                                <Button
-                                  variant="ghost"
-                                  feedbackVariant="none"
+                                <TactileButton
+                                  variant="primary"
+                                  size="sm"
                                   onPress={handleBuyNFT}
-                                  className={tactileButton({ variant: 'primary', size: 'sm' })}
                                   accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
                                   accessibilityHint="Purchase this NFT"
                                 >
-                                  <Button.Label
-                                    className={tactileButtonText({
-                                      variant: 'primary',
-                                      size: 'sm',
-                                    })}
-                                  >
-                                    Buy
-                                  </Button.Label>
-                                </Button>
+                                  Buy
+                                </TactileButton>
                               </View>
                             }
                           />
@@ -210,22 +200,16 @@ export default memo(function Marketplace() {
                               action={
                                 <View className={itemRow.root()}>
                                   <Text className={itemRow.price()}>{item.price}</Text>
-                                  <Button
+                                  <TactileButton
+                                    variant="outline"
+                                    size="sm"
                                     isDisabled={updateLoading}
                                     onPress={() => handleUnlist(item.id)}
-                                    className={tactileButton({ variant: 'outline', size: 'sm' })}
                                     accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
                                     accessibilityHint="Remove this NFT from marketplace"
                                   >
-                                    <Button.Label
-                                      className={tactileButtonText({
-                                        variant: 'outline',
-                                        size: 'sm',
-                                      })}
-                                    >
-                                      {updateLoading ? 'Unlisting...' : 'Unlist'}
-                                    </Button.Label>
-                                  </Button>
+                                    {updateLoading ? 'Unlisting...' : 'Unlist'}
+                                  </TactileButton>
                                 </View>
                               }
                             />
@@ -264,17 +248,14 @@ export default memo(function Marketplace() {
               <Dialog.Description>{dialog?.message}</Dialog.Description>
             </View>
             <View className={dialogFooter()}>
-              <Button
+              <TactileButton
                 animation="disable-all"
-                variant="ghost"
-                feedbackVariant="none"
+                variant="primary"
+                size="sm"
                 onPress={() => setDialog(null)}
-                className={tactileButton({ variant: 'primary', size: 'sm' })}
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
-                  OK
-                </Button.Label>
-              </Button>
+                OK
+              </TactileButton>
             </View>
           </Dialog.Content>
         </Dialog.Portal>

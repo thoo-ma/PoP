@@ -1,14 +1,7 @@
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import {
-  phaseContainer,
-  phaseContent,
-  phaseText,
-  tactileButton,
-  tactileButtonText,
-  timerText,
-} from '@/styles'
+import { phaseContainer, phaseContent, phaseText, timerText } from '@/styles'
 import type { NFT } from '@/types'
+import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -26,15 +19,14 @@ export function CountdownPhase({ nft, countdownValue, onCancel }: Props) {
         <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
         <Text className={pt.hint()}>Get ready…</Text>
       </View>
-      <Button
+      <TactileButton
         animation="disable-all"
-        variant="ghost"
-        feedbackVariant="none"
+        variant="outline"
         onPress={onCancel}
-        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+        className="w-full"
       >
-        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
-      </Button>
+        Cancel
+      </TactileButton>
     </View>
   )
 }

@@ -1,6 +1,6 @@
 import { getThresholdForDifficulty } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Dialog } from 'heroui-native'
+import { cn, Dialog } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
@@ -14,10 +14,11 @@ import {
   ScreenError,
   ScreenLoader,
   StatAllocationModal,
+  TactileButton,
 } from '@/components'
 import { getCooldownStatus } from '@/constants'
 import { useImmobilityChallenge, usePoopNFT, useToiletDetection, useUserNFTs } from '@/hooks'
-import { dialogBody, dialogFooter, scrollContent, tactileButton, tactileButtonText } from '@/styles'
+import { dialogBody, dialogFooter, scrollContent } from '@/styles'
 import type { AllocateResult, NFT } from '@/types'
 
 const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {
@@ -476,17 +477,14 @@ export default memo(function Poop() {
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
             <View className={dialogFooter()}>
-              <Button
+              <TactileButton
                 animation="disable-all"
-                variant="ghost"
-                feedbackVariant="none"
+                variant="primary"
+                size="sm"
                 onPress={() => setAlertDialog(null)}
-                className={tactileButton({ variant: 'primary', size: 'sm' })}
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
-                  OK
-                </Button.Label>
-              </Button>
+                OK
+              </TactileButton>
             </View>
           </Dialog.Content>
         </Dialog.Portal>
