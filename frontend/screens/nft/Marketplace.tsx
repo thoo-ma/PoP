@@ -41,28 +41,26 @@ export default memo(function Marketplace() {
   // Filter user's listed NFTs for "My Listings" tab
   const myListings = useMemo(() => nfts.filter((nft) => nft.isListed), [nfts])
 
-  const sortedMarketplaceListings = useMemo(
-    () =>
-      sortNFTs(
-        backendListings.filter(
-          (nft) => searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
-        sortBy,
-        sortOrder,
+  const sortedMarketplaceListings = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    return sortNFTs(
+      backendListings.filter(
+        (nft) => normalizedQuery === '' || nft.name.toLowerCase().includes(normalizedQuery),
       ),
-    [backendListings, sortBy, sortOrder, searchQuery],
-  )
-  const sortedMyListings = useMemo(
-    () =>
-      sortNFTs(
-        myListings.filter(
-          (nft) => searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
-        sortBy,
-        sortOrder,
+      sortBy,
+      sortOrder,
+    )
+  }, [backendListings, sortBy, sortOrder, searchQuery])
+  const sortedMyListings = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    return sortNFTs(
+      myListings.filter(
+        (nft) => normalizedQuery === '' || nft.name.toLowerCase().includes(normalizedQuery),
       ),
-    [myListings, sortBy, sortOrder, searchQuery],
-  )
+      sortBy,
+      sortOrder,
+    )
+  }, [myListings, sortBy, sortOrder, searchQuery])
 
   const marketplaceRows = useMemo(() => {
     const rows: NFT[][] = []

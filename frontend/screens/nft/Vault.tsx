@@ -83,17 +83,16 @@ export default memo(function Vault() {
     return rows
   }, [groupedBoxes])
 
-  const filteredNfts = useMemo(
-    () =>
-      nfts.filter((nft) => {
-        const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity)
-        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type)
-        const matchesSearch =
-          searchQuery === '' || nft.name.toLowerCase().includes(searchQuery.toLowerCase())
-        return matchesRarity && matchesType && matchesSearch
-      }),
-    [nfts, selectedRarities, selectedTypes, searchQuery],
-  )
+  const filteredNfts = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    return nfts.filter((nft) => {
+      const matchesRarity = selectedRarities.length === 0 || selectedRarities.includes(nft.rarity)
+      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(nft.type)
+      const matchesSearch =
+        normalizedQuery === '' || nft.name.toLowerCase().includes(normalizedQuery)
+      return matchesRarity && matchesType && matchesSearch
+    })
+  }, [nfts, selectedRarities, selectedTypes, searchQuery])
 
   const sortedNfts = useMemo(
     () => sortNFTs(filteredNfts, sortBy, sortOrder),
