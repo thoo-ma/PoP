@@ -1,5 +1,5 @@
 import { Accordion, AccordionLayoutTransition, Button, cn } from 'heroui-native'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { tactileButton, tactileButtonText } from '@/styles'
 
