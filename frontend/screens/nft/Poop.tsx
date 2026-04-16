@@ -1,6 +1,7 @@
 import { getThresholdForDifficulty } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { cn, Dialog } from 'heroui-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { cn, Dialog, ScrollShadow } from 'heroui-native'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
@@ -357,98 +358,102 @@ export default memo(function Poop() {
         // bg-background (vs bg-surface): active challenge uses a darker base
         // to create contrast for countdown/immobility/prompt/results phases.
         <View className="flex-1">
-          <ScrollView
-            ref={scrollRef}
-            className="bg-background"
-            contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
-              'flex-grow items-center pt-[100px]',
-            )}
-            showsVerticalScrollIndicator={false}
-          >
-            {phase === 'countdown' && activeNFTRef.current && (
-              <CountdownPhase
-                nft={activeNFTRef.current}
-                countdownValue={countdownValue}
-                onCancel={handleCancelCountdownOrImmobility}
-              />
-            )}
-            {phase === 'immobility' && activeNFTRef.current && (
-              <ImmobilityPhase
-                nft={activeNFTRef.current}
-                remainingTime={remainingTime}
-                status={status}
-                onCancel={handleCancelCountdownOrImmobility}
-              />
-            )}
-            {phase === 'prompt' && activeNFTRef.current && (
-              <PromptPhase
-                nft={activeNFTRef.current}
-                onStartRecording={handleStartRecording}
-                onCancel={handleCancelPrompt}
-              />
-            )}
-            {phase === 'recording' && activeNFTRef.current && (
-              <RecordingPhase
-                nft={activeNFTRef.current}
-                isRecording={isRecording}
-                isAnalyzing={isAnalyzing}
-                onStop={stopRecording}
-                onCancel={handleCancelRecording}
-              />
-            )}
-            {phase === 'results' && activeNFTRef.current && (
-              <ResultsPhase
-                nft={activeNFTRef.current}
-                rateLimitError={rateLimitError}
-                detectionError={detectionError}
-                detectionResult={detectionResult}
-                poopedEnergy={poopedEnergy}
-                poopedXP={poopedXP}
-                poopedPoop={poopedPoop}
-                actionLoading={actionLoading}
-                lootRollId={lootRollId}
-                onRoulette={() => setPhase('roulette')}
-                onReset={handleFullReset}
-              />
-            )}
-            {phase === 'roulette' && activeNFTRef.current && lootRollId && (
-              <RoulettePhase
-                nft={activeNFTRef.current}
-                lootRollId={lootRollId}
-                onDone={handleFullReset}
-              />
-            )}
-          </ScrollView>
+          <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+            <ScrollView
+              ref={scrollRef}
+              className="bg-background"
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
+                'flex-grow items-center pt-[100px]',
+              )}
+              showsVerticalScrollIndicator={false}
+            >
+              {phase === 'countdown' && activeNFTRef.current && (
+                <CountdownPhase
+                  nft={activeNFTRef.current}
+                  countdownValue={countdownValue}
+                  onCancel={handleCancelCountdownOrImmobility}
+                />
+              )}
+              {phase === 'immobility' && activeNFTRef.current && (
+                <ImmobilityPhase
+                  nft={activeNFTRef.current}
+                  remainingTime={remainingTime}
+                  status={status}
+                  onCancel={handleCancelCountdownOrImmobility}
+                />
+              )}
+              {phase === 'prompt' && activeNFTRef.current && (
+                <PromptPhase
+                  nft={activeNFTRef.current}
+                  onStartRecording={handleStartRecording}
+                  onCancel={handleCancelPrompt}
+                />
+              )}
+              {phase === 'recording' && activeNFTRef.current && (
+                <RecordingPhase
+                  nft={activeNFTRef.current}
+                  isRecording={isRecording}
+                  isAnalyzing={isAnalyzing}
+                  onStop={stopRecording}
+                  onCancel={handleCancelRecording}
+                />
+              )}
+              {phase === 'results' && activeNFTRef.current && (
+                <ResultsPhase
+                  nft={activeNFTRef.current}
+                  rateLimitError={rateLimitError}
+                  detectionError={detectionError}
+                  detectionResult={detectionResult}
+                  poopedEnergy={poopedEnergy}
+                  poopedXP={poopedXP}
+                  poopedPoop={poopedPoop}
+                  actionLoading={actionLoading}
+                  lootRollId={lootRollId}
+                  onRoulette={() => setPhase('roulette')}
+                  onReset={handleFullReset}
+                />
+              )}
+              {phase === 'roulette' && activeNFTRef.current && lootRollId && (
+                <RoulettePhase
+                  nft={activeNFTRef.current}
+                  lootRollId={lootRollId}
+                  onDone={handleFullReset}
+                />
+              )}
+            </ScrollView>
+          </ScrollShadow>
         </View>
       ) : (
         // ── Idle (home) ────────────────────────────────────
         // bg-background: matches active challenge phase for seamless transition.
         <View className="flex-1">
-          <ScrollView
-            className="flex-1 bg-background"
-            contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
-              'flex-grow items-center pt-[100px]',
-            )}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <IdlePhase
-              nfts={nfts}
-              selectedIndex={selectedIndex}
-              displayNFT={displayNFT}
-              buttonDisabled={buttonDisabled}
-              buttonLabel={buttonLabel}
-              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
-              accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
-              immobilityMessage={immobilityMessage}
-              onSelectNFT={handleSelectNFT}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onPoop={handlePoop}
-            />
-          </ScrollView>
+          <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+            <ScrollView
+              className="flex-1 bg-background"
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
+                'flex-grow items-center pt-[100px]',
+              )}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <IdlePhase
+                nfts={nfts}
+                selectedIndex={selectedIndex}
+                displayNFT={displayNFT}
+                buttonDisabled={buttonDisabled}
+                buttonLabel={buttonLabel}
+                accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
+                accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
+                immobilityMessage={immobilityMessage}
+                onSelectNFT={handleSelectNFT}
+                onPrev={handlePrev}
+                onNext={handleNext}
+                onPoop={handlePoop}
+              />
+            </ScrollView>
+          </ScrollShadow>
         </View>
       )}
 

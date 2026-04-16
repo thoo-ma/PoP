@@ -1,8 +1,10 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button, cn, ScrollShadow, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { type ScrollView, Text, View } from 'react-native'
+import Animated, { runOnJS, useAnimatedScrollHandler } from 'react-native-reanimated'
 import {
   FilterControls,
   MysteryBoxCard,
@@ -33,10 +35,10 @@ import { formatDisplayName, sortNFTs } from '@/utils'
  * stat-point allocation via the `StatAllocationModal`.
  */
 export default memo(function Vault() {
-  const nftScrollRef = useRef<ScrollView>(null)
-  const boxScrollRef = useRef<ScrollView>(null)
-  useScrollToTop(nftScrollRef)
-  useScrollToTop(boxScrollRef)
+  const nftScrollRef = useRef<Animated.ScrollView>(null)
+  const boxScrollRef = useRef<Animated.ScrollView>(null)
+  useScrollToTop(nftScrollRef as React.RefObject<ScrollView>)
+  useScrollToTop(boxScrollRef as React.RefObject<ScrollView>)
 
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { listNFT } = useUpdateNFT()
@@ -54,6 +56,12 @@ export default memo(function Vault() {
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const handleScroll = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      runOnJS(setShowScrollTop)(event.contentOffset.y > 600)
+    },
+  })
 
   // Filter NFTs based on selected rarities and types
   /** Boxes grouped by rarity, sorted transcendent → common. Always includes all 4 rarities. */
@@ -252,81 +260,82 @@ export default memo(function Vault() {
             onSortOrderToggle={handleSortOrderToggle}
           />
 
-          <ScrollView
-            ref={nftScrollRef}
-            contentContainerClassName={cn(
-              scrollContent({ padding: 'md', bottomPad: 'xl' }),
-              'w-full',
-            )}
-            contentInset={{ bottom: 170 }}
-            scrollIndicatorInsets={{ bottom: 170 }}
-            showsVerticalScrollIndicator={false}
-            onScroll={(e) => setShowScrollTop(e.nativeEvent.contentOffset.y > 600)}
-            scrollEventThrottle={100}
-          >
-            <View className="w-full">
-              {nftRows.map((pair) => (
-                <View key={pair[0].id} className={gridLayout().row()}>
-                  {pair.map((nft) => (
-                    <View key={nft.id} className={gridLayout().item()}>
-                      <NFTCard
-                        nft={nft}
-                        action={
-                          <>
-                            <Button
-                              variant="ghost"
-                              feedbackVariant="none"
-                              isDisabled={(nft.stat_points ?? 0) === 0}
-                              onPress={() => handleOpenStatModal(nft)}
-                              className={cn(
-                                tactileButton({ variant: 'secondary', size: 'sm' }),
-                                'mt-1',
-                              )}
-                              accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
-                            >
-                              <Button.Label
-                                className={tactileButtonText({
-                                  variant: 'secondary',
-                                  size: 'sm',
-                                })}
-                              >
-                                Allocate {nft.stat_points ?? 0} pt
-                                {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
-                              </Button.Label>
-                            </Button>
-                            {!nft.isListed ? (
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <Animated.ScrollView
+              ref={nftScrollRef}
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'xl' }),
+                'w-full',
+              )}
+              contentInset={{ bottom: 170 }}
+              scrollIndicatorInsets={{ bottom: 170 }}
+              showsVerticalScrollIndicator={false}
+              onScroll={handleScroll}
+            >
+              <View className="w-full">
+                {nftRows.map((pair) => (
+                  <View key={pair[0].id} className={gridLayout().row()}>
+                    {pair.map((nft) => (
+                      <View key={nft.id} className={gridLayout().item()}>
+                        <NFTCard
+                          nft={nft}
+                          action={
+                            <>
                               <Button
                                 variant="ghost"
                                 feedbackVariant="none"
-                                isDisabled
-                                onPress={() => handleListNFT(nft.id)}
+                                isDisabled={(nft.stat_points ?? 0) === 0}
+                                onPress={() => handleOpenStatModal(nft)}
                                 className={cn(
-                                  tactileButton({ variant: 'primary', size: 'sm' }),
+                                  tactileButton({ variant: 'secondary', size: 'sm' }),
                                   'mt-1',
                                 )}
-                                accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                                accessibilityHint="List this NFT on the marketplace"
+                                accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
                               >
                                 <Button.Label
                                   className={tactileButtonText({
-                                    variant: 'primary',
+                                    variant: 'secondary',
                                     size: 'sm',
                                   })}
                                 >
-                                  Sale
+                                  Allocate {nft.stat_points ?? 0} pt
+                                  {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
                                 </Button.Label>
                               </Button>
-                            ) : undefined}
-                          </>
-                        }
-                      />
-                    </View>
-                  ))}
-                  {pair.length === 1 && <View className={gridLayout().item()} />}
-                </View>
-              ))}
-            </View>
-          </ScrollView>
+                              {!nft.isListed ? (
+                                <Button
+                                  variant="ghost"
+                                  feedbackVariant="none"
+                                  isDisabled
+                                  onPress={() => handleListNFT(nft.id)}
+                                  className={cn(
+                                    tactileButton({ variant: 'primary', size: 'sm' }),
+                                    'mt-1',
+                                  )}
+                                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                                  accessibilityHint="List this NFT on the marketplace"
+                                >
+                                  <Button.Label
+                                    className={tactileButtonText({
+                                      variant: 'primary',
+                                      size: 'sm',
+                                    })}
+                                  >
+                                    Sale
+                                  </Button.Label>
+                                </Button>
+                              ) : undefined}
+                            </>
+                          }
+                        />
+                      </View>
+                    ))}
+                    {pair.length === 1 && <View className={gridLayout().item()} />}
+                  </View>
+                ))}
+              </View>
+            </Animated.ScrollView>
+          </ScrollShadow>
         </Tabs.Content>
         <Tabs.Content value="mystery-boxes">
           {boxesLoading ? (
@@ -346,63 +355,64 @@ export default memo(function Vault() {
               </Text>
             </View>
           ) : (
-            <ScrollView
-              ref={boxScrollRef}
-              contentContainerClassName={cn(
-                scrollContent({ padding: 'md', bottomPad: 'xl' }),
-                'w-full',
-              )}
-              contentInset={{ bottom: 170 }}
-              scrollIndicatorInsets={{ bottom: 170 }}
-              showsVerticalScrollIndicator={false}
-              onScroll={(e) => setShowScrollTop(e.nativeEvent.contentOffset.y > 600)}
-              scrollEventThrottle={100}
-            >
-              <View className="w-full">
-                {boxRows.map((pair) => (
-                  <View key={pair[0].rarity} className={gridLayout().row()}>
-                    {pair.map((group) => {
-                      const isOpening = openingRarity === group.rarity
-                      const isEmpty = group.count === 0
-                      return (
-                        <View key={group.rarity} className={gridLayout().item()}>
-                          <MysteryBoxCard
-                            rarity={group.rarity}
-                            box={group.box}
-                            imageUrl={group.imageUrl}
-                            count={group.count}
-                            action={
-                              <Button
-                                isDisabled={isEmpty || isOpening || openLoading}
-                                onPress={() => handleOpenBox(group.rarity)}
-                                className={cn(
-                                  tactileButton({
-                                    variant: isEmpty ? 'disabled' : 'primary',
-                                    size: 'sm',
-                                  }),
-                                  'mt-1',
-                                )}
-                                accessibilityLabel={`Open a ${group.rarity} mystery box`}
-                              >
-                                <Button.Label
-                                  className={tactileButtonText({
-                                    variant: isEmpty ? 'disabled' : 'primary',
-                                    size: 'sm',
-                                  })}
+            <ScrollShadow LinearGradientComponent={LinearGradient}>
+              <Animated.ScrollView
+                ref={boxScrollRef}
+                contentContainerClassName={cn(
+                  scrollContent({ padding: 'md', bottomPad: 'xl' }),
+                  'w-full',
+                )}
+                contentInset={{ bottom: 170 }}
+                scrollIndicatorInsets={{ bottom: 170 }}
+                showsVerticalScrollIndicator={false}
+                onScroll={handleScroll}
+              >
+                <View className="w-full">
+                  {boxRows.map((pair) => (
+                    <View key={pair[0].rarity} className={gridLayout().row()}>
+                      {pair.map((group) => {
+                        const isOpening = openingRarity === group.rarity
+                        const isEmpty = group.count === 0
+                        return (
+                          <View key={group.rarity} className={gridLayout().item()}>
+                            <MysteryBoxCard
+                              rarity={group.rarity}
+                              box={group.box}
+                              imageUrl={group.imageUrl}
+                              count={group.count}
+                              action={
+                                <Button
+                                  isDisabled={isEmpty || isOpening || openLoading}
+                                  onPress={() => handleOpenBox(group.rarity)}
+                                  className={cn(
+                                    tactileButton({
+                                      variant: isEmpty ? 'disabled' : 'primary',
+                                      size: 'sm',
+                                    }),
+                                    'mt-1',
+                                  )}
+                                  accessibilityLabel={`Open a ${group.rarity} mystery box`}
                                 >
-                                  {isOpening ? 'Opening...' : 'Open'}
-                                </Button.Label>
-                              </Button>
-                            }
-                          />
-                        </View>
-                      )
-                    })}
-                    {pair.length === 1 && <View className={gridLayout().item()} />}
-                  </View>
-                ))}
-              </View>
-            </ScrollView>
+                                  <Button.Label
+                                    className={tactileButtonText({
+                                      variant: isEmpty ? 'disabled' : 'primary',
+                                      size: 'sm',
+                                    })}
+                                  >
+                                    {isOpening ? 'Opening...' : 'Open'}
+                                  </Button.Label>
+                                </Button>
+                              }
+                            />
+                          </View>
+                        )
+                      })}
+                      {pair.length === 1 && <View className={gridLayout().item()} />}
+                    </View>
+                  ))}
+                </View>
+              </Animated.ScrollView>
+            </ScrollShadow>
           )}
         </Tabs.Content>
       </Tabs>

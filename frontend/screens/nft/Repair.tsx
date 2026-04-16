@@ -1,6 +1,7 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button, cn, ScrollShadow, Skeleton, Slider, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, TactileButton } from '@/components'
@@ -121,20 +122,22 @@ export default memo(function Repair() {
     return (
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <View className="w-full">
-          <ScrollView
-            contentContainerClassName={scrollContent({
-              padding: 'md',
-              bottomPad: 'default',
-              align: 'center',
-            })}
-            showsVerticalScrollIndicator={false}
-          >
-            <View className="w-full items-center">
-              <Skeleton className={sk.pickerButton()} />
-            </View>
-            <Skeleton className={sk.sliderBox()} />
-            <Skeleton className={sk.button()} />
-          </ScrollView>
+          <ScrollShadow LinearGradientComponent={LinearGradient}>
+            <ScrollView
+              contentContainerClassName={scrollContent({
+                padding: 'md',
+                bottomPad: 'default',
+                align: 'center',
+              })}
+              showsVerticalScrollIndicator={false}
+            >
+              <View className="w-full items-center">
+                <Skeleton className={sk.pickerButton()} />
+              </View>
+              <Skeleton className={sk.sliderBox()} />
+              <Skeleton className={sk.button()} />
+            </ScrollView>
+          </ScrollShadow>
         </View>
       </View>
     )
@@ -148,158 +151,160 @@ export default memo(function Repair() {
     <>
       <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
         <View className="w-full">
-          <ScrollView
-            ref={scrollRef}
-            contentContainerClassName={scrollContent({
-              padding: 'md',
-              bottomPad: 'default',
-              align: 'center',
-            })}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* NFT picker / card area */}
-            <View className="w-full items-center mb-5">
-              {selectedIndex === null ? (
-                <Button
-                  variant="ghost"
-                  onPress={handleSelectNFT}
-                  isDisabled={nfts.length === 0}
-                  className={nftPickerButton()}
-                >
-                  <Text className={ph.icon()}>+</Text>
-                  <Button.Label className={ph.label()}>
-                    {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
-                  </Button.Label>
-                </Button>
-              ) : (
-                <>
-                  {/* NFT Carousel Selector */}
-                  {!isRepaired && (
-                    <NFTSelector
-                      current={(selectedIndex as number) + 1}
-                      total={nfts.length}
-                      onPrev={handlePrev}
-                      onNext={handleNext}
-                      className="mb-3"
-                    />
-                  )}
-                  {/* Selected NFT Card */}
-                  {!isRepaired && selectedNFT && (
-                    <NFTDetailCard
-                      nft={selectedNFT}
-                      energy={currentEnergy + Math.round(repairAmount)}
-                    />
-                  )}
+          <ScrollShadow LinearGradientComponent={LinearGradient} className="flex-1">
+            <ScrollView
+              ref={scrollRef}
+              contentContainerClassName={scrollContent({
+                padding: 'md',
+                bottomPad: 'default',
+                align: 'center',
+              })}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* NFT picker / card area */}
+              <View className="w-full items-center mb-5">
+                {selectedIndex === null ? (
+                  <Button
+                    variant="ghost"
+                    onPress={handleSelectNFT}
+                    isDisabled={nfts.length === 0}
+                    className={nftPickerButton()}
+                  >
+                    <Text className={ph.icon()}>+</Text>
+                    <Button.Label className={ph.label()}>
+                      {nfts.length === 0 ? 'No NFTs Available' : 'Select NFT from Vault'}
+                    </Button.Label>
+                  </Button>
+                ) : (
+                  <>
+                    {/* NFT Carousel Selector */}
+                    {!isRepaired && (
+                      <NFTSelector
+                        current={(selectedIndex as number) + 1}
+                        total={nfts.length}
+                        onPrev={handlePrev}
+                        onNext={handleNext}
+                        className="mb-3"
+                      />
+                    )}
+                    {/* Selected NFT Card */}
+                    {!isRepaired && selectedNFT && (
+                      <NFTDetailCard
+                        nft={selectedNFT}
+                        energy={currentEnergy + Math.round(repairAmount)}
+                      />
+                    )}
 
-                  {isRepaired && (
-                    <View className={rs.root()}>
-                      <Text className={rs.text()}>Repair Complete!</Text>
-                      {repairedEnergy !== null && (
-                        <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
-                      )}
-                      {poopSpent !== null && (
-                        <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
-                      )}
-                      <TactileButton
-                        animation="disable-all"
-                        variant="outline"
-                        onPress={handleReset}
-                        className="w-full"
-                      >
-                        Repair Another NFT
-                      </TactileButton>
+                    {isRepaired && (
+                      <View className={rs.root()}>
+                        <Text className={rs.text()}>Repair Complete!</Text>
+                        {repairedEnergy !== null && (
+                          <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
+                        )}
+                        {poopSpent !== null && (
+                          <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
+                        )}
+                        <TactileButton
+                          animation="disable-all"
+                          variant="outline"
+                          onPress={handleReset}
+                          className="w-full"
+                        >
+                          Repair Another NFT
+                        </TactileButton>
+                      </View>
+                    )}
+                  </>
+                )}
+              </View>
+
+              {/* Repair controls — only when NFT selected, energy < max, not repaired */}
+              {selectedNFT && currentEnergy < MAX_ENERGY && !isRepaired && (
+                <>
+                  <View className={cn(infoBox(), 'mb-5')}>
+                    <Text className={ra.title()}>Repair Amount</Text>
+                    <View className={ra.valueWrap()}>
+                      <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>
+                    </View>
+                    <Slider
+                      className="w-full"
+                      minValue={0}
+                      maxValue={maxRepairPossible}
+                      value={repairAmount}
+                      onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
+                      step={1}
+                    >
+                      <Slider.Track>
+                        <Slider.Fill />
+                        <Slider.Thumb />
+                      </Slider.Track>
+                    </Slider>
+                  </View>
+
+                  <DegenBar
+                    baseCost={poopCost}
+                    onDegenChange={setDegenPercent}
+                    disabled={updateLoading}
+                  />
+
+                  {/* Bust feedback */}
+                  {bustedResult && (
+                    <View className={bm.root()}>
+                      <Text className={bm.title()}>BUST</Text>
+                      <Text className={bm.detail()}>
+                        You lost {bustedResult.poop_spent} POOP — better luck next time!
+                      </Text>
                     </View>
                   )}
                 </>
               )}
-            </View>
 
-            {/* Repair controls — only when NFT selected, energy < max, not repaired */}
-            {selectedNFT && currentEnergy < MAX_ENERGY && !isRepaired && (
-              <>
-                <View className={cn(infoBox(), 'mb-5')}>
-                  <Text className={ra.title()}>Repair Amount</Text>
-                  <View className={ra.valueWrap()}>
-                    <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>
-                  </View>
-                  <Slider
+              {/* Full energy state */}
+              {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
+                <View className={rfe.root()}>
+                  <TactileButton
+                    animation="disable-all"
+                    variant="outline"
+                    onPress={handleReset}
                     className="w-full"
-                    minValue={0}
-                    maxValue={maxRepairPossible}
-                    value={repairAmount}
-                    onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
-                    step={1}
                   >
-                    <Slider.Track>
-                      <Slider.Fill />
-                      <Slider.Thumb />
-                    </Slider.Track>
-                  </Slider>
+                    This NFT is at full energy!
+                  </TactileButton>
                 </View>
+              )}
 
-                <DegenBar
-                  baseCost={poopCost}
-                  onDegenChange={setDegenPercent}
-                  disabled={updateLoading}
-                />
-
-                {/* Bust feedback */}
-                {bustedResult && (
-                  <View className={bm.root()}>
-                    <Text className={bm.title()}>BUST</Text>
-                    <Text className={bm.detail()}>
-                      You lost {bustedResult.poop_spent} POOP — better luck next time!
-                    </Text>
-                  </View>
-                )}
-              </>
-            )}
-
-            {/* Full energy state */}
-            {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
-              <View className={rfe.root()}>
+              {/* Repair button — always shown when not repaired and not full energy */}
+              {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
                 <TactileButton
-                  animation="disable-all"
-                  variant="outline"
-                  onPress={handleReset}
+                  variant="primary"
+                  onPress={handleRepair}
+                  isDisabled={
+                    selectedIndex === null ||
+                    repairAmount === 0 ||
+                    updateLoading ||
+                    (poopBalance !== null && poopBalance < poopCost)
+                  }
                   className="w-full"
                 >
-                  This NFT is at full energy!
+                  <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                    {updateLoading ? (
+                      'Repairing...'
+                    ) : poopBalance !== null && poopBalance < poopCost ? (
+                      `Need ${poopCost} POOP`
+                    ) : degenPercent > 0 ? (
+                      <>
+                        {'Repair — '}
+                        <Text className={costStrikethrough()}>{poopCost}</Text>
+                        {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
+                      </>
+                    ) : (
+                      `Repair (${poopCost} POOP)`
+                    )}
+                  </Button.Label>
                 </TactileButton>
-              </View>
-            )}
-
-            {/* Repair button — always shown when not repaired and not full energy */}
-            {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
-              <TactileButton
-                variant="primary"
-                onPress={handleRepair}
-                isDisabled={
-                  selectedIndex === null ||
-                  repairAmount === 0 ||
-                  updateLoading ||
-                  (poopBalance !== null && poopBalance < poopCost)
-                }
-                className="w-full"
-              >
-                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                  {updateLoading ? (
-                    'Repairing...'
-                  ) : poopBalance !== null && poopBalance < poopCost ? (
-                    `Need ${poopCost} POOP`
-                  ) : degenPercent > 0 ? (
-                    <>
-                      {'Repair — '}
-                      <Text className={costStrikethrough()}>{poopCost}</Text>
-                      {` ${calcReducedCost(poopCost, degenPercent)} POOP`}
-                    </>
-                  ) : (
-                    `Repair (${poopCost} POOP)`
-                  )}
-                </Button.Label>
-              </TactileButton>
-            )}
-          </ScrollView>
+              )}
+            </ScrollView>
+          </ScrollShadow>
         </View>
       </View>
     </>
