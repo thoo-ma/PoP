@@ -1,4 +1,4 @@
-import { cn, Dialog, Skeleton, Tabs, useToast } from 'heroui-native'
+import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { NFTCard, SortControls, TactileButton } from '@/components'
@@ -29,6 +29,7 @@ export default memo(function Marketplace() {
   const [sortBy, setSortBy] = useState<SortOption>('efficiency')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [dialog, setDialog] = useState<DialogInfo>(null)
+  const [searchQuery, setSearchQuery] = useState('')
   // Fetch user's NFTs for "My Listings" tab
   const { nfts, loading: userLoading } = useUserNFTs()
   // Fetch marketplace listings from other users
@@ -39,14 +40,26 @@ export default memo(function Marketplace() {
   // Filter user's listed NFTs for "My Listings" tab
   const myListings = useMemo(() => nfts.filter((nft) => nft.isListed), [nfts])
 
-  const sortedMarketplaceListings = useMemo(
-    () => sortNFTs(backendListings, sortBy, sortOrder),
-    [backendListings, sortBy, sortOrder],
-  )
-  const sortedMyListings = useMemo(
-    () => sortNFTs(myListings, sortBy, sortOrder),
-    [myListings, sortBy, sortOrder],
-  )
+  const sortedMarketplaceListings = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    return sortNFTs(
+      backendListings.filter(
+        (nft) => normalizedQuery === '' || nft.name.toLowerCase().includes(normalizedQuery),
+      ),
+      sortBy,
+      sortOrder,
+    )
+  }, [backendListings, sortBy, sortOrder, searchQuery])
+  const sortedMyListings = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    return sortNFTs(
+      myListings.filter(
+        (nft) => normalizedQuery === '' || nft.name.toLowerCase().includes(normalizedQuery),
+      ),
+      sortBy,
+      sortOrder,
+    )
+  }, [myListings, sortBy, sortOrder, searchQuery])
 
   const marketplaceRows = useMemo(() => {
     const rows: NFT[][] = []
@@ -122,6 +135,14 @@ export default memo(function Marketplace() {
             <Tabs.Label>My Listings ({myListings.length})</Tabs.Label>
           </Tabs.Trigger>
         </Tabs.List>
+
+        <SearchField value={searchQuery} onChange={setSearchQuery} className="px-4 pb-2">
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder="Search NFTs..." />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
 
         <SortControls
           sortBy={sortBy}
