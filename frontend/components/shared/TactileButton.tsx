@@ -31,10 +31,10 @@ export default function TactileButton({
 }: TactileButtonProps) {
   return (
     <Button
+      {...props}
       variant="ghost"
       feedbackVariant="none"
       className={cn(tactileButton({ variant, size }), className)}
-      {...props}
     >
       {typeof children === 'string' ? (
         <Button.Label className={tactileButtonText({ variant, size })}>{children}</Button.Label>
