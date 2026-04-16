@@ -1,6 +1,6 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Dialog, Slider } from 'heroui-native'
+import { Button, cn, Slider, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -15,8 +15,6 @@ import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   bustMessage,
   costStrikethrough,
-  dialogBody,
-  dialogFooter,
   infoBox,
   nftPickerButton,
   nftPickerPlaceholder,
@@ -40,15 +38,13 @@ export default memo(function Repair() {
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
   const { poopBalance } = useWallet()
+  const { toast } = useToast()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [repairAmount, setRepairAmount] = useState(0)
   const [degenPercent, setDegenPercent] = useState(0)
   const [isRepaired, setIsRepaired] = useState(false)
   const [repairedEnergy, setRepairedEnergy] = useState<number | null>(null)
   const [poopSpent, setPoopSpent] = useState<number | null>(null)
-
-  // ── Alert dialog state ─────────────────────────────────────
-  const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
 
   const selectedNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null
   const currentEnergy = selectedNFT?.energy || 0
@@ -98,14 +94,21 @@ export default memo(function Repair() {
       setIsRepaired(true)
       setRepairAmount(0)
     } else if (insufficientPoopError) {
-      setAlertDialog({
-        title: 'Insufficient POOP',
-        message: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
+      toast.show({
+        variant: 'danger',
+        label: 'Insufficient POOP',
+        description: `You need ${insufficientPoopError.poop_required} POOP to repair. You have ${insufficientPoopError.poop_balance} POOP.`,
       })
     } else {
-      setAlertDialog({
-        title: 'Repair Failed',
-        message: 'Failed to repair NFT. Please try again.',
+      toast.show({
+        variant: 'danger',
+        label: 'Repair Failed',
+        description: 'Failed to repair NFT. Please try again.',
+        actionLabel: 'Retry',
+        onActionPress: ({ hide }) => {
+          hide()
+          handleRepair()
+        },
       })
     }
   }
@@ -285,34 +288,6 @@ export default memo(function Repair() {
           </ScrollView>
         </View>
       </View>
-
-      <Dialog
-        isOpen={alertDialog !== null}
-        onOpenChange={(open) => {
-          if (!open) setAlertDialog(null)
-        }}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay />
-          <Dialog.Content>
-            <Dialog.Close />
-            <View className={dialogBody()}>
-              <Dialog.Title>{alertDialog?.title ?? ''}</Dialog.Title>
-              <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
-            </View>
-            <View className={dialogFooter()}>
-              <TactileButton
-                animation="disable-all"
-                variant="primary"
-                size="sm"
-                onPress={() => setAlertDialog(null)}
-              >
-                OK
-              </TactileButton>
-            </View>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
     </>
   )
 })

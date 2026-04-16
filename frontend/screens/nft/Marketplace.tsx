@@ -1,4 +1,4 @@
-import { cn, Dialog, Skeleton, Tabs } from 'heroui-native'
+import { cn, Dialog, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { NFTCard, SortControls, TactileButton } from '@/components'
@@ -34,6 +34,7 @@ export default memo(function Marketplace() {
   // Fetch marketplace listings from other users
   const { listings: backendListings, loading: marketplaceLoading } = useMarketplaceListings()
   const { unlistNFT, loadingUnlistNFT: updateLoading } = useUpdateNFT()
+  const { toast } = useToast()
 
   // Filter user's listed NFTs for "My Listings" tab
   const myListings = useMemo(() => nfts.filter((nft) => nft.isListed), [nfts])
@@ -71,12 +72,25 @@ export default memo(function Marketplace() {
     async (nftId: string) => {
       const success = await unlistNFT(nftId)
       if (success) {
-        setDialog({ title: 'Success', message: 'NFT removed from marketplace' })
+        toast.show({
+          variant: 'success',
+          label: 'Success',
+          description: 'NFT removed from marketplace',
+        })
       } else {
-        setDialog({ title: 'Error', message: 'Failed to unlist NFT' })
+        toast.show({
+          variant: 'danger',
+          label: 'Error',
+          description: 'Failed to unlist NFT',
+          actionLabel: 'Retry',
+          onActionPress: ({ hide }) => {
+            hide()
+            handleUnlist(nftId)
+          },
+        })
       }
     },
-    [unlistNFT],
+    [unlistNFT, toast],
   )
 
   const handleSortOrderToggle = useCallback(() => {

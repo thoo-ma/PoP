@@ -1,9 +1,9 @@
 import { FontAwesome6 } from '@expo/vector-icons'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import * as WebBrowser from 'expo-web-browser'
-import { Button, cn, Spinner, useToast } from 'heroui-native'
+import { Button, cn, LinkButton, Spinner, useToast } from 'heroui-native'
 import { useState } from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Linking, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import OAuthButton from '@/components/auth/OAuthButton'
 import { supabase } from '@/lib'
@@ -196,15 +196,15 @@ export default function Auth() {
       </View>
 
       <View className={cn(s.footer(), 'mt-auto pt-8')}>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Privacy</Text>
-        </View>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Terms</Text>
-        </View>
-        <View className={s.footerLink()}>
-          <Text className={s.footerLinkText()}>Support</Text>
-        </View>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/privacy')}>
+          <LinkButton.Label className={s.footerLinkText()}>Privacy</LinkButton.Label>
+        </LinkButton>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/terms')}>
+          <LinkButton.Label className={s.footerLinkText()}>Terms</LinkButton.Label>
+        </LinkButton>
+        <LinkButton size="sm" onPress={() => Linking.openURL('https://pop.app/support')}>
+          <LinkButton.Label className={s.footerLinkText()}>Support</LinkButton.Label>
+        </LinkButton>
       </View>
     </View>
   )
