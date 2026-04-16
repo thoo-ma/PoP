@@ -1,6 +1,6 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, Tabs } from 'heroui-native'
+import { Button, cn, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -42,6 +42,7 @@ export default memo(function Vault() {
   const { listNFT } = useUpdateNFT()
   const { boxes, loading: boxesLoading, error: boxesError } = useMysteryBoxes()
   const { openBox, loading: openLoading } = useOpenMysteryBox()
+  const { toast } = useToast()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')
   const [sortBy, setSortBy] = useState<SortOption>('efficiency')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
@@ -162,9 +163,20 @@ export default memo(function Vault() {
       if (nft) {
         setRevealedNFT(nft)
         setRevealVisible(true)
+      } else {
+        toast.show({
+          variant: 'danger',
+          label: 'Open Failed',
+          description: 'Failed to open mystery box. Please try again.',
+          actionLabel: 'Retry',
+          onActionPress: ({ hide }) => {
+            hide()
+            handleOpenBox(rarity)
+          },
+        })
       }
     },
-    [boxes, openBox],
+    [boxes, openBox, toast],
   )
 
   const handleRevealClose = useCallback(() => {

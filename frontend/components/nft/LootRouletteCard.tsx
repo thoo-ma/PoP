@@ -1,4 +1,4 @@
-import { Card, Spinner } from 'heroui-native'
+import { Card, Spinner, useToast } from 'heroui-native'
 import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
 import type { RollLootResult } from '@/hooks'
@@ -25,6 +25,7 @@ export interface LootRouletteCardProps {
  */
 export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRouletteCardProps) {
   const { holdLootRoll, rollLoot, loading } = useRollLoot()
+  const { toast } = useToast()
   const [holds, setHolds] = useState(0)
   const [result, setResult] = useState<RollLootResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
@@ -44,6 +45,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
       setHolds(res.holds)
     } else {
       setErr('Hold failed. Try rolling instead.')
+      toast.show({ variant: 'danger', label: 'Hold Failed', description: 'Try rolling instead.' })
     }
   }
 
@@ -54,6 +56,16 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
       setResult(res)
     } else {
       setErr('Something went wrong. Please try again.')
+      toast.show({
+        variant: 'danger',
+        label: 'Roll Failed',
+        description: 'Something went wrong. Please try again.',
+        actionLabel: 'Retry',
+        onActionPress: ({ hide }) => {
+          hide()
+          handleRoll()
+        },
+      })
     }
   }
 

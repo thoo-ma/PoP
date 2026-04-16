@@ -97,23 +97,19 @@ function FilterControls({
               if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
             }}
           >
-            <Select.Trigger className="h-[40px] py-0 bg-surface-container-low border-[3px] border-outline border-b-[6px] rounded-full px-4">
-              <Select.Value className="font-bold text-on-surface" placeholder="Sort by..." />
-              <Select.TriggerIndicator className="text-on-surface" />
+            <Select.Trigger className={s.selectTrigger()}>
+              <Select.Value className={s.selectValue()} placeholder="Sort by..." />
+              <Select.TriggerIndicator className={s.selectIndicator()} />
             </Select.Trigger>
             <Select.Portal>
               <Select.Overlay />
-              <Select.Content
-                presentation="popover"
-                width="trigger"
-                className="bg-surface border-[2px] border-outline rounded-2xl overflow-hidden"
-              >
+              <Select.Content presentation="popover" width="trigger" className={s.selectContent()}>
                 {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
                   <Select.Item
                     key={option}
                     value={option}
                     label={capitalize(option)}
-                    className="px-4 py-2"
+                    className={s.selectItem()}
                   />
                 ))}
               </Select.Content>
@@ -154,11 +150,7 @@ function FilterControls({
           >
             <TagGroup.List className={s.tagList()}>
               {RARITIES.map((rarity) => (
-                <TagGroup.Item
-                  key={rarity}
-                  id={rarity}
-                  className="border-[2px] border-outline border-b-[3px] rounded-full"
-                >
+                <TagGroup.Item key={rarity} id={rarity} className={s.tagItem()}>
                   <TagGroup.ItemLabel>{RARITY_LABELS[rarity]}</TagGroup.ItemLabel>
                 </TagGroup.Item>
               ))}
@@ -174,11 +166,7 @@ function FilterControls({
           >
             <TagGroup.List className={s.tagList()}>
               {TYPES.map((type) => (
-                <TagGroup.Item
-                  key={type}
-                  id={type}
-                  className="border-[2px] border-outline border-b-[3px] rounded-full"
-                >
+                <TagGroup.Item key={type} id={type} className={s.tagItem()}>
                   <TagGroup.ItemLabel>{TYPE_LABELS[type]}</TagGroup.ItemLabel>
                 </TagGroup.Item>
               ))}
