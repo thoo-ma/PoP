@@ -270,6 +270,7 @@ export default memo(function Vault() {
               contentInset={{ bottom: 170 }}
               scrollIndicatorInsets={{ bottom: 170 }}
               showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
               onScroll={handleScroll}
             >
               <View className="w-full">
@@ -365,6 +366,7 @@ export default memo(function Vault() {
                 contentInset={{ bottom: 170 }}
                 scrollIndicatorInsets={{ bottom: 170 }}
                 showsVerticalScrollIndicator={false}
+                scrollEventThrottle={16}
                 onScroll={handleScroll}
               >
                 <View className="w-full">
