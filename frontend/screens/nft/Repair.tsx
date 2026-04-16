@@ -1,16 +1,9 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Slider, useToast } from 'heroui-native'
+import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import {
-  DegenBar,
-  NFTDetailCard,
-  NFTSelector,
-  ScreenError,
-  ScreenLoader,
-  TactileButton,
-} from '@/components'
+import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, TactileButton } from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   bustMessage,
@@ -20,6 +13,7 @@ import {
   nftPickerPlaceholder,
   repairAmountBox,
   repairFullEnergy,
+  repairSkeleton,
   repairSuccess,
   screenContainer,
   scrollContent,
@@ -123,7 +117,27 @@ export default memo(function Repair() {
   }
 
   if (loading) {
-    return <ScreenLoader title="Repair" />
+    const sk = repairSkeleton()
+    return (
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
+        <View className="w-full">
+          <ScrollView
+            contentContainerClassName={scrollContent({
+              padding: 'md',
+              bottomPad: 'default',
+              align: 'center',
+            })}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="w-full items-center">
+              <Skeleton className={sk.pickerButton()} />
+            </View>
+            <Skeleton className={sk.sliderBox()} />
+            <Skeleton className={sk.button()} />
+          </ScrollView>
+        </View>
+      </View>
+    )
   }
 
   if (error) {

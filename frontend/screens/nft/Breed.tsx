@@ -1,7 +1,7 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, useToast } from 'heroui-native'
+import { Button, cn, Skeleton, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
@@ -11,13 +11,13 @@ import {
   DegenBar,
   MysteryBoxCard,
   ScreenError,
-  ScreenLoader,
   TactileButton,
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   breedInfoText,
   breedResultSection,
+  breedSkeleton,
   costStrikethrough,
   errorMessage,
   infoBox,
@@ -85,7 +85,31 @@ import { canBreed } from '@/utils'
   }
 
   // ── Guards ────────────────────────────────────────────────────────────────
-  if (loading) return <ScreenLoader title="Breed" />
+  if (loading) {
+    const sk = breedSkeleton()
+    return (
+      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
+        <View className="w-full flex-1">
+          <ScrollView
+            contentContainerClassName={scrollContent({
+              padding: 'md',
+              bottomPad: 'default',
+              align: 'center',
+            })}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className={sk.slotsRow()}>
+              <Skeleton className={sk.parentSlot()} />
+              <View className={sk.separator()} />
+              <Skeleton className={sk.parentSlot()} />
+            </View>
+            <Skeleton className={sk.infoBox()} />
+            <Skeleton className={sk.button()} />
+          </ScrollView>
+        </View>
+      </View>
+    )
+  }
   if (error) return <ScreenError title="Breed" message={`Error: ${error}`} onRetry={refetch} />
 
   if (nfts.length < 2) {

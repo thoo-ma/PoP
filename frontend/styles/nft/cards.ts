@@ -94,6 +94,30 @@ export const skeletonCard = tv({
   },
 })
 
+// ── Breed skeleton ────────────────────────────────────────────────────────────
+// Content-shaped loading placeholders for the Breed screen (parent slots,
+// outcome info box, and breed button shapes).
+export const breedSkeleton = tv({
+  slots: {
+    slotsRow: 'flex-row items-stretch justify-center mb-6 w-full',
+    parentSlot: 'flex-1 aspect-square rounded-2xl',
+    separator: 'w-[36px]',
+    infoBox: 'h-20 w-full rounded-2xl mb-6',
+    button: 'h-14 w-full rounded-2xl',
+  },
+})
+
+// ── Repair skeleton ───────────────────────────────────────────────────────────
+// Content-shaped loading placeholders for the Repair screen (picker button,
+// slider box, and repair button shapes).
+export const repairSkeleton = tv({
+  slots: {
+    pickerButton: 'h-20 w-full rounded-2xl mb-5',
+    sliderBox: 'h-28 w-full rounded-2xl mb-5',
+    button: 'h-14 w-full rounded-2xl',
+  },
+})
+
 // ── Breed picker card ────────────────────────────────────────────────────────
 // Grid item card used in BreedPickerModal's 2-column NFT list.
 export const breedPickerCard = tv({
