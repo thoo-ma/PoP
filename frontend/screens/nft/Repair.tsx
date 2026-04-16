@@ -3,7 +3,14 @@ import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog, Slider } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, ScreenLoader } from '@/components'
+import {
+  DegenBar,
+  NFTDetailCard,
+  NFTSelector,
+  ScreenError,
+  ScreenLoader,
+  TactileButton,
+} from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   bustMessage,
@@ -18,7 +25,6 @@ import {
   repairSuccess,
   screenContainer,
   scrollContent,
-  tactileButton,
   tactileButtonText,
 } from '@/styles'
 
@@ -177,15 +183,14 @@ export default memo(function Repair() {
                       {poopSpent !== null && (
                         <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
                       )}
-                      <Button
+                      <TactileButton
                         animation="disable-all"
+                        variant="outline"
                         onPress={handleReset}
-                        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                        className="w-full"
                       >
-                        <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                          Repair Another NFT
-                        </Button.Label>
-                      </Button>
+                        Repair Another NFT
+                      </TactileButton>
                     </View>
                   )}
                 </>
@@ -236,23 +241,21 @@ export default memo(function Repair() {
             {/* Full energy state */}
             {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
               <View className={rfe.root()}>
-                <Button
+                <TactileButton
                   animation="disable-all"
+                  variant="outline"
                   onPress={handleReset}
-                  className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                  className="w-full"
                 >
-                  <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                    This NFT is at full energy!
-                  </Button.Label>
-                </Button>
+                  This NFT is at full energy!
+                </TactileButton>
               </View>
             )}
 
             {/* Repair button — always shown when not repaired and not full energy */}
             {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
+              <TactileButton
+                variant="primary"
                 onPress={handleRepair}
                 isDisabled={
                   selectedIndex === null ||
@@ -260,7 +263,7 @@ export default memo(function Repair() {
                   updateLoading ||
                   (poopBalance !== null && poopBalance < poopCost)
                 }
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+                className="w-full"
               >
                 <Button.Label className={tactileButtonText({ variant: 'primary' })}>
                   {updateLoading ? (
@@ -277,7 +280,7 @@ export default memo(function Repair() {
                     `Repair (${poopCost} POOP)`
                   )}
                 </Button.Label>
-              </Button>
+              </TactileButton>
             )}
           </ScrollView>
         </View>
@@ -298,17 +301,14 @@ export default memo(function Repair() {
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
             <View className={dialogFooter()}>
-              <Button
+              <TactileButton
                 animation="disable-all"
-                variant="ghost"
-                feedbackVariant="none"
+                variant="primary"
+                size="sm"
                 onPress={() => setAlertDialog(null)}
-                className={tactileButton({ variant: 'primary', size: 'sm' })}
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
-                  OK
-                </Button.Label>
-              </Button>
+                OK
+              </TactileButton>
             </View>
           </Dialog.Content>
         </Dialog.Portal>

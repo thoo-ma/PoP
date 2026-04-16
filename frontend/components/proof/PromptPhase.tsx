@@ -1,7 +1,7 @@
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { infoCard, phaseContainer, phaseText, tactileButton, tactileButtonText } from '@/styles'
+import { infoCard, phaseContainer, phaseText } from '@/styles'
 import type { NFT } from '@/types'
+import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -19,26 +19,22 @@ export function PromptPhase({ nft, onStartRecording, onCancel }: Props) {
         <Text className={pt.promptTitle()}>Immobility confirmed!</Text>
         <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
       </View>
-      <Button
+      <TactileButton
         animation="disable-all"
-        variant="ghost"
-        feedbackVariant="none"
+        variant="primary"
         onPress={onStartRecording}
-        className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+        className="w-full"
       >
-        <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-          Start Recording
-        </Button.Label>
-      </Button>
-      <Button
+        Start Recording
+      </TactileButton>
+      <TactileButton
         animation="disable-all"
-        variant="ghost"
-        feedbackVariant="none"
+        variant="outline"
         onPress={onCancel}
-        className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+        className="w-full"
       >
-        <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
-      </Button>
+        Cancel
+      </TactileButton>
     </View>
   )
 }

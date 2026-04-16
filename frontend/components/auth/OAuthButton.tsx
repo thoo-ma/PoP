@@ -1,8 +1,9 @@
 import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
-import { Button, cn, Spinner } from 'heroui-native'
+import { Button, Spinner } from 'heroui-native'
 import { useCSSVariable } from 'uniwind'
-import { tactileButton, tactileButtonText } from '@/styles/auth'
+import { tactileButtonText } from '@/styles/auth'
 import type { OAuthButtonProps } from '@/types'
+import TactileButton from '../shared/TactileButton'
 
 const labels = {
   google: 'Sign in with Google',
@@ -29,13 +30,11 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
     )
 
   return (
-    <Button
+    <TactileButton
       onPress={onPress}
       isDisabled={disabled || loading}
-      className={cn(tactileButton({ variant: 'default' }), 'w-full mb-4')}
+      className="w-full mb-4"
       accessibilityLabel={label}
-      variant="ghost"
-      feedbackVariant="none"
     >
       {loading ? (
         <Spinner size="sm" color={onSurface} />
@@ -45,6 +44,6 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
           <Button.Label className={tactileButtonText({ variant: 'default' })}>{label}</Button.Label>
         </>
       )}
-    </Button>
+    </TactileButton>
   )
 }

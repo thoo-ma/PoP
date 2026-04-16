@@ -1,12 +1,13 @@
 import type { NFTRarity, NFTType } from '@pop/shared'
 import { RARITIES } from '@pop/shared'
-import { Button, Select, TagGroup } from 'heroui-native'
+import { Select, TagGroup } from 'heroui-native'
 import { memo, useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { View } from 'react-native'
 import { SORT_OPTIONS } from '@/constants'
-import { filterControls, tactileButton, tactileButtonText } from '@/styles'
+import { filterControls } from '@/styles'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -121,29 +122,24 @@ function FilterControls({
         </View>
 
         {/* Sort order arrow */}
-        <Pressable
+        <TactileButton
+          variant="secondary"
+          size="sm"
           onPress={onSortOrderToggle}
           accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
-          className={tactileButton({ variant: 'secondary', size: 'sm' })}
         >
-          <Text className="text-on-surface font-black text-base">
-            {sortOrder === 'desc' ? '↓' : '↑'}
-          </Text>
-        </Pressable>
+          {sortOrder === 'desc' ? '↓' : '↑'}
+        </TactileButton>
 
         {/* Filters toggle */}
-        <Button
-          variant="ghost"
-          feedbackVariant="none"
+        <TactileButton
           size="sm"
+          variant="secondary"
           onPress={() => setShowFilters(!showFilters)}
           accessibilityLabel="Toggle filters"
-          className={tactileButton({ variant: 'secondary', size: 'sm' })}
         >
-          <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
-            Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-          </Button.Label>
-        </Button>
+          {`Filters${activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}`}
+        </TactileButton>
       </View>
 
       {/* Filter badges */}
@@ -190,18 +186,14 @@ function FilterControls({
           </TagGroup>
 
           {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
+            <TactileButton
               size="sm"
+              variant="secondary"
               onPress={onClearFilters}
               accessibilityLabel="Clear all filters"
-              className={tactileButton({ variant: 'secondary', size: 'sm' })}
             >
-              <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
-                Clear All
-              </Button.Label>
-            </Button>
+              Clear All
+            </TactileButton>
           )}
         </View>
       )}

@@ -3,9 +3,10 @@ import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native
 import { useEffect, useRef, useState } from 'react'
 import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import TactileButton from '@/components/shared/TactileButton'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
-import { authScreen, tactileButton, tactileButtonText } from '@/styles/auth'
+import { authScreen, tactileButtonText } from '@/styles/auth'
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void
@@ -121,41 +122,27 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
           </View>
 
           <View className={s.actionsWrap()}>
-            <Button
+            <TactileButton
+              variant={canSubmit ? 'default' : 'disabled'}
               onPress={handleSubmit}
               isDisabled={!canSubmit}
-              className={cn(
-                tactileButton({ variant: canSubmit ? 'default' : 'disabled' }),
-                'w-full mb-4',
-              )}
+              className="w-full mb-4"
               accessibilityLabel="Submit invite code"
-              variant="ghost"
-              feedbackVariant="none"
             >
-              {loading ? (
-                <Spinner size="sm" color={onSurface} />
-              ) : (
-                <Button.Label
-                  className={tactileButtonText({ variant: canSubmit ? 'default' : 'disabled' })}
-                >
-                  Submit Code
-                </Button.Label>
-              )}
-            </Button>
+              {loading ? <Spinner size="sm" color={onSurface} /> : 'Submit Code'}
+            </TactileButton>
 
-            <Button
+            <TactileButton
               animation="disable-all"
               onPress={handleSignOut}
               isDisabled={loading}
-              className={cn(tactileButton({ variant: 'default' }), 'w-full')}
-              variant="ghost"
-              feedbackVariant="none"
+              className="w-full"
             >
               <Feather name="log-out" size={18} color={onSurface} style={{ marginRight: 12 }} />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign Out
               </Button.Label>
-            </Button>
+            </TactileButton>
           </View>
 
           <View className={cn(s.footer(), 'mt-8')}>

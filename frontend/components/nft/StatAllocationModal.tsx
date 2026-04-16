@@ -1,10 +1,11 @@
-import { Button, cn, Dialog, Slider } from 'heroui-native'
+import { Dialog, Slider } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
 import { useAllocateStatPoints } from '@/hooks'
-import { statModal, tactileButton, tactileButtonText } from '@/styles'
+import { statModal } from '@/styles'
 import type { AllocateResult, NFT, StatDeltas } from '@/types'
 import { formatDisplayName } from '@/utils'
+import TactileButton from '../shared/TactileButton'
 
 const STAT_KEYS = ['efficiency', 'resilience', 'comfort', 'luck'] as const
 type StatKey = (typeof STAT_KEYS)[number]
@@ -136,27 +137,23 @@ export default memo(function StatAllocationModal({
           {error && <Text className={s.errorText()}>{error}</Text>}
 
           <View className={s.buttonRow()}>
-            <Button
+            <TactileButton
               animation="disable-all"
+              variant="outline"
               onPress={handleDismiss}
               isDisabled={loading}
-              className={cn(tactileButton({ variant: 'outline' }), 'flex-1')}
+              className="flex-1"
             >
-              <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                Later
-              </Button.Label>
-            </Button>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
+              Later
+            </TactileButton>
+            <TactileButton
+              variant="primary"
               onPress={handleConfirm}
               isDisabled={totalSpent === 0 || loading}
-              className={cn(tactileButton({ variant: 'primary' }), 'flex-1')}
+              className="flex-1"
             >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                {loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
-              </Button.Label>
-            </Button>
+              {loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
+            </TactileButton>
           </View>
         </Dialog.Content>
       </Dialog.Portal>

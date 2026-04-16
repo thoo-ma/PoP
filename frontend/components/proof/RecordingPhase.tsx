@@ -1,14 +1,7 @@
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
-import {
-  infoCard,
-  phaseContainer,
-  phaseText,
-  recordingIndicator,
-  tactileButton,
-  tactileButtonText,
-} from '@/styles'
+import { infoCard, phaseContainer, phaseText, recordingIndicator } from '@/styles'
 import type { NFT } from '@/types'
+import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -35,15 +28,14 @@ export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel
             <View className={recordStyles.dot()} />
             <Text className={recordStyles.label()}>Recording…</Text>
           </View>
-          <Button
+          <TactileButton
             animation="disable-all"
-            variant="ghost"
-            feedbackVariant="none"
+            variant="primary"
             onPress={onStop}
-            className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
+            className="w-full"
           >
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>Stop</Button.Label>
-          </Button>
+            Stop
+          </TactileButton>
         </View>
       ) : (
         <View className={infoCard()}>
@@ -51,15 +43,14 @@ export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel
         </View>
       )}
       {!isAnalyzing && (
-        <Button
+        <TactileButton
           animation="disable-all"
-          variant="ghost"
-          feedbackVariant="none"
+          variant="outline"
           onPress={onCancel}
-          className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+          className="w-full"
         >
-          <Button.Label className={tactileButtonText({ variant: 'outline' })}>Cancel</Button.Label>
-        </Button>
+          Cancel
+        </TactileButton>
       )}
     </View>
   )
