@@ -7,8 +7,8 @@ const workspaceRoot = path.resolve(projectRoot, '..')
 
 const config = getDefaultConfig(projectRoot)
 
-// Watch the shared/ folder which lives outside the frontend project root
-config.watchFolders = [workspaceRoot]
+// Watch only the shared/ folder which lives outside the frontend project root
+config.watchFolders = [path.join(workspaceRoot, 'shared')]
 
 // Resolve @pop/shared to the repo-root shared/ directory
 config.resolver.alias = {

@@ -12,10 +12,16 @@
       "env": {
         "APP_VARIANT": "development"
       },
+      "android": {
+        "env": {
+          "EAS_USE_CACHE": "1"
+        }
+      },
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0"
+          "EXPO_USE_PRECOMPILED_MODULES": "0",
+          "EAS_USE_CACHE": "1"
         }
       }
     },
@@ -26,20 +32,32 @@
       "env": {
         "APP_VARIANT": "preview"
       },
+      "android": {
+        "env": {
+          "EAS_USE_CACHE": "1"
+        }
+      },
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0"
+          "EXPO_USE_PRECOMPILED_MODULES": "0",
+          "EAS_USE_CACHE": "1"
         }
       }
     },
     "production": {
       "channel": "production",
       "environment": "production",
+      "android": {
+        "env": {
+          "EAS_USE_CACHE": "1"
+        }
+      },
       "ios": {
         "image": "latest",
         "env": {
-          "EXPO_USE_PRECOMPILED_MODULES": "0"
+          "EXPO_USE_PRECOMPILED_MODULES": "0",
+          "EAS_USE_CACHE": "1"
         }
       }
     }
