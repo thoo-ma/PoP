@@ -3,7 +3,7 @@ import { Button, cn, FieldError, Input, Spinner, TextField } from 'heroui-native
 import { useEffect, useRef, useState } from 'react'
 import { Image, KeyboardAvoidingView, Platform, Text, type TextInput, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import TactileButton from '@/components/shared/TactileButton'
+import { TactileButton } from '@/components'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
 import { authScreen, tactileButtonText } from '@/styles/auth'
