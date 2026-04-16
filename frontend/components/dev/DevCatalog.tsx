@@ -1,6 +1,6 @@
-import { Button, cn } from 'heroui-native'
-import { useCallback, useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Accordion, AccordionLayoutTransition, Button, cn } from 'heroui-native'
+import { Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { tactileButton, tactileButtonText } from '@/styles'
 
 // ─── Catalog definition ──────────────────────────────────────────────────────
@@ -92,53 +92,6 @@ const CATALOG: CatalogSection[] = [
 
 const TOTAL = CATALOG.reduce((n, s) => n + s.entries.length, 0)
 
-// ─── Collapsible Section ─────────────────────────────────────────────────────
-
-function Section({
-  section,
-  expanded,
-  onToggle,
-  onSelect,
-}: {
-  section: CatalogSection
-  expanded: boolean
-  onToggle: () => void
-  onSelect: (key: string) => void
-}) {
-  return (
-    <View className="mb-2 w-full">
-      <Pressable
-        onPress={onToggle}
-        className="flex-row items-center justify-between bg-surface-container-low rounded-xl px-3 py-2.5 border-2 border-outline"
-      >
-        <Text className="text-xs font-black text-on-surface uppercase tracking-wider">
-          {expanded ? '▼' : '▶'} {section.title} ({section.entries.length})
-        </Text>
-      </Pressable>
-      {expanded && (
-        <View className="flex-row flex-wrap gap-2 mt-2 w-full">
-          {section.entries.map(([key, label]) => (
-            <Button
-              key={key}
-              variant="ghost"
-              feedbackVariant="none"
-              className={cn(
-                tactileButton({ variant: 'default', size: 'sm' }),
-                'flex-1 basis-[47%]',
-              )}
-              onPress={() => onSelect(key)}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'default', size: 'sm' })}>
-                {label}
-              </Button.Label>
-            </Button>
-          ))}
-        </View>
-      )}
-    </View>
-  )
-}
-
 // ─── DevCatalog ──────────────────────────────────────────────────────────────
 
 export default function DevCatalog({
@@ -148,34 +101,44 @@ export default function DevCatalog({
   onSelect: (key: string, sectionIndex: number) => void
   initialExpandedSections?: Set<number>
 }) {
-  const [expandedSections, setExpandedSections] = useState<Set<number>>(
-    () => initialExpandedSections ?? new Set(),
-  )
-
-  const toggleSection = useCallback((index: number) => {
-    setExpandedSections((prev) => {
-      const next = new Set(prev)
-      if (next.has(index)) next.delete(index)
-      else next.add(index)
-      return next
-    })
-  }, [])
+  const defaultValue = Array.from(initialExpandedSections ?? new Set()).map(String)
 
   // ── Catalog grid ───────────────────────────────────────────────────────
   return (
-    <View className="w-full gap-1 mb-2.5 mt-2">
+    <Animated.View layout={AccordionLayoutTransition} className="w-full gap-1 mb-2.5 mt-2">
       <Text className="text-xs font-black text-outline uppercase tracking-wider text-center mb-1">
         Dev Catalog ({TOTAL} previews)
       </Text>
-      {CATALOG.map((section, i) => (
-        <Section
-          key={section.title}
-          section={section}
-          expanded={expandedSections.has(i)}
-          onToggle={() => toggleSection(i)}
-          onSelect={(key) => onSelect(key, i)}
-        />
-      ))}
-    </View>
+      <Accordion selectionMode="multiple" defaultValue={defaultValue} hideSeparator>
+        {CATALOG.map((section, i) => (
+          <Accordion.Item key={section.title} value={String(i)} className="mb-2">
+            <Accordion.Trigger className="flex-row items-center justify-between bg-surface-container-low rounded-xl px-3 py-2.5 border-2 border-outline">
+              <Text className="text-xs font-black text-on-surface uppercase tracking-wider flex-1">
+                {section.title} ({section.entries.length})
+              </Text>
+              <Accordion.Indicator />
+            </Accordion.Trigger>
+            <Accordion.Content className="flex-row flex-wrap gap-2 mt-2 w-full">
+              {section.entries.map(([key, label]) => (
+                <Button
+                  key={key}
+                  variant="ghost"
+                  feedbackVariant="none"
+                  className={cn(
+                    tactileButton({ variant: 'default', size: 'sm' }),
+                    'flex-1 basis-[47%]',
+                  )}
+                  onPress={() => onSelect(key, i)}
+                >
+                  <Button.Label className={tactileButtonText({ variant: 'default', size: 'sm' })}>
+                    {label}
+                  </Button.Label>
+                </Button>
+              ))}
+            </Accordion.Content>
+          </Accordion.Item>
+        ))}
+      </Accordion>
+    </Animated.View>
   )
 }

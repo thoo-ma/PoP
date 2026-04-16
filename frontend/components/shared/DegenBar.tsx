@@ -1,5 +1,5 @@
 import { calcBustChance, calcReducedCost, calcReduction, DEGEN_ZONE_THRESHOLD } from '@pop/shared'
-import { cn, Slider } from 'heroui-native'
+import { cn, Separator, Slider } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
 import { degenBar, infoBox } from '@/styles'
@@ -81,7 +81,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
           </View>
 
           {/* Divider */}
-          <View className={s.divider()} />
+          <Separator orientation="vertical" className="mx-2" />
 
           {/* Bust risk */}
           <View className={s.metricCol()}>
