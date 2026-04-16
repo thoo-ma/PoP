@@ -18,7 +18,14 @@ config.watchFolders = [workspaceRoot]
 // Prevent Metro from crawling or resolving modules in workspace packages that
 // are irrelevant to the mobile app.  This recovers most of the startup-time
 // cost of watching the full workspace root without breaking entry resolution.
+// Spread existing defaults (e.g. /.expo\/types/, /__tests__/) so they are not lost.
+const existingBlockList = Array.isArray(config.resolver.blockList)
+  ? config.resolver.blockList
+  : config.resolver.blockList
+    ? [config.resolver.blockList]
+    : []
 config.resolver.blockList = [
+  ...existingBlockList,
   new RegExp(`${escapeRegExp(path.join(workspaceRoot, 'dashboard'))}(/.*)?$`),
   new RegExp(`${escapeRegExp(path.join(workspaceRoot, 'supabase'))}(/.*)?$`),
   new RegExp(`${escapeRegExp(path.join(workspaceRoot, 'google-cloud-run'))}(/.*)?$`),
