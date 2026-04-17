@@ -4,7 +4,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Button, cn, ScrollShadow, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { type ScrollView, Text, View } from 'react-native'
-import Animated, { runOnJS, useAnimatedScrollHandler } from 'react-native-reanimated'
+import Animated, {
+  runOnJS,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated'
 import {
   FilterControls,
   MysteryBoxCard,
@@ -57,9 +61,14 @@ export default memo(function Vault() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
+  const _showScrollTop = useSharedValue(false)
   const handleScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
-      runOnJS(setShowScrollTop)(event.contentOffset.y > 600)
+      const next = event.contentOffset.y > 600
+      if (next !== _showScrollTop.value) {
+        _showScrollTop.value = next
+        runOnJS(setShowScrollTop)(next)
+      }
     },
   })
 
