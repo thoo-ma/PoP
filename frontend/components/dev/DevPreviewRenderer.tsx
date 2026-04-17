@@ -1458,7 +1458,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'component:mystery-box-reveal') {
-    return <MysteryBoxRevealModal visible nft={MOCK_NFT_READY} onClose={dismiss} />
+    return <MysteryBoxRevealModal isVisible nft={MOCK_NFT_READY} onDismiss={dismiss} />
   }
 
   // Fallback

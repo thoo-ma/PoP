@@ -18,7 +18,7 @@ const STAT_LABELS: Record<StatKey, string> = {
 }
 
 export interface StatAllocationModalProps {
-  visible: boolean
+  isVisible: boolean
   nft: NFT
   /** Total unspent stat points currently on this NFT (including newly earned ones). */
   pointsAvailable: number
@@ -31,7 +31,7 @@ export interface StatAllocationModalProps {
 const ZERO_DELTAS: StatDeltas = { efficiency: 0, resilience: 0, comfort: 0, luck: 0 }
 
 export default memo(function StatAllocationModal({
-  visible,
+  isVisible,
   nft,
   pointsAvailable,
   onComplete,
@@ -86,7 +86,7 @@ export default memo(function StatAllocationModal({
   const s = statModal()
   return (
     <Dialog
-      isOpen={visible}
+      isOpen={isVisible}
       onOpenChange={(open) => {
         if (!open) handleDismiss()
       }}

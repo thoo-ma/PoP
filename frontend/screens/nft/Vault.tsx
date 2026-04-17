@@ -426,7 +426,7 @@ export default memo(function Vault() {
 
       {statModalNFT && (
         <StatAllocationModal
-          visible
+          isVisible
           nft={statModalNFT}
           pointsAvailable={statModalNFT.stat_points ?? 0}
           onComplete={handleStatAllocated}
@@ -435,9 +435,9 @@ export default memo(function Vault() {
       )}
 
       <MysteryBoxRevealModal
-        visible={revealVisible}
+        isVisible={revealVisible}
         nft={revealedNFT}
-        onClose={handleRevealClose}
+        onDismiss={handleRevealClose}
       />
 
       {showScrollTop && (

@@ -454,7 +454,7 @@ export default memo(function Poop() {
 
       {statModalData && (
         <StatAllocationModal
-          visible
+          isVisible
           nft={statModalData.nft}
           pointsAvailable={statModalData.points}
           onComplete={handleStatAllocated}

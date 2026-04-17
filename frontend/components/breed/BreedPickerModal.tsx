@@ -12,7 +12,7 @@ const GRID_GAP = 12
 
 export interface BreedPickerModalProps {
   /** Controls modal visibility. */
-  visible: boolean
+  isVisible: boolean
   /** Full NFT collection to show as selectable items. */
   allNFTs: NFT[]
   /** ID of the NFT already chosen in the other slot — rendered as disabled. */
@@ -22,7 +22,7 @@ export interface BreedPickerModalProps {
   /** Called with the chosen NFT when the user taps a valid row. */
   onSelect: (nft: NFT) => void
   /** Called when the user dismisses the sheet without selecting. */
-  onClose: () => void
+  onDismiss: () => void
 }
 
 /**
@@ -31,12 +31,12 @@ export interface BreedPickerModalProps {
  * are shown greyed-out and non-interactive.
  */
 export default function BreedPickerModal({
-  visible,
+  isVisible,
   allNFTs,
   lockedId,
   lockedRarity,
   onSelect,
-  onClose,
+  onDismiss,
 }: BreedPickerModalProps) {
   const s = pickerModal()
   const { width: windowWidth } = useWindowDimensions()
@@ -50,9 +50,9 @@ export default function BreedPickerModal({
 
   return (
     <BottomSheet
-      isOpen={visible}
+      isOpen={isVisible}
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onDismiss()
       }}
     >
       <BottomSheet.Portal>
@@ -78,7 +78,7 @@ export default function BreedPickerModal({
                 width={cardWidth}
                 onPress={() => {
                   onSelect(item.nft)
-                  onClose()
+                  onDismiss()
                 }}
               />
             )}

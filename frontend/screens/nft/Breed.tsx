@@ -144,20 +144,20 @@ import { canBreed } from '@/utils'
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <BreedPickerModal
-        visible={pickerSlot === 1}
+        isVisible={pickerSlot === 1}
         allNFTs={nfts}
         lockedId={parent2?.id}
         lockedRarity={parent2?.rarity}
         onSelect={handleSetParent1}
-        onClose={() => setPickerSlot(null)}
+        onDismiss={() => setPickerSlot(null)}
       />
       <BreedPickerModal
-        visible={pickerSlot === 2}
+        isVisible={pickerSlot === 2}
         allNFTs={nfts}
         lockedId={parent1?.id}
         lockedRarity={parent1?.rarity}
         onSelect={setParent2}
-        onClose={() => setPickerSlot(null)}
+        onDismiss={() => setPickerSlot(null)}
       />
       <View className="w-full flex-1">
         <ScrollView
