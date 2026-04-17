@@ -225,10 +225,18 @@ export default memo(function Repair() {
             {/* Bust feedback — shown regardless of selection state */}
             {bustedResult && (
               <View className="mb-4 w-full">
-                <ScreenError
-                  title="BUST"
-                  message={`You lost ${bustedResult.poop_spent} POOP — better luck next time!`}
-                />
+                <Alert
+                  status="danger"
+                  className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                >
+                  <Alert.Indicator />
+                  <Alert.Content>
+                    <Alert.Title className="font-black">BUST</Alert.Title>
+                    <Alert.Description className="font-bold">
+                      You lost {bustedResult.poop_spent} POOP — better luck next time!
+                    </Alert.Description>
+                  </Alert.Content>
+                </Alert>
               </View>
             )}
 

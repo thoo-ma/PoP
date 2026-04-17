@@ -14,6 +14,7 @@ type Props = {
 
 export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props) {
   const isWarning = status === 'warning'
+  const warningBadge = statusBadge({ status: 'warning' })
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
@@ -22,8 +23,8 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
           {(remainingTime / 1000).toFixed(1)}s
         </Text>
         {isWarning ? (
-          <View className={statusBadge({ status: 'warning' }).root()}>
-            <Text className={statusBadge({ status: 'warning' }).label()}>Movement detected!</Text>
+          <View className={warningBadge.root()}>
+            <Text className={warningBadge.label()}>Movement detected!</Text>
           </View>
         ) : (
           <Alert
