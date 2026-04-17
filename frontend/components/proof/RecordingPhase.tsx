@@ -1,5 +1,6 @@
-import { Text, View } from 'react-native'
-import { infoCard, phaseContainer, phaseText, recordingIndicator } from '@/styles'
+import { Alert } from 'heroui-native'
+import { View } from 'react-native'
+import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
@@ -13,34 +14,49 @@ type Props = {
 }
 
 export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel }: Props) {
-  const pt = phaseText()
-  const recordStyles = recordingIndicator()
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
       {isAnalyzing ? (
-        <View className={infoCard()}>
-          <Text className={pt.statusText()}>Analyzing audio…</Text>
-        </View>
+        <Alert
+          status="success"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Analyzing audio…</Alert.Title>
+          </Alert.Content>
+        </Alert>
       ) : isRecording ? (
-        <View className={infoCard()}>
-          <View className={recordStyles.root()}>
-            <View className={recordStyles.dot()} />
-            <Text className={recordStyles.label()}>Recording…</Text>
-          </View>
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onStop}
-            className="w-full"
-          >
-            Stop
-          </TactileButton>
-        </View>
+        <Alert
+          status="success"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Recording…</Alert.Title>
+          </Alert.Content>
+        </Alert>
       ) : (
-        <View className={infoCard()}>
-          <Text className={pt.statusText()}>Processing…</Text>
-        </View>
+        <Alert
+          status="success"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Processing…</Alert.Title>
+          </Alert.Content>
+        </Alert>
+      )}
+      {isRecording && (
+        <TactileButton
+          animation="disable-all"
+          variant="primary"
+          onPress={onStop}
+          className="w-full"
+        >
+          Stop
+        </TactileButton>
       )}
       {!isAnalyzing && (
         <TactileButton

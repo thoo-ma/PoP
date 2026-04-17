@@ -1,3 +1,4 @@
+import { Alert } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
 import type { ChallengeStatus, NFT } from '@/types'
@@ -13,7 +14,7 @@ type Props = {
 
 export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props) {
   const isWarning = status === 'warning'
-  const badgeStyles = statusBadge({ status: isWarning ? 'warning' : 'ok' })
+  const warningBadge = statusBadge({ status: 'warning' })
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
@@ -21,11 +22,21 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
         <Text className={timerText({ status: isWarning ? 'danger' : 'normal' })}>
           {(remainingTime / 1000).toFixed(1)}s
         </Text>
-        <View className={badgeStyles.root()}>
-          <Text className={badgeStyles.label()}>
-            {isWarning ? 'Movement detected!' : 'Hold still'}
-          </Text>
-        </View>
+        {isWarning ? (
+          <View className={warningBadge.root()}>
+            <Text className={warningBadge.label()}>Movement detected!</Text>
+          </View>
+        ) : (
+          <Alert
+            status="success"
+            className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+          >
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title className="font-black">Hold still</Alert.Title>
+            </Alert.Content>
+          </Alert>
+        )}
       </View>
       <TactileButton
         animation="disable-all"

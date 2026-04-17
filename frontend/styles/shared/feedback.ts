@@ -91,15 +91,6 @@ export const pickerModal = tv({
   },
 })
 
-// ── Bust message ──────────────────────────────────────────────────────────────
-// Degen-bust feedback box — used in both Breed and Repair screens.
-export const bustMessage = tv({
-  slots: {
-    root: 'w-full mb-3 p-4 rounded-xl bg-danger/10 border border-danger items-center',
-    title: 'text-2xl font-bold text-danger mb-1',
-    detail: 'text-sm text-on-surface-variant text-center font-bold',
-  },
-})
 // ── Screen loader ─────────────────────────────────────────────────────────────
 // Full-screen centered spinner shown while data loads.
 export const screenLoader = tv({
@@ -114,18 +105,13 @@ export const screenLoader = tv({
 export const screenError = tv({
   base: 'flex-1 bg-background items-center justify-center px-6',
 })
-
+// ── Screen info ────────────────────────────────────────────────────────────
+// Full-screen centered informational alert.
+export const screenInfo = tv({
+  base: 'flex-1 bg-background items-center justify-center px-6',
+})
 // ── Dialog footer row ─────────────────────────────────────────────────────────
 // Right-aligned action row inside alert / confirm dialogs.
 export const dialogFooter = tv({
   base: 'flex-row justify-end',
-})
-
-// ── Inline error ──────────────────────────────────────────────────────────────
-// Centred error block used when a screen-level ScreenError is too heavy.
-export const inlineError = tv({
-  slots: {
-    root: 'flex-1 justify-center items-center px-6',
-    text: 'text-app-error text-center font-bold',
-  },
 })

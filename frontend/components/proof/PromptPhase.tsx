@@ -1,5 +1,6 @@
-import { Text, View } from 'react-native'
-import { infoCard, phaseContainer, phaseText } from '@/styles'
+import { Alert } from 'heroui-native'
+import { View } from 'react-native'
+import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
@@ -11,14 +12,19 @@ type Props = {
 }
 
 export function PromptPhase({ nft, onStartRecording, onCancel }: Props) {
-  const pt = phaseText()
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
-      <View className={infoCard()}>
-        <Text className={pt.promptTitle()}>Immobility confirmed!</Text>
-        <Text className={pt.promptSubtitle()}>Now record the flush sound</Text>
-      </View>
+      <Alert
+        status="success"
+        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+      >
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title className="font-black">Immobility confirmed!</Alert.Title>
+          <Alert.Description className="font-bold">Now record the flush sound</Alert.Description>
+        </Alert.Content>
+      </Alert>
       <TactileButton
         animation="disable-all"
         variant="primary"

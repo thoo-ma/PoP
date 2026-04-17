@@ -1,12 +1,11 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
+import { Alert, Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { DegenBar, NFTDetailCard, NFTSelector, ScreenError, TactileButton } from '@/components'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
-  bustMessage,
   costStrikethrough,
   infoBox,
   nftPickerButton,
@@ -14,7 +13,6 @@ import {
   repairAmountBox,
   repairFullEnergy,
   repairSkeleton,
-  repairSuccess,
   screenContainer,
   scrollContent,
   tactileButtonText,
@@ -48,9 +46,7 @@ export default memo(function Repair() {
     ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY)
     : 0
   const ra = repairAmountBox()
-  const rs = repairSuccess()
   const rfe = repairFullEnergy()
-  const bm = bustMessage()
   const ph = nftPickerPlaceholder()
 
   const handleSelectNFT = () => {
@@ -192,19 +188,31 @@ export default memo(function Repair() {
                   )}
 
                   {isRepaired && (
-                    <View className={rs.root()}>
-                      <Text className={rs.text()}>Repair Complete!</Text>
-                      {repairedEnergy !== null && (
-                        <Text className={rs.text()}>Energy: {repairedEnergy}%</Text>
-                      )}
-                      {poopSpent !== null && (
-                        <Text className={rs.text()}>-{poopSpent} POOP spent</Text>
-                      )}
+                    <View className="w-full">
+                      <Alert
+                        status="success"
+                        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                      >
+                        <Alert.Indicator />
+                        <Alert.Content>
+                          <Alert.Title className="font-black">Repair Complete!</Alert.Title>
+                          {repairedEnergy !== null && (
+                            <Alert.Description className="font-bold">
+                              Energy: {repairedEnergy}%
+                            </Alert.Description>
+                          )}
+                          {poopSpent !== null && (
+                            <Alert.Description className="font-bold">
+                              -{poopSpent} POOP spent
+                            </Alert.Description>
+                          )}
+                        </Alert.Content>
+                      </Alert>
                       <TactileButton
                         animation="disable-all"
                         variant="outline"
                         onPress={handleReset}
-                        className="w-full"
+                        className="w-full mt-4"
                       >
                         Repair Another NFT
                       </TactileButton>
@@ -213,6 +221,24 @@ export default memo(function Repair() {
                 </>
               )}
             </View>
+
+            {/* Bust feedback — shown regardless of selection state */}
+            {bustedResult && (
+              <View className="mb-4 w-full">
+                <Alert
+                  status="danger"
+                  className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                >
+                  <Alert.Indicator />
+                  <Alert.Content>
+                    <Alert.Title className="font-black">BUST</Alert.Title>
+                    <Alert.Description className="font-bold">
+                      You lost {bustedResult.poop_spent} POOP — better luck next time!
+                    </Alert.Description>
+                  </Alert.Content>
+                </Alert>
+              </View>
+            )}
 
             {/* Repair controls — only when NFT selected, energy < max, not repaired */}
             {selectedNFT && currentEnergy < MAX_ENERGY && !isRepaired && (
@@ -242,16 +268,6 @@ export default memo(function Repair() {
                   onDegenChange={setDegenPercent}
                   disabled={updateLoading}
                 />
-
-                {/* Bust feedback */}
-                {bustedResult && (
-                  <View className={bm.root()}>
-                    <Text className={bm.title()}>BUST</Text>
-                    <Text className={bm.detail()}>
-                      You lost {bustedResult.poop_spent} POOP — better luck next time!
-                    </Text>
-                  </View>
-                )}
               </>
             )}
 
