@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useScrollToTop } from '@react-navigation/native'
-import { Avatar, Button, Spinner } from 'heroui-native'
+import { Avatar, Button, Skeleton } from 'heroui-native'
 import type { ReactElement } from 'react'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
@@ -96,11 +96,9 @@ export default function ProfileScreen() {
           {/* Stats */}
           <View className={p.statsRow()}>
             <View className={p.statCol()}>
-              {statsLoading ? (
-                <Spinner size="sm" />
-              ) : (
+              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-md">
                 <Text className={p.statValue()}>{detections}</Text>
-              )}
+              </Skeleton>
               <Text className={p.statLabel()}>Detections</Text>
             </View>
             <View className={p.statDivider()} />
@@ -110,11 +108,9 @@ export default function ProfileScreen() {
             </View>
             <View className={p.statDivider()} />
             <View className={p.statCol()}>
-              {statsLoading ? (
-                <Spinner size="sm" />
-              ) : (
+              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-md">
                 <Text className={p.statValue()}>{daysActive}</Text>
-              )}
+              </Skeleton>
               <Text className={p.statLabel()}>Days Active</Text>
             </View>
           </View>
