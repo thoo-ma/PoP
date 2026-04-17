@@ -14,6 +14,25 @@ interface CatalogSection {
 
 const CATALOG: CatalogSection[] = [
   {
+    title: 'Profile',
+    entries: [
+      ['profile:stats-loading', 'Stats loading'],
+      ['profile:stats-loaded', 'Stats loaded'],
+      ['profile:poop-balance', 'POOP Balance'],
+      ['profile:sign-out-dialog', 'Sign-out dialog'],
+      ['profile:dev-catalog', 'Dev Catalog (meta)'],
+      ['profile:error', 'Error state'],
+    ],
+  },
+  {
+    title: 'Auth',
+    entries: [
+      ['auth:invite-code', 'Invite code \u2014 idle'],
+      ['auth:invite-code-loading', 'Invite code \u2014 loading'],
+      ['auth:invite-code-error', 'Invite code \u2014 error'],
+    ],
+  },
+  {
     title: 'Shared',
     entries: [
       ['shared:screen-error', 'ScreenError'],
@@ -24,6 +43,7 @@ const CATALOG: CatalogSection[] = [
   {
     title: 'Breed',
     entries: [
+      ['breed:loading', 'Loading guard'],
       ['breed:need-2-nfts', '< 2 NFTs guard'],
       ['breed:idle-no-parents', 'Idle — no parents'],
       ['breed:parents-selected', 'Parents selected'],
@@ -60,6 +80,8 @@ const CATALOG: CatalogSection[] = [
       ['poop:result-success', 'Result — success + loot'],
       ['poop:result-rate-limit', 'Result — rate limit'],
       ['poop:result-error', 'Result — error'],
+      ['poop:analyzing', 'Analyzing'],
+      ['poop:roulette', 'Roulette'],
     ],
   },
   {
@@ -68,6 +90,9 @@ const CATALOG: CatalogSection[] = [
       ['vault:boxes-loading', 'Boxes skeleton'],
       ['vault:boxes-error', 'Boxes inline error'],
       ['vault:nft-with-points', 'NFT with stat points'],
+      ['vault:empty-nfts', 'Empty NFTs tab'],
+      ['vault:empty-boxes', 'Empty boxes tab'],
+      ['vault:nft-error', 'NFT load error'],
     ],
   },
   {
@@ -76,6 +101,10 @@ const CATALOG: CatalogSection[] = [
       ['marketplace:loading', 'Skeleton loading'],
       ['marketplace:empty-sell', 'Empty sell tab'],
       ['marketplace:buy-card', 'Buy card with price'],
+      ['marketplace:coming-soon-dialog', 'Coming soon dialog'],
+      ['marketplace:sell-card', 'Sell card with Unlist'],
+      ['marketplace:empty-buy', 'Empty buy tab'],
+      ['marketplace:error', 'Error state'],
     ],
   },
   {

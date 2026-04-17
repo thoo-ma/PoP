@@ -1,5 +1,16 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
-import { Alert, Button, cn, Skeleton } from 'heroui-native'
+import {
+  Alert,
+  Avatar,
+  Button,
+  cn,
+  Dialog,
+  FieldError,
+  InputOTP,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+  Skeleton,
+  Spinner,
+} from 'heroui-native'
 import type { ReactNode } from 'react'
 import { Image, Text, View } from 'react-native'
 import {
@@ -17,6 +28,7 @@ import {
   PromptPhase,
   RecordingPhase,
   ResultsPhase,
+  RoulettePhase,
   ScreenError,
   ScreenLoader,
   TactileButton,
@@ -24,17 +36,23 @@ import {
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
+  authScreen,
   breedResultSection,
+  dialogBody,
+  dialogFooter,
   gridLayout,
   infoBox,
   marketplaceItemRow,
   parentSlotsRow,
+  profileModal,
   repairAmountBox,
   repairFullEnergy,
   screenContainer,
+  signOutDialog,
   skeletonCard,
   tactileButton,
   tactileButtonText,
+  walletModal,
 } from '@/styles'
 import {
   MOCK_BOXES,
@@ -120,8 +138,318 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     )
 
   // ════════════════════════════════════════════════════════════════════════════
+  // PROFILE
+  // ════════════════════════════════════════════════════════════════════════════
+
+  if (key === 'profile:stats-loading') {
+    const p = profileModal()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <View className={p.scrollContainer()}>
+            <View className={p.avatarWrap()}>
+              <Avatar size="lg" color="accent" alt="User avatar">
+                <Avatar.Fallback>JD</Avatar.Fallback>
+              </Avatar>
+            </View>
+            <Text className={p.username()}>Jane Doe</Text>
+            <Text className={p.email()}>jane@example.com</Text>
+            <View className={p.statsRow()}>
+              <View className={p.statCol()}>
+                <Skeleton isLoading className="h-6 w-12 rounded-md">
+                  <Text className={p.statValue()}>—</Text>
+                </Skeleton>
+                <Text className={p.statLabel()}>Detections</Text>
+              </View>
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
+                <Text className={p.statValue()}>5</Text>
+                <Text className={p.statLabel()}>NFTs</Text>
+              </View>
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
+                <Skeleton isLoading className="h-6 w-12 rounded-md">
+                  <Text className={p.statValue()}>—</Text>
+                </Skeleton>
+                <Text className={p.statLabel()}>Days Active</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'profile:stats-loaded') {
+    const p = profileModal()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <View className={p.scrollContainer()}>
+            <View className={p.avatarWrap()}>
+              <Avatar size="lg" color="accent" alt="User avatar">
+                <Avatar.Fallback>JD</Avatar.Fallback>
+              </Avatar>
+            </View>
+            <Text className={p.username()}>Jane Doe</Text>
+            <Text className={p.email()}>jane@example.com</Text>
+            <View className={p.statsRow()}>
+              <View className={p.statCol()}>
+                <Text className={p.statValue()}>42</Text>
+                <Text className={p.statLabel()}>Detections</Text>
+              </View>
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
+                <Text className={p.statValue()}>5</Text>
+                <Text className={p.statLabel()}>NFTs</Text>
+              </View>
+              <View className={p.statDivider()} />
+              <View className={p.statCol()}>
+                <Text className={p.statValue()}>7</Text>
+                <Text className={p.statLabel()}>Days Active</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'profile:poop-balance') {
+    const w = walletModal()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <View className="flex-1 items-center justify-center px-6">
+            <View className={w.balanceCard()}>
+              <Text className={w.balanceLabel()}>POOP Balance</Text>
+              <Text className={w.balanceValue()}>
+                1337 <Text className={w.currencyLabel()}>POOP</Text>
+              </Text>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'profile:sign-out-dialog') {
+    const s = signOutDialog()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <Dialog
+            isOpen
+            onOpenChange={(isOpen) => {
+              if (!isOpen) dismiss()
+            }}
+          >
+            <Dialog.Portal>
+              <Dialog.Overlay />
+              <Dialog.Content className={s.content()}>
+                <View className={dialogBody()}>
+                  <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
+                </View>
+                <View className={s.buttonRow()}>
+                  <TactileButton variant="outline" onPress={dismiss} className="flex-1">
+                    Cancel
+                  </TactileButton>
+                  <TactileButton variant="default" onPress={dismiss} className="flex-1">
+                    Sign Out
+                  </TactileButton>
+                </View>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'profile:dev-catalog') {
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <View className="flex-1 items-center justify-center px-6">
+            <Text className="text-lg font-black text-on-surface text-center">
+              ← You're looking at it
+            </Text>
+            <Text className="text-sm font-bold text-on-surface-variant text-center mt-2">
+              The Dev Catalog is the accordion on the Profile screen.
+            </Text>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'profile:error')
+    return (
+      <PreviewShell onBack={dismiss}>
+        <ScreenError title="Profile" message="Failed to load profile data" onRetry={dismiss} />
+      </PreviewShell>
+    )
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // AUTH
+  // ════════════════════════════════════════════════════════════════════════════
+
+  if (key === 'auth:invite-code') {
+    const s = authScreen()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={s.scrim()}>
+          <View className={s.innerRoot()}>
+            <View className={s.logoWrap()}>
+              <Image
+                source={require('@/assets/icon.png')}
+                className="w-16 h-16 rounded-2xl"
+                resizeMode="contain"
+              />
+            </View>
+            <Text className={s.headline()}>
+              ENTER.{'\n'}YOUR.{'\n'}CODE.
+            </Text>
+            <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
+            <View className={s.inputWrap()}>
+              <InputOTP
+                maxLength={8}
+                value=""
+                onChange={() => {}}
+                pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                inputMode="text"
+              >
+                <InputOTP.Group>
+                  <InputOTP.Slot index={0} />
+                  <InputOTP.Slot index={1} />
+                  <InputOTP.Slot index={2} />
+                  <InputOTP.Slot index={3} />
+                </InputOTP.Group>
+                <InputOTP.Separator />
+                <InputOTP.Group>
+                  <InputOTP.Slot index={4} />
+                  <InputOTP.Slot index={5} />
+                  <InputOTP.Slot index={6} />
+                  <InputOTP.Slot index={7} />
+                </InputOTP.Group>
+              </InputOTP>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'auth:invite-code-loading') {
+    const s = authScreen()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={s.scrim()}>
+          <View className={s.innerRoot()}>
+            <View className={s.logoWrap()}>
+              <Image
+                source={require('@/assets/icon.png')}
+                className="w-16 h-16 rounded-2xl"
+                resizeMode="contain"
+              />
+            </View>
+            <Text className={s.headline()}>
+              ENTER.{'\n'}YOUR.{'\n'}CODE.
+            </Text>
+            <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
+            <View className={s.inputWrap()}>
+              <InputOTP
+                maxLength={8}
+                value="ABCD1234"
+                onChange={() => {}}
+                pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                inputMode="text"
+                isDisabled
+              >
+                <InputOTP.Group>
+                  <InputOTP.Slot index={0} />
+                  <InputOTP.Slot index={1} />
+                  <InputOTP.Slot index={2} />
+                  <InputOTP.Slot index={3} />
+                </InputOTP.Group>
+                <InputOTP.Separator />
+                <InputOTP.Group>
+                  <InputOTP.Slot index={4} />
+                  <InputOTP.Slot index={5} />
+                  <InputOTP.Slot index={6} />
+                  <InputOTP.Slot index={7} />
+                </InputOTP.Group>
+              </InputOTP>
+            </View>
+            <View className={s.actionsWrap()}>
+              <TactileButton variant="disabled" isDisabled className="w-full">
+                <Spinner size="sm" />
+              </TactileButton>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'auth:invite-code-error') {
+    const s = authScreen()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={s.scrim()}>
+          <View className={s.innerRoot()}>
+            <View className={s.logoWrap()}>
+              <Image
+                source={require('@/assets/icon.png')}
+                className="w-16 h-16 rounded-2xl"
+                resizeMode="contain"
+              />
+            </View>
+            <Text className={s.headline()}>
+              ENTER.{'\n'}YOUR.{'\n'}CODE.
+            </Text>
+            <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
+            <View className={s.inputWrap()}>
+              <InputOTP
+                maxLength={8}
+                value="INVALID8"
+                onChange={() => {}}
+                pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                inputMode="text"
+                isInvalid
+              >
+                <InputOTP.Group>
+                  <InputOTP.Slot index={0} />
+                  <InputOTP.Slot index={1} />
+                  <InputOTP.Slot index={2} />
+                  <InputOTP.Slot index={3} />
+                </InputOTP.Group>
+                <InputOTP.Separator />
+                <InputOTP.Group>
+                  <InputOTP.Slot index={4} />
+                  <InputOTP.Slot index={5} />
+                  <InputOTP.Slot index={6} />
+                  <InputOTP.Slot index={7} />
+                </InputOTP.Group>
+              </InputOTP>
+              <FieldError className={s.fieldError()}>Invalid invite code</FieldError>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
   // BREED
   // ════════════════════════════════════════════════════════════════════════════
+
+  if (key === 'breed:loading')
+    return (
+      <PreviewShell onBack={dismiss}>
+        <ScreenLoader title="Breed" message="Loading your NFTs..." />
+      </PreviewShell>
+    )
 
   if (key === 'breed:need-2-nfts')
     return (
@@ -730,6 +1058,28 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       </PhaseShell>
     )
 
+  if (key === 'poop:analyzing')
+    return (
+      <PhaseShell onBack={dismiss}>
+        <RecordingPhase
+          nft={MOCK_NFT_READY}
+          isRecording={false}
+          isAnalyzing
+          onStop={() => {}}
+          onCancel={dismiss}
+        />
+      </PhaseShell>
+    )
+
+  if (key === 'poop:roulette')
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className="flex-1 bg-background">
+          <RoulettePhase nft={MOCK_NFT_READY} lootRollId="mock-loot-roll-id" onDone={dismiss} />
+        </View>
+      </PreviewShell>
+    )
+
   // ════════════════════════════════════════════════════════════════════════════
   // VAULT
   // ════════════════════════════════════════════════════════════════════════════
@@ -811,6 +1161,84 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     )
   }
 
+  if (key === 'vault:empty-nfts') {
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
+          <View className="flex-1 justify-center items-center px-6">
+            <Alert
+              status="warning"
+              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+            >
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title className="font-black">No NFTs</Alert.Title>
+                <Alert.Description className="font-bold">
+                  You don't own any NFTs yet. Mint one to get started!
+                </Alert.Description>
+              </Alert.Content>
+            </Alert>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'vault:empty-boxes') {
+    const gl = gridLayout()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
+          <View className="w-full px-4 pt-4">
+            <View className={gl.row()}>
+              <View className={gl.item()}>
+                <MysteryBoxCard
+                  rarity="common"
+                  box={null}
+                  imageUrl="https://placehold.co/400x400/9CA3AF/white?text=Common%0ABox"
+                  count={0}
+                />
+              </View>
+              <View className={gl.item()}>
+                <MysteryBoxCard
+                  rarity="rare"
+                  box={null}
+                  imageUrl="https://placehold.co/400x400/3B82F6/white?text=Rare%0ABox"
+                  count={0}
+                />
+              </View>
+            </View>
+            <View className={gl.row()}>
+              <View className={gl.item()}>
+                <MysteryBoxCard
+                  rarity="legendary"
+                  box={null}
+                  imageUrl="https://placehold.co/400x400/F59E0B/white?text=Legendary%0ABox"
+                  count={0}
+                />
+              </View>
+              <View className={gl.item()}>
+                <MysteryBoxCard
+                  rarity="transcendent"
+                  box={null}
+                  imageUrl="https://placehold.co/400x400/EC4899/white?text=Trans%0ABox"
+                  count={0}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'vault:nft-error')
+    return (
+      <PreviewShell onBack={dismiss}>
+        <ScreenError title="Vault" message="Failed to load NFTs: network error" onRetry={dismiss} />
+      </PreviewShell>
+    )
+
   // ════════════════════════════════════════════════════════════════════════════
   // MARKETPLACE
   // ════════════════════════════════════════════════════════════════════════════
@@ -887,6 +1315,102 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       </PreviewShell>
     )
   }
+
+  if (key === 'marketplace:coming-soon-dialog') {
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface' })}>
+          <Dialog
+            isOpen
+            onOpenChange={(isOpen) => {
+              if (!isOpen) dismiss()
+            }}
+          >
+            <Dialog.Portal>
+              <Dialog.Overlay />
+              <Dialog.Content>
+                <Dialog.Close />
+                <View className={dialogBody()}>
+                  <Dialog.Title>Coming Soon</Dialog.Title>
+                  <Dialog.Description>
+                    Buying from marketplace is not yet available.
+                  </Dialog.Description>
+                </View>
+                <View className={dialogFooter()}>
+                  <TactileButton
+                    animation="disable-all"
+                    variant="primary"
+                    size="sm"
+                    onPress={dismiss}
+                  >
+                    OK
+                  </TactileButton>
+                </View>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'marketplace:sell-card') {
+    const nft = MOCK_NFT_LISTED
+    const itemRow = marketplaceItemRow()
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
+          <View className="px-5 pt-5 w-[55%]">
+            <NFTCard
+              nft={nft}
+              action={
+                <View className={itemRow.root()}>
+                  <Text className={itemRow.price()}>{nft.price}</Text>
+                  <TactileButton variant="outline" size="sm" onPress={() => {}}>
+                    Unlist
+                  </TactileButton>
+                </View>
+              }
+            />
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'marketplace:empty-buy') {
+    return (
+      <PreviewShell onBack={dismiss}>
+        <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
+          <View className="py-15 w-full px-5">
+            <Alert
+              status="default"
+              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+            >
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title className="font-black">No listings</Alert.Title>
+                <Alert.Description className="font-bold">
+                  There are no NFTs listed on the marketplace right now.
+                </Alert.Description>
+              </Alert.Content>
+            </Alert>
+          </View>
+        </View>
+      </PreviewShell>
+    )
+  }
+
+  if (key === 'marketplace:error')
+    return (
+      <PreviewShell onBack={dismiss}>
+        <ScreenError
+          title="Marketplace"
+          message="Failed to load marketplace listings"
+          onRetry={dismiss}
+        />
+      </PreviewShell>
+    )
 
   // ════════════════════════════════════════════════════════════════════════════
   // STANDALONE COMPONENTS
