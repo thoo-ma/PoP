@@ -1,13 +1,5 @@
 import { tv } from 'tailwind-variants'
 
-export const emptyState = tv({
-  slots: {
-    root: 'py-12 items-center',
-    title: 'text-base font-bold text-on-surface mb-2',
-    detail: 'text-sm text-on-surface-variant text-center font-bold',
-  },
-})
-
 export const errorMessage = tv({
   base: 'text-[13px] text-danger text-center mb-3 px-2',
 })
