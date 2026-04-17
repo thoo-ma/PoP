@@ -80,6 +80,8 @@ const CATALOG: CatalogSection[] = [
       ['poop:result-success', 'Result — success + loot'],
       ['poop:result-rate-limit', 'Result — rate limit'],
       ['poop:result-error', 'Result — error'],
+      ['poop:analyzing', 'Analyzing'],
+      ['poop:roulette', 'Roulette'],
     ],
   },
   {

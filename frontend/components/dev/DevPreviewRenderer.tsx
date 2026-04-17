@@ -238,7 +238,12 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
-          <Dialog isOpen onOpenChange={() => {}}>
+          <Dialog
+            isOpen
+            onOpenChange={(isOpen) => {
+              if (!isOpen) dismiss()
+            }}
+          >
             <Dialog.Portal>
               <Dialog.Overlay />
               <Dialog.Content className={s.content()}>
@@ -1315,7 +1320,12 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
-          <Dialog isOpen onOpenChange={() => {}}>
+          <Dialog
+            isOpen
+            onOpenChange={(isOpen) => {
+              if (!isOpen) dismiss()
+            }}
+          >
             <Dialog.Portal>
               <Dialog.Overlay />
               <Dialog.Content>
