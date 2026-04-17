@@ -7,34 +7,16 @@ import AlertBox from '../shared/AlertBox'
 import TactileButton from '../shared/TactileButton'
 
 type Props = {
-  nfts: NFT[]
-  selectedIndex: number | null
-  displayNFT: NFT | null
-  buttonDisabled: boolean
-  buttonLabel: string
-  accessibilityLabel: string
-  accessibilityHint: string
-  immobilityMessage: string | null
-  onSelectNFT: () => void
-  onPrev: () => void
-  onNext: () => void
-  onPoop: () => void
+  nft: { nfts: NFT[]; selectedIndex: number | null; displayNFT: NFT | null }
+  ui: { buttonDisabled: boolean; buttonLabel: string; immobilityMessage: string | null }
+  a11y: { label: string; hint: string }
+  handlers: { onSelectNFT: () => void; onPrev: () => void; onNext: () => void; onPoop: () => void }
 }
 
-export function IdlePhase({
-  nfts,
-  selectedIndex,
-  displayNFT,
-  buttonDisabled,
-  buttonLabel,
-  accessibilityLabel,
-  accessibilityHint,
-  immobilityMessage,
-  onSelectNFT,
-  onPrev,
-  onNext,
-  onPoop,
-}: Props) {
+export function IdlePhase({ nft, ui, a11y, handlers }: Props) {
+  const { nfts, selectedIndex, displayNFT } = nft
+  const { buttonDisabled, buttonLabel, immobilityMessage } = ui
+  const { onSelectNFT, onPrev, onNext, onPoop } = handlers
   const ph = nftPickerPlaceholder()
   return (
     <>
@@ -75,8 +57,8 @@ export function IdlePhase({
         onPress={onPoop}
         isDisabled={buttonDisabled}
         className="px-12"
-        accessibilityLabel={accessibilityLabel}
-        accessibilityHint={accessibilityHint}
+        accessibilityLabel={a11y.label}
+        accessibilityHint={a11y.hint}
       >
         {buttonLabel}
       </TactileButton>

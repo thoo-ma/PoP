@@ -7,10 +7,10 @@ import { formatDisplayName } from '@/utils'
 import TactileButton from '../shared/TactileButton'
 
 interface MysteryBoxRevealModalProps {
-  visible: boolean
-  /** The newly minted toilet NFT — must be non-null when `visible` is true. */
+  isVisible: boolean
+  /** The newly minted toilet NFT — must be non-null when `isVisible` is true. */
   nft: NFT | null
-  onClose: () => void
+  onDismiss: () => void
 }
 
 /**
@@ -19,18 +19,18 @@ interface MysteryBoxRevealModalProps {
  * then lets the user dismiss to return to the vault.
  */
 export default memo(function MysteryBoxRevealModal({
-  visible,
+  isVisible,
   nft,
-  onClose,
+  onDismiss,
 }: MysteryBoxRevealModalProps) {
   if (!nft) return null
 
   const s = revealModal()
   return (
     <Dialog
-      isOpen={visible}
+      isOpen={isVisible}
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onDismiss()
       }}
     >
       <Dialog.Portal>
@@ -53,7 +53,7 @@ export default memo(function MysteryBoxRevealModal({
 
           <TactileButton
             variant="primary"
-            onPress={onClose}
+            onPress={onDismiss}
             className="w-full"
             accessibilityLabel="Close reveal and return to vault"
           >

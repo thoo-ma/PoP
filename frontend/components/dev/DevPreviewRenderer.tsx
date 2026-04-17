@@ -824,18 +824,15 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
           <IdlePhase
-            nfts={[]}
-            selectedIndex={null}
-            displayNFT={null}
-            buttonDisabled
-            buttonLabel="Poop"
-            accessibilityLabel="Poop"
-            accessibilityHint=""
-            immobilityMessage={null}
-            onSelectNFT={() => {}}
-            onPrev={() => {}}
-            onNext={() => {}}
-            onPoop={() => {}}
+            nft={{ nfts: [], selectedIndex: null, displayNFT: null }}
+            ui={{ buttonDisabled: true, buttonLabel: 'Poop', immobilityMessage: null }}
+            a11y={{ label: 'Poop', hint: '' }}
+            handlers={{
+              onSelectNFT: () => {},
+              onPrev: () => {},
+              onNext: () => {},
+              onPoop: () => {},
+            }}
           />
         </View>
       </PreviewShell>
@@ -846,18 +843,15 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
           <IdlePhase
-            nfts={[MOCK_NFT_READY]}
-            selectedIndex={0}
-            displayNFT={MOCK_NFT_READY}
-            buttonDisabled={false}
-            buttonLabel="Poop"
-            accessibilityLabel="Poop"
-            accessibilityHint=""
-            immobilityMessage={null}
-            onSelectNFT={() => {}}
-            onPrev={() => {}}
-            onNext={() => {}}
-            onPoop={() => {}}
+            nft={{ nfts: [MOCK_NFT_READY], selectedIndex: 0, displayNFT: MOCK_NFT_READY }}
+            ui={{ buttonDisabled: false, buttonLabel: 'Poop', immobilityMessage: null }}
+            a11y={{ label: 'Poop', hint: '' }}
+            handlers={{
+              onSelectNFT: () => {},
+              onPrev: () => {},
+              onNext: () => {},
+              onPoop: () => {},
+            }}
           />
         </View>
       </PreviewShell>
@@ -868,18 +862,15 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
           <IdlePhase
-            nfts={[MOCK_NFT_COOLDOWN]}
-            selectedIndex={0}
-            displayNFT={MOCK_NFT_COOLDOWN}
-            buttonDisabled
-            buttonLabel="On Cooldown"
-            accessibilityLabel="On Cooldown"
-            accessibilityHint=""
-            immobilityMessage={null}
-            onSelectNFT={() => {}}
-            onPrev={() => {}}
-            onNext={() => {}}
-            onPoop={() => {}}
+            nft={{ nfts: [MOCK_NFT_COOLDOWN], selectedIndex: 0, displayNFT: MOCK_NFT_COOLDOWN }}
+            ui={{ buttonDisabled: true, buttonLabel: 'On Cooldown', immobilityMessage: null }}
+            a11y={{ label: 'On Cooldown', hint: '' }}
+            handlers={{
+              onSelectNFT: () => {},
+              onPrev: () => {},
+              onNext: () => {},
+              onPoop: () => {},
+            }}
           />
         </View>
       </PreviewShell>
@@ -890,18 +881,15 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className="flex-1 bg-background items-center pt-[100px] px-5">
           <IdlePhase
-            nfts={[MOCK_NFT_NO_ENERGY]}
-            selectedIndex={0}
-            displayNFT={MOCK_NFT_NO_ENERGY}
-            buttonDisabled
-            buttonLabel="No Energy"
-            accessibilityLabel="No Energy"
-            accessibilityHint=""
-            immobilityMessage={null}
-            onSelectNFT={() => {}}
-            onPrev={() => {}}
-            onNext={() => {}}
-            onPoop={() => {}}
+            nft={{ nfts: [MOCK_NFT_NO_ENERGY], selectedIndex: 0, displayNFT: MOCK_NFT_NO_ENERGY }}
+            ui={{ buttonDisabled: true, buttonLabel: 'No Energy', immobilityMessage: null }}
+            a11y={{ label: 'No Energy', hint: '' }}
+            handlers={{
+              onSelectNFT: () => {},
+              onPrev: () => {},
+              onNext: () => {},
+              onPoop: () => {},
+            }}
           />
         </View>
       </PreviewShell>
@@ -1470,7 +1458,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'component:mystery-box-reveal') {
-    return <MysteryBoxRevealModal visible nft={MOCK_NFT_READY} onClose={dismiss} />
+    return <MysteryBoxRevealModal isVisible nft={MOCK_NFT_READY} onDismiss={dismiss} />
   }
 
   // Fallback
