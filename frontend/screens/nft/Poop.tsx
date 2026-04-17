@@ -435,18 +435,18 @@ export default memo(function Poop() {
             keyboardShouldPersistTaps="handled"
           >
             <IdlePhase
-              nfts={nfts}
-              selectedIndex={selectedIndex}
-              displayNFT={displayNFT}
-              buttonDisabled={buttonDisabled}
-              buttonLabel={buttonLabel}
-              accessibilityLabel={onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping'}
-              accessibilityHint={onCooldown ? 'NFT is resting' : 'Begin your toilet session'}
-              immobilityMessage={immobilityMessage}
-              onSelectNFT={handleSelectNFT}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onPoop={handlePoop}
+              nft={{ nfts, selectedIndex, displayNFT }}
+              ui={{ buttonDisabled, buttonLabel, immobilityMessage }}
+              a11y={{
+                label: onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping',
+                hint: onCooldown ? 'NFT is resting' : 'Begin your toilet session',
+              }}
+              handlers={{
+                onSelectNFT: handleSelectNFT,
+                onPrev: handlePrev,
+                onNext: handleNext,
+                onPoop: handlePoop,
+              }}
             />
           </ScrollView>
         </View>
