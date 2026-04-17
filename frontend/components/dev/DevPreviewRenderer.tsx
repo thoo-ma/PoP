@@ -1,5 +1,5 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
-import { Button, cn, Skeleton } from 'heroui-native'
+import { Alert, Button, cn, Skeleton } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { Image, Text, View } from 'react-native'
 import {
@@ -19,21 +19,18 @@ import {
   ResultsPhase,
   ScreenError,
   ScreenLoader,
+  TactileButton,
 } from '@/components'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
   breedResultSection,
-  emptyState,
-  errorMessage,
   gridLayout,
   infoBox,
-  inlineError,
   marketplaceItemRow,
   parentSlotsRow,
   repairAmountBox,
   repairFullEnergy,
-  repairSuccess,
   screenContainer,
   skeletonCard,
   tactileButton,
@@ -215,10 +212,20 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <BreedParentSlot nft={p2} label="Choose Parent 2" onPress={() => {}} />
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
-            <Text className={errorMessage()}>
-              One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT}) and
-              cannot be bred again.
-            </Text>
+            <View className="mt-4 w-full">
+              <Alert
+                status="warning"
+                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title className="font-black">Breed Limit Reached</Alert.Title>
+                  <Alert.Description className="font-bold">
+                    {`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
+                  </Alert.Description>
+                </Alert.Content>
+              </Alert>
+            </View>
             <Button
               variant="ghost"
               feedbackVariant="none"
@@ -253,7 +260,20 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <BreedParentSlot nft={p2} label="Choose Parent 2" onPress={() => {}} />
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
-            <ScreenError title="Insufficient POOP" message={`You need ${cost} POOP to breed.`} />
+            <View className="mt-4 w-full">
+              <Alert
+                status="warning"
+                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title className="font-black">Insufficient POOP</Alert.Title>
+                  <Alert.Description className="font-bold">
+                    {`You need ${cost} POOP to breed.`}
+                  </Alert.Description>
+                </Alert.Content>
+              </Alert>
+            </View>
             <Button
               variant="ghost"
               feedbackVariant="none"
@@ -427,19 +447,26 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'repair:success') {
-    const rs = repairSuccess()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5">
-            <View className={rs.root()}>
-              <Text className={rs.text()}>Repair Complete!</Text>
-              <Text className={rs.text()}>Energy: 100%</Text>
-              <Text className={rs.text()}>-42 POOP spent</Text>
+            <View className="w-full">
+              <Alert
+                status="success"
+                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title className="font-black">Repair Complete!</Alert.Title>
+                  <Alert.Description className="font-bold">Energy: 100%</Alert.Description>
+                  <Alert.Description className="font-bold">-42 POOP spent</Alert.Description>
+                </Alert.Content>
+              </Alert>
               <Button
                 variant="ghost"
                 feedbackVariant="none"
-                className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
+                className={cn(tactileButton({ variant: 'outline' }), 'w-full mt-4')}
                 onPress={() => {}}
               >
                 <Button.Label className={tactileButtonText({ variant: 'outline' })}>
@@ -456,7 +483,26 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'repair:bust-inline')
     return (
       <PreviewShell onBack={dismiss}>
-        <ScreenError title="BUST" message="You lost 42 POOP — better luck next time!" />
+        <DevMockProvider
+          value={{
+            userNFTs: {
+              nfts: [MOCK_NFT_READY],
+              loading: false,
+              error: null,
+              refetch: async () => {},
+            },
+            wallet: { poopBalance: 380, loading: false, error: null, refetch: async () => {} },
+            repairNFT: {
+              repairNFT: async () => null,
+              loading: false,
+              error: null,
+              insufficientPoopError: null,
+              bustedResult: { poop_spent: 42, poop_balance: 380 },
+            },
+          }}
+        >
+          <Repair />
+        </DevMockProvider>
       </PreviewShell>
     )
 
@@ -711,10 +757,27 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-          <View className={inlineError().root()}>
-            <Text className={inlineError().text()}>
-              Failed to load mystery boxes: Network error
-            </Text>
+          <View className="flex-1 justify-center items-center px-6">
+            <Alert
+              status="danger"
+              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+            >
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title className="font-black">Mystery Boxes</Alert.Title>
+                <Alert.Description className="font-bold">
+                  Failed to load: Network error
+                </Alert.Description>
+              </Alert.Content>
+            </Alert>
+            <TactileButton
+              animation="disable-all"
+              variant="primary"
+              onPress={() => {}}
+              className="mt-4"
+            >
+              Retry
+            </TactileButton>
           </View>
         </View>
       </PreviewShell>
@@ -772,15 +835,22 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'marketplace:empty-sell') {
-    const es = emptyState()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-          <View className={cn(es.root(), 'py-15 w-full px-5')}>
-            <Text className={es.title()}>No active listings</Text>
-            <Text className={cn(es.detail(), 'mt-1 leading-5')}>
-              You haven't listed any NFTs yet.
-            </Text>
+          <View className="py-15 w-full px-5">
+            <Alert
+              status="warning"
+              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+            >
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title className="font-black">No active listings</Alert.Title>
+                <Alert.Description className="font-bold">
+                  You haven't listed any NFTs yet.
+                </Alert.Description>
+              </Alert.Content>
+            </Alert>
           </View>
         </View>
       </PreviewShell>

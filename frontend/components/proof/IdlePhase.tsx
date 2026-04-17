@@ -1,7 +1,7 @@
-import { Button } from 'heroui-native'
+import { Alert, Button } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
-import { nftPickerButton, nftPickerPlaceholder, toastBanner } from '@/styles'
+import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
 import type { NFT } from '@/types'
 import TactileButton from '../shared/TactileButton'
 
@@ -34,14 +34,19 @@ export function IdlePhase({
   onNext,
   onPoop,
 }: Props) {
-  const toastStyles = toastBanner()
   const ph = nftPickerPlaceholder()
   return (
     <>
       {immobilityMessage && (
-        <View className={toastStyles.root()}>
-          <Text className={toastStyles.label()}>{immobilityMessage}</Text>
-        </View>
+        <Alert
+          status="warning"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-2"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Description className="font-bold">{immobilityMessage}</Alert.Description>
+          </Alert.Content>
+        </Alert>
       )}
 
       <View className="w-full items-center mb-5">

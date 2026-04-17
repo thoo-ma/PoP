@@ -60,16 +60,3 @@ export const breedResultSection = tv({
 export const costStrikethrough = tv({
   base: 'line-through text-on-surface-variant',
 })
-// ── Breed info text ───────────────────────────────────────────────────────────────
-// Informational text shown inside info-box containers in the Breed screen.
-// 'base' → minimum-NFT notice; 'hint' → smaller parents-not-yet-selected hint.
-export const breedInfoText = tv({
-  base: 'text-center',
-  variants: {
-    size: {
-      base: 'text-sm text-on-surface-variant font-bold',
-      hint: 'text-[13px] text-on-surface-variant leading-5 font-bold',
-    },
-  },
-  defaultVariants: { size: 'base' },
-})

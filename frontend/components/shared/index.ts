@@ -1,6 +1,7 @@
 export { default as DegenBar } from './DegenBar'
 export { default as ErrorBoundary } from './ErrorBoundary'
 export { default as ScreenError } from './ScreenError'
+export { default as ScreenInfo } from './ScreenInfo'
 export { default as ScreenLoader } from './ScreenLoader'
 export type { TactileButtonProps } from './TactileButton'
 export { default as TactileButton } from './TactileButton'

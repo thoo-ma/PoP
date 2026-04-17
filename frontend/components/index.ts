@@ -23,4 +23,11 @@ export {
   RoulettePhase,
 } from './proof'
 export type { TactileButtonProps } from './shared'
-export { DegenBar, ErrorBoundary, ScreenError, ScreenLoader, TactileButton } from './shared'
+export {
+  DegenBar,
+  ErrorBoundary,
+  ScreenError,
+  ScreenInfo,
+  ScreenLoader,
+  TactileButton,
+} from './shared'

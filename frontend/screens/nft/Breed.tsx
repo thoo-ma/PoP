@@ -1,7 +1,7 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, useToast } from 'heroui-native'
+import { Alert, Button, Skeleton, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
@@ -11,16 +11,15 @@ import {
   DegenBar,
   MysteryBoxCard,
   ScreenError,
+  ScreenInfo,
   TactileButton,
 } from '@/components'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
-  breedInfoText,
   breedResultSection,
   breedSkeleton,
   costStrikethrough,
   errorMessage,
-  infoBox,
   parentSlotsRow,
   screenContainer,
   scrollContent,
@@ -114,14 +113,10 @@ import { canBreed } from '@/utils'
 
   if (nfts.length < 2) {
     return (
-      <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
-        <View className={infoBox()}>
-          <Text className={breedInfoText()}>
-            You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then
-            come back to start breeding.
-          </Text>
-        </View>
-      </View>
+      <ScreenInfo
+        title="Not Enough NFTs"
+        message="You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding."
+      />
     )
   }
 
@@ -196,10 +191,18 @@ import { canBreed } from '@/utils'
               {parent1 && parent2 ? (
                 <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
-                <View className={cn(infoBox(), 'mb-6 items-center')}>
-                  <Text className={breedInfoText({ size: 'hint' })}>
-                    Select both parents to see outcome probabilities
-                  </Text>
+                <View className="w-full mb-6">
+                  <Alert
+                    status="default"
+                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                  >
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Description className="font-bold">
+                        Select both parents to see outcome probabilities
+                      </Alert.Description>
+                    </Alert.Content>
+                  </Alert>
                 </View>
               )}
               {/* ── Degen Bar ────────────────────────────────────────── */}
@@ -213,26 +216,49 @@ import { canBreed } from '@/utils'
 
               {/* ── Bust feedback ──────────────────────────────────────── */}
               {bustedResult && (
-                <ScreenError
-                  title="BUST"
-                  message={`You lost ${bustedResult.poop_spent} POOP — better luck next time!`}
-                />
+                <View className="mb-4 w-full">
+                  <ScreenError
+                    title="BUST"
+                    message={`You lost ${bustedResult.poop_spent} POOP — better luck next time!`}
+                  />
+                </View>
               )}
               {/* ── Breed error ───────────────────────────────────────────── */}
               {breedError && <Text className={errorMessage()}>{breedError}</Text>}
 
               {atBreedLimit && (
-                <Text className={errorMessage()}>
-                  One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT}) and
-                  cannot be bred again.
-                </Text>
+                <View className="mt-4 w-full">
+                  <Alert
+                    status="warning"
+                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                  >
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Title className="font-black">Breed Limit Reached</Alert.Title>
+                      <Alert.Description className="font-bold">
+                        One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT})
+                        and cannot be bred again.
+                      </Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                </View>
               )}
 
               {!hasEnoughPoop && (
-                <ScreenError
-                  title="Insufficient POOP"
-                  message={`You need ${totalBreedCost} POOP to breed.`}
-                />
+                <View className="mt-4 w-full">
+                  <Alert
+                    status="warning"
+                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                  >
+                    <Alert.Indicator />
+                    <Alert.Content>
+                      <Alert.Title className="font-black">Insufficient POOP</Alert.Title>
+                      <Alert.Description className="font-bold">
+                        You need {totalBreedCost} POOP to breed.
+                      </Alert.Description>
+                    </Alert.Content>
+                  </Alert>
+                </View>
               )}
 
               {/* ── Breed button ──────────────────────────────────────────────── */}

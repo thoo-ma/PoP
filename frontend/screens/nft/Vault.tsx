@@ -1,6 +1,6 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
+import { Alert, Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -11,12 +11,12 @@ import {
   ScreenError,
   ScreenLoader,
   StatAllocationModal,
+  TactileButton,
 } from '@/components'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
 import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
   gridLayout,
-  inlineError,
   screenContainer,
   scrollContent,
   skeletonCard,
@@ -40,7 +40,12 @@ export default memo(function Vault() {
 
   const { nfts, loading, error, refetch } = useUserNFTs()
   const { listNFT } = useUpdateNFT()
-  const { boxes, loading: boxesLoading, error: boxesError } = useMysteryBoxes()
+  const {
+    boxes,
+    loading: boxesLoading,
+    error: boxesError,
+    refetch: refetchBoxes,
+  } = useMysteryBoxes()
   const { openBox, loading: openLoading } = useOpenMysteryBox()
   const { toast } = useToast()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')
@@ -340,10 +345,27 @@ export default memo(function Vault() {
               ))}
             </View>
           ) : boxesError ? (
-            <View className={inlineError().root()}>
-              <Text className={inlineError().text()}>
-                Failed to load mystery boxes: {boxesError}
-              </Text>
+            <View className="flex-1 justify-center items-center px-6">
+              <Alert
+                status="danger"
+                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title className="font-black">Mystery Boxes</Alert.Title>
+                  <Alert.Description className="font-bold">
+                    Failed to load: {boxesError}
+                  </Alert.Description>
+                </Alert.Content>
+              </Alert>
+              <TactileButton
+                animation="disable-all"
+                variant="primary"
+                onPress={() => refetchBoxes()}
+                className="mt-4"
+              >
+                Retry
+              </TactileButton>
             </View>
           ) : (
             <ScrollView

@@ -10,14 +10,6 @@ export const repairAmountBox = tv({
   },
 })
 
-// Success state shown after a successful repair.
-export const repairSuccess = tv({
-  slots: {
-    root: 'items-center mt-8 bg-app-success-container p-6 rounded-2xl border-2 border-app-success',
-    text: 'text-2xl font-bold text-app-success mb-5',
-  },
-})
-
 // "Full energy" state shown when the selected NFT needs no repair.
 export const repairFullEnergy = tv({
   slots: {

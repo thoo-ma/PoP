@@ -55,29 +55,6 @@ export const statusBadge = tv({
   defaultVariants: { status: 'ok' },
 })
 
-// ── Result card ──────────────────────────────────────────────────────────────
-// The outcome card shown after flush detection (success/failure/rate-limit/error).
-export const resultCard = tv({
-  slots: {
-    root: 'w-full rounded-2xl p-6 border-[3px] items-center gap-1.5',
-    title: 'text-[22px] font-bold text-on-surface text-center',
-    detail: 'text-sm text-on-surface-variant text-center',
-  },
-  variants: {
-    status: {
-      success: { root: 'bg-app-success-container border-app-success' },
-      failure: { root: 'bg-app-error-container border-app-error' },
-      warning: { root: 'bg-app-warning-container border-app-warning' },
-    },
-  },
-})
-
-// ── Info card ────────────────────────────────────────────────────────────────
-// The white bordered card used for prompt / recording / analyzing states.
-export const infoCard = tv({
-  base: 'w-full bg-surface rounded-[14px] p-5 border-[3px] border-outline items-center gap-2',
-})
-
 // ── Phase text labels ─────────────────────────────────────────────────────────
 // Small text labels used inside phase render functions in Poop.tsx.
 export const phaseText = tv({
@@ -122,23 +99,4 @@ export const degenBar = tv({
     },
   },
   defaultVariants: { zone: 'safe' },
-})
-
-// ── Recording indicator ──────────────────────────────────────────────────────
-// The red dot + "Recording…" row.
-export const recordingIndicator = tv({
-  slots: {
-    root: 'flex-row items-center gap-2 mb-3',
-    dot: 'w-3 h-3 rounded-full bg-app-error',
-    label: 'text-base font-bold text-on-surface',
-  },
-})
-
-// ── Toast banner ─────────────────────────────────────────────────────────────
-// The immobility failure toast ("Too much movement — try again!").
-export const toastBanner = tv({
-  slots: {
-    root: 'bg-app-error-container rounded-[10px] py-2.5 px-4 mb-2 border border-app-error',
-    label: 'text-[13px] text-app-error font-bold text-center',
-  },
 })

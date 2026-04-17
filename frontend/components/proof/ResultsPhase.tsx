@@ -1,5 +1,6 @@
-import { Text, View } from 'react-native'
-import { phaseContainer, resultCard } from '@/styles'
+import { Alert } from 'heroui-native'
+import { View } from 'react-native'
+import { phaseContainer } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import { formatConfidencePercentage } from '@/utils'
 import TactileButton from '../shared/TactileButton'
@@ -33,14 +34,19 @@ export function ResultsPhase({
   onReset,
 }: Props) {
   if (rateLimitError) {
-    const cardStyles = resultCard({ status: 'warning' })
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <View className={cardStyles.root()}>
-          <Text className={cardStyles.title()}>Daily limit reached</Text>
-          <Text className={cardStyles.detail()}>{rateLimitError.message}</Text>
-        </View>
+        <Alert
+          status="warning"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Daily limit reached</Alert.Title>
+            <Alert.Description className="font-bold">{rateLimitError.message}</Alert.Description>
+          </Alert.Content>
+        </Alert>
         <TactileButton
           animation="disable-all"
           variant="primary"
@@ -53,14 +59,19 @@ export function ResultsPhase({
     )
   }
   if (detectionError && !detectionResult) {
-    const cardStyles = resultCard({ status: 'warning' })
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <View className={cardStyles.root()}>
-          <Text className={cardStyles.title()}>Something went wrong</Text>
-          <Text className={cardStyles.detail()}>{detectionError}</Text>
-        </View>
+        <Alert
+          status="danger"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Something went wrong</Alert.Title>
+            <Alert.Description className="font-bold">{detectionError}</Alert.Description>
+          </Alert.Content>
+        </Alert>
         <TactileButton
           animation="disable-all"
           variant="primary"
@@ -73,16 +84,21 @@ export function ResultsPhase({
     )
   }
   if (detectionResult && !detectionResult.detected) {
-    const cardStyles = resultCard({ status: 'failure' })
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <View className={cardStyles.root()}>
-          <Text className={cardStyles.title()}>Flush not detected</Text>
-          <Text className={cardStyles.detail()}>
-            Confidence: {formatConfidencePercentage(detectionResult.confidence)}
-          </Text>
-        </View>
+        <Alert
+          status="danger"
+          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+        >
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title className="font-black">Flush not detected</Alert.Title>
+            <Alert.Description className="font-bold">
+              Confidence: {formatConfidencePercentage(detectionResult.confidence)}
+            </Alert.Description>
+          </Alert.Content>
+        </Alert>
         <TactileButton
           animation="disable-all"
           variant="primary"
@@ -101,28 +117,37 @@ export function ResultsPhase({
   if (!detectionResult?.detected) return null
 
   // Success
-  const cardStyles = resultCard({ status: 'success' })
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
-      <View className={cardStyles.root()}>
-        <Text className={cardStyles.title()}>Flush confirmed!</Text>
-        {poopedEnergy && (
-          <Text className={cardStyles.detail()}>
-            Energy: {poopedEnergy.from} → {poopedEnergy.to}
-          </Text>
-        )}
-        {poopedXP && (
-          <>
-            <Text className={cardStyles.detail()}>+{poopedXP.gained} XP</Text>
-            {poopedXP.leveledUp && (
-              <Text className={cardStyles.detail()}>Level Up! Now Lv {poopedXP.level}</Text>
-            )}
-          </>
-        )}
-        {poopedPoop && <Text className={cardStyles.detail()}>+{poopedPoop.earned} POOP</Text>}
-        {actionLoading && <Text className={cardStyles.detail()}>Saving…</Text>}
-      </View>
+      <Alert
+        status="success"
+        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+      >
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title className="font-black">Flush confirmed!</Alert.Title>
+          {poopedEnergy && (
+            <Alert.Description className="font-bold">
+              Energy: {poopedEnergy.from} → {poopedEnergy.to}
+            </Alert.Description>
+          )}
+          {poopedXP && (
+            <>
+              <Alert.Description className="font-bold">+{poopedXP.gained} XP</Alert.Description>
+              {poopedXP.leveledUp && (
+                <Alert.Description className="font-bold">
+                  Level Up! Now Lv {poopedXP.level}
+                </Alert.Description>
+              )}
+            </>
+          )}
+          {poopedPoop && (
+            <Alert.Description className="font-bold">+{poopedPoop.earned} POOP</Alert.Description>
+          )}
+          {actionLoading && <Alert.Description className="font-bold">Saving…</Alert.Description>}
+        </Alert.Content>
+      </Alert>
       {lootRollId ? (
         <TactileButton
           variant="primary"
