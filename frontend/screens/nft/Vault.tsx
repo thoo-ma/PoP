@@ -1,9 +1,10 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Alert, Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
+import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import {
+  AlertBox,
   FilterControls,
   MysteryBoxCard,
   MysteryBoxRevealModal,
@@ -346,26 +347,20 @@ export default memo(function Vault() {
             </View>
           ) : boxesError ? (
             <View className="flex-1 justify-center items-center px-6">
-              <Alert
+              <AlertBox
                 status="danger"
-                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                title="Mystery Boxes"
+                description={`Failed to load: ${boxesError}`}
               >
-                <Alert.Indicator />
-                <Alert.Content>
-                  <Alert.Title className="font-black">Mystery Boxes</Alert.Title>
-                  <Alert.Description className="font-bold">
-                    Failed to load: {boxesError}
-                  </Alert.Description>
-                </Alert.Content>
-              </Alert>
-              <TactileButton
-                animation="disable-all"
-                variant="primary"
-                onPress={() => refetchBoxes()}
-                className="mt-4"
-              >
-                Retry
-              </TactileButton>
+                <TactileButton
+                  animation="disable-all"
+                  variant="primary"
+                  onPress={() => refetchBoxes()}
+                  className="mt-4"
+                >
+                  Retry
+                </TactileButton>
+              </AlertBox>
             </View>
           ) : (
             <ScrollView

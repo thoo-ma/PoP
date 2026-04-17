@@ -1,7 +1,7 @@
-import { Alert } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
 import type { ChallengeStatus, NFT } from '@/types'
+import AlertBox from '../shared/AlertBox'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -27,15 +27,7 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
             <Text className={warningBadge.label()}>Movement detected!</Text>
           </View>
         ) : (
-          <Alert
-            status="success"
-            className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-          >
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title className="font-black">Hold still</Alert.Title>
-            </Alert.Content>
-          </Alert>
+          <AlertBox status="success" title="Hold still" />
         )}
       </View>
       <TactileButton

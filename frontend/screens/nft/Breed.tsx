@@ -1,10 +1,11 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Alert, Button, Skeleton, useToast } from 'heroui-native'
+import { Button, Skeleton, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
 import {
+  AlertBox,
   BreedOutcomePanel,
   BreedParentSlot,
   BreedPickerModal,
@@ -192,17 +193,10 @@ import { canBreed } from '@/utils'
                 <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
                 <View className="w-full mb-6">
-                  <Alert
+                  <AlertBox
                     status="default"
-                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-                  >
-                    <Alert.Indicator />
-                    <Alert.Content>
-                      <Alert.Description className="font-bold">
-                        Select both parents to see outcome probabilities
-                      </Alert.Description>
-                    </Alert.Content>
-                  </Alert>
+                    description="Select both parents to see outcome probabilities"
+                  />
                 </View>
               )}
               {/* ── Degen Bar ────────────────────────────────────────── */}
@@ -228,36 +222,21 @@ import { canBreed } from '@/utils'
 
               {atBreedLimit && (
                 <View className="mt-4 w-full">
-                  <Alert
+                  <AlertBox
                     status="warning"
-                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-                  >
-                    <Alert.Indicator />
-                    <Alert.Content>
-                      <Alert.Title className="font-black">Breed Limit Reached</Alert.Title>
-                      <Alert.Description className="font-bold">
-                        One of the selected NFTs has reached its max breed count ({BREED_MAX_COUNT})
-                        and cannot be bred again.
-                      </Alert.Description>
-                    </Alert.Content>
-                  </Alert>
+                    title="Breed Limit Reached"
+                    description={`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
+                  />
                 </View>
               )}
 
               {!hasEnoughPoop && (
                 <View className="mt-4 w-full">
-                  <Alert
+                  <AlertBox
                     status="warning"
-                    className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-                  >
-                    <Alert.Indicator />
-                    <Alert.Content>
-                      <Alert.Title className="font-black">Insufficient POOP</Alert.Title>
-                      <Alert.Description className="font-bold">
-                        You need {totalBreedCost} POOP to breed.
-                      </Alert.Description>
-                    </Alert.Content>
-                  </Alert>
+                    title="Insufficient POOP"
+                    description={`You need ${totalBreedCost} POOP to breed.`}
+                  />
                 </View>
               )}
 

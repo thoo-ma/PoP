@@ -1,3 +1,4 @@
+export { default as AlertBox } from './AlertBox'
 export { default as DegenBar } from './DegenBar'
 export { default as ErrorBoundary } from './ErrorBoundary'
 export { default as ScreenError } from './ScreenError'

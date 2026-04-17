@@ -1,7 +1,7 @@
-import { Alert, cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
+import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { NFTCard, SortControls, TactileButton } from '@/components'
+import { AlertBox, NFTCard, SortControls, TactileButton } from '@/components'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
@@ -253,18 +253,11 @@ export default memo(function Marketplace() {
                     ))
                   ) : (
                     <View className="py-15 w-full px-2">
-                      <Alert
+                      <AlertBox
                         status="warning"
-                        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-                      >
-                        <Alert.Indicator />
-                        <Alert.Content>
-                          <Alert.Title className="font-black">No active listings</Alert.Title>
-                          <Alert.Description className="font-bold">
-                            You haven't listed any NFTs yet.
-                          </Alert.Description>
-                        </Alert.Content>
-                      </Alert>
+                        title="No active listings"
+                        description="You haven't listed any NFTs yet."
+                      />
                     </View>
                   )}
                 </View>

@@ -24,6 +24,7 @@ export {
 } from './proof'
 export type { TactileButtonProps } from './shared'
 export {
+  AlertBox,
   DegenBar,
   ErrorBoundary,
   ScreenError,
