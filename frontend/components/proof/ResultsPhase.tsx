@@ -1,8 +1,8 @@
-import { Alert } from 'heroui-native'
 import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import { formatConfidencePercentage } from '@/utils'
+import AlertBox from '../shared/AlertBox'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -37,24 +37,21 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <Alert
+        <AlertBox
           status="warning"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+          title="Daily limit reached"
+          description={rateLimitError.message}
+          className="mb-4"
         >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Daily limit reached</Alert.Title>
-            <Alert.Description className="font-bold">{rateLimitError.message}</Alert.Description>
-          </Alert.Content>
-        </Alert>
-        <TactileButton
-          animation="disable-all"
-          variant="primary"
-          onPress={onReset}
-          className="w-full"
-        >
-          Done
-        </TactileButton>
+          <TactileButton
+            animation="disable-all"
+            variant="primary"
+            onPress={onReset}
+            className="w-full"
+          >
+            Done
+          </TactileButton>
+        </AlertBox>
       </View>
     )
   }
@@ -62,24 +59,21 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <Alert
+        <AlertBox
           status="danger"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+          title="Something went wrong"
+          description={detectionError}
+          className="mb-4"
         >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Something went wrong</Alert.Title>
-            <Alert.Description className="font-bold">{detectionError}</Alert.Description>
-          </Alert.Content>
-        </Alert>
-        <TactileButton
-          animation="disable-all"
-          variant="primary"
-          onPress={onReset}
-          className="w-full"
-        >
-          Try Again
-        </TactileButton>
+          <TactileButton
+            animation="disable-all"
+            variant="primary"
+            onPress={onReset}
+            className="w-full"
+          >
+            Try Again
+          </TactileButton>
+        </AlertBox>
       </View>
     )
   }
@@ -87,26 +81,21 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <Alert
+        <AlertBox
           status="danger"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+          title="Flush not detected"
+          description={`Confidence: ${formatConfidencePercentage(detectionResult.confidence)}`}
+          className="mb-4"
         >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Flush not detected</Alert.Title>
-            <Alert.Description className="font-bold">
-              Confidence: {formatConfidencePercentage(detectionResult.confidence)}
-            </Alert.Description>
-          </Alert.Content>
-        </Alert>
-        <TactileButton
-          animation="disable-all"
-          variant="primary"
-          onPress={onReset}
-          className="w-full"
-        >
-          Try Again
-        </TactileButton>
+          <TactileButton
+            animation="disable-all"
+            variant="primary"
+            onPress={onReset}
+            className="w-full"
+          >
+            Try Again
+          </TactileButton>
+        </AlertBox>
       </View>
     )
   }
@@ -120,53 +109,38 @@ export function ResultsPhase({
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
-      <Alert
+      <AlertBox
         status="success"
-        className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-4"
+        title="Flush confirmed!"
+        description={[
+          poopedEnergy && `Energy: ${poopedEnergy.from} → ${poopedEnergy.to}`,
+          poopedXP && `+${poopedXP.gained} XP`,
+          poopedXP?.leveledUp && `Level Up! Now Lv ${poopedXP.level}`,
+          poopedPoop && `+${poopedPoop.earned} POOP`,
+          actionLoading && 'Saving…',
+        ]}
+        className="mb-4"
       >
-        <Alert.Indicator />
-        <Alert.Content>
-          <Alert.Title className="font-black">Flush confirmed!</Alert.Title>
-          {poopedEnergy && (
-            <Alert.Description className="font-bold">
-              Energy: {poopedEnergy.from} → {poopedEnergy.to}
-            </Alert.Description>
-          )}
-          {poopedXP && (
-            <>
-              <Alert.Description className="font-bold">+{poopedXP.gained} XP</Alert.Description>
-              {poopedXP.leveledUp && (
-                <Alert.Description className="font-bold">
-                  Level Up! Now Lv {poopedXP.level}
-                </Alert.Description>
-              )}
-            </>
-          )}
-          {poopedPoop && (
-            <Alert.Description className="font-bold">+{poopedPoop.earned} POOP</Alert.Description>
-          )}
-          {actionLoading && <Alert.Description className="font-bold">Saving…</Alert.Description>}
-        </Alert.Content>
-      </Alert>
-      {lootRollId ? (
-        <TactileButton
-          variant="primary"
-          onPress={onRoulette}
-          isDisabled={actionLoading}
-          className="w-full"
-        >
-          Continue →
-        </TactileButton>
-      ) : (
-        <TactileButton
-          animation="disable-all"
-          variant="primary"
-          onPress={onReset}
-          className="w-full"
-        >
-          Done
-        </TactileButton>
-      )}
+        {lootRollId ? (
+          <TactileButton
+            variant="primary"
+            onPress={onRoulette}
+            isDisabled={actionLoading}
+            className="w-full"
+          >
+            Continue →
+          </TactileButton>
+        ) : (
+          <TactileButton
+            animation="disable-all"
+            variant="primary"
+            onPress={onReset}
+            className="w-full"
+          >
+            Done
+          </TactileButton>
+        )}
+      </AlertBox>
     </View>
   )
 }

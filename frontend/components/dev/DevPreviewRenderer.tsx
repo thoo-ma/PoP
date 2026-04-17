@@ -1,6 +1,5 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import {
-  Alert,
   Avatar,
   Button,
   cn,
@@ -14,6 +13,7 @@ import {
 import type { ReactNode } from 'react'
 import { Image, Text, View } from 'react-native'
 import {
+  AlertBox,
   BreedOutcomePanel,
   BreedParentSlot,
   CountdownPhase,
@@ -541,18 +541,11 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
             <View className="mt-4 w-full">
-              <Alert
+              <AlertBox
                 status="warning"
-                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-              >
-                <Alert.Indicator />
-                <Alert.Content>
-                  <Alert.Title className="font-black">Breed Limit Reached</Alert.Title>
-                  <Alert.Description className="font-bold">
-                    {`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
-                  </Alert.Description>
-                </Alert.Content>
-              </Alert>
+                title="Breed Limit Reached"
+                description={`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
+              />
             </View>
             <Button
               variant="ghost"
@@ -589,18 +582,11 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
             <View className="mt-4 w-full">
-              <Alert
+              <AlertBox
                 status="warning"
-                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-              >
-                <Alert.Indicator />
-                <Alert.Content>
-                  <Alert.Title className="font-black">Insufficient POOP</Alert.Title>
-                  <Alert.Description className="font-bold">
-                    {`You need ${cost} POOP to breed.`}
-                  </Alert.Description>
-                </Alert.Content>
-              </Alert>
+                title="Insufficient POOP"
+                description={`You need ${cost} POOP to breed.`}
+              />
             </View>
             <Button
               variant="ghost"
@@ -780,27 +766,22 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5">
             <View className="w-full">
-              <Alert
+              <AlertBox
                 status="success"
-                className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+                title="Repair Complete!"
+                description={['Energy: 100%', '-42 POOP spent']}
               >
-                <Alert.Indicator />
-                <Alert.Content>
-                  <Alert.Title className="font-black">Repair Complete!</Alert.Title>
-                  <Alert.Description className="font-bold">Energy: 100%</Alert.Description>
-                  <Alert.Description className="font-bold">-42 POOP spent</Alert.Description>
-                </Alert.Content>
-              </Alert>
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
-                className={cn(tactileButton({ variant: 'outline' }), 'w-full mt-4')}
-                onPress={() => {}}
-              >
-                <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                  Repair Another NFT
-                </Button.Label>
-              </Button>
+                <Button
+                  variant="ghost"
+                  feedbackVariant="none"
+                  className={cn(tactileButton({ variant: 'outline' }), 'w-full mt-4')}
+                  onPress={() => {}}
+                >
+                  <Button.Label className={tactileButtonText({ variant: 'outline' })}>
+                    Repair Another NFT
+                  </Button.Label>
+                </Button>
+              </AlertBox>
             </View>
           </View>
         </View>
@@ -1108,26 +1089,20 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="flex-1 justify-center items-center px-6">
-            <Alert
+            <AlertBox
               status="danger"
-              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
+              title="Mystery Boxes"
+              description="Failed to load: Network error"
             >
-              <Alert.Indicator />
-              <Alert.Content>
-                <Alert.Title className="font-black">Mystery Boxes</Alert.Title>
-                <Alert.Description className="font-bold">
-                  Failed to load: Network error
-                </Alert.Description>
-              </Alert.Content>
-            </Alert>
-            <TactileButton
-              animation="disable-all"
-              variant="primary"
-              onPress={() => {}}
-              className="mt-4"
-            >
-              Retry
-            </TactileButton>
+              <TactileButton
+                animation="disable-all"
+                variant="primary"
+                onPress={() => {}}
+                className="mt-4"
+              >
+                Retry
+              </TactileButton>
+            </AlertBox>
           </View>
         </View>
       </PreviewShell>
@@ -1166,18 +1141,11 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="flex-1 justify-center items-center px-6">
-            <Alert
+            <AlertBox
               status="warning"
-              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-            >
-              <Alert.Indicator />
-              <Alert.Content>
-                <Alert.Title className="font-black">No NFTs</Alert.Title>
-                <Alert.Description className="font-bold">
-                  You don't own any NFTs yet. Mint one to get started!
-                </Alert.Description>
-              </Alert.Content>
-            </Alert>
+              title="No NFTs"
+              description="You don't own any NFTs yet. Mint one to get started!"
+            />
           </View>
         </View>
       </PreviewShell>
@@ -1267,18 +1235,11 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="py-15 w-full px-5">
-            <Alert
+            <AlertBox
               status="warning"
-              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-            >
-              <Alert.Indicator />
-              <Alert.Content>
-                <Alert.Title className="font-black">No active listings</Alert.Title>
-                <Alert.Description className="font-bold">
-                  You haven't listed any NFTs yet.
-                </Alert.Description>
-              </Alert.Content>
-            </Alert>
+              title="No active listings"
+              description="You haven't listed any NFTs yet."
+            />
           </View>
         </View>
       </PreviewShell>
@@ -1383,18 +1344,11 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="py-15 w-full px-5">
-            <Alert
+            <AlertBox
               status="default"
-              className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-            >
-              <Alert.Indicator />
-              <Alert.Content>
-                <Alert.Title className="font-black">No listings</Alert.Title>
-                <Alert.Description className="font-bold">
-                  There are no NFTs listed on the marketplace right now.
-                </Alert.Description>
-              </Alert.Content>
-            </Alert>
+              title="No listings"
+              description="There are no NFTs listed on the marketplace right now."
+            />
           </View>
         </View>
       </PreviewShell>

@@ -1,8 +1,9 @@
-import { Alert, Button } from 'heroui-native'
+import { Button } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
 import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
 import type { NFT } from '@/types'
+import AlertBox from '../shared/AlertBox'
 import TactileButton from '../shared/TactileButton'
 
 type Props = {
@@ -38,15 +39,7 @@ export function IdlePhase({
   return (
     <>
       {immobilityMessage && (
-        <Alert
-          status="warning"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px] mb-2"
-        >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Description className="font-bold">{immobilityMessage}</Alert.Description>
-          </Alert.Content>
-        </Alert>
+        <AlertBox status="warning" description={immobilityMessage} className="mb-2" />
       )}
 
       <View className="w-full items-center mb-5">

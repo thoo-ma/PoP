@@ -1,7 +1,7 @@
-import { Alert } from 'heroui-native'
 import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
+import AlertBox from '../shared/AlertBox'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -18,35 +18,11 @@ export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
       {isAnalyzing ? (
-        <Alert
-          status="success"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-        >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Analyzing audio…</Alert.Title>
-          </Alert.Content>
-        </Alert>
+        <AlertBox status="success" title="Analyzing audio…" />
       ) : isRecording ? (
-        <Alert
-          status="success"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-        >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Recording…</Alert.Title>
-          </Alert.Content>
-        </Alert>
+        <AlertBox status="success" title="Recording…" />
       ) : (
-        <Alert
-          status="success"
-          className="w-full rounded-2xl border-[3px] border-outline border-b-[5px]"
-        >
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title className="font-black">Processing…</Alert.Title>
-          </Alert.Content>
-        </Alert>
+        <AlertBox status="success" title="Processing…" />
       )}
       {isRecording && (
         <TactileButton
