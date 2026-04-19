@@ -31,8 +31,8 @@ export default function AlertBox({
         <Alert.Indicator />
         <Alert.Content>
           {title && <Alert.Title className="font-black">{title}</Alert.Title>}
-          {descriptions.map((desc, index) => (
-            <Alert.Description key={`${desc}-${index}`} className="font-bold">
+          {descriptions.map((desc) => (
+            <Alert.Description key={desc} className="font-bold">
               {desc}
             </Alert.Description>
           ))}
