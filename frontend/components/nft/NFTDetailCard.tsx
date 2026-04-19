@@ -1,6 +1,7 @@
-import { cn } from 'heroui-native'
-import { Image, Text, View } from 'react-native'
-import { badgeLabel, nftDetailCard, overlayBadge, typeBadge } from '@/styles'
+import { Card } from 'heroui-native'
+import { Image, View } from 'react-native'
+import { BadgeOverlay } from '@/components'
+import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, typeBadge } from '@/styles'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 import NFTProperties from './NFTProperties'
@@ -14,30 +15,34 @@ interface NFTDetailCardProps {
 export default function NFTDetailCard({ nft, energy }: NFTDetailCardProps) {
   const s = nftDetailCard()
   return (
-    <View className={cn(s.root(), 'w-70 bg-surface border-outline')}>
-      <View className={s.imageWrap()}>
-        <Image source={{ uri: nft.image_url }} className={s.image()} resizeMode="cover" />
-        <View className={cn(overlayBadge({ position: 'topLeft' }), 'bg-badge-level')}>
-          <Text className={cn(badgeLabel(), 'tracking-wide')}>Lv {nft.level}</Text>
-        </View>
-        <View className={cn(overlayBadge({ position: 'topRight' }), typeBadge({ type: nft.type }))}>
-          <Text className={cn(badgeLabel({ size: 'sm' }), 'tracking-wide')}>
+    <View className={cardWrapper({ border: 'flat', className: 'w-70 bg-surface' })}>
+      <Card
+        className={cardContainer()}
+        animation="disable-all"
+        accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.type ?? 'unknown'} type`}
+      >
+        <Card.Header className={cardImageContainer({ className: 'aspect-auto' })}>
+          <Image source={{ uri: nft.image_url }} className={s.image()} resizeMode="cover" />
+          <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
+            {`Lv ${nft.level}`}
+          </BadgeOverlay>
+          <BadgeOverlay position="topRight" colorClass={typeBadge({ type: nft.type })}>
             {nft.type.toUpperCase()}
-          </Text>
-        </View>
-      </View>
+          </BadgeOverlay>
+        </Card.Header>
 
-      <View className={cn(s.content(), 'p-4')}>
-        <Text className={cn(s.title(), 'text-on-surface mb-3')}>{formatDisplayName(nft.name)}</Text>
-        <NFTProperties
-          efficiency={nft.efficiency}
-          resilience={nft.resilience}
-          comfort={nft.comfort}
-          luck={nft.luck}
-          energy={energy ?? nft.energy}
-          mode="compact"
-        />
-      </View>
+        <Card.Body className={s.body()}>
+          <Card.Title className={s.title()}>{formatDisplayName(nft.name)}</Card.Title>
+          <NFTProperties
+            efficiency={nft.efficiency}
+            resilience={nft.resilience}
+            comfort={nft.comfort}
+            luck={nft.luck}
+            energy={energy ?? nft.energy}
+            mode="compact"
+          />
+        </Card.Body>
+      </Card>
     </View>
   )
 }

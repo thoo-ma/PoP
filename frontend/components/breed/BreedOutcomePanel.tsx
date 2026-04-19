@@ -2,6 +2,7 @@ import type { NFTRarity } from '@pop/shared'
 import { RARITIES } from '@pop/shared'
 import { Card } from 'heroui-native'
 import { Text, View } from 'react-native'
+import { ProgressBar } from '@/components'
 import { useRarityColors } from '@/hooks'
 import { outcomePanel } from '@/styles'
 import { getProbabilities } from '@/utils'
@@ -25,12 +26,7 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
           return (
             <View key={rarity} className={s.row()}>
               <Text className={s.label()}>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</Text>
-              <View className={s.track()}>
-                <View
-                  className={s.fill()}
-                  style={{ width: `${pct}%`, backgroundColor: rarityColors[rarity] }}
-                />
-              </View>
+              <ProgressBar value={pct} color={rarityColors[rarity]} />
               <Text className={s.value()}>{pct}%</Text>
             </View>
           )

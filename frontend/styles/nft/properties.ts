@@ -9,8 +9,6 @@ export const propertyBar = tv({
     root: '',
     label: 'text-on-surface-variant',
     barWrap: 'flex-row items-center',
-    bar: 'flex-1 bg-surface-container-highest rounded overflow-hidden',
-    fill: 'h-full rounded',
     value: 'text-right font-bold',
   },
   variants: {
@@ -19,14 +17,12 @@ export const propertyBar = tv({
         root: 'flex-row items-center justify-between',
         label: 'text-caption-sm w-[50px] mr-1',
         barWrap: 'flex-1 gap-1',
-        bar: 'h-1.5',
         value: 'text-caption-sm text-on-surface-variant w-5',
       },
       detailed: {
         root: 'gap-1',
         label: 'text-xs font-bold mb-0.5',
         barWrap: 'gap-1.5',
-        bar: 'h-2',
         value: 'text-xs text-on-surface font-bold w-[26px]',
       },
     },

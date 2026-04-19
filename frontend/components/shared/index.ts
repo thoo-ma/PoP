@@ -1,6 +1,8 @@
 export { default as AlertBox } from './AlertBox'
+export { default as BadgeOverlay } from './BadgeOverlay'
 export { default as DegenBar } from './DegenBar'
 export { default as ErrorBoundary } from './ErrorBoundary'
+export { default as ProgressBar } from './ProgressBar'
 export { default as ScreenError } from './ScreenError'
 export { default as ScreenInfo } from './ScreenInfo'
 export { default as ScreenLoader } from './ScreenLoader'

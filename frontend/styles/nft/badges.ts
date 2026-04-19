@@ -15,20 +15,6 @@ export const badgePosition = tv({
   },
 })
 
-// ── Overlay badge ────────────────────────────────────────────────────────────
-// Rounded-lg badge positioned over the NFT detail card image
-// (used in Poop idle and Repair for level / type / energy labels).
-export const overlayBadge = tv({
-  base: 'absolute rounded-lg px-3 py-1.5',
-  variants: {
-    position: {
-      topLeft: 'top-3 left-3',
-      bottomLeft: 'bottom-3 left-3',
-      topRight: 'top-3 right-3',
-    },
-  },
-})
-
 // ── Type badge ───────────────────────────────────────────────────────────────
 // Background colour by NFT type — replaces the old TYPE_BADGE_STYLES ViewStyle record.
 export const typeBadge = tv({

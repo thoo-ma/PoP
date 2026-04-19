@@ -25,8 +25,10 @@ export {
 export type { TactileButtonProps } from './shared'
 export {
   AlertBox,
+  BadgeOverlay,
   DegenBar,
   ErrorBoundary,
+  ProgressBar,
   ScreenError,
   ScreenInfo,
   ScreenLoader,
