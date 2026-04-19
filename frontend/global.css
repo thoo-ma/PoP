@@ -66,21 +66,21 @@
   --color-overlay-dark-heavy: rgba(0, 0, 0, 0.7);
 
   /* ── Typography scale ────────────────────────────────────── */
-  --font-size-display-xl: 80px;
-  --font-size-display-xl--line-height: 88px;
-  --font-size-display-lg: 48px;
-  --font-size-display-lg--line-height: 48px;
-  --font-size-icon-xl: 40px;
-  --font-size-icon-lg: 36px;
-  --font-size-heading-lg: 32px;
-  --font-size-heading-md: 26px;
-  --font-size-heading-sm: 22px;
-  --font-size-body-xl: 17px;
-  --font-size-body-lg: 15px;
-  --font-size-body-md: 14px;
-  --font-size-body-sm: 13px;
-  --font-size-caption: 11px;
-  --font-size-caption-sm: 10px;
+  --text-display-xl: 80px;
+  --text-display-xl--line-height: 88px;
+  --text-display-lg: 48px;
+  --text-display-lg--line-height: 48px;
+  --text-icon-xl: 40px;
+  --text-icon-lg: 36px;
+  --text-heading-lg: 32px;
+  --text-heading-md: 26px;
+  --text-heading-sm: 22px;
+  --text-body-xl: 17px;
+  --text-body-lg: 15px;
+  --text-body-md: 14px;
+  --text-body-sm: 13px;
+  --text-caption: 11px;
+  --text-caption-sm: 10px;
 
   /* ── Screen-level spacing ────────────────────────────────── */
   --spacing-screen-top-sm: 60px;
