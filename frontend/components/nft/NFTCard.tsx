@@ -78,7 +78,12 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <View className={xp.row()}>
             <Text className={xp.label()}>XP</Text>
             <View className={xp.track()}>
-              <ProgressBar value={xpPct} colorClass="bg-app-amber" size="sm" />
+              <ProgressBar
+                value={xpPct}
+                colorClass="bg-app-amber"
+                size="sm"
+                className="bg-surface-container-low"
+              />
             </View>
           </View>
           {action}

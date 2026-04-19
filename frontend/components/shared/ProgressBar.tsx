@@ -27,12 +27,16 @@ export default memo(function ProgressBar({
 }: ProgressBarProps) {
   const clamped = Math.min(100, Math.max(0, value))
   const s = progressBar({ size })
+  const accessibilityProps = accessibilityLabel
+    ? {
+        accessible: true,
+        accessibilityLabel,
+        accessibilityRole: 'progressbar' as const,
+        accessibilityValue: { min: 0, max: 100, now: Math.round(clamped) },
+      }
+    : {}
   return (
-    <View
-      className={cn(s.track(), className)}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityValue={{ min: 0, max: 100, now: Math.round(clamped) }}
-    >
+    <View className={cn(s.track(), className)} {...accessibilityProps}>
       <View
         className={cn(s.fill(), colorClass)}
         style={{ width: `${clamped}%`, ...(color ? { backgroundColor: color } : undefined) }}
