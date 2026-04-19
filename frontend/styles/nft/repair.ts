@@ -6,7 +6,7 @@ export const repairAmountBox = tv({
   slots: {
     title: 'text-base font-bold text-on-surface mb-3',
     valueWrap: 'items-center mb-2',
-    value: 'text-[32px] font-bold text-app-success',
+    value: 'text-heading-lg font-bold text-app-success',
   },
 })
 

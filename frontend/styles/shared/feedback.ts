@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const errorMessage = tv({
-  base: 'text-[13px] text-danger text-center mb-3 px-2',
+  base: 'text-body-sm text-danger text-center mb-3 px-2',
 })
 
 // ── Info box ─────────────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@ export const infoBox = tv({
   variants: {
     border: {
       solid: '',
-      dashed: 'border-dashed rounded-[14px] p-5 items-center',
+      dashed: 'border-dashed rounded-panel p-5 items-center',
     },
   },
   defaultVariants: { border: 'solid' },

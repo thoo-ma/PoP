@@ -17,10 +17,10 @@ export const propertyBar = tv({
     mode: {
       compact: {
         root: 'flex-row items-center justify-between',
-        label: 'text-[10px] w-[50px] mr-1',
+        label: 'text-caption-sm w-[50px] mr-1',
         barWrap: 'flex-1 gap-1',
         bar: 'h-1.5',
-        value: 'text-[10px] text-on-surface-variant w-5',
+        value: 'text-caption-sm text-on-surface-variant w-5',
       },
       detailed: {
         root: 'gap-1',
@@ -51,7 +51,7 @@ export const propertiesWrapper = tv({
 // Empty-state text inside the picker Button when no NFT is selected.
 export const nftPickerPlaceholder = tv({
   slots: {
-    icon: 'text-[40px] mb-3 text-on-surface-variant',
+    icon: 'text-icon-xl mb-3 text-on-surface-variant',
     label: 'text-base font-bold text-on-surface-variant',
   },
 })

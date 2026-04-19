@@ -11,10 +11,10 @@ export const phaseContainer = tv({
 // The NFT info row shown at the top of every active game phase.
 export const challengeHeader = tv({
   slots: {
-    root: 'flex-row items-center w-full bg-surface rounded-[14px] p-3 border-[3px] border-outline gap-3',
-    avatar: 'w-14 h-14 rounded-[10px] bg-surface-container-low',
+    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-[3px] border-outline gap-3',
+    avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
     info: 'flex-1',
-    name: 'text-[15px] font-black text-on-surface mb-0.5',
+    name: 'text-body-lg font-black text-on-surface mb-0.5',
     subtitle: 'text-xs text-on-surface-variant font-bold',
   },
 })
@@ -28,7 +28,7 @@ export const phaseContent = tv({
 // ── Big timer text ───────────────────────────────────────────────────────────
 // The large countdown / immobility timer number.
 export const timerText = tv({
-  base: 'text-[80px] font-black leading-[88px]',
+  base: 'text-display-xl font-black',
   variants: {
     status: {
       normal: 'text-on-surface',
@@ -61,7 +61,7 @@ export const phaseText = tv({
   slots: {
     hint: 'text-base text-on-surface-variant font-bold',
     promptTitle: 'text-xl font-bold text-app-success text-center',
-    promptSubtitle: 'text-[13px] text-on-surface-variant text-center font-bold',
+    promptSubtitle: 'text-body-sm text-on-surface-variant text-center font-bold',
     statusText: 'text-base font-bold text-on-surface text-center',
   },
 })

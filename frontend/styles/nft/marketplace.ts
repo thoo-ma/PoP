@@ -10,7 +10,7 @@ export const breedPickerCard = tv({
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
     info: 'px-2 pt-1.5 pb-2',
     name: 'text-sm font-bold',
-    rarity: 'text-[11px] font-bold capitalize',
+    rarity: 'text-caption font-bold capitalize',
   },
   variants: {
     disabled: {
