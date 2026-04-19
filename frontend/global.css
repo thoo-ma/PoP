@@ -64,6 +64,37 @@
   --color-overlay-dark: rgba(0, 0, 0, 0.5);
   --color-overlay-dark-mid: rgba(0, 0, 0, 0.55);
   --color-overlay-dark-heavy: rgba(0, 0, 0, 0.7);
+
+  /* ── Typography scale ────────────────────────────────────── */
+  --font-size-display-xl: 80px;
+  --font-size-display-xl--line-height: 88px;
+  --font-size-display-lg: 48px;
+  --font-size-display-lg--line-height: 48px;
+  --font-size-icon-xl: 40px;
+  --font-size-icon-lg: 36px;
+  --font-size-heading-lg: 32px;
+  --font-size-heading-md: 26px;
+  --font-size-heading-sm: 22px;
+  --font-size-body-xl: 17px;
+  --font-size-body-lg: 15px;
+  --font-size-body-md: 14px;
+  --font-size-body-sm: 13px;
+  --font-size-caption: 11px;
+  --font-size-caption-sm: 10px;
+
+  /* ── Screen-level spacing ────────────────────────────────── */
+  --spacing-screen-top-sm: 60px;
+  --spacing-screen-top-md: 100px;
+  --spacing-tab-clearance: 120px;
+  --spacing-tab-clearance-header: 140px;
+  --spacing-tab-clearance-xl: 170px;
+  --spacing-control-lg: 60px;
+  --spacing-control-md: 40px;
+
+  /* ── Border radius ───────────────────────────────────────── */
+  --radius-panel: 14px;
+  --radius-inset: 13px;
+  --radius-thumbnail: 10px;
 }
 
 /* Bridge HeroUI Native CSS variables to Digital Atelier tokens */

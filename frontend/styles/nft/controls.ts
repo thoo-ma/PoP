@@ -9,12 +9,12 @@ export const filterControls = tv({
     panel: 'gap-3',
     tagList: 'flex-row flex-wrap gap-2',
     selectTrigger:
-      'h-[40px] py-0 bg-surface-container-low border-[3px] border-outline border-b-[6px] rounded-full px-4',
+      'h-control-md py-0 bg-surface-container-low border-[3px] border-outline border-b-[6px] rounded-full px-4',
     selectValue: 'font-bold text-on-surface',
     selectIndicator: 'text-on-surface',
-    selectContent: 'bg-surface border-[2px] border-outline rounded-2xl overflow-hidden',
+    selectContent: 'bg-surface border-2 border-outline rounded-2xl overflow-hidden',
     selectItem: 'px-4 py-2',
-    tagItem: 'border-[2px] border-outline border-b-[3px] rounded-full',
+    tagItem: 'border-2 border-outline border-b-[3px] rounded-full',
   },
 })
 

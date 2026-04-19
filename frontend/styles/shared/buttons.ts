@@ -1,7 +1,14 @@
 import { tv } from 'tailwind-variants'
 
+// ── Tactile 3D Border Convention ──────────────────────────────────────────────
+// Interactive (press-down):  border-[3px] border-b-[6px] + active:border-b-[3px]
+// Passive cards:             border-[3px] border-b-[5px]
+// Static containers:         border-[3px] (uniform)
+// Light interactive:         border-2 border-b-[4px]
+// Subtle interactive:        border-2 border-b-[3px]
+
 export const tactileButton = tv({
-  base: 'h-[60px] rounded-full border-[3px] border-outline border-b-[6px] flex-row items-center justify-center active:border-b-[3px] active:translate-y-[3px]',
+  base: 'h-control-lg rounded-full border-[3px] border-outline border-b-[6px] flex-row items-center justify-center active:border-b-[3px] active:translate-y-[3px]',
   variants: {
     variant: {
       //   default: 'bg-surface',
@@ -15,7 +22,7 @@ export const tactileButton = tv({
     },
     size: {
       default: '',
-      sm: 'h-[40px] px-4',
+      sm: 'h-control-md px-4',
     },
   },
   defaultVariants: {
@@ -35,8 +42,8 @@ export const tactileButtonText = tv({
       disabled: 'text-outline',
     },
     size: {
-      default: 'text-[15px]',
-      sm: 'text-[13px]',
+      default: 'text-body-lg',
+      sm: 'text-body-sm',
     },
   },
   defaultVariants: {
@@ -49,7 +56,7 @@ export const tactileButtonText = tv({
 // Square nav arrow button used in NFTSelector.
 export const tactileNavButton = tv({
   base: [
-    'w-[48px] h-[48px] rounded-2xl bg-surface',
+    'w-12 h-12 rounded-2xl bg-surface',
     'border-2 border-surface-container-highest border-b-[4px]',
     'flex-row items-center justify-center',
     'active:border-b-2 active:translate-y-[2px]',

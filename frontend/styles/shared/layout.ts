@@ -7,9 +7,9 @@ export const screenContainer = tv({
   base: 'flex-1 items-center',
   variants: {
     padTop: {
-      sm: 'pt-[60px]',
-      md: 'pt-[100px]',
-      lg: 'pt-[100px]',
+      sm: 'pt-screen-top-sm',
+      md: 'pt-screen-top-md',
+      lg: 'pt-screen-top-md',
     },
     padX: {
       none: '',
@@ -36,9 +36,9 @@ export const scrollContent = tv({
     },
     // default = no tab header above; withHeader = tab bar header present; xl = extra clearance (vault)
     bottomPad: {
-      default: 'pb-[120px]',
-      withHeader: 'pb-[140px]',
-      xl: 'pb-[170px]',
+      default: 'pb-tab-clearance',
+      withHeader: 'pb-tab-clearance-header',
+      xl: 'pb-tab-clearance-xl',
     },
     align: {
       center: 'items-center w-full',
