@@ -1,7 +1,7 @@
 import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { AlertBox, NFTCard, SortToolbar, TactileButton } from '@/components'
+import { AlertBox, NFTCard, ScreenError, SortToolbar, TactileButton } from '@/components'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
@@ -31,9 +31,14 @@ export default memo(function Marketplace() {
   const [dialog, setDialog] = useState<DialogInfo>(null)
   const [searchQuery, setSearchQuery] = useState('')
   // Fetch user's NFTs for "My Listings" tab
-  const { nfts, loading: userLoading } = useUserNFTs()
+  const { nfts, loading: userLoading, error: userError, refetch: refetchNfts } = useUserNFTs()
   // Fetch marketplace listings from other users
-  const { listings: backendListings, loading: marketplaceLoading } = useMarketplaceListings()
+  const {
+    listings: backendListings,
+    loading: marketplaceLoading,
+    error: marketplaceError,
+    refetch: refetchListings,
+  } = useMarketplaceListings()
   const { unlistNFT, loadingUnlistNFT: updateLoading } = useUpdateNFT()
   const { toast } = useToast()
 
@@ -118,6 +123,16 @@ export default memo(function Marketplace() {
   const itemRow = marketplaceItemRow()
   const tabs = tactileTabs()
 
+  if (userError) {
+    return (
+      <ScreenError
+        title="Marketplace"
+        message={`Failed to load NFTs: ${userError}`}
+        onRetry={refetchNfts}
+      />
+    )
+  }
+
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
       {/* Tabs */}
@@ -170,6 +185,23 @@ export default memo(function Marketplace() {
                 </View>
               ))}
             </View>
+          ) : marketplaceError ? (
+            <View className="flex-1 justify-center items-center px-6">
+              <AlertBox
+                status="danger"
+                title="Listings"
+                description={`Failed to load: ${marketplaceError}`}
+              >
+                <TactileButton
+                  animation="disable-all"
+                  variant="primary"
+                  onPress={() => refetchListings()}
+                  className="mt-4"
+                >
+                  Retry
+                </TactileButton>
+              </AlertBox>
+            </View>
           ) : (
             <View>
               <ScrollView
@@ -180,32 +212,42 @@ export default memo(function Marketplace() {
                 showsVerticalScrollIndicator={false}
               >
                 <View className="w-full">
-                  {marketplaceRows.map((pair) => (
-                    <View key={pair[0].id} className={gridLayout().row()}>
-                      {pair.map((item) => (
-                        <View key={item.id} className={gridLayout().item()}>
-                          <NFTCard
-                            nft={item}
-                            action={
-                              <View className={itemRow.root()}>
-                                <Text className={itemRow.price()}>{item.price}</Text>
-                                <TactileButton
-                                  variant="primary"
-                                  size="sm"
-                                  onPress={handleBuyNFT}
-                                  accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
-                                  accessibilityHint="Purchase this NFT"
-                                >
-                                  Buy
-                                </TactileButton>
-                              </View>
-                            }
-                          />
-                        </View>
-                      ))}
-                      {pair.length === 1 && <View className={gridLayout().item()} />}
+                  {marketplaceRows.length > 0 ? (
+                    marketplaceRows.map((pair) => (
+                      <View key={pair[0].id} className={gridLayout().row()}>
+                        {pair.map((item) => (
+                          <View key={item.id} className={gridLayout().item()}>
+                            <NFTCard
+                              nft={item}
+                              action={
+                                <View className={itemRow.root()}>
+                                  <Text className={itemRow.price()}>{item.price}</Text>
+                                  <TactileButton
+                                    variant="primary"
+                                    size="sm"
+                                    onPress={handleBuyNFT}
+                                    accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
+                                    accessibilityHint="Purchase this NFT"
+                                  >
+                                    Buy
+                                  </TactileButton>
+                                </View>
+                              }
+                            />
+                          </View>
+                        ))}
+                        {pair.length === 1 && <View className={gridLayout().item()} />}
+                      </View>
+                    ))
+                  ) : (
+                    <View className="py-15 w-full px-2">
+                      <AlertBox
+                        status="default"
+                        title="No listings available"
+                        description="Check back later or list your own NFTs."
+                      />
                     </View>
-                  ))}
+                  )}
                 </View>
               </ScrollView>
             </View>

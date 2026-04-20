@@ -5,7 +5,7 @@ import type { ReactElement } from 'react'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { TactileButton } from '@/components'
+import { ScreenError, TactileButton } from '@/components'
 import type DevCatalogCmp from '@/components/dev/DevCatalog'
 import type renderDevPreviewFn from '@/components/dev/DevPreviewRenderer'
 import { useAuth, useProfileStats, useSignOutDialog, useUserNFTs, useWallet } from '@/hooks'
@@ -25,9 +25,10 @@ import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {
   const { getUserDisplayName, user, signOut } = useAuth()
-  const { detections, daysActive, loading: statsLoading } = useProfileStats()
-  const { nfts } = useUserNFTs()
-  const { poopBalance, loading: walletLoading } = useWallet()
+  const { detections, daysActive, loading: statsLoading, error: statsError } = useProfileStats()
+  const { nfts, error: nftsError, refetch: refetchNfts } = useUserNFTs()
+  const { poopBalance, loading: walletLoading, error: walletError, refetch: refetchWallet } =
+    useWallet()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [activePreview, setActivePreview] = useState<string | null>(null)
   const [activeSectionIndex, setActiveSectionIndex] = useState<number | null>(null)
@@ -59,6 +60,8 @@ export default function ProfileScreen() {
   const p = profileModal()
   const w = walletModal()
 
+  const profileError = statsError || nftsError || walletError
+
   if (__DEV__ && activePreview && renderDevPreview) {
     return renderDevPreview(activePreview, () => {
       setActivePreview(null)
@@ -66,6 +69,19 @@ export default function ProfileScreen() {
         scrollRef.current?.scrollTo({ y: savedScrollY.current, animated: false })
       })
     }) as unknown as ReactElement
+  }
+
+  if (profileError) {
+    return (
+      <ScreenError
+        title="Profile"
+        message={`Failed to load profile: ${profileError}`}
+        onRetry={() => {
+          refetchNfts()
+          refetchWallet()
+        }}
+      />
+    )
   }
 
   return (

@@ -18,6 +18,7 @@ import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@
 import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
   gridLayout,
+  mysteryBoxSkeleton,
   screenContainer,
   scrollContent,
   skeletonCard,
@@ -207,6 +208,7 @@ export default memo(function Vault() {
   }
 
   const skeleton = skeletonCard()
+  const boxSkeleton = mysteryBoxSkeleton()
   const tabs = tactileTabs()
 
   return (
@@ -271,45 +273,55 @@ export default memo(function Vault() {
             scrollEventThrottle={100}
           >
             <View className="w-full">
-              {nftRows.map((pair) => (
-                <View key={pair[0].id} className={gridLayout().row()}>
-                  {pair.map((nft) => (
-                    <View key={nft.id} className={gridLayout().item()}>
-                      <NFTCard
-                        nft={nft}
-                        action={
-                          <>
-                            <TactileButton
-                              variant="secondary"
-                              size="sm"
-                              isDisabled={(nft.stat_points ?? 0) === 0}
-                              onPress={() => handleOpenStatModal(nft)}
-                              className="mt-1"
-                              accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
-                            >
-                              {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
-                            </TactileButton>
-                            {!nft.isListed ? (
+              {nftRows.length > 0 ? (
+                nftRows.map((pair) => (
+                  <View key={pair[0].id} className={gridLayout().row()}>
+                    {pair.map((nft) => (
+                      <View key={nft.id} className={gridLayout().item()}>
+                        <NFTCard
+                          nft={nft}
+                          action={
+                            <>
                               <TactileButton
-                                variant="primary"
+                                variant="secondary"
                                 size="sm"
-                                isDisabled
-                                onPress={() => handleListNFT(nft.id)}
+                                isDisabled={(nft.stat_points ?? 0) === 0}
+                                onPress={() => handleOpenStatModal(nft)}
                                 className="mt-1"
-                                accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                                accessibilityHint="List this NFT on the marketplace"
+                                accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
                               >
-                                Sale
+                                {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
                               </TactileButton>
-                            ) : undefined}
-                          </>
-                        }
-                      />
-                    </View>
-                  ))}
-                  {pair.length === 1 && <View className={gridLayout().item()} />}
+                              {!nft.isListed ? (
+                                <TactileButton
+                                  variant="primary"
+                                  size="sm"
+                                  isDisabled
+                                  onPress={() => handleListNFT(nft.id)}
+                                  className="mt-1"
+                                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                                  accessibilityHint="List this NFT on the marketplace"
+                                >
+                                  Sale
+                                </TactileButton>
+                              ) : undefined}
+                            </>
+                          }
+                        />
+                      </View>
+                    ))}
+                    {pair.length === 1 && <View className={gridLayout().item()} />}
+                  </View>
+                ))
+              ) : (
+                <View className="py-15 w-full px-2">
+                  <AlertBox
+                    status="default"
+                    title="No NFTs found"
+                    description="Try adjusting your filters."
+                  />
                 </View>
-              ))}
+              )}
             </View>
           </ScrollView>
         </Tabs.Content>
@@ -318,9 +330,12 @@ export default memo(function Vault() {
             <View className={cn(gridLayout().wrapper(), 'p-4')}>
               {[0, 1, 2, 3].map((i) => (
                 <View key={i} className={cn(gridLayout().item(), 'mb-3')}>
-                  <Skeleton className={skeleton.image()} />
-                  <Skeleton className={skeleton.titleLine()} />
-                  <Skeleton className={skeleton.subtitleLine()} />
+                  <Skeleton className={boxSkeleton.image()} />
+                  <View className={boxSkeleton.chipsRow()}>
+                    <Skeleton className={boxSkeleton.chip()} />
+                    <Skeleton className={boxSkeleton.chip()} />
+                  </View>
+                  <Skeleton className={boxSkeleton.button()} />
                 </View>
               ))}
             </View>

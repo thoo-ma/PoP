@@ -20,7 +20,7 @@ const Tab = createMaterialTopTabNavigator<RootTabParamList>()
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView className="flex-1">
       <SafeAreaProvider>
         <HeroUINativeProvider>
           <QueryClientProvider client={queryClient}>
@@ -76,7 +76,7 @@ function AppInner() {
 
   // Session exists and user is approved (or in Expo Go dev mode) - show main app
   return (
-    <View style={{ flex: 1 }} className="bg-background">
+    <View className="flex-1 bg-background">
       <NavigationContainer>
         <Tab.Navigator
           tabBarPosition="bottom"

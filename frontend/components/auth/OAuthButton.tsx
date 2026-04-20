@@ -17,16 +17,11 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
 
   const icon =
     provider === 'google' ? (
-      <AntDesign name="google" size={18} color={onSurface} style={{ marginRight: 12 }} />
+      <AntDesign name="google" size={18} color={onSurface} className="mr-3" />
     ) : provider === 'x' ? (
-      <FontAwesome6 name="x-twitter" size={18} color={onSurface} style={{ marginRight: 12 }} />
+      <FontAwesome6 name="x-twitter" size={18} color={onSurface} className="mr-3" />
     ) : (
-      <AntDesign
-        name="apple"
-        size={20}
-        color={onSurface}
-        style={{ marginRight: 12, marginBottom: 2 }}
-      />
+      <AntDesign name="apple" size={20} color={onSurface} className="mr-3 mb-0.5" />
     )
 
   return (
