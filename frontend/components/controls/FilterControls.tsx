@@ -4,7 +4,7 @@ import { Select, TagGroup } from 'heroui-native'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { SORT_OPTIONS } from '@/constants'
-import { filterControls } from '@/styles'
+import { filterControls, tactileSelect } from '@/styles'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
 import TactileButton from '../shared/TactileButton'
@@ -64,6 +64,7 @@ function FilterControls({
   const hasActiveFilters = selectedRarities.length > 0 || selectedTypes.length > 0
   const activeFilterCount = selectedRarities.length + selectedTypes.length
   const s = filterControls()
+  const sel = tactileSelect()
 
   const handleRaritySelectionChange = (newKeys: Set<NFTRarity>) => {
     const prev = new Set(selectedRarities)
@@ -97,19 +98,19 @@ function FilterControls({
               if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
             }}
           >
-            <Select.Trigger className={s.selectTrigger()}>
-              <Select.Value className={s.selectValue()} placeholder="Sort by..." />
-              <Select.TriggerIndicator className={s.selectIndicator()} />
+            <Select.Trigger className={sel.trigger()}>
+              <Select.Value className={sel.value()} placeholder="Sort by..." />
+              <Select.TriggerIndicator className={sel.indicator()} />
             </Select.Trigger>
             <Select.Portal>
               <Select.Overlay />
-              <Select.Content presentation="popover" width="trigger" className={s.selectContent()}>
+              <Select.Content presentation="popover" width="trigger" className={sel.content()}>
                 {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
                   <Select.Item
                     key={option}
                     value={option}
                     label={capitalize(option)}
-                    className={s.selectItem()}
+                    className={sel.item()}
                   />
                 ))}
               </Select.Content>

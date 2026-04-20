@@ -21,9 +21,8 @@ import {
   screenContainer,
   scrollContent,
   skeletonCard,
-  tactileButton,
-  tactileButtonText,
   tactileNavButton,
+  tactileTabs,
 } from '@/styles'
 import type { AllocateResult, NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
@@ -208,6 +207,7 @@ export default memo(function Vault() {
   }
 
   const skeleton = skeletonCard()
+  const tabs = tactileTabs()
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -220,8 +220,8 @@ export default memo(function Vault() {
           setShowScrollTop(false)
         }}
       >
-        <Tabs.List className="self-center bg-surface border-[3px] border-outline border-b-[6px] rounded-full px-1 py-1">
-          <Tabs.Indicator className="bg-surface-container-low border-2 border-outline rounded-full" />
+        <Tabs.List className={tabs.list()}>
+          <Tabs.Indicator className={tabs.indicator()} />
           <Tabs.Trigger value="toilets">
             {({ isSelected }) => (
               <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
@@ -279,49 +279,29 @@ export default memo(function Vault() {
                         nft={nft}
                         action={
                           <>
-                            <Button
-                              variant="ghost"
-                              feedbackVariant="none"
+                            <TactileButton
+                              variant="secondary"
+                              size="sm"
                               isDisabled={(nft.stat_points ?? 0) === 0}
                               onPress={() => handleOpenStatModal(nft)}
-                              className={cn(
-                                tactileButton({ variant: 'secondary', size: 'sm' }),
-                                'mt-1',
-                              )}
+                              className="mt-1"
                               accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
                             >
-                              <Button.Label
-                                className={tactileButtonText({
-                                  variant: 'secondary',
-                                  size: 'sm',
-                                })}
-                              >
-                                Allocate {nft.stat_points ?? 0} pt
-                                {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
-                              </Button.Label>
-                            </Button>
+                              Allocate {nft.stat_points ?? 0} pt
+                              {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
+                            </TactileButton>
                             {!nft.isListed ? (
-                              <Button
-                                variant="ghost"
-                                feedbackVariant="none"
+                              <TactileButton
+                                variant="primary"
+                                size="sm"
                                 isDisabled
                                 onPress={() => handleListNFT(nft.id)}
-                                className={cn(
-                                  tactileButton({ variant: 'primary', size: 'sm' }),
-                                  'mt-1',
-                                )}
+                                className="mt-1"
                                 accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
                                 accessibilityHint="List this NFT on the marketplace"
                               >
-                                <Button.Label
-                                  className={tactileButtonText({
-                                    variant: 'primary',
-                                    size: 'sm',
-                                  })}
-                                >
-                                  Sale
-                                </Button.Label>
-                              </Button>
+                                Sale
+                              </TactileButton>
                             ) : undefined}
                           </>
                         }
@@ -389,27 +369,16 @@ export default memo(function Vault() {
                             imageUrl={group.imageUrl}
                             count={group.count}
                             action={
-                              <Button
+                              <TactileButton
+                                variant={isEmpty ? 'disabled' : 'primary'}
+                                size="sm"
                                 isDisabled={isEmpty || isOpening || openLoading}
                                 onPress={() => handleOpenBox(group.rarity)}
-                                className={cn(
-                                  tactileButton({
-                                    variant: isEmpty ? 'disabled' : 'primary',
-                                    size: 'sm',
-                                  }),
-                                  'mt-1',
-                                )}
+                                className="mt-1"
                                 accessibilityLabel={`Open a ${group.rarity} mystery box`}
                               >
-                                <Button.Label
-                                  className={tactileButtonText({
-                                    variant: isEmpty ? 'disabled' : 'primary',
-                                    size: 'sm',
-                                  })}
-                                >
-                                  {isOpening ? 'Opening...' : 'Open'}
-                                </Button.Label>
-                              </Button>
+                                {isOpening ? 'Opening...' : 'Open'}
+                              </TactileButton>
                             }
                           />
                         </View>

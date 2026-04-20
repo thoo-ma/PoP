@@ -78,79 +78,81 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
       : 'in progress'
 
   return (
-    <Card
-      className={cardStyles.root()}
-      animation="disable-all"
-      accessibilityLabel={`Loot roulette, ${lootChance}% chance, ${currentState}`}
-    >
-      <Card.Body className={cardStyles.body()}>
-        <Card.Title className={cardStyles.title()}>Loot Roll</Card.Title>
+    <View className={cardStyles.wrapper()}>
+      <Card
+        className={cardStyles.root()}
+        animation="disable-all"
+        accessibilityLabel={`Loot roulette, ${lootChance}% chance, ${currentState}`}
+      >
+        <Card.Body className={cardStyles.body()}>
+          <Card.Title className={cardStyles.title()}>Loot Roll</Card.Title>
 
-        {!result ? (
-          <>
-            <Text className="text-base">
-              Loot Chance: <Text className={cardStyles.chanceValue()}>{lootChance}%</Text>
-            </Text>
-
-            {holds > 0 && (
-              <Text className={cardStyles.holdText()}>
-                {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
+          {!result ? (
+            <>
+              <Text className="text-base">
+                Loot Chance: <Text className={cardStyles.chanceValue()}>{lootChance}%</Text>
               </Text>
-            )}
 
-            {holds === MAX_HOLDS && (
-              <Text className={cardStyles.maxHoldText()}>Max holds reached — now roll!</Text>
-            )}
-
-            {err && <Text className={cardStyles.rollError()}>{err}</Text>}
-
-            <View className={cardStyles.buttonRow()}>
-              <TactileButton
-                variant="secondary"
-                onPress={handleHold}
-                isDisabled={!canHold || loading}
-                className="flex-1"
-              >
-                {loading ? <Spinner size="sm" /> : `Hold +${CHANCE_PER_HOLD}%`}
-              </TactileButton>
-
-              <TactileButton
-                variant="primary"
-                onPress={handleRoll}
-                isDisabled={!canRoll || loading}
-                className="flex-1"
-              >
-                {loading ? <Spinner size="sm" /> : 'Roll!'}
-              </TactileButton>
-            </View>
-          </>
-        ) : (
-          <>
-            {result.won ? (
-              <View className={wonStyles.root()}>
-                <Text className={wonStyles.title()}>You won!</Text>
-                <Text className={wonStyles.body()}>
-                  A Common Mystery Box has been added to your Vault.
+              {holds > 0 && (
+                <Text className={cardStyles.holdText()}>
+                  {holds} hold{holds > 1 ? 's' : ''} (+{holds * CHANCE_PER_HOLD}% bonus)
                 </Text>
-              </View>
-            ) : (
-              <View className={lostStyles.root()}>
-                <Text className={lostStyles.title()}>No luck this time</Text>
-                <Text className={lostStyles.body()}>Better luck on your next flush!</Text>
-              </View>
-            )}
+              )}
 
-            <TactileButton
-              animation="disable-all"
-              variant="secondary"
-              onPress={onDone}
-              className="px-8 mt-2"
-            >
-              Done
-            </TactileButton>
-          </>
-        )}
-      </Card.Body>
-    </Card>
+              {holds === MAX_HOLDS && (
+                <Text className={cardStyles.maxHoldText()}>Max holds reached — now roll!</Text>
+              )}
+
+              {err && <Text className={cardStyles.rollError()}>{err}</Text>}
+
+              <View className={cardStyles.buttonRow()}>
+                <TactileButton
+                  variant="secondary"
+                  onPress={handleHold}
+                  isDisabled={!canHold || loading}
+                  className="flex-1"
+                >
+                  {loading ? <Spinner size="sm" /> : `Hold +${CHANCE_PER_HOLD}%`}
+                </TactileButton>
+
+                <TactileButton
+                  variant="primary"
+                  onPress={handleRoll}
+                  isDisabled={!canRoll || loading}
+                  className="flex-1"
+                >
+                  {loading ? <Spinner size="sm" /> : 'Roll!'}
+                </TactileButton>
+              </View>
+            </>
+          ) : (
+            <>
+              {result.won ? (
+                <View className={wonStyles.root()}>
+                  <Text className={wonStyles.title()}>You won!</Text>
+                  <Text className={wonStyles.body()}>
+                    A Common Mystery Box has been added to your Vault.
+                  </Text>
+                </View>
+              ) : (
+                <View className={lostStyles.root()}>
+                  <Text className={lostStyles.title()}>No luck this time</Text>
+                  <Text className={lostStyles.body()}>Better luck on your next flush!</Text>
+                </View>
+              )}
+
+              <TactileButton
+                animation="disable-all"
+                variant="secondary"
+                onPress={onDone}
+                className="px-8 mt-2"
+              >
+                Done
+              </TactileButton>
+            </>
+          )}
+        </Card.Body>
+      </Card>
+    </View>
   )
 })

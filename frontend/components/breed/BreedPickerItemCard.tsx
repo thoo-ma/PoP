@@ -40,21 +40,23 @@ export default function BreedPickerItemCard({
       style={{ width }}
       className="mb-3"
     >
-      <Card className={s.root()} animation="disable-all">
-        <View className={s.image()}>
-          <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
-          {disabled && <View className={s.disabledOverlay()} />}
-          <View className={s.rarityDot()} style={{ backgroundColor: rarityColors[nft.rarity] }} />
-        </View>
-        <View className={s.info()}>
-          <Text className={s.name()} numberOfLines={1}>
-            {formatDisplayName(nft.name)}
-          </Text>
-          <Text className={s.rarity()} style={{ color: rarityColors[nft.rarity] }}>
-            {nft.rarity}
-          </Text>
-        </View>
-      </Card>
+      <View className={s.wrapper()}>
+        <Card className={s.root()} animation="disable-all">
+          <View className={s.image()}>
+            <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
+            {disabled && <View className={s.disabledOverlay()} />}
+            <View className={s.rarityDot()} style={{ backgroundColor: rarityColors[nft.rarity] }} />
+          </View>
+          <View className={s.info()}>
+            <Text className={s.name()} numberOfLines={1}>
+              {formatDisplayName(nft.name)}
+            </Text>
+            <Text className={s.rarity()} style={{ color: rarityColors[nft.rarity] }}>
+              {nft.rarity}
+            </Text>
+          </View>
+        </Card>
+      </View>
     </PressableFeedback>
   )
 }

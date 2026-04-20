@@ -21,7 +21,8 @@ export const parentSlot = tv({
 // Read-only probability breakdown card shown after both parents are selected.
 export const outcomePanel = tv({
   slots: {
-    root: 'w-full mb-5 border-[3px] border-outline',
+    wrapper: 'w-full mb-5 border-[3px] border-outline rounded-xl',
+    root: 'overflow-hidden rounded-lg',
     body: 'px-4 py-1.5',
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
     row: 'flex-row items-center mb-1 gap-2',
