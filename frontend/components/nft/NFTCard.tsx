@@ -1,11 +1,10 @@
 import { MAX_LEVEL, xpThreshold } from '@pop/shared'
-import { Card, Chip, cn } from 'heroui-native'
+import { Card, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, Text, View } from 'react-native'
+import { BadgeOverlay, ProgressBar } from '@/components'
 import {
-  badgeLabel,
-  badgePosition,
   cardBody,
   cardContainer,
   cardImageContainer,
@@ -40,54 +39,26 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         {/* Image + badge overlay */}
         <Card.Header className={cardImageContainer()}>
           <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
-          {/* Level — top-left */}
-          <Chip
-            size="sm"
-            variant="primary"
-            className={badgePosition({ position: 'topLeft' })}
-            animation="disable-all"
-          >
-            <Chip.Label className={badgeLabel()}>Lv {nft.level}</Chip.Label>
-          </Chip>
+          <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
+            {`Lv ${nft.level}`}
+          </BadgeOverlay>
 
-          {/* Type — top-right */}
           {nft.type && (
-            <Chip
-              size="sm"
-              variant="primary"
-              className={cn(badgePosition({ position: 'topRight' }), typeBadge({ type: nft.type }))}
-              animation="disable-all"
-            >
-              <Chip.Label className={badgeLabel()}>{nft.type.toUpperCase()}</Chip.Label>
-            </Chip>
+            <BadgeOverlay position="topRight" colorClass={typeBadge({ type: nft.type })}>
+              {nft.type.toUpperCase()}
+            </BadgeOverlay>
           )}
 
-          {/* Rarity — bottom-left */}
           {nft.rarity && (
-            <Chip
-              size="sm"
-              variant="primary"
-              className={cn(
-                badgePosition({ position: 'bottomLeft' }),
-                rarityBadge({ rarity: nft.rarity }),
-              )}
-              animation="disable-all"
-            >
-              <Chip.Label className={badgeLabel()}>{nft.rarity.toUpperCase()}</Chip.Label>
-            </Chip>
+            <BadgeOverlay position="bottomLeft" colorClass={rarityBadge({ rarity: nft.rarity })}>
+              {nft.rarity.toUpperCase()}
+            </BadgeOverlay>
           )}
 
-          {/* Listed — below rarity */}
           {nft.isListed && (
-            <Chip
-              size="sm"
-              variant="primary"
-              color="success"
-              className={badgePosition({ position: 'topRightOffset' })}
-              animation="disable-all"
-            >
-              <Chip.Label className={badgeLabel()}>Listed</Chip.Label>
-            </Chip>
+            <BadgeOverlay position="topRightOffset" chipColor="success">
+              Listed
+            </BadgeOverlay>
           )}
         </Card.Header>
 
@@ -107,9 +78,12 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
           <View className={xp.row()}>
             <Text className={xp.label()}>XP</Text>
             <View className={xp.track()}>
-              <View className={xp.bg()}>
-                <View className={xp.fill()} style={{ width: `${xpPct}%` }} />
-              </View>
+              <ProgressBar
+                value={xpPct}
+                colorClass="bg-app-amber"
+                size="sm"
+                className="bg-surface-container-low"
+              />
             </View>
           </View>
           {action}

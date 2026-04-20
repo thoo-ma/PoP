@@ -26,8 +26,6 @@ export const outcomePanel = tv({
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
     row: 'flex-row items-center mb-1 gap-2',
     label: 'text-body-sm text-on-surface font-bold w-[90px]',
-    track: 'flex-1 h-2 bg-surface-container-highest rounded overflow-hidden',
-    fill: 'h-full rounded',
     value: 'text-sm font-bold text-on-surface w-11 text-right',
   },
 })

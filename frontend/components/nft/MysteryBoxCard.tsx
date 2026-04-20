@@ -3,15 +3,9 @@ import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Image, View } from 'react-native'
+import { BadgeOverlay } from '@/components'
 import { useRarityColors } from '@/hooks'
-import {
-  badgeLabel,
-  badgePosition,
-  cardBody,
-  cardContainer,
-  cardImageContainer,
-  cardWrapper,
-} from '@/styles'
+import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/styles'
 
 interface MysteryBoxCardProps {
   /** The rarity this card slot represents. */
@@ -47,14 +41,9 @@ export default memo(function MysteryBoxCard({
 
           {/* Opened — top-right */}
           {box?.opened && (
-            <Chip
-              size="sm"
-              variant="secondary"
-              className={badgePosition({ position: 'topRight' })}
-              animation="disable-all"
-            >
-              <Chip.Label className={cn(badgeLabel(), 'font-bold')}>Opened</Chip.Label>
-            </Chip>
+            <BadgeOverlay position="topRight" chipVariant="secondary">
+              Opened
+            </BadgeOverlay>
           )}
         </Card.Header>
 

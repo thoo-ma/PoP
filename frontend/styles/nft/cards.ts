@@ -18,13 +18,12 @@ export const cardBody = tv({
 
 // ── NFT detail card ──────────────────────────────────────────────────────────
 // The larger NFT card used in the Poop idle screen and the Repair screen.
+// Layout handled by cardWrapper (flat border) + cardContainer + Card compound.
 export const nftDetailCard = tv({
   slots: {
-    root: 'rounded-2xl overflow-hidden border-[3px]',
-    imageWrap: 'relative w-full overflow-hidden',
     image: 'w-full h-[280px] bg-surface-container-low',
-    content: 'w-full',
-    title: 'text-lg font-black text-center',
+    body: 'p-4',
+    title: 'text-lg font-black text-center text-on-surface mb-3',
   },
 })
 
@@ -33,7 +32,14 @@ export const nftDetailCard = tv({
 // border-radius WITHOUT overflow-hidden, so React Native renders the border
 // correctly at the corners (RN clips border when overflow-hidden is also set).
 export const cardWrapper = tv({
-  base: 'w-full mb-4 border-[3px] border-outline border-b-[5px] rounded-2xl flex-1',
+  base: 'w-full mb-4 border-[3px] border-outline rounded-2xl flex-1',
+  variants: {
+    border: {
+      tactile: 'border-b-[5px]',
+      flat: '',
+    },
+  },
+  defaultVariants: { border: 'tactile' },
 })
 
 // ── Card container ────────────────────────────────────────────────────────────
@@ -50,13 +56,11 @@ export const cardTitle = tv({
 })
 
 // ── XP bar ────────────────────────────────────────────────────────────────────
-// Level progress bar used in NFTCard.
+// Level progress bar layout used in NFTCard. The track+fill is now ProgressBar.
 export const xpBar = tv({
   slots: {
     row: 'flex-row items-center mt-1',
     label: 'text-xs font-bold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
-    bg: 'h-1 rounded-full overflow-hidden bg-surface-container-low',
-    fill: 'h-full rounded-full bg-app-amber',
   },
 })

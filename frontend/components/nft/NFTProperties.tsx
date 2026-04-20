@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import { ProgressBar } from '@/components'
 import { propertiesWrapper, propertyBar } from '@/styles'
 
 interface NFTPropertiesProps {
@@ -36,9 +37,7 @@ const PropertyBar = memo(function PropertyBar({
     >
       <Text className={s.label()}>{label}</Text>
       <View className={s.barWrap()}>
-        <View className={s.bar()}>
-          <View className={s.fill()} style={{ width: `${value}%`, backgroundColor: color }} />
-        </View>
+        <ProgressBar value={value} color={color} size={isCompact ? 'sm' : 'md'} />
         <Text className={s.value()}>{Math.round(value)}</Text>
       </View>
     </View>
