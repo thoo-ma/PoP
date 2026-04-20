@@ -2,7 +2,7 @@ import { Select } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
 import { SORT_OPTIONS } from '@/constants'
-import { sortControls } from '@/styles'
+import { sortControls, tactileSelect } from '@/styles'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
 import TactileButton from '../shared/TactileButton'
@@ -33,6 +33,7 @@ function SortToolbar({
   className,
 }: SortToolbarProps) {
   const s = sortControls()
+  const sel = tactileSelect()
   return (
     <View className={className ?? s.root()}>
       <View className={s.selectWrapper()}>
@@ -42,15 +43,20 @@ function SortToolbar({
             if (opt && !Array.isArray(opt)) onSortByChange(opt.value as SortOption)
           }}
         >
-          <Select.Trigger className="border-[2px] border-outline border-b-[3px] rounded-full">
-            <Select.Value className="font-bold" placeholder="Sort by..." />
-            <Select.TriggerIndicator />
+          <Select.Trigger className={sel.trigger()}>
+            <Select.Value className={sel.value()} placeholder="Sort by..." />
+            <Select.TriggerIndicator className={sel.indicator()} />
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content presentation="popover" width="trigger">
+            <Select.Content presentation="popover" width="trigger" className={sel.content()}>
               {(SORT_OPTIONS as readonly SortOption[]).map((option) => (
-                <Select.Item key={option} value={option} label={capitalize(option)} />
+                <Select.Item
+                  key={option}
+                  value={option}
+                  label={capitalize(option)}
+                  className={sel.item()}
+                />
               ))}
             </Select.Content>
           </Select.Portal>

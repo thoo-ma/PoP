@@ -2,9 +2,12 @@ import { tv } from 'tailwind-variants'
 
 // ── Breed picker card ────────────────────────────────────────────────────────
 // Grid item card used in BreedPickerModal's 2-column NFT list.
+// Uses the wrapper+container pattern (like NFTCard) so RN renders the border
+// correctly at the corners — wrapper carries border+radius, container clips.
 export const breedPickerCard = tv({
   slots: {
-    root: 'overflow-hidden rounded-xl p-0 border-[3px] border-outline',
+    wrapper: 'border-[3px] border-outline rounded-xl',
+    root: 'overflow-hidden rounded-lg p-0',
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
@@ -14,8 +17,8 @@ export const breedPickerCard = tv({
   },
   variants: {
     disabled: {
-      true: { root: 'opacity-40', name: 'text-on-surface-variant' },
-      false: { root: '', name: 'text-on-surface' },
+      true: { wrapper: 'opacity-40', name: 'text-on-surface-variant' },
+      false: { wrapper: '', name: 'text-on-surface' },
     },
   },
   defaultVariants: { disabled: false },

@@ -17,21 +17,25 @@ export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRa
   const rarityColors = useRarityColors()
   const s = outcomePanel()
   return (
-    <Card className={s.root()} animation="disable-all">
-      <Card.Body className={s.body()}>
-        <Card.Title className={s.title()}>Possible outcomes</Card.Title>
-        {RARITIES.map((rarity, i) => {
-          const pct = probs[i]
-          if (pct === 0) return null
-          return (
-            <View key={rarity} className={s.row()}>
-              <Text className={s.label()}>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</Text>
-              <ProgressBar value={pct} color={rarityColors[rarity]} />
-              <Text className={s.value()}>{pct}%</Text>
-            </View>
-          )
-        })}
-      </Card.Body>
-    </Card>
+    <View className={s.wrapper()}>
+      <Card className={s.root()} animation="disable-all">
+        <Card.Body className={s.body()}>
+          <Card.Title className={s.title()}>Possible outcomes</Card.Title>
+          {RARITIES.map((rarity, i) => {
+            const pct = probs[i]
+            if (pct === 0) return null
+            return (
+              <View key={rarity} className={s.row()}>
+                <Text className={s.label()}>
+                  {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
+                </Text>
+                <ProgressBar value={pct} color={rarityColors[rarity]} />
+                <Text className={s.value()}>{pct}%</Text>
+              </View>
+            )
+          })}
+        </Card.Body>
+      </Card>
+    </View>
   )
 }

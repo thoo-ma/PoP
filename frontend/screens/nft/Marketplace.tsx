@@ -1,7 +1,7 @@
 import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { AlertBox, NFTCard, SortControls, TactileButton } from '@/components'
+import { AlertBox, NFTCard, SortToolbar, TactileButton } from '@/components'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
@@ -11,6 +11,7 @@ import {
   screenContainer,
   scrollContent,
   skeletonCard,
+  tactileTabs,
 } from '@/styles'
 import type { NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
@@ -115,6 +116,7 @@ export default memo(function Marketplace() {
 
   const skeleton = skeletonCard()
   const itemRow = marketplaceItemRow()
+  const tabs = tactileTabs()
 
   return (
     <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -124,13 +126,21 @@ export default memo(function Marketplace() {
         value={activeTab}
         onValueChange={(v) => setActiveTab(v as 'buy' | 'sell')}
       >
-        <Tabs.List className="self-center">
-          <Tabs.Indicator />
+        <Tabs.List className={tabs.list()}>
+          <Tabs.Indicator className={tabs.indicator()} />
           <Tabs.Trigger value="buy">
-            <Tabs.Label>Buy ({backendListings.length})</Tabs.Label>
+            {({ isSelected }) => (
+              <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
+                Buy ({backendListings.length})
+              </Tabs.Label>
+            )}
           </Tabs.Trigger>
           <Tabs.Trigger value="sell">
-            <Tabs.Label>My Listings ({myListings.length})</Tabs.Label>
+            {({ isSelected }) => (
+              <Tabs.Label className={isSelected ? 'font-black' : 'font-bold'}>
+                My Listings ({myListings.length})
+              </Tabs.Label>
+            )}
           </Tabs.Trigger>
         </Tabs.List>
 
@@ -142,7 +152,7 @@ export default memo(function Marketplace() {
           </SearchField.Group>
         </SearchField>
 
-        <SortControls
+        <SortToolbar
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSortByChange={handleSortByChange}
