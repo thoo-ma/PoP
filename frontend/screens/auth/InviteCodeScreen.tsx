@@ -140,7 +140,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               isDisabled={loading}
               className="w-full"
             >
-              <Feather name="log-out" size={18} color={onSurface} style={{ marginRight: 12 }} />
+              <Feather name="log-out" size={18} color={onSurface} className="mr-3" />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign Out
               </Button.Label>

@@ -143,7 +143,7 @@ export default function Auth() {
             <Spinner size="sm" color={onSurface} />
           ) : (
             <>
-              <FontAwesome6 name="flask" size={16} color={onSurface} style={{ marginRight: 12 }} />
+              <FontAwesome6 name="flask" size={16} color={onSurface} className="mr-3" />
               <Button.Label className={tactileButtonText({ variant: 'default' })}>
                 Sign in in Test Mode
               </Button.Label>
@@ -162,7 +162,7 @@ export default function Auth() {
               <Spinner size="sm" color={onSurface} />
             ) : (
               <>
-                <FontAwesome6 name="code" size={16} color={onSurface} style={{ marginRight: 12 }} />
+                <FontAwesome6 name="code" size={16} color={onSurface} className="mr-3" />
                 <Button.Label className={tactileButtonText({ variant: 'default' })}>
                   Sign in in Dev Mode
                 </Button.Label>
