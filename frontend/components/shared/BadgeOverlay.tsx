@@ -1,4 +1,4 @@
-import type { ChipColor } from 'heroui-native'
+import type { ChipColor, ChipVariant } from 'heroui-native'
 import { Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
@@ -14,6 +14,8 @@ interface BadgeOverlayProps {
   colorClass?: string
   /** HeroUI Chip `color` prop (e.g. "success"). */
   chipColor?: ChipColor
+  /** HeroUI Chip `variant` prop. Defaults to "primary". */
+  chipVariant?: ChipVariant
   /** Badge label text size variant. */
   labelSize?: BadgeLabelSize
   /** Extra className merged onto the Chip. */
@@ -26,6 +28,7 @@ export default memo(function BadgeOverlay({
   position,
   colorClass,
   chipColor,
+  chipVariant = 'primary',
   labelSize = 'xs',
   className,
   children,
@@ -33,7 +36,7 @@ export default memo(function BadgeOverlay({
   return (
     <Chip
       size="sm"
-      variant="primary"
+      variant={chipVariant}
       color={chipColor}
       className={cn(badgePosition({ position }), colorClass, className)}
       animation="disable-all"

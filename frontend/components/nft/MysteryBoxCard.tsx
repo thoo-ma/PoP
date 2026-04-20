@@ -40,7 +40,11 @@ export default memo(function MysteryBoxCard({
           <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
 
           {/* Opened — top-right */}
-          {box?.opened && <BadgeOverlay position="topRight">Opened</BadgeOverlay>}
+          {box?.opened && (
+            <BadgeOverlay position="topRight" chipVariant="secondary">
+              Opened
+            </BadgeOverlay>
+          )}
         </Card.Header>
 
         <Card.Body className={cardBody()}>
