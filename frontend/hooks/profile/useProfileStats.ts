@@ -50,7 +50,7 @@ async function fetchProfileStats(): Promise<ProfileStats> {
  * NFT count is derived from `useUserNFTs` (shared React Query cache).
  */
 export function useProfileStats() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.profileStats,
     queryFn: fetchProfileStats,
   })
@@ -60,5 +60,6 @@ export function useProfileStats() {
     daysActive: data?.daysActive ?? 0,
     loading: isLoading,
     error: error?.message ?? null,
+    refetch,
   }
 }

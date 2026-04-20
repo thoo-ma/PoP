@@ -25,7 +25,7 @@ import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {
   const { getUserDisplayName, user, signOut } = useAuth()
-  const { detections, daysActive, loading: statsLoading, error: statsError } = useProfileStats()
+  const { detections, daysActive, loading: statsLoading, error: statsError, refetch: refetchStats } = useProfileStats()
   const { nfts, error: nftsError, refetch: refetchNfts } = useUserNFTs()
   const { poopBalance, loading: walletLoading, error: walletError, refetch: refetchWallet } =
     useWallet()
@@ -77,6 +77,7 @@ export default function ProfileScreen() {
         title="Profile"
         message={`Failed to load profile: ${profileError}`}
         onRetry={() => {
+          refetchStats()
           refetchNfts()
           refetchWallet()
         }}
