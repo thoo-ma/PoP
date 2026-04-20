@@ -55,7 +55,7 @@ Address every issue from the design audit: define semantic token scales (typogra
 
 **Step 4.2: Missing empty states** *(parallel with 4.1, 4.3)* — Vault NFTs tab: `AlertBox` when filtered to zero results. Marketplace Buy tab: `AlertBox` when no listings. Uses existing patterns.
 
-**Step 4.3: Missing error states** *(parallel with 4.1, 4.2)* — Marketplace: `ScreenError` guard for both tabs' data loading failures. Profile: inline `AlertBox status="danger"` for `useProfileStats`/`useWallet` failures.
+**Step 4.3: Missing error states** *(parallel with 4.1, 4.2)* — Marketplace: `ScreenError` guard for both tabs' data loading failures. Profile: `ScreenError` early-return guard if any of the three data hooks fail.
 
 **Step 4.4: Mystery Boxes tab skeleton** — Add content-shaped skeletons for mystery box loading state in Vault. New `mysteryBoxSkeleton` recipe in skeletons.ts.
 

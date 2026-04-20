@@ -240,7 +240,7 @@ export default memo(function Marketplace() {
                       </View>
                     ))
                   ) : (
-                    <View className="py-15 w-full px-2">
+                    <View className="py-16 w-full px-2">
                       <AlertBox
                         status="default"
                         title="No listings available"
