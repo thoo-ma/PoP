@@ -26,7 +26,7 @@ export const outcomePanel = tv({
     body: 'px-4 py-1.5',
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
     row: 'flex-row items-center mb-1 gap-2',
-    label: 'text-body-sm text-on-surface font-bold w-[90px]',
+    label: 'text-body-sm text-on-surface font-bold w-label-lg',
     value: 'text-sm font-bold text-on-surface w-11 text-right',
   },
 })
@@ -48,7 +48,7 @@ export const breedResultSection = tv({
     root: 'items-center w-full',
     title: 'text-heading-md font-black text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
-    parentImage: 'w-[52px] h-[52px] rounded-lg border border-outline',
+    parentImage: 'size-thumbnail rounded-lg border border-outline',
     multiplyText: 'text-lg text-on-surface-variant font-bold',
     arrowText: 'text-heading-sm text-on-surface font-bold',
   },

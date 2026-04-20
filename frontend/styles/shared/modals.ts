@@ -40,6 +40,6 @@ export const revealModal = tv({
 // Bottom-sheet help text for the NFT parent picker.
 export const pickerModal = tv({
   slots: {
-    helpText: 'text-sm text-on-surface-variant px-5 pt-2.5 pb-1 leading-[18px] font-bold',
+    helpText: 'text-sm text-on-surface-variant px-5 pt-2.5 pb-1 leading-modal-body font-bold',
   },
 })

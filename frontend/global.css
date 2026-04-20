@@ -95,6 +95,23 @@
   --radius-panel: 14px;
   --radius-inset: 13px;
   --radius-thumbnail: 10px;
+
+  /* ── Component sizing ────────────────────────────────────── */
+  --spacing-card-image: 280px;
+  --spacing-nft-picker-w: 240px;
+  --spacing-nft-picker-h: 360px;
+  --spacing-thumbnail: 52px;
+  --spacing-label-lg: 90px;
+  --spacing-label-md: 50px;
+  --spacing-label-sm: 26px;
+  --spacing-dialog-max: 400px;
+  --spacing-counter-min: 60px;
+  --spacing-phase-px: 18px;
+
+  /* ── Miscellaneous ───────────────────────────────────────── */
+  --z-header: 99;
+  --leading-modal-body: 18px;
+  --tracking-otp: 0.2em;
 }
 
 /* Bridge HeroUI Native CSS variables to Digital Atelier tokens */

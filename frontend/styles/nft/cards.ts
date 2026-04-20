@@ -21,7 +21,7 @@ export const cardBody = tv({
 // Layout handled by cardWrapper (flat border) + cardContainer + Card compound.
 export const nftDetailCard = tv({
   slots: {
-    image: 'w-full h-[280px] bg-surface-container-low',
+    image: 'w-full h-card-image bg-surface-container-low',
     body: 'p-4',
     title: 'text-lg font-black text-center text-on-surface mb-3',
   },
