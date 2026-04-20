@@ -21,7 +21,6 @@ import {
   mysteryBoxSkeleton,
   screenContainer,
   scrollContent,
-  skeletonCard,
   tactileNavButton,
   tactileTabs,
 } from '@/styles'
@@ -207,7 +206,6 @@ export default memo(function Vault() {
     return <ScreenError title="Vault" message={`Failed to load NFTs: ${error}`} onRetry={refetch} />
   }
 
-  const skeleton = skeletonCard()
   const boxSkeleton = mysteryBoxSkeleton()
   const tabs = tactileTabs()
 
