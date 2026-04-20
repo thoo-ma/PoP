@@ -15,7 +15,7 @@ export const propertyBar = tv({
     mode: {
       compact: {
         root: 'flex-row items-center justify-between',
-        label: 'text-caption-sm w-[50px] mr-1',
+        label: 'text-caption-sm w-label-md mr-1',
         barWrap: 'flex-1 gap-1',
         value: 'text-caption-sm text-on-surface-variant w-5',
       },
@@ -23,7 +23,7 @@ export const propertyBar = tv({
         root: 'gap-1',
         label: 'text-xs font-bold mb-0.5',
         barWrap: 'gap-1.5',
-        value: 'text-xs text-on-surface font-bold w-[26px]',
+        value: 'text-xs text-on-surface font-bold w-label-sm',
       },
     },
   },

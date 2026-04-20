@@ -18,7 +18,7 @@ export const signOutDialog = tv({
 // Shared Dialog.Content + Dialog.Close styling for Profile and Wallet modals.
 export const dialogPanel = tv({
   slots: {
-    content: 'mx-auto w-[85%] max-w-[400px] rounded-3xl px-8 py-8 items-center',
+    content: 'mx-auto w-[85%] max-w-dialog-max rounded-3xl px-8 py-8 items-center',
     close: 'absolute top-4 right-4',
   },
 })

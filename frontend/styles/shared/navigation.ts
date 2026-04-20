@@ -30,11 +30,11 @@ export const tactileTabs = tv({
 // ── Screen header ────────────────────────────────────────────────────────────
 // Floating screen title overlay positioned at the top of the screen.
 export const screenHeader = tv({
-  base: 'absolute top-screen-top-sm left-0 right-0 z-[99] h-12 items-center justify-center pointer-events-none',
+  base: 'absolute top-screen-top-sm left-0 right-0 z-header h-12 items-center justify-center pointer-events-none',
 })
 
 // ── NFT selector counter ───────────────────────────────────────────────────────────
 // The "1 / 5" counter text shown between the prev / next arrows in NFTSelector.
 export const nftSelectorCounter = tv({
-  base: 'text-body-xl font-bold text-outline min-w-[60px] text-center',
+  base: 'text-body-xl font-bold text-outline min-w-counter-min text-center',
 })

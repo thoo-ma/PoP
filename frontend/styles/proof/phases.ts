@@ -43,7 +43,7 @@ export const timerText = tv({
 // The pill showing "Hold still" / "Movement detected" during immobility phase.
 export const statusBadge = tv({
   slots: {
-    root: 'py-2 px-[18px] rounded-full',
+    root: 'py-2 px-phase-px rounded-full',
     label: 'text-sm font-bold text-on-surface',
   },
   variants: {
