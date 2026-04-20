@@ -287,8 +287,7 @@ export default memo(function Vault() {
                               className="mt-1"
                               accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
                             >
-                              Allocate {nft.stat_points ?? 0} pt
-                              {(nft.stat_points ?? 0) !== 1 ? 's' : ''}
+                              {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
                             </TactileButton>
                             {!nft.isListed ? (
                               <TactileButton
