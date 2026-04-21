@@ -14,9 +14,3 @@ export const screenLoader = tv({
 export const screenError = tv({
   base: 'flex-1 bg-background items-center justify-center px-6',
 })
-
-// ── Screen info ────────────────────────────────────────────────────────────
-// Full-screen centered informational alert.
-export const screenInfo = tv({
-  base: 'flex-1 bg-background items-center justify-center px-6',
-})
