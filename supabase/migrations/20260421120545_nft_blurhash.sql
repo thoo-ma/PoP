@@ -4,7 +4,7 @@
 -- Powers expo-image's `placeholder={{ blurhash }}` so images fade in from a
 -- colour-accurate blurred preview instead of a blank rectangle.
 --
--- Hashes are computed offline by `scripts/generate-blurhashes.mjs` and stored
+-- Hashes are computed offline by `scripts/generate-blurhashes.ts` and stored
 -- in `shared/src/blurhashes.ts`; edge functions read them from there at insert
 -- time. Existing rows can be backfilled by pasting the UPDATE statements from
 -- `supabase/migrations/_data/nft_blurhash_backfill.sql` into a follow-up

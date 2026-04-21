@@ -143,7 +143,7 @@ async function main(): Promise<void> {
  * the solid placeholder background, so out-of-date tables never break rendering.
  */
 
-import type { NFTRarity, NFTType } from './nft'
+import type { NFTRarity, NFTType } from './nft.ts'
 
 /** Composite key used to look up an NFT blurhash: \`\${type}/\${name}/\${rarity}\`. */
 export type NFTBlurhashKey = \`\${NFTType}/\${string}/\${NFTRarity}\`
