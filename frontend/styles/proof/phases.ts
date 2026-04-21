@@ -73,7 +73,7 @@ export const degenBar = tv({
     headerRow: 'flex-row items-center justify-between mb-3',
     title: 'text-base font-bold text-on-surface',
     zoneBadge: 'px-2 py-0.5 rounded-full',
-    zoneBadgeLabel: 'text-xs font-bold text-white',
+    zoneBadgeLabel: 'text-xs font-bold text-on-primary',
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
@@ -94,7 +94,7 @@ export const degenBar = tv({
       degen: {
         zoneBadge: 'bg-app-error',
         sliderFill: 'bg-app-error',
-        bustValue: 'text-app-error',
+        bustValue: 'text-danger',
       },
     },
   },

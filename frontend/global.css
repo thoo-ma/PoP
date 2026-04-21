@@ -145,6 +145,9 @@
   --border-tactile-md: 5px;
   --border-tactile-lg: 6px;
 
+  /* ── Hairline border (sub-pixel-tier outlines, e.g. small status dots) ── */
+  --border-hairline: 1.5px;
+
   /* ── Component sizing ────────────────────────────────────── */
   --spacing-card-image: 280px;
   --spacing-nft-picker-w: 240px;

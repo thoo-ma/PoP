@@ -32,7 +32,7 @@ export const revealModal = tv({
     imageContainer:
       'w-[70%] aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-4 relative',
     rarityOverlay: 'absolute bottom-2 right-2 px-2.5 py-1 rounded-md',
-    rarityText: 'text-white text-xs font-bold tracking-wide',
+    rarityText: 'text-on-primary text-xs font-bold tracking-wide',
   },
 })
 

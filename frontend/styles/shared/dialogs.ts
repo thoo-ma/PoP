@@ -14,15 +14,6 @@ export const signOutDialog = tv({
   },
 })
 
-// ── Dialog panel ─────────────────────────────────────────────────────────────
-// Shared Dialog.Content + Dialog.Close styling for Profile and Wallet modals.
-export const dialogPanel = tv({
-  slots: {
-    content: 'mx-auto w-[85%] max-w-dialog-max rounded-3xl px-8 py-8 items-center',
-    close: 'absolute top-4 right-4',
-  },
-})
-
 // ── Dialog footer row ─────────────────────────────────────────────────────────
 // Right-aligned action row inside alert / confirm dialogs.
 export const dialogFooter = tv({
