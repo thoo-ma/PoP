@@ -32,7 +32,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
       className={cn(s.root({ empty: !nft }))}
       accessibilityRole="button"
       accessibilityLabel={a11yLabel}
-      accessibilityHint="Tap to change parent"
+      accessibilityHint={nft ? 'Tap to change parent' : 'Tap to choose parent'}
     >
       {nft ? (
         <>
