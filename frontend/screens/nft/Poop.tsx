@@ -113,13 +113,17 @@ export default memo(function Poop() {
       case 'immobility':
         announce('Hold your phone still')
         break
-      case 'recording':
-        announce('Recording started, detecting flush')
-        break
       default:
         break
     }
   }, [phase, announce])
+
+  // Announce only once recording has actually started.
+  useEffect(() => {
+    if (phase === 'recording' && isRecording) {
+      announce('Recording started, detecting flush')
+    }
+  }, [phase, isRecording, announce])
 
   // Announce when audio analysis begins (isAnalyzing flips true mid-recording).
   useEffect(() => {
