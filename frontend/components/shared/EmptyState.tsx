@@ -25,7 +25,7 @@ export default memo(function EmptyState({
 }: EmptyStateProps) {
   const s = emptyState({ layout })
   return (
-    <View className={cn(s.root(), className)} accessibilityLiveRegion="polite" accessible>
+    <View className={cn(s.root(), className)} accessibilityLiveRegion="polite">
       {icon != null && <View className={s.icon()}>{icon}</View>}
       <Text className={s.title()}>{title}</Text>
       {description != null && <Text className={s.description()}>{description}</Text>}
