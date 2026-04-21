@@ -14,6 +14,7 @@ export {
 } from './nft'
 export {
   ChallengeHeader,
+  CooldownTimer,
   CountdownPhase,
   IdlePhase,
   ImmobilityPhase,
