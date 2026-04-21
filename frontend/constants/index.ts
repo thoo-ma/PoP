@@ -1,4 +1,5 @@
 export * from './cooldown'
+export * from './image'
 export * from './queryKeys'
 export * from './sensors'
 export * from './sort'

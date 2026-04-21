@@ -33,7 +33,7 @@ import {
   ScreenLoader,
   TactileButton,
 } from '@/components'
-import { Image } from '@/components/styled'
+import { Image, RemoteImage } from '@/components/styled'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
@@ -640,22 +640,16 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <View className={result.root()}>
               <Text className={result.title()}>Mystery Box Earned!</Text>
               <View className={result.parentsRow()}>
-                <Image
+                <RemoteImage
                   source={{ uri: MOCK_NFT_READY.image_url }}
                   className={result.parentImage()}
                   contentFit="cover"
-                  cachePolicy="memory-disk"
-                  style={{ backgroundColor: '#2c2c2c' }}
-                  transition={200}
                 />
                 <Text className={result.multiplyText()}>×</Text>
-                <Image
+                <RemoteImage
                   source={{ uri: MOCK_NFT_COMMON.image_url }}
                   className={result.parentImage()}
                   contentFit="cover"
-                  cachePolicy="memory-disk"
-                  style={{ backgroundColor: '#2c2c2c' }}
-                  transition={200}
                 />
                 <Text className={result.arrowText()}>→</Text>
               </View>

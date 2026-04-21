@@ -1,6 +1,6 @@
 import { Chip, cn, PressableFeedback } from 'heroui-native'
 import { Text, View } from 'react-native'
-import { Image } from '@/components/styled'
+import { RemoteImage } from '@/components/styled'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, parentSlot } from '@/styles'
 import type { NFT } from '@/types'
@@ -30,13 +30,10 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
     >
       {nft ? (
         <>
-          <Image
+          <RemoteImage
             source={{ uri: nft.image_url }}
             className={s.image()}
             contentFit="cover"
-            cachePolicy="memory-disk"
-            style={{ backgroundColor: '#2c2c2c' }}
-            transition={200}
           />
           <View className={s.info()}>
             <Text className={s.name()} numberOfLines={1}>

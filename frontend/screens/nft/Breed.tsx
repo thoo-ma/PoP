@@ -15,7 +15,7 @@ import {
   ScreenInfo,
   TactileButton,
 } from '@/components'
-import { Image } from '@/components/styled'
+import { RemoteImage } from '@/components/styled'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   breedResultSection,
@@ -273,24 +273,18 @@ import { canBreed } from '@/utils'
               {/* Parents summary */}
               <View className={result.parentsRow()}>
                 {resultParent1Url && (
-                  <Image
+                  <RemoteImage
                     source={{ uri: resultParent1Url }}
                     className={result.parentImage()}
                     contentFit="cover"
-                    cachePolicy="memory-disk"
-                    style={{ backgroundColor: '#2c2c2c' }}
-                    transition={200}
                   />
                 )}
                 <Text className={result.multiplyText()}>×</Text>
                 {resultParent2Url && (
-                  <Image
+                  <RemoteImage
                     source={{ uri: resultParent2Url }}
                     className={result.parentImage()}
                     contentFit="cover"
-                    cachePolicy="memory-disk"
-                    style={{ backgroundColor: '#2c2c2c' }}
-                    transition={200}
                   />
                 )}
                 <Text className={result.arrowText()}>→</Text>
