@@ -2,7 +2,7 @@ import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { FlatList, type ListRenderItem, ScrollView, View } from 'react-native'
 import {
   AlertBox,
   EmptyState,
@@ -34,7 +34,7 @@ import { formatDisplayName, sortNFTs } from '@/utils'
  * stat-point allocation via the `StatAllocationModal`.
  */
 export default memo(function Vault() {
-  const nftScrollRef = useRef<ScrollView>(null)
+  const nftScrollRef = useRef<FlatList<NFT>>(null)
   const boxScrollRef = useRef<ScrollView>(null)
   useScrollToTop(nftScrollRef)
   useScrollToTop(boxScrollRef)
@@ -105,14 +105,6 @@ export default memo(function Vault() {
     () => sortNFTs(filteredNfts, sortBy, sortOrder),
     [filteredNfts, sortBy, sortOrder],
   )
-
-  const nftRows = useMemo(() => {
-    const rows: NFT[][] = []
-    for (let i = 0; i < sortedNfts.length; i += 2) {
-      rows.push(sortedNfts.slice(i, i + 2))
-    }
-    return rows
-  }, [sortedNfts])
 
   const handleRarityToggle = useCallback((rarity: NFTRarity) => {
     setSelectedRarities((prev) =>
@@ -193,11 +185,57 @@ export default memo(function Vault() {
 
   const handleScrollToTop = useCallback(() => {
     if (activeTab === 'toilets') {
-      nftScrollRef.current?.scrollTo({ y: 0, animated: true })
+      nftScrollRef.current?.scrollToOffset({ offset: 0, animated: true })
     } else {
       boxScrollRef.current?.scrollTo({ y: 0, animated: true })
     }
   }, [activeTab])
+
+  const grid = useMemo(() => gridLayout(), [])
+
+  const keyExtractor = useCallback((nft: NFT) => nft.id, [])
+
+  const renderNftItem = useCallback<ListRenderItem<NFT>>(
+    ({ item: nft }) => (
+      <View className={grid.item()}>
+        <NFTCard
+          nft={nft}
+          action={
+            <>
+              <TactileButton
+                variant="secondary"
+                size="sm"
+                isDisabled={(nft.stat_points ?? 0) === 0}
+                onPress={() => handleOpenStatModal(nft)}
+                className="mt-1"
+                accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
+              >
+                {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
+              </TactileButton>
+              {!nft.isListed ? (
+                <TactileButton
+                  variant="primary"
+                  size="sm"
+                  isDisabled
+                  onPress={() => handleListNFT(nft.id)}
+                  className="mt-1"
+                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+                  accessibilityHint="List this NFT on the marketplace"
+                >
+                  Sale
+                </TactileButton>
+              ) : undefined}
+            </>
+          }
+        />
+      </View>
+    ),
+    [grid, handleOpenStatModal, handleListNFT],
+  )
+
+  const handleNftScroll = useCallback((e: { nativeEvent: { contentOffset: { y: number } } }) => {
+    setShowScrollTop(e.nativeEvent.contentOffset.y > 600)
+  }, [])
 
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />
@@ -259,8 +297,13 @@ export default memo(function Vault() {
             onSortOrderToggle={handleSortOrderToggle}
           />
 
-          <ScrollView
+          <FlatList
             ref={nftScrollRef}
+            data={sortedNfts}
+            keyExtractor={keyExtractor}
+            renderItem={renderNftItem}
+            numColumns={2}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'xl' }),
               'w-full',
@@ -268,55 +311,18 @@ export default memo(function Vault() {
             contentInset={{ bottom: 170 }}
             scrollIndicatorInsets={{ bottom: 170 }}
             showsVerticalScrollIndicator={false}
-            onScroll={(e) => setShowScrollTop(e.nativeEvent.contentOffset.y > 600)}
+            onScroll={handleNftScroll}
             scrollEventThrottle={100}
-          >
-            <View className="w-full">
-              {nftRows.length > 0 ? (
-                nftRows.map((pair) => (
-                  <View key={pair[0].id} className={gridLayout().row()}>
-                    {pair.map((nft) => (
-                      <View key={nft.id} className={gridLayout().item()}>
-                        <NFTCard
-                          nft={nft}
-                          action={
-                            <>
-                              <TactileButton
-                                variant="secondary"
-                                size="sm"
-                                isDisabled={(nft.stat_points ?? 0) === 0}
-                                onPress={() => handleOpenStatModal(nft)}
-                                className="mt-1"
-                                accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
-                              >
-                                {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
-                              </TactileButton>
-                              {!nft.isListed ? (
-                                <TactileButton
-                                  variant="primary"
-                                  size="sm"
-                                  isDisabled
-                                  onPress={() => handleListNFT(nft.id)}
-                                  className="mt-1"
-                                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                                  accessibilityHint="List this NFT on the marketplace"
-                                >
-                                  Sale
-                                </TactileButton>
-                              ) : undefined}
-                            </>
-                          }
-                        />
-                      </View>
-                    ))}
-                    {pair.length === 1 && <View className={gridLayout().item()} />}
-                  </View>
-                ))
-              ) : (
-                <EmptyState title="No NFTs found" description="Try adjusting your filters." />
-              )}
-            </View>
-          </ScrollView>
+            // Card height varies (Sale button is conditional on `!nft.isListed`),
+            // so getItemLayout would be inaccurate.
+            initialNumToRender={6}
+            maxToRenderPerBatch={6}
+            windowSize={5}
+            removeClippedSubviews
+            ListEmptyComponent={
+              <EmptyState title="No NFTs found" description="Try adjusting your filters." />
+            }
+          />
         </Tabs.Content>
         <Tabs.Content value="mystery-boxes">
           {boxesLoading ? (

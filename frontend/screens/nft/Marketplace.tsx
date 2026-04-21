@@ -1,6 +1,6 @@
 import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { FlatList, type ListRenderItem, Text, View } from 'react-native'
 import {
   AlertBox,
   EmptyState,
@@ -73,22 +73,6 @@ export default memo(function Marketplace() {
     )
   }, [myListings, sortBy, sortOrder, searchQuery])
 
-  const marketplaceRows = useMemo(() => {
-    const rows: NFT[][] = []
-    for (let i = 0; i < sortedMarketplaceListings.length; i += 2) {
-      rows.push(sortedMarketplaceListings.slice(i, i + 2))
-    }
-    return rows
-  }, [sortedMarketplaceListings])
-
-  const myListingsRows = useMemo(() => {
-    const rows: NFT[][] = []
-    for (let i = 0; i < sortedMyListings.length; i += 2) {
-      rows.push(sortedMyListings.slice(i, i + 2))
-    }
-    return rows
-  }, [sortedMyListings])
-
   const handleBuyNFT = useCallback(() => {
     setDialog({ title: 'Coming Soon', message: 'Buying from marketplace is not yet available.' })
   }, [])
@@ -129,6 +113,60 @@ export default memo(function Marketplace() {
   const skeleton = skeletonCard()
   const itemRow = marketplaceItemRow()
   const tabs = tactileTabs()
+  const grid = useMemo(() => gridLayout(), [])
+
+  const keyExtractor = useCallback((nft: NFT) => nft.id, [])
+
+  const renderMarketplaceItem = useCallback<ListRenderItem<NFT>>(
+    ({ item }) => (
+      <View className={grid.item()}>
+        <NFTCard
+          nft={item}
+          action={
+            <View className={itemRow.root()}>
+              <Text className={itemRow.price()}>{item.price}</Text>
+              <TactileButton
+                variant="primary"
+                size="sm"
+                onPress={handleBuyNFT}
+                accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
+                accessibilityHint="Purchase this NFT"
+              >
+                Buy
+              </TactileButton>
+            </View>
+          }
+        />
+      </View>
+    ),
+    [grid, itemRow, handleBuyNFT],
+  )
+
+  const renderMyListingItem = useCallback<ListRenderItem<NFT>>(
+    ({ item }) => (
+      <View className={grid.item()}>
+        <NFTCard
+          nft={item}
+          action={
+            <View className={itemRow.root()}>
+              <Text className={itemRow.price()}>{item.price}</Text>
+              <TactileButton
+                variant="outline"
+                size="sm"
+                isDisabled={updateLoading}
+                onPress={() => handleUnlist(item.id)}
+                accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
+                accessibilityHint="Remove this NFT from marketplace"
+              >
+                {updateLoading ? 'Unlisting...' : 'Unlist'}
+              </TactileButton>
+            </View>
+          }
+        />
+      </View>
+    ),
+    [grid, itemRow, handleUnlist, updateLoading],
+  )
 
   if (userError) {
     return (
@@ -210,51 +248,28 @@ export default memo(function Marketplace() {
               </AlertBox>
             </View>
           ) : (
-            <View>
-              <ScrollView
-                contentContainerClassName={cn(
-                  scrollContent({ padding: 'md', bottomPad: 'default' }),
-                  'w-full',
-                )}
-                showsVerticalScrollIndicator={false}
-              >
-                <View className="w-full">
-                  {marketplaceRows.length > 0 ? (
-                    marketplaceRows.map((pair) => (
-                      <View key={pair[0].id} className={gridLayout().row()}>
-                        {pair.map((item) => (
-                          <View key={item.id} className={gridLayout().item()}>
-                            <NFTCard
-                              nft={item}
-                              action={
-                                <View className={itemRow.root()}>
-                                  <Text className={itemRow.price()}>{item.price}</Text>
-                                  <TactileButton
-                                    variant="primary"
-                                    size="sm"
-                                    onPress={handleBuyNFT}
-                                    accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
-                                    accessibilityHint="Purchase this NFT"
-                                  >
-                                    Buy
-                                  </TactileButton>
-                                </View>
-                              }
-                            />
-                          </View>
-                        ))}
-                        {pair.length === 1 && <View className={gridLayout().item()} />}
-                      </View>
-                    ))
-                  ) : (
-                    <EmptyState
-                      title="No listings available"
-                      description="Check back later or list your own NFTs."
-                    />
-                  )}
-                </View>
-              </ScrollView>
-            </View>
+            <FlatList
+              data={sortedMarketplaceListings}
+              keyExtractor={keyExtractor}
+              renderItem={renderMarketplaceItem}
+              numColumns={2}
+              columnWrapperStyle={{ justifyContent: 'space-between' }}
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'default' }),
+                'w-full',
+              )}
+              showsVerticalScrollIndicator={false}
+              initialNumToRender={6}
+              maxToRenderPerBatch={6}
+              windowSize={5}
+              removeClippedSubviews
+              ListEmptyComponent={
+                <EmptyState
+                  title="No listings available"
+                  description="Check back later or list your own NFTs."
+                />
+              }
+            />
           )}
         </Tabs.Content>
 
@@ -270,52 +285,28 @@ export default memo(function Marketplace() {
               ))}
             </View>
           ) : (
-            <View>
-              <ScrollView
-                contentContainerClassName={cn(
-                  scrollContent({ padding: 'md', bottomPad: 'default' }),
-                  'w-full',
-                )}
-                showsVerticalScrollIndicator={false}
-              >
-                <View className="w-full">
-                  {sortedMyListings.length > 0 ? (
-                    myListingsRows.map((pair) => (
-                      <View key={pair[0].id} className={gridLayout().row()}>
-                        {pair.map((item) => (
-                          <View key={item.id} className={gridLayout().item()}>
-                            <NFTCard
-                              nft={item}
-                              action={
-                                <View className={itemRow.root()}>
-                                  <Text className={itemRow.price()}>{item.price}</Text>
-                                  <TactileButton
-                                    variant="outline"
-                                    size="sm"
-                                    isDisabled={updateLoading}
-                                    onPress={() => handleUnlist(item.id)}
-                                    accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
-                                    accessibilityHint="Remove this NFT from marketplace"
-                                  >
-                                    {updateLoading ? 'Unlisting...' : 'Unlist'}
-                                  </TactileButton>
-                                </View>
-                              }
-                            />
-                          </View>
-                        ))}
-                        {pair.length === 1 && <View className={gridLayout().item()} />}
-                      </View>
-                    ))
-                  ) : (
-                    <EmptyState
-                      title="No active listings"
-                      description="You haven't listed any NFTs yet."
-                    />
-                  )}
-                </View>
-              </ScrollView>
-            </View>
+            <FlatList
+              data={sortedMyListings}
+              keyExtractor={keyExtractor}
+              renderItem={renderMyListingItem}
+              numColumns={2}
+              columnWrapperStyle={{ justifyContent: 'space-between' }}
+              contentContainerClassName={cn(
+                scrollContent({ padding: 'md', bottomPad: 'default' }),
+                'w-full',
+              )}
+              showsVerticalScrollIndicator={false}
+              initialNumToRender={6}
+              maxToRenderPerBatch={6}
+              windowSize={5}
+              removeClippedSubviews
+              ListEmptyComponent={
+                <EmptyState
+                  title="No active listings"
+                  description="You haven't listed any NFTs yet."
+                />
+              }
+            />
           )}
         </Tabs.Content>
       </Tabs>
