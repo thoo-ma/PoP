@@ -1,5 +1,6 @@
 import { Card } from 'heroui-native'
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
+import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay } from '@/components'
 import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, typeBadge } from '@/styles'
 import type { NFT } from '@/types'
@@ -22,7 +23,7 @@ export default function NFTDetailCard({ nft, energy }: NFTDetailCardProps) {
         accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.type ?? 'unknown'} type`}
       >
         <Card.Header className={cardImageContainer({ className: 'aspect-auto' })}>
-          <Image source={{ uri: nft.image_url }} className={s.image()} resizeMode="cover" />
+          <RemoteImage source={{ uri: nft.image_url }} className={s.image()} contentFit="cover" />
           <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>

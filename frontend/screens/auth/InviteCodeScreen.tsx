@@ -9,9 +9,10 @@ import {
   Spinner,
 } from 'heroui-native'
 import { useState } from 'react'
-import { Image, KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
+import { KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { TactileButton } from '@/components'
+import { Image } from '@/components/styled'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
 import { authScreen, tactileButtonText } from '@/styles/auth'
@@ -83,7 +84,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
             <Image
               source={require('@/assets/icon.png')}
               className="w-16 h-16 rounded-2xl"
-              resizeMode="contain"
+              contentFit="contain"
             />
           </View>
 

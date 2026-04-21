@@ -1,6 +1,7 @@
 import { cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { Image } from '@/components/styled'
 import { rarityBadge, revealModal } from '@/styles'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
@@ -42,7 +43,14 @@ export default memo(function MysteryBoxRevealModal({
           </Dialog.Description>
 
           <View className={s.imageContainer()}>
-            <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
+            <Image
+              source={{ uri: nft.image_url }}
+              className="w-full h-full"
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              style={{ backgroundColor: '#2c2c2c' }}
+              transition={200}
+            />
             <View className={cn(s.rarityOverlay(), rarityBadge({ rarity: nft.rarity }))}>
               <Text className={s.rarityText()}>{nft.rarity.toUpperCase()}</Text>
             </View>
