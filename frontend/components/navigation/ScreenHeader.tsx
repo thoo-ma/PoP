@@ -17,7 +17,9 @@ const SCREEN_TITLES: Record<string, string> = {
 export default memo(function ScreenHeader({ title }: ScreenHeaderProps) {
   return (
     <View className={screenHeader()}>
-      <Text className={screenTitle({ spacing: 'sm' })}>{SCREEN_TITLES[title] ?? title}</Text>
+      <Text className={screenTitle({ spacing: 'sm' })} accessibilityRole="header">
+        {SCREEN_TITLES[title] ?? title}
+      </Text>
     </View>
   )
 })
