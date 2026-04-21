@@ -66,14 +66,14 @@ export default memo(function Repair() {
   }, [nfts])
 
   const handlePrev = useCallback(() => {
-    if (selectedIndex === null) return
+    if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
   }, [selectedIndex, nfts.length])
 
   const handleNext = useCallback(() => {
-    if (selectedIndex === null) return
+    if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
