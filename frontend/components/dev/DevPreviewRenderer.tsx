@@ -11,7 +11,7 @@ import {
   Spinner,
 } from 'heroui-native'
 import type { ReactNode } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import {
   AlertBox,
   BreedOutcomePanel,
@@ -33,6 +33,7 @@ import {
   ScreenLoader,
   TactileButton,
 } from '@/components'
+import { Image, RemoteImage } from '@/components/styled'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
@@ -304,7 +305,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <Image
                 source={require('@/assets/icon.png')}
                 className="w-16 h-16 rounded-2xl"
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
             <Text className={s.headline()}>
@@ -350,7 +351,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <Image
                 source={require('@/assets/icon.png')}
                 className="w-16 h-16 rounded-2xl"
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
             <Text className={s.headline()}>
@@ -402,7 +403,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               <Image
                 source={require('@/assets/icon.png')}
                 className="w-16 h-16 rounded-2xl"
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
             <Text className={s.headline()}>
@@ -639,14 +640,16 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <View className={result.root()}>
               <Text className={result.title()}>Mystery Box Earned!</Text>
               <View className={result.parentsRow()}>
-                <Image
+                <RemoteImage
                   source={{ uri: MOCK_NFT_READY.image_url }}
                   className={result.parentImage()}
+                  contentFit="cover"
                 />
                 <Text className={result.multiplyText()}>×</Text>
-                <Image
+                <RemoteImage
                   source={{ uri: MOCK_NFT_COMMON.image_url }}
                   className={result.parentImage()}
+                  contentFit="cover"
                 />
                 <Text className={result.arrowText()}>→</Text>
               </View>

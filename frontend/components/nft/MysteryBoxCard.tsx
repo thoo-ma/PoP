@@ -2,7 +2,8 @@ import type { MysteryBox, NFTRarity } from '@pop/shared'
 import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
+import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay } from '@/components'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/styles'
@@ -37,7 +38,7 @@ export default memo(function MysteryBoxCard({
         accessibilityLabel={`Mystery box, ${rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ', unavailable'}`}
       >
         <Card.Header className={cardImageContainer()}>
-          <Image source={{ uri: imageUrl }} className="w-full h-full" resizeMode="cover" />
+          <RemoteImage source={{ uri: imageUrl }} className="w-full h-full" contentFit="cover" />
 
           {/* Opened — top-right */}
           {box?.opened && (

@@ -2,7 +2,8 @@ import { MAX_LEVEL, xpThreshold } from '@pop/shared'
 import { Card, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay, ProgressBar } from '@/components'
 import {
   cardBody,
@@ -38,7 +39,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
       >
         {/* Image + badge overlay */}
         <Card.Header className={cardImageContainer()}>
-          <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
+          <RemoteImage source={{ uri: nft.image_url }} className="w-full h-full" contentFit="cover" />
           <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>

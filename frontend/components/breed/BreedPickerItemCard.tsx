@@ -1,5 +1,6 @@
 import { Card, PressableFeedback } from 'heroui-native'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { RemoteImage } from '@/components/styled'
 import { useRarityColors } from '@/hooks'
 import { breedPickerCard } from '@/styles'
 import type { NFT } from '@/types'
@@ -43,7 +44,7 @@ export default function BreedPickerItemCard({
       <View className={s.wrapper()}>
         <Card className={s.root()} animation="disable-all">
           <View className={s.image()}>
-            <Image source={{ uri: nft.image_url }} className="w-full h-full" resizeMode="cover" />
+            <RemoteImage source={{ uri: nft.image_url }} className="w-full h-full" contentFit="cover" />
             {disabled && <View className={s.disabledOverlay()} />}
             <View className={s.rarityDot()} style={{ backgroundColor: rarityColors[nft.rarity] }} />
           </View>

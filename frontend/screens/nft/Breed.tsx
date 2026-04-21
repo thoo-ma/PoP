@@ -3,7 +3,7 @@ import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, Skeleton, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
-import { Image, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import {
   AlertBox,
   BreedOutcomePanel,
@@ -15,6 +15,7 @@ import {
   ScreenInfo,
   TactileButton,
 } from '@/components'
+import { RemoteImage } from '@/components/styled'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   breedResultSection,
@@ -272,11 +273,19 @@ import { canBreed } from '@/utils'
               {/* Parents summary */}
               <View className={result.parentsRow()}>
                 {resultParent1Url && (
-                  <Image source={{ uri: resultParent1Url }} className={result.parentImage()} />
+                  <RemoteImage
+                    source={{ uri: resultParent1Url }}
+                    className={result.parentImage()}
+                    contentFit="cover"
+                  />
                 )}
                 <Text className={result.multiplyText()}>×</Text>
                 {resultParent2Url && (
-                  <Image source={{ uri: resultParent2Url }} className={result.parentImage()} />
+                  <RemoteImage
+                    source={{ uri: resultParent2Url }}
+                    className={result.parentImage()}
+                    contentFit="cover"
+                  />
                 )}
                 <Text className={result.arrowText()}>→</Text>
               </View>
