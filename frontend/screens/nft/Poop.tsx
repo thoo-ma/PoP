@@ -16,7 +16,6 @@ import {
   StatAllocationModal,
   TactileButton,
 } from '@/components'
-import { getCooldownStatus } from '@/constants'
 import {
   useAnnounce,
   useImmobilityChallenge,
@@ -28,6 +27,7 @@ import {
 import { dialogBody, dialogFooter, scrollContent } from '@/styles'
 import { tactileButtonText } from '@/styles/shared/buttons'
 import type { AllocateResult, NFT } from '@/types'
+import { getCooldownStatus } from '@/utils/proof/cooldown'
 
 /**
  * Poop screen — the core gameplay loop of the app.

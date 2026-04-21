@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { Text } from 'react-native'
-import { formatCooldown } from '@/constants'
+import { formatCooldown } from '@/utils/proof/cooldown'
 
 type Props = {
   endsAt: Date

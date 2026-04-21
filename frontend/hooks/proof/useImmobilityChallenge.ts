@@ -3,9 +3,11 @@ import { getThresholds } from '@pop/shared'
 import type { EventSubscription } from 'expo-modules-core'
 import { Accelerometer, Gyroscope, Pedometer } from 'expo-sensors'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { SENSOR_UPDATE_INTERVAL } from '@/constants'
 import type { ChallengeStatus } from '@/types'
 import { logError } from '@/utils/errorHelpers'
+
+/** Accelerometer/Gyroscope update interval in milliseconds. */
+const SENSOR_UPDATE_INTERVAL = 100
 
 /** Sensor data from accelerometer. */
 interface AccelerometerData {
