@@ -34,7 +34,7 @@ export const lootResultPanel = tv({
       lost: {
         root: 'bg-surface-container-low',
         title: 'text-xl font-bold text-on-surface',
-        body: 'text-on-surface-variant',
+        body: 'text-on-surface-variant font-bold',
       },
     },
   },

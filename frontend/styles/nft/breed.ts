@@ -57,5 +57,5 @@ export const breedResultSection = tv({
 // ── Cost strikethrough ────────────────────────────────────────────────────────
 // Inline strikethrough text for the original cost inside action button labels.
 export const costStrikethrough = tv({
-  base: 'line-through text-on-surface-variant',
+  base: 'line-through text-on-surface-variant font-bold',
 })

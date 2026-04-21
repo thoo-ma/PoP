@@ -27,14 +27,19 @@
  *   --spacing-control-*       (40px / 60px)
  *
  * ── Tactile 3D border convention ────────────────────────────────────────────
- * Three strict tiers — every tactile surface must use one of these:
+ * The tactile scale applies to raised bottom widths. Use one of these tiers
+ * for the tactile raise:
  *   border-tactile-sm = 3px → uniform / static / "subtle" bottom
  *   border-tactile-md = 5px → passive card raise (e.g. NFTCard tactile variant)
  *   border-tactile-lg = 6px → interactive button / nav raise (pairs with
  *                              `active:border-b-tactile-sm` for the press effect)
  *
- * No 4px / 7px / arbitrary values — if a new tier is needed, extend the scale
- * here, do not inline.
+ * `border-2` remains a separate non-tactile side-border tier and may be paired
+ * with a tactile bottom raise (e.g. `border-2` + `border-b-tactile-md/sm`)
+ * when a hybrid pattern is needed.
+ *
+ * No 4px / 7px / arbitrary tactile values — if a new tactile tier is needed,
+ * extend the scale here, do not inline.
  *
  * ── Muted text + font weight pairing ────────────────────────────────────────
  * Text using `text-on-surface-variant` MUST pair with `font-medium` or stronger
