@@ -1,6 +1,5 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
 import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import type { NFT } from '@/types'
@@ -52,16 +51,13 @@ export function useOpenMysteryBox() {
     },
   })
 
-  const openBox = useCallback(
-    async (boxId: string): Promise<NFT | null> => {
-      try {
-        return await mutation.mutateAsync(boxId)
-      } catch {
-        return null
-      }
-    },
-    [mutation.mutateAsync],
-  )
+  const openBox = async (boxId: string): Promise<NFT | null> => {
+    try {
+      return await mutation.mutateAsync(boxId)
+    } catch {
+      return null
+    }
+  }
 
   return {
     openBox,

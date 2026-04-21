@@ -66,7 +66,7 @@ export default memo(function Poop() {
   // Force a single re-render when a CooldownTimer fires onExpire so
   // buttonDisabled / buttonLabel recompute and the Poop button re-enables.
   const [, setCooldownExpiry] = useState(0)
-  const handleCooldownExpired = useCallback(() => setCooldownExpiry((v) => v + 1), [])
+  const handleCooldownExpired = () => setCooldownExpiry((v) => v + 1)
 
   // ── Proof hooks ────────────────────────────────────────────
   const immobility = useImmobilityChallenge('normal')
@@ -158,6 +158,8 @@ export default memo(function Poop() {
     setSelectedIndex(ready >= 0 ? ready : withEnergy >= 0 ? withEnergy : 0)
   }
 
+  // kept: closes over `phase` to guard carousel swipes; without useCallback the guard captures a stale
+  // `phase` value and allows swiping during active challenge phases (countdown, immobility, recording).
   const handlePrev = useCallback(() => {
     if (phase !== 'idle') return
     setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
@@ -167,6 +169,8 @@ export default memo(function Poop() {
     setStatModalData(null)
   }, [nfts.length, phase])
 
+  // kept: closes over `phase` to guard carousel swipes; without useCallback the guard captures a stale
+  // `phase` value and allows swiping during active challenge phases (countdown, immobility, recording).
   const handleNext = useCallback(() => {
     if (phase !== 'idle') return
     setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
@@ -199,6 +203,9 @@ export default memo(function Poop() {
   }
 
   // ── Master reset ──────────────────────────────────────────
+  // kept: in the roulette-fallback useEffect dep array directly below; without useCallback it recreates
+  // on every render, which would cause that effect to call resetStateMachine on every render while in
+  // the roulette phase instead of only when it first enters with no lootRollId.
   const handleFullReset = useCallback(() => {
     setPoopedEnergy(null)
     setPoopedXP(null)
@@ -253,10 +260,10 @@ export default memo(function Poop() {
   }, [phase, detectionResult, activeNFT, cooldownError, handleFullReset, poopNFT, hasPoopedRef])
 
   // ── Stat allocation ───────────────────────────────────────
-  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+  const handleStatAllocated = (_result: AllocateResult) => {
     setStatModalData(null)
-  }, [])
-  const handleStatModalDismiss = useCallback(() => setStatModalData(null), [])
+  }
+  const handleStatModalDismiss = () => setStatModalData(null)
 
   // ── Early returns ─────────────────────────────────────────
   if (loading) return <ScreenLoader title="Poop" message="Loading your collection..." />

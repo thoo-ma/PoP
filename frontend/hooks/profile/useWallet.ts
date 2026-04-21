@@ -20,6 +20,8 @@ export function useWallet() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // kept: in the useEffect dep array below; recreating on every render would tear down and re-establish
+  // the Supabase realtime channel subscription on each render.
   const fetchBalance = useCallback(
     async (userId: string) => {
       if (mock?.wallet) return

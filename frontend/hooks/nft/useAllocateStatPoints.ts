@@ -1,6 +1,5 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
 import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import type { AllocateResult, StatDeltas } from '@/types'
@@ -56,16 +55,13 @@ export function useAllocateStatPoints() {
     },
   })
 
-  const allocate = useCallback(
-    async (nftId: string, deltas: StatDeltas): Promise<AllocateResult | null> => {
-      try {
-        return await mutation.mutateAsync({ nftId, deltas })
-      } catch {
-        return null
-      }
-    },
-    [mutation.mutateAsync],
-  )
+  const allocate = async (nftId: string, deltas: StatDeltas): Promise<AllocateResult | null> => {
+    try {
+      return await mutation.mutateAsync({ nftId, deltas })
+    } catch {
+      return null
+    }
+  }
 
   return {
     allocate,

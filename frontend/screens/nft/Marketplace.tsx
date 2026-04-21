@@ -73,10 +73,14 @@ export default memo(function Marketplace() {
     )
   }, [myListings, sortBy, sortOrder, searchQuery])
 
+  // kept: dep of renderBuyAction → renderMarketplaceItem → FlatList renderItem; recreating would cascade
+  // through that memo chain and force every visible Buy-tab row to re-render.
   const handleBuyNFT = useCallback(() => {
     setDialog({ title: 'Coming Soon', message: 'Buying from marketplace is not yet available.' })
   }, [])
 
+  // kept: recurses into itself inside the toast retry callback (onActionPress); without useCallback the
+  // retry captures a stale closure that may reference an outdated `unlistNFT` or `toast` reference.
   const handleUnlist = useCallback(
     async (nftId: string) => {
       const success = await unlistNFT(nftId)
@@ -102,21 +106,25 @@ export default memo(function Marketplace() {
     [unlistNFT, toast],
   )
 
-  const handleSortOrderToggle = useCallback(() => {
+  const handleSortOrderToggle = () => {
     setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))
-  }, [])
+  }
 
-  const handleSortByChange = useCallback((option: SortOption) => {
+  const handleSortByChange = (option: SortOption) => {
     setSortBy(option)
-  }, [])
+  }
 
   const skeleton = skeletonCard()
   const itemRow = useMemo(() => marketplaceItemRow(), [])
   const tabs = tactileTabs()
   const grid = useMemo(() => gridLayout(), [])
 
+  // kept: passed to FlatList.keyExtractor; recreating on every render causes React Native to remount
+  // every list item rather than reconcile them in-place.
   const keyExtractor = useCallback((nft: NFT) => nft.id, [])
 
+  // kept: render-prop passed to memo()-wrapped NFTCard.action; recreating would break NFTCard's memo
+  // comparison and re-render every visible Buy-tab row even when the NFT data hasn't changed.
   const renderBuyAction = useCallback(
     (nft: NFT) => (
       <View className={itemRow.root()}>
@@ -135,6 +143,8 @@ export default memo(function Marketplace() {
     [itemRow, handleBuyNFT],
   )
 
+  // kept: passed to FlatList.renderItem; recreating on every parent re-render causes React Native to
+  // re-render all currently visible Buy-tab rows.
   const renderMarketplaceItem = useCallback<ListRenderItem<NFT>>(
     ({ item }) => (
       <View className={grid.item()}>
@@ -144,6 +154,8 @@ export default memo(function Marketplace() {
     [grid, renderBuyAction],
   )
 
+  // kept: render-prop passed to memo()-wrapped NFTCard.action; recreating would break NFTCard's memo
+  // comparison and re-render every visible Sell-tab row even when the NFT data hasn't changed.
   const renderUnlistAction = useCallback(
     (nft: NFT) => (
       <View className={itemRow.root()}>
@@ -163,6 +175,8 @@ export default memo(function Marketplace() {
     [itemRow, handleUnlist, updateLoading],
   )
 
+  // kept: passed to FlatList.renderItem; recreating on every parent re-render causes React Native to
+  // re-render all currently visible Sell-tab rows.
   const renderMyListingItem = useCallback<ListRenderItem<NFT>>(
     ({ item }) => (
       <View className={grid.item()}>

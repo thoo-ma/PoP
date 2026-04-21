@@ -69,6 +69,11 @@ export const useImmobilityChallenge = (
     }
   }, [])
 
+  // All callbacks below are intentionally memoised: they are passed to native sensor
+  // listeners (Accelerometer/Gyroscope/Pedometer) whose subscription effects depend on
+  // their identity, and to usePoopStateMachine bridge effects. Recreating any of them
+  // on every render would churn sensor subscriptions and re-trigger state machine effects.
+
   // Single teardown function – clears every timer and sensor subscription.
   // Called from stopChallenge, the grace-period callback, and the unmount effect
   // so no code path can leak a phantom timer or subscription.

@@ -291,6 +291,8 @@ export function usePoopStateMachine(deps: UsePoopStateMachineDeps): UsePoopState
   }, [state.immobilityMessage])
 
   // ── Actions ────────────────────────────────────────────────
+  // All actions kept stable: they are part of the hook's public API and are passed to memo()-wrapped
+  // phase components (e.g. CountdownPhase) and into useEffect dep arrays in the Poop screen.
   const start = useCallback((nft: NFT) => {
     hasPoopedRef.current = false
     dispatch({ type: 'START', nft })

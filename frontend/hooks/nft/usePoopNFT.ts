@@ -106,6 +106,8 @@ export function usePoopNFT() {
     },
   })
 
+  // kept: in the useEffect dep array in Poop.tsx that awards XP on flush detection; without useCallback
+  // it recreates on every render, which would re-fire that effect and double-award XP.
   const poopNFT = useCallback(
     async (nftId: string): Promise<PoopResult | null> => {
       try {

@@ -54,8 +54,12 @@ export default function BreedPickerModal({
     [allNFTs, lockedId, lockedRarity],
   )
 
+  // kept: passed to BottomSheetFlatList.keyExtractor; recreating on every render causes React Native to
+  // remount every list item rather than reconcile them in-place.
   const keyExtractor = useCallback((item: { nft: NFT; disabled: boolean }) => item.nft.id, [])
 
+  // kept: passed to BottomSheetFlatList.renderItem; recreating on every parent re-render causes React
+  // Native to re-render all currently visible picker rows even when the underlying data hasn't changed.
   const renderItem = useCallback(
     ({ item }: { item: { nft: NFT; disabled: boolean } }) => (
       <BreedPickerItemCard
