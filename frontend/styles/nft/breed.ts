@@ -15,6 +15,11 @@ export const parentSlot = tv({
     emptyIcon: 'text-icon-lg text-default-300 mb-1.5',
     emptyLabel: 'text-body-md text-on-surface-variant text-center px-4 leading-4 font-bold',
   },
+  variants: {
+    empty: {
+      true: { root: 'border-dashed border-2 rounded-card' },
+    },
+  },
 })
 
 // ── Outcome panel ─────────────────────────────────────────────────────────────

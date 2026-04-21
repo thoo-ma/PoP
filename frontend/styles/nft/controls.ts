@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 export const tactileSelect = tv({
   slots: {
     trigger:
-      'h-control-md py-0 bg-surface-container-low border-tactile-sm border-outline border-b-tactile-lg rounded-full px-4',
+      'h-control-md py-0 bg-surface-container-low border-tactile-sm border-outline border-b-tactile-lg rounded-full px-4 active:translate-y-[1px]',
     value: 'font-bold text-on-surface',
     indicator: 'text-on-surface',
     content: 'bg-surface border-2 border-outline rounded-2xl overflow-hidden',

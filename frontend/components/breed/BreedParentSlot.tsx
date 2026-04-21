@@ -24,10 +24,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
   const rarityColors = useRarityColors()
   const s = parentSlot()
   return (
-    <PressableFeedback
-      onPress={onPress}
-      className={cn(s.root(), !nft && 'border-dashed border-2 rounded-2xl')}
-    >
+    <PressableFeedback onPress={onPress} className={cn(s.root({ empty: !nft }))}>
       {nft ? (
         <>
           <RemoteImage

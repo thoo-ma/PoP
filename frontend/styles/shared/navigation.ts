@@ -22,7 +22,7 @@ export const pageIndicator = tv({
 // Shared tactile-styled tab bar used by Vault and Marketplace.
 export const tactileTabs = tv({
   slots: {
-    list: 'self-center bg-surface border-tactile-sm border-outline border-b-tactile-lg rounded-full px-1 py-1',
+    list: 'self-center bg-surface border-tactile-sm border-outline border-b-tactile-lg rounded-full px-1 py-1 active:translate-y-[1px]',
     indicator: 'bg-surface-container-low border-2 border-outline rounded-full',
   },
 })
