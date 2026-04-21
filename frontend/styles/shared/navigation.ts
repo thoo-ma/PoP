@@ -4,7 +4,10 @@ import { tv } from 'tailwind-variants'
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
+    // half-step: pill height for the floating bottom nav rail; py-2 reads
+    // as a button bar, py-3 dominates the screen.
     rail: 'flex-row bg-surface rounded-modal px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
+    // half-step: keeps the touch target wider than tall to fit five icons.
     navButton: 'px-2.5 py-1',
     iconContainer: 'items-center',
     navLabel: 'text-caption mt-1',

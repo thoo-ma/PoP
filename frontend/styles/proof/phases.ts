@@ -14,6 +14,8 @@ export const challengeHeader = tv({
     root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-tactile-sm border-outline gap-3',
     avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
     info: 'flex-1',
+    // half-step: tight name-above-subtitle pairing inside the challenge
+    // header card; whole-step breaks the grouping.
     name: 'text-body-lg font-black text-on-surface mb-0.5',
     subtitle: 'text-body-sm text-on-surface-variant font-bold',
   },
@@ -72,11 +74,14 @@ export const degenBar = tv({
   slots: {
     headerRow: 'flex-row items-center justify-between mb-3',
     title: 'text-body-base font-bold text-on-surface',
+    // half-step: pill chip for the active risk zone; whole-step inflates
+    // the chip beyond the surrounding text rhythm.
     zoneBadge: 'px-2 py-0.5 rounded-full',
     zoneBadgeLabel: 'text-body-sm font-bold text-on-primary',
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
+    // half-step: tight label-above-value pairing per metric column.
     metricLabel: 'text-body-sm text-on-surface-variant mb-0.5 font-bold',
     costValue: 'text-body-md font-bold text-app-success',
     costSubvalue: 'text-body-sm font-bold text-on-surface',

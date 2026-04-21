@@ -2,7 +2,7 @@ import { tv } from 'tailwind-variants'
 
 // ── Dialog body ─────────────────────────────────────────────────────────────
 export const dialogBody = tv({
-  base: 'mb-4 gap-1.5',
+  base: 'mb-4 gap-2',
 })
 
 // ── Dialog footer row ─────────────────────────────────────────────────────────

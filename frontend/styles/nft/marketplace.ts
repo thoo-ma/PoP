@@ -11,7 +11,7 @@ export const breedPickerCard = tv({
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-hairline border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
-    info: 'px-2 pt-1.5 pb-2',
+    info: 'px-2 py-2',
     name: 'text-body-md font-bold',
     rarity: 'text-caption font-bold capitalize',
   },

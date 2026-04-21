@@ -166,6 +166,7 @@ export default function ProfileScreen() {
               }
             />
           )}
+          {/* half-step mb-2.5: tighter than the section gap above to group the action with the section. */}
           <TactileButton
             variant="primary"
             className="w-full mb-2.5"

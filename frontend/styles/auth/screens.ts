@@ -13,6 +13,7 @@ export const authScreen = tv({
     inputWrap: 'mb-8',
     actionsWrap: 'mt-auto',
     footer: 'flex-row justify-center gap-6',
+    // half-step: keeps the underline tight to the link text.
     footerLink: 'border-b border-outline pb-0.5',
     footerLinkText: 'text-caption font-black text-on-surface-variant uppercase tracking-wider',
     fieldError: 'text-danger text-center mt-3 font-bold',

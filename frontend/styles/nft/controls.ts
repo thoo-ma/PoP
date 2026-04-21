@@ -20,6 +20,9 @@ export const filterControls = tv({
     toolbar: 'flex-row items-center gap-2 mb-2',
     sortWrapper: 'flex-1',
     panel: 'gap-3',
+    // TODO(redesign): chip-row layouts have diverged across the app
+    // (gap-2 wrap here vs gap-1 no-wrap in parentSlot.chipsRow).
+    // Reconcile before extracting a shared chipRow recipe.
     tagList: 'flex-row flex-wrap gap-2',
     tagItem: 'border-2 border-outline border-b-tactile-sm rounded-full',
   },

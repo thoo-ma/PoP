@@ -21,7 +21,10 @@ export const propertyBar = tv({
       },
       detailed: {
         root: 'gap-1',
+        // half-step: tight label-above-bar pairing in the detailed property
+        // bar; whole-step breaks the visual grouping.
         label: 'text-body-sm font-bold mb-0.5',
+        // half-step: matches the label-above-bar rhythm.
         barWrap: 'gap-1.5',
         value: 'text-body-sm text-on-surface font-bold w-label-sm',
       },

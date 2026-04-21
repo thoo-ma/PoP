@@ -8,6 +8,8 @@ export const statModal = tv({
     header: 'flex-row items-center justify-between mb-1',
     title: 'text-heading-xs font-black text-on-surface',
     description: 'text-body-md text-on-surface-variant mb-5 font-bold',
+    // half-step: matches statModal vertical rhythm; py-3 makes the box
+    // tower over its siblings.
     pointsBox:
       'flex-row items-center justify-between bg-surface-container-low rounded-card py-2.5 px-4 mb-5',
     pointsLabel: 'text-body-md font-bold text-on-surface-variant',
@@ -31,6 +33,8 @@ export const revealModal = tv({
     description: 'text-body-md text-on-surface-variant mb-5 text-center font-bold',
     imageContainer:
       'w-[70%] aspect-square rounded-frame overflow-hidden bg-surface-container-low mb-4 relative',
+    // half-step: chip-style badge on the image overlay; whole-step makes
+    // the chip feel oversized for the corner.
     rarityOverlay: 'absolute bottom-2 right-2 px-2.5 py-1 rounded-tag',
     rarityText: 'text-on-primary text-body-sm font-bold tracking-wide',
   },
@@ -40,7 +44,7 @@ export const revealModal = tv({
 // Bottom-sheet help text for the NFT parent picker.
 export const pickerModal = tv({
   slots: {
-    helpText: 'text-body-md text-on-surface-variant px-5 pt-2.5 pb-1 leading-modal-body font-bold',
+    helpText: 'text-body-md text-on-surface-variant px-5 py-2 leading-modal-body font-bold',
   },
 })
 

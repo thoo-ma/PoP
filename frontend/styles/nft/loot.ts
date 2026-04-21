@@ -1,5 +1,7 @@
 import { tv } from 'tailwind-variants'
 
+// TODO(redesign): if a third feedback frame appears, extract a shared
+// feedbackContainer recipe. Today: lootPanel only.
 // ── Loot roulette card ────────────────────────────────────────────────────────
 // Layout slots for the LootRouletteCard component.
 export const lootPanel = tv({
