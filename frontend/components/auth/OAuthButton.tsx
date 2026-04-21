@@ -2,8 +2,15 @@ import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
 import { Button, Spinner } from 'heroui-native'
 import { useCSSVariable } from 'uniwind'
 import { tactileButtonText } from '@/styles/auth'
-import type { OAuthButtonProps } from '@/types'
+import type { OAuthProvider } from '@/types'
 import TactileButton from '../shared/TactileButton'
+
+export interface OAuthButtonProps {
+  provider: OAuthProvider
+  onPress: () => void
+  loading: boolean
+  disabled?: boolean
+}
 
 const labels = {
   google: 'Sign in with Google',

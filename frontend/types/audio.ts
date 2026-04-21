@@ -26,19 +26,3 @@ export interface RateLimitError {
   limit: number
   current_count: number
 }
-
-/**
- * Return type for useToiletDetection hook
- */
-export interface UseToiletDetectionReturn {
-  isRecording: boolean
-  audioUri: string | null
-  detectionResult: DetectionResult | null
-  isAnalyzing: boolean
-  error: string | null
-  rateLimitError: RateLimitError | null
-  startRecording: () => Promise<void>
-  stopRecording: () => Promise<void>
-  analyzeAudio: (threshold?: number) => Promise<void>
-  clearResult: () => void
-}

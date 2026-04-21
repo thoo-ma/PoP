@@ -11,8 +11,24 @@ import * as FileSystem from 'expo-file-system'
 import { useCallback, useState } from 'react'
 import { useErrorHandler } from '@/hooks'
 import { detectToiletFlush } from '@/lib/toiletDetectionApi'
-import type { DetectionResult, RateLimitError, UseToiletDetectionReturn } from '@/types'
+import type { DetectionResult, RateLimitError } from '@/types'
 import { isRateLimitError } from '@/utils/errorHelpers'
+
+/**
+ * Return type for {@link useToiletDetection}.
+ */
+export interface UseToiletDetectionReturn {
+  isRecording: boolean
+  audioUri: string | null
+  detectionResult: DetectionResult | null
+  isAnalyzing: boolean
+  error: string | null
+  rateLimitError: RateLimitError | null
+  startRecording: () => Promise<void>
+  stopRecording: () => Promise<void>
+  analyzeAudio: (threshold?: number) => Promise<void>
+  clearResult: () => void
+}
 
 /** Mono recording options — smaller file for detection pipeline. */
 const RECORDING_OPTIONS: RecordingOptions = {

@@ -1,7 +1,18 @@
-import type { Session } from '@supabase/supabase-js'
+import type { Session, User } from '@supabase/supabase-js'
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib'
-import type { UseAuthReturn } from '@/types'
+
+/**
+ * Return type for {@link useAuth}.
+ */
+export interface UseAuthReturn {
+  session: Session | null
+  loading: boolean
+  signOut: () => Promise<{ error: Error | null }>
+  getUserDisplayName: () => string
+  user: User | null
+  isAuthenticated: boolean
+}
 
 /**
  * Hook to manage the current Supabase auth session.
