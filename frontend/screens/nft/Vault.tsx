@@ -120,30 +120,36 @@ export default memo(function Vault() {
     [filteredNfts, sortBy, sortOrder],
   )
 
-  const handleRarityToggle = (rarity: NFTRarity) => {
+  // kept: passed to memo()-wrapped FilterControls; recreating on every render breaks its memo
+  // comparison and re-renders the entire filter toolbar even when no filter state has changed.
+  const handleRarityToggle = useCallback((rarity: NFTRarity) => {
     setSelectedRarities((prev) =>
       prev.includes(rarity) ? prev.filter((r) => r !== rarity) : [...prev, rarity],
     )
-  }
+  }, [])
 
-  const handleTypeToggle = (type: NFTType) => {
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
+  const handleTypeToggle = useCallback((type: NFTType) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     )
-  }
+  }, [])
 
-  const handleClearFilters = () => {
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
+  const handleClearFilters = useCallback(() => {
     setSelectedRarities([])
     setSelectedTypes([])
-  }
+  }, [])
 
-  const handleSortByChange = (option: SortOption) => {
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
+  const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option)
-  }
+  }, [])
 
-  const handleSortOrderToggle = () => {
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
+  const handleSortOrderToggle = useCallback(() => {
     setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))
-  }
+  }, [])
 
   // kept: dep of renderNftAction → renderNftItem → FlatList renderItem; recreating would cascade through
   // that memo chain and force every visible NFT row to re-render.

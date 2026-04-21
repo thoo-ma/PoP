@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
 import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
@@ -100,32 +101,44 @@ export function useUpdateNFT() {
     },
   })
 
-  const updateEnergy = async (nftId: string, newEnergy: number): Promise<boolean> => {
-    try {
-      await updateEnergyMutation.mutateAsync({ nftId, newEnergy })
-      return true
-    } catch {
-      return false
-    }
-  }
+  // kept: consumers (e.g. Vault.handleListNFT/handleUnlist) put these in useCallback dep arrays whose
+  // identity propagates through render-prop memo chains down to FlatList rows; recreating these
+  // wrappers on every render would cascade and re-render every visible NFT row.
+  const updateEnergy = useCallback(
+    async (nftId: string, newEnergy: number): Promise<boolean> => {
+      try {
+        await updateEnergyMutation.mutateAsync({ nftId, newEnergy })
+        return true
+      } catch {
+        return false
+      }
+    },
+    [updateEnergyMutation.mutateAsync],
+  )
 
-  const listNFT = async (nftId: string, price: string): Promise<boolean> => {
-    try {
-      await listNFTMutation.mutateAsync({ nftId, price })
-      return true
-    } catch {
-      return false
-    }
-  }
+  const listNFT = useCallback(
+    async (nftId: string, price: string): Promise<boolean> => {
+      try {
+        await listNFTMutation.mutateAsync({ nftId, price })
+        return true
+      } catch {
+        return false
+      }
+    },
+    [listNFTMutation.mutateAsync],
+  )
 
-  const unlistNFT = async (nftId: string): Promise<boolean> => {
-    try {
-      await unlistNFTMutation.mutateAsync({ nftId })
-      return true
-    } catch {
-      return false
-    }
-  }
+  const unlistNFT = useCallback(
+    async (nftId: string): Promise<boolean> => {
+      try {
+        await unlistNFTMutation.mutateAsync({ nftId })
+        return true
+      } catch {
+        return false
+      }
+    },
+    [unlistNFTMutation.mutateAsync],
+  )
 
   return {
     updateEnergy,

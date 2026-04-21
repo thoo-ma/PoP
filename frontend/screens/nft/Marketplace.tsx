@@ -106,13 +106,16 @@ export default memo(function Marketplace() {
     [unlistNFT, toast],
   )
 
-  const handleSortOrderToggle = () => {
+  // kept: passed to memo()-wrapped SortToolbar; recreating on every render breaks its memo
+  // comparison and re-renders the entire sort toolbar even when no sort state has changed.
+  const handleSortOrderToggle = useCallback(() => {
     setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))
-  }
+  }, [])
 
-  const handleSortByChange = (option: SortOption) => {
+  // kept: passed to memo()-wrapped SortToolbar; same reasoning as handleSortOrderToggle above.
+  const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option)
-  }
+  }, [])
 
   const skeleton = skeletonCard()
   const itemRow = useMemo(() => marketplaceItemRow(), [])
