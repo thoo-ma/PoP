@@ -1,6 +1,6 @@
 import type { CooldownDetails, EdgeFunctionErrorResponse } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
@@ -36,6 +36,13 @@ export interface PoopResult {
   loot_roll_id: string | null
 }
 
+/** Custom error thrown when the NFT is still on cooldown. */
+class CooldownErrorClass extends Error {
+  constructor(public details: CooldownError) {
+    super('on_cooldown')
+  }
+}
+
 /**
  * Hook to consume a single use of an NFT (the "poop" action).
  *
@@ -43,72 +50,81 @@ export interface PoopResult {
  * runs server-side in the `use-nft` Edge Function for tamper-resistance.
  *
  * @returns A `poopNFT(nftId)` callback resolving to `PoopResult | null`,
- *   async state (`loading`, `error`), and a `cooldownError` object when the
+ *   async state (`isPending`, `error`), and a `cooldownError` object when the
  *   NFT is still resting (contains `cooldown_ends_at` and `cooldown_remaining_seconds`).
  */
 export function usePoopNFT() {
   const mock = useDevMock()
   const queryClient = useQueryClient()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
   const [cooldownError, setCooldownError] = useState<CooldownError | null>(null)
+
+  const mutation = useMutation<PoopResult, Error, string>({
+    mutationFn: async (nftId) => {
+      const { data, error: fnError } = await supabase.functions.invoke('use-nft', {
+        body: { nft_id: nftId },
+      })
+
+      if (fnError) {
+        let message: string = fnError.message
+        let body: EdgeFunctionErrorResponse | null = null
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            body = await fnError.context.json()
+            if (body?.message) message = body.message
+            else if (body?.error) message = body.error
+          } catch {
+            /* leave message as-is */
+          }
+        }
+        // Structured cooldown error from the server
+        if (body?.error === 'on_cooldown' && body?.details) {
+          const d = body.details as unknown as CooldownDetails
+          throw new CooldownErrorClass({
+            cooldown_ends_at: d.cooldown_ends_at,
+            cooldown_remaining_seconds: d.cooldown_remaining_seconds,
+          })
+        }
+        throw new Error(message)
+      }
+
+      if (!data) throw new Error('No data returned from use-nft function')
+
+      return data as PoopResult
+    },
+    onMutate: () => {
+      setCooldownError(null)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+    },
+    onError: (err) => {
+      if (err instanceof CooldownErrorClass) {
+        setCooldownError(err.details)
+        return
+      }
+      logError('usePoopNFT:Invoke', err)
+    },
+  })
 
   const poopNFT = useCallback(
     async (nftId: string): Promise<PoopResult | null> => {
-      if (mock?.poopNFT) return null
       try {
-        setLoading(true)
-        setError(null)
-        setCooldownError(null)
-
-        const { data, error: fnError } = await supabase.functions.invoke('use-nft', {
-          body: { nft_id: nftId },
-        })
-
-        if (fnError) {
-          let message: string = fnError.message
-          let body: EdgeFunctionErrorResponse | null = null
-          if (fnError instanceof FunctionsHttpError) {
-            try {
-              body = await fnError.context.json()
-              if (body?.message) message = body.message
-              else if (body?.error) message = body.error
-            } catch {
-              /* leave message as-is */
-            }
-          }
-          // Structured cooldown error from the server
-          if (body?.error === 'on_cooldown' && body?.details) {
-            const d = body.details as unknown as CooldownDetails
-            setCooldownError({
-              cooldown_ends_at: d.cooldown_ends_at,
-              cooldown_remaining_seconds: d.cooldown_remaining_seconds,
-            })
-            return null
-          }
-          logError('usePoopNFT:Invoke', fnError)
-          setError(message)
-          return null
-        }
-
-        if (!data) {
-          setError('No data returned from use-nft function')
-          return null
-        }
-
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        return data as PoopResult
-      } catch (err) {
-        logError('usePoopNFT:Poop', err)
-        setError(err instanceof Error ? err.message : 'Failed to use NFT')
+        return await mutation.mutateAsync(nftId)
+      } catch {
         return null
-      } finally {
-        setLoading(false)
       }
     },
-    [queryClient, mock],
+    [mutation.mutateAsync],
   )
 
   if (mock?.poopNFT) return mock.poopNFT
-  return { poopNFT, loading, error, cooldownError }
+  return {
+    poopNFT,
+    isPending: mutation.isPending,
+    error:
+      mutation.error && !(mutation.error instanceof CooldownErrorClass)
+        ? mutation.error.message
+        : null,
+    cooldownError,
+  }
 }

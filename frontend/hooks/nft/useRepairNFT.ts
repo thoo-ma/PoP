@@ -1,6 +1,6 @@
 import type { BustedDetails, EdgeFunctionErrorResponse, InsufficientPoopDetails } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
@@ -22,6 +22,20 @@ export interface InsufficientPoopError {
   poop_required: number
 }
 
+/** Custom error thrown when the user can't afford the repair. */
+class InsufficientPoopErrorClass extends Error {
+  constructor(public details: InsufficientPoopError) {
+    super('insufficient_poop')
+  }
+}
+
+/** Custom error thrown when the degen roll busts the repair attempt. */
+class BustedError extends Error {
+  constructor(public details: BustedDetails) {
+    super('busted')
+  }
+}
+
 /**
  * Hook to repair an NFT's energy via the server-side `repair-nft` Edge Function.
  *
@@ -29,85 +43,104 @@ export interface InsufficientPoopError {
  * is enforced server-side and cannot be bypassed.
  *
  * @returns A `repairNFT(nftId, newEnergy, degenPercent)` callback resolving to `RepairResult | null`,
- *   async state (`loading`, `error`), `insufficientPoopError`, and `bustedResult` when the
+ *   async state (`isPending`, `error`), `insufficientPoopError`, and `bustedResult` when the
  *   degen roll busts.
  */
 export function useRepairNFT() {
   const mock = useDevMock()
   const queryClient = useQueryClient()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
   const [insufficientPoopError, setInsufficientPoopError] = useState<InsufficientPoopError | null>(
     null,
   )
   const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null)
 
+  const mutation = useMutation<
+    RepairResult,
+    Error,
+    { nftId: string; newEnergy: number; degenPercent: number }
+  >({
+    mutationFn: async ({ nftId, newEnergy, degenPercent }) => {
+      const { data, error: fnError } = await supabase.functions.invoke('repair-nft', {
+        body: { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
+      })
+
+      if (fnError) {
+        let message: string = fnError.message
+        let body: EdgeFunctionErrorResponse | null = null
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            body = await fnError.context.json()
+            if (body?.message) message = body.message
+            else if (body?.error) message = body.error
+          } catch {
+            /* leave message as-is */
+          }
+        }
+        // Structured insufficient POOP error from the server
+        if (body?.error === 'insufficient_poop' && body?.details) {
+          const d = body.details as unknown as InsufficientPoopDetails
+          throw new InsufficientPoopErrorClass({
+            poop_balance: d.poop_balance,
+            poop_required: d.poop_required,
+          })
+        }
+        // Degen bust
+        if (body?.error === 'busted') {
+          const d = body.details as unknown as BustedDetails | undefined
+          throw new BustedError({
+            poop_spent: d?.poop_spent ?? 0,
+            poop_balance: d?.poop_balance ?? 0,
+          })
+        }
+        throw new Error(message)
+      }
+
+      if (!data) throw new Error('No data returned from repair-nft function')
+
+      return data as RepairResult
+    },
+    onMutate: () => {
+      setInsufficientPoopError(null)
+      setBustedResult(null)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+    },
+    onError: (err) => {
+      if (err instanceof InsufficientPoopErrorClass) {
+        setInsufficientPoopError(err.details)
+        return
+      }
+      if (err instanceof BustedError) {
+        setBustedResult(err.details)
+        return
+      }
+      logError('useRepairNFT:Invoke', err)
+    },
+  })
+
   const repairNFT = useCallback(
     async (nftId: string, newEnergy: number, degenPercent = 0): Promise<RepairResult | null> => {
-      if (mock?.repairNFT) return null
       try {
-        setLoading(true)
-        setError(null)
-        setInsufficientPoopError(null)
-        setBustedResult(null)
-
-        const { data, error: fnError } = await supabase.functions.invoke('repair-nft', {
-          body: { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
-        })
-
-        if (fnError) {
-          let message: string = fnError.message
-          let body: EdgeFunctionErrorResponse | null = null
-          if (fnError instanceof FunctionsHttpError) {
-            try {
-              body = await fnError.context.json()
-              if (body?.message) message = body.message
-              else if (body?.error) message = body.error
-            } catch {
-              /* leave message as-is */
-            }
-          }
-          // Structured insufficient POOP error from the server
-          if (body?.error === 'insufficient_poop' && body?.details) {
-            const d = body.details as unknown as InsufficientPoopDetails
-            setInsufficientPoopError({
-              poop_balance: d.poop_balance,
-              poop_required: d.poop_required,
-            })
-            return null
-          }
-          // Degen bust
-          if (body?.error === 'busted') {
-            const d = body.details as unknown as BustedDetails | undefined
-            setBustedResult({
-              poop_spent: d?.poop_spent ?? 0,
-              poop_balance: d?.poop_balance ?? 0,
-            })
-            return null
-          }
-          logError('useRepairNFT:Invoke', fnError)
-          setError(message)
-          return null
-        }
-
-        if (!data) {
-          setError('No data returned from repair-nft function')
-          return null
-        }
-
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        return data as RepairResult
-      } catch (err) {
-        logError('useRepairNFT:Repair', err)
-        setError(err instanceof Error ? err.message : 'Failed to repair NFT')
+        return await mutation.mutateAsync({ nftId, newEnergy, degenPercent })
+      } catch {
         return null
-      } finally {
-        setLoading(false)
       }
     },
-    [queryClient, mock],
+    [mutation.mutateAsync],
   )
 
   if (mock?.repairNFT) return mock.repairNFT
-  return { repairNFT, loading, error, insufficientPoopError, bustedResult }
+  return {
+    repairNFT,
+    isPending: mutation.isPending,
+    error:
+      mutation.error &&
+      !(mutation.error instanceof InsufficientPoopErrorClass) &&
+      !(mutation.error instanceof BustedError)
+        ? mutation.error.message
+        : null,
+    insufficientPoopError,
+    bustedResult,
+  }
 }

@@ -30,20 +30,20 @@ export interface DevMockContextValue {
   }
   breedNFT?: {
     breedNFTs: (parent1Id: string, parent2Id: string, degenPercent?: number) => Promise<null>
-    loading: boolean
+    isPending: boolean
     error: string | null
     bustedResult: BustedDetails | null
   }
   repairNFT?: {
     repairNFT: (nftId: string, newEnergy: number, degenPercent?: number) => Promise<null>
-    loading: boolean
+    isPending: boolean
     error: string | null
     insufficientPoopError: InsufficientPoopError | null
     bustedResult: BustedDetails | null
   }
   poopNFT?: {
     poopNFT: (nftId: string) => Promise<null>
-    loading: boolean
+    isPending: boolean
     error: string | null
     cooldownError: CooldownError | null
   }

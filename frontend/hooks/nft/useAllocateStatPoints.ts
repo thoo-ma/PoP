@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
 import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import type { AllocateResult, StatDeltas } from '@/types'
@@ -13,62 +13,63 @@ import { logError } from '@/utils/errorHelpers'
  * in the `allocate-stat-points` Edge Function for tamper-resistance.
  *
  * @returns An `allocate(nftId, deltas)` callback resolving to `AllocateResult | null`,
- *   plus `loading` and `error` state.
+ *   plus `isPending` and `error` state.
  */
 export function useAllocateStatPoints() {
   const queryClient = useQueryClient()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
+
+  const mutation = useMutation<AllocateResult, Error, { nftId: string; deltas: StatDeltas }>({
+    mutationFn: async ({ nftId, deltas }) => {
+      const { data, error: fnError } = await supabase.functions.invoke('allocate-stat-points', {
+        body: {
+          nft_id: nftId,
+          efficiency: deltas.efficiency,
+          resilience: deltas.resilience,
+          comfort: deltas.comfort,
+          luck: deltas.luck,
+        },
+      })
+
+      if (fnError) {
+        let message: string = fnError.message
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            const body = await fnError.context.json()
+            if (body?.message) message = body.message as string
+            else if (body?.error) message = body.error as string
+          } catch {
+            /* leave message as-is */
+          }
+        }
+        throw new Error(message)
+      }
+
+      if (!data) throw new Error('No data returned from allocate-stat-points function')
+
+      return data as AllocateResult
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+    },
+    onError: (err) => {
+      logError('useAllocateStatPoints:invoke', err)
+    },
+  })
 
   const allocate = useCallback(
     async (nftId: string, deltas: StatDeltas): Promise<AllocateResult | null> => {
       try {
-        setLoading(true)
-        setError(null)
-
-        const { data, error: fnError } = await supabase.functions.invoke('allocate-stat-points', {
-          body: {
-            nft_id: nftId,
-            efficiency: deltas.efficiency,
-            resilience: deltas.resilience,
-            comfort: deltas.comfort,
-            luck: deltas.luck,
-          },
-        })
-
-        if (fnError) {
-          let message: string = fnError.message
-          if (fnError instanceof FunctionsHttpError) {
-            try {
-              const body = await fnError.context.json()
-              if (body?.message) message = body.message as string
-              else if (body?.error) message = body.error as string
-            } catch {
-              /* leave message as-is */
-            }
-          }
-          logError('useAllocateStatPoints:invoke', fnError)
-          setError(message)
-          return null
-        }
-
-        if (!data) {
-          setError('No data returned from allocate-stat-points function')
-          return null
-        }
-
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        return data as AllocateResult
-      } catch (err) {
-        logError('useAllocateStatPoints:allocate', err)
-        setError(err instanceof Error ? err.message : 'Failed to allocate stat points')
+        return await mutation.mutateAsync({ nftId, deltas })
+      } catch {
         return null
-      } finally {
-        setLoading(false)
       }
     },
-    [queryClient],
+    [mutation.mutateAsync],
   )
 
-  return { allocate, loading, error }
+  return {
+    allocate,
+    isPending: mutation.isPending,
+    error: mutation.error?.message ?? null,
+  }
 }

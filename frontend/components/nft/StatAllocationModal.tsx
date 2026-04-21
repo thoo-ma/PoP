@@ -37,7 +37,7 @@ export default memo(function StatAllocationModal({
   onComplete,
   onDismiss,
 }: StatAllocationModalProps) {
-  const { allocate, loading, error } = useAllocateStatPoints()
+  const { allocate, isPending, error } = useAllocateStatPoints()
   const [deltas, setDeltas] = useState<StatDeltas>(ZERO_DELTAS)
 
   const totalSpent = deltas.efficiency + deltas.resilience + deltas.comfort + deltas.luck
@@ -58,13 +58,13 @@ export default memo(function StatAllocationModal({
   )
 
   const handleConfirm = useCallback(async () => {
-    if (totalSpent === 0 || loading) return
+    if (totalSpent === 0 || isPending) return
     const result = await allocate(nft.id, deltas)
     if (result) {
       setDeltas(ZERO_DELTAS)
       onComplete(result)
     }
-  }, [allocate, nft.id, deltas, totalSpent, loading, onComplete])
+  }, [allocate, nft.id, deltas, totalSpent, isPending, onComplete])
 
   const handleDismiss = useCallback(() => {
     setDeltas(ZERO_DELTAS)
@@ -141,7 +141,7 @@ export default memo(function StatAllocationModal({
               animation="disable-all"
               variant="outline"
               onPress={handleDismiss}
-              isDisabled={loading}
+              isDisabled={isPending}
               className="flex-1"
             >
               Later
@@ -149,10 +149,10 @@ export default memo(function StatAllocationModal({
             <TactileButton
               variant="primary"
               onPress={handleConfirm}
-              isDisabled={totalSpent === 0 || loading}
+              isDisabled={totalSpent === 0 || isPending}
               className="flex-1"
             >
-              {loading ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
+              {isPending ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
             </TactileButton>
           </View>
         </Dialog.Content>

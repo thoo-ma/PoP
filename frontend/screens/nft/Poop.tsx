@@ -46,7 +46,7 @@ import type { AllocateResult, NFT } from '@/types'
 export default memo(function Poop() {
   // ── NFT data ──────────────────────────────────────────────
   const { nfts, loading, error, refetch } = useUserNFTs()
-  const { poopNFT, loading: actionLoading, cooldownError } = usePoopNFT()
+  const { poopNFT, isPending: actionLoading, cooldownError } = usePoopNFT()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [poopedEnergy, setPoopedEnergy] = useState<{ from: number; to: number } | null>(null)
   const [poopedXP, setPoopedXP] = useState<{

@@ -40,7 +40,7 @@ import { canBreed } from '@/utils'
   useScrollToTop(scrollRef)
 
   const { nfts, loading, error, refetch } = useUserNFTs()
-  const { breedNFTs, loading: breedLoading, error: breedError, bustedResult } = useBreedNFT()
+  const { breedNFTs, isPending: breedLoading, error: breedError, bustedResult } = useBreedNFT()
   const { poopBalance } = useWallet()
   const { toast } = useToast()
 
