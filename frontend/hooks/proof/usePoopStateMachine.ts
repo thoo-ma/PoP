@@ -1,14 +1,9 @@
 import { getThresholdForDifficulty } from '@pop/shared'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useReducer, useRef } from 'react'
-import type {
-  ChallengeStatus,
-  DetectionResult,
-  NFT,
-  RateLimitError,
-  UseImmobilityChallengeReturn,
-  UseToiletDetectionReturn,
-} from '@/types'
+import type { ChallengeStatus, DetectionResult, NFT, RateLimitError } from '@/types'
+import type { UseImmobilityChallengeReturn } from './useImmobilityChallenge'
+import type { UseToiletDetectionReturn } from './useToiletDetection'
 
 /** Per-NFT-type immobility duration in milliseconds. */
 export const IMMOBILITY_MS_BY_TYPE: Record<NFT['type'], number> = {

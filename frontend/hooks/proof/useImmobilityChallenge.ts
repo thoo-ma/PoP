@@ -4,14 +4,38 @@ import type { EventSubscription } from 'expo-modules-core'
 import { Accelerometer, Gyroscope, Pedometer } from 'expo-sensors'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SENSOR_UPDATE_INTERVAL } from '@/constants'
-import type {
-  AccelerometerData,
-  ChallengeStatus,
-  GyroscopeData,
-  PedometerData,
-  UseImmobilityChallengeReturn,
-} from '@/types'
+import type { ChallengeStatus } from '@/types'
 import { logError } from '@/utils/errorHelpers'
+
+/** Sensor data from accelerometer. */
+interface AccelerometerData {
+  x: number
+  y: number
+  z: number
+}
+
+/** Sensor data from gyroscope. */
+interface GyroscopeData {
+  x: number
+  y: number
+  z: number
+}
+
+/** Pedometer step count result. */
+interface PedometerData {
+  steps: number
+}
+
+/**
+ * Return type for {@link useImmobilityChallenge}.
+ */
+export interface UseImmobilityChallengeReturn {
+  elapsedTime: number
+  status: ChallengeStatus
+  isRunning: boolean
+  startChallenge: () => void
+  stopChallenge: () => void
+}
 
 /** Sensor listener subscription, typed via the SDK-exported `EventSubscription` from `expo-modules-core`. */
 type Subscription = EventSubscription

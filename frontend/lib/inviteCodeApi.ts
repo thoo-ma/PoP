@@ -1,4 +1,4 @@
-import type { ApprovalResult } from '@/types'
+import type { ApprovalResult } from '@pop/shared'
 import { supabase } from './supabase'
 
 /**
