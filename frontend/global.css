@@ -7,6 +7,41 @@
 @source "./styles/**/*.ts";
 @source "./node_modules/heroui-native/lib";
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Blessed spacing scale
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Use these Tailwind utilities for layout. Do not introduce bespoke arbitrary
+ * spacing (e.g. `p-[7px]`, `gap-[11px]`) — if a design needs a value outside
+ * this scale, add a semantic token below instead.
+ *
+ *   Inline gaps          : gap-1   gap-2   gap-3   gap-4         (4 / 8 / 12 / 16 px)
+ *   Padding              : p-3     p-4     p-5     p-6           (12 / 16 / 20 / 24 px)
+ *   Section margin-Y     : mb-3    mb-5    mb-8                  (12 / 20 / 32 px)
+ *   Screen padding-X     : px-4    px-5    px-6                  (16 / 20 / 24 px)
+ *
+ * Semantic tokens (defined in @theme below) cover screen-level spacing,
+ * tab clearance, control sizing, and component sizing — prefer these over
+ * arbitrary values for non-trivial layouts:
+ *   --spacing-screen-top-*    (60px / 100px)
+ *   --spacing-tab-clearance-* (120px / 140px / 170px)
+ *   --spacing-control-*       (40px / 60px)
+ *
+ * ── Tactile 3D border convention ────────────────────────────────────────────
+ * Three strict tiers — every tactile surface must use one of these:
+ *   border-tactile-sm = 3px → uniform / static / "subtle" bottom
+ *   border-tactile-md = 5px → passive card raise (e.g. NFTCard tactile variant)
+ *   border-tactile-lg = 6px → interactive button / nav raise (pairs with
+ *                              `active:border-b-tactile-sm` for the press effect)
+ *
+ * No 4px / 7px / arbitrary values — if a new tier is needed, extend the scale
+ * here, do not inline.
+ *
+ * ── Muted text + font weight pairing ────────────────────────────────────────
+ * Text using `text-on-surface-variant` MUST pair with `font-medium` or stronger
+ * (`font-bold`, `font-black`) to maintain perceived contrast. Lower weights
+ * should use `text-on-surface` instead.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
 @theme {
   /* ── App background override ─────────────────────────────── */
   --color-background: #fdf9f6;
@@ -20,7 +55,8 @@
   --color-primary-container: #ff8c42;
   --color-on-primary: #ffffff;
   --color-on-surface: #1c1b1a;
-  --color-on-surface-variant: #b0a39d;
+  /* Darkened from #b0a39d (~2.2:1) to meet WCAG AA on --color-surface (~5.1:1). */
+  --color-on-surface-variant: #6b5d54;
   --color-badge-level: #6366f1;
   --color-surface-overlay: rgba(253, 249, 246, 0.9);
   --color-surface-overlay-rail: rgba(253, 249, 246, 0.95);
@@ -98,6 +134,11 @@
   --radius-panel: 14px;
   --radius-inset: 13px;
   --radius-thumbnail: 10px;
+
+  /* ── Tactile border-width scale (see top-of-file convention) ── */
+  --border-tactile-sm: 3px;
+  --border-tactile-md: 5px;
+  --border-tactile-lg: 6px;
 
   /* ── Component sizing ────────────────────────────────────── */
   --spacing-card-image: 280px;

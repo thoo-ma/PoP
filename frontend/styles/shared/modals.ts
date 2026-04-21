@@ -25,7 +25,7 @@ export const statModal = tv({
 // Celebration dialog shown after opening a mystery box.
 export const revealModal = tv({
   slots: {
-    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center border-[3px] border-outline',
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center border-tactile-sm border-outline',
     titleLg: 'text-xl font-black text-on-surface mb-1 text-center',
     titleMd: 'text-base font-black text-on-surface mb-1 text-center',
     description: 'text-sm text-on-surface-variant mb-5 text-center font-bold',

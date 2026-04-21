@@ -7,7 +7,7 @@ export const errorMessage = tv({
 // ── Info box ─────────────────────────────────────────────────────────────────
 // Generic rounded container used in Breed (dashed) and Repair (solid).
 export const infoBox = tv({
-  base: 'w-full bg-surface-container-low rounded-2xl p-4 border-[3px] border-outline',
+  base: 'w-full bg-surface-container-low rounded-2xl p-4 border-tactile-sm border-outline',
   variants: {
     border: {
       solid: '',

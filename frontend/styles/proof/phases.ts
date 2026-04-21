@@ -11,7 +11,7 @@ export const phaseContainer = tv({
 // The NFT info row shown at the top of every active game phase.
 export const challengeHeader = tv({
   slots: {
-    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-[3px] border-outline gap-3',
+    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-tactile-sm border-outline gap-3',
     avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
     info: 'flex-1',
     name: 'text-body-lg font-black text-on-surface mb-0.5',

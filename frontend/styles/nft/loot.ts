@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 // Layout slots for the LootRouletteCard component.
 export const lootCard = tv({
   slots: {
-    wrapper: 'mx-4 border-[3px] border-outline border-b-[5px] rounded-xl',
+    wrapper: 'mx-4 border-tactile-sm border-outline border-b-tactile-md rounded-xl',
     root: 'overflow-hidden rounded-lg items-center gap-4',
     body: 'items-center gap-4 w-full',
     title: 'text-xl font-bold',

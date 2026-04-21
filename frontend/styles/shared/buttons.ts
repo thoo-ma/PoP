@@ -1,14 +1,18 @@
 import { tv } from 'tailwind-variants'
 
 // ── Tactile 3D Border Convention ──────────────────────────────────────────────
-// Interactive (press-down):  border-[3px] border-b-[6px] + active:border-b-[3px]
-// Passive cards:             border-[3px] border-b-[5px]
-// Static containers:         border-[3px] (uniform)
-// Light interactive:         border-2 border-b-[4px]
-// Subtle interactive:        border-2 border-b-[3px]
+// Three strict tiers; see global.css top-of-file comment.
+//   Interactive (press-down): border-tactile-sm border-b-tactile-lg
+//                             + active:border-b-tactile-sm
+//   Passive cards:            border-tactile-sm border-b-tactile-md
+//   Static containers:        border-tactile-sm (uniform)
+//
+// `border-2` (2px) is the lighter non-tactile static border tier — used by
+// dashed slots, dropdown content, and tag pills. It is intentionally separate
+// from the tactile scale and never carries a raised bottom.
 
 export const tactileButton = tv({
-  base: 'h-control-lg rounded-full border-[3px] border-outline border-b-[6px] flex-row items-center justify-center active:border-b-[3px] active:translate-y-[3px]',
+  base: 'h-control-lg rounded-full border-tactile-sm border-outline border-b-tactile-lg flex-row items-center justify-center active:border-b-tactile-sm active:translate-y-[3px]',
   variants: {
     variant: {
       //   default: 'bg-surface',
@@ -53,12 +57,15 @@ export const tactileButtonText = tv({
 })
 
 // ── Tactile nav button ────────────────────────────────────────────────────────
-// Square nav arrow button used in NFTSelector.
+// Square nav arrow button used in NFTSelector. Uses the passive-card raise
+// (border-tactile-md = 5px) over the static border-2 base; pressing collapses
+// to border-tactile-sm (3px) for a 2px translate-y delta — same press feel as
+// the legacy 4px→2px setup.
 export const tactileNavButton = tv({
   base: [
     'w-12 h-12 rounded-2xl bg-surface',
-    'border-2 border-surface-container-highest border-b-[4px]',
+    'border-2 border-surface-container-highest border-b-tactile-md',
     'flex-row items-center justify-center',
-    'active:border-b-2 active:translate-y-[2px]',
+    'active:border-b-tactile-sm active:translate-y-[2px]',
   ],
 })

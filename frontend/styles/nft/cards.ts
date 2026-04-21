@@ -32,10 +32,10 @@ export const nftDetailCard = tv({
 // border-radius WITHOUT overflow-hidden, so React Native renders the border
 // correctly at the corners (RN clips border when overflow-hidden is also set).
 export const cardWrapper = tv({
-  base: 'w-full mb-4 border-[3px] border-outline rounded-2xl flex-1',
+  base: 'w-full mb-4 border-tactile-sm border-outline rounded-2xl flex-1',
   variants: {
     border: {
-      tactile: 'border-b-[5px]',
+      tactile: 'border-b-tactile-md',
       flat: '',
     },
   },

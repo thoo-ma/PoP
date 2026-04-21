@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants'
 // correctly at the corners — wrapper carries border+radius, container clips.
 export const breedPickerCard = tv({
   slots: {
-    wrapper: 'border-[3px] border-outline rounded-xl',
+    wrapper: 'border-tactile-sm border-outline rounded-xl',
     root: 'overflow-hidden rounded-lg p-0',
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-[1.5px] border-surface',

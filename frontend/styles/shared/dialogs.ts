@@ -9,7 +9,7 @@ export const dialogBody = tv({
 // Declarative confirm dialog built in useSignOutDialog().
 export const signOutDialog = tv({
   slots: {
-    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-[3px] border-outline',
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-tactile-sm border-outline',
     buttonRow: 'flex-row gap-3',
   },
 })
