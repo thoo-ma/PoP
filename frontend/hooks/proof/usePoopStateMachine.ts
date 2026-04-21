@@ -1,4 +1,5 @@
 import { getThresholdForDifficulty } from '@pop/shared'
+import type { RefObject } from 'react'
 import { useCallback, useEffect, useReducer, useRef } from 'react'
 import type {
   ChallengeStatus,
@@ -158,7 +159,7 @@ export interface UsePoopStateMachineReturn {
   detectionError: string | null
   rateLimitError: RateLimitError | null
   /** Single-fire guard for the screen's `poopNFT` mutation; cleared on `reset()`. */
-  hasPoopedRef: React.MutableRefObject<boolean>
+  hasPoopedRef: RefObject<boolean>
   // Actions
   start: (nft: NFT) => void
   cancelCountdownOrImmobility: () => void
