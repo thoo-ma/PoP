@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { phaseContainer, phaseContent, phaseText, timerText } from '@/styles'
 import type { NFT } from '@/types'
@@ -10,7 +11,11 @@ type Props = {
   onCancel: () => void
 }
 
-export function CountdownPhase({ nft, countdownValue, onCancel }: Props) {
+export const CountdownPhase = memo(function CountdownPhase({
+  nft,
+  countdownValue,
+  onCancel,
+}: Props) {
   const pt = phaseText()
   return (
     <View className={phaseContainer()}>
@@ -29,4 +34,4 @@ export function CountdownPhase({ nft, countdownValue, onCancel }: Props) {
       </TactileButton>
     </View>
   )
-}
+})

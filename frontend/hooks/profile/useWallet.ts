@@ -47,15 +47,15 @@ export function useWallet() {
 
     const init = async () => {
       const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session?.user) {
         setLoading(false)
         return
       }
 
-      userId = user.id
-      await fetchBalance(user.id)
+      userId = session.user.id
+      await fetchBalance(session.user.id)
 
       // Realtime subscription so balance updates reflect immediately
       channel = supabase
@@ -87,13 +87,13 @@ export function useWallet() {
   const refetch = async () => {
     setLoading(true)
     const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) {
+      data: { session },
+    } = await supabase.auth.getSession()
+    if (!session?.user) {
       setLoading(false)
       return
     }
-    await fetchBalance(user.id)
+    await fetchBalance(session.user.id)
   }
 
   if (mock?.wallet) return mock.wallet

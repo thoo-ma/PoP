@@ -3,8 +3,8 @@ import { Card, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
-import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay, ProgressBar } from '@/components'
+import { RemoteImage } from '@/components/styled'
 import {
   cardBody,
   cardContainer,
@@ -21,8 +21,12 @@ import NFTProperties from './NFTProperties'
 
 interface NFTCardProps {
   nft: NFT
-  /** Slot for the action area below properties (list button, buy button, price row, etc.) */
-  action?: ReactNode
+  /**
+   * Slot for the action area below properties (list button, buy button, price row, etc.).
+   * Use a render-prop so call sites can wrap it in `useCallback` and keep `React.memo`
+   * effective — a `ReactNode` would change identity on every parent render.
+   */
+  action?: (nft: NFT) => ReactNode
 }
 
 export default memo(function NFTCard({ nft, action }: NFTCardProps) {
@@ -39,7 +43,11 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
       >
         {/* Image + badge overlay */}
         <Card.Header className={cardImageContainer()}>
-          <RemoteImage source={{ uri: nft.image_url }} className="w-full h-full" contentFit="cover" />
+          <RemoteImage
+            source={{ uri: nft.image_url }}
+            className="w-full h-full"
+            contentFit="cover"
+          />
           <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>
@@ -87,7 +95,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
               />
             </View>
           </View>
-          {action}
+          {action?.(nft)}
         </Card.Body>
       </Card>
     </View>

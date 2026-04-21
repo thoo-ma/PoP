@@ -1,5 +1,5 @@
 import { Button } from 'heroui-native'
-import type { ReactElement } from 'react'
+import { memo, type ReactElement } from 'react'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
 import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
@@ -18,7 +18,7 @@ type Props = {
   handlers: { onSelectNFT: () => void; onPrev: () => void; onNext: () => void; onPoop: () => void }
 }
 
-export function IdlePhase({ nft, ui, a11y, handlers }: Props) {
+export const IdlePhase = memo(function IdlePhase({ nft, ui, a11y, handlers }: Props) {
   const { nfts, selectedIndex, displayNFT } = nft
   const { buttonDisabled, buttonLabel, immobilityMessage } = ui
   const { onSelectNFT, onPrev, onNext, onPoop } = handlers
@@ -69,4 +69,4 @@ export function IdlePhase({ nft, ui, a11y, handlers }: Props) {
       </TactileButton>
     </>
   )
-}
+})

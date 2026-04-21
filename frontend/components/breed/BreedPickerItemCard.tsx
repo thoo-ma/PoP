@@ -1,4 +1,5 @@
 import { Card, PressableFeedback } from 'heroui-native'
+import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
 import { useRarityColors } from '@/hooks'
@@ -15,7 +16,7 @@ interface BreedPickerItemCardProps {
   onPress: () => void
 }
 
-export default function BreedPickerItemCard({
+export default memo(function BreedPickerItemCard({
   nft,
   disabled,
   isSelected,
@@ -44,7 +45,11 @@ export default function BreedPickerItemCard({
       <View className={s.wrapper()}>
         <Card className={s.root()} animation="disable-all">
           <View className={s.image()}>
-            <RemoteImage source={{ uri: nft.image_url }} className="w-full h-full" contentFit="cover" />
+            <RemoteImage
+              source={{ uri: nft.image_url }}
+              className="w-full h-full"
+              contentFit="cover"
+            />
             {disabled && <View className={s.disabledOverlay()} />}
             <View className={s.rarityDot()} style={{ backgroundColor: rarityColors[nft.rarity] }} />
           </View>
@@ -60,4 +65,4 @@ export default function BreedPickerItemCard({
       </View>
     </PressableFeedback>
   )
-}
+})

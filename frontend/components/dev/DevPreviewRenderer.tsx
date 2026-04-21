@@ -1108,7 +1108,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
           <View className="px-5 pt-5 w-[55%]">
             <NFTCard
               nft={nft}
-              action={
+              action={(n) => (
                 <Button
                   variant="ghost"
                   feedbackVariant="none"
@@ -1116,10 +1116,10 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                   onPress={() => {}}
                 >
                   <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
-                    Allocate {nft.stat_points} pts
+                    Allocate {n.stat_points} pts
                   </Button.Label>
                 </Button>
-              }
+              )}
             />
           </View>
         </View>
@@ -1246,9 +1246,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
           <View className="px-5 pt-5 w-[55%]">
             <NFTCard
               nft={nft}
-              action={
+              action={(n) => (
                 <View className={itemRow.root()}>
-                  <Text className={itemRow.price()}>{nft.price}</Text>
+                  <Text className={itemRow.price()}>{n.price}</Text>
                   <Button
                     variant="ghost"
                     feedbackVariant="none"
@@ -1260,7 +1260,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                     </Button.Label>
                   </Button>
                 </View>
-              }
+              )}
             />
           </View>
         </View>
@@ -1315,14 +1315,14 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
           <View className="px-5 pt-5 w-[55%]">
             <NFTCard
               nft={nft}
-              action={
+              action={(n) => (
                 <View className={itemRow.root()}>
-                  <Text className={itemRow.price()}>{nft.price}</Text>
+                  <Text className={itemRow.price()}>{n.price}</Text>
                   <TactileButton variant="outline" size="sm" onPress={() => {}}>
                     Unlist
                   </TactileButton>
                 </View>
-              }
+              )}
             />
           </View>
         </View>

@@ -58,8 +58,10 @@ export function useBreedNFT() {
           return null
         }
 
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        await queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes })
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.mysteryBoxes }),
+        ])
         return data as MysteryBox
       } catch (err) {
         logError('useBreedNFT:Breed', err)

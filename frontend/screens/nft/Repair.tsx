@@ -1,7 +1,7 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
-import { memo, useRef, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
   AlertBox,
@@ -56,30 +56,30 @@ export default memo(function Repair() {
   const rfe = repairFullEnergy()
   const ph = nftPickerPlaceholder()
 
-  const handleSelectNFT = () => {
+  const handleSelectNFT = useCallback(() => {
     if (nfts.length === 0) return
     // Start on the first NFT with energy < 100, or index 0
     const idx = nfts.findIndex((nft) => nft.energy < 100)
     setSelectedIndex(idx >= 0 ? idx : 0)
     setIsRepaired(false)
     setRepairAmount(0)
-  }
+  }, [nfts])
 
-  const handlePrev = () => {
-    if (selectedIndex === null) return
+  const handlePrev = useCallback(() => {
+    if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
-  }
+  }, [selectedIndex, nfts.length])
 
-  const handleNext = () => {
-    if (selectedIndex === null) return
+  const handleNext = useCallback(() => {
+    if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
-  }
+  }, [selectedIndex, nfts.length])
 
-  const handleRepair = async () => {
+  const handleRepair = useCallback(async () => {
     if (!selectedNFT || repairAmount === 0) return
 
     const newEnergy = currentEnergy + Math.round(repairAmount)
@@ -108,7 +108,15 @@ export default memo(function Repair() {
         },
       })
     }
-  }
+  }, [
+    selectedNFT,
+    repairAmount,
+    currentEnergy,
+    degenPercent,
+    repairNFT,
+    insufficientPoopError,
+    toast,
+  ])
 
   const handleReset = () => {
     setSelectedIndex(null)

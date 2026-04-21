@@ -5,9 +5,9 @@ import type { NFT } from '@/types'
 
 async function fetchMarketplaceListings(): Promise<NFT[]> {
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return []
+    data: { session },
+  } = await supabase.auth.getSession()
+  if (!session?.user) return []
 
   const { data, error } = await supabase
     .from('marketplace_listings')
@@ -36,7 +36,7 @@ async function fetchMarketplaceListings(): Promise<NFT[]> {
         updated_at
       )
     `)
-    .neq('seller_id', user.id)
+    .neq('seller_id', session.user.id)
     .order('listed_at', { ascending: false })
 
   if (error) throw new Error(error.message)

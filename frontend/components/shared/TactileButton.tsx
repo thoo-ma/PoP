@@ -1,5 +1,6 @@
 import type { ButtonRootProps } from 'heroui-native'
 import { Button, cn } from 'heroui-native'
+import { memo } from 'react'
 import { tactileButton, tactileButtonText } from '@/styles/shared/buttons'
 
 type TactileVariant = 'default' | 'primary' | 'outline' | 'secondary' | 'disabled'
@@ -22,7 +23,7 @@ export type TactileButtonProps = Omit<ButtonPropsNone, 'variant' | 'size' | 'fee
  * - Non-string children (Spinner, icon + Fragment, etc.) are passed through untouched so
  *   callers can manage their own label markup.
  */
-export default function TactileButton({
+export default memo(function TactileButton({
   variant = 'default',
   size = 'default',
   className,
@@ -43,4 +44,4 @@ export default function TactileButton({
       )}
     </Button>
   )
-}
+})
