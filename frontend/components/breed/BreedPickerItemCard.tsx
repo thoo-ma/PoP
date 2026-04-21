@@ -47,6 +47,7 @@ export default memo(function BreedPickerItemCard({
           <View className={s.image()}>
             <RemoteImage
               source={{ uri: nft.image_url }}
+              blurhash={nft.blurhash ?? undefined}
               className="w-full h-full"
               contentFit="cover"
             />

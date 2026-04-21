@@ -32,6 +32,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
         <>
           <RemoteImage
             source={{ uri: nft.image_url }}
+            blurhash={nft.blurhash ?? undefined}
             className={s.image()}
             contentFit="cover"
           />

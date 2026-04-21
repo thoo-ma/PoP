@@ -1,4 +1,5 @@
 import type { NFTRarity as Rarity } from '../../../shared/src/nft.ts'
+import { getNftBlurhash } from '../../../shared/src/blurhashes.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { randomType, randomName, rollStat, buildImageUrl } from '../_shared/nftHelpers.ts'
@@ -43,6 +44,7 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
       type,
       rarity,
       image_url:  buildImageUrl(type, name, rarity),
+      blurhash:   getNftBlurhash(type, name, rarity) ?? null,
       efficiency: rollStat(rarity),
       resilience: rollStat(rarity),
       comfort:    rollStat(rarity),
@@ -84,6 +86,7 @@ export async function handleOpenMysteryBox(req: Request): Promise<Response> {
       id:         created.id,
       name:       created.name,
       image_url:  created.image_url,
+      blurhash:   created.blurhash,
       type:       created.type,
       rarity:     created.rarity,
       efficiency: created.efficiency,

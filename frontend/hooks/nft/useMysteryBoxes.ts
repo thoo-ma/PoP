@@ -11,7 +11,7 @@ async function fetchMysteryBoxes(): Promise<MysteryBox[]> {
 
   const { data, error } = await supabase
     .from('mystery_boxes')
-    .select('id, rarity, image_url, opened, created_at')
+    .select('id, rarity, image_url, blurhash, opened, created_at')
     .eq('user_id', session.user.id)
     .eq('opened', false)
     .order('created_at', { ascending: false })
