@@ -77,7 +77,7 @@
  *                  (e.g. outcomePanel, lootResultPanel, repairAmountPanel)
  *   *Modal      → dialog/sheet body (e.g. statModal, signOutModal)
  *   *Frame      → small framed status/feedback element
- *                  (e.g. infoFrame, alertFrame, zoneBadgeFrame)
+ *                  (e.g. infoFrame, alertFrame)
  *   *Container  → layout wrapper, no visual frame
  *                  (e.g. screenContainer, cardContainer)
  *   *Row        → horizontal flex layout
