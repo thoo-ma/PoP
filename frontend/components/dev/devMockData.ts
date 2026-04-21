@@ -11,6 +11,7 @@ export const MOCK_NFT_READY: NFT = {
   id: 'dev-nft-ready',
   name: 'toilet_mock_ready',
   image_url: IMG('8B5CF6', 'Ready'),
+  blurhash: null,
   rarity: 'rare',
   type: 'turbo-flush',
   level: 5,
@@ -128,6 +129,7 @@ export const mockMysteryBox = (rarity: NFTRarity, _count: number): MysteryBox =>
           : 'EC4899',
     `${rarity}\nBox`,
   ),
+  blurhash: null,
   opened: false,
   created_at: '2026-01-01T00:00:00Z',
 })

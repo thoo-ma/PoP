@@ -1,4 +1,5 @@
 import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
+import { getMysteryBoxBlurhash } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
@@ -84,13 +85,19 @@ export default memo(function Vault() {
     return RARITY_ORDER.map((r) => {
       const entry = map.get(r)
       const imageUrl = entry?.box.image_url ?? `${SUPABASE_STORAGE_BASE}/mystery-boxes/${r}.jpg`
-      return { rarity: r, box: entry?.box ?? null, count: entry?.count ?? 0, imageUrl }
+      const blurhash = entry?.box.blurhash ?? getMysteryBoxBlurhash(r) ?? null
+      return { rarity: r, box: entry?.box ?? null, count: entry?.count ?? 0, imageUrl, blurhash }
     })
   }, [boxes])
 
   const boxRows = useMemo(() => {
-    const rows: { rarity: NFTRarity; box: MysteryBox | null; count: number; imageUrl: string }[][] =
-      []
+    const rows: {
+      rarity: NFTRarity
+      box: MysteryBox | null
+      count: number
+      imageUrl: string
+      blurhash: string | null
+    }[][] = []
     for (let i = 0; i < groupedBoxes.length; i += 2) {
       rows.push(groupedBoxes.slice(i, i + 2))
     }
@@ -389,6 +396,7 @@ export default memo(function Vault() {
                             rarity={group.rarity}
                             box={group.box}
                             imageUrl={group.imageUrl}
+                            blurhash={group.blurhash}
                             count={group.count}
                             action={
                               <TactileButton

@@ -19,6 +19,7 @@ async function fetchMarketplaceListings(): Promise<NFT[]> {
         id,
         name,
         image_url,
+        blurhash,
         type,
         rarity,
         efficiency,

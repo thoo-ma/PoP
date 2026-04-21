@@ -1,4 +1,5 @@
 import { BASE_WIN_PROBABILITY, PER_HOLD_INCREMENT } from '../../../shared/src/lootRoll.ts'
+import { getMysteryBoxBlurhash } from '../../../shared/src/blurhashes.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
@@ -78,10 +79,11 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     // ── Award mystery box ─────────────────────────────────────────────────────
     const rarity = 'common'
     const imageUrl = buildMysteryBoxImageUrl(rarity)
+    const blurhash = getMysteryBoxBlurhash(rarity) ?? null
 
     const { data: box, error: boxError } = await supabase
       .from('mystery_boxes')
-      .insert({ user_id: userId, rarity, image_url: imageUrl })
+      .insert({ user_id: userId, rarity, image_url: imageUrl, blurhash })
       .select('id, rarity')
       .single()
 

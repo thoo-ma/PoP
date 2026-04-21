@@ -1,5 +1,6 @@
 import { RARITY_RANK, type NFTRarity as Rarity } from '../../../shared/src/nft.ts'
 import type { Tables } from '../../../shared/src/database.types.ts'
+import { getMysteryBoxBlurhash } from '../../../shared/src/blurhashes.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES, type BreedPairKey } from '../../../shared/src/breedProbabilities.ts'
 import { breedCost, BREED_MAX_COUNT } from '../../../shared/src/currency.ts'
@@ -139,6 +140,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
       user_id:   userId,
       rarity:    offspringRarity,
       image_url: buildMysteryBoxImageUrl(offspringRarity),
+      blurhash:  getMysteryBoxBlurhash(offspringRarity) ?? null,
       opened:    false,
     }
 
@@ -187,6 +189,7 @@ export async function handleBreedNfts(req: Request): Promise<Response> {
       id:           created.id,
       rarity:       created.rarity,
       image_url:    created.image_url,
+      blurhash:     created.blurhash,
       opened:       created.opened,
       created_at:   created.created_at,
       poop_spent:   chargedAmount,

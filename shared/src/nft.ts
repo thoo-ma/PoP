@@ -26,6 +26,7 @@ export type MysteryBox = {
   id: string
   rarity: NFTRarity
   image_url: string
+  blurhash: string | null
   opened: boolean
   created_at: string
 }

@@ -45,6 +45,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
         <Card.Header className={cardImageContainer()}>
           <RemoteImage
             source={{ uri: nft.image_url }}
+            blurhash={nft.blurhash ?? undefined}
             className="w-full h-full"
             contentFit="cover"
           />

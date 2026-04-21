@@ -296,6 +296,7 @@ import { canBreed } from '@/utils'
                 rarity={breedResult.rarity}
                 box={breedResult}
                 imageUrl={breedResult.image_url}
+                blurhash={breedResult.blurhash}
               />
 
               <TactileButton

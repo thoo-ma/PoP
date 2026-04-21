@@ -24,7 +24,12 @@ export default memo(function NFTDetailCard({ nft, energy }: NFTDetailCardProps) 
         accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.type ?? 'unknown'} type`}
       >
         <Card.Header className={cardImageContainer({ className: 'aspect-auto' })}>
-          <RemoteImage source={{ uri: nft.image_url }} className={s.image()} contentFit="cover" />
+          <RemoteImage
+            source={{ uri: nft.image_url }}
+            blurhash={nft.blurhash ?? undefined}
+            className={s.image()}
+            contentFit="cover"
+          />
           <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>

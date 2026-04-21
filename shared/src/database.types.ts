@@ -106,6 +106,7 @@ export type Database = {
       }
       mystery_boxes: {
         Row: {
+          blurhash: string | null
           created_at: string
           id: string
           image_url: string
@@ -114,6 +115,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          blurhash?: string | null
           created_at?: string
           id?: string
           image_url: string
@@ -122,6 +124,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          blurhash?: string | null
           created_at?: string
           id?: string
           image_url?: string
@@ -165,6 +168,7 @@ export type Database = {
       }
       nfts: {
         Row: {
+          blurhash: string | null
           breed_count: number
           comfort: number
           created_at: string
@@ -185,6 +189,7 @@ export type Database = {
           xp: number
         }
         Insert: {
+          blurhash?: string | null
           breed_count?: number
           comfort: number
           created_at?: string
@@ -205,6 +210,7 @@ export type Database = {
           xp?: number
         }
         Update: {
+          blurhash?: string | null
           breed_count?: number
           comfort?: number
           created_at?: string

@@ -45,6 +45,7 @@ export default memo(function MysteryBoxRevealModal({
           <View className={s.imageContainer()}>
             <RemoteImage
               source={{ uri: nft.image_url }}
+              blurhash={nft.blurhash ?? undefined}
               className="w-full h-full"
               contentFit="cover"
             />

@@ -3,8 +3,8 @@ import { Card, Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { View } from 'react-native'
-import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay } from '@/components'
+import { RemoteImage } from '@/components/styled'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/styles'
 
@@ -15,6 +15,8 @@ interface MysteryBoxCardProps {
   box: MysteryBox | null
   /** Image URL for the mystery box (always provided, even when count is 0). */
   imageUrl: string
+  /** Optional blurhash for the mystery-box image. */
+  blurhash?: string | null
   /** Number of boxes of this rarity. Always shown, including 0. */
   count?: number
   /** Slot for the action area below the card header (e.g. an Open button). */
@@ -25,6 +27,7 @@ export default memo(function MysteryBoxCard({
   rarity,
   box,
   imageUrl,
+  blurhash,
   count,
   action,
 }: MysteryBoxCardProps) {
@@ -38,7 +41,12 @@ export default memo(function MysteryBoxCard({
         accessibilityLabel={`Mystery box, ${rarity} rarity${count !== undefined && count > 0 ? `, quantity ${count}` : ', unavailable'}`}
       >
         <Card.Header className={cardImageContainer()}>
-          <RemoteImage source={{ uri: imageUrl }} className="w-full h-full" contentFit="cover" />
+          <RemoteImage
+            source={{ uri: imageUrl }}
+            blurhash={blurhash ?? undefined}
+            className="w-full h-full"
+            contentFit="cover"
+          />
 
           {/* Opened — top-right */}
           {box?.opened && (
