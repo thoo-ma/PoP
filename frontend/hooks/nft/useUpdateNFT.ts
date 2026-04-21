@@ -60,16 +60,16 @@ export function useUpdateNFT() {
         setError(null)
 
         const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (!user) {
+          data: { session },
+        } = await supabase.auth.getSession()
+        if (!session?.user) {
           setError('Not authenticated')
           return false
         }
 
         const { error: listError } = await supabase.from('marketplace_listings').insert({
           nft_id: nftId,
-          seller_id: user.id,
+          seller_id: session.user.id,
           price,
         })
 
@@ -84,8 +84,10 @@ export function useUpdateNFT() {
           return false
         }
 
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
+        ])
         return true
       } catch (err) {
         logError('useUpdateNFT:ListNFT', err)
@@ -105,9 +107,9 @@ export function useUpdateNFT() {
         setError(null)
 
         const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (!user) {
+          data: { session },
+        } = await supabase.auth.getSession()
+        if (!session?.user) {
           setError('Not authenticated')
           return false
         }
@@ -116,7 +118,7 @@ export function useUpdateNFT() {
           .from('marketplace_listings')
           .delete()
           .eq('nft_id', nftId)
-          .eq('seller_id', user.id)
+          .eq('seller_id', session.user.id)
 
         if (unlistError) {
           logError('useUpdateNFT:UnlistNFT', unlistError)
@@ -124,8 +126,10 @@ export function useUpdateNFT() {
           return false
         }
 
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
-        await queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings })
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
+        ])
         return true
       } catch (err) {
         logError('useUpdateNFT:UnlistNFT', err)

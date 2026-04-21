@@ -1,7 +1,8 @@
 import { Card } from 'heroui-native'
+import { memo } from 'react'
 import { View } from 'react-native'
-import { RemoteImage } from '@/components/styled'
 import { BadgeOverlay } from '@/components'
+import { RemoteImage } from '@/components/styled'
 import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, typeBadge } from '@/styles'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
@@ -13,7 +14,7 @@ interface NFTDetailCardProps {
   energy?: number
 }
 
-export default function NFTDetailCard({ nft, energy }: NFTDetailCardProps) {
+export default memo(function NFTDetailCard({ nft, energy }: NFTDetailCardProps) {
   const s = nftDetailCard()
   return (
     <View className={cardWrapper({ border: 'flat', className: 'w-70 bg-surface' })}>
@@ -46,4 +47,4 @@ export default function NFTDetailCard({ nft, energy }: NFTDetailCardProps) {
       </Card>
     </View>
   )
-}
+})

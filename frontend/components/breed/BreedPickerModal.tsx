@@ -1,6 +1,7 @@
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import type { NFTRarity } from '@pop/shared'
 import { BottomSheet } from 'heroui-native'
+import { useCallback, useMemo } from 'react'
 import { Text, useWindowDimensions } from 'react-native'
 import { pickerModal } from '@/styles'
 import type { NFT } from '@/types'
@@ -42,11 +43,34 @@ export default function BreedPickerModal({
   const { width: windowWidth } = useWindowDimensions()
   const cardWidth = (windowWidth - GRID_PADDING * 2 - GRID_GAP) / 2
 
-  const items = allNFTs.map((nft) => ({
-    nft,
-    disabled:
-      nft.id === lockedId || (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
-  }))
+  const items = useMemo(
+    () =>
+      allNFTs.map((nft) => ({
+        nft,
+        disabled:
+          nft.id === lockedId ||
+          (lockedRarity !== undefined && !canBreed(lockedRarity, nft.rarity)),
+      })),
+    [allNFTs, lockedId, lockedRarity],
+  )
+
+  const keyExtractor = useCallback((item: { nft: NFT; disabled: boolean }) => item.nft.id, [])
+
+  const renderItem = useCallback(
+    ({ item }: { item: { nft: NFT; disabled: boolean } }) => (
+      <BreedPickerItemCard
+        nft={item.nft}
+        disabled={item.disabled}
+        isSelected={lockedId !== undefined && lockedId === item.nft.id}
+        width={cardWidth}
+        onPress={() => {
+          onSelect(item.nft)
+          onDismiss()
+        }}
+      />
+    ),
+    [lockedId, cardWidth, onSelect, onDismiss],
+  )
 
   return (
     <BottomSheet
@@ -65,23 +89,12 @@ export default function BreedPickerModal({
           )}
           <BottomSheetFlatList<{ nft: NFT; disabled: boolean }>
             data={items}
-            keyExtractor={(item: { nft: NFT; disabled: boolean }) => item.nft.id}
+            keyExtractor={keyExtractor}
             numColumns={2}
             columnWrapperStyle={{ gap: GRID_GAP }}
             contentContainerStyle={{ padding: GRID_PADDING, paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }: { item: { nft: NFT; disabled: boolean } }) => (
-              <BreedPickerItemCard
-                nft={item.nft}
-                disabled={item.disabled}
-                isSelected={lockedId !== undefined && lockedId === item.nft.id}
-                width={cardWidth}
-                onPress={() => {
-                  onSelect(item.nft)
-                  onDismiss()
-                }}
-              />
-            )}
+            renderItem={renderItem}
           />
         </BottomSheet.Content>
       </BottomSheet.Portal>

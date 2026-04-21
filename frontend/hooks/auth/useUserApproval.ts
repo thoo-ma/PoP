@@ -24,12 +24,12 @@ export function useUserApproval(session?: Session | null): UseUserApprovalReturn
     try {
       setLoading(true)
 
-      // Get current user
+      // Get current user from cached session (no network round-trip)
       const {
-        data: { user },
-      } = await supabase.auth.getUser()
+        data: { session },
+      } = await supabase.auth.getSession()
 
-      if (!user) {
+      if (!session?.user) {
         setApproved(null)
         setLoading(false)
         return
@@ -39,7 +39,7 @@ export function useUserApproval(session?: Session | null): UseUserApprovalReturn
       const { data, error } = await supabase
         .from('users')
         .select('approved')
-        .eq('id', user.id)
+        .eq('id', session.user.id)
         .single()
 
       if (error) {

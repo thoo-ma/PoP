@@ -1,4 +1,5 @@
 import { Avatar } from 'heroui-native'
+import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { challengeHeader } from '@/styles'
 import type { NFT } from '@/types'
@@ -8,7 +9,7 @@ type Props = {
   nft: NFT
 }
 
-export function ChallengeHeader({ nft }: Props) {
+export const ChallengeHeader = memo(function ChallengeHeader({ nft }: Props) {
   const headerStyles = challengeHeader()
   return (
     <View className={headerStyles.root()}>
@@ -24,4 +25,4 @@ export function ChallengeHeader({ nft }: Props) {
       </View>
     </View>
   )
-}
+})

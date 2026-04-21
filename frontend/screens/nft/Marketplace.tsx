@@ -117,55 +117,59 @@ export default memo(function Marketplace() {
 
   const keyExtractor = useCallback((nft: NFT) => nft.id, [])
 
+  const renderBuyAction = useCallback(
+    (nft: NFT) => (
+      <View className={itemRow.root()}>
+        <Text className={itemRow.price()}>{nft.price}</Text>
+        <TactileButton
+          variant="primary"
+          size="sm"
+          onPress={handleBuyNFT}
+          accessibilityLabel={`Buy ${formatDisplayName(nft.name)} for ${nft.price}`}
+          accessibilityHint="Purchase this NFT"
+        >
+          Buy
+        </TactileButton>
+      </View>
+    ),
+    [itemRow, handleBuyNFT],
+  )
+
   const renderMarketplaceItem = useCallback<ListRenderItem<NFT>>(
     ({ item }) => (
       <View className={grid.item()}>
-        <NFTCard
-          nft={item}
-          action={
-            <View className={itemRow.root()}>
-              <Text className={itemRow.price()}>{item.price}</Text>
-              <TactileButton
-                variant="primary"
-                size="sm"
-                onPress={handleBuyNFT}
-                accessibilityLabel={`Buy ${formatDisplayName(item.name)} for ${item.price}`}
-                accessibilityHint="Purchase this NFT"
-              >
-                Buy
-              </TactileButton>
-            </View>
-          }
-        />
+        <NFTCard nft={item} action={renderBuyAction} />
       </View>
     ),
-    [grid, itemRow, handleBuyNFT],
+    [grid, renderBuyAction],
+  )
+
+  const renderUnlistAction = useCallback(
+    (nft: NFT) => (
+      <View className={itemRow.root()}>
+        <Text className={itemRow.price()}>{nft.price}</Text>
+        <TactileButton
+          variant="outline"
+          size="sm"
+          isDisabled={updateLoading}
+          onPress={() => handleUnlist(nft.id)}
+          accessibilityLabel={`Unlist ${formatDisplayName(nft.name)}`}
+          accessibilityHint="Remove this NFT from marketplace"
+        >
+          {updateLoading ? 'Unlisting...' : 'Unlist'}
+        </TactileButton>
+      </View>
+    ),
+    [itemRow, handleUnlist, updateLoading],
   )
 
   const renderMyListingItem = useCallback<ListRenderItem<NFT>>(
     ({ item }) => (
       <View className={grid.item()}>
-        <NFTCard
-          nft={item}
-          action={
-            <View className={itemRow.root()}>
-              <Text className={itemRow.price()}>{item.price}</Text>
-              <TactileButton
-                variant="outline"
-                size="sm"
-                isDisabled={updateLoading}
-                onPress={() => handleUnlist(item.id)}
-                accessibilityLabel={`Unlist ${formatDisplayName(item.name)}`}
-                accessibilityHint="Remove this NFT from marketplace"
-              >
-                {updateLoading ? 'Unlisting...' : 'Unlist'}
-              </TactileButton>
-            </View>
-          }
-        />
+        <NFTCard nft={item} action={renderUnlistAction} />
       </View>
     ),
-    [grid, itemRow, handleUnlist, updateLoading],
+    [grid, renderUnlistAction],
   )
 
   if (userError) {

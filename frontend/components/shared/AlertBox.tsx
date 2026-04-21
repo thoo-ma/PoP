@@ -1,5 +1,5 @@
 import { Alert, cn } from 'heroui-native'
-import type { ComponentProps, ReactNode } from 'react'
+import { type ComponentProps, memo, type ReactNode } from 'react'
 
 type AlertBoxProps = {
   status: NonNullable<ComponentProps<typeof Alert>['status']>
@@ -9,7 +9,7 @@ type AlertBoxProps = {
   children?: ReactNode
 }
 
-export default function AlertBox({
+export default memo(function AlertBox({
   status,
   title,
   description,
@@ -41,4 +41,4 @@ export default function AlertBox({
       {children}
     </>
   )
-}
+})

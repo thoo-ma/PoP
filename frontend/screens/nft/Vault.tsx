@@ -2,7 +2,14 @@ import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { FlatList, type ListRenderItem, type NativeScrollEvent, type NativeSyntheticEvent, ScrollView, View } from 'react-native'
+import {
+  FlatList,
+  type ListRenderItem,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  ScrollView,
+  View,
+} from 'react-native'
 import {
   AlertBox,
   EmptyState,
@@ -195,42 +202,44 @@ export default memo(function Vault() {
 
   const keyExtractor = useCallback((nft: NFT) => nft.id, [])
 
+  const renderNftAction = useCallback(
+    (nft: NFT) => (
+      <>
+        <TactileButton
+          variant="secondary"
+          size="sm"
+          isDisabled={(nft.stat_points ?? 0) === 0}
+          onPress={() => handleOpenStatModal(nft)}
+          className="mt-1"
+          accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
+        >
+          {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
+        </TactileButton>
+        {!nft.isListed ? (
+          <TactileButton
+            variant="primary"
+            size="sm"
+            isDisabled
+            onPress={() => handleListNFT(nft.id)}
+            className="mt-1"
+            accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
+            accessibilityHint="List this NFT on the marketplace"
+          >
+            Sale
+          </TactileButton>
+        ) : undefined}
+      </>
+    ),
+    [handleOpenStatModal, handleListNFT],
+  )
+
   const renderNftItem = useCallback<ListRenderItem<NFT>>(
     ({ item: nft }) => (
       <View className={grid.item()}>
-        <NFTCard
-          nft={nft}
-          action={
-            <>
-              <TactileButton
-                variant="secondary"
-                size="sm"
-                isDisabled={(nft.stat_points ?? 0) === 0}
-                onPress={() => handleOpenStatModal(nft)}
-                className="mt-1"
-                accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
-              >
-                {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
-              </TactileButton>
-              {!nft.isListed ? (
-                <TactileButton
-                  variant="primary"
-                  size="sm"
-                  isDisabled
-                  onPress={() => handleListNFT(nft.id)}
-                  className="mt-1"
-                  accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
-                  accessibilityHint="List this NFT on the marketplace"
-                >
-                  Sale
-                </TactileButton>
-              ) : undefined}
-            </>
-          }
-        />
+        <NFTCard nft={nft} action={renderNftAction} />
       </View>
     ),
-    [grid, handleOpenStatModal, handleListNFT],
+    [grid, renderNftAction],
   )
 
   const handleNftScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
