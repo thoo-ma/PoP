@@ -21,9 +21,12 @@ export const propertyBar = tv({
       },
       detailed: {
         root: 'gap-1',
-        label: 'text-xs font-bold mb-0.5',
+        // half-step: tight label-above-bar pairing in the detailed property
+        // bar; whole-step breaks the visual grouping.
+        label: 'text-body-sm font-bold mb-0.5',
+        // half-step: matches the label-above-bar rhythm.
         barWrap: 'gap-1.5',
-        value: 'text-xs text-on-surface font-bold w-label-sm',
+        value: 'text-body-sm text-on-surface font-bold w-label-sm',
       },
     },
   },
@@ -45,9 +48,9 @@ export const propertiesWrapper = tv({
 
 // ── NFT picker placeholder ──────────────────────────────────────────────────────────
 // Empty-state text inside the picker Button when no NFT is selected.
-export const nftPickerPlaceholder = tv({
+export const nftPickerSlot = tv({
   slots: {
     icon: 'text-icon-xl mb-3 text-on-surface-variant',
-    label: 'text-base font-bold text-on-surface-variant',
+    label: 'text-body-base font-bold text-on-surface-variant',
   },
 })

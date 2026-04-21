@@ -135,13 +135,13 @@ export default function DevCatalog({
   // ── Catalog grid ───────────────────────────────────────────────────────
   return (
     <Animated.View layout={AccordionLayoutTransition} className="w-full gap-1 mb-2.5 mt-2">
-      <Text className="text-xs font-black text-outline uppercase tracking-wider text-center mb-1">
+      <Text className="text-xs font-black text-on-surface-variant uppercase tracking-wider text-center mb-1">
         Dev Catalog ({TOTAL} previews)
       </Text>
       <Accordion selectionMode="multiple" defaultValue={defaultValue} hideSeparator>
         {CATALOG.map((section, i) => (
           <Accordion.Item key={section.title} value={String(i)} className="mb-2">
-            <Accordion.Trigger className="flex-row items-center justify-between bg-surface-container-low rounded-xl px-3 py-2.5 border-2 border-outline">
+            <Accordion.Trigger className="flex-row items-center justify-between bg-surface-container-low rounded-frame px-3 py-2.5 border-2 border-outline">
               <Text className="text-xs font-black text-on-surface uppercase tracking-wider flex-1">
                 {section.title} ({section.entries.length})
               </Text>

@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import { formatConfidencePercentage } from '@/utils'
-import AlertBox from '../shared/AlertBox'
+import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -37,7 +37,7 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <AlertBox
+        <AlertFrame
           status="warning"
           title="Daily limit reached"
           description={rateLimitError.message}
@@ -51,7 +51,7 @@ export function ResultsPhase({
           >
             Done
           </TactileButton>
-        </AlertBox>
+        </AlertFrame>
       </View>
     )
   }
@@ -59,7 +59,7 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <AlertBox
+        <AlertFrame
           status="danger"
           title="Something went wrong"
           description={detectionError}
@@ -73,7 +73,7 @@ export function ResultsPhase({
           >
             Try Again
           </TactileButton>
-        </AlertBox>
+        </AlertFrame>
       </View>
     )
   }
@@ -81,7 +81,7 @@ export function ResultsPhase({
     return (
       <View className={phaseContainer()}>
         <ChallengeHeader nft={nft} />
-        <AlertBox
+        <AlertFrame
           status="danger"
           title="Flush not detected"
           description={`Confidence: ${formatConfidencePercentage(detectionResult.confidence)}`}
@@ -95,7 +95,7 @@ export function ResultsPhase({
           >
             Try Again
           </TactileButton>
-        </AlertBox>
+        </AlertFrame>
       </View>
     )
   }
@@ -109,7 +109,7 @@ export function ResultsPhase({
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
-      <AlertBox
+      <AlertFrame
         status="success"
         title="Flush confirmed!"
         description={[
@@ -140,7 +140,7 @@ export function ResultsPhase({
             Done
           </TactileButton>
         )}
-      </AlertBox>
+      </AlertFrame>
     </View>
   )
 }

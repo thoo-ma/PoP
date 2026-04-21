@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
-import AlertBox from '../shared/AlertBox'
+import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -15,7 +15,7 @@ export function PromptPhase({ nft, onStartRecording, onCancel }: Props) {
   return (
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
-      <AlertBox
+      <AlertFrame
         status="success"
         title="Immobility confirmed!"
         description="Now record the flush sound"
@@ -36,7 +36,7 @@ export function PromptPhase({ nft, onStartRecording, onCancel }: Props) {
         >
           Cancel
         </TactileButton>
-      </AlertBox>
+      </AlertFrame>
     </View>
   )
 }

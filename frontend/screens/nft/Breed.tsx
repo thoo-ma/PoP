@@ -5,7 +5,7 @@ import { Button, Skeleton, useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
-  AlertBox,
+  AlertFrame,
   BreedOutcomePanel,
   BreedParentSlot,
   BreedPickerModal,
@@ -18,7 +18,7 @@ import {
 import { RemoteImage } from '@/components/styled'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
-  breedResultSection,
+  breedResultPanel,
   breedSkeleton,
   costStrikethrough,
   errorMessage,
@@ -104,7 +104,7 @@ import { canBreed } from '@/utils'
               <View className={sk.separator()} />
               <Skeleton className={sk.parentSlot()} />
             </View>
-            <Skeleton className={sk.infoBox()} />
+            <Skeleton className={sk.infoFrame()} />
             <Skeleton className={sk.button()} />
           </ScrollView>
         </View>
@@ -142,7 +142,7 @@ import { canBreed } from '@/utils'
 
   // ── Render ────────────────────────────────────────────────────────────────
   const slotsRow = parentSlotsRow()
-  const result = breedResultSection()
+  const result = breedResultPanel()
   return (
     <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
       <BreedPickerModal
@@ -195,7 +195,7 @@ import { canBreed } from '@/utils'
                 <BreedOutcomePanel r1={parent1.rarity} r2={parent2.rarity} />
               ) : (
                 <View className="w-full mb-6">
-                  <AlertBox
+                  <AlertFrame
                     status="default"
                     description="Select both parents to see outcome probabilities"
                   />
@@ -224,7 +224,7 @@ import { canBreed } from '@/utils'
 
               {atBreedLimit && (
                 <View className="mt-4 w-full">
-                  <AlertBox
+                  <AlertFrame
                     status="warning"
                     title="Breed Limit Reached"
                     description={`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
@@ -234,7 +234,7 @@ import { canBreed } from '@/utils'
 
               {!hasEnoughPoop && (
                 <View className="mt-4 w-full">
-                  <AlertBox
+                  <AlertFrame
                     status="warning"
                     title="Insufficient POOP"
                     description={`You need ${totalBreedCost} POOP to breed.`}

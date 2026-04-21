@@ -4,7 +4,10 @@ import { tv } from 'tailwind-variants'
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
-    rail: 'flex-row bg-surface rounded-3xl px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
+    // half-step: pill height for the floating bottom nav rail; py-2 reads
+    // as a button bar, py-3 dominates the screen.
+    rail: 'flex-row bg-surface rounded-modal px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
+    // half-step: keeps the touch target wider than tall to fit five icons.
     navButton: 'px-2.5 py-1',
     iconContainer: 'items-center',
     navLabel: 'text-caption mt-1',
@@ -22,7 +25,7 @@ export const pageIndicator = tv({
 // Shared tactile-styled tab bar used by Vault and Marketplace.
 export const tactileTabs = tv({
   slots: {
-    list: 'self-center bg-surface border-tactile-sm border-outline border-b-tactile-lg rounded-full px-1 py-1',
+    list: 'self-center bg-surface border-tactile-sm border-outline border-b-tactile-lg rounded-full px-1 py-1 active:translate-y-[1px]',
     indicator: 'bg-surface-container-low border-2 border-outline rounded-full',
   },
 })
@@ -36,5 +39,5 @@ export const screenHeader = tv({
 // ── NFT selector counter ───────────────────────────────────────────────────────────
 // The "1 / 5" counter text shown between the prev / next arrows in NFTSelector.
 export const nftSelectorCounter = tv({
-  base: 'text-body-xl font-bold text-outline min-w-counter-min text-center',
+  base: 'text-body-xl font-bold text-on-surface-variant min-w-counter-min text-center',
 })

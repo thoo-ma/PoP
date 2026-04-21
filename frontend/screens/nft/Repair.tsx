@@ -4,7 +4,7 @@ import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
 import { memo, useCallback, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
-  AlertBox,
+  AlertFrame,
   DegenBar,
   NFTDetailCard,
   NFTSelector,
@@ -14,10 +14,10 @@ import {
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   costStrikethrough,
-  infoBox,
+  infoFrame,
   nftPickerButton,
-  nftPickerPlaceholder,
-  repairAmountBox,
+  nftPickerSlot,
+  repairAmountPanel,
   repairFullEnergy,
   repairSkeleton,
   screenContainer,
@@ -52,9 +52,9 @@ export default memo(function Repair() {
   const poopCost = selectedNFT
     ? repairCost(selectedNFT.level, selectedNFT.rarity, Math.round(repairAmount), MAX_ENERGY)
     : 0
-  const ra = repairAmountBox()
+  const ra = repairAmountPanel()
   const rfe = repairFullEnergy()
-  const ph = nftPickerPlaceholder()
+  const ph = nftPickerSlot()
 
   const handleSelectNFT = useCallback(() => {
     if (nfts.length === 0) return
@@ -203,7 +203,7 @@ export default memo(function Repair() {
 
                 {isRepaired && (
                   <View className="w-full">
-                    <AlertBox
+                    <AlertFrame
                       status="success"
                       title="Repair Complete!"
                       description={[
@@ -219,7 +219,7 @@ export default memo(function Repair() {
                       >
                         Repair Another NFT
                       </TactileButton>
-                    </AlertBox>
+                    </AlertFrame>
                   </View>
                 )}
               </>
@@ -229,7 +229,7 @@ export default memo(function Repair() {
           {/* Bust feedback — shown regardless of selection state */}
           {bustedResult && (
             <View className="mb-4 w-full">
-              <AlertBox
+              <AlertFrame
                 status="danger"
                 title="BUST"
                 description={`You lost ${bustedResult.poop_spent} POOP — better luck next time!`}
@@ -240,7 +240,7 @@ export default memo(function Repair() {
           {/* Repair controls — only when NFT selected, energy < max, not repaired */}
           {selectedNFT && currentEnergy < MAX_ENERGY && !isRepaired && (
             <>
-              <View className={cn(infoBox(), 'mb-5')}>
+              <View className={cn(infoFrame(), 'mb-5')}>
                 <Text className={ra.title()}>Repair Amount</Text>
                 <View className={ra.valueWrap()}>
                   <Text className={ra.value()}>+{Math.round(repairAmount)}%</Text>

@@ -6,18 +6,18 @@ import { tv } from 'tailwind-variants'
 // correctly at the corners — wrapper carries border+radius, container clips.
 export const breedPickerCard = tv({
   slots: {
-    wrapper: 'border-tactile-sm border-outline rounded-xl',
-    root: 'overflow-hidden rounded-lg p-0',
+    wrapper: 'border-tactile-sm border-outline rounded-frame',
+    root: 'overflow-hidden rounded-body p-0',
     image: 'w-full aspect-square relative',
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-hairline border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
-    info: 'px-2 pt-1.5 pb-2',
-    name: 'text-sm font-bold',
+    info: 'px-2 py-2',
+    name: 'text-body-md font-bold',
     rarity: 'text-caption font-bold capitalize',
   },
   variants: {
     disabled: {
-      true: { wrapper: 'opacity-40', name: 'text-on-surface-variant' },
+      true: { wrapper: 'opacity-disabled-heavy', name: 'text-on-surface-variant' },
       false: { wrapper: '', name: 'text-on-surface' },
     },
   },
@@ -29,6 +29,6 @@ export const breedPickerCard = tv({
 export const marketplaceItemRow = tv({
   slots: {
     root: 'flex-row justify-between items-center',
-    price: 'text-sm font-bold text-on-surface',
+    price: 'text-body-md font-bold text-on-surface',
   },
 })

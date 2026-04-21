@@ -1,4 +1,4 @@
-export { default as AlertBox } from './AlertBox'
+export { default as AlertFrame } from './AlertFrame'
 export { default as BadgeOverlay } from './BadgeOverlay'
 export { default as DegenBar } from './DegenBar'
 export { default as EmptyState } from './EmptyState'

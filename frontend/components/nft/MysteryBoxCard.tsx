@@ -34,7 +34,7 @@ export default memo(function MysteryBoxCard({
   const rarityColors = useRarityColors()
   const isEmpty = count === 0
   return (
-    <View className={cn(cardWrapper(), isEmpty && 'opacity-40')}>
+    <View className={cn(cardWrapper(), isEmpty && 'opacity-disabled-heavy')}>
       <Card
         className={cardContainer()}
         animation="disable-all"

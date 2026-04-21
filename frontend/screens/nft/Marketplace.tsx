@@ -2,7 +2,7 @@ import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from 'heroui-native
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FlatList, type ListRenderItem, Text, View } from 'react-native'
 import {
-  AlertBox,
+  AlertFrame,
   EmptyState,
   NFTCard,
   ScreenError,
@@ -236,7 +236,7 @@ export default memo(function Marketplace() {
             </View>
           ) : marketplaceError ? (
             <View className="flex-1 justify-center items-center px-6">
-              <AlertBox
+              <AlertFrame
                 status="danger"
                 title="Listings"
                 description={`Failed to load: ${marketplaceError}`}
@@ -249,7 +249,7 @@ export default memo(function Marketplace() {
                 >
                   Retry
                 </TactileButton>
-              </AlertBox>
+              </AlertFrame>
             </View>
           ) : (
             <FlatList

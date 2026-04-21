@@ -45,6 +45,52 @@
  * Text using `text-on-surface-variant` MUST pair with `font-medium` or stronger
  * (`font-bold`, `font-black`) to maintain perceived contrast. Lower weights
  * should use `text-on-surface` instead.
+ *
+ * ── Opacity convention ──────────────────────────────────────────────────────
+ * Disabled / dimmed state opacity is controlled by two semantic utilities:
+ *   opacity-disabled-light = 0.7 → buttons, controls, links in disabled state
+ *   opacity-disabled-heavy = 0.4 → cards/panels rendered as inactive/empty
+ * Do NOT introduce raw `opacity-50`, `opacity-70`, etc. for disabled UI; use
+ * the semantic tokens above so future tuning is centralised.
+ *
+ * ── Border-radius policy ────────────────────────────────────────────────────
+ * Every rounded surface MUST use a semantic `--radius-*` token. Raw
+ * `rounded-md/lg/xl/2xl/3xl` are banned in production code (recipes, screens,
+ * components). The token-to-px scale below is exhaustive — if a new radius is
+ * needed, extend the scale here, do not inline.
+ *
+ *   rounded-tag       =  6px → small overlay badge / inline tag
+ *   rounded-body      =  8px → small inner sub-frame (inside a card/panel)
+ *   rounded-thumbnail = 10px → small image / avatar
+ *   rounded-frame     = 12px → wrapper of a small framed element
+ *   rounded-inset     = 13px → card inner content area
+ *   rounded-panel     = 14px → mid-size container (parent slot, etc.)
+ *   rounded-card      = 16px → card outer / large box
+ *   rounded-modal     = 24px → full modal / sheet / nav rail
+ *   rounded-full      = circle / pill (unchanged)
+ *
+ * ── Recipe naming convention ────────────────────────────────────────────────
+ * Suffixes for tv() recipe names (use the closest semantic match):
+ *   *Card       → grid/list item, often interactive (e.g. nftDetailCard,
+ *                  breedPickerCard)
+ *   *Panel      → large framed content section
+ *                  (e.g. outcomePanel, lootResultPanel, repairAmountPanel)
+ *   *Modal      → dialog/sheet body (e.g. statModal, signOutModal)
+ *   *Frame      → small framed status/feedback element
+ *                  (e.g. infoFrame, alertFrame)
+ *   *Container  → layout wrapper, no visual frame
+ *                  (e.g. screenContainer, cardContainer)
+ *   *Row        → horizontal flex layout
+ *                  (e.g. parentSlotsRow, marketplaceItemRow)
+ *   *Slot       → placeholder or fillable position
+ *                  (e.g. parentSlot, nftPickerSlot)
+ *   *Box        → DEPRECATED: use *Frame for status, *Panel for content.
+ *
+ * ── Fractional spacing exception ────────────────────────────────────────────
+ * Half-step values (`*-0.5`, `*-1.5`, `*-2.5`) are permitted ONLY when a
+ * whole-step value would visibly break tactile-border alignment, badge
+ * proportions, or sub-pixel centering. Annotate the site with a brief
+ * `// half-step: <reason>` comment so future readers know it is intentional.
  * ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
@@ -101,11 +147,6 @@
   --color-app-mystery: #7c3aed;
   --color-app-amber: #fbbf24;
 
-  /* ── Dark scrims (modal backdrops) ──────────────────────── */
-  --color-overlay-dark: rgba(0, 0, 0, 0.5);
-  --color-overlay-dark-mid: rgba(0, 0, 0, 0.55);
-  --color-overlay-dark-heavy: rgba(0, 0, 0, 0.7);
-
   /* ── Image placeholder (loading skeleton bg) ─────────────── */
   --color-image-placeholder: #2c2c2c;
 
@@ -119,6 +160,8 @@
   --text-heading-lg: 32px;
   --text-heading-md: 26px;
   --text-heading-sm: 22px;
+  --text-heading-xs: 20px;
+  --text-body-base: 16px;
   --text-body-xl: 17px;
   --text-body-lg: 15px;
   --text-body-md: 14px;
@@ -135,10 +178,15 @@
   --spacing-control-lg: 60px;
   --spacing-control-md: 40px;
 
-  /* ── Border radius ───────────────────────────────────────── */
-  --radius-panel: 14px;
-  --radius-inset: 13px;
+  /* ── Border radius (see top-of-file policy) ──────────────── */
+  --radius-tag: 6px;
+  --radius-body: 8px;
   --radius-thumbnail: 10px;
+  --radius-frame: 12px;
+  --radius-inset: 13px;
+  --radius-panel: 14px;
+  --radius-card: 16px;
+  --radius-modal: 24px;
 
   /* ── Tactile border-width scale (see top-of-file convention) ── */
   --border-tactile-sm: 3px;
@@ -164,6 +212,10 @@
   --z-header: 99;
   --leading-modal-body: 18px;
   --tracking-otp: 0.2em;
+
+  /* ── Opacity tokens (see top-of-file policy) ─────────────── */
+  --opacity-disabled-light: 0.7;
+  --opacity-disabled-heavy: 0.4;
 }
 
 /* Bridge HeroUI Native CSS variables to Digital Atelier tokens */

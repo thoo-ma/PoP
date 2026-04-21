@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,
 // and BreedPickerModal grid items.
 // No border-radius here — the inner cardContainer's overflow-hidden + rounded-inset
-// handles corner clipping. The outer cardWrapper carries border + rounded-2xl without
+// handles corner clipping. The outer cardWrapper carries border + rounded-card without
 // overflow-hidden so React Native renders the border correctly at the corners.
 export const cardImageContainer = tv({
   base: 'w-full aspect-square relative overflow-hidden',
@@ -23,7 +23,7 @@ export const nftDetailCard = tv({
   slots: {
     image: 'w-full h-card-image bg-surface-container-low',
     body: 'p-4',
-    title: 'text-lg font-black text-center text-on-surface mb-3',
+    title: 'text-heading-xs font-black text-center text-on-surface mb-3',
   },
 })
 
@@ -32,7 +32,7 @@ export const nftDetailCard = tv({
 // border-radius WITHOUT overflow-hidden, so React Native renders the border
 // correctly at the corners (RN clips border when overflow-hidden is also set).
 export const cardWrapper = tv({
-  base: 'w-full mb-4 border-tactile-sm border-outline rounded-2xl flex-1',
+  base: 'w-full mb-4 border-tactile-sm border-outline rounded-card flex-1',
   variants: {
     border: {
       tactile: 'border-b-tactile-md',
@@ -52,7 +52,7 @@ export const cardContainer = tv({
 // ── Card title (grid card) ────────────────────────────────────────────────────
 // Small bold title used in NFTCard and MysteryBoxCard grid cards.
 export const cardTitle = tv({
-  base: 'text-sm font-bold',
+  base: 'text-body-md font-bold',
 })
 
 // ── XP bar ────────────────────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ export const cardTitle = tv({
 export const xpBar = tv({
   slots: {
     row: 'flex-row items-center mt-1',
-    label: 'text-xs font-bold w-5 text-stat-comfort',
+    label: 'text-body-sm font-bold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
   },
 })

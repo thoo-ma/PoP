@@ -25,10 +25,20 @@ import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {
   const { getUserDisplayName, user, signOut } = useAuth()
-  const { detections, daysActive, loading: statsLoading, error: statsError, refetch: refetchStats } = useProfileStats()
+  const {
+    detections,
+    daysActive,
+    loading: statsLoading,
+    error: statsError,
+    refetch: refetchStats,
+  } = useProfileStats()
   const { nfts, error: nftsError, refetch: refetchNfts } = useUserNFTs()
-  const { poopBalance, loading: walletLoading, error: walletError, refetch: refetchWallet } =
-    useWallet()
+  const {
+    poopBalance,
+    loading: walletLoading,
+    error: walletError,
+    refetch: refetchWallet,
+  } = useWallet()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [activePreview, setActivePreview] = useState<string | null>(null)
   const [activeSectionIndex, setActiveSectionIndex] = useState<number | null>(null)
@@ -113,7 +123,7 @@ export default function ProfileScreen() {
           {/* Stats */}
           <View className={p.statsRow()}>
             <View className={p.statCol()}>
-              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-md">
+              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-tag">
                 <Text className={p.statValue()}>{detections}</Text>
               </Skeleton>
               <Text className={p.statLabel()}>Detections</Text>
@@ -125,7 +135,7 @@ export default function ProfileScreen() {
             </View>
             <View className={p.statDivider()} />
             <View className={p.statCol()}>
-              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-md">
+              <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-tag">
                 <Text className={p.statValue()}>{daysActive}</Text>
               </Skeleton>
               <Text className={p.statLabel()}>Days Active</Text>
@@ -156,6 +166,7 @@ export default function ProfileScreen() {
               }
             />
           )}
+          {/* half-step mb-2.5: tighter than the section gap above to group the action with the section. */}
           <TactileButton
             variant="primary"
             className="w-full mb-2.5"

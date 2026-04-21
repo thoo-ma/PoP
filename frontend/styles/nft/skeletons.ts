@@ -4,9 +4,9 @@ import { tv } from 'tailwind-variants'
 // Placeholder shimmer lines used in Vault and Marketplace loading states.
 export const skeletonCard = tv({
   slots: {
-    image: 'aspect-square w-full rounded-xl',
-    titleLine: 'h-4 w-3/4 rounded-md mt-2',
-    subtitleLine: 'h-3 w-1/2 rounded-md mt-1',
+    image: 'aspect-square w-full rounded-frame',
+    titleLine: 'h-4 w-3/4 rounded-tag mt-2',
+    subtitleLine: 'h-3 w-1/2 rounded-tag mt-1',
   },
 })
 
@@ -16,10 +16,10 @@ export const skeletonCard = tv({
 export const breedSkeleton = tv({
   slots: {
     slotsRow: 'flex-row items-stretch justify-center mb-6 w-full',
-    parentSlot: 'flex-1 aspect-square rounded-2xl',
+    parentSlot: 'flex-1 aspect-square rounded-card',
     separator: 'w-9',
-    infoBox: 'h-20 w-full rounded-2xl mb-6',
-    button: 'h-14 w-full rounded-2xl',
+    infoFrame: 'h-20 w-full rounded-card mb-6',
+    button: 'h-14 w-full rounded-card',
   },
 })
 
@@ -28,9 +28,9 @@ export const breedSkeleton = tv({
 // slider box, and repair button shapes).
 export const repairSkeleton = tv({
   slots: {
-    pickerButton: 'h-20 w-full rounded-2xl mb-5',
-    sliderBox: 'h-28 w-full rounded-2xl mb-5',
-    button: 'h-14 w-full rounded-2xl',
+    pickerButton: 'h-20 w-full rounded-card mb-5',
+    sliderBox: 'h-28 w-full rounded-card mb-5',
+    button: 'h-14 w-full rounded-card',
   },
 })
 
@@ -39,9 +39,9 @@ export const repairSkeleton = tv({
 // rarity/count chip row, and open-button shape).
 export const mysteryBoxSkeleton = tv({
   slots: {
-    image: 'aspect-square w-full rounded-xl',
+    image: 'aspect-square w-full rounded-frame',
     chipsRow: 'flex-row gap-2 mt-2',
     chip: 'h-6 w-16 rounded-full',
-    button: 'h-10 w-full rounded-2xl mt-2',
+    button: 'h-10 w-full rounded-card mt-2',
   },
 })

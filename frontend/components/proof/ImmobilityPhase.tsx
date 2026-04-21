@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native'
 import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
 import type { ChallengeStatus, NFT } from '@/types'
-import AlertBox from '../shared/AlertBox'
+import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -27,7 +27,7 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
             <Text className={warningBadge.label()}>Movement detected!</Text>
           </View>
         ) : (
-          <AlertBox status="success" title="Hold still" />
+          <AlertFrame status="success" title="Hold still" />
         )}
       </View>
       <TactileButton
