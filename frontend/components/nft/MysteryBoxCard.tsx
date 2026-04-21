@@ -46,6 +46,7 @@ export default memo(function MysteryBoxCard({
             blurhash={blurhash ?? undefined}
             className="w-full h-full"
             contentFit="cover"
+            accessible={false}
           />
 
           {/* Opened — top-right */}

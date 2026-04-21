@@ -26,7 +26,7 @@ export default memo(function AlertFrame({
 
   return (
     <>
-      <Alert status={status} className={cn(s.root(), className)}>
+      <Alert status={status} className={cn(s.root(), className)} accessibilityLiveRegion="polite">
         <Alert.Indicator />
         <Alert.Content>
           {title && <Alert.Title className={s.title()}>{title}</Alert.Title>}

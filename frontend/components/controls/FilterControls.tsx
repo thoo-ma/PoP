@@ -134,6 +134,7 @@ function FilterControls({
           variant="secondary"
           onPress={() => setShowFilters(!showFilters)}
           accessibilityLabel="Toggle filters"
+          accessibilityState={{ expanded: showFilters }}
         >
           {`Filters${activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}`}
         </TactileButton>

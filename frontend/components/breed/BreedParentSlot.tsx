@@ -41,6 +41,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
             blurhash={nft.blurhash ?? undefined}
             className={s.image()}
             contentFit="cover"
+            accessible={false}
           />
           <View className={s.info()}>
             <Text className={s.name()} numberOfLines={1}>
