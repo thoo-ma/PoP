@@ -9,17 +9,8 @@ export const dialogBody = tv({
 // Declarative confirm dialog built in useSignOutDialog().
 export const signOutDialog = tv({
   slots: {
-    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-[3px] border-outline',
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-tactile-sm border-outline',
     buttonRow: 'flex-row gap-3',
-  },
-})
-
-// ── Dialog panel ─────────────────────────────────────────────────────────────
-// Shared Dialog.Content + Dialog.Close styling for Profile and Wallet modals.
-export const dialogPanel = tv({
-  slots: {
-    content: 'mx-auto w-[85%] max-w-dialog-max rounded-3xl px-8 py-8 items-center',
-    close: 'absolute top-4 right-4',
   },
 })
 

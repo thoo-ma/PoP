@@ -15,8 +15,8 @@ export const authScreen = tv({
     footer: 'flex-row justify-center gap-6',
     footerLink: 'border-b border-outline pb-0.5',
     footerLinkText: 'text-caption font-black text-outline uppercase tracking-wider',
-    fieldError: 'text-primary text-center mt-3 font-bold',
+    fieldError: 'text-danger text-center mt-3 font-bold',
     codeInput:
-      'h-16 w-full bg-surface-container-low border-[3px] border-surface-container-highest focus:border-outline rounded-2xl text-center text-heading-md font-black tracking-otp text-on-surface uppercase',
+      'h-16 w-full bg-surface-container-low border-tactile-sm border-surface-container-highest focus:border-outline rounded-2xl text-center text-heading-md font-black tracking-otp text-on-surface uppercase',
   },
 })

@@ -1,5 +1,6 @@
 import { Alert, cn } from 'heroui-native'
 import { type ComponentProps, memo, type ReactNode } from 'react'
+import { alertBox } from '@/styles'
 
 type AlertBoxProps = {
   status: NonNullable<ComponentProps<typeof Alert>['status']>
@@ -16,6 +17,7 @@ export default memo(function AlertBox({
   className,
   children,
 }: AlertBoxProps) {
+  const s = alertBox()
   const descriptions: string[] = description
     ? Array.isArray(description)
       ? (description.filter(Boolean) as string[])
@@ -24,15 +26,12 @@ export default memo(function AlertBox({
 
   return (
     <>
-      <Alert
-        status={status}
-        className={cn('w-full rounded-2xl border-[3px] border-outline border-b-[5px]', className)}
-      >
+      <Alert status={status} className={cn(s.root(), className)}>
         <Alert.Indicator />
         <Alert.Content>
-          {title && <Alert.Title className="font-black">{title}</Alert.Title>}
+          {title && <Alert.Title className={s.title()}>{title}</Alert.Title>}
           {descriptions.map((desc) => (
-            <Alert.Description key={desc} className="font-bold">
+            <Alert.Description key={desc} className={s.description()}>
               {desc}
             </Alert.Description>
           ))}

@@ -825,7 +825,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'poop:no-nfts')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className="flex-1 bg-background items-center pt-[100px] px-5">
+        <View className="flex-1 bg-background items-center pt-screen-top-md px-5">
           <IdlePhase
             nft={{ nfts: [], selectedIndex: null, displayNFT: null }}
             ui={{ buttonDisabled: true, buttonLabel: 'Poop', immobilityMessage: null }}
@@ -844,7 +844,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'poop:idle-ready')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className="flex-1 bg-background items-center pt-[100px] px-5">
+        <View className="flex-1 bg-background items-center pt-screen-top-md px-5">
           <IdlePhase
             nft={{ nfts: [MOCK_NFT_READY], selectedIndex: 0, displayNFT: MOCK_NFT_READY }}
             ui={{ buttonDisabled: false, buttonLabel: 'Poop', immobilityMessage: null }}
@@ -863,7 +863,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'poop:idle-cooldown')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className="flex-1 bg-background items-center pt-[100px] px-5">
+        <View className="flex-1 bg-background items-center pt-screen-top-md px-5">
           <IdlePhase
             nft={{ nfts: [MOCK_NFT_COOLDOWN], selectedIndex: 0, displayNFT: MOCK_NFT_COOLDOWN }}
             ui={{ buttonDisabled: true, buttonLabel: 'On Cooldown', immobilityMessage: null }}
@@ -882,7 +882,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   if (key === 'poop:idle-no-energy')
     return (
       <PreviewShell onBack={dismiss}>
-        <View className="flex-1 bg-background items-center pt-[100px] px-5">
+        <View className="flex-1 bg-background items-center pt-screen-top-md px-5">
           <IdlePhase
             nft={{ nfts: [MOCK_NFT_NO_ENERGY], selectedIndex: 0, displayNFT: MOCK_NFT_NO_ENERGY }}
             ui={{ buttonDisabled: true, buttonLabel: 'No Energy', immobilityMessage: null }}
@@ -1225,7 +1225,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-          <View className="py-15 w-full px-5">
+          <View className="py-screen-top-sm w-full px-5">
             <AlertBox
               status="warning"
               title="No active listings"
@@ -1334,7 +1334,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
-          <View className="py-15 w-full px-5">
+          <View className="py-screen-top-sm w-full px-5">
             <AlertBox
               status="default"
               title="No listings"

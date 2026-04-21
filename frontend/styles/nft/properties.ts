@@ -7,7 +7,7 @@ import { tv } from 'tailwind-variants'
 export const propertyBar = tv({
   slots: {
     root: '',
-    label: 'text-on-surface-variant',
+    label: 'text-on-surface-variant font-bold',
     barWrap: 'flex-row items-center',
     value: 'text-right font-bold',
   },
@@ -17,7 +17,7 @@ export const propertyBar = tv({
         root: 'flex-row items-center justify-between',
         label: 'text-caption-sm w-label-md mr-1',
         barWrap: 'flex-1 gap-1',
-        value: 'text-caption-sm text-on-surface-variant w-5',
+        value: 'text-caption-sm text-on-surface-variant w-5 font-bold',
       },
       detailed: {
         root: 'gap-1',

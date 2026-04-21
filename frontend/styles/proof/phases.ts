@@ -11,7 +11,7 @@ export const phaseContainer = tv({
 // The NFT info row shown at the top of every active game phase.
 export const challengeHeader = tv({
   slots: {
-    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-[3px] border-outline gap-3',
+    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-tactile-sm border-outline gap-3',
     avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
     info: 'flex-1',
     name: 'text-body-lg font-black text-on-surface mb-0.5',
@@ -73,7 +73,7 @@ export const degenBar = tv({
     headerRow: 'flex-row items-center justify-between mb-3',
     title: 'text-base font-bold text-on-surface',
     zoneBadge: 'px-2 py-0.5 rounded-full',
-    zoneBadgeLabel: 'text-xs font-bold text-white',
+    zoneBadgeLabel: 'text-xs font-bold text-on-primary',
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
@@ -94,7 +94,7 @@ export const degenBar = tv({
       degen: {
         zoneBadge: 'bg-app-error',
         sliderFill: 'bg-app-error',
-        bustValue: 'text-app-error',
+        bustValue: 'text-danger',
       },
     },
   },

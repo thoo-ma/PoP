@@ -295,7 +295,7 @@ export default memo(function Poop() {
             className="bg-background"
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
-              'flex-grow items-center pt-[100px]',
+              'flex-grow items-center pt-screen-top-md',
             )}
             showsVerticalScrollIndicator={false}
           >
@@ -358,7 +358,7 @@ export default memo(function Poop() {
             className="flex-1 bg-background"
             contentContainerClassName={cn(
               scrollContent({ padding: 'md', bottomPad: 'withHeader' }),
-              'flex-grow items-center pt-[100px]',
+              'flex-grow items-center pt-screen-top-md',
             )}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"

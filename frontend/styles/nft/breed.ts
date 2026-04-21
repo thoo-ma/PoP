@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 // Tappable NFT slot card used in the Breed screen (filled and empty states).
 export const parentSlot = tv({
   slots: {
-    root: 'flex-1 rounded-panel border-[3px] border-outline overflow-hidden bg-surface',
+    root: 'flex-1 rounded-panel border-tactile-sm border-outline overflow-hidden bg-surface',
     image: 'w-full aspect-square',
     info: 'p-2 pb-1',
     name: 'text-body-sm font-black text-on-surface mb-1',
@@ -21,7 +21,7 @@ export const parentSlot = tv({
 // Read-only probability breakdown card shown after both parents are selected.
 export const outcomePanel = tv({
   slots: {
-    wrapper: 'w-full mb-5 border-[3px] border-outline rounded-xl',
+    wrapper: 'w-full mb-5 border-tactile-sm border-outline rounded-xl',
     root: 'overflow-hidden rounded-lg',
     body: 'px-4 py-1.5',
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
@@ -57,5 +57,5 @@ export const breedResultSection = tv({
 // ── Cost strikethrough ────────────────────────────────────────────────────────
 // Inline strikethrough text for the original cost inside action button labels.
 export const costStrikethrough = tv({
-  base: 'line-through text-on-surface-variant',
+  base: 'line-through text-on-surface-variant font-bold',
 })

@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
-    rail: 'flex-row bg-surface rounded-3xl px-4 py-2.5 gap-1 border-[3px] border-outline border-b-[6px]',
+    rail: 'flex-row bg-surface rounded-3xl px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
     navButton: 'px-2.5 py-1',
     iconContainer: 'items-center',
     navLabel: 'text-caption mt-1',
@@ -22,7 +22,7 @@ export const pageIndicator = tv({
 // Shared tactile-styled tab bar used by Vault and Marketplace.
 export const tactileTabs = tv({
   slots: {
-    list: 'self-center bg-surface border-[3px] border-outline border-b-[6px] rounded-full px-1 py-1',
+    list: 'self-center bg-surface border-tactile-sm border-outline border-b-tactile-lg rounded-full px-1 py-1',
     indicator: 'bg-surface-container-low border-2 border-outline rounded-full',
   },
 })

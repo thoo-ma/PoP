@@ -12,7 +12,7 @@ export const screenTitle = tv({
 })
 
 export const badgeLabel = tv({
-  base: 'text-white font-bold',
+  base: 'text-on-primary font-bold',
   variants: {
     size: {
       base: 'text-sm',
