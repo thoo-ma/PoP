@@ -4,8 +4,8 @@ import { tv } from 'tailwind-variants'
 // Layout slots for the LootRouletteCard component.
 export const lootPanel = tv({
   slots: {
-    wrapper: 'mx-4 border-tactile-sm border-outline border-b-tactile-md rounded-xl',
-    root: 'overflow-hidden rounded-lg items-center gap-4',
+    wrapper: 'mx-4 border-tactile-sm border-outline border-b-tactile-md rounded-frame',
+    root: 'overflow-hidden rounded-body items-center gap-4',
     body: 'items-center gap-4 w-full',
     title: 'text-heading-xs font-bold',
     chanceValue: 'font-bold text-stat-luck',
@@ -20,7 +20,7 @@ export const lootPanel = tv({
 // Won / lost outcome panel shown after a loot roll.
 export const lootResultPanel = tv({
   slots: {
-    root: 'items-center gap-2 rounded-xl py-4 px-6 w-full',
+    root: 'items-center gap-2 rounded-frame py-4 px-6 w-full',
     title: 'text-center',
     body: 'text-body-base text-center',
   },

@@ -68,5 +68,5 @@ export const gridLayout = tv({
 // The dashed-border "Select NFT from Vault" placeholder shown in Poop and
 // Repair before the user picks an NFT.
 export const nftPickerButton = tv({
-  base: 'w-nft-picker-w h-nft-picker-h rounded-2xl border-2 border-dashed border-outline flex-col',
+  base: 'w-nft-picker-w h-nft-picker-h rounded-card border-2 border-dashed border-outline flex-col',
 })

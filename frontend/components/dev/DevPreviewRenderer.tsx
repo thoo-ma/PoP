@@ -157,7 +157,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <Text className={p.email()}>jane@example.com</Text>
             <View className={p.statsRow()}>
               <View className={p.statCol()}>
-                <Skeleton isLoading className="h-6 w-12 rounded-md">
+                <Skeleton isLoading className="h-6 w-12 rounded-tag">
                   <Text className={p.statValue()}>—</Text>
                 </Skeleton>
                 <Text className={p.statLabel()}>Detections</Text>
@@ -169,7 +169,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               </View>
               <View className={p.statDivider()} />
               <View className={p.statCol()}>
-                <Skeleton isLoading className="h-6 w-12 rounded-md">
+                <Skeleton isLoading className="h-6 w-12 rounded-tag">
                   <Text className={p.statValue()}>—</Text>
                 </Skeleton>
                 <Text className={p.statLabel()}>Days Active</Text>
@@ -304,7 +304,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <View className={s.logoWrap()}>
               <Image
                 source={require('@/assets/icon.png')}
-                className="w-16 h-16 rounded-2xl"
+                className="w-16 h-16 rounded-card"
                 contentFit="contain"
               />
             </View>
@@ -350,7 +350,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <View className={s.logoWrap()}>
               <Image
                 source={require('@/assets/icon.png')}
-                className="w-16 h-16 rounded-2xl"
+                className="w-16 h-16 rounded-card"
                 contentFit="contain"
               />
             </View>
@@ -402,7 +402,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <View className={s.logoWrap()}>
               <Image
                 source={require('@/assets/icon.png')}
-                className="w-16 h-16 rounded-2xl"
+                className="w-16 h-16 rounded-card"
                 contentFit="contain"
               />
             </View>

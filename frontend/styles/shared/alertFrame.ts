@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 // composition: root carries the tactile border, title/description set weight.
 export const alertFrame = tv({
   slots: {
-    root: 'w-full rounded-2xl border-tactile-sm border-outline border-b-tactile-md',
+    root: 'w-full rounded-card border-tactile-sm border-outline border-b-tactile-md',
     title: 'font-black',
     description: 'font-bold',
   },

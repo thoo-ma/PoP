@@ -26,8 +26,8 @@ export const parentSlot = tv({
 // Read-only probability breakdown card shown after both parents are selected.
 export const outcomePanel = tv({
   slots: {
-    wrapper: 'w-full mb-5 border-tactile-sm border-outline rounded-xl',
-    root: 'overflow-hidden rounded-lg',
+    wrapper: 'w-full mb-5 border-tactile-sm border-outline rounded-frame',
+    root: 'overflow-hidden rounded-body',
     body: 'px-4 py-1.5',
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
     row: 'flex-row items-center mb-1 gap-2',
@@ -53,7 +53,7 @@ export const breedResultPanel = tv({
     root: 'items-center w-full',
     title: 'text-heading-md font-black text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
-    parentImage: 'size-thumbnail rounded-lg border border-outline',
+    parentImage: 'size-thumbnail rounded-body border border-outline',
     multiplyText: 'text-heading-xs text-on-surface-variant font-bold',
     arrowText: 'text-heading-sm text-on-surface font-bold',
   },

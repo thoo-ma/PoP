@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 export const pageIndicator = tv({
   slots: {
     wrapper: 'absolute bottom-10 left-0 right-0 flex-row justify-center items-center',
-    rail: 'flex-row bg-surface rounded-3xl px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
+    rail: 'flex-row bg-surface rounded-modal px-4 py-2.5 gap-1 border-tactile-sm border-outline border-b-tactile-lg',
     navButton: 'px-2.5 py-1',
     iconContainer: 'items-center',
     navLabel: 'text-caption mt-1',

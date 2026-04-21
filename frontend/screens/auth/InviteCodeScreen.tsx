@@ -83,7 +83,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
           <View className={s.logoWrap()}>
             <Image
               source={require('@/assets/icon.png')}
-              className="w-16 h-16 rounded-2xl"
+              className="w-16 h-16 rounded-card"
               contentFit="contain"
             />
           </View>
