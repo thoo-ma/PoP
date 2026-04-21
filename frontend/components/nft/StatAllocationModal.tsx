@@ -125,6 +125,8 @@ export default memo(function StatAllocationModal({
                 value={current + delta}
                 onChange={(v) => handleSliderChange(key, v)}
                 isDisabled={sliderMax <= current}
+                accessibilityLabel={`${label} stat`}
+                accessibilityValue={{ min: current, max: sliderMax, now: current + delta }}
               >
                 <Slider.Track>
                   <Slider.Fill />
