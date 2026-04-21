@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native'
 import {
-  AlertBox,
+  AlertFrame,
   EmptyState,
   FilterControls,
   MysteryBoxCard,
@@ -356,7 +356,7 @@ export default memo(function Vault() {
             </View>
           ) : boxesError ? (
             <View className="flex-1 justify-center items-center px-6">
-              <AlertBox
+              <AlertFrame
                 status="danger"
                 title="Mystery Boxes"
                 description={`Failed to load: ${boxesError}`}
@@ -369,7 +369,7 @@ export default memo(function Vault() {
                 >
                   Retry
                 </TactileButton>
-              </AlertBox>
+              </AlertFrame>
             </View>
           ) : (
             <ScrollView

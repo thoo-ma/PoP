@@ -43,3 +43,12 @@ export const pickerModal = tv({
     helpText: 'text-body-md text-on-surface-variant px-5 pt-2.5 pb-1 leading-modal-body font-bold',
   },
 })
+
+// ── Sign-out confirmation modal ──────────────────────────────────────────────
+// Declarative confirm modal built in useSignOutDialog().
+export const signOutModal = tv({
+  slots: {
+    content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 border-tactile-sm border-outline',
+    buttonRow: 'flex-row gap-3',
+  },
+})

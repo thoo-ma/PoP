@@ -2,7 +2,7 @@ import { calcBustChance, calcReducedCost, calcReduction, DEGEN_ZONE_THRESHOLD } 
 import { cn, Separator, Slider } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
-import { degenBar, infoBox } from '@/styles'
+import { degenBar, infoFrame } from '@/styles'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -40,7 +40,7 @@ export default function DegenBar({ baseCost, onDegenChange, disabled = false }: 
   }
 
   return (
-    <View className={cn(infoBox(), 'mb-5')}>
+    <View className={cn(infoFrame(), 'mb-5')}>
       {/* Header row */}
       <View className={s.headerRow()}>
         <Text className={s.title()}>Degen Bar</Text>

@@ -13,7 +13,7 @@ import {
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 import {
-  AlertBox,
+  AlertFrame,
   BreedOutcomePanel,
   BreedParentSlot,
   CountdownPhase,
@@ -38,18 +38,18 @@ import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
   authScreen,
-  breedResultSection,
+  breedResultPanel,
   dialogBody,
   dialogFooter,
   gridLayout,
-  infoBox,
+  infoFrame,
   marketplaceItemRow,
   parentSlotsRow,
   profileModal,
-  repairAmountBox,
+  repairAmountPanel,
   repairFullEnergy,
   screenContainer,
-  signOutDialog,
+  signOutModal,
   skeletonCard,
   tactileButton,
   tactileButtonText,
@@ -235,7 +235,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   }
 
   if (key === 'profile:sign-out-dialog') {
-    const s = signOutDialog()
+    const s = signOutModal()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
@@ -542,7 +542,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
             <View className="mt-4 w-full">
-              <AlertBox
+              <AlertFrame
                 status="warning"
                 title="Breed Limit Reached"
                 description={`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
@@ -583,7 +583,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
             <View className="mt-4 w-full">
-              <AlertBox
+              <AlertFrame
                 status="warning"
                 title="Insufficient POOP"
                 description={`You need ${cost} POOP to breed.`}
@@ -632,7 +632,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'breed:result') {
     const box = mockMysteryBox('rare', 1)
-    const result = breedResultSection()
+    const result = breedResultPanel()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
@@ -710,13 +710,13 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
 
   if (key === 'repair:nft-selected') {
     const nft = { ...MOCK_NFT_READY, energy: 40 }
-    const ra = repairAmountBox()
+    const ra = repairAmountPanel()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5">
             <NFTDetailCard nft={nft} energy={nft.energy + 30} />
-            <View className={cn(infoBox(), 'mb-5 mt-5')}>
+            <View className={cn(infoFrame(), 'mb-5 mt-5')}>
               <Text className={ra.title()}>Repair Amount</Text>
               <View className={ra.valueWrap()}>
                 <Text className={ra.value()}>+30%</Text>
@@ -769,7 +769,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5">
             <View className="w-full">
-              <AlertBox
+              <AlertFrame
                 status="success"
                 title="Repair Complete!"
                 description={['Energy: 100%', '-42 POOP spent']}
@@ -784,7 +784,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                     Repair Another NFT
                   </Button.Label>
                 </Button>
-              </AlertBox>
+              </AlertFrame>
             </View>
           </View>
         </View>
@@ -1080,7 +1080,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="flex-1 justify-center items-center px-6">
-            <AlertBox
+            <AlertFrame
               status="danger"
               title="Mystery Boxes"
               description="Failed to load: Network error"
@@ -1093,7 +1093,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               >
                 Retry
               </TactileButton>
-            </AlertBox>
+            </AlertFrame>
           </View>
         </View>
       </PreviewShell>
@@ -1132,7 +1132,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="flex-1 justify-center items-center px-6">
-            <AlertBox
+            <AlertFrame
               status="warning"
               title="No NFTs"
               description="You don't own any NFTs yet. Mint one to get started!"
@@ -1226,7 +1226,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="py-screen-top-sm w-full px-5">
-            <AlertBox
+            <AlertFrame
               status="warning"
               title="No active listings"
               description="You haven't listed any NFTs yet."
@@ -1335,7 +1335,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
           <View className="py-screen-top-sm w-full px-5">
-            <AlertBox
+            <AlertFrame
               status="default"
               title="No listings"
               description="There are no NFTs listed on the marketplace right now."

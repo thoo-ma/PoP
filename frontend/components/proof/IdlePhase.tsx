@@ -2,9 +2,9 @@ import { Button } from 'heroui-native'
 import { memo, type ReactElement } from 'react'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
-import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
+import { nftPickerButton, nftPickerSlot } from '@/styles'
 import type { NFT } from '@/types'
-import AlertBox from '../shared/AlertBox'
+import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 
 type Props = {
@@ -22,11 +22,11 @@ export const IdlePhase = memo(function IdlePhase({ nft, ui, a11y, handlers }: Pr
   const { nfts, selectedIndex, displayNFT } = nft
   const { buttonDisabled, buttonLabel, immobilityMessage } = ui
   const { onSelectNFT, onPrev, onNext, onPoop } = handlers
-  const ph = nftPickerPlaceholder()
+  const ph = nftPickerSlot()
   return (
     <>
       {immobilityMessage && (
-        <AlertBox status="warning" description={immobilityMessage} className="mb-2" />
+        <AlertFrame status="warning" description={immobilityMessage} className="mb-2" />
       )}
 
       <View className="w-full items-center mb-5">

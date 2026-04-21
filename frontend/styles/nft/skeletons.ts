@@ -18,7 +18,7 @@ export const breedSkeleton = tv({
     slotsRow: 'flex-row items-stretch justify-center mb-6 w-full',
     parentSlot: 'flex-1 aspect-square rounded-2xl',
     separator: 'w-9',
-    infoBox: 'h-20 w-full rounded-2xl mb-6',
+    infoFrame: 'h-20 w-full rounded-2xl mb-6',
     button: 'h-14 w-full rounded-2xl',
   },
 })

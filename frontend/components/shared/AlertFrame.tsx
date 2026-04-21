@@ -1,8 +1,8 @@
 import { Alert, cn } from 'heroui-native'
 import { type ComponentProps, memo, type ReactNode } from 'react'
-import { alertBox } from '@/styles'
+import { alertFrame } from '@/styles'
 
-type AlertBoxProps = {
+type AlertFrameProps = {
   status: NonNullable<ComponentProps<typeof Alert>['status']>
   title?: string
   description?: string | (string | false | null | undefined)[]
@@ -10,14 +10,14 @@ type AlertBoxProps = {
   children?: ReactNode
 }
 
-export default memo(function AlertBox({
+export default memo(function AlertFrame({
   status,
   title,
   description,
   className,
   children,
-}: AlertBoxProps) {
-  const s = alertBox()
+}: AlertFrameProps) {
+  const s = alertFrame()
   const descriptions: string[] = description
     ? Array.isArray(description)
       ? (description.filter(Boolean) as string[])

@@ -45,7 +45,7 @@ export const propertiesWrapper = tv({
 
 // ── NFT picker placeholder ──────────────────────────────────────────────────────────
 // Empty-state text inside the picker Button when no NFT is selected.
-export const nftPickerPlaceholder = tv({
+export const nftPickerSlot = tv({
   slots: {
     icon: 'text-icon-xl mb-3 text-on-surface-variant',
     label: 'text-body-base font-bold text-on-surface-variant',

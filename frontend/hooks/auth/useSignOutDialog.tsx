@@ -2,7 +2,7 @@ import { cn, Dialog } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
 import { TactileButton } from '@/components'
-import { dialogBody, signOutDialog, tactileButton } from '@/styles'
+import { dialogBody, signOutModal, tactileButton } from '@/styles'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -25,7 +25,7 @@ export function useSignOutDialog() {
     }
   }
 
-  const s = signOutDialog()
+  const s = signOutModal()
   const dialog = (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Portal>

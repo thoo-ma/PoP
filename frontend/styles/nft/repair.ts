@@ -2,7 +2,7 @@ import { tv } from 'tailwind-variants'
 
 // ── Repair screen ─────────────────────────────────────────────────────────────
 // Amount slider box inner elements.
-export const repairAmountBox = tv({
+export const repairAmountPanel = tv({
   slots: {
     title: 'text-body-base font-bold text-on-surface mb-3',
     valueWrap: 'items-center mb-2',

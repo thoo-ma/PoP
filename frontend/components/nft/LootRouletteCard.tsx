@@ -3,7 +3,7 @@ import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
 import type { RollLootResult } from '@/hooks'
 import { useRollLoot } from '@/hooks'
-import { lootCard, lootResultPanel } from '@/styles'
+import { lootPanel, lootResultPanel } from '@/styles'
 import TactileButton from '../shared/TactileButton'
 
 const MAX_HOLDS = 3
@@ -30,7 +30,7 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
   const [result, setResult] = useState<RollLootResult | null>(null)
   const [err, setErr] = useState<string | null>(null)
 
-  const cardStyles = lootCard()
+  const cardStyles = lootPanel()
   const wonStyles = lootResultPanel({ status: 'won' })
   const lostStyles = lootResultPanel({ status: 'lost' })
 

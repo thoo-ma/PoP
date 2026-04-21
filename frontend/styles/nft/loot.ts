@@ -2,7 +2,7 @@ import { tv } from 'tailwind-variants'
 
 // ── Loot roulette card ────────────────────────────────────────────────────────
 // Layout slots for the LootRouletteCard component.
-export const lootCard = tv({
+export const lootPanel = tv({
   slots: {
     wrapper: 'mx-4 border-tactile-sm border-outline border-b-tactile-md rounded-xl',
     root: 'overflow-hidden rounded-lg items-center gap-4',

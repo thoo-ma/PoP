@@ -25,7 +25,7 @@ export {
 } from './proof'
 export type { TactileButtonProps } from './shared'
 export {
-  AlertBox,
+  AlertFrame,
   BadgeOverlay,
   DegenBar,
   EmptyState,

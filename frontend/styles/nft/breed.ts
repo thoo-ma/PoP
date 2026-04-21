@@ -43,7 +43,7 @@ export const parentSlotsRow = tv({
 
 // ── Breed result section ──────────────────────────────────────────────────────
 // Layout for the success state shown after a breed completes.
-export const breedResultSection = tv({
+export const breedResultPanel = tv({
   slots: {
     root: 'items-center w-full',
     title: 'text-heading-md font-black text-on-surface mb-5 text-center',

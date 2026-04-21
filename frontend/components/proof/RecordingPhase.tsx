@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
-import AlertBox from '../shared/AlertBox'
+import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
@@ -18,11 +18,11 @@ export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel
     <View className={phaseContainer()}>
       <ChallengeHeader nft={nft} />
       {isAnalyzing ? (
-        <AlertBox status="success" title="Analyzing audio…" />
+        <AlertFrame status="success" title="Analyzing audio…" />
       ) : isRecording ? (
-        <AlertBox status="success" title="Recording…" />
+        <AlertFrame status="success" title="Recording…" />
       ) : (
-        <AlertBox status="success" title="Processing…" />
+        <AlertFrame status="success" title="Processing…" />
       )}
       {isRecording && (
         <TactileButton
