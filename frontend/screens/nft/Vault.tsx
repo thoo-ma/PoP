@@ -2,7 +2,7 @@ import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { FlatList, type ListRenderItem, ScrollView, View } from 'react-native'
+import { FlatList, type ListRenderItem, type NativeScrollEvent, type NativeSyntheticEvent, ScrollView, View } from 'react-native'
 import {
   AlertBox,
   EmptyState,
@@ -233,7 +233,7 @@ export default memo(function Vault() {
     [grid, handleOpenStatModal, handleListNFT],
   )
 
-  const handleNftScroll = useCallback((e: { nativeEvent: { contentOffset: { y: number } } }) => {
+  const handleNftScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setShowScrollTop(e.nativeEvent.contentOffset.y > 600)
   }, [])
 

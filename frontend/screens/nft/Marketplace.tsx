@@ -111,7 +111,7 @@ export default memo(function Marketplace() {
   }, [])
 
   const skeleton = skeletonCard()
-  const itemRow = marketplaceItemRow()
+  const itemRow = useMemo(() => marketplaceItemRow(), [])
   const tabs = tactileTabs()
   const grid = useMemo(() => gridLayout(), [])
 
