@@ -120,31 +120,39 @@ export default memo(function Vault() {
     [filteredNfts, sortBy, sortOrder],
   )
 
+  // kept: passed to memo()-wrapped FilterControls; recreating on every render breaks its memo
+  // comparison and re-renders the entire filter toolbar even when no filter state has changed.
   const handleRarityToggle = useCallback((rarity: NFTRarity) => {
     setSelectedRarities((prev) =>
       prev.includes(rarity) ? prev.filter((r) => r !== rarity) : [...prev, rarity],
     )
   }, [])
 
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
   const handleTypeToggle = useCallback((type: NFTType) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     )
   }, [])
 
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
   const handleClearFilters = useCallback(() => {
     setSelectedRarities([])
     setSelectedTypes([])
   }, [])
 
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
   const handleSortByChange = useCallback((option: SortOption) => {
     setSortBy(option)
   }, [])
 
+  // kept: passed to memo()-wrapped FilterControls; same reasoning as handleRarityToggle above.
   const handleSortOrderToggle = useCallback(() => {
     setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))
   }, [])
 
+  // kept: dep of renderNftAction → renderNftItem → FlatList renderItem; recreating would cascade through
+  // that memo chain and force every visible NFT row to re-render.
   const handleListNFT = useCallback(
     async (nftId: string) => {
       const nft = nfts.find((n) => n.id === nftId)
@@ -155,18 +163,22 @@ export default memo(function Vault() {
     [nfts, listNFT],
   )
 
+  // kept: dep of renderNftAction → renderNftItem → FlatList renderItem; recreating would cascade through
+  // that memo chain and force every visible NFT row to re-render.
   const handleOpenStatModal = useCallback((nft: NFT) => {
     setStatModalNFT(nft)
   }, [])
 
-  const handleStatAllocated = useCallback((_result: AllocateResult) => {
+  const handleStatAllocated = (_result: AllocateResult) => {
     setStatModalNFT(null)
-  }, [])
+  }
 
-  const handleStatModalDismiss = useCallback(() => {
+  const handleStatModalDismiss = () => {
     setStatModalNFT(null)
-  }, [])
+  }
 
+  // kept: recurses into itself inside the toast retry callback (onActionPress); without useCallback the
+  // retry captures a stale closure that may reference outdated `boxes` state.
   const handleOpenBox = useCallback(
     async (rarity: NFTRarity) => {
       const box = boxes.find((b) => b.rarity === rarity)
@@ -193,10 +205,12 @@ export default memo(function Vault() {
     [boxes, openBox, toast],
   )
 
-  const handleRevealClose = useCallback(() => {
+  const handleRevealClose = () => {
     setRevealVisible(false)
-  }, [])
+  }
 
+  // kept: reads `activeTab` to pick the right scroll ref; without useCallback it captures a stale tab
+  // value and scrolls the wrong list when the user switches tabs before pressing the button.
   const handleScrollToTop = useCallback(() => {
     if (activeTab === 'toilets') {
       nftScrollRef.current?.scrollToOffset({ offset: 0, animated: true })
@@ -207,8 +221,12 @@ export default memo(function Vault() {
 
   const grid = useMemo(() => gridLayout(), [])
 
+  // kept: passed to FlatList.keyExtractor; recreating on every render causes React Native to remount
+  // every list item rather than reconcile them in-place.
   const keyExtractor = useCallback((nft: NFT) => nft.id, [])
 
+  // kept: render-prop passed to memo()-wrapped NFTCard.action; recreating would break NFTCard's memo
+  // comparison and re-render every visible row even when the NFT data hasn't changed.
   const renderNftAction = useCallback(
     (nft: NFT) => (
       <>
@@ -240,6 +258,8 @@ export default memo(function Vault() {
     [handleOpenStatModal, handleListNFT],
   )
 
+  // kept: passed to FlatList.renderItem; recreating on every parent re-render causes React Native to
+  // re-render all currently visible rows, defeating the purpose of the FlatList's internal windowing.
   const renderNftItem = useCallback<ListRenderItem<NFT>>(
     ({ item: nft }) => (
       <View className={grid.item()}>
@@ -249,9 +269,9 @@ export default memo(function Vault() {
     [grid, renderNftAction],
   )
 
-  const handleNftScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const handleNftScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setShowScrollTop(e.nativeEvent.contentOffset.y > 600)
-  }, [])
+  }
 
   if (loading) {
     return <ScreenLoader title="Vault" message="Loading your collection..." />

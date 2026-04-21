@@ -1,7 +1,7 @@
 import type { BustedDetails, EdgeFunctionErrorResponse, InsufficientPoopDetails } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
@@ -119,16 +119,17 @@ export function useRepairNFT() {
     },
   })
 
-  const repairNFT = useCallback(
-    async (nftId: string, newEnergy: number, degenPercent = 0): Promise<RepairResult | null> => {
-      try {
-        return await mutation.mutateAsync({ nftId, newEnergy, degenPercent })
-      } catch {
-        return null
-      }
-    },
-    [mutation.mutateAsync],
-  )
+  const repairNFT = async (
+    nftId: string,
+    newEnergy: number,
+    degenPercent = 0,
+  ): Promise<RepairResult | null> => {
+    try {
+      return await mutation.mutateAsync({ nftId, newEnergy, degenPercent })
+    } catch {
+      return null
+    }
+  }
 
   if (mock?.repairNFT) return mock.repairNFT
   return {

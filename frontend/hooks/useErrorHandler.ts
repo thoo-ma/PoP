@@ -25,6 +25,9 @@ export function useErrorHandler(context: string) {
    * @param err - The error to handle
    * @param customMessage - Optional custom fallback message
    */
+  // kept: recreates whenever `context` changes (it's a plain string prop); used inside useEffect dep
+  // arrays in useToiletDetection and screen handlers — without useCallback those effects would re-fire
+  // on every render regardless of whether the error state actually changed.
   const handleError = useCallback(
     (err: unknown, customMessage?: string) => {
       logError(context, err)
@@ -37,6 +40,8 @@ export function useErrorHandler(context: string) {
   /**
    * Clear the current error state
    */
+  // kept: consumed in the same useEffect dep arrays as handleError; without useCallback it recreates
+  // on every render and those effects would re-fire unconditionally.
   const clearError = useCallback(() => {
     setError(null)
   }, [])

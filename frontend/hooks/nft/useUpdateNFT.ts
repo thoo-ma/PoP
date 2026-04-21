@@ -101,6 +101,9 @@ export function useUpdateNFT() {
     },
   })
 
+  // kept: consumers (e.g. Vault.handleListNFT/handleUnlist) put these in useCallback dep arrays whose
+  // identity propagates through render-prop memo chains down to FlatList rows; recreating these
+  // wrappers on every render would cascade and re-render every visible NFT row.
   const updateEnergy = useCallback(
     async (nftId: string, newEnergy: number): Promise<boolean> => {
       try {

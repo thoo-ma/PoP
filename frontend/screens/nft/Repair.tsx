@@ -61,6 +61,8 @@ export default memo(function Repair() {
   const rfe = repairFullEnergy()
   const ph = nftPickerSlot()
 
+  // kept: passed to NFTSelector as its onSelect handler; without useCallback it recreates on every render
+  // and any component or effect that compares handler identity would see a changed reference each time.
   const handleSelectNFT = useCallback(() => {
     if (nfts.length === 0) return
     // Start on the first NFT with energy < 100, or index 0
@@ -70,20 +72,22 @@ export default memo(function Repair() {
     setRepairAmount(0)
   }, [nfts])
 
-  const handlePrev = useCallback(() => {
+  const handlePrev = () => {
     if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) - 1 + nfts.length) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
-  }, [selectedIndex, nfts.length])
+  }
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     if (selectedIndex === null || nfts.length === 0) return
     setSelectedIndex((i) => ((i as number) + 1) % nfts.length)
     setIsRepaired(false)
     setRepairAmount(0)
-  }, [selectedIndex, nfts.length])
+  }
 
+  // kept: recurses into itself inside the toast retry callback (onActionPress); without useCallback the
+  // retry captures a stale closure that may reference outdated repair state (selectedNFT, repairAmount, etc.).
   const handleRepair = useCallback(async () => {
     if (!selectedNFT || repairAmount === 0) return
 

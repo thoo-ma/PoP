@@ -1,7 +1,7 @@
 import type { BustedDetails, MysteryBox } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
 import { supabase } from '@/lib/supabase'
@@ -74,16 +74,17 @@ export function useBreedNFT() {
     },
   })
 
-  const breedNFTs = useCallback(
-    async (parent1Id: string, parent2Id: string, degenPercent = 0): Promise<MysteryBox | null> => {
-      try {
-        return await mutation.mutateAsync({ parent1Id, parent2Id, degenPercent })
-      } catch {
-        return null
-      }
-    },
-    [mutation.mutateAsync],
-  )
+  const breedNFTs = async (
+    parent1Id: string,
+    parent2Id: string,
+    degenPercent = 0,
+  ): Promise<MysteryBox | null> => {
+    try {
+      return await mutation.mutateAsync({ parent1Id, parent2Id, degenPercent })
+    } catch {
+      return null
+    }
+  }
 
   if (mock?.breedNFT) return mock.breedNFT
   return {
