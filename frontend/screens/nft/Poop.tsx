@@ -324,7 +324,10 @@ export default memo(function Poop() {
               nft={{ nfts, selectedIndex, displayNFT }}
               ui={{ buttonDisabled, buttonLabel, immobilityMessage }}
               a11y={{
-                label: onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping',
+                // On cooldown: omit accessibilityLabel so RN derives it from
+                // <Button.Label> children (the live CooldownTimer text) instead
+                // of a stale snapshot. Static label for all other branches.
+                label: onCooldown ? undefined : 'Start pooping',
                 hint: onCooldown ? 'NFT is resting' : 'Begin your toilet session',
               }}
               handlers={{

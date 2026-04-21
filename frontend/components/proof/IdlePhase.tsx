@@ -10,7 +10,7 @@ import TactileButton from '../shared/TactileButton'
 type Props = {
   nft: { nfts: NFT[]; selectedIndex: number | null; displayNFT: NFT | null }
   ui: { buttonDisabled: boolean; buttonLabel: ReactNode; immobilityMessage: string | null }
-  a11y: { label: string; hint: string }
+  a11y: { label?: string; hint: string }
   handlers: { onSelectNFT: () => void; onPrev: () => void; onNext: () => void; onPoop: () => void }
 }
 
@@ -58,7 +58,7 @@ export function IdlePhase({ nft, ui, a11y, handlers }: Props) {
         onPress={onPoop}
         isDisabled={buttonDisabled}
         className="px-12"
-        accessibilityLabel={a11y.label}
+        {...(a11y.label !== undefined ? { accessibilityLabel: a11y.label } : {})}
         accessibilityHint={a11y.hint}
       >
         {buttonLabel}
