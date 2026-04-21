@@ -1,5 +1,5 @@
 import { useScrollToTop } from '@react-navigation/native'
-import { cn, Dialog } from 'heroui-native'
+import { Button, cn, Dialog } from 'heroui-native'
 import { memo, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
@@ -25,6 +25,7 @@ import {
   useUserNFTs,
 } from '@/hooks'
 import { dialogBody, dialogFooter, scrollContent } from '@/styles'
+import { tactileButtonText } from '@/styles/shared/buttons'
 import type { AllocateResult, NFT } from '@/types'
 
 /**
@@ -230,9 +231,9 @@ export default memo(function Poop() {
   ) : noEnergy ? (
     'No Energy'
   ) : onCooldown && cooldown?.endsAt != null ? (
-    <>
+    <Button.Label className={tactileButtonText({ variant: 'primary' })}>
       Ready in <CooldownTimer endsAt={cooldown.endsAt} onExpire={handleCooldownExpired} />
-    </>
+    </Button.Label>
   ) : selectedIndex === null ? (
     'Select an NFT'
   ) : (

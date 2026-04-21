@@ -27,9 +27,14 @@ export const CooldownTimer = memo(function CooldownTimer({ endsAt, onExpire, cla
   const onExpireRef = useRef(onExpire)
   onExpireRef.current = onExpire
 
+  // Stable numeric timestamp so callers passing a fresh `new Date(...)` each
+  // render do not reset/restart this effect.
+  const endsAtMs = endsAt.getTime()
+
   useEffect(() => {
+    const endsAtDate = new Date(endsAtMs)
     firedRef.current = false
-    const initial = calcRemaining(endsAt)
+    const initial = calcRemaining(endsAtDate)
     setRemaining(initial)
 
     if (initial <= 0) {
@@ -39,7 +44,7 @@ export const CooldownTimer = memo(function CooldownTimer({ endsAt, onExpire, cla
     }
 
     const id = setInterval(() => {
-      const r = calcRemaining(endsAt)
+      const r = calcRemaining(endsAtDate)
       setRemaining(r)
       if (r <= 0 && !firedRef.current) {
         firedRef.current = true
@@ -48,7 +53,7 @@ export const CooldownTimer = memo(function CooldownTimer({ endsAt, onExpire, cla
       }
     }, 1000)
     return () => clearInterval(id)
-  }, [endsAt])
+  }, [endsAtMs])
 
   return <Text className={className}>{formatCooldown(remaining)}</Text>
 })

@@ -81,10 +81,10 @@ todo
 .VSCodeCounter
 .vercel
 todo-max
+.audit
 
 # Turborepo
 .turbo
 
 # Agent worktree marker
 .agent-worktree-origindesign-plan.md
-design-audit.md
