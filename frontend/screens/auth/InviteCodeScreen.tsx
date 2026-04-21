@@ -105,7 +105,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               isInvalid={!!error}
               isDisabled={loading}
               pasteTransformer={(text) => text.toUpperCase().replace(/[^A-Z0-9]/g, '')}
-              textInputProps={{ autoCapitalize: 'characters' }}
+              textInputProps={{ autoCapitalize: 'characters', accessibilityLabel: 'Invite code' }}
             >
               <InputOTP.Group>
                 <InputOTP.Slot index={0} />

@@ -257,6 +257,8 @@ export default memo(function Repair() {
                   value={repairAmount}
                   onChange={(v) => setRepairAmount(Array.isArray(v) ? (v[0] ?? 0) : v)}
                   step={1}
+                  accessibilityLabel="Energy to repair"
+                  accessibilityValue={{ min: 0, max: maxRepairPossible, now: repairAmount }}
                 >
                   <Slider.Track>
                     <Slider.Fill />

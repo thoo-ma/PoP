@@ -23,8 +23,17 @@ interface BreedParentSlotProps {
 export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlotProps) {
   const rarityColors = useRarityColors()
   const s = parentSlot()
+  const a11yLabel = nft
+    ? `${label}: ${formatDisplayName(nft.name)}, ${nft.rarity}`
+    : `Choose ${label}`
   return (
-    <PressableFeedback onPress={onPress} className={cn(s.root({ empty: !nft }))}>
+    <PressableFeedback
+      onPress={onPress}
+      className={cn(s.root({ empty: !nft }))}
+      accessibilityRole="button"
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={nft ? 'Tap to change parent' : 'Tap to choose parent'}
+    >
       {nft ? (
         <>
           <RemoteImage
@@ -32,6 +41,7 @@ export default function BreedParentSlot({ nft, label, onPress }: BreedParentSlot
             blurhash={nft.blurhash ?? undefined}
             className={s.image()}
             contentFit="cover"
+            accessible={false}
           />
           <View className={s.info()}>
             <Text className={s.name()} numberOfLines={1}>

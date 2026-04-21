@@ -48,6 +48,7 @@ export default memo(function MysteryBoxRevealModal({
               blurhash={nft.blurhash ?? undefined}
               className="w-full h-full"
               contentFit="cover"
+              accessible={false}
             />
             <View className={cn(s.rarityOverlay(), rarityBadge({ rarity: nft.rarity }))}>
               <Text className={s.rarityText()}>{nft.rarity.toUpperCase()}</Text>

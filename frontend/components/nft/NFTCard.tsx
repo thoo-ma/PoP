@@ -48,6 +48,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             blurhash={nft.blurhash ?? undefined}
             className="w-full h-full"
             contentFit="cover"
+            accessible={false}
           />
           <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
             {`Lv ${nft.level}`}
