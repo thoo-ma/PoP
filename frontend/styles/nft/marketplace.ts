@@ -17,7 +17,7 @@ export const breedPickerCard = tv({
   },
   variants: {
     disabled: {
-      true: { wrapper: 'opacity-40', name: 'text-on-surface-variant' },
+      true: { wrapper: 'opacity-disabled-heavy', name: 'text-on-surface-variant' },
       false: { wrapper: '', name: 'text-on-surface' },
     },
   },

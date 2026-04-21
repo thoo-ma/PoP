@@ -135,7 +135,7 @@ export default function DevCatalog({
   // ── Catalog grid ───────────────────────────────────────────────────────
   return (
     <Animated.View layout={AccordionLayoutTransition} className="w-full gap-1 mb-2.5 mt-2">
-      <Text className="text-xs font-black text-outline uppercase tracking-wider text-center mb-1">
+      <Text className="text-xs font-black text-on-surface-variant uppercase tracking-wider text-center mb-1">
         Dev Catalog ({TOTAL} previews)
       </Text>
       <Accordion selectionMode="multiple" defaultValue={defaultValue} hideSeparator>

@@ -36,5 +36,5 @@ export const screenHeader = tv({
 // ── NFT selector counter ───────────────────────────────────────────────────────────
 // The "1 / 5" counter text shown between the prev / next arrows in NFTSelector.
 export const nftSelectorCounter = tv({
-  base: 'text-body-xl font-bold text-outline min-w-counter-min text-center',
+  base: 'text-body-xl font-bold text-on-surface-variant min-w-counter-min text-center',
 })

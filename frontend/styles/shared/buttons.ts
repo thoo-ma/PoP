@@ -22,7 +22,7 @@ export const tactileButton = tv({
       outline: 'bg-transparent',
       secondary: 'bg-surface-container-low',
       disabled:
-        'bg-surface-container-highest border-on-surface-variant border-b-on-surface-variant opacity-70',
+        'bg-surface-container-highest border-on-surface-variant border-b-on-surface-variant opacity-disabled-light',
     },
     size: {
       default: '',
@@ -43,7 +43,7 @@ export const tactileButtonText = tv({
       primary: 'text-on-primary',
       outline: 'text-on-surface',
       secondary: 'text-on-surface',
-      disabled: 'text-outline',
+      disabled: 'text-on-surface-variant',
     },
     size: {
       default: 'text-body-lg',
