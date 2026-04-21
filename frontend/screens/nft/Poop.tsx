@@ -18,6 +18,7 @@ import {
 } from '@/components'
 import { getCooldownStatus } from '@/constants'
 import {
+  useAnnounce,
   useImmobilityChallenge,
   usePoopNFT,
   usePoopStateMachine,
@@ -79,6 +80,8 @@ export default memo(function Poop() {
     stopRecording,
   } = recording
 
+  const announce = useAnnounce()
+
   // ── Phase state machine ───────────────────────────────────
   const {
     phase,
@@ -99,6 +102,45 @@ export default memo(function Poop() {
 
   // ── Derived ────────────────────────────────────────────────
   const displayNFT = selectedIndex !== null ? (nfts[selectedIndex] ?? null) : null
+
+  // ── Screen reader announcements ───────────────────────────
+  // Announce at phase transitions (excluding idle — that's the default state).
+  useEffect(() => {
+    switch (phase) {
+      case 'countdown':
+        announce('Get ready, countdown starting')
+        break
+      case 'immobility':
+        announce('Hold your phone still')
+        break
+      default:
+        break
+    }
+  }, [phase, announce])
+
+  // Announce only once recording has actually started.
+  useEffect(() => {
+    if (phase === 'recording' && isRecording) {
+      announce('Recording started, detecting flush')
+    }
+  }, [phase, isRecording, announce])
+
+  // Announce when audio analysis begins (isAnalyzing flips true mid-recording).
+  useEffect(() => {
+    if (phase === 'recording' && isAnalyzing) {
+      announce('Analyzing audio')
+    }
+  }, [phase, isAnalyzing, announce])
+
+  // Announce results only once poopedPoop is populated (server data ready).
+  useEffect(() => {
+    if (phase !== 'results') return
+    if (detectionResult?.detected && poopedPoop !== null) {
+      announce(`Flush detected! You earned ${poopedPoop.earned} POOP`)
+    } else if (detectionResult && !detectionResult.detected) {
+      announce('No flush detected')
+    }
+  }, [phase, detectionResult, poopedPoop, announce])
 
   // ── NFT carousel (disabled during challenge) ───────────────
   // Reset selectedIndex when a background refetch shrinks the nfts array past it,
@@ -146,6 +188,7 @@ export default memo(function Poop() {
     }
     const cooldown = getCooldownStatus(displayNFT)
     if (cooldown.isOnCooldown) {
+      announce(`Cooldown active, ${cooldown.display} remaining`)
       setAlertDialog({
         title: 'On Cooldown',
         message: `This NFT is resting. Ready in ${cooldown.display}.`,
@@ -246,7 +289,7 @@ export default memo(function Poop() {
         // ── Active challenge ───────────────────────────────
         // bg-background (vs bg-surface): active challenge uses a darker base
         // to create contrast for countdown/immobility/prompt/results phases.
-        <View className="flex-1">
+        <View className="flex-1" accessibilityLiveRegion="polite">
           <ScrollView
             ref={scrollRef}
             className="bg-background"
