@@ -1,5 +1,5 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
 import { queryKeys } from '@/constants'
 import { supabase } from '@/lib/supabase'
 import { logError } from '@/utils/errorHelpers'
@@ -16,139 +16,138 @@ import { logError } from '@/utils/errorHelpers'
  */
 export function useUpdateNFT() {
   const queryClient = useQueryClient()
-  const [loadingUpdateEnergy, setLoadingUpdateEnergy] = useState<boolean>(false)
-  const [loadingListNFT, setLoadingListNFT] = useState<boolean>(false)
-  const [loadingUnlistNFT, setLoadingUnlistNFT] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
+
+  const updateEnergyMutation = useMutation<true, Error, { nftId: string; newEnergy: number }>({
+    mutationFn: async ({ nftId, newEnergy }) => {
+      const clampedEnergy = Math.max(0, Math.min(100, newEnergy))
+
+      const { error: updateError } = await supabase
+        .from('nfts')
+        .update({ energy: clampedEnergy })
+        .eq('id', nftId)
+
+      if (updateError) throw new Error(updateError.message)
+
+      return true
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+    },
+    onError: (err) => {
+      logError('useUpdateNFT:UpdateEnergy', err)
+    },
+  })
+
+  const listNFTMutation = useMutation<true, Error, { nftId: string; price: string }>({
+    mutationFn: async ({ nftId, price }) => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session?.user) throw new Error('Not authenticated')
+
+      const { error: listError } = await supabase.from('marketplace_listings').insert({
+        nft_id: nftId,
+        seller_id: session.user.id,
+        price,
+      })
+
+      if (listError) {
+        // Unique constraint violation — nft_id already has a listing row.
+        throw new Error(
+          listError.code === '23505'
+            ? 'This NFT is already listed on the marketplace.'
+            : listError.message,
+        )
+      }
+
+      return true
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
+      ])
+    },
+    onError: (err) => {
+      logError('useUpdateNFT:ListNFT', err)
+    },
+  })
+
+  const unlistNFTMutation = useMutation<true, Error, { nftId: string }>({
+    mutationFn: async ({ nftId }) => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session?.user) throw new Error('Not authenticated')
+
+      const { error: unlistError } = await supabase
+        .from('marketplace_listings')
+        .delete()
+        .eq('nft_id', nftId)
+        .eq('seller_id', session.user.id)
+
+      if (unlistError) throw new Error(unlistError.message)
+
+      return true
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
+      ])
+    },
+    onError: (err) => {
+      logError('useUpdateNFT:UnlistNFT', err)
+    },
+  })
 
   const updateEnergy = useCallback(
-    async (nftId: string, newEnergy: number) => {
+    async (nftId: string, newEnergy: number): Promise<boolean> => {
       try {
-        setLoadingUpdateEnergy(true)
-        setError(null)
-
-        const clampedEnergy = Math.max(0, Math.min(100, newEnergy))
-
-        const { error: updateError } = await supabase
-          .from('nfts')
-          .update({ energy: clampedEnergy })
-          .eq('id', nftId)
-
-        if (updateError) {
-          logError('useUpdateNFT:UpdateEnergy', updateError)
-          setError(updateError.message)
-          return false
-        }
-
-        await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
+        await updateEnergyMutation.mutateAsync({ nftId, newEnergy })
         return true
-      } catch (err) {
-        logError('useUpdateNFT:UpdateEnergy', err)
-        setError(err instanceof Error ? err.message : 'Failed to update energy')
+      } catch {
         return false
-      } finally {
-        setLoadingUpdateEnergy(false)
       }
     },
-    [queryClient],
+    [updateEnergyMutation.mutateAsync],
   )
 
   const listNFT = useCallback(
-    async (nftId: string, price: string) => {
+    async (nftId: string, price: string): Promise<boolean> => {
       try {
-        setLoadingListNFT(true)
-        setError(null)
-
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-        if (!session?.user) {
-          setError('Not authenticated')
-          return false
-        }
-
-        const { error: listError } = await supabase.from('marketplace_listings').insert({
-          nft_id: nftId,
-          seller_id: session.user.id,
-          price,
-        })
-
-        if (listError) {
-          logError('useUpdateNFT:ListNFT', listError)
-          // Unique constraint violation — nft_id already has a listing row.
-          setError(
-            listError.code === '23505'
-              ? 'This NFT is already listed on the marketplace.'
-              : listError.message,
-          )
-          return false
-        }
-
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
-          queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
-        ])
+        await listNFTMutation.mutateAsync({ nftId, price })
         return true
-      } catch (err) {
-        logError('useUpdateNFT:ListNFT', err)
-        setError(err instanceof Error ? err.message : 'Failed to list NFT')
+      } catch {
         return false
-      } finally {
-        setLoadingListNFT(false)
       }
     },
-    [queryClient],
+    [listNFTMutation.mutateAsync],
   )
 
   const unlistNFT = useCallback(
-    async (nftId: string) => {
+    async (nftId: string): Promise<boolean> => {
       try {
-        setLoadingUnlistNFT(true)
-        setError(null)
-
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-        if (!session?.user) {
-          setError('Not authenticated')
-          return false
-        }
-
-        const { error: unlistError } = await supabase
-          .from('marketplace_listings')
-          .delete()
-          .eq('nft_id', nftId)
-          .eq('seller_id', session.user.id)
-
-        if (unlistError) {
-          logError('useUpdateNFT:UnlistNFT', unlistError)
-          setError(unlistError.message)
-          return false
-        }
-
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
-          queryClient.invalidateQueries({ queryKey: queryKeys.marketplaceListings }),
-        ])
+        await unlistNFTMutation.mutateAsync({ nftId })
         return true
-      } catch (err) {
-        logError('useUpdateNFT:UnlistNFT', err)
-        setError(err instanceof Error ? err.message : 'Failed to unlist NFT')
+      } catch {
         return false
-      } finally {
-        setLoadingUnlistNFT(false)
       }
     },
-    [queryClient],
+    [unlistNFTMutation.mutateAsync],
   )
 
   return {
     updateEnergy,
     listNFT,
     unlistNFT,
-    loadingUpdateEnergy,
-    loadingListNFT,
-    loadingUnlistNFT,
-    error,
+    loadingUpdateEnergy: updateEnergyMutation.isPending,
+    loadingListNFT: listNFTMutation.isPending,
+    loadingUnlistNFT: unlistNFTMutation.isPending,
+    error:
+      updateEnergyMutation.error?.message ??
+      listNFTMutation.error?.message ??
+      unlistNFTMutation.error?.message ??
+      null,
   }
 }

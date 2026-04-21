@@ -55,7 +55,7 @@ export default memo(function Vault() {
     error: boxesError,
     refetch: refetchBoxes,
   } = useMysteryBoxes()
-  const { openBox, loading: openLoading } = useOpenMysteryBox()
+  const { openBox, isPending: openLoading } = useOpenMysteryBox()
   const { toast } = useToast()
   const [activeTab, setActiveTab] = useState<'toilets' | 'mystery-boxes'>('toilets')
   const [sortBy, setSortBy] = useState<SortOption>('efficiency')

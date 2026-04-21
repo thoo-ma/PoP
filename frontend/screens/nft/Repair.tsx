@@ -35,7 +35,12 @@ export default memo(function Repair() {
   useScrollToTop(scrollRef)
 
   const { nfts, loading, error, refetch } = useUserNFTs()
-  const { repairNFT, loading: updateLoading, insufficientPoopError, bustedResult } = useRepairNFT()
+  const {
+    repairNFT,
+    isPending: updateLoading,
+    insufficientPoopError,
+    bustedResult,
+  } = useRepairNFT()
   const { poopBalance } = useWallet()
   const { toast } = useToast()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)

@@ -619,7 +619,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             wallet: { poopBalance: 380, loading: false, error: null, refetch: async () => {} },
             breedNFT: {
               breedNFTs: async () => null,
-              loading: false,
+              isPending: false,
               error: null,
               bustedResult: { poop_spent: 120, poop_balance: 380 },
             },
@@ -806,7 +806,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             wallet: { poopBalance: 380, loading: false, error: null, refetch: async () => {} },
             repairNFT: {
               repairNFT: async () => null,
-              loading: false,
+              isPending: false,
               error: null,
               insufficientPoopError: null,
               bustedResult: { poop_spent: 42, poop_balance: 380 },
