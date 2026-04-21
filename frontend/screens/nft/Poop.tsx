@@ -1,6 +1,6 @@
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, Dialog } from 'heroui-native'
-import { memo, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, type ReactElement, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
   CooldownTimer,
@@ -226,7 +226,7 @@ export default memo(function Poop() {
   const onCooldown = cooldown?.isOnCooldown ?? false
   const noEnergy = displayNFT ? displayNFT.energy <= 0 : false
   const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null
-  const buttonLabel: ReactNode = actionLoading ? (
+  const buttonLabel: string | ReactElement = actionLoading ? (
     'Processing...'
   ) : noEnergy ? (
     'No Energy'
