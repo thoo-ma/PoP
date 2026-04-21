@@ -200,6 +200,7 @@ export function usePoopStateMachine(deps: UsePoopStateMachineDeps): UsePoopState
     error: detectionError,
     rateLimitError,
     startRecording,
+    stopRecording,
     analyzeAudio,
     clearResult,
   } = recording
@@ -213,6 +214,7 @@ export function usePoopStateMachine(deps: UsePoopStateMachineDeps): UsePoopState
     if (state.phase !== 'countdown') return
     const id = setInterval(() => {
       if (countdownValueRef.current <= 1) {
+        clearInterval(id)
         startChallenge()
         dispatch({ type: 'COUNTDOWN_DONE' })
       } else {
@@ -303,10 +305,11 @@ export function usePoopStateMachine(deps: UsePoopStateMachineDeps): UsePoopState
     dispatch({ type: 'CANCEL' })
   }, [])
 
-  const cancelRecording = useCallback(() => {
+  const cancelRecording = useCallback(async () => {
+    await stopRecording()
     clearResult()
     dispatch({ type: 'CANCEL' })
-  }, [clearResult])
+  }, [clearResult, stopRecording])
 
   const beginRecording = useCallback(() => {
     dispatch({ type: 'BEGIN_RECORDING' })
