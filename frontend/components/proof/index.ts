@@ -1,4 +1,5 @@
 export { ChallengeHeader } from './ChallengeHeader'
+export { CooldownTimer } from './CooldownTimer'
 export { CountdownPhase } from './CountdownPhase'
 export { IdlePhase } from './IdlePhase'
 export { ImmobilityPhase } from './ImmobilityPhase'

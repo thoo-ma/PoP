@@ -1,4 +1,5 @@
 import { Button } from 'heroui-native'
+import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
 import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
@@ -8,7 +9,7 @@ import TactileButton from '../shared/TactileButton'
 
 type Props = {
   nft: { nfts: NFT[]; selectedIndex: number | null; displayNFT: NFT | null }
-  ui: { buttonDisabled: boolean; buttonLabel: string; immobilityMessage: string | null }
+  ui: { buttonDisabled: boolean; buttonLabel: ReactNode; immobilityMessage: string | null }
   a11y: { label: string; hint: string }
   handlers: { onSelectNFT: () => void; onPrev: () => void; onNext: () => void; onPoop: () => void }
 }
