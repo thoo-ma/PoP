@@ -12,7 +12,7 @@ export const breedPickerCard = tv({
     rarityDot: 'absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-hairline border-surface',
     disabledOverlay: 'absolute inset-0 bg-surface-overlay-dim',
     info: 'px-2 pt-1.5 pb-2',
-    name: 'text-sm font-bold',
+    name: 'text-body-md font-bold',
     rarity: 'text-caption font-bold capitalize',
   },
   variants: {
@@ -29,6 +29,6 @@ export const breedPickerCard = tv({
 export const marketplaceItemRow = tv({
   slots: {
     root: 'flex-row justify-between items-center',
-    price: 'text-sm font-bold text-on-surface',
+    price: 'text-body-md font-bold text-on-surface',
   },
 })

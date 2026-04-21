@@ -15,7 +15,7 @@ export const challengeHeader = tv({
     avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
     info: 'flex-1',
     name: 'text-body-lg font-black text-on-surface mb-0.5',
-    subtitle: 'text-xs text-on-surface-variant font-bold',
+    subtitle: 'text-body-sm text-on-surface-variant font-bold',
   },
 })
 
@@ -44,7 +44,7 @@ export const timerText = tv({
 export const statusBadge = tv({
   slots: {
     root: 'py-2 px-phase-px rounded-full',
-    label: 'text-sm font-bold text-on-surface',
+    label: 'text-body-md font-bold text-on-surface',
   },
   variants: {
     status: {
@@ -59,10 +59,10 @@ export const statusBadge = tv({
 // Small text labels used inside phase render functions in Poop.tsx.
 export const phaseText = tv({
   slots: {
-    hint: 'text-base text-on-surface-variant font-bold',
-    promptTitle: 'text-xl font-bold text-app-success text-center',
+    hint: 'text-body-base text-on-surface-variant font-bold',
+    promptTitle: 'text-heading-xs font-bold text-app-success text-center',
     promptSubtitle: 'text-body-sm text-on-surface-variant text-center font-bold',
-    statusText: 'text-base font-bold text-on-surface text-center',
+    statusText: 'text-body-base font-bold text-on-surface text-center',
   },
 })
 
@@ -71,18 +71,18 @@ export const phaseText = tv({
 export const degenBar = tv({
   slots: {
     headerRow: 'flex-row items-center justify-between mb-3',
-    title: 'text-base font-bold text-on-surface',
+    title: 'text-body-base font-bold text-on-surface',
     zoneBadge: 'px-2 py-0.5 rounded-full',
-    zoneBadgeLabel: 'text-xs font-bold text-on-primary',
+    zoneBadgeLabel: 'text-body-sm font-bold text-on-primary',
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
-    metricLabel: 'text-xs text-on-surface-variant mb-0.5 font-bold',
-    costValue: 'text-sm font-bold text-app-success',
-    costSubvalue: 'text-xs font-bold text-on-surface',
-    bustValue: 'text-sm font-bold',
-    bustSubvalue: 'text-xs text-on-surface-variant text-center leading-4 font-bold',
-    hint: 'text-xs text-on-surface-variant text-center font-bold',
+    metricLabel: 'text-body-sm text-on-surface-variant mb-0.5 font-bold',
+    costValue: 'text-body-md font-bold text-app-success',
+    costSubvalue: 'text-body-sm font-bold text-on-surface',
+    bustValue: 'text-body-md font-bold',
+    bustSubvalue: 'text-body-sm text-on-surface-variant text-center leading-4 font-bold',
+    hint: 'text-body-sm text-on-surface-variant text-center font-bold',
   },
   variants: {
     zone: {

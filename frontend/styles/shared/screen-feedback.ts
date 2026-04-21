@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 export const screenLoader = tv({
   slots: {
     root: 'flex-1 bg-background items-center justify-center',
-    message: 'mt-3 text-sm text-on-surface-variant font-bold',
+    message: 'mt-3 text-body-md text-on-surface-variant font-bold',
   },
 })
 

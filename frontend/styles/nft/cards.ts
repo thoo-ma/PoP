@@ -23,7 +23,7 @@ export const nftDetailCard = tv({
   slots: {
     image: 'w-full h-card-image bg-surface-container-low',
     body: 'p-4',
-    title: 'text-lg font-black text-center text-on-surface mb-3',
+    title: 'text-heading-xs font-black text-center text-on-surface mb-3',
   },
 })
 
@@ -52,7 +52,7 @@ export const cardContainer = tv({
 // ── Card title (grid card) ────────────────────────────────────────────────────
 // Small bold title used in NFTCard and MysteryBoxCard grid cards.
 export const cardTitle = tv({
-  base: 'text-sm font-bold',
+  base: 'text-body-md font-bold',
 })
 
 // ── XP bar ────────────────────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ export const cardTitle = tv({
 export const xpBar = tv({
   slots: {
     row: 'flex-row items-center mt-1',
-    label: 'text-xs font-bold w-5 text-stat-comfort',
+    label: 'text-body-sm font-bold w-5 text-stat-comfort',
     track: 'flex-1 mx-1',
   },
 })

@@ -21,9 +21,9 @@ export const propertyBar = tv({
       },
       detailed: {
         root: 'gap-1',
-        label: 'text-xs font-bold mb-0.5',
+        label: 'text-body-sm font-bold mb-0.5',
         barWrap: 'gap-1.5',
-        value: 'text-xs text-on-surface font-bold w-label-sm',
+        value: 'text-body-sm text-on-surface font-bold w-label-sm',
       },
     },
   },
@@ -48,6 +48,6 @@ export const propertiesWrapper = tv({
 export const nftPickerPlaceholder = tv({
   slots: {
     icon: 'text-icon-xl mb-3 text-on-surface-variant',
-    label: 'text-base font-bold text-on-surface-variant',
+    label: 'text-body-base font-bold text-on-surface-variant',
   },
 })

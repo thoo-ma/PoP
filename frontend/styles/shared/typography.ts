@@ -15,8 +15,8 @@ export const badgeLabel = tv({
   base: 'text-on-primary font-bold',
   variants: {
     size: {
-      base: 'text-sm',
-      xs: 'text-xs',
+      base: 'text-body-md',
+      xs: 'text-body-sm',
       sm: 'text-caption',
       tiny: 'text-caption-sm',
     },

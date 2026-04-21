@@ -10,10 +10,10 @@ export const parentSlot = tv({
     name: 'text-body-sm font-black text-on-surface mb-1',
     chipsRow: 'flex-row gap-1',
     hintSection: 'px-2 pb-2',
-    hintText: 'text-xs text-on-surface-variant italic font-bold',
+    hintText: 'text-body-sm text-on-surface-variant italic font-bold',
     emptyRoot: 'aspect-square justify-center items-center bg-surface-container-low',
     emptyIcon: 'text-icon-lg text-default-300 mb-1.5',
-    emptyLabel: 'text-sm text-on-surface-variant text-center px-4 leading-4 font-bold',
+    emptyLabel: 'text-body-md text-on-surface-variant text-center px-4 leading-4 font-bold',
   },
 })
 
@@ -27,7 +27,7 @@ export const outcomePanel = tv({
     title: 'text-body-sm font-bold uppercase tracking-widest mb-1.5',
     row: 'flex-row items-center mb-1 gap-2',
     label: 'text-body-sm text-on-surface font-bold w-label-lg',
-    value: 'text-sm font-bold text-on-surface w-11 text-right',
+    value: 'text-body-md font-bold text-on-surface w-11 text-right',
   },
 })
 
@@ -49,7 +49,7 @@ export const breedResultSection = tv({
     title: 'text-heading-md font-black text-on-surface mb-5 text-center',
     parentsRow: 'flex-row items-center mb-5 gap-2',
     parentImage: 'size-thumbnail rounded-lg border border-outline',
-    multiplyText: 'text-lg text-on-surface-variant font-bold',
+    multiplyText: 'text-heading-xs text-on-surface-variant font-bold',
     arrowText: 'text-heading-sm text-on-surface font-bold',
   },
 })

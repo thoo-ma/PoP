@@ -6,17 +6,17 @@ export const statModal = tv({
   slots: {
     content: 'px-6 pt-5 pb-10 rounded-t-3xl',
     header: 'flex-row items-center justify-between mb-1',
-    title: 'text-lg font-black text-on-surface',
-    description: 'text-sm text-on-surface-variant mb-5 font-bold',
+    title: 'text-heading-xs font-black text-on-surface',
+    description: 'text-body-md text-on-surface-variant mb-5 font-bold',
     pointsBox:
       'flex-row items-center justify-between bg-surface-container-low rounded-2xl py-2.5 px-4 mb-5',
-    pointsLabel: 'text-sm font-bold text-on-surface-variant',
-    pointsValue: 'text-2xl font-extrabold text-on-surface',
+    pointsLabel: 'text-body-md font-bold text-on-surface-variant',
+    pointsValue: 'text-heading-md font-extrabold text-on-surface',
     sliderRow: 'mb-4',
     sliderHeader: 'flex-row items-center justify-between mb-1',
-    statLabel: 'text-sm font-bold text-on-surface-variant',
-    statValue: 'text-sm font-bold text-on-surface',
-    errorText: 'text-sm text-danger text-center mb-2',
+    statLabel: 'text-body-md font-bold text-on-surface-variant',
+    statValue: 'text-body-md font-bold text-on-surface',
+    errorText: 'text-body-md text-danger text-center mb-2',
     buttonRow: 'flex-row gap-3 mt-2',
   },
 })
@@ -26,13 +26,13 @@ export const statModal = tv({
 export const revealModal = tv({
   slots: {
     content: 'mx-6 rounded-3xl px-6 pt-6 pb-8 items-center border-tactile-sm border-outline',
-    titleLg: 'text-xl font-black text-on-surface mb-1 text-center',
-    titleMd: 'text-base font-black text-on-surface mb-1 text-center',
-    description: 'text-sm text-on-surface-variant mb-5 text-center font-bold',
+    titleLg: 'text-heading-xs font-black text-on-surface mb-1 text-center',
+    titleMd: 'text-body-base font-black text-on-surface mb-1 text-center',
+    description: 'text-body-md text-on-surface-variant mb-5 text-center font-bold',
     imageContainer:
       'w-[70%] aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-4 relative',
     rarityOverlay: 'absolute bottom-2 right-2 px-2.5 py-1 rounded-md',
-    rarityText: 'text-on-primary text-xs font-bold tracking-wide',
+    rarityText: 'text-on-primary text-body-sm font-bold tracking-wide',
   },
 })
 
@@ -40,6 +40,6 @@ export const revealModal = tv({
 // Bottom-sheet help text for the NFT parent picker.
 export const pickerModal = tv({
   slots: {
-    helpText: 'text-sm text-on-surface-variant px-5 pt-2.5 pb-1 leading-modal-body font-bold',
+    helpText: 'text-body-md text-on-surface-variant px-5 pt-2.5 pb-1 leading-modal-body font-bold',
   },
 })
