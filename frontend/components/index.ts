@@ -27,10 +27,10 @@ export {
   AlertBox,
   BadgeOverlay,
   DegenBar,
+  EmptyState,
   ErrorBoundary,
   ProgressBar,
   ScreenError,
-  ScreenInfo,
   ScreenLoader,
   TactileButton,
 } from './shared'

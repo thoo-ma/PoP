@@ -10,9 +10,9 @@ import {
   BreedParentSlot,
   BreedPickerModal,
   DegenBar,
+  EmptyState,
   MysteryBoxCard,
   ScreenError,
-  ScreenInfo,
   TactileButton,
 } from '@/components'
 import { RemoteImage } from '@/components/styled'
@@ -115,9 +115,10 @@ import { canBreed } from '@/utils'
 
   if (nfts.length < 2) {
     return (
-      <ScreenInfo
+      <EmptyState
+        layout="screen"
         title="Not Enough NFTs"
-        message="You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding."
+        description="You need at least two NFTs in your wallet to breed. Acquire or mint another NFT, then come back to start breeding."
       />
     )
   }

@@ -5,6 +5,7 @@ import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
   AlertBox,
+  EmptyState,
   FilterControls,
   MysteryBoxCard,
   MysteryBoxRevealModal,
@@ -312,13 +313,7 @@ export default memo(function Vault() {
                   </View>
                 ))
               ) : (
-                <View className="py-16 w-full px-2">
-                  <AlertBox
-                    status="default"
-                    title="No NFTs found"
-                    description="Try adjusting your filters."
-                  />
-                </View>
+                <EmptyState title="No NFTs found" description="Try adjusting your filters." />
               )}
             </View>
           </ScrollView>
