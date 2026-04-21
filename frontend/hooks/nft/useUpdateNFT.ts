@@ -144,6 +144,10 @@ export function useUpdateNFT() {
     loadingUpdateEnergy: updateEnergyMutation.isPending,
     loadingListNFT: listNFTMutation.isPending,
     loadingUnlistNFT: unlistNFTMutation.isPending,
+    // NOTE: Uses ?? to pick the first non-null error across mutations. React Query
+    // error state persists until the same mutation reruns, so this can surface a
+    // stale error from a prior operation. Acceptable while no consumer reads this
+    // field; revisit with per-mutation error fields if that changes.
     error:
       updateEnergyMutation.error?.message ??
       listNFTMutation.error?.message ??
