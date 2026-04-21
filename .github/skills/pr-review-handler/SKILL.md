@@ -38,11 +38,11 @@ The calling agent must provide:
 
 ## Workflow
 
-### Step 1 — Wait for review
+### Step 1 — Check for existing review
 
-Poll `github/pull_request_read` every 30 seconds until review comments appear.
-- Timeout: **5 minutes** (Copilot can be slow on large PRs)
-- If no comments arrive after timeout, the PR is clean — skip to the review report
+Call `github/pull_request_read` once immediately.
+- If inline review comments already exist → proceed to Step 2. Do **not** request a new review.
+- If no comments exist → poll every 30 seconds (max 5 min). If still none after timeout, the PR is clean — skip to the review report.
 
 ### Step 2 — Fetch and group comments
 
@@ -155,6 +155,7 @@ This report covers **review activity only**. The calling agent is responsible fo
 
 ## Constraints
 
+- Do NOT call `github/request_copilot_review` — the review must already exist before this skill is invoked; never request a new one
 - Do NOT auto-fix a comment if there is any ambiguity about what the correct fix is
 - Do NOT force-push — always regular push to preserve review history
 - Do NOT use generic replies — each reply must show understanding of the comment
