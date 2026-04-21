@@ -1,8 +1,9 @@
 import { useScrollToTop } from '@react-navigation/native'
-import { cn, Dialog } from 'heroui-native'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { Button, cn, Dialog } from 'heroui-native'
+import { memo, type ReactElement, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
+  CooldownTimer,
   CountdownPhase,
   IdlePhase,
   ImmobilityPhase,
@@ -24,6 +25,7 @@ import {
   useUserNFTs,
 } from '@/hooks'
 import { dialogBody, dialogFooter, scrollContent } from '@/styles'
+import { tactileButtonText } from '@/styles/shared/buttons'
 import type { AllocateResult, NFT } from '@/types'
 
 /**
@@ -60,15 +62,10 @@ export default memo(function Poop() {
   // ── Alert dialog state ─────────────────────────────────────
   const [alertDialog, setAlertDialog] = useState<{ title: string; message: string } | null>(null)
 
-  // Tick once/s so the cooldown countdown refreshes in the UI
-  const [, setTick] = useState(0)
-  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  useEffect(() => {
-    tickRef.current = setInterval(() => setTick((t) => t + 1), 1000)
-    return () => {
-      if (tickRef.current) clearInterval(tickRef.current)
-    }
-  }, [])
+  // Force a single re-render when a CooldownTimer fires onExpire so
+  // buttonDisabled / buttonLabel recompute and the Poop button re-enables.
+  const [, setCooldownExpiry] = useState(0)
+  const handleCooldownExpired = useCallback(() => setCooldownExpiry((v) => v + 1), [])
 
   // ── Proof hooks ────────────────────────────────────────────
   const immobility = useImmobilityChallenge('normal')
@@ -229,15 +226,19 @@ export default memo(function Poop() {
   const onCooldown = cooldown?.isOnCooldown ?? false
   const noEnergy = displayNFT ? displayNFT.energy <= 0 : false
   const buttonDisabled = actionLoading || noEnergy || onCooldown || selectedIndex === null
-  const buttonLabel = actionLoading
-    ? 'Processing...'
-    : noEnergy
-      ? 'No Energy'
-      : onCooldown
-        ? `Ready in ${cooldown?.display}`
-        : selectedIndex === null
-          ? 'Select an NFT'
-          : 'Poop'
+  const buttonLabel: string | ReactElement = actionLoading ? (
+    'Processing...'
+  ) : noEnergy ? (
+    'No Energy'
+  ) : onCooldown && cooldown?.endsAt != null ? (
+    <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+      Ready in <CooldownTimer endsAt={cooldown.endsAt} onExpire={handleCooldownExpired} />
+    </Button.Label>
+  ) : selectedIndex === null ? (
+    'Select an NFT'
+  ) : (
+    'Poop'
+  )
 
   return (
     <>
@@ -323,7 +324,10 @@ export default memo(function Poop() {
               nft={{ nfts, selectedIndex, displayNFT }}
               ui={{ buttonDisabled, buttonLabel, immobilityMessage }}
               a11y={{
-                label: onCooldown ? `Cooldown: ${cooldown?.display}` : 'Start pooping',
+                // On cooldown: omit accessibilityLabel so RN derives it from
+                // <Button.Label> children (the live CooldownTimer text) instead
+                // of a stale snapshot. Static label for all other branches.
+                label: onCooldown ? undefined : 'Start pooping',
                 hint: onCooldown ? 'NFT is resting' : 'Begin your toilet session',
               }}
               handlers={{

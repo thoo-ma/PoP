@@ -1,4 +1,5 @@
 import { Button } from 'heroui-native'
+import type { ReactElement } from 'react'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components'
 import { nftPickerButton, nftPickerPlaceholder } from '@/styles'
@@ -8,8 +9,12 @@ import TactileButton from '../shared/TactileButton'
 
 type Props = {
   nft: { nfts: NFT[]; selectedIndex: number | null; displayNFT: NFT | null }
-  ui: { buttonDisabled: boolean; buttonLabel: string; immobilityMessage: string | null }
-  a11y: { label: string; hint: string }
+  ui: {
+    buttonDisabled: boolean
+    buttonLabel: string | ReactElement
+    immobilityMessage: string | null
+  }
+  a11y: { label?: string; hint: string }
   handlers: { onSelectNFT: () => void; onPrev: () => void; onNext: () => void; onPoop: () => void }
 }
 
@@ -57,7 +62,7 @@ export function IdlePhase({ nft, ui, a11y, handlers }: Props) {
         onPress={onPoop}
         isDisabled={buttonDisabled}
         className="px-12"
-        accessibilityLabel={a11y.label}
+        {...(a11y.label !== undefined ? { accessibilityLabel: a11y.label } : {})}
         accessibilityHint={a11y.hint}
       >
         {buttonLabel}

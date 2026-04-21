@@ -10,7 +10,7 @@ import type { CooldownConfig } from '@pop/shared/schemas'
 import type { NFT } from '@/types'
 
 /** Human-readable countdown string, e.g. "2h 34m" or "45m" or "30s". */
-function formatCooldown(totalSeconds: number): string {
+export function formatCooldown(totalSeconds: number): string {
   if (totalSeconds <= 0) return '0s'
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
