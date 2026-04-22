@@ -1,7 +1,7 @@
 import { Button } from 'heroui-native'
 import { memo, type ReactElement } from 'react'
 import { Text, View } from 'react-native'
-import { NFTDetailCard, NFTSelector } from '@/components'
+import { NFTDetailCard, NFTSelector } from '@/components/nft'
 import { nftPickerButton, nftPickerSlot } from '@/styles'
 import type { NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'

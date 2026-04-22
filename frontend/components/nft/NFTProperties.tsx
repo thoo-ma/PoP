@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { ProgressBar } from '@/components'
+import { ProgressBar } from '@/components/shared'
 import { propertiesWrapper, propertyBar } from '@/styles'
 
 interface NFTPropertiesProps {

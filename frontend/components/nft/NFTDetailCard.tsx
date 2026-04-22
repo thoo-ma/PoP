@@ -1,7 +1,7 @@
 import { Card } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
-import { BadgeOverlay } from '@/components'
+import { BadgeOverlay } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
 import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, typeBadge } from '@/styles'
 import type { NFT } from '@/types'
