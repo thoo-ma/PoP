@@ -141,7 +141,7 @@ type ErrorMapper = (
  *   exceptions (e.g. `BustedError`, `CooldownError`).
  * - Falls back to `Error(body.message ?? body.error ?? error.message)`.
  * - Throws `Error("No data returned from <name> function")` on missing data.
- * - When `responseSchema` is provided, the success body is validated with
+ * - The success body is always validated against `responseSchema` via
  *   `.safeParse(...)`. A failure throws `ResponseValidationError` (wrapping
  *   the underlying `ZodError`) so silent type-casts can no longer pass.
  */
