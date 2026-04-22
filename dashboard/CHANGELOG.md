@@ -1,5 +1,12 @@
 # dashboard
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [[`dc9af66`](https://github.com/thoo-ma/PoP/commit/dc9af66a1cd2d03e4b5c842c956d6e9649cd5a93), [`d568dd4`](https://github.com/thoo-ma/PoP/commit/d568dd4069b82f8fe38fab25239d09fbca071635), [`bab30b0`](https://github.com/thoo-ma/PoP/commit/bab30b037847ca1d7b0e67814ecd5ab626f98649)]:
+  - @pop/shared@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes
