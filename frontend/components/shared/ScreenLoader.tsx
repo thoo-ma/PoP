@@ -8,11 +8,12 @@ interface ScreenLoaderProps {
   message?: string
 }
 
-export default memo(function ScreenLoader({ message }: ScreenLoaderProps) {
+export default memo(function ScreenLoader({ title, message }: ScreenLoaderProps) {
   const s = screenLoader()
   return (
     <View className={s.root()}>
       <Spinner size="lg" />
+      {title && <Text className={s.title()}>{title}</Text>}
       {message && <Text className={s.message()}>{message}</Text>}
     </View>
   )
