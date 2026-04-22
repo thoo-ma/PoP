@@ -1,7 +1,6 @@
 import { View } from 'react-native'
 import { phaseContainer } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
-import { formatConfidencePercentage } from '@/utils'
 import AlertFrame from '../shared/AlertFrame'
 import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
@@ -84,7 +83,7 @@ export function ResultsPhase({
         <AlertFrame
           status="danger"
           title="Flush not detected"
-          description={`Confidence: ${formatConfidencePercentage(detectionResult.confidence)}`}
+          description={`Confidence: ${Math.round(detectionResult.confidence * 100)}%`}
           className="mb-4"
         >
           <TactileButton

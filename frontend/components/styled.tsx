@@ -3,7 +3,16 @@ import { Image as ExpoImage } from 'expo-image'
 import type { ComponentProps } from 'react'
 import { useState } from 'react'
 import { withUniwind } from 'uniwind'
-import { IMAGE_PLACEHOLDER_BG, IMAGE_TRANSITION_DURATION } from '@/constants'
+
+/**
+ * Background color shown while a remote image is loading.
+ * Must stay in sync with --color-image-placeholder in global.css.
+ * Inline style prop only — CSS variables cannot be used directly in RN style objects.
+ */
+const IMAGE_PLACEHOLDER_BG = '#2c2c2c'
+
+/** Fade-in transition duration (ms) applied when a remote image finishes loading. */
+const IMAGE_TRANSITION_DURATION = 200
 
 const StyledImage = withUniwind(ExpoImage)
 
