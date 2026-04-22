@@ -101,47 +101,5 @@ Every PR that touches workspace code **must** include a changeset. Load `.github
 
 ## Agents
 
-<agents>
-<agent>
-<name>config-tuner</name>
-<description>Tune game balance constants in shared/*.ts.</description>
-<file>.github/agents/config-tuner.agent.md</file>
-</agent>
-<agent>
-<name>bug-fixer</name>
-<description>Debug and fix bugs in the PoP React Native frontend.</description>
-<file>.github/agents/bug-fixer.agent.md</file>
-</agent>
-<agent>
-<name>heroui-migrator</name>
-<description>Migrate React Native components to HeroUI Native.</description>
-<file>.github/agents/heroui-migrator.agent.md</file>
-</agent>
-<agent>
-<name>perf-optimizer</name>
-<description>Profile and optimise React Native app performance.</description>
-<file>.github/agents/perf-optimizer.agent.md</file>
-</agent>
-<agent>
-<name>security-hardener</name>
-<description>Audit and harden security across the PoP stack.</description>
-<file>.github/agents/security-hardener.agent.md</file>
-</agent>
-<agent>
-<name>test-writer</name>
-<description>Write tests for frontend and shared game logic.</description>
-<file>.github/agents/test-writer.agent.md</file>
-</agent>
-<agent>
-<name>tv-extractor</name>
-<description>Extract inline className strings into tv() recipes.</description>
-<file>.github/agents/tv-extractor.agent.md</file>
-</agent>
-<agent>
-<name>ui-ux-designer</name>
-<description>Design and implement UI/UX improvements.</description>
-<file>.github/agents/ui-ux-designer.agent.md</file>
-</agent>
-</agents>
-
+No agents are currently registered in `.github/agents/`. To add one, see `.github/.instructions.md` for the `.agent.md` format and registration steps.
 
