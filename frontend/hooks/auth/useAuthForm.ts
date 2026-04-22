@@ -8,8 +8,6 @@ import { supabase } from '@/lib'
 import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
 
-WebBrowser.maybeCompleteAuthSession()
-
 export function useAuthForm() {
   const { toast } = useToast()
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
