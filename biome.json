@@ -52,5 +52,25 @@
     "formatter": {
       "enabled": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["frontend/components/**", "frontend/hooks/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "@/components": "Import from the direct subpath (e.g. '@/components/shared/ProgressBar') to avoid require cycles.",
+                  "@/hooks": "Import from the direct subpath (e.g. '@/hooks/useErrorHandler') to avoid require cycles."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
