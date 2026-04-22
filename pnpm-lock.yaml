@@ -196,7 +196,7 @@ importers:
         specifier: ~55.0.13
         version: 55.0.13(expo@55.0.12)(react-native@0.83.4(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))
       heroui-native:
-        specifier: ^1.0.1
+        specifier: 1.0.1
         version: 1.0.1(21e7b9c7f9e094db5ba2405ac9803f74)
       react:
         specifier: 19.2.0

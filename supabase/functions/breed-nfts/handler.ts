@@ -5,6 +5,7 @@ import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
 import { BREED_PROBABILITIES, type BreedPairKey } from '../../../shared/src/breedProbabilities.ts'
 import { breedCost, BREED_MAX_COUNT } from '../../../shared/src/currency.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
+import { secureRandom } from '../_shared/random.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 import { processPayment, computeConfigHash } from '../_shared/processPayment.ts'
@@ -32,7 +33,7 @@ export function rollRarity(r1: Rarity, r2: Rarity, probsMap: Record<BreedPairKey
   const probs = probsMap[key]
   if (!probs) throw new Error(`No probability table for combination: ${key}`)
 
-  const roll = Math.random() * 100
+  const roll = secureRandom() * 100
   let cumulative = 0
   const rarities: Rarity[] = ['common', 'rare', 'legendary', 'transcendent']
   for (let i = 0; i < probs.length; i++) {
