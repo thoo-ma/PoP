@@ -1,5 +1,6 @@
 import { TYPE_NAMES, NFT_TYPES, type NFTRarity as Rarity, type NFTType } from '../../../shared/src/nft.ts'
 import { STAT_RANGES } from '../../../shared/src/minting.ts'
+import { secureRandom } from './random.ts'
 
 export { STAT_RANGES }
 
@@ -7,13 +8,13 @@ export { STAT_RANGES }
 
 /** Returns a random NFT type with equal probability. */
 export function randomType(): NFTType {
-  return NFT_TYPES[Math.floor(Math.random() * NFT_TYPES.length)]
+  return NFT_TYPES[Math.floor(secureRandom() * NFT_TYPES.length)]
 }
 
 /** Returns a random name slug for the given NFT type. */
 export function randomName(type: NFTType): string {
   const names = TYPE_NAMES[type]
-  return names[Math.floor(Math.random() * names.length)]
+  return names[Math.floor(secureRandom() * names.length)]
 }
 
 /**
@@ -26,7 +27,7 @@ export function rollStat(
 ): number {
   const ranges = cfg?.STAT_RANGES ?? STAT_RANGES
   const [min, max] = ranges[rarity]
-  return Math.floor(Math.random() * (max - min + 1)) + min
+  return Math.floor(secureRandom() * (max - min + 1)) + min
 }
 
 /** Constructs the public storage URL for a toilet NFT image. */

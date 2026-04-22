@@ -14,6 +14,7 @@ import {
 } from '../../../shared/src/energyDrain.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
+import { secureRandom } from '../_shared/random.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -41,7 +42,7 @@ export function calcEnergyLoss(
   const ENERGY_ROLL_MIN = cfg?.ENERGY_ROLL_MIN ?? DEFAULT_ENERGY_ROLL_MIN
   const ENERGY_ROLL_MAX = cfg?.ENERGY_ROLL_MAX ?? DEFAULT_ENERGY_ROLL_MAX
   const TYPE_DRAIN_MULT = cfg?.TYPE_DRAIN_MULT ?? DEFAULT_TYPE_DRAIN_MULT
-  const baseRoll = ENERGY_ROLL_MIN + Math.random() * (ENERGY_ROLL_MAX - ENERGY_ROLL_MIN) // [min, max)
+  const baseRoll = ENERGY_ROLL_MIN + secureRandom() * (ENERGY_ROLL_MAX - ENERGY_ROLL_MIN) // [min, max)
   const resilienceFactor = 1 - resilience / 100
   const mult = TYPE_DRAIN_MULT[type] ?? 1
   const raw = baseRoll * resilienceFactor * mult

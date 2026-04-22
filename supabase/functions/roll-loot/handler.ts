@@ -3,6 +3,7 @@ import { getMysteryBoxBlurhash } from '../../../shared/src/blurhashes.ts'
 import { initHandler } from '../_shared/handlerInit.ts'
 import { fetchOwned } from '../_shared/fetchOwned.ts'
 import { buildMysteryBoxImageUrl } from '../_shared/nftHelpers.ts'
+import { secureRandom } from '../_shared/random.ts'
 import { respondOk, respondError, type Warning } from '../_shared/responses.ts'
 import { parseBody, z } from '../_shared/validation.ts'
 
@@ -66,7 +67,7 @@ export async function handleRollLoot(req: Request): Promise<Response> {
     // ── Server-side roll ──────────────────────────────────────────────────────
     // Probability = BASE_WIN_PROBABILITY + holds × PER_HOLD_INCREMENT
     const probability = BASE_WIN_PROBABILITY + holdsUsed * PER_HOLD_INCREMENT
-    const won = Math.random() < probability
+    const won = secureRandom() < probability
 
     console.log(
       `roll-loot: user=${userId} holds=${holdsUsed} probability=${(probability * 100).toFixed(0)}% won=${won}`
