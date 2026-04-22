@@ -16,9 +16,7 @@ PoP is an NFT-based mobile game where players earn POOP tokens by detecting real
 | `supabase/` | Deno (Edge Functions) | Supabase JS, Zod |
 | `google-cloud-run/` | Python + Flask | TensorFlow, YAMNet |
 
-## Build & Validate
-
-**Husky git hooks** automate formatting, linting, and type-checking so you don't have to run them manually:
+## Build & Validate**Husky git hooks** automate formatting, linting, and type-checking so you don't have to run them manually:
 
 | Hook | What runs | Trigger |
 |---|---|---|
@@ -48,6 +46,18 @@ Never force-push. Never use `--no-verify` to bypass hooks.
 ## Changeset Convention
 
 Every PR that touches workspace code **must** include a changeset. Load `.github/skills/changeset/SKILL.md` for package name mapping, file format, bump rules, and empty changesets.
+
+## Area-File Template
+
+Each area's `.instructions.md` follows this canonical H2 structure:
+
+1. `## Runtime & Dependencies` — language, framework, key libraries
+2. `## Code Organization` — folder layout, path aliases, navigation/routing
+3. `## Patterns` — conventions, recipes, idioms (use `### Subsections` per topic)
+4. `## Pitfalls` — "do NOT" rules, cross-area warnings, common mistakes
+5. `## Skills & Agents` — pointers to relevant skills (and agents, if any)
+
+Keep these H2s in this order. Add new content under an existing `### Subsection` of `## Patterns` rather than introducing a new top-level H2.
 
 ## Skills
 
