@@ -16,7 +16,9 @@ PoP is an NFT-based mobile game where players earn POOP tokens by detecting real
 | `supabase/` | Deno (Edge Functions) | Supabase JS, Zod |
 | `google-cloud-run/` | Python + Flask | TensorFlow, YAMNet |
 
-## Build & Validate**Husky git hooks** automate formatting, linting, and type-checking so you don't have to run them manually:
+## Build & Validate
+
+**Husky git hooks** automate formatting, linting, and type-checking so you don't have to run them manually:
 
 | Hook | What runs | Trigger |
 |---|---|---|
@@ -112,4 +114,7 @@ Keep these H2s in this order. Add new content under an existing `### Subsection`
 ## Agents
 
 No agents are currently registered in `.github/agents/`. To add one, place `<name>.agent.md` in `.github/agents/`, follow the format of existing skills under `.github/skills/` for reference, and register it in this `<agents>` block.
+
+<agents>
+</agents>
 
