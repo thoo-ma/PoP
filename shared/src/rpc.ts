@@ -3,8 +3,8 @@
  */
 
 import { z } from 'zod'
-import { EdgeFunctionErrorCode } from './errors'
-import type { NFTRarity, NFTType } from './nft'
+import { EdgeFunctionErrorCode } from './errors.ts'
+import type { NFTRarity, NFTType } from './nft.ts'
 
 /**
  * Result returned by the `validate_and_approve_user` Postgres RPC.
