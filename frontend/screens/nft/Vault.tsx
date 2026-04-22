@@ -1,4 +1,4 @@
-import type { MysteryBox, NFTRarity, NFTType } from '@pop/shared'
+import type { MysteryBox, NFTRarity, NFTType, OpenMysteryBoxResponse } from '@pop/shared'
 import { getMysteryBoxBlurhash } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
@@ -63,7 +63,7 @@ export default memo(function Vault() {
   const [selectedRarities, setSelectedRarities] = useState<NFTRarity[]>([])
   const [selectedTypes, setSelectedTypes] = useState<NFTType[]>([])
   const [statModalNFT, setStatModalNFT] = useState<NFT | null>(null)
-  const [revealedNFT, setRevealedNFT] = useState<NFT | null>(null)
+  const [revealedNFT, setRevealedNFT] = useState<OpenMysteryBoxResponse | null>(null)
   const [revealVisible, setRevealVisible] = useState(false)
   const [openingRarity, setOpeningRarity] = useState<NFTRarity | null>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)

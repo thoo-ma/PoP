@@ -1,9 +1,13 @@
-import type { BustedDetails, MysteryBox } from '@pop/shared'
+import type { BreedNftsResponse, BustedDetails } from '@pop/shared'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
-import { BustedError, breedNFTs as invokeBreedNFTs } from '@/lib/edgeFunctions'
+import {
+  BustedError,
+  breedNFTs as invokeBreedNFTs,
+  ResponseValidationError,
+} from '@/lib/edgeFunctions'
 import { logError } from '@/utils/errorHelpers'
 
 export function useBreedNFT() {
@@ -12,7 +16,7 @@ export function useBreedNFT() {
   const [bustedResult, setBustedResult] = useState<BustedDetails | null>(null)
 
   const mutation = useMutation<
-    MysteryBox,
+    BreedNftsResponse,
     Error,
     { parent1Id: string; parent2Id: string; degenPercent: number }
   >({
@@ -32,6 +36,10 @@ export function useBreedNFT() {
         setBustedResult(err.details)
         return
       }
+      if (err instanceof ResponseValidationError) {
+        logError('useBreedNFT:ResponseValidation', err.zodError)
+        return
+      }
       logError('useBreedNFT:Invoke', err)
     },
   })
@@ -40,7 +48,7 @@ export function useBreedNFT() {
     parent1Id: string,
     parent2Id: string,
     degenPercent = 0,
-  ): Promise<MysteryBox | null> => {
+  ): Promise<BreedNftsResponse | null> => {
     try {
       return await mutation.mutateAsync({ parent1Id, parent2Id, degenPercent })
     } catch {
@@ -53,7 +61,11 @@ export function useBreedNFT() {
     breedNFTs,
     isPending: mutation.isPending,
     error:
-      mutation.error && !(mutation.error instanceof BustedError) ? mutation.error.message : null,
+      mutation.error instanceof ResponseValidationError
+        ? 'Server returned an unexpected response'
+        : mutation.error && !(mutation.error instanceof BustedError)
+          ? mutation.error.message
+          : null,
     bustedResult,
   }
 }

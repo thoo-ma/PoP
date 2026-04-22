@@ -1,12 +1,29 @@
 import type {
+  AllocateStatPointsResponse,
+  BreedNftsResponse,
   BustedDetails,
   CooldownDetails,
   EdgeFunctionErrorResponse,
+  HoldLootRollResponse,
   InsufficientPoopDetails,
-  MysteryBox,
+  OpenMysteryBoxResponse,
+  RepairNftResponse,
+  RollLootResponse,
+  UseNftResponse,
+} from '@pop/shared'
+import {
+  AllocateStatPointsResponseSchema,
+  BreedNftsResponseSchema,
+  EdgeFunctionErrorResponseSchema,
+  HoldLootRollResponseSchema,
+  OpenMysteryBoxResponseSchema,
+  RepairNftResponseSchema,
+  RollLootResponseSchema,
+  UseNftResponseSchema,
 } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import type { AllocateResult, NFT, StatDeltas } from '@/types'
+import type { z } from 'zod'
+import type { StatDeltas } from '@/types'
 import { supabase } from './supabase'
 
 // ── Domain error classes ─────────────────────────────────────────────────────
@@ -32,52 +49,34 @@ export class CooldownError extends Error {
   }
 }
 
-// ── Result types co-located with their wrappers ──────────────────────────────
-
-export interface RepairResult {
-  id: string
-  /** Energy value after the repair */
-  energy: number
-  /** POOP spent for this repair */
-  poop_spent: number
-  /** Updated wallet balance */
-  poop_balance: number
+/**
+ * Thrown when an edge function response fails Zod validation. Wraps the
+ * underlying `ZodError` and carries the function name for telemetry. Hooks
+ * filter this from generic errors and surface a stable user-facing message
+ * instead of a raw Zod dump.
+ */
+export class ResponseValidationError extends Error {
+  constructor(
+    public functionName: string,
+    public zodError: z.ZodError,
+  ) {
+    super(`Invalid response from ${functionName}`)
+    this.name = 'ResponseValidationError'
+  }
 }
 
-export interface PoopResult {
-  id: string
-  /** Energy value after the use */
-  energy: number
-  energy_lost: number
-  depleted: boolean
-  /** XP within the current level after the use */
-  xp: number
-  /** XP earned this poop */
-  xp_gained: number
-  /** Level after the use */
-  level: number
-  /** Whether the NFT leveled up this poop */
-  leveled_up: boolean
-  /** Total unspent stat points on the NFT after this poop */
-  stat_points: number
-  /** POOP currency earned this use */
-  poop_earned: number
-  /** Updated wallet balance after this use */
-  poop_balance: number
-  /** ID of the newly created pending loot roll — pass to rollLoot */
-  loot_roll_id: string | null
-}
+// ── Result types — re-exports of inferred schema types ──────────────────────
+//
+// Response shapes are defined as Zod schemas in `@pop/shared` (see
+// `shared/src/rpc.ts`). The inferred types are re-exported here so callers
+// (hooks, screens) can keep importing `RepairResult` / `PoopResult` / etc.
+// from `@/lib/edgeFunctions` while validation happens transparently inside
+// `invokeEdgeFunction`.
 
-export interface HoldLootResult {
-  /** Updated holds count after this hold (1–3) */
-  holds: number
-}
-
-export interface RollLootResult {
-  won: boolean
-  holds_used: number
-  box?: { id: string; rarity: string }
-}
+export type RepairResult = RepairNftResponse
+export type PoopResult = UseNftResponse
+export type HoldLootResult = HoldLootRollResponse
+export type RollLootResult = RollLootResponse
 
 // ── Domain error registry ────────────────────────────────────────────────────
 
@@ -132,19 +131,26 @@ type ErrorMapper = (
 ) => Error | null
 
 /**
- * Invoke a Supabase Edge Function with consistent error parsing.
+ * Invoke a Supabase Edge Function with consistent error parsing and runtime
+ * response validation.
  *
- * - Parses `FunctionsHttpError` body into `EdgeFunctionErrorResponse`.
+ * - Parses `FunctionsHttpError` body, validating it with
+ *   `EdgeFunctionErrorResponseSchema`. On parse failure the original message
+ *   string is preserved (the underlying HTTP error is never swallowed).
  * - Optional `errorMapper` translates structured errors into typed domain
  *   exceptions (e.g. `BustedError`, `CooldownError`).
  * - Falls back to `Error(body.message ?? body.error ?? error.message)`.
  * - Throws `Error("No data returned from <name> function")` on missing data.
+ * - The success body is always validated against `responseSchema` via
+ *   `.safeParse(...)`. A failure throws `ResponseValidationError` (wrapping
+ *   the underlying `ZodError`) so silent type-casts can no longer pass.
  */
-async function invokeEdgeFunction<TResult>(
+async function invokeEdgeFunction<TSchema extends z.ZodTypeAny>(
   name: string,
   body: Record<string, unknown>,
+  responseSchema: TSchema,
   errorMapper?: ErrorMapper,
-): Promise<TResult> {
+): Promise<z.infer<TSchema>> {
   const { data, error: fnError } = await supabase.functions.invoke(name, { body })
 
   if (fnError) {
@@ -155,9 +161,21 @@ async function invokeEdgeFunction<TResult>(
     if (fnError instanceof FunctionsHttpError) {
       httpStatus = fnError.context.status
       try {
-        parsedBody = (await fnError.context.json()) as EdgeFunctionErrorResponse
-        if (parsedBody?.message) message = parsedBody.message
-        else if (parsedBody?.error) message = parsedBody.error
+        const raw = await fnError.context.json()
+        const parsed = EdgeFunctionErrorResponseSchema.safeParse(raw)
+        if (parsed.success) {
+          parsedBody = parsed.data
+          if (parsed.data.message) message = parsed.data.message
+          else if (parsed.data.error) message = parsed.data.error
+        } else {
+          // Body shape diverged from the canonical envelope — log and fall
+          // through to the original transport-level message rather than
+          // swallow the HTTP error.
+          console.warn(
+            `invokeEdgeFunction: ${name} returned a malformed error envelope`,
+            parsed.error.issues,
+          )
+        }
       } catch {
         /* leave message as-is */
       }
@@ -173,7 +191,11 @@ async function invokeEdgeFunction<TResult>(
 
   if (!data) throw new Error(`No data returned from ${name} function`)
 
-  return data as TResult
+  const result = responseSchema.safeParse(data)
+  if (!result.success) {
+    throw new ResponseValidationError(name, result.error)
+  }
+  return result.data
 }
 
 // ── Edge function names ─────────────────────────────────────────────────────
@@ -195,24 +217,32 @@ const EDGE_FUNCTIONS = {
 
 // ── Typed wrappers ──────────────────────────────────────────────────────────
 
-export function allocateStatPoints(nftId: string, deltas: StatDeltas): Promise<AllocateResult> {
-  return invokeEdgeFunction<AllocateResult>(EDGE_FUNCTIONS.allocateStatPoints, {
-    nft_id: nftId,
-    efficiency: deltas.efficiency,
-    resilience: deltas.resilience,
-    comfort: deltas.comfort,
-    luck: deltas.luck,
-  })
+export function allocateStatPoints(
+  nftId: string,
+  deltas: StatDeltas,
+): Promise<AllocateStatPointsResponse> {
+  return invokeEdgeFunction(
+    EDGE_FUNCTIONS.allocateStatPoints,
+    {
+      nft_id: nftId,
+      efficiency: deltas.efficiency,
+      resilience: deltas.resilience,
+      comfort: deltas.comfort,
+      luck: deltas.luck,
+    },
+    AllocateStatPointsResponseSchema,
+  )
 }
 
 export function breedNFTs(
   parent1Id: string,
   parent2Id: string,
   degenPercent: number,
-): Promise<MysteryBox> {
-  return invokeEdgeFunction<MysteryBox>(
+): Promise<BreedNftsResponse> {
+  return invokeEdgeFunction(
     EDGE_FUNCTIONS.breedNFTs,
     { parent1_id: parent1Id, parent2_id: parent2Id, degen_percent: degenPercent },
+    BreedNftsResponseSchema,
     mapKnownErrors(['busted']),
   )
 }
@@ -222,31 +252,43 @@ export function repairNFT(
   newEnergy: number,
   degenPercent: number,
 ): Promise<RepairResult> {
-  return invokeEdgeFunction<RepairResult>(
+  return invokeEdgeFunction(
     EDGE_FUNCTIONS.repairNFT,
     { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
+    RepairNftResponseSchema,
     mapKnownErrors(['insufficient_poop', 'busted']),
   )
 }
 
 export function poopNFT(nftId: string): Promise<PoopResult> {
-  return invokeEdgeFunction<PoopResult>(
+  return invokeEdgeFunction(
     EDGE_FUNCTIONS.poopNFT,
     { nft_id: nftId },
+    UseNftResponseSchema,
     mapKnownErrors(['on_cooldown']),
   )
 }
 
-export function openMysteryBox(boxId: string): Promise<NFT> {
-  return invokeEdgeFunction<NFT>(EDGE_FUNCTIONS.openMysteryBox, { box_id: boxId })
+export function openMysteryBox(boxId: string): Promise<OpenMysteryBoxResponse> {
+  return invokeEdgeFunction(
+    EDGE_FUNCTIONS.openMysteryBox,
+    { box_id: boxId },
+    OpenMysteryBoxResponseSchema,
+  )
 }
 
 export function holdLootRoll(lootRollId: string): Promise<HoldLootResult> {
-  return invokeEdgeFunction<HoldLootResult>(EDGE_FUNCTIONS.holdLootRoll, {
-    loot_roll_id: lootRollId,
-  })
+  return invokeEdgeFunction(
+    EDGE_FUNCTIONS.holdLootRoll,
+    { loot_roll_id: lootRollId },
+    HoldLootRollResponseSchema,
+  )
 }
 
 export function rollLoot(lootRollId: string): Promise<RollLootResult> {
-  return invokeEdgeFunction<RollLootResult>(EDGE_FUNCTIONS.rollLoot, { loot_roll_id: lootRollId })
+  return invokeEdgeFunction(
+    EDGE_FUNCTIONS.rollLoot,
+    { loot_roll_id: lootRollId },
+    RollLootResponseSchema,
+  )
 }

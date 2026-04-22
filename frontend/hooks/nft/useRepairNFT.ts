@@ -8,6 +8,7 @@ import {
   InsufficientPoopError,
   repairNFT as invokeRepairNFT,
   type RepairResult,
+  ResponseValidationError,
 } from '@/lib/edgeFunctions'
 import { logError } from '@/utils/errorHelpers'
 
@@ -53,6 +54,10 @@ export function useRepairNFT() {
         setBustedResult(err.details)
         return
       }
+      if (err instanceof ResponseValidationError) {
+        logError('useRepairNFT:ResponseValidation', err.zodError)
+        return
+      }
       logError('useRepairNFT:Invoke', err)
     },
   })
@@ -74,11 +79,13 @@ export function useRepairNFT() {
     repairNFT,
     isPending: mutation.isPending,
     error:
-      mutation.error &&
-      !(mutation.error instanceof InsufficientPoopError) &&
-      !(mutation.error instanceof BustedError)
-        ? mutation.error.message
-        : null,
+      mutation.error instanceof ResponseValidationError
+        ? 'Server returned an unexpected response'
+        : mutation.error &&
+            !(mutation.error instanceof InsufficientPoopError) &&
+            !(mutation.error instanceof BustedError)
+          ? mutation.error.message
+          : null,
     insufficientPoopError,
     bustedResult,
   }

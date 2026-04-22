@@ -3,7 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { queryKeys } from '@/constants'
 import { useDevMock } from '@/lib/devMock'
-import { CooldownError, poopNFT as invokePoopNFT, type PoopResult } from '@/lib/edgeFunctions'
+import {
+  CooldownError,
+  poopNFT as invokePoopNFT,
+  type PoopResult,
+  ResponseValidationError,
+} from '@/lib/edgeFunctions'
 import { logError } from '@/utils/errorHelpers'
 
 export type { PoopResult }
@@ -36,6 +41,10 @@ export function usePoopNFT() {
         setCooldownError(err.details)
         return
       }
+      if (err instanceof ResponseValidationError) {
+        logError('usePoopNFT:ResponseValidation', err.zodError)
+        return
+      }
       logError('usePoopNFT:Invoke', err)
     },
   })
@@ -58,7 +67,11 @@ export function usePoopNFT() {
     poopNFT,
     isPending: mutation.isPending,
     error:
-      mutation.error && !(mutation.error instanceof CooldownError) ? mutation.error.message : null,
+      mutation.error instanceof ResponseValidationError
+        ? 'Server returned an unexpected response'
+        : mutation.error && !(mutation.error instanceof CooldownError)
+          ? mutation.error.message
+          : null,
     cooldownError,
   }
 }
