@@ -1,16 +1,16 @@
+import type { OpenMysteryBoxResponse } from '@pop/shared'
 import { cn, Dialog } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
 import { rarityBadge, revealModal } from '@/styles'
-import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 import TactileButton from '../shared/TactileButton'
 
 interface MysteryBoxRevealModalProps {
   isVisible: boolean
   /** The newly minted toilet NFT — must be non-null when `isVisible` is true. */
-  nft: NFT | null
+  nft: OpenMysteryBoxResponse | null
   onDismiss: () => void
 }
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/constants'
-import { allocateStatPoints } from '@/lib/edgeFunctions'
+import { allocateStatPoints, ResponseValidationError } from '@/lib/edgeFunctions'
 import type { AllocateResult, StatDeltas } from '@/types'
 import { logError } from '@/utils/errorHelpers'
 
@@ -22,6 +22,10 @@ export function useAllocateStatPoints() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs })
     },
     onError: (err) => {
+      if (err instanceof ResponseValidationError) {
+        logError('useAllocateStatPoints:ResponseValidation', err.zodError)
+        return
+      }
       logError('useAllocateStatPoints:invoke', err)
     },
   })
@@ -37,6 +41,9 @@ export function useAllocateStatPoints() {
   return {
     allocate,
     isPending: mutation.isPending,
-    error: mutation.error?.message ?? null,
+    error:
+      mutation.error instanceof ResponseValidationError
+        ? 'Server returned an unexpected response'
+        : (mutation.error?.message ?? null),
   }
 }

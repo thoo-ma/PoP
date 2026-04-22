@@ -3,6 +3,7 @@ import {
   type HoldLootResult,
   holdLootRoll as invokeHoldLootRoll,
   rollLoot as invokeRollLoot,
+  ResponseValidationError,
   type RollLootResult,
 } from '@/lib/edgeFunctions'
 import { logError } from '@/utils/errorHelpers'
@@ -29,8 +30,13 @@ export function useRollLoot() {
       setError(null)
       return await invokeHoldLootRoll(lootRollId)
     } catch (err) {
-      logError('useRollLoot:Hold', err)
-      setError(err instanceof Error ? err.message : 'Failed to hold loot roll')
+      if (err instanceof ResponseValidationError) {
+        logError('useRollLoot:HoldResponseValidation', err.zodError)
+        setError('Server returned an unexpected response')
+      } else {
+        logError('useRollLoot:Hold', err)
+        setError(err instanceof Error ? err.message : 'Failed to hold loot roll')
+      }
       return null
     } finally {
       setLoading(false)
@@ -43,8 +49,13 @@ export function useRollLoot() {
       setError(null)
       return await invokeRollLoot(lootRollId)
     } catch (err) {
-      logError('useRollLoot:Roll', err)
-      setError(err instanceof Error ? err.message : 'Failed to roll loot')
+      if (err instanceof ResponseValidationError) {
+        logError('useRollLoot:RollResponseValidation', err.zodError)
+        setError('Server returned an unexpected response')
+      } else {
+        logError('useRollLoot:Roll', err)
+        setError(err instanceof Error ? err.message : 'Failed to roll loot')
+      }
       return null
     } finally {
       setLoading(false)

@@ -1,4 +1,4 @@
-import type { Tables } from '@pop/shared'
+import type { AllocateStatPointsResponse, Tables } from '@pop/shared'
 import type { SORT_OPTIONS } from '@/constants'
 
 /**
@@ -23,11 +23,9 @@ export interface StatDeltas {
   luck: number
 }
 
-export interface AllocateResult {
-  id: string
-  efficiency: number
-  resilience: number
-  comfort: number
-  luck: number
-  stat_points: number
-}
+/**
+ * Result of the `allocate-stat-points` Edge Function. Inferred from the
+ * canonical Zod schema in `@pop/shared` so the frontend type stays aligned
+ * with the validated runtime shape.
+ */
+export type AllocateResult = AllocateStatPointsResponse
