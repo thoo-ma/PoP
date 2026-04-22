@@ -176,10 +176,27 @@ async function invokeEdgeFunction<TResult>(
   return data as TResult
 }
 
-// ── Typed wrappers ───────────────────────────────────────────────────────────
+// ── Edge function names ─────────────────────────────────────────────────────
+
+/**
+ * Single source of truth for every Supabase Edge Function name invoked from
+ * the frontend. Use these constants instead of inline string literals so that
+ * typos are caught at compile time and call sites are trivially greppable.
+ */
+const EDGE_FUNCTIONS = {
+  allocateStatPoints: 'allocate-stat-points',
+  breedNFTs: 'breed-nfts',
+  repairNFT: 'repair-nft',
+  poopNFT: 'use-nft',
+  openMysteryBox: 'open-mystery-box',
+  holdLootRoll: 'hold-loot-roll',
+  rollLoot: 'roll-loot',
+} as const
+
+// ── Typed wrappers ──────────────────────────────────────────────────────────
 
 export function allocateStatPoints(nftId: string, deltas: StatDeltas): Promise<AllocateResult> {
-  return invokeEdgeFunction<AllocateResult>('allocate-stat-points', {
+  return invokeEdgeFunction<AllocateResult>(EDGE_FUNCTIONS.allocateStatPoints, {
     nft_id: nftId,
     efficiency: deltas.efficiency,
     resilience: deltas.resilience,
@@ -194,7 +211,7 @@ export function breedNFTs(
   degenPercent: number,
 ): Promise<MysteryBox> {
   return invokeEdgeFunction<MysteryBox>(
-    'breed-nfts',
+    EDGE_FUNCTIONS.breedNFTs,
     { parent1_id: parent1Id, parent2_id: parent2Id, degen_percent: degenPercent },
     mapKnownErrors(['busted']),
   )
@@ -206,7 +223,7 @@ export function repairNFT(
   degenPercent: number,
 ): Promise<RepairResult> {
   return invokeEdgeFunction<RepairResult>(
-    'repair-nft',
+    EDGE_FUNCTIONS.repairNFT,
     { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
     mapKnownErrors(['insufficient_poop', 'busted']),
   )
@@ -214,20 +231,22 @@ export function repairNFT(
 
 export function poopNFT(nftId: string): Promise<PoopResult> {
   return invokeEdgeFunction<PoopResult>(
-    'use-nft',
+    EDGE_FUNCTIONS.poopNFT,
     { nft_id: nftId },
     mapKnownErrors(['on_cooldown']),
   )
 }
 
 export function openMysteryBox(boxId: string): Promise<NFT> {
-  return invokeEdgeFunction<NFT>('open-mystery-box', { box_id: boxId })
+  return invokeEdgeFunction<NFT>(EDGE_FUNCTIONS.openMysteryBox, { box_id: boxId })
 }
 
 export function holdLootRoll(lootRollId: string): Promise<HoldLootResult> {
-  return invokeEdgeFunction<HoldLootResult>('hold-loot-roll', { loot_roll_id: lootRollId })
+  return invokeEdgeFunction<HoldLootResult>(EDGE_FUNCTIONS.holdLootRoll, {
+    loot_roll_id: lootRollId,
+  })
 }
 
 export function rollLoot(lootRollId: string): Promise<RollLootResult> {
-  return invokeEdgeFunction<RollLootResult>('roll-loot', { loot_roll_id: lootRollId })
+  return invokeEdgeFunction<RollLootResult>(EDGE_FUNCTIONS.rollLoot, { loot_roll_id: lootRollId })
 }
