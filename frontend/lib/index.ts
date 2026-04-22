@@ -1,3 +1,4 @@
+export * from './edgeFunctions'
 export * from './inviteCodeApi'
 export * from './queryClient'
 export * from './supabase'
