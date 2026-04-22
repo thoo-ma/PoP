@@ -111,5 +111,5 @@ Keep these H2s in this order. Add new content under an existing `### Subsection`
 
 ## Agents
 
-No agents are currently registered in `.github/agents/`. To add one, see `.github/.instructions.md` for the `.agent.md` format and registration steps.
+No agents are currently registered in `.github/agents/`. To add one, place `<name>.agent.md` in `.github/agents/`, follow the format of existing skills under `.github/skills/` for reference, and register it in this `<agents>` block.
 
