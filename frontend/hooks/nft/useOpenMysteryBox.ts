@@ -1,7 +1,6 @@
-import { FunctionsHttpError } from '@supabase/supabase-js'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/constants'
-import { supabase } from '@/lib/supabase'
+import { openMysteryBox as invokeOpenMysteryBox } from '@/lib/edgeFunctions'
 import type { NFT } from '@/types'
 import { logError } from '@/utils/errorHelpers'
 
@@ -17,29 +16,7 @@ export function useOpenMysteryBox() {
   const queryClient = useQueryClient()
 
   const mutation = useMutation<NFT, Error, string>({
-    mutationFn: async (boxId) => {
-      const { data, error: fnError } = await supabase.functions.invoke('open-mystery-box', {
-        body: { box_id: boxId },
-      })
-
-      if (fnError) {
-        let message: string = fnError.message
-        if (fnError instanceof FunctionsHttpError) {
-          try {
-            const body = await fnError.context.json()
-            if (body?.message) message = body.message
-            else if (body?.error) message = body.error
-          } catch {
-            /* leave message as-is */
-          }
-        }
-        throw new Error(message)
-      }
-
-      if (!data) throw new Error('No data returned from open-mystery-box function')
-
-      return data as NFT
-    },
+    mutationFn: (boxId) => invokeOpenMysteryBox(boxId),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: queryKeys.userNFTs }),
