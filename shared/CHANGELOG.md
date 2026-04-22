@@ -1,5 +1,17 @@
 # @pop/shared
 
+## 0.3.0
+
+### Minor Changes
+
+- [#430](https://github.com/thoo-ma/PoP/pull/430) [`d568dd4`](https://github.com/thoo-ma/PoP/commit/d568dd4069b82f8fe38fab25239d09fbca071635) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add blurhash placeholder support for NFT and mystery-box images. Exports `getNftBlurhash` / `getMysteryBoxBlurhash` helpers and `NFT_BLURHASHES` / `MYSTERY_BOX_BLURHASHES` lookup tables from `@pop/shared`. Adds `blurhash` column to `nfts` and `mystery_boxes` tables (Supabase migration included). Edge functions populate `blurhash` on insert. `RemoteImage` accepts a new `blurhash` prop that maps to expo-image's `placeholder={{ blurhash }}`, eliminating blank-flash on image load.
+
+- [#458](https://github.com/thoo-ma/PoP/pull/458) [`bab30b0`](https://github.com/thoo-ma/PoP/commit/bab30b037847ca1d7b0e67814ecd5ab626f98649) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add Zod response validation for edge function responses on the frontend. Response schemas live in `@pop/shared/rpc` and are enforced by `invokeEdgeFunction`, surfacing parse failures via a new `ResponseValidationError`.
+
+### Patch Changes
+
+- [#438](https://github.com/thoo-ma/PoP/pull/438) [`dc9af66`](https://github.com/thoo-ma/PoP/commit/dc9af66a1cd2d03e4b5c842c956d6e9649cd5a93) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Audit and rationalize `frontend/types/`: delete dead types, co-locate single-consumer hook return types and component prop interfaces, move `ApprovalResult` RPC contract to `@pop/shared`, and document the convention (cross-cutting types only) in `frontend/.instructions.md`.
+
 ## 0.2.1
 
 ### Patch Changes

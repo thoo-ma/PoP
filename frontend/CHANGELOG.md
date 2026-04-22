@@ -1,5 +1,109 @@
 # pop
 
+## 0.5.0
+
+### Minor Changes
+
+- [#436](https://github.com/thoo-ma/PoP/pull/436) [`50ac253`](https://github.com/thoo-ma/PoP/commit/50ac25322e711b806cbcce13305477073647bdaf) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Accessibility hardening: add labels and values to sliders (StatAllocationModal, Repair), make BreedParentSlot announce as a button, label the InviteCodeScreen InputOTP, add a heading role to the screen header, announce AlertFrame content changes via a polite live region, hide decorative NFT images from screen readers, and expose expanded state on the filter toggle.
+
+- [#428](https://github.com/thoo-ma/PoP/pull/428) [`d96e3bc`](https://github.com/thoo-ma/PoP/commit/d96e3bc9e005962f856c2f35a69c986e39b17ba7) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add useAnnounce hook and screen reader announcements for all Poop game phase transitions
+
+- [#458](https://github.com/thoo-ma/PoP/pull/458) [`bab30b0`](https://github.com/thoo-ma/PoP/commit/bab30b037847ca1d7b0e67814ecd5ab626f98649) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add Zod response validation for edge function responses on the frontend. Response schemas live in `@pop/shared/rpc` and are enforced by `invokeEdgeFunction`, surfacing parse failures via a new `ResponseValidationError`.
+
+### Patch Changes
+
+- [#457](https://github.com/thoo-ma/PoP/pull/457) [`a8a7ac7`](https://github.com/thoo-ma/PoP/commit/a8a7ac7f162f8c7e7c64bc65b92701ab4a7925ad) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Polish batch ([#443](https://github.com/thoo-ma/PoP/issues/443)):
+
+  - Render `ScreenLoader` `title` prop instead of silently dropping it ([#450](https://github.com/thoo-ma/PoP/issues/450))
+  - Extract `useAuthForm` hook from `Auth.tsx` ([#447](https://github.com/thoo-ma/PoP/issues/447))
+  - Replace `Math.random()` with `crypto.getRandomValues()`-backed `secureRandom()` in edge functions for game-economy outcomes ([#448](https://github.com/thoo-ma/PoP/issues/448))
+
+- [#383](https://github.com/thoo-ma/PoP/pull/383) [`a27bb85`](https://github.com/thoo-ma/PoP/commit/a27bb853770dff59e08b73e2fd979669c4120226) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Enforce one-Alert-per-state pattern across all screens.
+
+  Every status state (success, warning, empty, error) now maps to exactly one component used everywhere:
+
+  - Breed at-limit and insufficient-POOP: ScreenError → Alert status="warning"
+  - Repair success: repairSuccess() View/Text → Alert status="success"
+  - Repair bust-inline: feedback moved outside NFT selection guard so it renders correctly
+  - PromptPhase "Immobility confirmed!": infoCard + phaseText → Alert status="success"
+  - RecordingPhase analyzing/recording/processing: infoCard states → Alert status="success"
+  - ImmobilityPhase "Hold still": statusBadge ok → Alert status="success"
+  - Marketplace empty sell tab: emptyState() → Alert status="warning"
+  - DevPreviewRenderer: all catalog previews updated to match
+  - Dead styles removed: repairSuccess, infoCard, recordingIndicator
+
+- [#385](https://github.com/thoo-ma/PoP/pull/385) [`a47363f`](https://github.com/thoo-ma/PoP/commit/a47363f982aa9a89e252ec4e8bedb1e82956ba1a) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract shared AlertBox component to deduplicate 22 inline Alert instances across screens and components.
+
+- [#440](https://github.com/thoo-ma/PoP/pull/440) [`07d106f`](https://github.com/thoo-ma/PoP/commit/07d106fd2e70fc19abf8d5334bd6b8470dcf9d99) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Audit and rationalize `frontend/constants/`, `utils/`, and `lib/`: move misclassified cooldown helpers (`formatCooldown`, `getCooldownStatus`, `CooldownStatus`) from `constants/` to `utils/proof/cooldown.ts`, co-locate single-consumer constants (`IMAGE_PLACEHOLDER_BG`, `IMAGE_TRANSITION_DURATION`, `SENSOR_UPDATE_INTERVAL`) and helpers (`formatConfidencePercentage`) with their owning files, and document folder conventions in `frontend/.instructions.md` (`constants/` = cross-cutting config & literal shared data; `utils/` = pure stateless helpers; `lib/` = third-party SDK init & API wrappers).
+
+- [#438](https://github.com/thoo-ma/PoP/pull/438) [`dc9af66`](https://github.com/thoo-ma/PoP/commit/dc9af66a1cd2d03e4b5c842c956d6e9649cd5a93) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Audit and rationalize `frontend/types/`: delete dead types, co-locate single-consumer hook return types and component prop interfaces, move `ApprovalResult` RPC contract to `@pop/shared`, and document the convention (cross-cutting types only) in `frontend/.instructions.md`.
+
+- [#437](https://github.com/thoo-ma/PoP/pull/437) [`81c036e`](https://github.com/thoo-ma/PoP/commit/81c036e21dcbe35f7e9dcec06af684ee1e53552e) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Audit and remove unnecessary `useCallback` wrappers in `frontend/`. Mutation hooks (`useAllocateStatPoints`, `useBreedNFT`, `useOpenMysteryBox`, `useRepairNFT`, `useUpdateNFT`) now expose React Query's already-stable `mutateAsync` directly; trivial empty-deps handlers in Vault, Marketplace, Poop, and Repair screens are inlined as plain functions. Load-bearing wrappers (FlatList memo boundaries, sensor subscriptions, state-machine bridges, async retry closures) are kept and annotated with `// kept: …` comments. No behaviour changes.
+
+- [#386](https://github.com/thoo-ma/PoP/pull/386) [`1f4d223`](https://github.com/thoo-ma/PoP/commit/1f4d223ee4bebc052b1f2b8c050a5ce31fe64ef0) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Refactor frontend internals: group IdlePhase props into semantic objects, split oversized style files (feedback.ts, cards.ts) into focused modules, and standardize modal prop naming (isVisible, onDismiss).
+
+- [#442](https://github.com/thoo-ma/PoP/pull/442) [`1d8df4b`](https://github.com/thoo-ma/PoP/commit/1d8df4bc3bc22ca89b52018553b0135673c24490) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Consolidate inline `supabase.functions.invoke` calls in NFT mutation hooks into a new `lib/edgeFunctions.ts` module with typed wrappers and centralised `FunctionsHttpError` parsing. Domain error classes (`BustedError`, `InsufficientPoopError`, `CooldownError`) now live in a single source of truth. Behaviour unchanged.
+
+- [#387](https://github.com/thoo-ma/PoP/pull/387) [`916b0d3`](https://github.com/thoo-ma/PoP/commit/916b0d3db7efbcd2aeba0b1b10cc5a4adc266893) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Define semantic token scale (typography, spacing, border-radius, border-width) in global.css and update all tv() style recipes to use token-backed class names instead of arbitrary bracket values.
+
+- [#391](https://github.com/thoo-ma/PoP/pull/391) [`85423c9`](https://github.com/thoo-ma/PoP/commit/85423c9c3efbcccbda78ec4e5672a3e83fd6f892) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Tokenize remaining arbitrary bracket values in style files (sizing, z-index, line-height, letter-spacing).
+
+- [#384](https://github.com/thoo-ma/PoP/pull/384) [`672ee3f`](https://github.com/thoo-ma/PoP/commit/672ee3f4aad17c9b0a7be56326c97dee2ab9accc) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add 19 missing dev catalogue entries across Profile, Auth, Breed, Poop, Vault, and Marketplace sections.
+
+- [#358](https://github.com/thoo-ma/PoP/pull/358) [`76d3285`](https://github.com/thoo-ma/PoP/commit/76d3285e8e5236e954d9e9916429d021edc96aa0) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Enable ccache for Android and iOS EAS builds, narrow Metro watchFolders to shared/ only.
+
+- [#424](https://github.com/thoo-ma/PoP/pull/424) [`6a9d2cb`](https://github.com/thoo-ma/PoP/commit/6a9d2cb04498485863b0fc812a57c6febcc25ac9) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add shared EmptyState component and consolidate empty-state UX across screens.
+
+- [#421](https://github.com/thoo-ma/PoP/pull/421) [`63ea4ca`](https://github.com/thoo-ma/PoP/commit/63ea4ca16f394b994de408a4487a9b251f9e537e) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace React Native Image with expo-image for disk caching and better memory management.
+
+- [#425](https://github.com/thoo-ma/PoP/pull/425) [`ae05d9a`](https://github.com/thoo-ma/PoP/commit/ae05d9a3acfd4a9e2ce4acdbda15a94572fc3ccf) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract CooldownTimer component from Poop screen to own its own setInterval.
+
+- [#423](https://github.com/thoo-ma/PoP/pull/423) [`e2f28ac`](https://github.com/thoo-ma/PoP/commit/e2f28ac3bee3c141bc05a20f607f2e9e31a80c29) Thanks [@thoo-ma](https://github.com/thoo-ma)! - refactor: extract usePoopStateMachine hook from Poop.tsx
+
+- [#381](https://github.com/thoo-ma/PoP/pull/381) [`28c17d9`](https://github.com/thoo-ma/PoP/commit/28c17d983d4c370a829f935596ef638283d24858) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace manual collapsible pattern in DevCatalog with HeroUI Native Accordion; replace View divider in DegenBar with Separator.
+
+- [#429](https://github.com/thoo-ma/PoP/pull/429) [`a52c572`](https://github.com/thoo-ma/PoP/commit/a52c57255f09282f234b88ac6a6068ff3f9effc8) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Design token & style hardening ([#394](https://github.com/thoo-ma/PoP/issues/394)): add `--border-tactile-sm/md/lg` (3/5/6px) scale and migrate every tactile call-site, eliminating the 4px outlier on `tactileNavButton`. Darken `--color-on-surface-variant` from `#b0a39d` (~2.2:1) to `#6b5d54` (~5.1:1) to meet WCAG AA. Extract `AlertBox` inline styles to a `tv()` recipe in `styles/shared/alertBox.ts`. Document the blessed spacing scale, tactile border convention, and muted-text font-weight pairing at the top of `global.css`.
+
+- [#360](https://github.com/thoo-ma/PoP/pull/360) [`98c16c4`](https://github.com/thoo-ma/PoP/commit/98c16c4d964ffdca6301cef53474c2489b57512c) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Block dashboard, supabase, and google-cloud-run from Metro resolver to reduce startup time while keeping watchFolders at workspace root for correct monorepo entry resolution.
+
+- [#435](https://github.com/thoo-ma/PoP/pull/435) [`5468d11`](https://github.com/thoo-ma/PoP/commit/5468d11f88666df8f0f0a00164ca50e6d9c09862) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate the 6 NFT mutation hooks (`useBreedNFT`, `useOpenMysteryBox`, `useRepairNFT`, `useUpdateNFT`, `useAllocateStatPoints`, `usePoopNFT`) to React Query `useMutation`. Removes manual `useState` loading/error state, standardizes cache invalidation in `onSuccess`, and renames the public `loading` field to `isPending` (with consumer updates in `Breed`, `Vault`, `Repair`, `Poop`, and `StatAllocationModal`).
+
+- [#430](https://github.com/thoo-ma/PoP/pull/430) [`d568dd4`](https://github.com/thoo-ma/PoP/commit/d568dd4069b82f8fe38fab25239d09fbca071635) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add blurhash placeholder support for NFT and mystery-box images. Exports `getNftBlurhash` / `getMysteryBoxBlurhash` helpers and `NFT_BLURHASHES` / `MYSTERY_BOX_BLURHASHES` lookup tables from `@pop/shared`. Adds `blurhash` column to `nfts` and `mystery_boxes` tables (Supabase migration included). Edge functions populate `blurhash` on insert. `RemoteImage` accepts a new `blurhash` prop that maps to expo-image's `placeholder={{ blurhash }}`, eliminating blank-flash on image load.
+
+- [#427](https://github.com/thoo-ma/PoP/pull/427) [`42ae467`](https://github.com/thoo-ma/PoP/commit/42ae4671fd8d1f00ce9757209b1bb0d67697e284) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Performance quick wins ([#396](https://github.com/thoo-ma/PoP/issues/396)): wrap TactileButton, NFTDetailCard, AlertBox, BreedPickerItemCard, and proof phase components (IdlePhase, CountdownPhase, ChallengeHeader) in `React.memo`; convert NFTCard `action` prop to a render-prop so call-site memoization is preserved; add `useCallback` to BreedPickerModal `renderItem` and Repair screen handlers; parallelize multi-key cache invalidations in useBreedNFT, useOpenMysteryBox, and useUpdateNFT (list/unlist); replace redundant `supabase.auth.getUser()` round-trips with `getSession()` in useUserApproval, useUpdateNFT, useMarketplaceListings, and useWallet.
+
+- [#378](https://github.com/thoo-ma/PoP/pull/378) [`464d174`](https://github.com/thoo-ma/PoP/commit/464d1743f04ffcaa119ca1ecfc9bc0b7ac6068ae) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Phase 2 HeroUI component upgrades: LinkButton footer links, InputOTP invite code, Avatar in ChallengeHeader, useToast across screens with retry actions, and Select/TagGroup style extraction into tv() recipe.
+
+- [#390](https://github.com/thoo-ma/PoP/pull/390) [`7a89bab`](https://github.com/thoo-ma/PoP/commit/7a89bab8620ec61098ed5d98d46dda946124665c) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace inline style={{}} with className on icons and root views, add empty states for Vault NFTs and Marketplace Buy tabs, add error handling to Marketplace and ProfileScreen, and fix mystery box skeleton to match MysteryBoxCard layout.
+
+- [#389](https://github.com/thoo-ma/PoP/pull/389) [`f1380a2`](https://github.com/thoo-ma/PoP/commit/f1380a250539f53104bada86eb9184831ae524aa) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Unify component patterns: BreedPickerItemCard wrapper+container card, tactileTabs/tactileSelect/screenHeader tv() recipes, replace raw Buttons with TactileButton, remove SortControls pass-through.
+
+- [#433](https://github.com/thoo-ma/PoP/pull/433) [`6836615`](https://github.com/thoo-ma/PoP/commit/6836615c5f9cf88302544050a48e4d89ea82ec40) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Design-system polish (pre-redesign foundation, [#432](https://github.com/thoo-ma/PoP/issues/432)). Establish the
+  single source of design tokens and conventions in `frontend/global.css`,
+  sweep typography/opacity/text-outline usage, rename tv() recipes to the
+  `*Frame` / `*Panel` / `*Modal` / `*Slot` taxonomy, and migrate every
+  border-radius class to the new semantic tokens (`rounded-tag`,
+  `rounded-body`, `rounded-frame`, `rounded-card`, `rounded-modal`).
+  Renames the `AlertBox` component to `AlertFrame` for parity with its
+  recipe. Audits per-site fractional spacing (annotated where intentional,
+  normalized where accidental) and adds `TODO(redesign)` markers at three
+  sites where shared abstractions were considered and deferred. No visual
+  shift expected — the new radius tokens map 1:1 onto the previous Tailwind
+  defaults.
+
+- [#379](https://github.com/thoo-ma/PoP/pull/379) [`ffb4766`](https://github.com/thoo-ma/PoP/commit/ffb47662ac901f487d345d6355757747dc4dce31) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add SearchField to Vault and Marketplace screens for filtering NFTs by name.
+
+- [#388](https://github.com/thoo-ma/PoP/pull/388) [`63cdf24`](https://github.com/thoo-ma/PoP/commit/63cdf24630f9e09e4acec60da92f9def65ebeb72) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Extract shared ProgressBar and BadgeOverlay sub-components; migrate NFTDetailCard to HeroUI Card compound API.
+
+- [#380](https://github.com/thoo-ma/PoP/pull/380) [`559a5d9`](https://github.com/thoo-ma/PoP/commit/559a5d986479a529efe8bb05e616302dc18188c5) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Replace ScreenLoader with content-shaped Skeleton placeholders in Breed and Repair screens.
+
+- [#361](https://github.com/thoo-ma/PoP/pull/361) [`41fbbb9`](https://github.com/thoo-ma/PoP/commit/41fbbb9485f4c93ea17ff728a85d005653e7ca57) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add TactileButton wrapper component and migrate all call sites.
+
+- [#426](https://github.com/thoo-ma/PoP/pull/426) [`c055b56`](https://github.com/thoo-ma/PoP/commit/c055b56f06f1751471cbd6274696db00bb8451e7) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate Vault and Marketplace NFT grids from `ScrollView` + `.map()` to virtualized `FlatList` (`numColumns={2}`). Only visible cards are rendered, dramatically reducing component count and memory at larger collection / listing sizes. Filtering, sorting, search, tab switching, empty states, and the Vault scroll-to-top FAB are preserved. The Vault mystery-box grid (4 fixed items) is unchanged.
+
+- Updated dependencies [[`dc9af66`](https://github.com/thoo-ma/PoP/commit/dc9af66a1cd2d03e4b5c842c956d6e9649cd5a93), [`d568dd4`](https://github.com/thoo-ma/PoP/commit/d568dd4069b82f8fe38fab25239d09fbca071635), [`bab30b0`](https://github.com/thoo-ma/PoP/commit/bab30b037847ca1d7b0e67814ecd5ab626f98649)]:
+  - @pop/shared@0.3.0
+
 ## 0.4.0
 
 ### Minor Changes
