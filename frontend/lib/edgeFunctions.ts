@@ -6,8 +6,8 @@ import type {
   MysteryBox,
 } from '@pop/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
 import type { AllocateResult, NFT, StatDeltas } from '@/types'
+import { supabase } from './supabase'
 
 // ── Domain error classes ─────────────────────────────────────────────────────
 
@@ -77,6 +77,46 @@ export interface RollLootResult {
   won: boolean
   holds_used: number
   box?: { id: string; rarity: string }
+}
+
+// ── Domain error registry ────────────────────────────────────────────────────
+
+/**
+ * Single source of truth mapping server `error` codes to their typed domain
+ * exceptions. Add a new entry here when introducing a new structured error.
+ */
+const errorRegistry = {
+  busted: (d: Partial<BustedDetails> | undefined) =>
+    new BustedError({
+      poop_spent: d?.poop_spent ?? 0,
+      poop_balance: d?.poop_balance ?? 0,
+    }),
+  insufficient_poop: (d: InsufficientPoopDetails) =>
+    new InsufficientPoopError({
+      poop_balance: d.poop_balance,
+      poop_required: d.poop_required,
+    }),
+  on_cooldown: (d: CooldownDetails) =>
+    new CooldownError({
+      cooldown_ends_at: d.cooldown_ends_at,
+      cooldown_remaining_seconds: d.cooldown_remaining_seconds,
+    }),
+} as const
+
+type ErrorCode = keyof typeof errorRegistry
+
+/**
+ * Build an `ErrorMapper` that translates the listed structured error codes
+ * into their typed domain exceptions. Unlisted codes fall through to the
+ * generic `Error(message)` path.
+ */
+function mapKnownErrors(codes: readonly ErrorCode[]): ErrorMapper {
+  const allowed = new Set<string>(codes)
+  return (body) => {
+    if (!body?.error || !allowed.has(body.error)) return null
+    const builder = errorRegistry[body.error as ErrorCode]
+    return builder(body.details as never)
+  }
 }
 
 // ── Generic invoker ──────────────────────────────────────────────────────────
@@ -156,16 +196,7 @@ export function breedNFTs(
   return invokeEdgeFunction<MysteryBox>(
     'breed-nfts',
     { parent1_id: parent1Id, parent2_id: parent2Id, degen_percent: degenPercent },
-    (body) => {
-      if (body?.error === 'busted') {
-        const d = body.details as unknown as BustedDetails | undefined
-        return new BustedError({
-          poop_spent: d?.poop_spent ?? 0,
-          poop_balance: d?.poop_balance ?? 0,
-        })
-      }
-      return null
-    },
+    mapKnownErrors(['busted']),
   )
 }
 
@@ -177,37 +208,16 @@ export function repairNFT(
   return invokeEdgeFunction<RepairResult>(
     'repair-nft',
     { nft_id: nftId, new_energy: newEnergy, degen_percent: degenPercent },
-    (body) => {
-      if (body?.error === 'insufficient_poop' && body.details) {
-        const d = body.details as unknown as InsufficientPoopDetails
-        return new InsufficientPoopError({
-          poop_balance: d.poop_balance,
-          poop_required: d.poop_required,
-        })
-      }
-      if (body?.error === 'busted') {
-        const d = body.details as unknown as BustedDetails | undefined
-        return new BustedError({
-          poop_spent: d?.poop_spent ?? 0,
-          poop_balance: d?.poop_balance ?? 0,
-        })
-      }
-      return null
-    },
+    mapKnownErrors(['insufficient_poop', 'busted']),
   )
 }
 
 export function poopNFT(nftId: string): Promise<PoopResult> {
-  return invokeEdgeFunction<PoopResult>('use-nft', { nft_id: nftId }, (body) => {
-    if (body?.error === 'on_cooldown' && body.details) {
-      const d = body.details as unknown as CooldownDetails
-      return new CooldownError({
-        cooldown_ends_at: d.cooldown_ends_at,
-        cooldown_remaining_seconds: d.cooldown_remaining_seconds,
-      })
-    }
-    return null
-  })
+  return invokeEdgeFunction<PoopResult>(
+    'use-nft',
+    { nft_id: nftId },
+    mapKnownErrors(['on_cooldown']),
+  )
 }
 
 export function openMysteryBox(boxId: string): Promise<NFT> {
