@@ -3,7 +3,8 @@ import { Card, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
-import { BadgeOverlay, ProgressBar } from '@/components'
+import BadgeOverlay from '@/components/shared/BadgeOverlay'
+import ProgressBar from '@/components/shared/ProgressBar'
 import { RemoteImage } from '@/components/styled'
 import {
   cardBody,

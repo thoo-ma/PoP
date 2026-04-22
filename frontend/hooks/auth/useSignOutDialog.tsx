@@ -1,7 +1,7 @@
 import { cn, Dialog } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
-import { TactileButton } from '@/components'
+import TactileButton from '@/components/shared/TactileButton'
 import { dialogBody, signOutModal, tactileButton } from '@/styles'
 
 /**

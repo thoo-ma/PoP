@@ -3,7 +3,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { Button, cn, LinkButton, Spinner } from 'heroui-native'
 import { Linking, Platform, Text, View } from 'react-native'
 import OAuthButton from '@/components/auth/OAuthButton'
-import { useAuthForm } from '@/hooks'
+import { useAuthForm } from '@/hooks/auth/useAuthForm'
 import { authScreen, tactileButtonText } from '@/styles/auth'
 import TactileButton from '../shared/TactileButton'
 
