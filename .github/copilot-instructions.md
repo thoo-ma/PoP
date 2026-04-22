@@ -56,10 +56,10 @@ Each area's `.instructions.md` follows this canonical H2 structure:
 1. `## Runtime & Dependencies` — language, framework, key libraries
 2. `## Code Organization` — folder layout, path aliases, navigation/routing
 3. `## Patterns` — conventions, recipes, idioms (use `### Subsections` per topic)
-4. `## Pitfalls` — "do NOT" rules, cross-area warnings, common mistakes
+4. `## Pitfalls` — "do not" rules, cross-area warnings, common mistakes
 5. `## Skills & Agents` — pointers to relevant skills (and agents, if any)
 
-Keep these H2s in this order. Add new content under an existing `### Subsection` of `## Patterns` rather than introducing a new top-level H2.
+Maintain this order. Add new content under an existing `### Subsection` of `## Patterns` rather than introducing a new top-level H2.
 
 ## Skills
 
@@ -113,7 +113,7 @@ Keep these H2s in this order. Add new content under an existing `### Subsection`
 
 ## Agents
 
-No agents are currently registered in `.github/agents/`. To add one, place `<name>.agent.md` in `.github/agents/`, follow the format of existing skills under `.github/skills/` for reference, and register it in this `<agents>` block.
+No agents are currently registered in `.github/agents/`. To add one: place `<name>.agent.md` in `.github/agents/`, use any file under `.github/skills/` as a format reference, and register the entry in the `<agents>` block below.
 
 <agents>
 </agents>
