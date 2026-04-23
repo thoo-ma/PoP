@@ -30,6 +30,9 @@ jobs:
       - name: Type-check all packages
         run: pnpm typecheck
 
+      - name: Check HeroUI theme coverage
+        run: pnpm check:theme
+
   lint:
     name: Lint (Biome)
     runs-on: ubuntu-latest
