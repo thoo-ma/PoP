@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Text, View } from 'react-native'
+import { Button } from '@/components/ui'
 import { phaseContainer, phaseContent, phaseText, timerText } from '@/styles'
 import type { NFT } from '@/types'
-import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -24,14 +24,9 @@ export const CountdownPhase = memo(function CountdownPhase({
         <Text className={timerText({ status: 'neutral' })}>{countdownValue}</Text>
         <Text className={pt.hint()}>Get ready…</Text>
       </View>
-      <TactileButton
-        animation="disable-all"
-        variant="outline"
-        onPress={onCancel}
-        className="w-full"
-      >
-        Cancel
-      </TactileButton>
+      <Button animation="disable-all" variant="outline" onPress={onCancel} className="w-full">
+        <Button.Label>Cancel</Button.Label>
+      </Button>
     </View>
   )
 })

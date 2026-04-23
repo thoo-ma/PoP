@@ -20,7 +20,6 @@ import {
   ScreenError,
   ScreenLoader,
   StatAllocationModal,
-  TactileButton,
 } from '@/components'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
@@ -30,7 +29,6 @@ import {
   mysteryBoxSkeleton,
   screenContainer,
   scrollContent,
-  tactileNavButton,
   tactileTabs,
 } from '@/styles'
 import type { AllocateResult, NFT, SortOption } from '@/types'
@@ -230,7 +228,7 @@ export default memo(function Vault() {
   const renderNftAction = useCallback(
     (nft: NFT) => (
       <>
-        <TactileButton
+        <Button
           variant="secondary"
           size="sm"
           isDisabled={(nft.stat_points ?? 0) === 0}
@@ -238,10 +236,10 @@ export default memo(function Vault() {
           className="mt-1"
           accessibilityLabel={`Allocate ${nft.stat_points ?? 0} stat point${(nft.stat_points ?? 0) !== 1 ? 's' : ''} for ${formatDisplayName(nft.name)}`}
         >
-          {`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}
-        </TactileButton>
+          <Button.Label>{`Allocate ${nft.stat_points ?? 0} pt${(nft.stat_points ?? 0) !== 1 ? 's' : ''}`}</Button.Label>
+        </Button>
         {!nft.isListed ? (
-          <TactileButton
+          <Button
             variant="primary"
             size="sm"
             isDisabled
@@ -250,8 +248,8 @@ export default memo(function Vault() {
             accessibilityLabel={`List ${formatDisplayName(nft.name)} for sale`}
             accessibilityHint="List this NFT on the marketplace"
           >
-            Sale
-          </TactileButton>
+            <Button.Label>Sale</Button.Label>
+          </Button>
         ) : undefined}
       </>
     ),
@@ -381,14 +379,14 @@ export default memo(function Vault() {
                 title="Mystery Boxes"
                 description={`Failed to load: ${boxesError}`}
               >
-                <TactileButton
+                <Button
                   animation="disable-all"
                   variant="primary"
                   onPress={() => refetchBoxes()}
                   className="mt-4"
                 >
-                  Retry
-                </TactileButton>
+                  <Button.Label>Retry</Button.Label>
+                </Button>
               </AlertFrame>
             </View>
           ) : (
@@ -419,16 +417,16 @@ export default memo(function Vault() {
                             blurhash={group.blurhash}
                             count={group.count}
                             action={
-                              <TactileButton
-                                variant={isEmpty ? 'disabled' : 'primary'}
+                              <Button
+                                variant="primary"
                                 size="sm"
                                 isDisabled={isEmpty || isOpening || openLoading}
                                 onPress={() => handleOpenBox(group.rarity)}
                                 className="mt-1"
                                 accessibilityLabel={`Open a ${group.rarity} mystery box`}
                               >
-                                {isOpening ? 'Opening...' : 'Open'}
-                              </TactileButton>
+                                <Button.Label>{isOpening ? 'Opening...' : 'Open'}</Button.Label>
+                              </Button>
                             }
                           />
                         </View>
@@ -464,10 +462,7 @@ export default memo(function Vault() {
           variant="ghost"
           feedbackVariant="none"
           onPress={handleScrollToTop}
-          className={cn(
-            tactileNavButton(),
-            'absolute bottom-44 right-4 border-border border-b-border',
-          )}
+          className="w-12 h-12 rounded-card bg-surface border-2 border-border flex-row items-center justify-center absolute bottom-44 right-4"
           accessibilityLabel="Scroll to top"
         >
           <Button.Label className="text-foreground text-heading-xs font-black">↑</Button.Label>

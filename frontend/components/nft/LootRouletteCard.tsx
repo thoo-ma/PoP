@@ -1,11 +1,10 @@
 import { BASE_WIN_PROBABILITY, MAX_HOLDS, PER_HOLD_INCREMENT } from '@pop/shared'
 import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
-import { Card, Spinner, useToast } from '@/components/ui'
+import { Button, Card, Spinner, useToast } from '@/components/ui'
 import type { RollLootResult } from '@/hooks'
 import { useRollLoot } from '@/hooks'
 import { lootPanel, lootResultPanel } from '@/styles'
-import TactileButton from '../shared/TactileButton'
 
 const BASE_CHANCE = Math.round(BASE_WIN_PROBABILITY * 100)
 const CHANCE_PER_HOLD = Math.round(PER_HOLD_INCREMENT * 100)
@@ -106,23 +105,31 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
               {err && <Text className={cardStyles.rollError()}>{err}</Text>}
 
               <View className={cardStyles.buttonRow()}>
-                <TactileButton
+                <Button
                   variant="secondary"
                   onPress={handleHold}
                   isDisabled={!canHold || loading}
                   className="flex-1"
+                  accessibilityLabel={`Hold +${CHANCE_PER_HOLD}%`}
+                  accessibilityState={{ busy: loading }}
                 >
-                  {loading ? <Spinner size="sm" /> : `Hold +${CHANCE_PER_HOLD}%`}
-                </TactileButton>
+                  {loading ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <Button.Label>{`Hold +${CHANCE_PER_HOLD}%`}</Button.Label>
+                  )}
+                </Button>
 
-                <TactileButton
+                <Button
                   variant="primary"
                   onPress={handleRoll}
                   isDisabled={!canRoll || loading}
                   className="flex-1"
+                  accessibilityLabel="Roll!"
+                  accessibilityState={{ busy: loading }}
                 >
-                  {loading ? <Spinner size="sm" /> : 'Roll!'}
-                </TactileButton>
+                  {loading ? <Spinner size="sm" /> : <Button.Label>Roll!</Button.Label>}
+                </Button>
               </View>
             </>
           ) : (
@@ -141,14 +148,14 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                 </View>
               )}
 
-              <TactileButton
+              <Button
                 animation="disable-all"
                 variant="secondary"
                 onPress={onDone}
                 className="px-8 mt-2"
               >
-                Done
-              </TactileButton>
+                <Button.Label>Done</Button.Label>
+              </Button>
             </>
           )}
         </Card.Body>

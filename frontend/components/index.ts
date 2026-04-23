@@ -23,7 +23,6 @@ export {
   ResultsPhase,
   RoulettePhase,
 } from './proof'
-export type { TactileButtonProps } from './shared'
 export {
   AlertFrame,
   BadgeOverlay,
@@ -33,5 +32,4 @@ export {
   ProgressBar,
   ScreenError,
   ScreenLoader,
-  TactileButton,
 } from './shared'

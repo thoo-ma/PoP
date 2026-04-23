@@ -1,7 +1,7 @@
-import { cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
+import { cn } from '@/components/ui'
 import { emptyState } from '@/styles'
 
 type EmptyStateLayout = 'inline' | 'screen'

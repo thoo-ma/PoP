@@ -1,6 +1,5 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import {
-  Button,
   cn,
   Dialog,
   FieldError,
@@ -29,10 +28,9 @@ import {
   RoulettePhase,
   ScreenError,
   ScreenLoader,
-  TactileButton,
 } from '@/components'
 import { Image, RemoteImage } from '@/components/styled'
-import { Avatar, Skeleton } from '@/components/ui'
+import { Avatar, Button, Skeleton } from '@/components/ui'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {
@@ -50,8 +48,6 @@ import {
   screenContainer,
   signOutModal,
   skeletonCard,
-  tactileButton,
-  tactileButtonText,
   walletModal,
 } from '@/styles'
 import {
@@ -75,15 +71,8 @@ function PreviewShell({ children, onBack }: { children: ReactNode; onBack: () =>
     <View className="flex-1">
       {children}
       <View className="absolute bottom-32 left-6 right-6">
-        <Button
-          variant="ghost"
-          feedbackVariant="none"
-          onPress={onBack}
-          className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-        >
-          <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-            ← Back to Catalog
-          </Button.Label>
+        <Button variant="primary" onPress={onBack} className="w-full">
+          <Button.Label>← Back to Catalog</Button.Label>
         </Button>
       </View>
     </View>
@@ -257,12 +246,12 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                   <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
                 </View>
                 <View className={s.buttonRow()}>
-                  <TactileButton variant="outline" onPress={dismiss} className="flex-1">
-                    Cancel
-                  </TactileButton>
-                  <TactileButton variant="default" onPress={dismiss} className="flex-1">
-                    Sign Out
-                  </TactileButton>
+                  <Button variant="outline" onPress={dismiss} className="flex-1">
+                    <Button.Label>Cancel</Button.Label>
+                  </Button>
+                  <Button variant="secondary" onPress={dismiss} className="flex-1">
+                    <Button.Label>Sign Out</Button.Label>
+                  </Button>
                 </View>
               </Dialog.Content>
             </Dialog.Portal>
@@ -388,9 +377,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               </InputOTP>
             </View>
             <View className={s.actionsWrap()}>
-              <TactileButton variant="disabled" isDisabled className="w-full">
+              <Button variant="primary" isDisabled className="w-full">
                 <Spinner size="sm" />
-              </TactileButton>
+              </Button>
             </View>
           </View>
         </View>
@@ -514,15 +503,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             </View>
             <BreedOutcomePanel r1={p1.rarity} r2={p2.rarity} />
             <DegenBar baseCost={cost} onDegenChange={() => {}} />
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-4')}
-              onPress={() => {}}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Breed ({cost} POOP)
-              </Button.Label>
+            <Button variant="primary" className="w-full mt-4" onPress={() => {}}>
+              <Button.Label>Breed ({cost} POOP)</Button.Label>
             </Button>
           </View>
         </View>
@@ -553,15 +535,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                 description={`One of the selected NFTs has reached its max breed count (${BREED_MAX_COUNT}) and cannot be bred again.`}
               />
             </View>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              isDisabled
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Breed
-              </Button.Label>
+            <Button variant="primary" isDisabled className="w-full">
+              <Button.Label>Breed</Button.Label>
             </Button>
           </View>
         </View>
@@ -594,15 +569,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                 description={`You need ${cost} POOP to breed.`}
               />
             </View>
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              isDisabled
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full')}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Breed ({cost} POOP)
-              </Button.Label>
+            <Button variant="primary" isDisabled className="w-full">
+              <Button.Label>Breed ({cost} POOP)</Button.Label>
             </Button>
           </View>
         </View>
@@ -659,15 +627,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                 <Text className={result.arrowText()}>→</Text>
               </View>
               <MysteryBoxCard rarity={box.rarity} box={box} imageUrl={box.image_url} />
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
-                className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-4')}
-                onPress={() => {}}
-              >
-                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                  Breed Again
-                </Button.Label>
+              <Button variant="primary" className="w-full mt-4" onPress={() => {}}>
+                <Button.Label>Breed Again</Button.Label>
               </Button>
             </View>
           </View>
@@ -728,15 +689,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               </View>
             </View>
             <DegenBar baseCost={42} onDegenChange={() => {}} />
-            <Button
-              variant="ghost"
-              feedbackVariant="none"
-              className={cn(tactileButton({ variant: 'primary' }), 'w-full mt-4')}
-              onPress={() => {}}
-            >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-                Repair (42 POOP)
-              </Button.Label>
+            <Button variant="primary" className="w-full mt-4" onPress={() => {}}>
+              <Button.Label>Repair (42 POOP)</Button.Label>
             </Button>
           </View>
         </View>
@@ -751,15 +705,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
         <View className={screenContainer({ bg: 'default', padTop: 'md' })}>
           <View className="w-full items-center px-5 pt-10">
             <View className={rfe.root()}>
-              <Button
-                variant="ghost"
-                feedbackVariant="none"
-                className={cn(tactileButton({ variant: 'outline' }), 'w-full')}
-                onPress={() => {}}
-              >
-                <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                  This NFT is at full energy!
-                </Button.Label>
+              <Button variant="outline" className="w-full" onPress={() => {}}>
+                <Button.Label>This NFT is at full energy!</Button.Label>
               </Button>
             </View>
           </View>
@@ -779,15 +726,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                 title="Repair Complete!"
                 description={['Energy: 100%', '-42 POOP spent']}
               >
-                <Button
-                  variant="ghost"
-                  feedbackVariant="none"
-                  className={cn(tactileButton({ variant: 'outline' }), 'w-full mt-4')}
-                  onPress={() => {}}
-                >
-                  <Button.Label className={tactileButtonText({ variant: 'outline' })}>
-                    Repair Another NFT
-                  </Button.Label>
+                <Button variant="outline" className="w-full mt-4" onPress={() => {}}>
+                  <Button.Label>Repair Another NFT</Button.Label>
                 </Button>
               </AlertFrame>
             </View>
@@ -1090,14 +1030,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               title="Mystery Boxes"
               description="Failed to load: Network error"
             >
-              <TactileButton
-                animation="disable-all"
-                variant="primary"
-                onPress={() => {}}
-                className="mt-4"
-              >
-                Retry
-              </TactileButton>
+              <Button animation="disable-all" variant="primary" onPress={() => {}} className="mt-4">
+                <Button.Label>Retry</Button.Label>
+              </Button>
             </AlertFrame>
           </View>
         </View>
@@ -1114,15 +1049,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
             <NFTCard
               nft={nft}
               action={(n) => (
-                <Button
-                  variant="ghost"
-                  feedbackVariant="none"
-                  className={cn(tactileButton({ variant: 'secondary', size: 'sm' }), 'mt-1')}
-                  onPress={() => {}}
-                >
-                  <Button.Label className={tactileButtonText({ variant: 'secondary', size: 'sm' })}>
-                    Allocate {n.stat_points} pts
-                  </Button.Label>
+                <Button variant="secondary" size="sm" className="mt-1" onPress={() => {}}>
+                  <Button.Label>Allocate {n.stat_points} pts</Button.Label>
                 </Button>
               )}
             />
@@ -1254,15 +1182,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               action={(n) => (
                 <View className={itemRow.root()}>
                   <Text className={itemRow.price()}>{n.price}</Text>
-                  <Button
-                    variant="ghost"
-                    feedbackVariant="none"
-                    onPress={() => {}}
-                    className={tactileButton({ variant: 'primary', size: 'sm' })}
-                  >
-                    <Button.Label className={tactileButtonText({ variant: 'primary', size: 'sm' })}>
-                      Buy
-                    </Button.Label>
+                  <Button variant="primary" size="sm" onPress={() => {}}>
+                    <Button.Label>Buy</Button.Label>
                   </Button>
                 </View>
               )}
@@ -1294,14 +1215,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
                   </Dialog.Description>
                 </View>
                 <View className={dialogFooter()}>
-                  <TactileButton
-                    animation="disable-all"
-                    variant="primary"
-                    size="sm"
-                    onPress={dismiss}
-                  >
-                    OK
-                  </TactileButton>
+                  <Button animation="disable-all" variant="primary" size="sm" onPress={dismiss}>
+                    <Button.Label>OK</Button.Label>
+                  </Button>
                 </View>
               </Dialog.Content>
             </Dialog.Portal>
@@ -1323,9 +1239,9 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
               action={(n) => (
                 <View className={itemRow.root()}>
                   <Text className={itemRow.price()}>{n.price}</Text>
-                  <TactileButton variant="outline" size="sm" onPress={() => {}}>
-                    Unlist
-                  </TactileButton>
+                  <Button variant="outline" size="sm" onPress={() => {}}>
+                    <Button.Label>Unlist</Button.Label>
+                  </Button>
                 </View>
               )}
             />

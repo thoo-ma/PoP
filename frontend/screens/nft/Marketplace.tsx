@@ -1,14 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FlatList, type ListRenderItem, Text, View } from 'react-native'
-import {
-  AlertFrame,
-  EmptyState,
-  NFTCard,
-  ScreenError,
-  SortToolbar,
-  TactileButton,
-} from '@/components'
-import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
+import { AlertFrame, EmptyState, NFTCard, ScreenError, SortToolbar } from '@/components'
+import { Button, cn, Dialog, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,
@@ -132,15 +125,15 @@ export default memo(function Marketplace() {
     (nft: NFT) => (
       <View className={itemRow.root()}>
         <Text className={itemRow.price()}>{nft.price}</Text>
-        <TactileButton
+        <Button
           variant="primary"
           size="sm"
           onPress={handleBuyNFT}
           accessibilityLabel={`Buy ${formatDisplayName(nft.name)} for ${nft.price}`}
           accessibilityHint="Purchase this NFT"
         >
-          Buy
-        </TactileButton>
+          <Button.Label>Buy</Button.Label>
+        </Button>
       </View>
     ),
     [itemRow, handleBuyNFT],
@@ -163,7 +156,7 @@ export default memo(function Marketplace() {
     (nft: NFT) => (
       <View className={itemRow.root()}>
         <Text className={itemRow.price()}>{nft.price}</Text>
-        <TactileButton
+        <Button
           variant="outline"
           size="sm"
           isDisabled={updateLoading}
@@ -171,8 +164,8 @@ export default memo(function Marketplace() {
           accessibilityLabel={`Unlist ${formatDisplayName(nft.name)}`}
           accessibilityHint="Remove this NFT from marketplace"
         >
-          {updateLoading ? 'Unlisting...' : 'Unlist'}
-        </TactileButton>
+          <Button.Label>{updateLoading ? 'Unlisting...' : 'Unlist'}</Button.Label>
+        </Button>
       </View>
     ),
     [itemRow, handleUnlist, updateLoading],
@@ -258,14 +251,14 @@ export default memo(function Marketplace() {
                 title="Listings"
                 description={`Failed to load: ${marketplaceError}`}
               >
-                <TactileButton
+                <Button
                   animation="disable-all"
                   variant="primary"
                   onPress={() => refetchListings()}
                   className="mt-4"
                 >
-                  Retry
-                </TactileButton>
+                  <Button.Label>Retry</Button.Label>
+                </Button>
               </AlertFrame>
             </View>
           ) : (
@@ -347,14 +340,14 @@ export default memo(function Marketplace() {
               <Dialog.Description>{dialog?.message}</Dialog.Description>
             </View>
             <View className={dialogFooter()}>
-              <TactileButton
+              <Button
                 animation="disable-all"
                 variant="primary"
                 size="sm"
                 onPress={() => setDialog(null)}
               >
-                OK
-              </TactileButton>
+                <Button.Label>OK</Button.Label>
+              </Button>
             </View>
           </Dialog.Content>
         </Dialog.Portal>

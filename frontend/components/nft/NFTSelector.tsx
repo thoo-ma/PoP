@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { Button, cn } from '@/components/ui'
-import { nftSelectorCounter, tactileNavButton } from '@/styles'
+import { nftSelectorCounter } from '@/styles'
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */
@@ -32,7 +32,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         variant="ghost"
         feedbackVariant="none"
         onPress={onPrev}
-        className={tactileNavButton()}
+        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary flex-row items-center justify-center"
         accessibilityLabel="Previous NFT"
       >
         {/* Pass the icon directly as a child */}
@@ -48,7 +48,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         variant="ghost"
         feedbackVariant="none"
         onPress={onNext}
-        className={tactileNavButton()}
+        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary flex-row items-center justify-center"
         accessibilityLabel="Next NFT"
       >
         {/* Pass the icon directly as a child */}

@@ -1,7 +1,7 @@
-import { Accordion, AccordionLayoutTransition, Button, cn } from 'heroui-native'
+import { Accordion, AccordionLayoutTransition } from 'heroui-native'
 import { Text } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { tactileButton, tactileButtonText } from '@/styles'
+import { Button } from '@/components/ui'
 
 // ─── Catalog definition ──────────────────────────────────────────────────────
 
@@ -151,17 +151,12 @@ export default function DevCatalog({
               {section.entries.map(([key, label]) => (
                 <Button
                   key={key}
-                  variant="ghost"
-                  feedbackVariant="none"
-                  className={cn(
-                    tactileButton({ variant: 'default', size: 'sm' }),
-                    'flex-1 basis-[47%]',
-                  )}
+                  variant="secondary"
+                  size="sm"
+                  className="flex-1 basis-[47%]"
                   onPress={() => onSelect(key, i)}
                 >
-                  <Button.Label className={tactileButtonText({ variant: 'default', size: 'sm' })}>
-                    {label}
-                  </Button.Label>
+                  <Button.Label>{label}</Button.Label>
                 </Button>
               ))}
             </Accordion.Content>

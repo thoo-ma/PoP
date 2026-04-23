@@ -1,8 +1,8 @@
 import { View } from 'react-native'
+import { Button } from '@/components/ui'
 import { phaseContainer } from '@/styles'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
-import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -42,14 +42,9 @@ export function ResultsPhase({
           description={rateLimitError.message}
           className="mb-4"
         >
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onReset}
-            className="w-full"
-          >
-            Done
-          </TactileButton>
+          <Button animation="disable-all" variant="primary" onPress={onReset} className="w-full">
+            <Button.Label>Done</Button.Label>
+          </Button>
         </AlertFrame>
       </View>
     )
@@ -64,14 +59,9 @@ export function ResultsPhase({
           description={detectionError}
           className="mb-4"
         >
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onReset}
-            className="w-full"
-          >
-            Try Again
-          </TactileButton>
+          <Button animation="disable-all" variant="primary" onPress={onReset} className="w-full">
+            <Button.Label>Try Again</Button.Label>
+          </Button>
         </AlertFrame>
       </View>
     )
@@ -86,14 +76,9 @@ export function ResultsPhase({
           description={`Confidence: ${Math.round(detectionResult.confidence * 100)}%`}
           className="mb-4"
         >
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onReset}
-            className="w-full"
-          >
-            Try Again
-          </TactileButton>
+          <Button animation="disable-all" variant="primary" onPress={onReset} className="w-full">
+            <Button.Label>Try Again</Button.Label>
+          </Button>
         </AlertFrame>
       </View>
     )
@@ -121,23 +106,18 @@ export function ResultsPhase({
         className="mb-4"
       >
         {lootRollId ? (
-          <TactileButton
+          <Button
             variant="primary"
             onPress={onRoulette}
             isDisabled={actionLoading}
             className="w-full"
           >
-            Continue →
-          </TactileButton>
+            <Button.Label>Continue →</Button.Label>
+          </Button>
         ) : (
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onReset}
-            className="w-full"
-          >
-            Done
-          </TactileButton>
+          <Button animation="disable-all" variant="primary" onPress={onReset} className="w-full">
+            <Button.Label>Done</Button.Label>
+          </Button>
         )}
       </AlertFrame>
     </View>

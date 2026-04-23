@@ -89,10 +89,7 @@ const TabItem = memo(function TabItem({
 })
 
 export default memo(function PageIndicator({ state, navigation }: MaterialTopTabBarProps) {
-  const [active, inactive] = useCSSVariable([
-    '--color-on-surface',
-    '--color-on-surface-variant',
-  ]) as [string, string]
+  const [active, inactive] = useCSSVariable(['--foreground', '--muted']) as [string, string]
   const s = pageIndicator()
   return (
     <View className={s.wrapper()}>

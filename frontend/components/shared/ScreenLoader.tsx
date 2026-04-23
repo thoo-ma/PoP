@@ -1,6 +1,6 @@
-import { Spinner } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
+import { Spinner } from '@/components/ui'
 import { screenLoader } from '@/styles'
 
 interface ScreenLoaderProps {

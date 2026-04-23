@@ -2,10 +2,9 @@ import type { OpenMysteryBoxResponse } from '@pop/shared'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
-import { cn, Dialog } from '@/components/ui'
+import { Button, cn, Dialog } from '@/components/ui'
 import { rarityBadge, revealModal } from '@/styles'
 import { formatDisplayName } from '@/utils'
-import TactileButton from '../shared/TactileButton'
 
 interface MysteryBoxRevealModalProps {
   isVisible: boolean
@@ -58,14 +57,14 @@ export default memo(function MysteryBoxRevealModal({
           <Text className={s.titleMd()}>{formatDisplayName(nft.name)}</Text>
           <Text className={cn(s.description(), 'capitalize')}>{nft.type.replace(/-/g, ' ')}</Text>
 
-          <TactileButton
+          <Button
             variant="primary"
             onPress={onDismiss}
             className="w-full"
             accessibilityLabel="Close reveal and return to vault"
           >
-            View in Vault
-          </TactileButton>
+            <Button.Label>View in Vault</Button.Label>
+          </Button>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>

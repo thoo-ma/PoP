@@ -1,6 +1,12 @@
-import { type ChipProps as ChipRootProps, Chip as HeroChip } from 'heroui-native'
+import {
+  type ChipColor,
+  type ChipProps as ChipRootProps,
+  type ChipVariant,
+  Chip as HeroChip,
+} from 'heroui-native'
 import { memo } from 'react'
 
+export type { ChipColor, ChipVariant }
 export type ChipProps = ChipRootProps
 
 /**

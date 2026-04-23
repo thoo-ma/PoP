@@ -1,7 +1,6 @@
-import type { ChipColor, ChipVariant } from 'heroui-native'
-import { Chip, cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
+import { Chip, type ChipColor, type ChipVariant, cn } from '@/components/ui'
 import { badgeLabel, badgePosition } from '@/styles'
 
 type BadgePositionVariant = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'topRightOffset'

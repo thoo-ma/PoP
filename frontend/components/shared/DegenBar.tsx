@@ -1,7 +1,7 @@
 import { calcBustChance, calcReducedCost, calcReduction, DEGEN_ZONE_THRESHOLD } from '@pop/shared'
-import { cn, Separator, Slider } from 'heroui-native'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
+import { cn, Separator, Slider } from '@/components/ui'
 import { degenBar, infoFrame } from '@/styles'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────

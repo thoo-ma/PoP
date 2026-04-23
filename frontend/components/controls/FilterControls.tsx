@@ -3,11 +3,11 @@ import { RARITIES } from '@pop/shared'
 import { Select, TagGroup } from 'heroui-native'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
+import { Button } from '@/components/ui'
 import { SORT_OPTIONS } from '@/constants'
 import { filterControls, tactileSelect } from '@/styles'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
-import TactileButton from '../shared/TactileButton'
 
 interface FilterControlsProps {
   /** Currently active rarity filters. */
@@ -119,25 +119,25 @@ function FilterControls({
         </View>
 
         {/* Sort order arrow */}
-        <TactileButton
+        <Button
           variant="secondary"
           size="sm"
           onPress={onSortOrderToggle}
           accessibilityLabel={`Sort order: ${sortOrder === 'desc' ? 'descending' : 'ascending'}`}
         >
-          {sortOrder === 'desc' ? '↓' : '↑'}
-        </TactileButton>
+          <Button.Label>{sortOrder === 'desc' ? '↓' : '↑'}</Button.Label>
+        </Button>
 
         {/* Filters toggle */}
-        <TactileButton
+        <Button
           size="sm"
           variant="secondary"
           onPress={() => setShowFilters(!showFilters)}
           accessibilityLabel="Toggle filters"
           accessibilityState={{ expanded: showFilters }}
         >
-          {`Filters${activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}`}
-        </TactileButton>
+          <Button.Label>{`Filters${activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}`}</Button.Label>
+        </Button>
       </View>
 
       {/* Filter badges */}
@@ -176,14 +176,14 @@ function FilterControls({
           </TagGroup>
 
           {hasActiveFilters && (
-            <TactileButton
+            <Button
               size="sm"
               variant="secondary"
               onPress={onClearFilters}
               accessibilityLabel="Clear all filters"
             >
-              Clear All
-            </TactileButton>
+              <Button.Label>Clear All</Button.Label>
+            </Button>
           )}
         </View>
       )}

@@ -13,7 +13,6 @@ import {
   ScreenError,
   ScreenLoader,
   StatAllocationModal,
-  TactileButton,
 } from '@/components'
 import { Button, cn, Dialog } from '@/components/ui'
 import {
@@ -25,7 +24,6 @@ import {
   useUserNFTs,
 } from '@/hooks'
 import { dialogBody, dialogFooter, scrollContent } from '@/styles'
-import { tactileButtonText } from '@/styles/shared/buttons'
 import type { AllocateResult, NFT } from '@/types'
 import { getCooldownStatus } from '@/utils/proof/cooldown'
 
@@ -281,7 +279,7 @@ export default memo(function Poop() {
   ) : noEnergy ? (
     'No Energy'
   ) : onCooldown && cooldown?.endsAt != null ? (
-    <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+    <Button.Label>
       Ready in <CooldownTimer endsAt={cooldown.endsAt} onExpire={handleCooldownExpired} />
     </Button.Label>
   ) : selectedIndex === null ? (
@@ -416,14 +414,14 @@ export default memo(function Poop() {
               <Dialog.Description>{alertDialog?.message ?? ''}</Dialog.Description>
             </View>
             <View className={dialogFooter()}>
-              <TactileButton
+              <Button
                 animation="disable-all"
                 variant="primary"
                 size="sm"
                 onPress={() => setAlertDialog(null)}
               >
-                OK
-              </TactileButton>
+                <Button.Label>OK</Button.Label>
+              </Button>
             </View>
           </Dialog.Content>
         </Dialog.Portal>

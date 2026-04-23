@@ -5,7 +5,6 @@ import { Button } from '@/components/ui'
 import { nftPickerButton, nftPickerSlot } from '@/styles'
 import type { NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
-import TactileButton from '../shared/TactileButton'
 
 type Props = {
   nft: { nfts: NFT[]; selectedIndex: number | null; displayNFT: NFT | null }
@@ -57,7 +56,7 @@ export const IdlePhase = memo(function IdlePhase({ nft, ui, a11y, handlers }: Pr
         )}
       </View>
 
-      <TactileButton
+      <Button
         variant="primary"
         onPress={onPoop}
         isDisabled={buttonDisabled}
@@ -65,8 +64,8 @@ export const IdlePhase = memo(function IdlePhase({ nft, ui, a11y, handlers }: Pr
         {...(a11y.label !== undefined ? { accessibilityLabel: a11y.label } : {})}
         accessibilityHint={a11y.hint}
       >
-        {buttonLabel}
-      </TactileButton>
+        {typeof buttonLabel === 'string' ? <Button.Label>{buttonLabel}</Button.Label> : buttonLabel}
+      </Button>
     </>
   )
 })

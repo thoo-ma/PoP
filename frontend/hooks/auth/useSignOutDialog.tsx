@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
-import { TactileButton } from '@/components/shared'
-import { cn, Dialog } from '@/components/ui'
+import { Button, cn, Dialog } from '@/components/ui'
 import { dialogBody, signOutModal } from '@/styles'
 
 /**
@@ -45,12 +44,12 @@ export function useSignOutDialog() {
             <Dialog.Description>Are you sure you want to sign out?</Dialog.Description>
           </View>
           <View className={s.buttonRow()}>
-            <TactileButton variant="outline" onPress={() => setIsOpen(false)} className="flex-1">
-              Cancel
-            </TactileButton>
-            <TactileButton variant="default" onPress={handleConfirm} className="flex-1">
-              Sign Out
-            </TactileButton>
+            <Button variant="outline" onPress={() => setIsOpen(false)} className="flex-1">
+              <Button.Label>Cancel</Button.Label>
+            </Button>
+            <Button variant="secondary" onPress={handleConfirm} className="flex-1">
+              <Button.Label>Sign Out</Button.Label>
+            </Button>
           </View>
         </Dialog.Content>
       </Dialog.Portal>
