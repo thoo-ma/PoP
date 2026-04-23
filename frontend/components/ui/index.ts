@@ -2,6 +2,7 @@
 // `heroui-native` directly. See `frontend/.instructions.md` § "Sanctioned UI
 // wrappers".
 export { cn, useToast } from 'heroui-native'
+export { Alert, type AlertProps } from './Alert'
 export { Avatar, type AvatarProps } from './Avatar'
 export { BottomSheet, type BottomSheetProps } from './BottomSheet'
 export { Button, type ButtonProps } from './Button'
@@ -13,8 +14,10 @@ export { InputOTP, type InputOTPProps, REGEXP_ONLY_DIGITS_AND_CHARS } from './In
 export { LinkButton, type LinkButtonProps } from './LinkButton'
 export { PressableFeedback, type PressableFeedbackProps } from './PressableFeedback'
 export { SearchField, type SearchFieldProps } from './SearchField'
+export { Select, type SelectProps } from './Select'
 export { Separator, type SeparatorProps } from './Separator'
 export { Skeleton, type SkeletonProps } from './Skeleton'
 export { Slider, type SliderProps } from './Slider'
 export { Spinner } from './Spinner'
 export { Tabs, type TabsProps } from './Tabs'
+export { TagGroup, type TagGroupProps } from './TagGroup'

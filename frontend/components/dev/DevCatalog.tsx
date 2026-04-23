@@ -1,3 +1,4 @@
+// biome-ignore lint/style/noRestrictedImports: Accordion is not yet wrapped in @/components/ui
 import { Accordion, AccordionLayoutTransition } from 'heroui-native'
 import { Text } from 'react-native'
 import Animated from 'react-native-reanimated'

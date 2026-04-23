@@ -1,12 +1,4 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
-import {
-  cn,
-  Dialog,
-  FieldError,
-  InputOTP,
-  REGEXP_ONLY_DIGITS_AND_CHARS,
-  Spinner,
-} from 'heroui-native'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 import {
@@ -30,7 +22,17 @@ import {
   ScreenLoader,
 } from '@/components'
 import { Image, RemoteImage } from '@/components/styled'
-import { Avatar, Button, Skeleton } from '@/components/ui'
+import {
+  Avatar,
+  Button,
+  cn,
+  Dialog,
+  FieldError,
+  InputOTP,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+  Skeleton,
+  Spinner,
+} from '@/components/ui'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {

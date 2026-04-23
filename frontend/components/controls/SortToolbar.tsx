@@ -1,7 +1,6 @@
-import { Select } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
-import { Button } from '@/components/ui'
+import { Button, Select } from '@/components/ui'
 import { SORT_OPTIONS } from '@/constants'
 import { sortControls, tactileSelect } from '@/styles'
 import type { SortOption } from '@/types'
