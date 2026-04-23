@@ -1,11 +1,10 @@
 import { MAX_LEVEL, xpThreshold } from '@pop/shared'
-import { cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { BadgeOverlay, ProgressBar } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
-import { Card } from '@/components/ui'
+import { Card, cn } from '@/components/ui'
 import {
   cardBody,
   cardContainer,

@@ -1,4 +1,3 @@
-import { cn, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FlatList, type ListRenderItem, Text, View } from 'react-native'
 import {
@@ -9,7 +8,7 @@ import {
   SortToolbar,
   TactileButton,
 } from '@/components'
-import { Dialog, SearchField, Skeleton, Tabs } from '@/components/ui'
+import { cn, Dialog, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
   dialogBody,

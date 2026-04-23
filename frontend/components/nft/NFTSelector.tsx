@@ -1,8 +1,7 @@
 import { Feather } from '@expo/vector-icons'
-import { cn } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { Button } from '@/components/ui'
+import { Button, cn } from '@/components/ui'
 import { nftSelectorCounter, tactileNavButton } from '@/styles'
 
 interface Props {
