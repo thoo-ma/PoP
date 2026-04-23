@@ -110,6 +110,8 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                   onPress={handleHold}
                   isDisabled={!canHold || loading}
                   className="flex-1"
+                  accessibilityLabel={`Hold +${CHANCE_PER_HOLD}%`}
+                  accessibilityState={{ busy: loading }}
                 >
                   {loading ? (
                     <Spinner size="sm" />
@@ -123,6 +125,8 @@ export default memo(function LootRouletteCard({ lootRollId, onDone }: LootRoulet
                   onPress={handleRoll}
                   isDisabled={!canRoll || loading}
                   className="flex-1"
+                  accessibilityLabel="Roll!"
+                  accessibilityState={{ busy: loading }}
                 >
                   {loading ? <Spinner size="sm" /> : <Button.Label>Roll!</Button.Label>}
                 </Button>
