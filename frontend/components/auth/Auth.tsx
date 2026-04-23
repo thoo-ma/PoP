@@ -1,10 +1,10 @@
 import { FontAwesome6 } from '@expo/vector-icons'
 import * as WebBrowser from 'expo-web-browser'
-import { Button, cn, LinkButton, Spinner } from 'heroui-native'
 import { Linking, Platform, Text, View } from 'react-native'
 import OAuthButton from '@/components/auth/OAuthButton'
+import { Button, cn, LinkButton, Spinner } from '@/components/ui'
 import { useAuthForm } from '@/hooks/auth'
-import { authScreen, tactileButtonText } from '@/styles/auth'
+import { authScreen } from '@/styles/auth'
 import TactileButton from '../shared/TactileButton'
 
 WebBrowser.maybeCompleteAuthSession()
@@ -14,7 +14,7 @@ export default function Auth() {
     loadingProvider,
     devLoading,
     testLoading,
-    onSurface,
+    foreground,
     handleDevSignIn,
     handleTestSignIn,
     signInWithProvider,
@@ -38,11 +38,11 @@ export default function Auth() {
           accessibilityLabel="Sign in in Test Mode"
         >
           {testLoading ? (
-            <Spinner size="sm" color={onSurface} />
+            <Spinner size="sm" color={foreground} />
           ) : (
             <>
-              <FontAwesome6 name="flask" size={16} color={onSurface} className="mr-3" />
-              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+              <FontAwesome6 name="flask" size={16} color={foreground} className="mr-3" />
+              <Button.Label className="font-black text-foreground text-body-lg">
                 Sign in in Test Mode
               </Button.Label>
             </>
@@ -57,11 +57,11 @@ export default function Auth() {
             accessibilityLabel="Sign in in Dev Mode"
           >
             {devLoading ? (
-              <Spinner size="sm" color={onSurface} />
+              <Spinner size="sm" color={foreground} />
             ) : (
               <>
-                <FontAwesome6 name="code" size={16} color={onSurface} className="mr-3" />
-                <Button.Label className={tactileButtonText({ variant: 'default' })}>
+                <FontAwesome6 name="code" size={16} color={foreground} className="mr-3" />
+                <Button.Label className="font-black text-foreground text-body-lg">
                   Sign in in Dev Mode
                 </Button.Label>
               </>

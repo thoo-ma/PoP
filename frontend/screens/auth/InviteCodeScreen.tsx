@@ -1,4 +1,9 @@
 import { Feather } from '@expo/vector-icons'
+import { useState } from 'react'
+import { KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
+import { TactileButton } from '@/components'
+import { Image } from '@/components/styled'
 import {
   Button,
   cn,
@@ -7,15 +12,10 @@ import {
   LinkButton,
   REGEXP_ONLY_DIGITS_AND_CHARS,
   Spinner,
-} from 'heroui-native'
-import { useState } from 'react'
-import { KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
-import { useCSSVariable } from 'uniwind'
-import { TactileButton } from '@/components'
-import { Image } from '@/components/styled'
+} from '@/components/ui'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
-import { authScreen, tactileButtonText } from '@/styles/auth'
+import { authScreen } from '@/styles/auth'
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void
@@ -27,7 +27,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const [loading, setLoading] = useState(false)
   const { error, handleError, clearError } = useErrorHandler('InviteCode')
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
-  const onSurface = useCSSVariable('--color-on-surface') as string
+  const foreground = useCSSVariable('--foreground') as string
   const s = authScreen()
 
   const isValidFormat = (text: string): boolean => {
@@ -126,13 +126,12 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
 
           <View className={s.actionsWrap()}>
             <TactileButton
-              variant={canSubmit ? 'default' : 'disabled'}
               onPress={handleSubmit}
               isDisabled={!canSubmit}
               className="w-full mb-4"
               accessibilityLabel="Submit invite code"
             >
-              {loading ? <Spinner size="sm" color={onSurface} /> : 'Submit Code'}
+              {loading ? <Spinner size="sm" color={foreground} /> : 'Submit Code'}
             </TactileButton>
 
             <TactileButton
@@ -141,8 +140,8 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               isDisabled={loading}
               className="w-full"
             >
-              <Feather name="log-out" size={18} color={onSurface} className="mr-3" />
-              <Button.Label className={tactileButtonText({ variant: 'default' })}>
+              <Feather name="log-out" size={18} color={foreground} className="mr-3" />
+              <Button.Label className="font-black text-foreground text-body-lg">
                 Sign Out
               </Button.Label>
             </TactileButton>

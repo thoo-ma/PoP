@@ -1,8 +1,8 @@
-import { cn, Dialog } from 'heroui-native'
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
 import { TactileButton } from '@/components/shared'
-import { dialogBody, signOutModal, tactileButton } from '@/styles'
+import { cn, Dialog } from '@/components/ui'
+import { dialogBody, signOutModal } from '@/styles'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.
@@ -35,7 +35,9 @@ export function useSignOutDialog() {
             variant="ghost"
             feedbackVariant="none"
             className={cn(
-              tactileButton({ variant: 'default', size: 'sm' }),
+              'h-control-md rounded-full bg-surface active:bg-surface',
+              'border-tactile-sm border-border border-b-raise active:border-b-press active:translate-y-[3px]',
+              'flex-row items-center justify-center',
               'self-start w-10 px-0',
             )}
           />
