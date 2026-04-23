@@ -1,13 +1,13 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useScrollToTop } from '@react-navigation/native'
-import { Avatar, Button, Skeleton } from 'heroui-native'
 import type { ReactElement } from 'react'
 import { useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { ScreenError, TactileButton } from '@/components'
+import { ScreenError } from '@/components'
 import type DevCatalogCmp from '@/components/dev/DevCatalog'
 import type renderDevPreviewFn from '@/components/dev/DevPreviewRenderer'
+import { Avatar, Button, Card, Skeleton } from '@/components/ui'
 import { useAuth, useProfileStats, useSignOutDialog, useUserNFTs, useWallet } from '@/hooks'
 
 // Lazy dev-only requires — Metro dead-strips these from production bundles
@@ -20,7 +20,7 @@ const renderDevPreview = __DEV__
       .default
   : null
 
-import { profileModal, screenContainer, tactileButtonText, walletModal } from '@/styles'
+import { profileModal, screenContainer, walletModal } from '@/styles'
 import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {
@@ -47,7 +47,7 @@ export default function ProfileScreen() {
   const savedScrollY = useRef<number>(0)
   useScrollToTop(scrollRef)
 
-  const onSurface = useCSSVariable('--color-on-surface') as string
+  const onSurface = useCSSVariable('--foreground') as string
 
   const handleSignOut = () => {
     showSignOutDialog(async () => {
@@ -108,8 +108,8 @@ export default function ProfileScreen() {
           scrollEventThrottle={16}
         >
           {/* Avatar */}
-          <View className={p.avatarWrap()}>
-            <Avatar size="lg" color="accent" alt={getUserDisplayName() || 'User avatar'}>
+          <View className={`${p.avatarWrap()} border-border`}>
+            <Avatar size="lg" alt={getUserDisplayName() || 'User avatar'}>
               <Avatar.Fallback>
                 {initials || <MaterialIcons name="person" size={28} />}
               </Avatar.Fallback>
@@ -117,42 +117,42 @@ export default function ProfileScreen() {
           </View>
 
           {/* User info */}
-          <Text className={p.username()}>{getUserDisplayName()}</Text>
-          {user?.email && <Text className={p.email()}>{user.email}</Text>}
+          <Text className={`${p.username()} text-foreground`}>{getUserDisplayName()}</Text>
+          {user?.email && <Text className={`${p.email()} text-muted`}>{user.email}</Text>}
 
           {/* Stats */}
-          <View className={p.statsRow()}>
+          <Card className={`${p.statsRow()} bg-surface-secondary`}>
             <View className={p.statCol()}>
               <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-tag">
-                <Text className={p.statValue()}>{detections}</Text>
+                <Text className={`${p.statValue()} text-foreground`}>{detections}</Text>
               </Skeleton>
-              <Text className={p.statLabel()}>Detections</Text>
+              <Text className={`${p.statLabel()} text-muted`}>Detections</Text>
             </View>
-            <View className={p.statDivider()} />
+            <View className="w-px h-8 bg-border" />
             <View className={p.statCol()}>
-              <Text className={p.statValue()}>{nfts.length}</Text>
-              <Text className={p.statLabel()}>NFTs</Text>
+              <Text className={`${p.statValue()} text-foreground`}>{nfts.length}</Text>
+              <Text className={`${p.statLabel()} text-muted`}>NFTs</Text>
             </View>
-            <View className={p.statDivider()} />
+            <View className="w-px h-8 bg-border" />
             <View className={p.statCol()}>
               <Skeleton isLoading={statsLoading} className="h-6 w-12 rounded-tag">
-                <Text className={p.statValue()}>{daysActive}</Text>
+                <Text className={`${p.statValue()} text-foreground`}>{daysActive}</Text>
               </Skeleton>
-              <Text className={p.statLabel()}>Days Active</Text>
+              <Text className={`${p.statLabel()} text-muted`}>Days Active</Text>
             </View>
-          </View>
+          </Card>
 
           {/* POOP Balance */}
-          <View className={w.balanceCard()}>
-            <Text className={w.balanceLabel()}>POOP Balance</Text>
+          <Card className={`${w.balanceCard()} bg-surface-secondary`}>
+            <Text className={`${w.balanceLabel()} text-muted`}>POOP Balance</Text>
             {walletLoading ? (
-              <Text className={w.balanceValue()}>—</Text>
+              <Text className={`${w.balanceValue()} text-foreground`}>—</Text>
             ) : (
-              <Text className={w.balanceValue()}>
-                {poopBalance ?? 0} <Text className={w.currencyLabel()}>POOP</Text>
+              <Text className={`${w.balanceValue()} text-foreground`}>
+                {poopBalance ?? 0} <Text className={`${w.currencyLabel()} text-muted`}>POOP</Text>
               </Text>
             )}
-          </View>
+          </Card>
 
           {/* DEV catalog */}
           {__DEV__ && DevCatalog && (
@@ -167,7 +167,7 @@ export default function ProfileScreen() {
             />
           )}
           {/* half-step mb-2.5: tighter than the section gap above to group the action with the section. */}
-          <TactileButton
+          <Button
             variant="primary"
             className="w-full mb-2.5"
             onPress={handleSignOut}
@@ -176,10 +176,8 @@ export default function ProfileScreen() {
             accessibilityHint="Sign out of your account"
           >
             <MaterialIcons name="logout" size={18} color={onSurface} />
-            <Button.Label className={tactileButtonText({ variant: 'primary' })}>
-              Sign Out
-            </Button.Label>
-          </TactileButton>
+            <Button.Label>Sign Out</Button.Label>
+          </Button>
         </ScrollView>
       </View>
       <ProfileModals signOutDialog={signOutDialog} />

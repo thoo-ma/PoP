@@ -148,31 +148,33 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className={p.scrollContainer()}>
-            <View className={p.avatarWrap()}>
+            <View className={`${p.avatarWrap()} border-border`}>
               <Avatar size="lg" color="accent" alt="User avatar">
                 <Avatar.Fallback>JD</Avatar.Fallback>
               </Avatar>
             </View>
-            <Text className={p.username()}>Jane Doe</Text>
-            <Text className={p.email()}>jane@example.com</Text>
-            <View className={p.statsRow()}>
+            <Text className={`${p.username()} text-foreground`}>Jane Doe</Text>
+            <Text className={`${p.email()} text-muted`}>jane@example.com</Text>
+            <View
+              className={`${p.statsRow()} bg-surface-secondary rounded-card border-hairline border-border`}
+            >
               <View className={p.statCol()}>
                 <Skeleton isLoading className="h-6 w-12 rounded-tag">
-                  <Text className={p.statValue()}>—</Text>
+                  <Text className={`${p.statValue()} text-foreground`}>—</Text>
                 </Skeleton>
-                <Text className={p.statLabel()}>Detections</Text>
+                <Text className={`${p.statLabel()} text-muted`}>Detections</Text>
               </View>
-              <View className={p.statDivider()} />
+              <View className={`${p.statDivider()} bg-border`} />
               <View className={p.statCol()}>
-                <Text className={p.statValue()}>5</Text>
-                <Text className={p.statLabel()}>NFTs</Text>
+                <Text className={`${p.statValue()} text-foreground`}>5</Text>
+                <Text className={`${p.statLabel()} text-muted`}>NFTs</Text>
               </View>
-              <View className={p.statDivider()} />
+              <View className={`${p.statDivider()} bg-border`} />
               <View className={p.statCol()}>
                 <Skeleton isLoading className="h-6 w-12 rounded-tag">
-                  <Text className={p.statValue()}>—</Text>
+                  <Text className={`${p.statValue()} text-foreground`}>—</Text>
                 </Skeleton>
-                <Text className={p.statLabel()}>Days Active</Text>
+                <Text className={`${p.statLabel()} text-muted`}>Days Active</Text>
               </View>
             </View>
           </View>
@@ -187,27 +189,29 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className={p.scrollContainer()}>
-            <View className={p.avatarWrap()}>
+            <View className={`${p.avatarWrap()} border-border`}>
               <Avatar size="lg" color="accent" alt="User avatar">
                 <Avatar.Fallback>JD</Avatar.Fallback>
               </Avatar>
             </View>
-            <Text className={p.username()}>Jane Doe</Text>
-            <Text className={p.email()}>jane@example.com</Text>
-            <View className={p.statsRow()}>
+            <Text className={`${p.username()} text-foreground`}>Jane Doe</Text>
+            <Text className={`${p.email()} text-muted`}>jane@example.com</Text>
+            <View
+              className={`${p.statsRow()} bg-surface-secondary rounded-card border-hairline border-border`}
+            >
               <View className={p.statCol()}>
-                <Text className={p.statValue()}>42</Text>
-                <Text className={p.statLabel()}>Detections</Text>
+                <Text className={`${p.statValue()} text-foreground`}>42</Text>
+                <Text className={`${p.statLabel()} text-muted`}>Detections</Text>
               </View>
-              <View className={p.statDivider()} />
+              <View className={`${p.statDivider()} bg-border`} />
               <View className={p.statCol()}>
-                <Text className={p.statValue()}>5</Text>
-                <Text className={p.statLabel()}>NFTs</Text>
+                <Text className={`${p.statValue()} text-foreground`}>5</Text>
+                <Text className={`${p.statLabel()} text-muted`}>NFTs</Text>
               </View>
-              <View className={p.statDivider()} />
+              <View className={`${p.statDivider()} bg-border`} />
               <View className={p.statCol()}>
-                <Text className={p.statValue()}>7</Text>
-                <Text className={p.statLabel()}>Days Active</Text>
+                <Text className={`${p.statValue()} text-foreground`}>7</Text>
+                <Text className={`${p.statLabel()} text-muted`}>Days Active</Text>
               </View>
             </View>
           </View>
@@ -222,10 +226,12 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className="flex-1 items-center justify-center px-6">
-            <View className={w.balanceCard()}>
-              <Text className={w.balanceLabel()}>POOP Balance</Text>
-              <Text className={w.balanceValue()}>
-                1337 <Text className={w.currencyLabel()}>POOP</Text>
+            <View
+              className={`${w.balanceCard()} bg-surface-secondary rounded-card border-hairline border-border`}
+            >
+              <Text className={`${w.balanceLabel()} text-muted`}>POOP Balance</Text>
+              <Text className={`${w.balanceValue()} text-foreground`}>
+                1337 <Text className={`${w.currencyLabel()} text-muted`}>POOP</Text>
               </Text>
             </View>
           </View>
