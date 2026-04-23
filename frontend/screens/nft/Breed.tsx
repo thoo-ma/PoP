@@ -12,7 +12,6 @@ import {
   EmptyState,
   MysteryBoxCard,
   ScreenError,
-  TactileButton,
 } from '@/components'
 import { RemoteImage } from '@/components/styled'
 import { Button, Skeleton, useToast } from '@/components/ui'
@@ -25,7 +24,6 @@ import {
   parentSlotsRow,
   screenContainer,
   scrollContent,
-  tactileButtonText,
 } from '@/styles'
 import type { NFT } from '@/types'
 import { canBreed } from '@/utils'
@@ -243,13 +241,15 @@ import { canBreed } from '@/utils'
               )}
 
               {/* ── Breed button ──────────────────────────────────────────────── */}
-              <TactileButton
+              <Button
                 variant="primary"
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
                 className="w-full"
+                accessibilityLabel="Breed NFTs"
+                accessibilityHint="Creates a mystery box using the two selected NFTs"
               >
-                <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+                <Button.Label>
                   {breedLoading ? (
                     'Breeding…'
                   ) : degenPercent > 0 && totalBreedCost !== null ? (
@@ -264,7 +264,7 @@ import { canBreed } from '@/utils'
                     'Breed'
                   )}
                 </Button.Label>
-              </TactileButton>
+              </Button>
             </>
           ) : (
             /* ── Result ───────────────────────────────────────────────────── */
@@ -299,14 +299,15 @@ import { canBreed } from '@/utils'
                 blurhash={breedResult.blurhash}
               />
 
-              <TactileButton
+              <Button
                 animation="disable-all"
                 variant="primary"
                 onPress={handleReset}
                 className="w-full"
+                accessibilityLabel="Breed again"
               >
-                Breed Again
-              </TactileButton>
+                <Button.Label>Breed Again</Button.Label>
+              </Button>
             </View>
           )}
         </ScrollView>

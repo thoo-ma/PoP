@@ -1,5 +1,19 @@
+import { type ChipProps as ChipRootProps, Chip as HeroChip } from 'heroui-native'
+import { memo } from 'react'
+
+export type ChipProps = ChipRootProps
+
 /**
- * Brand-wrapped `Chip`. Pass-through today — see `./Dialog` for the upgrade
- * path when a brand default is needed.
+ * Brand-wrapped `Chip`. Pass-through for now; exists so feature code does not
+ * import from `heroui-native` directly. Compound part (`Label`) passes through
+ * unchanged. See `frontend/.instructions.md` § "Sanctioned UI wrappers" for
+ * usage rules.
  */
-export { Chip, type ChipProps } from 'heroui-native'
+export const Chip = Object.assign(
+  memo(function Chip(props: ChipProps) {
+    return <HeroChip {...props} />
+  }),
+  {
+    Label: HeroChip.Label,
+  },
+)
