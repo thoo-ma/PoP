@@ -1,6 +1,5 @@
 import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Skeleton, Slider, useToast } from 'heroui-native'
 import { memo, useCallback, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -11,6 +10,7 @@ import {
   ScreenError,
   TactileButton,
 } from '@/components'
+import { Button, cn, Skeleton, Slider, useToast } from '@/components/ui'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   costStrikethrough,

@@ -1,6 +1,6 @@
-import { Card, Spinner, useToast } from 'heroui-native'
 import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
+import { Card, Spinner, useToast } from '@/components/ui'
 import type { RollLootResult } from '@/hooks'
 import { useRollLoot } from '@/hooks'
 import { lootPanel, lootResultPanel } from '@/styles'

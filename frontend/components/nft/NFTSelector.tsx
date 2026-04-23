@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons'
-import { Button, cn } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import { Button, cn } from '@/components/ui'
 import { nftSelectorCounter, tactileNavButton } from '@/styles'
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
  * Renders `null` when `total` is 1 or less (nothing to navigate).
  */
 export default function NFTSelector({ current, total, onPrev, onNext, className }: Props) {
-  const onSurface = useCSSVariable('--color-on-surface') as string
+  const onSurface = useCSSVariable('--foreground') as string
   if (total <= 1) return null
 
   return (
