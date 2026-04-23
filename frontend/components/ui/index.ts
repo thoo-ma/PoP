@@ -1,4 +1,5 @@
 export { cn, useToast } from 'heroui-native'
+export { Avatar, type AvatarProps } from './Avatar'
 export { Button, type ButtonProps } from './Button'
 export { Card, type CardProps } from './Card'
 export { Chip, type ChipProps } from './Chip'
