@@ -5,7 +5,6 @@ import OAuthButton from '@/components/auth/OAuthButton'
 import { Button, cn, LinkButton, Spinner } from '@/components/ui'
 import { useAuthForm } from '@/hooks/auth'
 import { authScreen } from '@/styles/auth'
-import TactileButton from '../shared/TactileButton'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -31,7 +30,8 @@ export default function Auth() {
 
         <Text className={s.tagline()}>The world's first tactile proof-of-potty protocol.</Text>
 
-        <TactileButton
+        <Button
+          variant="secondary"
           onPress={handleTestSignIn}
           isDisabled={testLoading}
           className="w-full mb-4"
@@ -47,10 +47,11 @@ export default function Auth() {
               </Button.Label>
             </>
           )}
-        </TactileButton>
+        </Button>
 
         {__DEV__ && (
-          <TactileButton
+          <Button
+            variant="secondary"
             onPress={handleDevSignIn}
             isDisabled={devLoading}
             className="w-full mb-4"
@@ -66,7 +67,7 @@ export default function Auth() {
                 </Button.Label>
               </>
             )}
-          </TactileButton>
+          </Button>
         )}
 
         <OAuthButton

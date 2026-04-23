@@ -2,7 +2,6 @@ import { Feather } from '@expo/vector-icons'
 import { useState } from 'react'
 import { KeyboardAvoidingView, Linking, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { TactileButton } from '@/components'
 import { Image } from '@/components/styled'
 import {
   Button,
@@ -125,16 +124,20 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
           </View>
 
           <View className={s.actionsWrap()}>
-            <TactileButton
+            <Button
               onPress={handleSubmit}
               isDisabled={!canSubmit}
               className="w-full mb-4"
               accessibilityLabel="Submit invite code"
             >
-              {loading ? <Spinner size="sm" color={foreground} /> : 'Submit Code'}
-            </TactileButton>
+              {loading ? (
+                <Spinner size="sm" color={foreground} />
+              ) : (
+                <Button.Label>Submit Code</Button.Label>
+              )}
+            </Button>
 
-            <TactileButton
+            <Button
               animation="disable-all"
               onPress={handleSignOut}
               isDisabled={loading}
@@ -144,7 +147,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               <Button.Label className="font-black text-foreground text-body-lg">
                 Sign Out
               </Button.Label>
-            </TactileButton>
+            </Button>
           </View>
 
           <View className={cn(s.footer(), 'mt-8')}>

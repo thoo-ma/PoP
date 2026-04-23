@@ -2,7 +2,6 @@ import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
 import { useCSSVariable } from 'uniwind'
 import { Button, Spinner } from '@/components/ui'
 import type { OAuthProvider } from '@/types'
-import TactileButton from '../shared/TactileButton'
 
 export interface OAuthButtonProps {
   provider: OAuthProvider
@@ -32,7 +31,8 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
     )
 
   return (
-    <TactileButton
+    <Button
+      variant="secondary"
       onPress={onPress}
       isDisabled={disabled || loading}
       className="w-full mb-4"
@@ -46,6 +46,6 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
           <Button.Label className="font-black text-foreground text-body-lg">{label}</Button.Label>
         </>
       )}
-    </TactileButton>
+    </Button>
   )
 }

@@ -1,5 +1,4 @@
 export * from './alertFrame'
-export * from './buttons'
 export * from './dialogs'
 export * from './emptyState'
 export * from './feedback'

@@ -1,8 +1,8 @@
 import { View } from 'react-native'
+import { Button } from '@/components/ui'
 import { phaseContainer } from '@/styles'
 import type { NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
-import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -25,24 +25,14 @@ export function RecordingPhase({ nft, isRecording, isAnalyzing, onStop, onCancel
         <AlertFrame status="success" title="Processing…" />
       )}
       {isRecording && (
-        <TactileButton
-          animation="disable-all"
-          variant="primary"
-          onPress={onStop}
-          className="w-full"
-        >
-          Stop
-        </TactileButton>
+        <Button animation="disable-all" variant="primary" onPress={onStop} className="w-full">
+          <Button.Label>Stop</Button.Label>
+        </Button>
       )}
       {!isAnalyzing && (
-        <TactileButton
-          animation="disable-all"
-          variant="outline"
-          onPress={onCancel}
-          className="w-full"
-        >
-          Cancel
-        </TactileButton>
+        <Button animation="disable-all" variant="outline" onPress={onCancel} className="w-full">
+          <Button.Label>Cancel</Button.Label>
+        </Button>
       )}
     </View>
   )

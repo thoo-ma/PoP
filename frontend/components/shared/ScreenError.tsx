@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { View } from 'react-native'
+import { Button } from '@/components/ui'
 import { screenError } from '@/styles'
 import AlertFrame from './AlertFrame'
-import TactileButton from './TactileButton'
 
 interface ScreenErrorProps {
   title: string
@@ -15,14 +15,9 @@ export default memo(function ScreenError({ title, message, onRetry }: ScreenErro
     <View className={screenError()}>
       <AlertFrame status="danger" title={title} description={message}>
         {onRetry && (
-          <TactileButton
-            animation="disable-all"
-            variant="primary"
-            onPress={onRetry}
-            className="mt-4"
-          >
-            Retry
-          </TactileButton>
+          <Button animation="disable-all" variant="primary" onPress={onRetry} className="mt-4">
+            <Button.Label>Retry</Button.Label>
+          </Button>
         )}
       </AlertFrame>
     </View>

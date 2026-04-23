@@ -1,11 +1,10 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
-import { Dialog, Slider } from '@/components/ui'
+import { Button, Dialog, Slider } from '@/components/ui'
 import { useAllocateStatPoints } from '@/hooks'
 import { statModal } from '@/styles'
 import type { AllocateResult, NFT, StatDeltas } from '@/types'
 import { formatDisplayName } from '@/utils'
-import TactileButton from '../shared/TactileButton'
 
 const STAT_KEYS = ['efficiency', 'resilience', 'comfort', 'luck'] as const
 type StatKey = (typeof STAT_KEYS)[number]
@@ -139,23 +138,23 @@ export default memo(function StatAllocationModal({
           {error && <Text className={s.errorText()}>{error}</Text>}
 
           <View className={s.buttonRow()}>
-            <TactileButton
+            <Button
               animation="disable-all"
               variant="outline"
               onPress={handleDismiss}
               isDisabled={isPending}
               className="flex-1"
             >
-              Later
-            </TactileButton>
-            <TactileButton
+              <Button.Label>Later</Button.Label>
+            </Button>
+            <Button
               variant="primary"
               onPress={handleConfirm}
               isDisabled={totalSpent === 0 || isPending}
               className="flex-1"
             >
-              {isPending ? 'Saving…' : `Confirm (+${totalSpent} pts)`}
-            </TactileButton>
+              <Button.Label>{isPending ? 'Saving…' : `Confirm (+${totalSpent} pts)`}</Button.Label>
+            </Button>
           </View>
         </Dialog.Content>
       </Dialog.Portal>

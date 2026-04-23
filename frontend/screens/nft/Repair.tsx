@@ -2,14 +2,7 @@ import { calcReducedCost, MAX_ENERGY, repairCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
 import { memo, useCallback, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import {
-  AlertFrame,
-  DegenBar,
-  NFTDetailCard,
-  NFTSelector,
-  ScreenError,
-  TactileButton,
-} from '@/components'
+import { AlertFrame, DegenBar, NFTDetailCard, NFTSelector, ScreenError } from '@/components'
 import { Button, cn, Skeleton, Slider, useToast } from '@/components/ui'
 import { useRepairNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
@@ -22,7 +15,6 @@ import {
   repairSkeleton,
   screenContainer,
   scrollContent,
-  tactileButtonText,
 } from '@/styles'
 
 /**
@@ -220,14 +212,14 @@ export default memo(function Repair() {
                         poopSpent !== null && `-${poopSpent} POOP spent`,
                       ]}
                     >
-                      <TactileButton
+                      <Button
                         animation="disable-all"
                         variant="outline"
                         onPress={handleReset}
                         className="w-full mt-4"
                       >
-                        Repair Another NFT
-                      </TactileButton>
+                        <Button.Label>Repair Another NFT</Button.Label>
+                      </Button>
                     </AlertFrame>
                   </View>
                 )}
@@ -282,20 +274,20 @@ export default memo(function Repair() {
           {/* Full energy state */}
           {currentEnergy === MAX_ENERGY && selectedNFT && !isRepaired && (
             <View className={rfe.root()}>
-              <TactileButton
+              <Button
                 animation="disable-all"
                 variant="outline"
                 onPress={handleReset}
                 className="w-full"
               >
-                This NFT is at full energy!
-              </TactileButton>
+                <Button.Label>This NFT is at full energy!</Button.Label>
+              </Button>
             </View>
           )}
 
           {/* Repair button — always shown when not repaired and not full energy */}
           {!isRepaired && !(currentEnergy === MAX_ENERGY && selectedNFT) && (
-            <TactileButton
+            <Button
               variant="primary"
               onPress={handleRepair}
               isDisabled={
@@ -306,7 +298,7 @@ export default memo(function Repair() {
               }
               className="w-full"
             >
-              <Button.Label className={tactileButtonText({ variant: 'primary' })}>
+              <Button.Label>
                 {updateLoading ? (
                   'Repairing...'
                 ) : poopBalance !== null && poopBalance < poopCost ? (
@@ -321,7 +313,7 @@ export default memo(function Repair() {
                   `Repair (${poopCost} POOP)`
                 )}
               </Button.Label>
-            </TactileButton>
+            </Button>
           )}
         </ScrollView>
       </View>

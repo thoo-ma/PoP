@@ -1,8 +1,8 @@
 import { Text, View } from 'react-native'
+import { Button } from '@/components/ui'
 import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
 import type { ChallengeStatus, NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
-import TactileButton from '../shared/TactileButton'
 import { ChallengeHeader } from './ChallengeHeader'
 
 type Props = {
@@ -30,14 +30,9 @@ export function ImmobilityPhase({ nft, remainingTime, status, onCancel }: Props)
           <AlertFrame status="success" title="Hold still" />
         )}
       </View>
-      <TactileButton
-        animation="disable-all"
-        variant="outline"
-        onPress={onCancel}
-        className="w-full"
-      >
-        Cancel
-      </TactileButton>
+      <Button animation="disable-all" variant="outline" onPress={onCancel} className="w-full">
+        <Button.Label>Cancel</Button.Label>
+      </Button>
     </View>
   )
 }
