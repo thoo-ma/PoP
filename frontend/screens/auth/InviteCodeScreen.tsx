@@ -27,7 +27,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
   const [loading, setLoading] = useState(false)
   const { error, handleError, clearError } = useErrorHandler('InviteCode')
   const { dialog: signOutDialog, show: showSignOutDialog } = useSignOutDialog()
-  const onSurface = useCSSVariable('--foreground') as string
+  const foreground = useCSSVariable('--foreground') as string
   const s = authScreen()
 
   const isValidFormat = (text: string): boolean => {
