@@ -1,13 +1,11 @@
 import { BREED_MAX_COUNT, breedCost } from '@pop/shared'
 import {
-  Avatar,
   Button,
   cn,
   Dialog,
   FieldError,
   InputOTP,
   REGEXP_ONLY_DIGITS_AND_CHARS,
-  Skeleton,
   Spinner,
 } from 'heroui-native'
 import type { ReactNode } from 'react'
@@ -34,6 +32,7 @@ import {
   TactileButton,
 } from '@/components'
 import { Image, RemoteImage } from '@/components/styled'
+import { Avatar, Skeleton } from '@/components/ui'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
 import {

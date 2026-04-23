@@ -47,7 +47,7 @@ export default function ProfileScreen() {
   const savedScrollY = useRef<number>(0)
   useScrollToTop(scrollRef)
 
-  const onSurface = useCSSVariable('--foreground') as string
+  const foreground = useCSSVariable('--accent-foreground') as string
 
   const handleSignOut = () => {
     showSignOutDialog(async () => {
@@ -175,7 +175,7 @@ export default function ProfileScreen() {
             accessibilityLabel="Sign out"
             accessibilityHint="Sign out of your account"
           >
-            <MaterialIcons name="logout" size={18} color={onSurface} />
+            <MaterialIcons name="logout" size={18} color={foreground} />
             <Button.Label>Sign Out</Button.Label>
           </Button>
         </ScrollView>
