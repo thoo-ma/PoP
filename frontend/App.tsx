@@ -9,7 +9,13 @@ import { useCallback } from 'react'
 import { View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Uniwind } from 'uniwind'
 import { Auth, ErrorBoundary, PageIndicator } from '@/components'
+
+// Lock to light until Digital Atelier dark palette is designed; prevents
+// HeroUI's bundled @variant dark palette from winning on a system-dark device.
+Uniwind.setTheme('light')
+
 import { useAuth, useUserApproval } from '@/hooks'
 import { queryClient } from '@/lib/queryClient'
 import { InviteCodeScreen, ProfileScreen } from '@/screens'

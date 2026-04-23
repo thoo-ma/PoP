@@ -5,7 +5,6 @@
 @source "./components/**/*.tsx";
 @source "./screens/**/*.tsx";
 @source "./styles/**/*.ts";
-@source "./node_modules/heroui-native/lib";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Blessed spacing scale
@@ -29,13 +28,15 @@
  * ── Tactile 3D border convention ────────────────────────────────────────────
  * The tactile scale applies to raised bottom widths. Use one of these tiers
  * for the tactile raise:
- *   border-tactile-sm = 3px → uniform / static / "subtle" bottom
- *   border-tactile-md = 5px → passive card raise (e.g. NFTCard tactile variant)
- *   border-tactile-lg = 6px → interactive button / nav raise (pairs with
- *                              `active:border-b-tactile-sm` for the press effect)
+ *   border-b-press    = 3px → uniform / static / "subtle" bottom
+ *                              (also used by `active:border-b-press` to
+ *                              create the press-down effect on tactile buttons)
+ *   border-b-raise    = 6px → interactive button / nav raise (pairs with
+ *                              `active:border-b-press` for the press effect)
+ *   border-hairline   = 1.5px → sub-pixel-tier outlines (e.g. small status dots)
  *
  * `border-2` remains a separate non-tactile side-border tier and may be paired
- * with a tactile bottom raise (e.g. `border-2` + `border-b-tactile-md/sm`)
+ * with a tactile bottom raise (e.g. `border-2` + `border-b-press`)
  * when a hybrid pattern is needed.
  *
  * No 4px / 7px / arbitrary tactile values — if a new tactile tier is needed,
@@ -93,30 +94,18 @@
  * `// half-step: <reason>` comment so future readers know it is intentional.
  * ─────────────────────────────────────────────────────────────────────────── */
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Block A — Static brand tokens (theme-agnostic)
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Identity-stable values that do not change with light/dark theme:
+ * typography, spacing, radius, opacity, border widths, and brand colors whose
+ * meaning *is* the colour itself (rarity, stats, NFT types).
+ *
+ * App-namespaced custom colors that DO need to theme-switch (info, amber,
+ * mystery) live in Block B (`@layer theme @variant light`) and are exposed as
+ * Tailwind utilities via Block C (`@theme inline`).
+ * ─────────────────────────────────────────────────────────────────────────── */
 @theme {
-  /* ── App background override ─────────────────────────────── */
-  --color-background: #fdf9f6;
-
-  /* ── Digital Atelier (Tactile System) ────────────────────── */
-  --color-surface: #fdf9f6;
-  --color-surface-container-low: #f7f3f0;
-  --color-surface-container-highest: #e5e2df;
-  --color-outline: #897266;
-  --color-primary: #9b4500;
-  --color-primary-container: #ff8c42;
-  --color-on-primary: #ffffff;
-  --color-on-surface: #1c1b1a;
-  /* Darkened from #b0a39d (~2.2:1) to meet WCAG AA on --color-surface (~5.1:1). */
-  --color-on-surface-variant: #6b5d54;
-  --color-badge-level: #6366f1;
-  --color-surface-overlay: rgba(253, 249, 246, 0.9);
-  --color-surface-overlay-rail: rgba(253, 249, 246, 0.95);
-  --color-surface-overlay-dim: rgba(253, 249, 246, 0.5);
-
-  /* ── 3D Button Accents ───────────────────────────────────── */
-  --color-primary-dark: #7a3600;
-  --color-primary-darker: #5c2900;
-
   /* ── NFT stat colors ─────────────────────────────────────── */
   --color-stat-efficiency: #3b82f6;
   --color-stat-resilience: #10b981;
@@ -135,20 +124,6 @@
   --color-rarity-rare: #3b82f6;
   --color-rarity-legendary: #f59e0b;
   --color-rarity-transcendent: #a855f7;
-
-  /* ── Status & feedback ───────────────────────────────────── */
-  --color-app-success: #16a34a;
-  --color-app-error: #dc2626;
-  --color-app-warning: #d97706;
-  --color-app-success-container: #dcfce7;
-  --color-app-error-container: #fee2e2;
-  --color-app-warning-container: #fef3c7;
-  --color-app-info: #3b82f6;
-  --color-app-mystery: #7c3aed;
-  --color-app-amber: #fbbf24;
-
-  /* ── Image placeholder (loading skeleton bg) ─────────────── */
-  --color-image-placeholder: #2c2c2c;
 
   /* ── Typography scale ────────────────────────────────────── */
   --text-display-xl: 80px;
@@ -189,11 +164,8 @@
   --radius-modal: 24px;
 
   /* ── Tactile border-width scale (see top-of-file convention) ── */
-  --border-tactile-sm: 3px;
-  --border-tactile-md: 5px;
-  --border-tactile-lg: 6px;
-
-  /* ── Hairline border (sub-pixel-tier outlines, e.g. small status dots) ── */
+  --border-raise: 6px;
+  --border-press: 3px;
   --border-hairline: 1.5px;
 
   /* ── Component sizing ────────────────────────────────────── */
@@ -216,36 +188,189 @@
   /* ── Opacity tokens (see top-of-file policy) ─────────────── */
   --opacity-disabled-light: 0.7;
   --opacity-disabled-heavy: 0.4;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * DEPRECATED — remove in PR 8 once all consumers migrated to HeroUI semantics
+   * ─────────────────────────────────────────────────────────────────────────
+   * MD3-named aliases mapped to the new HeroUI semantic vars (Block B) so
+   * existing recipes (`tactileButton`, `tactileNavButton`, screen layouts)
+   * keep compiling unchanged. Do NOT add new consumers of these names.
+   * ───────────────────────────────────────────────────────────────────────── */
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-surface: var(--surface);
+  --color-surface-container-low: var(--surface-secondary);
+  --color-surface-container-highest: var(--surface-tertiary);
+  --color-surface-overlay-dim: color-mix(in oklab, var(--surface) 50%, transparent);
+  --color-outline: var(--border);
+  --color-primary: var(--accent);
+  --color-primary-dark: var(--accent);
+  --color-primary-darker: var(--accent);
+  --color-on-primary: var(--accent-foreground);
+  --color-app-success: var(--success);
+  --color-app-error: var(--danger);
+  --color-app-warning: var(--warning);
+  --color-app-success-container: color-mix(in oklab, var(--success) 15%, transparent);
+  --color-app-error-container: color-mix(in oklab, var(--danger) 15%, transparent);
+  --color-app-warning-container: color-mix(in oklab, var(--warning) 15%, transparent);
+  --color-app-info: var(--info);
+  --color-app-mystery: var(--mystery);
+  --color-app-amber: var(--amber);
+  --color-badge-level: var(--color-stat-level);
 }
 
-/* Bridge HeroUI Native CSS variables to Digital Atelier tokens */
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Block B — HeroUI semantic overrides (theme-bound, OKLCH only)
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Every CSS variable required by HeroUI Native v1.0.1's `variables.css` is
+ * declared here with PoP Digital Atelier brown values — all in OKLCH so the
+ * `color-mix(in oklab, …)` calculations that produce `*-hover`, `*-soft`,
+ * `border-secondary`, `separator-secondary`, etc. inside HeroUI's compiled
+ * stylesheet remain colorimetrically correct.
+ *
+ * App-namespaced custom colors (`--info`, `--amber`, `--mystery` + their
+ * `-foreground` pairs) are also declared here so they pick up dark-theme
+ * overrides cleanly when a Digital Atelier dark palette is added later.
+ *
+ * Adding a real dark palette later: just add a sibling `@variant dark { … }`
+ * block here — no JS changes needed (theme is locked to `light` at boot in
+ * `App.tsx` so HeroUI's bundled default dark palette never wins on a
+ * system-dark device).
+ *
+ * OKLCH conversions performed via https://oklch.com — source HEX retained as
+ * a comment beside each value for traceability.
+ * ─────────────────────────────────────────────────────────────────────────── */
 @layer theme {
   :root {
     @variant light {
-      /* Surfaces */
-      --surface: var(--color-surface);
-      --surface-secondary: var(--color-surface-container-low);
-      --surface-tertiary: var(--color-surface-container-highest);
+      /* Base */
+      --background: oklch(0.9824 0.0072 60); /* #fdf9f6 */
+      --foreground: oklch(0.2178 0.0024 67); /* #1c1b1a */
 
-      /* Text */
-      --foreground: var(--color-on-surface);
-      --muted: var(--color-on-surface-variant);
+      /* Surfaces (cards, accordions, disclosure groups) */
+      --surface: oklch(0.9824 0.0072 60); /* #fdf9f6 */
+      --surface-foreground: var(--foreground);
+      --surface-secondary: oklch(0.9582 0.0067 56); /* #f7f3f0 */
+      --surface-secondary-foreground: var(--foreground);
+      --surface-tertiary: oklch(0.8987 0.0046 67); /* #e5e2df */
+      --surface-tertiary-foreground: var(--foreground);
 
-      /* Borders */
-      --border: var(--color-outline);
+      /* Overlay (dialogs, popovers, modals, menus) */
+      --overlay: oklch(0.9824 0.0072 60); /* #fdf9f6 */
+      --overlay-foreground: var(--foreground);
+      --backdrop: oklch(0% 0 0 / 20%);
 
-      /* Primary interactive (Avatar color="accent", Chip primary, Slider fill) */
-      --accent: var(--color-primary);
-      --accent-foreground: var(--color-on-primary);
+      /* Muted */
+      --muted: oklch(0.4612 0.0182 60); /* #6b5d54 — WCAG AA on --surface */
 
-      /* Dialog / BottomSheet overlay surface */
-      --overlay: var(--color-surface);
+      /* Default neutral (chips, segments fill) */
+      --default: oklch(0.9582 0.0067 56); /* #f7f3f0 */
+      --default-foreground: var(--foreground);
 
-      /* Text inputs (TextField, CodeInput internals) */
-      --field-background: var(--color-surface-container-low);
-      --field-foreground: var(--color-on-surface);
-      --field-placeholder: var(--color-on-surface-variant);
-      --field-border: var(--color-outline);
+      /* Accent (primary interactive — Digital Atelier brown) */
+      --accent: oklch(0.4869 0.1395 47.5); /* #9b4500 */
+      --accent-foreground: oklch(100% 0 0); /* #ffffff */
+
+      /* Form fields */
+      --field-background: oklch(0.9582 0.0067 56); /* #f7f3f0 */
+      --field-foreground: var(--foreground);
+      --field-placeholder: var(--muted);
+      --field-border: oklch(0.5562 0.0274 51); /* #897266 */
+
+      /* Status */
+      --success: oklch(0.6266 0.1697 149.21); /* #16a34a */
+      --success-foreground: oklch(100% 0 0); /* #ffffff */
+      --warning: oklch(0.6727 0.1567 47.69); /* #d97706 */
+      --warning-foreground: oklch(100% 0 0); /* #ffffff */
+      --danger: oklch(0.5762 0.2242 27.33); /* #dc2626 */
+      --danger-foreground: oklch(100% 0 0); /* #ffffff */
+
+      /* Component */
+      --segment: oklch(0.9824 0.0072 60); /* #fdf9f6 */
+      --segment-foreground: var(--foreground);
+
+      /* Misc */
+      --border: oklch(0.5562 0.0274 51); /* #897266 */
+      --separator: oklch(0.7345 0.0185 56); /* lighter outline */
+      --focus: var(--accent);
+      --link: var(--foreground);
+
+      /* Shadows (verbatim from HeroUI defaults — RGBA permitted in shadows) */
+      --surface-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
+      --overlay-shadow:
+        0 2px 8px 0 rgba(0, 0, 0, 0.02), 0 -6px 12px 0 rgba(0, 0, 0, 0.01),
+        0 14px 28px 0 rgba(0, 0, 0, 0.03);
+      --field-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
+
+      /* App-namespaced custom colors (exposed as Tailwind utilities in Block C) */
+      --info: oklch(0.6231 0.188 259.81); /* #3b82f6 */
+      --info-foreground: oklch(100% 0 0); /* #ffffff */
+      --amber: oklch(0.825 0.1697 80.39); /* #fbbf24 */
+      --amber-foreground: var(--foreground);
+      --mystery: oklch(0.5103 0.265 287.72); /* #7c3aed */
+      --mystery-foreground: oklch(100% 0 0); /* #ffffff */
     }
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Block C — Tailwind utility exposure for app-namespaced custom colors
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Two-step pattern: Block B declares the theme-bound source vars; this block
+ * maps them to `--color-*` so Tailwind generates `bg-info`, `text-info`,
+ * `bg-amber`, `text-mystery-foreground`, etc. utilities. `@theme inline`
+ * preserves the `var(--…)` reference (rather than baking the value at build
+ * time) so the utility tracks live theme switches.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@theme inline {
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-amber: var(--amber);
+  --color-amber-foreground: var(--amber-foreground);
+  --color-mystery: var(--mystery);
+  --color-mystery-foreground: var(--mystery-foreground);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * @utility blocks — border-* namespace is NOT auto-mapped from theme tokens
+ * in Tailwind v4, so we declare the tactile-border utilities explicitly.
+ * `bg-image-placeholder` uses `light-dark()` for automatic dark-theme support.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@utility border-b-raise {
+  border-bottom-width: var(--border-raise);
+}
+@utility border-b-press {
+  border-bottom-width: var(--border-press);
+}
+@utility border-hairline {
+  border-width: var(--border-hairline);
+}
+@utility bg-image-placeholder {
+  background-color: light-dark(#2c2c2c, #3a3a3a);
+}
+
+/* DEPRECATED — remove in PR 8 once all consumers migrated to
+   `border-b-raise` / `border-b-press`. Existing styles still reference
+   `border-tactile-sm`, `border-tactile-md`, `border-b-tactile-{sm,md,lg}`. */
+@utility border-tactile-sm {
+  border-width: 3px;
+}
+@utility border-tactile-md {
+  border-width: 5px;
+}
+@utility border-tactile-lg {
+  border-width: var(--border-raise);
+}
+@utility border-b-tactile-sm {
+  border-bottom-width: var(--border-press);
+}
+@utility border-b-tactile-md {
+  border-bottom-width: 5px;
+}
+@utility border-b-tactile-lg {
+  border-bottom-width: var(--border-raise);
 }
