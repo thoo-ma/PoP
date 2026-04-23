@@ -1,7 +1,7 @@
-import { Card, PressableFeedback } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
+import { Card, PressableFeedback } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
 import { breedPickerCard } from '@/styles'
 import type { NFT } from '@/types'
