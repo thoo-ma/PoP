@@ -22,7 +22,7 @@ interface Props {
  * Renders `null` when `total` is 1 or less (nothing to navigate).
  */
 export default function NFTSelector({ current, total, onPrev, onNext, className }: Props) {
-  const onSurface = useCSSVariable('--color-foreground') as string
+  const onSurface = useCSSVariable('--foreground') as string
   if (total <= 1) return null
 
   return (
