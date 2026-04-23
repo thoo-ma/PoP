@@ -32,7 +32,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         variant="ghost"
         feedbackVariant="none"
         onPress={onPrev}
-        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary border-b-raise flex-row items-center justify-center"
+        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary flex-row items-center justify-center"
         accessibilityLabel="Previous NFT"
       >
         {/* Pass the icon directly as a child */}
@@ -48,7 +48,7 @@ export default function NFTSelector({ current, total, onPrev, onNext, className 
         variant="ghost"
         feedbackVariant="none"
         onPress={onNext}
-        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary border-b-raise flex-row items-center justify-center"
+        className="w-12 h-12 rounded-card bg-surface border-2 border-surface-tertiary flex-row items-center justify-center"
         accessibilityLabel="Next NFT"
       >
         {/* Pass the icon directly as a child */}

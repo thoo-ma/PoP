@@ -462,7 +462,7 @@ export default memo(function Vault() {
           variant="ghost"
           feedbackVariant="none"
           onPress={handleScrollToTop}
-          className="w-12 h-12 rounded-card bg-surface border-2 border-border border-b-raise flex-row items-center justify-center absolute bottom-44 right-4"
+          className="w-12 h-12 rounded-card bg-surface border-2 border-border flex-row items-center justify-center absolute bottom-44 right-4"
           accessibilityLabel="Scroll to top"
         >
           <Button.Label className="text-foreground text-heading-xs font-black">↑</Button.Label>
