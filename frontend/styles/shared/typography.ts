@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const screenTitle = tv({
-  base: 'text-heading-lg font-black text-center text-on-surface',
+  base: 'text-heading-lg font-black text-center text-foreground',
   variants: {
     spacing: {
       sm: 'mb-2',
@@ -12,7 +12,7 @@ export const screenTitle = tv({
 })
 
 export const badgeLabel = tv({
-  base: 'text-on-primary font-bold',
+  base: 'text-accent-foreground font-bold',
   variants: {
     size: {
       base: 'text-body-md',

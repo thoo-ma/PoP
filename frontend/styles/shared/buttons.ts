@@ -12,17 +12,16 @@ import { tv } from 'tailwind-variants'
 // from the tactile scale and never carries a raised bottom.
 
 export const tactileButton = tv({
-  base: 'h-control-lg rounded-full border-tactile-sm border-outline border-b-tactile-lg flex-row items-center justify-center active:border-b-tactile-sm active:translate-y-[3px]',
+  base: 'h-control-lg rounded-full border-tactile-sm border-border border-b-tactile-lg flex-row items-center justify-center active:border-b-tactile-sm active:translate-y-[3px]',
   variants: {
     variant: {
       //   default: 'bg-surface',
       default: 'bg-surface active:bg-surface',
-      //   primary: 'bg-primary border-primary-dark border-b-primary-darker',
-      primary: 'bg-primary border-primary-dark border-b-primary-darker active:bg-primary',
+      //   primary: 'bg-accent border-primary-dark border-b-primary-darker',
+      primary: 'bg-accent border-primary-dark border-b-primary-darker active:bg-accent',
       outline: 'bg-transparent',
-      secondary: 'bg-surface-container-low',
-      disabled:
-        'bg-surface-container-highest border-on-surface-variant border-b-on-surface-variant opacity-disabled-light',
+      secondary: 'bg-surface-secondary',
+      disabled: 'bg-surface-tertiary border-muted border-b-muted opacity-disabled-light',
     },
     size: {
       default: '',
@@ -39,11 +38,11 @@ export const tactileButtonText = tv({
   base: 'font-black',
   variants: {
     variant: {
-      default: 'text-on-surface',
-      primary: 'text-on-primary',
-      outline: 'text-on-surface',
-      secondary: 'text-on-surface',
-      disabled: 'text-on-surface-variant',
+      default: 'text-foreground',
+      primary: 'text-accent-foreground',
+      outline: 'text-foreground',
+      secondary: 'text-foreground',
+      disabled: 'text-muted',
     },
     size: {
       default: 'text-body-lg',
@@ -64,7 +63,7 @@ export const tactileButtonText = tv({
 export const tactileNavButton = tv({
   base: [
     'w-12 h-12 rounded-card bg-surface',
-    'border-2 border-surface-container-highest border-b-tactile-md',
+    'border-2 border-surface-tertiary border-b-tactile-md',
     'flex-row items-center justify-center',
     'active:border-b-tactile-sm active:translate-y-[2px]',
   ],
