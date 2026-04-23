@@ -32,9 +32,34 @@
             "ignore": ["tailwind"]
           }
         }
+      },
+      "style": {
+        "noRestrictedImports": {
+          "level": "warn",
+          "options": {
+            "patterns": [
+              {
+                "group": ["heroui-native", "heroui-native/**"],
+                "message": "Import HeroUI components from @/components/ui instead. Wrappers ensure consistent brand styling and tactile behavior."
+              }
+            ]
+          }
+        }
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["frontend/components/ui/**/*.{ts,tsx}"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    }
+  ],
   "css": {
     "parser": {
       "tailwindDirectives": true
