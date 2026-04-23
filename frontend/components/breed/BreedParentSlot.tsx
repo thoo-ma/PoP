@@ -1,6 +1,6 @@
-import { Chip, cn, PressableFeedback } from 'heroui-native'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
+import { Chip, cn, PressableFeedback } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, parentSlot } from '@/styles'
 import type { NFT } from '@/types'
