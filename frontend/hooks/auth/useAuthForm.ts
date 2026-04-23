@@ -1,9 +1,9 @@
 import * as AppleAuthentication from 'expo-apple-authentication'
 import * as WebBrowser from 'expo-web-browser'
-import { useToast } from 'heroui-native'
 import { useState } from 'react'
 import { Platform } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import { useToast } from '@/components/ui'
 import { supabase } from '@/lib'
 import type { OAuthProvider } from '@/types'
 import { getErrorMessage, logError } from '@/utils'
@@ -13,7 +13,7 @@ export function useAuthForm() {
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
-  const onSurface = useCSSVariable('--color-on-surface') as string
+  const onSurface = useCSSVariable('--foreground') as string
 
   const handleDevSignIn = async () => {
     setDevLoading(true)

@@ -1,7 +1,6 @@
 import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
-import { Button, Spinner } from 'heroui-native'
 import { useCSSVariable } from 'uniwind'
-import { tactileButtonText } from '@/styles/auth'
+import { Button, Spinner } from '@/components/ui'
 import type { OAuthProvider } from '@/types'
 import TactileButton from '../shared/TactileButton'
 
@@ -19,7 +18,7 @@ const labels = {
 } as const
 
 export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
-  const onSurface = useCSSVariable('--color-on-surface') as string
+  const onSurface = useCSSVariable('--foreground') as string
   const label = labels[provider]
 
   const icon =
@@ -44,7 +43,7 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
       ) : (
         <>
           {icon}
-          <Button.Label className={tactileButtonText({ variant: 'default' })}>{label}</Button.Label>
+          <Button.Label className="font-black text-foreground text-body-lg">{label}</Button.Label>
         </>
       )}
     </TactileButton>
