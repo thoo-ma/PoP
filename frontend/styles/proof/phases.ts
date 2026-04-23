@@ -11,13 +11,13 @@ export const phaseContainer = tv({
 // The NFT info row shown at the top of every active game phase.
 export const challengeHeader = tv({
   slots: {
-    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-tactile-sm border-outline gap-3',
-    avatar: 'w-14 h-14 rounded-thumbnail bg-surface-container-low',
+    root: 'flex-row items-center w-full bg-surface rounded-panel p-3 border-tactile-sm border-border gap-3',
+    avatar: 'w-14 h-14 rounded-thumbnail bg-surface-secondary',
     info: 'flex-1',
     // half-step: tight name-above-subtitle pairing inside the challenge
     // header card; whole-step breaks the grouping.
-    name: 'text-body-lg font-black text-on-surface mb-0.5',
-    subtitle: 'text-body-sm text-on-surface-variant font-bold',
+    name: 'text-body-lg font-black text-foreground mb-0.5',
+    subtitle: 'text-body-sm text-muted font-bold',
   },
 })
 
@@ -33,9 +33,9 @@ export const timerText = tv({
   base: 'text-display-xl font-black',
   variants: {
     status: {
-      normal: 'text-on-surface',
+      normal: 'text-foreground',
       danger: 'text-stat-energy',
-      neutral: 'text-on-surface',
+      neutral: 'text-foreground',
     },
   },
   defaultVariants: { status: 'neutral' },
@@ -46,12 +46,12 @@ export const timerText = tv({
 export const statusBadge = tv({
   slots: {
     root: 'py-2 px-phase-px rounded-full',
-    label: 'text-body-md font-bold text-on-surface',
+    label: 'text-body-md font-bold text-foreground',
   },
   variants: {
     status: {
-      ok: { root: 'bg-app-success-container' },
-      warning: { root: 'bg-app-error-container' },
+      ok: { root: 'bg-success-soft' },
+      warning: { root: 'bg-danger-soft' },
     },
   },
   defaultVariants: { status: 'ok' },
@@ -61,10 +61,10 @@ export const statusBadge = tv({
 // Small text labels used inside phase render functions in Poop.tsx.
 export const phaseText = tv({
   slots: {
-    hint: 'text-body-base text-on-surface-variant font-bold',
-    promptTitle: 'text-heading-xs font-bold text-app-success text-center',
-    promptSubtitle: 'text-body-sm text-on-surface-variant text-center font-bold',
-    statusText: 'text-body-base font-bold text-on-surface text-center',
+    hint: 'text-body-base text-muted font-bold',
+    promptTitle: 'text-heading-xs font-bold text-success text-center',
+    promptSubtitle: 'text-body-sm text-muted text-center font-bold',
+    statusText: 'text-body-base font-bold text-foreground text-center',
   },
 })
 
@@ -73,32 +73,32 @@ export const phaseText = tv({
 export const degenBar = tv({
   slots: {
     headerRow: 'flex-row items-center justify-between mb-3',
-    title: 'text-body-base font-bold text-on-surface',
+    title: 'text-body-base font-bold text-foreground',
     // half-step: pill chip for the active risk zone; whole-step inflates
     // the chip beyond the surrounding text rhythm.
     zoneBadge: 'px-2 py-0.5 rounded-full',
-    zoneBadgeLabel: 'text-body-sm font-bold text-on-primary',
+    zoneBadgeLabel: 'text-body-sm font-bold text-accent-foreground',
     sliderFill: '',
     metricsRow: 'flex-row justify-between mt-1',
     metricCol: 'flex-1 items-center',
     // half-step: tight label-above-value pairing per metric column.
-    metricLabel: 'text-body-sm text-on-surface-variant mb-0.5 font-bold',
-    costValue: 'text-body-md font-bold text-app-success',
-    costSubvalue: 'text-body-sm font-bold text-on-surface',
+    metricLabel: 'text-body-sm text-muted mb-0.5 font-bold',
+    costValue: 'text-body-md font-bold text-success',
+    costSubvalue: 'text-body-sm font-bold text-foreground',
     bustValue: 'text-body-md font-bold',
-    bustSubvalue: 'text-body-sm text-on-surface-variant text-center leading-4 font-bold',
-    hint: 'text-body-sm text-on-surface-variant text-center font-bold',
+    bustSubvalue: 'text-body-sm text-muted text-center leading-4 font-bold',
+    hint: 'text-body-sm text-muted text-center font-bold',
   },
   variants: {
     zone: {
       safe: {
-        zoneBadge: 'bg-app-success',
-        sliderFill: 'bg-app-success',
-        bustValue: 'text-app-warning',
+        zoneBadge: 'bg-success',
+        sliderFill: 'bg-success',
+        bustValue: 'text-warning',
       },
       degen: {
-        zoneBadge: 'bg-app-error',
-        sliderFill: 'bg-app-error',
+        zoneBadge: 'bg-danger',
+        sliderFill: 'bg-danger',
         bustValue: 'text-danger',
       },
     },

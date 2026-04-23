@@ -1,6 +1,6 @@
-import { cn } from 'heroui-native'
 import { memo } from 'react'
 import { View } from 'react-native'
+import { cn } from '@/components/ui'
 import { progressBar } from '@/styles'
 
 interface ProgressBarProps {
@@ -8,7 +8,7 @@ interface ProgressBarProps {
   value: number
   /** Runtime color string for the fill (e.g. from useCSSVariable). */
   color?: string
-  /** Static Tailwind bg-* className for the fill (e.g. "bg-app-amber"). */
+  /** Static Tailwind bg-* className for the fill (e.g. "bg-amber"). */
   colorClass?: string
   /** Bar height — sm (1 px-unit) or md (2 px-units). */
   size?: 'sm' | 'md'

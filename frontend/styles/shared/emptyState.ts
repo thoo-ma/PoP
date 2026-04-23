@@ -8,8 +8,8 @@ export const emptyState = tv({
   slots: {
     root: 'items-center px-6',
     icon: 'mb-3',
-    title: 'text-body-base font-black text-on-surface text-center',
-    description: 'text-body-md font-bold text-on-surface-variant text-center mt-1',
+    title: 'text-body-base font-black text-foreground text-center',
+    description: 'text-body-md font-bold text-muted text-center mt-1',
     action: 'mt-4 w-full',
   },
   variants: {

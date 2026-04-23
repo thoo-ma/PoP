@@ -1,6 +1,6 @@
-import { Avatar } from 'heroui-native'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
+import { Avatar } from '@/components/ui'
 import { challengeHeader } from '@/styles'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
