@@ -27,8 +27,8 @@ import {
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.
- * Persists the updated energy value via `updateEnergy` and emits an
- * `nftUpdated` event so other screens stay in sync.
+ * Calls `useRepairNFT`, which invokes the `repair-nft` Edge Function server-side.
+ * On success, invalidates the React Query `userNFTs` cache — no custom events are emitted.
  */
 export default memo(function Repair() {
   const scrollRef = useRef<ScrollView>(null)

@@ -1,3 +1,4 @@
+import { BASE_WIN_PROBABILITY, MAX_HOLDS, PER_HOLD_INCREMENT } from '@pop/shared'
 import { memo, useState } from 'react'
 import { Text, View } from 'react-native'
 import { Card, Spinner, useToast } from '@/components/ui'
@@ -6,9 +7,8 @@ import { useRollLoot } from '@/hooks'
 import { lootPanel, lootResultPanel } from '@/styles'
 import TactileButton from '../shared/TactileButton'
 
-const MAX_HOLDS = 3
-const BASE_CHANCE = 10
-const CHANCE_PER_HOLD = 10
+const BASE_CHANCE = Math.round(BASE_WIN_PROBABILITY * 100)
+const CHANCE_PER_HOLD = Math.round(PER_HOLD_INCREMENT * 100)
 
 export interface LootRouletteCardProps {
   lootRollId: string
