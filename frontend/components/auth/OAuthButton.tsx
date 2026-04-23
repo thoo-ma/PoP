@@ -18,17 +18,17 @@ const labels = {
 } as const
 
 export default function OAuthButton({ provider, onPress, loading, disabled }: OAuthButtonProps) {
-  const onSurface = useCSSVariable('--foreground') as string
+  const foreground = useCSSVariable('--foreground') as string
   const label = labels[provider]
 
   const icon =
     provider === 'google' ? (
-      <AntDesign name="google" size={18} color={onSurface} className="mr-3" />
+      <AntDesign name="google" size={18} color={foreground} className="mr-3" />
     ) : provider === 'x' ? (
-      <FontAwesome6 name="x-twitter" size={18} color={onSurface} className="mr-3" />
+      <FontAwesome6 name="x-twitter" size={18} color={foreground} className="mr-3" />
     ) : (
       // half-step mb-0.5: nudge the apple glyph to align optically with the label.
-      <AntDesign name="apple" size={20} color={onSurface} className="mr-3 mb-0.5" />
+      <AntDesign name="apple" size={20} color={foreground} className="mr-3 mb-0.5" />
     )
 
   return (
@@ -39,7 +39,7 @@ export default function OAuthButton({ provider, onPress, loading, disabled }: OA
       accessibilityLabel={label}
     >
       {loading ? (
-        <Spinner size="sm" color={onSurface} />
+        <Spinner size="sm" color={foreground} />
       ) : (
         <>
           {icon}

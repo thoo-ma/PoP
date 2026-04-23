@@ -13,7 +13,7 @@ export function useAuthForm() {
   const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(null)
   const [devLoading, setDevLoading] = useState(false)
   const [testLoading, setTestLoading] = useState(false)
-  const onSurface = useCSSVariable('--foreground') as string
+  const foreground = useCSSVariable('--foreground') as string
 
   const handleDevSignIn = async () => {
     setDevLoading(true)
@@ -121,7 +121,7 @@ export function useAuthForm() {
     loadingProvider,
     devLoading,
     testLoading,
-    onSurface,
+    foreground,
     handleDevSignIn,
     handleTestSignIn,
     signInWithProvider,

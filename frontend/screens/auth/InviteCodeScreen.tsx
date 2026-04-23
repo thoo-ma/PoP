@@ -131,7 +131,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               className="w-full mb-4"
               accessibilityLabel="Submit invite code"
             >
-              {loading ? <Spinner size="sm" color={onSurface} /> : 'Submit Code'}
+              {loading ? <Spinner size="sm" color={foreground} /> : 'Submit Code'}
             </TactileButton>
 
             <TactileButton
@@ -140,7 +140,7 @@ export default function InviteCodeScreen({ onApprovalSuccess, onSignOut }: Invit
               isDisabled={loading}
               className="w-full"
             >
-              <Feather name="log-out" size={18} color={onSurface} className="mr-3" />
+              <Feather name="log-out" size={18} color={foreground} className="mr-3" />
               <Button.Label className="font-black text-foreground text-body-lg">
                 Sign Out
               </Button.Label>

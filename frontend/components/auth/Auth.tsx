@@ -14,7 +14,7 @@ export default function Auth() {
     loadingProvider,
     devLoading,
     testLoading,
-    onSurface,
+    foreground,
     handleDevSignIn,
     handleTestSignIn,
     signInWithProvider,
@@ -38,10 +38,10 @@ export default function Auth() {
           accessibilityLabel="Sign in in Test Mode"
         >
           {testLoading ? (
-            <Spinner size="sm" color={onSurface} />
+            <Spinner size="sm" color={foreground} />
           ) : (
             <>
-              <FontAwesome6 name="flask" size={16} color={onSurface} className="mr-3" />
+              <FontAwesome6 name="flask" size={16} color={foreground} className="mr-3" />
               <Button.Label className="font-black text-foreground text-body-lg">
                 Sign in in Test Mode
               </Button.Label>
@@ -57,10 +57,10 @@ export default function Auth() {
             accessibilityLabel="Sign in in Dev Mode"
           >
             {devLoading ? (
-              <Spinner size="sm" color={onSurface} />
+              <Spinner size="sm" color={foreground} />
             ) : (
               <>
-                <FontAwesome6 name="code" size={16} color={onSurface} className="mr-3" />
+                <FontAwesome6 name="code" size={16} color={foreground} className="mr-3" />
                 <Button.Label className="font-black text-foreground text-body-lg">
                   Sign in in Dev Mode
                 </Button.Label>
