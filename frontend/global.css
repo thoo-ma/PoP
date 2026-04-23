@@ -204,8 +204,8 @@
   --color-surface-overlay-dim: color-mix(in oklab, var(--surface) 50%, transparent);
   --color-outline: var(--border);
   --color-primary: var(--accent);
-  --color-primary-dark: var(--accent);
-  --color-primary-darker: var(--accent);
+  --color-primary-dark: color-mix(in oklab, var(--accent) 88%, black);
+  --color-primary-darker: color-mix(in oklab, var(--accent) 76%, black);
   --color-on-primary: var(--accent-foreground);
   --color-app-success: var(--success);
   --color-app-error: var(--danger);
