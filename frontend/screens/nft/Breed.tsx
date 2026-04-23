@@ -304,6 +304,7 @@ import { canBreed } from '@/utils'
                 variant="primary"
                 onPress={handleReset}
                 className="w-full"
+                accessibilityLabel="Breed again"
               >
                 <Button.Label>Breed Again</Button.Label>
               </Button>
