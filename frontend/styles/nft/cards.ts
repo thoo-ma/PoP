@@ -21,9 +21,9 @@ export const cardBody = tv({
 // Layout handled by cardWrapper (flat border) + cardContainer + Card compound.
 export const nftDetailCard = tv({
   slots: {
-    image: 'w-full h-card-image bg-surface-container-low',
+    image: 'w-full h-card-image bg-surface-secondary',
     body: 'p-4',
-    title: 'text-heading-xs font-black text-center text-on-surface mb-3',
+    title: 'text-heading-xs font-black text-center text-foreground mb-3',
   },
 })
 
@@ -32,7 +32,7 @@ export const nftDetailCard = tv({
 // border-radius WITHOUT overflow-hidden, so React Native renders the border
 // correctly at the corners (RN clips border when overflow-hidden is also set).
 export const cardWrapper = tv({
-  base: 'w-full mb-4 border-tactile-sm border-outline rounded-card flex-1',
+  base: 'w-full mb-4 border-tactile-sm border-border rounded-card flex-1',
   variants: {
     border: {
       tactile: 'border-b-tactile-md',

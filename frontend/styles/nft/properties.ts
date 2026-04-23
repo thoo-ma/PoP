@@ -7,7 +7,7 @@ import { tv } from 'tailwind-variants'
 export const propertyBar = tv({
   slots: {
     root: '',
-    label: 'text-on-surface-variant font-bold',
+    label: 'text-muted font-bold',
     barWrap: 'flex-row items-center',
     value: 'text-right font-bold',
   },
@@ -17,7 +17,7 @@ export const propertyBar = tv({
         root: 'flex-row items-center justify-between',
         label: 'text-caption-sm w-label-md mr-1',
         barWrap: 'flex-1 gap-1',
-        value: 'text-caption-sm text-on-surface-variant w-5 font-bold',
+        value: 'text-caption-sm text-muted w-5 font-bold',
       },
       detailed: {
         root: 'gap-1',
@@ -26,7 +26,7 @@ export const propertyBar = tv({
         label: 'text-body-sm font-bold mb-0.5',
         // half-step: matches the label-above-bar rhythm.
         barWrap: 'gap-1.5',
-        value: 'text-body-sm text-on-surface font-bold w-label-sm',
+        value: 'text-body-sm text-foreground font-bold w-label-sm',
       },
     },
   },
@@ -50,7 +50,7 @@ export const propertiesWrapper = tv({
 // Empty-state text inside the picker Button when no NFT is selected.
 export const nftPickerSlot = tv({
   slots: {
-    icon: 'text-icon-xl mb-3 text-on-surface-variant',
-    label: 'text-body-base font-bold text-on-surface-variant',
+    icon: 'text-icon-xl mb-3 text-muted',
+    label: 'text-body-base font-bold text-muted',
   },
 })

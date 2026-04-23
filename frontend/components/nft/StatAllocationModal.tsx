@@ -1,6 +1,6 @@
-import { Dialog, Slider } from 'heroui-native'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
+import { Dialog, Slider } from '@/components/ui'
 import { useAllocateStatPoints } from '@/hooks'
 import { statModal } from '@/styles'
 import type { AllocateResult, NFT, StatDeltas } from '@/types'

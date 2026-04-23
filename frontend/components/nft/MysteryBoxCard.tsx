@@ -1,10 +1,11 @@
 import type { MysteryBox, NFTRarity } from '@pop/shared'
-import { Card, Chip, cn } from 'heroui-native'
+import { cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { View } from 'react-native'
 import { BadgeOverlay } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
+import { Card, Chip } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
 import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/styles'
 

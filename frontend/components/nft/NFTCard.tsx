@@ -1,10 +1,11 @@
 import { MAX_LEVEL, xpThreshold } from '@pop/shared'
-import { Card, cn } from 'heroui-native'
+import { cn } from 'heroui-native'
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { BadgeOverlay, ProgressBar } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
+import { Card } from '@/components/ui'
 import {
   cardBody,
   cardContainer,
@@ -91,9 +92,9 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             <View className={xp.track()}>
               <ProgressBar
                 value={xpPct}
-                colorClass="bg-app-amber"
+                colorClass="bg-amber"
                 size="sm"
-                className="bg-surface-container-low"
+                className="bg-surface-secondary"
               />
             </View>
           </View>

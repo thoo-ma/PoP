@@ -1,7 +1,7 @@
 import type { MysteryBox } from '@pop/shared'
 import { BREED_MAX_COUNT, breedCost, calcReducedCost } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, Skeleton, useToast } from 'heroui-native'
+import { useToast } from 'heroui-native'
 import { memo, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import {
@@ -16,6 +16,7 @@ import {
   TactileButton,
 } from '@/components'
 import { RemoteImage } from '@/components/styled'
+import { Button, Skeleton } from '@/components/ui'
 import { useBreedNFT, useUserNFTs, useWallet } from '@/hooks'
 import {
   breedResultPanel,

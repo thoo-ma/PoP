@@ -1,5 +1,5 @@
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, Dialog } from 'heroui-native'
+import { cn } from 'heroui-native'
 import { memo, type ReactElement, useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
@@ -16,6 +16,7 @@ import {
   StatAllocationModal,
   TactileButton,
 } from '@/components'
+import { Button, Dialog } from '@/components/ui'
 import {
   useAnnounce,
   useImmobilityChallenge,

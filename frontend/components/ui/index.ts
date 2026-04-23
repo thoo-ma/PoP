@@ -1,2 +1,8 @@
 export { Button, type ButtonProps } from './Button'
 export { Card, type CardProps } from './Card'
+export { Chip, type ChipProps } from './Chip'
+export { Dialog, type DialogProps } from './Dialog'
+export { SearchField, type SearchFieldProps } from './SearchField'
+export { Skeleton, type SkeletonProps } from './Skeleton'
+export { Slider, type SliderProps } from './Slider'
+export { Tabs, type TabsProps } from './Tabs'

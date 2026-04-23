@@ -1,7 +1,7 @@
 import type { MysteryBox, NFTRarity, NFTType, OpenMysteryBoxResponse } from '@pop/shared'
 import { getMysteryBoxBlurhash } from '@pop/shared'
 import { useScrollToTop } from '@react-navigation/native'
-import { Button, cn, SearchField, Skeleton, Tabs, useToast } from 'heroui-native'
+import { cn, useToast } from 'heroui-native'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import {
   FlatList,
@@ -23,6 +23,7 @@ import {
   StatAllocationModal,
   TactileButton,
 } from '@/components'
+import { Button, SearchField, Skeleton, Tabs } from '@/components/ui'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
 import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
@@ -466,11 +467,11 @@ export default memo(function Vault() {
           onPress={handleScrollToTop}
           className={cn(
             tactileNavButton(),
-            'absolute bottom-44 right-4 border-outline border-b-outline',
+            'absolute bottom-44 right-4 border-border border-b-border',
           )}
           accessibilityLabel="Scroll to top"
         >
-          <Button.Label className="text-on-surface text-[20px] font-black">↑</Button.Label>
+          <Button.Label className="text-foreground text-heading-xs font-black">↑</Button.Label>
         </Button>
       )}
     </View>
