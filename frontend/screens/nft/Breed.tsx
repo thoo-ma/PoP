@@ -246,6 +246,8 @@ import { canBreed } from '@/utils'
                 onPress={handleBreed}
                 isDisabled={!canBreedNow || breedLoading || !hasEnoughPoop || atBreedLimit}
                 className="w-full"
+                accessibilityLabel="Breed NFTs"
+                accessibilityHint="Creates a mystery box using the two selected NFTs"
               >
                 <Button.Label>
                   {breedLoading ? (
