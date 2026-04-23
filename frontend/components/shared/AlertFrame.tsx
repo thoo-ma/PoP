@@ -1,5 +1,5 @@
-import { Alert, cn } from 'heroui-native'
 import { type ComponentProps, memo, type ReactNode } from 'react'
+import { Alert, cn } from '@/components/ui'
 import { alertFrame } from '@/styles'
 
 type AlertFrameProps = {

@@ -4,13 +4,15 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
-import { HeroUINativeProvider, Spinner } from 'heroui-native'
+// biome-ignore lint/style/noRestrictedImports: HeroUINativeProvider is the root provider and must be imported directly
+import { HeroUINativeProvider } from 'heroui-native'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Uniwind } from 'uniwind'
 import { Auth, ErrorBoundary, PageIndicator } from '@/components'
+import { Spinner } from '@/components/ui'
 
 // Lock to light until Digital Atelier dark palette is designed; prevents
 // HeroUI's bundled @variant dark palette from winning on a system-dark device.
