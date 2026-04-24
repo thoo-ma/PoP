@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native'
 import { Button } from '@/components/ui'
-import { phaseContainer, phaseContent, statusBadge, timerText } from '@/styles'
+import { phaseContainer, phaseContent, statusBadge, timerText } from '@/layouts'
 import type { ChallengeStatus, NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
 import { ChallengeHeader } from './ChallengeHeader'

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { Spinner } from '@/components/ui'
-import { screenLoader } from '@/styles'
+import { screenLoader } from '@/layouts'
 
 interface ScreenLoaderProps {
   title?: string

@@ -4,7 +4,7 @@ import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { Button, Select, TagGroup } from '@/components/ui'
 import { SORT_OPTIONS } from '@/constants'
-import { filterControls, tactileSelect } from '@/styles'
+import { filterControls, tactileSelect } from '@/layouts'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
 

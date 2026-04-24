@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { Button } from '@/components/ui'
-import { phaseContainer, phaseContent, phaseText, timerText } from '@/styles'
+import { phaseContainer, phaseContent, phaseText, timerText } from '@/layouts'
 import type { NFT } from '@/types'
 import { ChallengeHeader } from './ChallengeHeader'
 

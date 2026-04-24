@@ -23,7 +23,7 @@ import {
   useToiletDetection,
   useUserNFTs,
 } from '@/hooks'
-import { dialogBody, dialogFooter, scrollContent } from '@/styles'
+import { dialogBody, dialogFooter, scrollContent } from '@/layouts'
 import type { AllocateResult, NFT } from '@/types'
 import { getCooldownStatus } from '@/utils/proof/cooldown'
 

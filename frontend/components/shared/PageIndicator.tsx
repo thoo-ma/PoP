@@ -3,7 +3,7 @@ import type { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs
 import { memo, useLayoutEffect, useRef } from 'react'
 import { Animated, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { pageIndicator } from '@/styles'
+import { pageIndicator } from '@/layouts'
 
 const TAB_ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
   Poop: 'emoticon-poop',

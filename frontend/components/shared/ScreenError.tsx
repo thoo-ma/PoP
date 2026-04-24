@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { View } from 'react-native'
 import { Button } from '@/components/ui'
-import { screenError } from '@/styles'
+import { screenError } from '@/layouts'
 import AlertFrame from './AlertFrame'
 
 interface ScreenErrorProps {

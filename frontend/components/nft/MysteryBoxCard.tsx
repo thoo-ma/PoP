@@ -6,7 +6,7 @@ import { BadgeOverlay } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
 import { Card, Chip, cn } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
-import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/styles'
+import { badgeLabel, cardBody, cardContainer, cardImageContainer, cardWrapper } from '@/layouts'
 
 interface MysteryBoxCardProps {
   /** The rarity this card slot represents. */

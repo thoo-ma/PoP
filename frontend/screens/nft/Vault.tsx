@@ -23,14 +23,14 @@ import {
 } from '@/components'
 import { Button, cn, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
 import { useMysteryBoxes, useOpenMysteryBox, useUpdateNFT, useUserNFTs } from '@/hooks'
-import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import {
   gridLayout,
   mysteryBoxSkeleton,
   screenContainer,
   scrollContent,
   tactileTabs,
-} from '@/styles'
+} from '@/layouts'
+import { SUPABASE_STORAGE_BASE } from '@/lib/supabase'
 import type { AllocateResult, NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
 

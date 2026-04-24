@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { ProgressBar } from '@/components/shared'
-import { propertiesWrapper, propertyBar } from '@/styles'
+import { propertiesWrapper, propertyBar } from '@/layouts'
 
 interface NFTPropertiesProps {
   efficiency: number

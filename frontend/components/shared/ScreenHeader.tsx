@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Text, View } from 'react-native'
-import { screenHeader, screenTitle } from '@/styles'
+import { screenHeader, screenTitle } from '@/layouts'
 
 interface ScreenHeaderProps {
   title: string

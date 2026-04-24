@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { Button } from '@/components/ui'
-import { phaseContainer } from '@/styles'
+import { phaseContainer } from '@/layouts'
 import type { DetectionResult, NFT, RateLimitError } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
 import { ChallengeHeader } from './ChallengeHeader'

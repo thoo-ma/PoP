@@ -33,8 +33,6 @@ import {
   Skeleton,
   Spinner,
 } from '@/components/ui'
-import { DevMockProvider } from '@/lib/devMock'
-import { Breed, Repair } from '@/screens/nft'
 import {
   authScreen,
   breedResultPanel,
@@ -51,7 +49,9 @@ import {
   signOutModal,
   skeletonCard,
   walletModal,
-} from '@/styles'
+} from '@/layouts'
+import { DevMockProvider } from '@/lib/devMock'
+import { Breed, Repair } from '@/screens/nft'
 import {
   MOCK_BOXES,
   MOCK_NFT_COMMON,

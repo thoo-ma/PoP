@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { View } from 'react-native'
 import { Button, cn, Dialog } from '@/components/ui'
-import { dialogBody, signOutModal } from '@/styles'
+import { dialogBody, signOutModal } from '@/layouts'
 
 /**
  * Hook providing a declarative sign-out confirmation dialog.

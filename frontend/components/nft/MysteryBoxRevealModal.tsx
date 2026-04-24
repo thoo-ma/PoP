@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
 import { Button, cn, Dialog } from '@/components/ui'
-import { rarityBadge, revealModal } from '@/styles'
+import { rarityBadge, revealModal } from '@/layouts'
 import { formatDisplayName } from '@/utils'
 
 interface MysteryBoxRevealModalProps {

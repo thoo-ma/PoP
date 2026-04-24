@@ -14,7 +14,7 @@ import {
   rarityBadge,
   typeBadge,
   xpBar,
-} from '@/styles'
+} from '@/layouts'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 import NFTProperties from './NFTProperties'

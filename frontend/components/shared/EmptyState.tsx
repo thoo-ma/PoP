@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { cn } from '@/components/ui'
-import { emptyState } from '@/styles'
+import { emptyState } from '@/layouts'
 
 type EmptyStateLayout = 'inline' | 'screen'
 

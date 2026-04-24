@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { View } from 'react-native'
 import { cn } from '@/components/ui'
-import { progressBar } from '@/styles'
+import { progressBar } from '@/layouts'
 
 interface ProgressBarProps {
   /** Current value (0–100). Clamped internally. */

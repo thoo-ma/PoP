@@ -2,7 +2,7 @@ import { calcBustChance, calcReducedCost, calcReduction, DEGEN_ZONE_THRESHOLD } 
 import { useState } from 'react'
 import { Text, View } from 'react-native'
 import { cn, Separator, Slider } from '@/components/ui'
-import { degenBar, infoFrame } from '@/styles'
+import { degenBar, infoFrame } from '@/layouts'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

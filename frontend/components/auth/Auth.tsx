@@ -4,7 +4,7 @@ import { Linking, Platform, Text, View } from 'react-native'
 import OAuthButton from '@/components/auth/OAuthButton'
 import { Button, cn, LinkButton, Spinner } from '@/components/ui'
 import { useAuthForm } from '@/hooks/auth'
-import { authScreen } from '@/styles/auth'
+import { authScreen } from '@/layouts/auth'
 
 WebBrowser.maybeCompleteAuthSession()
 

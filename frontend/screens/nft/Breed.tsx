@@ -24,7 +24,7 @@ import {
   parentSlotsRow,
   screenContainer,
   scrollContent,
-} from '@/styles'
+} from '@/layouts'
 import type { NFT } from '@/types'
 import { canBreed } from '@/utils'
 

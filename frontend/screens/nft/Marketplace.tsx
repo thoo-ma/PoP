@@ -12,7 +12,7 @@ import {
   scrollContent,
   skeletonCard,
   tactileTabs,
-} from '@/styles'
+} from '@/layouts'
 import type { NFT, SortOption } from '@/types'
 import { formatDisplayName, sortNFTs } from '@/utils'
 
