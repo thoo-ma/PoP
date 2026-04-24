@@ -35,7 +35,7 @@
       },
       "style": {
         "noRestrictedImports": {
-          "level": "warn",
+          "level": "error",
           "options": {
             "patterns": [
               {
@@ -51,6 +51,26 @@
   "overrides": [
     {
       "includes": ["frontend/components/ui/**/*.{ts,tsx}"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["frontend/App.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["frontend/components/dev/**/*.{ts,tsx}"],
       "linter": {
         "rules": {
           "style": {

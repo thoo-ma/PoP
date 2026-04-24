@@ -43,9 +43,9 @@
  * extend the scale here, do not inline.
  *
  * ── Muted text + font weight pairing ────────────────────────────────────────
- * Text using `text-on-surface-variant` MUST pair with `font-medium` or stronger
+ * Text using `text-muted` MUST pair with `font-medium` or stronger
  * (`font-bold`, `font-black`) to maintain perceived contrast. Lower weights
- * should use `text-on-surface` instead.
+ * should use `text-foreground` instead.
  *
  * ── Opacity convention ──────────────────────────────────────────────────────
  * Disabled / dimmed state opacity is controlled by two semantic utilities:
@@ -188,35 +188,6 @@
   /* ── Opacity tokens (see top-of-file policy) ─────────────── */
   --opacity-disabled-light: 0.7;
   --opacity-disabled-heavy: 0.4;
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * DEPRECATED — remove in PR 8 once all consumers migrated to HeroUI semantics
-   * ─────────────────────────────────────────────────────────────────────────
-   * MD3-named aliases mapped to the new HeroUI semantic vars (Block B) so
-   * existing recipes (`tactileButton`, `tactileNavButton`, screen layouts)
-   * keep compiling unchanged. Do NOT add new consumers of these names.
-   * ───────────────────────────────────────────────────────────────────────── */
-  --color-on-surface: var(--foreground);
-  --color-on-surface-variant: var(--muted);
-  --color-surface: var(--surface);
-  --color-surface-container-low: var(--surface-secondary);
-  --color-surface-container-highest: var(--surface-tertiary);
-  --color-surface-overlay-dim: color-mix(in oklab, var(--surface) 50%, transparent);
-  --color-outline: var(--border);
-  --color-primary: var(--accent);
-  --color-primary-dark: color-mix(in oklab, var(--accent) 88%, black);
-  --color-primary-darker: color-mix(in oklab, var(--accent) 76%, black);
-  --color-on-primary: var(--accent-foreground);
-  --color-app-success: var(--success);
-  --color-app-error: var(--danger);
-  --color-app-warning: var(--warning);
-  --color-app-success-container: color-mix(in oklab, var(--success) 15%, transparent);
-  --color-app-error-container: color-mix(in oklab, var(--danger) 15%, transparent);
-  --color-app-warning-container: color-mix(in oklab, var(--warning) 15%, transparent);
-  --color-app-info: var(--info);
-  --color-app-mystery: var(--mystery);
-  --color-app-amber: var(--amber);
-  --color-badge-level: var(--color-stat-level);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -351,26 +322,4 @@
 }
 @utility bg-image-placeholder {
   background-color: light-dark(#2c2c2c, #3a3a3a);
-}
-
-/* DEPRECATED — remove in PR 8 once all consumers migrated to
-   `border-b-raise` / `border-b-press`. Existing styles still reference
-   `border-tactile-sm`, `border-tactile-md`, `border-b-tactile-{sm,md,lg}`. */
-@utility border-tactile-sm {
-  border-width: 3px;
-}
-@utility border-tactile-md {
-  border-width: 5px;
-}
-@utility border-tactile-lg {
-  border-width: var(--border-raise);
-}
-@utility border-b-tactile-sm {
-  border-bottom-width: var(--border-press);
-}
-@utility border-b-tactile-md {
-  border-bottom-width: 5px;
-}
-@utility border-b-tactile-lg {
-  border-bottom-width: var(--border-raise);
 }

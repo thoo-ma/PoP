@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants'
 // Tappable NFT slot card used in the Breed screen (filled and empty states).
 export const parentSlot = tv({
   slots: {
-    root: 'flex-1 rounded-panel border-tactile-sm border-border overflow-hidden bg-surface',
+    root: 'flex-1 rounded-panel border-2 border-border overflow-hidden bg-surface',
     image: 'w-full aspect-square',
     info: 'p-2 pb-1',
     name: 'text-body-sm font-black text-foreground mb-1',
@@ -31,7 +31,7 @@ export const parentSlot = tv({
 // Read-only probability breakdown card shown after both parents are selected.
 export const outcomePanel = tv({
   slots: {
-    wrapper: 'w-full mb-5 border-tactile-sm border-border rounded-frame',
+    wrapper: 'w-full mb-5 border-2 border-border rounded-frame',
     root: 'overflow-hidden rounded-body',
     // half-step: tighter row rhythm for the dense probability grid; py-2
     // makes the panel feel airy and inconsistent with the row spacing.

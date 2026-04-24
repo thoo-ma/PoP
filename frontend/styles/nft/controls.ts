@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 export const tactileSelect = tv({
   slots: {
     trigger:
-      'h-control-md py-0 bg-surface-secondary border-tactile-sm border-border border-b-tactile-lg rounded-full px-4 active:translate-y-[1px]',
+      'h-control-md py-0 bg-surface-secondary border-2 border-border border-b-raise rounded-full px-4 active:translate-y-[1px]',
     value: 'font-bold text-foreground',
     indicator: 'text-foreground',
     content: 'bg-surface border-2 border-border rounded-card overflow-hidden',
@@ -24,7 +24,7 @@ export const filterControls = tv({
     // (gap-2 wrap here vs gap-1 no-wrap in parentSlot.chipsRow).
     // Reconcile before extracting a shared chipRow recipe.
     tagList: 'flex-row flex-wrap gap-2',
-    tagItem: 'border-2 border-border border-b-tactile-sm rounded-full',
+    tagItem: 'border-2 border-border border-b-press rounded-full',
   },
 })
 

@@ -4,7 +4,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { NavigationContainer } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
-// biome-ignore lint/style/noRestrictedImports: HeroUINativeProvider is the root provider and must be imported directly
 import { HeroUINativeProvider } from 'heroui-native'
 import { useCallback } from 'react'
 import { View } from 'react-native'
