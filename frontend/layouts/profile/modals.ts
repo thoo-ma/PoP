@@ -8,7 +8,9 @@ import { tv } from 'tailwind-variants'
 export const profileModal = tv({
   slots: {
     scrollContainer: 'flex-grow items-center justify-center px-6 pb-32 pt-4',
-    avatarWrap: 'mt-4 mb-4 rounded-full border-hairline overflow-hidden',
+    avatarWrap: 'mt-4 mb-4 items-center justify-center',
+    avatar:
+      'w-20 h-20 rounded-full overflow-hidden bg-surface-secondary border-hairline border-border',
     username: 'text-heading-xs font-bold mb-1',
     email: 'text-body-base mb-6 font-bold',
     statsRow: 'flex-row justify-around items-center w-full py-5 mb-6',

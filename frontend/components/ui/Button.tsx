@@ -13,7 +13,10 @@ export const Button = Object.assign(
     return (
       <HeroButton
         {...rest}
-        className={cn('border-b-raise active:border-b-press active:translate-y-[3px]', className)}
+        className={cn(
+          'border-2 border-border border-b-raise active:translate-y-0.75 active:border-b-press',
+          className,
+        )}
       />
     )
   }),

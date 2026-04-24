@@ -5,6 +5,7 @@
 @source "./components/**/*.tsx";
 @source "./screens/**/*.tsx";
 @source "./layouts/**/*.ts";
+@source "./node_modules/heroui-native/lib";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Blessed spacing scale
@@ -200,12 +201,13 @@
  * stylesheet remain colorimetrically correct.
  *
  * App-namespaced custom colors (`--info`, `--amber`, `--mystery` + their
- * `-foreground` pairs) are also declared here so they pick up dark-theme
- * overrides cleanly when a Digital Atelier dark palette is added later.
+ * `-foreground` pairs) are also declared here. The separate dark block below
+ * currently mirrors these custom values so Uniwind sees the same variable set
+ * in both themes until a real Digital Atelier dark palette is designed.
  *
- * Adding a real dark palette later: just add a sibling `@variant dark { … }`
- * block here — no JS changes needed (theme is locked to `light` at boot in
- * `App.tsx` so HeroUI's bundled default dark palette never wins on a
+ * When that palette exists, replace the mirrored values in the separate dark
+ * `:root` block below — no JS changes needed (theme is locked to `light` at
+ * boot in `App.tsx` so HeroUI's bundled default dark palette never wins on a
  * system-dark device).
  *
  * OKLCH conversions performed via https://oklch.com — source HEX retained as
@@ -278,6 +280,18 @@
         0 0 1px 0 rgba(0, 0, 0, 0.06);
 
       /* App-namespaced custom colors (exposed as Tailwind utilities in Block C) */
+      --info: oklch(0.6231 0.188 259.81); /* #3b82f6 */
+      --info-foreground: oklch(100% 0 0); /* #ffffff */
+      --amber: oklch(0.825 0.1697 80.39); /* #fbbf24 */
+      --amber-foreground: var(--foreground);
+      --mystery: oklch(0.5103 0.265 287.72); /* #7c3aed */
+      --mystery-foreground: oklch(100% 0 0); /* #ffffff */
+    }
+  }
+
+  :root {
+    @variant dark {
+      /* Keep custom theme vars in parity with light until dark tokens exist. */
       --info: oklch(0.6231 0.188 259.81); /* #3b82f6 */
       --info-foreground: oklch(100% 0 0); /* #ffffff */
       --amber: oklch(0.825 0.1697 80.39); /* #fbbf24 */

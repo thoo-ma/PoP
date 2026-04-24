@@ -138,8 +138,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className={p.scrollContainer()}>
-            <View className={`${p.avatarWrap()} border-border`}>
-              <Avatar size="lg" color="accent" alt="User avatar">
+            <View className={p.avatarWrap()}>
+              <Avatar size="lg" color="accent" alt="User avatar" className={p.avatar()}>
                 <Avatar.Fallback>JD</Avatar.Fallback>
               </Avatar>
             </View>
@@ -179,8 +179,8 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className={p.scrollContainer()}>
-            <View className={`${p.avatarWrap()} border-border`}>
-              <Avatar size="lg" color="accent" alt="User avatar">
+            <View className={p.avatarWrap()}>
+              <Avatar size="lg" color="accent" alt="User avatar" className={p.avatar()}>
                 <Avatar.Fallback>JD</Avatar.Fallback>
               </Avatar>
             </View>

@@ -108,8 +108,8 @@ export default function ProfileScreen() {
           scrollEventThrottle={16}
         >
           {/* Avatar */}
-          <View className={`${p.avatarWrap()} border-border`}>
-            <Avatar size="lg" alt={getUserDisplayName() || 'User avatar'}>
+          <View className={p.avatarWrap()}>
+            <Avatar size="lg" alt={getUserDisplayName() || 'User avatar'} className={p.avatar()}>
               <Avatar.Fallback>
                 {initials || <MaterialIcons name="person" size={28} />}
               </Avatar.Fallback>

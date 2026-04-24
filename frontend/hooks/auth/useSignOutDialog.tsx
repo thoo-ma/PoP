@@ -35,7 +35,7 @@ export function useSignOutDialog() {
             feedbackVariant="none"
             className={cn(
               'h-control-md rounded-full bg-surface active:bg-surface',
-              'border-2 border-border border-b-raise active:border-b-press active:translate-y-[3px]',
+              'border-2 border-border border-b-raise active:translate-y-0.75 active:border-b-press',
               'flex-row items-center justify-center',
               'self-start w-10 px-0',
             )}
