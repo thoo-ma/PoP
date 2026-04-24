@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button, Dialog, Slider } from '@/components/ui'
 import { useAllocateStatPoints } from '@/hooks'
-import { statModal } from '@/styles'
+import { statModal } from '@/layouts'
 import type { AllocateResult, NFT, StatDeltas } from '@/types'
 import { formatDisplayName } from '@/utils'
 

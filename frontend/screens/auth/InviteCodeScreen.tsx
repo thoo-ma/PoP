@@ -13,8 +13,8 @@ import {
   Spinner,
 } from '@/components/ui'
 import { useErrorHandler, useSignOutDialog } from '@/hooks'
+import { authScreen } from '@/layouts/auth'
 import { validateInviteCode } from '@/lib/inviteCodeApi'
-import { authScreen } from '@/styles/auth'
 
 interface InviteCodeScreenProps {
   onApprovalSuccess: () => void

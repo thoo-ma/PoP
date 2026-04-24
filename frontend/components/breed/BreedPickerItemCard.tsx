@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
 import { Card, PressableFeedback } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
-import { breedPickerCard } from '@/styles'
+import { breedPickerCard } from '@/layouts'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import { ProgressBar } from '@/components/shared'
 import { Card } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
-import { outcomePanel } from '@/styles'
+import { outcomePanel } from '@/layouts'
 import { getProbabilities } from '@/utils'
 
 /**

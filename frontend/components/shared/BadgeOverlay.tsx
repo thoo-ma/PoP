@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Chip, type ChipColor, type ChipVariant, cn } from '@/components/ui'
-import { badgeLabel, badgePosition } from '@/styles'
+import { badgeLabel, badgePosition } from '@/layouts'
 
 type BadgePositionVariant = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'topRightOffset'
 type BadgeLabelSize = 'base' | 'xs' | 'sm' | 'tiny'

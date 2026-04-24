@@ -2,7 +2,7 @@ import { memo, type ReactElement } from 'react'
 import { Text, View } from 'react-native'
 import { NFTDetailCard, NFTSelector } from '@/components/nft'
 import { Button } from '@/components/ui'
-import { nftPickerButton, nftPickerSlot } from '@/styles'
+import { nftPickerButton, nftPickerSlot } from '@/layouts'
 import type { NFT } from '@/types'
 import AlertFrame from '../shared/AlertFrame'
 

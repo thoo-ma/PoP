@@ -20,7 +20,7 @@ const renderDevPreview = __DEV__
       .default
   : null
 
-import { profileModal, screenContainer, walletModal } from '@/styles'
+import { profileModal, screenContainer, walletModal } from '@/layouts'
 import ProfileModals from './ProfileModals'
 
 export default function ProfileScreen() {

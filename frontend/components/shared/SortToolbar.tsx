@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { View } from 'react-native'
 import { Button, Select } from '@/components/ui'
 import { SORT_OPTIONS } from '@/constants'
-import { sortControls, tactileSelect } from '@/styles'
+import { sortControls, tactileSelect } from '@/layouts'
 import type { SortOption } from '@/types'
 import { capitalize } from '@/utils'
 

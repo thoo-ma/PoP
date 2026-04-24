@@ -15,7 +15,7 @@ import {
   repairSkeleton,
   screenContainer,
   scrollContent,
-} from '@/styles'
+} from '@/layouts'
 
 /**
  * Repair screen for restoring an NFT's energy using the Energy slider.

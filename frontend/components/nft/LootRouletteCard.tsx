@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import { Button, Card, Spinner, useToast } from '@/components/ui'
 import type { RollLootResult } from '@/hooks'
 import { useRollLoot } from '@/hooks'
-import { lootPanel, lootResultPanel } from '@/styles'
+import { lootPanel, lootResultPanel } from '@/layouts'
 
 const BASE_CHANCE = Math.round(BASE_WIN_PROBABILITY * 100)
 const CHANCE_PER_HOLD = Math.round(PER_HOLD_INCREMENT * 100)

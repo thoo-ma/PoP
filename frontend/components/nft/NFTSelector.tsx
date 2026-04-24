@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { Button, cn } from '@/components/ui'
-import { nftSelectorCounter } from '@/styles'
+import { nftSelectorCounter } from '@/layouts'
 
 interface Props {
   /** 1-based index of the currently displayed NFT. */

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 import { Avatar } from '@/components/ui'
-import { challengeHeader } from '@/styles'
+import { challengeHeader } from '@/layouts'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 

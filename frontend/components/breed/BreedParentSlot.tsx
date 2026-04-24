@@ -2,7 +2,7 @@ import { Text, View } from 'react-native'
 import { RemoteImage } from '@/components/styled'
 import { Chip, cn, PressableFeedback } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
-import { badgeLabel, parentSlot } from '@/styles'
+import { badgeLabel, parentSlot } from '@/layouts'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 

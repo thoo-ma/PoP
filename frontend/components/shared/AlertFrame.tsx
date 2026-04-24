@@ -1,6 +1,6 @@
 import { type ComponentProps, memo, type ReactNode } from 'react'
 import { Alert, cn } from '@/components/ui'
-import { alertFrame } from '@/styles'
+import { alertFrame } from '@/layouts'
 
 type AlertFrameProps = {
   status: NonNullable<ComponentProps<typeof Alert>['status']>
