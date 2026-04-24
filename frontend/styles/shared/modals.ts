@@ -27,7 +27,7 @@ export const statModal = tv({
 // Celebration dialog shown after opening a mystery box.
 export const revealModal = tv({
   slots: {
-    content: 'mx-6 rounded-modal px-6 pt-6 pb-8 items-center border-tactile-sm border-border',
+    content: 'mx-6 rounded-modal px-6 pt-6 pb-8 items-center border-2 border-border',
     titleLg: 'text-heading-xs font-black text-foreground mb-1 text-center',
     titleMd: 'text-body-base font-black text-foreground mb-1 text-center',
     description: 'text-body-md text-muted mb-5 text-center font-bold',
@@ -52,7 +52,7 @@ export const pickerModal = tv({
 // Declarative confirm modal built in useSignOutDialog().
 export const signOutModal = tv({
   slots: {
-    content: 'mx-6 rounded-modal px-6 pt-6 pb-8 border-tactile-sm border-border',
+    content: 'mx-6 rounded-modal px-6 pt-6 pb-8 border-2 border-border',
     buttonRow: 'flex-row gap-3',
   },
 })
