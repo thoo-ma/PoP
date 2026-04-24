@@ -50,7 +50,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
             contentFit="cover"
             accessible={false}
           />
-          <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
+          <BadgeOverlay position="topLeft" colorClass="bg-stat-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>
 

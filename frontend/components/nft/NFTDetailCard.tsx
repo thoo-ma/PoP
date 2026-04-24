@@ -31,7 +31,7 @@ export default memo(function NFTDetailCard({ nft, energy }: NFTDetailCardProps) 
             contentFit="cover"
             accessible={false}
           />
-          <BadgeOverlay position="topLeft" colorClass="bg-badge-level">
+          <BadgeOverlay position="topLeft" colorClass="bg-stat-level">
             {`Lv ${nft.level}`}
           </BadgeOverlay>
           <BadgeOverlay position="topRight" colorClass={typeBadge({ type: nft.type })}>
