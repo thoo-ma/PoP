@@ -1,7 +1,5 @@
 export { Auth, OAuthButton } from './auth'
 export { BreedOutcomePanel, BreedParentSlot, BreedPickerItemCard, BreedPickerModal } from './breed'
-export { FilterControls, SortToolbar } from './controls'
-export { PageIndicator, ScreenHeader } from './navigation'
 export {
   LootRouletteCard,
   MysteryBoxCard,
@@ -29,7 +27,11 @@ export {
   DegenBar,
   EmptyState,
   ErrorBoundary,
+  FilterControls,
+  PageIndicator,
   ProgressBar,
   ScreenError,
+  ScreenHeader,
   ScreenLoader,
+  SortToolbar,
 } from './shared'
