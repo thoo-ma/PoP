@@ -43,9 +43,10 @@ export const cardWrapper = tv({
 })
 
 // ── Card container ────────────────────────────────────────────────────────────
-// Inner card surface — handles overflow clipping. Radius is 13px (outer 16px
-// minus 2px border = 14px flush — kept at rounded-inset for visual consistency)
-// so content is near-flush with the border's inner edge.
+// Inner card surface — handles overflow clipping. The mathematically flush
+// inner radius would be 14px (outer 16px − 2px border), but `rounded-inset`
+// (13px) is used intentionally — it is the nearest available token and the 1px
+// difference is imperceptible on mobile.
 export const cardContainer = tv({
   base: 'w-full overflow-hidden p-0 rounded-inset flex-1',
 })
