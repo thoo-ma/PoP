@@ -268,10 +268,10 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface' })}>
           <View className="flex-1 items-center justify-center px-6">
-            <Text className="text-lg font-black text-on-surface text-center">
+            <Text className="text-lg font-black text-foreground text-center">
               ← You're looking at it
             </Text>
-            <Text className="text-sm font-bold text-on-surface-variant text-center mt-2">
+            <Text className="text-sm font-bold text-muted text-center mt-2">
               The Dev Catalog is the accordion on the Profile screen.
             </Text>
           </View>
@@ -1391,7 +1391,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   return (
     <PreviewShell onBack={dismiss}>
       <View className="flex-1 items-center justify-center">
-        <Text className="text-on-surface font-bold">Unknown preview: {key}</Text>
+        <Text className="text-foreground font-bold">Unknown preview: {key}</Text>
       </View>
     </PreviewShell>
   )
