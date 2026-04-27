@@ -76,7 +76,7 @@
  *   *Card       → grid/list item, often interactive (e.g. nftDetailCard,
  *                  breedPickerCard)
  *   *Panel      → large framed content section
- *                  (e.g. outcomePanel, lootResultPanel, repairAmountPanel)
+ *                  (e.g. breedOutcomePanel, lootResultPanel, repairAmountPanel)
  *   *Modal      → dialog/sheet body (e.g. statModal, signOutModal)
  *   *Frame      → small framed status/feedback element
  *                  (e.g. infoFrame, alertFrame)

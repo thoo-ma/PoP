@@ -27,9 +27,9 @@ export const parentSlot = tv({
   },
 })
 
-// ── Outcome panel ─────────────────────────────────────────────────────────────
+// ── Breed outcome panel ─────────────────────────────────────────────────────
 // Read-only probability breakdown card shown after both parents are selected.
-export const outcomePanel = tv({
+export const breedOutcomePanel = tv({
   slots: {
     wrapper: 'w-full mb-5 border-2 border-border rounded-frame',
     root: 'overflow-hidden rounded-body',

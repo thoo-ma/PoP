@@ -4,13 +4,13 @@ import { AlertFrame, EmptyState, NFTCard, ScreenError, SortToolbar } from '@/com
 import { Button, cn, Dialog, SearchField, Skeleton, Tabs, useToast } from '@/components/ui'
 import { useMarketplaceListings, useUpdateNFT, useUserNFTs } from '@/hooks'
 import {
+  cardSkeleton,
   dialogBody,
   dialogFooter,
   gridLayout,
   marketplaceItemRow,
   screenContainer,
   scrollContent,
-  skeletonCard,
   tactileTabs,
 } from '@/layouts'
 import type { NFT, SortOption } from '@/types'
@@ -110,7 +110,7 @@ export default memo(function Marketplace() {
     setSortBy(option)
   }, [])
 
-  const skeleton = skeletonCard()
+  const skeleton = cardSkeleton()
   const itemRow = useMemo(() => marketplaceItemRow(), [])
   const tabs = tactileTabs()
   const grid = useMemo(() => gridLayout(), [])

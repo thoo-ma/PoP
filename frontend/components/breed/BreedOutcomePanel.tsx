@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import { ProgressBar } from '@/components/shared'
 import { Card } from '@/components/ui'
 import { useRarityColors } from '@/hooks'
-import { outcomePanel } from '@/layouts'
+import { breedOutcomePanel } from '@/layouts'
 import { getProbabilities } from '@/utils'
 
 /**
@@ -15,7 +15,7 @@ import { getProbabilities } from '@/utils'
 export default function BreedOutcomePanel({ r1, r2 }: { r1: NFTRarity; r2: NFTRarity }) {
   const probs = getProbabilities(r1, r2)
   const rarityColors = useRarityColors()
-  const s = outcomePanel()
+  const s = breedOutcomePanel()
   return (
     <View className={s.wrapper()}>
       <Card className={s.root()} animation="disable-all">

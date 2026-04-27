@@ -36,6 +36,7 @@ import {
 import {
   authScreen,
   breedResultPanel,
+  cardSkeleton,
   dialogBody,
   dialogFooter,
   gridLayout,
@@ -47,7 +48,6 @@ import {
   repairFullEnergy,
   screenContainer,
   signOutModal,
-  skeletonCard,
   walletModal,
 } from '@/layouts'
 import { DevMockProvider } from '@/lib/devMock'
@@ -1004,7 +1004,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   // ════════════════════════════════════════════════════════════════════════════
 
   if (key === 'vault:boxes-loading') {
-    const skeleton = skeletonCard()
+    const skeleton = cardSkeleton()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>
@@ -1138,7 +1138,7 @@ export default function renderDevPreview(key: string, dismiss: () => void): Reac
   // ════════════════════════════════════════════════════════════════════════════
 
   if (key === 'marketplace:loading') {
-    const skeleton = skeletonCard()
+    const skeleton = cardSkeleton()
     return (
       <PreviewShell onBack={dismiss}>
         <View className={screenContainer({ bg: 'surface', padTop: 'lg' })}>

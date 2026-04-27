@@ -1,8 +1,8 @@
 import { tv } from 'tailwind-variants'
 
-// ── Skeleton card ────────────────────────────────────────────────────────────
+// ── Card skeleton ────────────────────────────────────────────────────────────
 // Placeholder shimmer lines used in Vault and Marketplace loading states.
-export const skeletonCard = tv({
+export const cardSkeleton = tv({
   slots: {
     image: 'aspect-square w-full rounded-frame',
     titleLine: 'h-4 w-3/4 rounded-tag mt-2',
