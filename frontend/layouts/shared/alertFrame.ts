@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── AlertFrame ───────────────────────────────────────────────────────────────────
 // Tactile alert surface wrapping HeroUI Native's Alert. Slots mirror the Alert

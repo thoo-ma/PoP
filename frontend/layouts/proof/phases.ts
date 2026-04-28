@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Phase container ──────────────────────────────────────────────────────────
 // Wraps every game phase (countdown, immobility, prompt, recording, results, roulette).

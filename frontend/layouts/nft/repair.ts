@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Repair screen ─────────────────────────────────────────────────────────────
 // Amount slider box inner elements.

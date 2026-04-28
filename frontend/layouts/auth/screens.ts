@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Auth screen layout ────────────────────────────────────────────────────────
 export const authScreen = tv({

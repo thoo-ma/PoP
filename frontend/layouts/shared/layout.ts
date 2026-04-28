@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Screen container ──────────────────────────────────────────────────────────
 // The top-level View (or ScrollView) wrapper for every screen.

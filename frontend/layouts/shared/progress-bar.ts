@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Progress bar ──────────────────────────────────────────────────────────────
 // Reusable track + fill bar used by NFTProperties (stat bars),

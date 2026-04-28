@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // TODO(redesign): if a third feedback frame appears, extract a shared
 // feedbackContainer recipe. Today: lootPanel only.

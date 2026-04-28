@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Screen loader ─────────────────────────────────────────────────────────────
 // Full-screen centered spinner shown while data loads.

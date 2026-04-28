@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Badge position ───────────────────────────────────────────────────────────
 // Absolute positioning for Chip badges overlaid on card images.

@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Dialog body ─────────────────────────────────────────────────────────────
 export const dialogBody = tv({

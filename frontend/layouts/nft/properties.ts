@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Property bar ──────────────────────────────────────────────────────────────
 // Stat bar row (label + track + value) used in NFTProperties.

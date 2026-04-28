@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 export const errorMessage = tv({
   base: 'text-body-sm text-danger text-center mb-3 px-2',
