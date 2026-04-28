@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 export const screenTitle = tv({
   base: 'text-heading-lg font-black text-center text-foreground',

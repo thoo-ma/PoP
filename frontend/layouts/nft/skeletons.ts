@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Card skeleton ────────────────────────────────────────────────────────────
 // Placeholder shimmer lines used in Vault and Marketplace loading states.

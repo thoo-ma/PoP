@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Card image container ─────────────────────────────────────────────────────
 // The full-width square image wrapper used in NFTCard, MysteryBoxCard,

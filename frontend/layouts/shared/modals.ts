@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Stat allocation modal ─────────────────────────────────────────────────────
 // Bottom-sheet dialog for allocating stat points after a level-up.

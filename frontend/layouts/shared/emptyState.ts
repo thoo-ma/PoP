@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Empty state ────────────────────────────────────────────────────────────────
 // Shared empty-state pattern for absent data across screens.

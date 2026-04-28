@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // Layout-only recipes for the Profile screen. Color, background, and
 // border-color utilities live inline on the JSX (or come from `<Card>` from

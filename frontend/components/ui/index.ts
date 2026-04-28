@@ -1,7 +1,8 @@
 // Re-exports of utilities/hooks so feature code does not need to import from
 // `heroui-native` directly. See `frontend/.instructions.md` § "Sanctioned UI
 // wrappers".
-export { cn, useToast } from 'heroui-native'
+export { useToast } from 'heroui-native'
+export { cn } from '@/lib/tv'
 export { Alert, type AlertProps } from './Alert'
 export { Avatar, type AvatarProps } from './Avatar'
 export { BottomSheet, type BottomSheetProps } from './BottomSheet'

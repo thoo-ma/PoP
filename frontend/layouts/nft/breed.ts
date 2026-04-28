@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Parent slot card ──────────────────────────────────────────────────────────
 // Tappable NFT slot card used in the Breed screen (filled and empty states).

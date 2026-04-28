@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Tactile select ────────────────────────────────────────────────────────────
 // Shared tactile-styled select dropdown used across FilterControls and SortToolbar.

@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants'
+import { tv } from '@/lib/tv'
 
 // ── Breed picker card ────────────────────────────────────────────────────────
 // Grid item card used in BreedPickerModal's 2-column NFT list.
