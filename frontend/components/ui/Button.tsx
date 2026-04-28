@@ -1,5 +1,7 @@
-import { type ButtonRootProps, cn, Button as HeroButton } from 'heroui-native'
+import { type ButtonRootProps, Button as HeroButton } from 'heroui-native'
 import { memo } from 'react'
+
+import { cn } from '@/lib/tv'
 
 export type ButtonProps = ButtonRootProps
 
