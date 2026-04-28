@@ -50,8 +50,8 @@ const twMergeConfig = {
     ],
   },
   classGroups: {
-    // Keeps parity with heroui-native's cn (opacity-disabled extension).
-    opacity: [{ opacity: ['disabled'] }],
+    // Keeps parity with heroui-native's cn for the app's semantic opacity utilities.
+    opacity: [{ opacity: ['disabled', 'disabled-light', 'disabled-heavy'] }],
   },
 }
 
