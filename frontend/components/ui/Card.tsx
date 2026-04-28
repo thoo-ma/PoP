@@ -1,5 +1,7 @@
-import { type CardRootProps, cn, Card as HeroCard } from 'heroui-native'
+import { type CardRootProps, Card as HeroCard } from 'heroui-native'
 import { memo } from 'react'
+
+import { cn } from '@/lib/tv'
 
 export type CardProps = CardRootProps
 

@@ -54,7 +54,17 @@
       "linter": {
         "rules": {
           "style": {
-            "noRestrictedImports": "off"
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "heroui-native": {
+                    "importNames": ["cn"],
+                    "message": "Import cn from @/lib/tv so wrapper className merging uses the app's extended tailwind-merge config."
+                  }
+                }
+              }
+            }
           }
         }
       }
