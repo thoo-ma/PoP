@@ -52,6 +52,7 @@ import {
 } from '@/layouts'
 import { DevMockProvider } from '@/lib/devMock'
 import { Breed, Repair } from '@/screens/nft'
+import { renderDesignSystem } from './DesignSystemRenderer'
 import {
   MOCK_BOXES,
   MOCK_NFT_COMMON,
@@ -95,6 +96,12 @@ function PhaseShell({ children, onBack }: { children: ReactNode; onBack: () => v
 // ─── Main renderer ───────────────────────────────────────────────────────────
 
 export default function renderDevPreview(key: string, dismiss: () => void): ReactNode {
+  // ════════════════════════════════════════════════════════════════════════════
+  // DESIGN SYSTEM
+  // ════════════════════════════════════════════════════════════════════════════
+
+  if (key.startsWith('ds:')) return renderDesignSystem(key, dismiss)
+
   // ════════════════════════════════════════════════════════════════════════════
   // SHARED
   // ════════════════════════════════════════════════════════════════════════════

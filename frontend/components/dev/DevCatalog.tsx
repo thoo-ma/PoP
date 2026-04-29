@@ -117,6 +117,10 @@ const CATALOG: CatalogSection[] = [
       ['component:mystery-box-reveal', 'Mystery Box Reveal'],
     ],
   },
+  {
+    title: 'Design System',
+    entries: [['ds:button', 'Button']],
+  },
 ]
 
 const TOTAL = CATALOG.reduce((n, s) => n + s.entries.length, 0)
