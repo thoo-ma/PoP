@@ -116,5 +116,10 @@ Maintain this order. Add new content under an existing `### Subsection` of `## P
 No agents are currently registered in `.github/agents/`. To add one: place `<name>.agent.md` in `.github/agents/`, use any file under `.github/skills/` as a format reference, and register the entry in the `<agents>` block below.
 
 <agents>
+<agent>
+<name>Frontend Debug</name>
+<description>Debug React Native frontend issues in `frontend/`: Expo app regressions, UI glitches, navigation or state bugs, React Query data problems, and screen-level failures. Conservative, question-driven, and narrowly validated.</description>
+<file>.github/agents/frontend-debug.agent.md</file>
+</agent>
 </agents>
 
