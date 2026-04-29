@@ -8,6 +8,9 @@ function getStory(key: string): ComponentStory | null {
     case 'ds:button':
       return (require('@/components/ui/Button.stories') as { buttonStories: ComponentStory })
         .buttonStories
+    case 'ds:card':
+      return (require('@/components/ui/Card.stories') as { cardStories: ComponentStory })
+        .cardStories
     default:
       return null
   }

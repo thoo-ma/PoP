@@ -119,7 +119,10 @@ const CATALOG: CatalogSection[] = [
   },
   {
     title: 'Design System',
-    entries: [['ds:button', 'Button']],
+    entries: [
+      ['ds:button', 'Button'],
+      ['ds:card', 'Card'],
+    ],
   },
 ]
 
