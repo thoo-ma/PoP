@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native'
 import type { ComponentStory } from '@/components/dev/storyTypes'
+import ProgressBar from '@/components/shared/ProgressBar'
 import { Button, Card, Chip, cn } from '@/components/ui'
 import {
   cardBody,
@@ -8,6 +9,8 @@ import {
   cardTitle,
   cardWrapper,
   nftDetailCard,
+  propertiesWrapper,
+  propertyBar,
   xpBar,
 } from '@/layouts'
 
@@ -54,7 +57,7 @@ export const cardStories: ComponentStory = {
         {
           label: 'Action card',
           render: () => (
-            <Card className="w-full">
+            <Card className="bg-surface-secondary w-full">
               <Card.Body>
                 <Card.Title>Action Card</Card.Title>
                 <Card.Description>
@@ -80,7 +83,7 @@ export const cardStories: ComponentStory = {
         {
           label: 'NFTCard',
           render: () => (
-            <View className={cardWrapper({ className: 'max-w-40' })}>
+            <View className={cardWrapper({ className: 'max-w-44' })}>
               <Card className={cardContainer()} animation="disable-all">
                 <Card.Header className={cardImageContainer()}>
                   <View className="w-full h-full bg-surface-secondary items-center justify-center">
@@ -98,6 +101,12 @@ export const cardStories: ComponentStory = {
                 </Card.Header>
                 <Card.Body className={cardBody()}>
                   <Card.Title className={cn(cardTitle(), 'min-h-8')}>Crypto Nibbler</Card.Title>
+                  <View className={propertiesWrapper({ mode: 'compact' })}>
+                    <PropertyBarMock label="Eff" value={72} colorClass="bg-stat-efficiency" />
+                    <PropertyBarMock label="Res" value={45} colorClass="bg-stat-resilience" />
+                    <PropertyBarMock label="Cmf" value={88} colorClass="bg-stat-comfort" />
+                    <PropertyBarMock label="Lck" value={33} colorClass="bg-stat-luck" />
+                  </View>
                   <View className={xpBar().row()}>
                     <Text className={xpBar().label()}>Lv</Text>
                     <View className={xpBar().track()}>
@@ -115,7 +124,7 @@ export const cardStories: ComponentStory = {
         {
           label: 'Mystery Box',
           render: () => (
-            <View className={cardWrapper({ className: 'max-w-40' })}>
+            <View className={cardWrapper({ className: 'max-w-44' })}>
               <Card className={cardContainer()} animation="disable-all">
                 <Card.Header className={cardImageContainer()}>
                   <View className="w-full h-full bg-surface-secondary items-center justify-center">
@@ -140,11 +149,12 @@ export const cardStories: ComponentStory = {
     },
     {
       title: 'Panels',
+      layout: 'stack',
       items: [
         {
           label: 'Outcome panel',
           render: () => (
-            <View className="w-full mb-5 border-2 border-border rounded-frame">
+            <View className="border-2 border-border rounded-frame w-full">
               <Card className="overflow-hidden rounded-body" animation="disable-all">
                 <Card.Body className="px-4 py-1.5">
                   <Card.Title className="text-body-sm font-bold uppercase tracking-widest mb-2">
@@ -178,7 +188,7 @@ export const cardStories: ComponentStory = {
         {
           label: 'Detail card',
           render: () => (
-            <View className={cardWrapper({ border: 'flat', className: 'w-70' })}>
+            <View className={cardWrapper({ border: 'flat', className: 'w-full' })}>
               <Card className={cardContainer()} animation="disable-all">
                 <Card.Header className={cn(cardImageContainer(), 'aspect-auto')}>
                   <View className={nftDetailCard().image()}>
@@ -203,4 +213,25 @@ export const cardStories: ComponentStory = {
       ],
     },
   ],
+}
+
+function PropertyBarMock({
+  label,
+  value,
+  colorClass,
+}: {
+  label: string
+  value: number
+  colorClass: string
+}) {
+  const s = propertyBar({ mode: 'compact' })
+  return (
+    <View className={s.root()}>
+      <Text className={s.label()}>{label}</Text>
+      <View className={s.barWrap()}>
+        <ProgressBar value={value} color={colorClass} size="sm" />
+        <Text className={s.value()}>{value}</Text>
+      </View>
+    </View>
+  )
 }

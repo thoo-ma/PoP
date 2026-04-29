@@ -8,6 +8,7 @@ export interface StoryItem {
 export interface StoryGroup {
   title: string
   items: StoryItem[]
+  layout?: 'grid' | 'stack'
 }
 
 export interface ComponentStory {
