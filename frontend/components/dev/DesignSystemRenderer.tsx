@@ -18,7 +18,13 @@ function PreviewShell({ children, onBack }: { children: ReactNode; onBack: () =>
     <View className="flex-1">
       {children}
       <View className="absolute bottom-32 left-6 right-6">
-        <Button variant="primary" onPress={onBack} className="w-full">
+        <Button
+          variant="primary"
+          onPress={onBack}
+          className="w-full"
+          accessibilityLabel="Back to catalog"
+          accessibilityHint="Returns to the design system catalog"
+        >
           <Button.Label>← Back to Catalog</Button.Label>
         </Button>
       </View>
