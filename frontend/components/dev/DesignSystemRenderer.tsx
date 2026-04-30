@@ -8,6 +8,20 @@ function getStory(key: string): ComponentStory | null {
     case 'ds:button':
       return (require('@/components/ui/Button.stories') as { buttonStories: ComponentStory })
         .buttonStories
+    case 'ds:card':
+      return (require('@/components/ui/Card.stories') as { cardStories: ComponentStory })
+        .cardStories
+    case 'ds:tokens-colors':
+      return (require('@/components/dev/tokens/TokenStories') as { colorStories: ComponentStory })
+        .colorStories
+    case 'ds:tokens-typography':
+      return (
+        require('@/components/dev/tokens/TokenStories') as { typographyStories: ComponentStory }
+      ).typographyStories
+    case 'ds:tokens-measurements':
+      return (
+        require('@/components/dev/tokens/TokenStories') as { measurementStories: ComponentStory }
+      ).measurementStories
     default:
       return null
   }
@@ -60,14 +74,25 @@ export function renderDesignSystem(key: string, dismiss: () => void): ReactNode 
             <Text className="text-xs font-black text-muted uppercase tracking-wider px-1">
               {group.title}
             </Text>
-            <View className="flex-row flex-wrap gap-3">
-              {group.items.map((item) => (
-                <View key={item.label} className="items-center gap-2">
-                  {item.render()}
-                  <Text className="text-xs text-muted text-center">{item.label}</Text>
-                </View>
-              ))}
-            </View>
+            {group.layout === 'stack' ? (
+              <View className="gap-3">
+                {group.items.map((item) => (
+                  <View key={item.label} className="items-center gap-2 w-full">
+                    {item.render()}
+                    <Text className="text-xs text-muted text-center">{item.label}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View className="flex-row flex-wrap gap-3">
+                {group.items.map((item) => (
+                  <View key={item.label} className="items-center gap-2">
+                    {item.render()}
+                    <Text className="text-xs text-muted text-center">{item.label}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         ))}
 
