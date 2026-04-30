@@ -112,21 +112,13 @@ export const typographyStories: ComponentStory = {
         {
           label: 'display-xl',
           render: () => (
-            <TextSample
-              token="display-xl"
-              size="text-display-xl font-black"
-              text="The quick brown fox jumps"
-            />
+            <TextSample size="text-display-xl font-black" text="The quick brown fox jumps" />
           ),
         },
         {
           label: 'display-lg',
           render: () => (
-            <TextSample
-              token="display-lg"
-              size="text-display-lg font-black"
-              text="The quick brown fox jumps"
-            />
+            <TextSample size="text-display-lg font-black" text="The quick brown fox jumps" />
           ),
         },
       ],
@@ -138,42 +130,24 @@ export const typographyStories: ComponentStory = {
         {
           label: 'heading-lg',
           render: () => (
-            <TextSample
-              token="heading-lg"
-              size="text-heading-lg font-black"
-              text="Heading Large — 32px"
-            />
+            <TextSample size="text-heading-lg font-black" text="Heading Large — 32px" />
           ),
         },
         {
           label: 'heading-md',
           render: () => (
-            <TextSample
-              token="heading-md"
-              size="text-heading-md font-black"
-              text="Heading Medium — 26px"
-            />
+            <TextSample size="text-heading-md font-black" text="Heading Medium — 26px" />
           ),
         },
         {
           label: 'heading-sm',
           render: () => (
-            <TextSample
-              token="heading-sm"
-              size="text-heading-sm font-black"
-              text="Heading Small — 22px"
-            />
+            <TextSample size="text-heading-sm font-black" text="Heading Small — 22px" />
           ),
         },
         {
           label: 'heading-xs',
-          render: () => (
-            <TextSample
-              token="heading-xs"
-              size="text-heading-xs font-black"
-              text="Heading XS — 20px"
-            />
-          ),
+          render: () => <TextSample size="text-heading-xs font-black" text="Heading XS — 20px" />,
         },
       ],
     },
@@ -184,51 +158,31 @@ export const typographyStories: ComponentStory = {
         {
           label: 'body-xl',
           render: () => (
-            <TextSample
-              token="body-xl"
-              size="text-body-xl font-bold"
-              text="Body XL — 17px — The quick brown fox"
-            />
+            <TextSample size="text-body-xl font-bold" text="Body XL — 17px — The quick brown fox" />
           ),
         },
         {
           label: 'body-base',
           render: () => (
-            <TextSample
-              token="body-base"
-              size="text-body-base"
-              text="Body base — 16px — The quick brown fox"
-            />
+            <TextSample size="text-body-base" text="Body base — 16px — The quick brown fox" />
           ),
         },
         {
           label: 'body-lg',
           render: () => (
-            <TextSample
-              token="body-lg"
-              size="text-body-lg font-bold"
-              text="Body LG — 15px — The quick brown fox"
-            />
+            <TextSample size="text-body-lg font-bold" text="Body LG — 15px — The quick brown fox" />
           ),
         },
         {
           label: 'body-md',
           render: () => (
-            <TextSample
-              token="body-md"
-              size="text-body-md font-bold"
-              text="Body MD — 14px — The quick brown fox"
-            />
+            <TextSample size="text-body-md font-bold" text="Body MD — 14px — The quick brown fox" />
           ),
         },
         {
           label: 'body-sm',
           render: () => (
-            <TextSample
-              token="body-sm"
-              size="text-body-sm font-bold"
-              text="Body SM — 13px — The quick brown fox"
-            />
+            <TextSample size="text-body-sm font-bold" text="Body SM — 13px — The quick brown fox" />
           ),
         },
       ],
@@ -240,21 +194,13 @@ export const typographyStories: ComponentStory = {
         {
           label: 'caption',
           render: () => (
-            <TextSample
-              token="caption"
-              size="text-caption font-bold"
-              text="Caption — 11px — The quick brown fox"
-            />
+            <TextSample size="text-caption font-bold" text="Caption — 11px — The quick brown fox" />
           ),
         },
         {
           label: 'caption-sm',
           render: () => (
-            <TextSample
-              token="caption-sm"
-              size="text-caption-sm"
-              text="Caption SM — 10px — The quick brown fox"
-            />
+            <TextSample size="text-caption-sm" text="Caption SM — 10px — The quick brown fox" />
           ),
         },
       ],
@@ -266,18 +212,13 @@ export const typographyStories: ComponentStory = {
         {
           label: 'Regular',
           render: () => (
-            <TextSample
-              token="body-base"
-              size="text-body-base"
-              text="The quick brown fox jumps over the lazy dog"
-            />
+            <TextSample size="text-body-base" text="The quick brown fox jumps over the lazy dog" />
           ),
         },
         {
           label: 'Bold',
           render: () => (
             <TextSample
-              token="body-base"
               size="text-body-base font-bold"
               text="The quick brown fox jumps over the lazy dog"
             />
@@ -287,7 +228,6 @@ export const typographyStories: ComponentStory = {
           label: 'Black',
           render: () => (
             <TextSample
-              token="body-base"
               size="text-body-base font-black"
               text="The quick brown fox jumps over the lazy dog"
             />
@@ -297,7 +237,6 @@ export const typographyStories: ComponentStory = {
           label: 'Black + uppercase',
           render: () => (
             <TextSample
-              token="body-base"
               size="text-body-base font-black uppercase tracking-wider"
               text="The quick brown fox jumps"
             />

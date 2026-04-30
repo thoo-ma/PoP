@@ -2,12 +2,10 @@ import { memo } from 'react'
 import { Text, View } from 'react-native'
 
 export const TextSample = memo(function TextSample({
-  token,
   size,
   weight,
   text,
 }: {
-  token: string
   size: string
   weight?: string
   text: string
@@ -18,7 +16,7 @@ export const TextSample = memo(function TextSample({
         <Text className={size + (weight ? ` ${weight}` : '')}>{text}</Text>
       </View>
       <Text className="text-caption-sm text-muted">
-        {token} &middot; {size}
+        {size}
         {weight ? ` &middot; ${weight}` : ''}
       </Text>
     </View>
