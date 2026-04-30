@@ -1,0 +1,53 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    ".github/copilot-instructions.md",
+    ".github/skills/*/SKILL.md"
+  ],
+  "mcp": {
+    "heroui-native": {
+      "type": "local",
+      "command": ["npx", "-y", "@heroui/native-mcp@latest"],
+      "enabled": true
+    },
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["npx", "-y", "shadcn@latest", "mcp"],
+      "enabled": true
+    },
+    "vercel": {
+      "type": "remote",
+      "url": "https://mcp.vercel.com",
+      "enabled": true
+    },
+    "embrace": {
+      "type": "remote",
+      "url": "https://mcp.embrace.io/mcp",
+      "enabled": true
+    },
+    "uniwind": {
+      "type": "remote",
+      "url": "https://mcp.uniwind.dev/mcp",
+      "enabled": true
+    },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "enabled": true
+    },
+    "expo-mcp": {
+      "type": "remote",
+      "url": "https://mcp.expo.dev/mcp",
+      "enabled": true
+    }
+  }
+}
