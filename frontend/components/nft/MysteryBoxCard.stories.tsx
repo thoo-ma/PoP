@@ -37,22 +37,24 @@ export const mysteryBoxCardStories: ComponentStory = {
           label: '2×2 grid',
           render: () => {
             const gl = gridLayout()
+            const rareBox = mockBox('rare')
+            const legendaryBox = mockBox('legendary')
             return (
               <View className="w-full">
                 <View className={gl.row()}>
                   <View className={gl.item()}>
                     <MysteryBoxCard
                       rarity="rare"
-                      box={mockBox('rare')}
-                      imageUrl={mockBox('rare').image_url}
+                      box={rareBox}
+                      imageUrl={rareBox.image_url}
                       count={3}
                     />
                   </View>
                   <View className={gl.item()}>
                     <MysteryBoxCard
                       rarity="legendary"
-                      box={mockBox('legendary')}
-                      imageUrl={mockBox('legendary').image_url}
+                      box={legendaryBox}
+                      imageUrl={legendaryBox.image_url}
                       count={1}
                     />
                   </View>

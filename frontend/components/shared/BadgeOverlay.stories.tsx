@@ -12,7 +12,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Top Left',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topLeft" chipColor="accent">
                 ×3
               </BadgeOverlay>
@@ -22,7 +22,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Top Right',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRight" chipColor="accent">
                 RARE
               </BadgeOverlay>
@@ -32,7 +32,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Bottom Left',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="bottomLeft" chipColor="success">
                 LIVE
               </BadgeOverlay>
@@ -42,7 +42,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Bottom Right',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="bottomRight" chipColor="warning">
                 SALE
               </BadgeOverlay>
@@ -52,7 +52,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Top Right Offset',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRightOffset" chipColor="danger">
                 NEW
               </BadgeOverlay>
@@ -67,7 +67,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Tiny',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRight" labelSize="tiny" chipColor="accent">
                 tiny
               </BadgeOverlay>
@@ -77,7 +77,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'XS',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRight" labelSize="xs" chipColor="accent">
                 XS
               </BadgeOverlay>
@@ -87,7 +87,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'SM',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRight" labelSize="sm" chipColor="accent">
                 SM
               </BadgeOverlay>
@@ -97,7 +97,7 @@ export const badgeOverlayStories: ComponentStory = {
         {
           label: 'Base',
           render: () => (
-            <View className="w-36 h-24 bg-surface-secondary rounded-xl border border-border relative">
+            <View className="w-36 h-24 bg-surface-secondary rounded-frame border border-border relative">
               <BadgeOverlay position="topRight" labelSize="base" chipColor="accent">
                 Base
               </BadgeOverlay>
