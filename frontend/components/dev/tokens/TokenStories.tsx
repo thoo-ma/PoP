@@ -244,5 +244,19 @@ export const typographyStories: ComponentStory = {
         },
       ],
     },
+    {
+      title: 'Icons',
+      layout: 'grid',
+      items: [
+        {
+          label: 'icon-xl',
+          render: () => <TextSample size="text-icon-xl font-black" text="🪠" />,
+        },
+        {
+          label: 'icon-lg',
+          render: () => <TextSample size="text-icon-lg font-black" text="🚽" />,
+        },
+      ],
+    },
   ],
 }
