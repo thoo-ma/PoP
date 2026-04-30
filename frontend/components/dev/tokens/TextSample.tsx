@@ -17,7 +17,7 @@ export const TextSample = memo(function TextSample({
       </View>
       <Text className="text-caption-sm font-mono text-muted">
         {size}
-        {weight ? ` &middot; ${weight}` : ''}
+        {weight ? ` · ${weight}` : ''}
       </Text>
     </View>
   )
