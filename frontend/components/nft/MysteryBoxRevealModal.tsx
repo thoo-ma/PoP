@@ -1,10 +1,9 @@
-import type { OpenMysteryBoxResponse } from '@pop/shared'
 import { memo } from 'react'
-import { Text, View } from 'react-native'
-import { RemoteImage } from '@/components/styled'
-import { Button, cn, Dialog } from '@/components/ui'
-import { rarityBadge, revealModal } from '@/layouts'
-import { formatDisplayName } from '@/utils'
+import { Button, Dialog } from '@/components/ui'
+import { NFTDetailCard } from '@/components/nft'
+import { revealModal } from '@/layouts'
+import type { OpenMysteryBoxResponse } from '@pop/shared'
+import type { NFT } from '@/types'
 
 interface MysteryBoxRevealModalProps {
   isVisible: boolean
@@ -15,8 +14,7 @@ interface MysteryBoxRevealModalProps {
 
 /**
  * Celebrate the result of opening a mystery box.
- * Displays the newly minted toilet's image, name and rarity,
- * then lets the user dismiss to return to the vault.
+ * Displays the newly minted toilet via NFTDetailCard.
  */
 export default memo(function MysteryBoxRevealModal({
   isVisible,
@@ -36,31 +34,14 @@ export default memo(function MysteryBoxRevealModal({
       <Dialog.Portal>
         <Dialog.Overlay />
         <Dialog.Content className={s.content()}>
-          <Dialog.Title className={s.titleLg()}>You got a toilet!</Dialog.Title>
-          <Dialog.Description className={s.description()}>
-            Your mystery box has been opened
-          </Dialog.Description>
+          <Dialog.Title className={s.titleLg()}>New NFT!</Dialog.Title>
 
-          <View className={s.imageContainer()}>
-            <RemoteImage
-              source={{ uri: nft.image_url }}
-              blurhash={nft.blurhash ?? undefined}
-              className="w-full h-full"
-              contentFit="cover"
-              accessible={false}
-            />
-            <View className={cn(s.rarityOverlay(), rarityBadge({ rarity: nft.rarity }))}>
-              <Text className={s.rarityText()}>{nft.rarity.toUpperCase()}</Text>
-            </View>
-          </View>
-
-          <Text className={s.titleMd()}>{formatDisplayName(nft.name)}</Text>
-          <Text className={cn(s.description(), 'capitalize')}>{nft.type.replace(/-/g, ' ')}</Text>
+          <NFTDetailCard nft={nft as NFT} />
 
           <Button
             variant="primary"
             onPress={onDismiss}
-            className="w-full"
+            className="w-full mt-4"
             accessibilityLabel="Close reveal and return to vault"
           >
             <Button.Label>View in Vault</Button.Label>

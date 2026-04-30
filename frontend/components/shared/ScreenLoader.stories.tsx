@@ -1,3 +1,4 @@
+import { View } from 'react-native'
 import type { ComponentStory } from '@/components/dev/storyTypes'
 import ScreenLoader from '@/components/shared/ScreenLoader'
 
@@ -11,19 +12,29 @@ export const screenLoaderStories: ComponentStory = {
       items: [
         {
           label: 'Bare',
-          render: () => <ScreenLoader />,
+          render: () => (
+            <View className="h-32">
+              <ScreenLoader />
+            </View>
+          ),
         },
         {
           label: 'With title',
-          render: () => <ScreenLoader title="Loading NFTs..." />,
+          render: () => (
+            <View className="h-32">
+              <ScreenLoader title="Loading NFTs..." />
+            </View>
+          ),
         },
         {
           label: 'With title + message',
           render: () => (
-            <ScreenLoader
-              title="Syncing data"
-              message="Please wait while we update your collection."
-            />
+            <View className="h-32">
+              <ScreenLoader
+                title="Syncing data"
+                message="Please wait while we update your collection."
+              />
+            </View>
           ),
         },
       ],

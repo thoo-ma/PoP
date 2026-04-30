@@ -1,6 +1,6 @@
 ---
 description: Pre-PR code review. Checks for bugs, security issues, performance problems, and project convention violations. Invoke with @review or via /review command.
-mode: subagent
+mode: primary
 temperature: 0.1
 permissions:
   edit:
