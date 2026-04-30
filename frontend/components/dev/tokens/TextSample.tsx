@@ -15,7 +15,7 @@ export const TextSample = memo(function TextSample({
       <View className="flex-row items-baseline gap-2">
         <Text className={size + (weight ? ` ${weight}` : '')}>{text}</Text>
       </View>
-      <Text className="text-caption-sm text-muted">
+      <Text className="text-caption-sm font-mono text-muted">
         {size}
         {weight ? ` &middot; ${weight}` : ''}
       </Text>
