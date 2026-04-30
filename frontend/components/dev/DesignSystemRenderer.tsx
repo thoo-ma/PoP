@@ -18,6 +18,10 @@ function getStory(key: string): ComponentStory | null {
       return (
         require('@/components/dev/tokens/TokenStories') as { typographyStories: ComponentStory }
       ).typographyStories
+    case 'ds:tokens-measurements':
+      return (
+        require('@/components/dev/tokens/TokenStories') as { measurementStories: ComponentStory }
+      ).measurementStories
     default:
       return null
   }

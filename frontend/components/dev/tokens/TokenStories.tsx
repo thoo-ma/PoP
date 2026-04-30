@@ -1,5 +1,6 @@
 import type { ComponentStory } from '@/components/dev/storyTypes'
 import { ColorSwatch } from './ColorSwatch'
+import { BorderBox, RadiusBox, SpacingBar } from './MeasurementSample'
 import { TextSample } from './TextSample'
 
 export const colorStories: ComponentStory = {
@@ -256,6 +257,62 @@ export const typographyStories: ComponentStory = {
           label: 'icon-lg',
           render: () => <TextSample size="text-icon-lg font-black" text="🚽" />,
         },
+      ],
+    },
+  ],
+}
+
+export const measurementStories: ComponentStory = {
+  componentName: 'Measurements',
+  description: 'Spacing, border-radius, and border-width tokens used throughout the app.',
+  groups: [
+    {
+      title: 'Spacing',
+      items: [
+        { label: 'screen-top-sm', render: () => <SpacingBar name="--spacing-screen-top-sm" /> },
+        { label: 'screen-top-md', render: () => <SpacingBar name="--spacing-screen-top-md" /> },
+        { label: 'tab-clearance', render: () => <SpacingBar name="--spacing-tab-clearance" /> },
+        {
+          label: 'tab-clearance-hdr',
+          render: () => <SpacingBar name="--spacing-tab-clearance-header" />,
+        },
+        {
+          label: 'tab-clearance-xl',
+          render: () => <SpacingBar name="--spacing-tab-clearance-xl" />,
+        },
+        { label: 'control-lg', render: () => <SpacingBar name="--spacing-control-lg" /> },
+        { label: 'control-md', render: () => <SpacingBar name="--spacing-control-md" /> },
+        { label: 'card-image', render: () => <SpacingBar name="--spacing-card-image" /> },
+        { label: 'nft-picker-w', render: () => <SpacingBar name="--spacing-nft-picker-w" /> },
+        { label: 'nft-picker-h', render: () => <SpacingBar name="--spacing-nft-picker-h" /> },
+        { label: 'thumbnail', render: () => <SpacingBar name="--spacing-thumbnail" /> },
+        { label: 'label-lg', render: () => <SpacingBar name="--spacing-label-lg" /> },
+        { label: 'label-md', render: () => <SpacingBar name="--spacing-label-md" /> },
+        { label: 'label-sm', render: () => <SpacingBar name="--spacing-label-sm" /> },
+        { label: 'dialog-max', render: () => <SpacingBar name="--spacing-dialog-max" /> },
+        { label: 'counter-min', render: () => <SpacingBar name="--spacing-counter-min" /> },
+        { label: 'phase-px', render: () => <SpacingBar name="--spacing-phase-px" /> },
+      ],
+    },
+    {
+      title: 'Border Radius',
+      items: [
+        { label: 'tag', render: () => <RadiusBox name="--radius-tag" /> },
+        { label: 'body', render: () => <RadiusBox name="--radius-body" /> },
+        { label: 'thumbnail', render: () => <RadiusBox name="--radius-thumbnail" /> },
+        { label: 'frame', render: () => <RadiusBox name="--radius-frame" /> },
+        { label: 'inset', render: () => <RadiusBox name="--radius-inset" /> },
+        { label: 'panel', render: () => <RadiusBox name="--radius-panel" /> },
+        { label: 'card', render: () => <RadiusBox name="--radius-card" /> },
+        { label: 'modal', render: () => <RadiusBox name="--radius-modal" /> },
+      ],
+    },
+    {
+      title: 'Border Width',
+      items: [
+        { label: 'hairline', render: () => <BorderBox name="--border-hairline" /> },
+        { label: 'press', render: () => <BorderBox name="--border-press" /> },
+        { label: 'raise', render: () => <BorderBox name="--border-raise" /> },
       ],
     },
   ],
