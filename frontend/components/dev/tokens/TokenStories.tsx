@@ -10,23 +10,35 @@ export const colorStories: ComponentStory = {
     {
       title: 'Background & Foreground',
       items: [
-        { label: 'Background', render: () => <ColorSwatch name="--background" /> },
-        { label: 'Foreground', render: () => <ColorSwatch name="--foreground" /> },
-        { label: 'Surface', render: () => <ColorSwatch name="--surface" /> },
-        { label: 'Surface fg', render: () => <ColorSwatch name="--surface-foreground" /> },
-        { label: 'Surface 2', render: () => <ColorSwatch name="--surface-secondary" /> },
+        { label: 'Background', render: () => <ColorSwatch name="--background" indicator="app" /> },
+        { label: 'Foreground', render: () => <ColorSwatch name="--foreground" indicator="app" /> },
+        { label: 'Surface', render: () => <ColorSwatch name="--surface" indicator="app" /> },
+        {
+          label: 'Surface fg',
+          render: () => <ColorSwatch name="--surface-foreground" indicator="heroui" />,
+        },
+        {
+          label: 'Surface 2',
+          render: () => <ColorSwatch name="--surface-secondary" indicator="app" />,
+        },
         {
           label: 'Surface 2 fg',
-          render: () => <ColorSwatch name="--surface-secondary-foreground" />,
+          render: () => <ColorSwatch name="--surface-secondary-foreground" indicator="heroui" />,
         },
-        { label: 'Surface 3', render: () => <ColorSwatch name="--surface-tertiary" /> },
+        {
+          label: 'Surface 3',
+          render: () => <ColorSwatch name="--surface-tertiary" indicator="app" />,
+        },
         {
           label: 'Surface 3 fg',
-          render: () => <ColorSwatch name="--surface-tertiary-foreground" />,
+          render: () => <ColorSwatch name="--surface-tertiary-foreground" indicator="heroui" />,
         },
-        { label: 'Overlay', render: () => <ColorSwatch name="--overlay" /> },
-        { label: 'Overlay fg', render: () => <ColorSwatch name="--overlay-foreground" /> },
-        { label: 'Backdrop', render: () => <ColorSwatch name="--backdrop" /> },
+        { label: 'Overlay', render: () => <ColorSwatch name="--overlay" indicator="heroui" /> },
+        {
+          label: 'Overlay fg',
+          render: () => <ColorSwatch name="--overlay-foreground" indicator="heroui" />,
+        },
+        { label: 'Backdrop', render: () => <ColorSwatch name="--backdrop" indicator="heroui" /> },
       ],
     },
     {
@@ -69,7 +81,7 @@ export const colorStories: ComponentStory = {
         { label: 'Accent', render: () => <ColorSwatch name="--accent" indicator="app" /> },
         {
           label: 'Accent fg',
-          render: () => <ColorSwatch name="--accent-foreground" indicator="heroui" />,
+          render: () => <ColorSwatch name="--accent-foreground" indicator="app" />,
         },
         { label: 'Default', render: () => <ColorSwatch name="--default" indicator="app" /> },
         {
@@ -205,57 +217,120 @@ export const colorStories: ComponentStory = {
     {
       title: 'Status',
       items: [
-        { label: 'Success', render: () => <ColorSwatch name="--success" /> },
-        { label: 'Success fg', render: () => <ColorSwatch name="--success-foreground" /> },
-        { label: 'Warning', render: () => <ColorSwatch name="--warning" /> },
-        { label: 'Warning fg', render: () => <ColorSwatch name="--warning-foreground" /> },
-        { label: 'Danger', render: () => <ColorSwatch name="--danger" /> },
-        { label: 'Danger fg', render: () => <ColorSwatch name="--danger-foreground" /> },
-        { label: 'Info', render: () => <ColorSwatch name="--info" /> },
-        { label: 'Info fg', render: () => <ColorSwatch name="--info-foreground" /> },
+        { label: 'Success', render: () => <ColorSwatch name="--success" indicator="app" /> },
+        {
+          label: 'Success fg',
+          render: () => <ColorSwatch name="--success-foreground" indicator="heroui" />,
+        },
+        { label: 'Warning', render: () => <ColorSwatch name="--warning" indicator="app" /> },
+        {
+          label: 'Warning fg',
+          render: () => <ColorSwatch name="--warning-foreground" indicator="heroui" />,
+        },
+        { label: 'Danger', render: () => <ColorSwatch name="--danger" indicator="app" /> },
+        {
+          label: 'Danger fg',
+          render: () => <ColorSwatch name="--danger-foreground" indicator="heroui" />,
+        },
+        { label: 'Info', render: () => <ColorSwatch name="--info" indicator="heroui" /> },
+        {
+          label: 'Info fg',
+          render: () => <ColorSwatch name="--info-foreground" indicator="heroui" />,
+        },
       ],
     },
     {
       title: 'NFT Stats',
       items: [
-        { label: 'Efficiency', render: () => <ColorSwatch name="--color-stat-efficiency" /> },
-        { label: 'Resilience', render: () => <ColorSwatch name="--color-stat-resilience" /> },
-        { label: 'Comfort', render: () => <ColorSwatch name="--color-stat-comfort" /> },
-        { label: 'Luck', render: () => <ColorSwatch name="--color-stat-luck" /> },
-        { label: 'Energy', render: () => <ColorSwatch name="--color-stat-energy" /> },
-        { label: 'Level', render: () => <ColorSwatch name="--color-stat-level" /> },
+        {
+          label: 'Efficiency',
+          render: () => <ColorSwatch name="--color-stat-efficiency" indicator="app" />,
+        },
+        {
+          label: 'Resilience',
+          render: () => <ColorSwatch name="--color-stat-resilience" indicator="app" />,
+        },
+        {
+          label: 'Comfort',
+          render: () => <ColorSwatch name="--color-stat-comfort" indicator="app" />,
+        },
+        { label: 'Luck', render: () => <ColorSwatch name="--color-stat-luck" indicator="app" /> },
+        {
+          label: 'Energy',
+          render: () => <ColorSwatch name="--color-stat-energy" indicator="app" />,
+        },
+        { label: 'Level', render: () => <ColorSwatch name="--color-stat-level" indicator="app" /> },
       ],
     },
     {
       title: 'NFT Types',
       items: [
-        { label: 'Cruise Seat', render: () => <ColorSwatch name="--color-type-cruise-seat" /> },
-        { label: 'Turbo Flush', render: () => <ColorSwatch name="--color-type-turbo-flush" /> },
-        { label: 'Zen Fortress', render: () => <ColorSwatch name="--color-type-zen-fortress" /> },
+        {
+          label: 'Cruise Seat',
+          render: () => <ColorSwatch name="--color-type-cruise-seat" indicator="app" />,
+        },
+        {
+          label: 'Turbo Flush',
+          render: () => <ColorSwatch name="--color-type-turbo-flush" indicator="app" />,
+        },
+        {
+          label: 'Zen Fortress',
+          render: () => <ColorSwatch name="--color-type-zen-fortress" indicator="app" />,
+        },
       ],
     },
     {
       title: 'NFT Rarity',
       items: [
-        { label: 'Common', render: () => <ColorSwatch name="--color-rarity-common" /> },
-        { label: 'Rare', render: () => <ColorSwatch name="--color-rarity-rare" /> },
-        { label: 'Legendary', render: () => <ColorSwatch name="--color-rarity-legendary" /> },
-        { label: 'Transcendent', render: () => <ColorSwatch name="--color-rarity-transcendent" /> },
+        {
+          label: 'Common',
+          render: () => <ColorSwatch name="--color-rarity-common" indicator="app" />,
+        },
+        { label: 'Rare', render: () => <ColorSwatch name="--color-rarity-rare" indicator="app" /> },
+        {
+          label: 'Legendary',
+          render: () => <ColorSwatch name="--color-rarity-legendary" indicator="app" />,
+        },
+        {
+          label: 'Transcendent',
+          render: () => <ColorSwatch name="--color-rarity-transcendent" indicator="app" />,
+        },
       ],
     },
     {
       title: 'Fields & Custom',
       items: [
-        { label: 'Field bg', render: () => <ColorSwatch name="--field-background" /> },
-        { label: 'Field fg', render: () => <ColorSwatch name="--field-foreground" /> },
-        { label: 'Field placeholder', render: () => <ColorSwatch name="--field-placeholder" /> },
-        { label: 'Field border', render: () => <ColorSwatch name="--field-border" /> },
-        { label: 'Amber', render: () => <ColorSwatch name="--amber" /> },
-        { label: 'Amber fg', render: () => <ColorSwatch name="--amber-foreground" /> },
-        { label: 'Mystery', render: () => <ColorSwatch name="--mystery" /> },
-        { label: 'Mystery fg', render: () => <ColorSwatch name="--mystery-foreground" /> },
-        { label: 'Segment', render: () => <ColorSwatch name="--segment" /> },
-        { label: 'Segment fg', render: () => <ColorSwatch name="--segment-foreground" /> },
+        {
+          label: 'Field bg',
+          render: () => <ColorSwatch name="--field-background" indicator="heroui" />,
+        },
+        {
+          label: 'Field fg',
+          render: () => <ColorSwatch name="--field-foreground" indicator="heroui" />,
+        },
+        {
+          label: 'Field placeholder',
+          render: () => <ColorSwatch name="--field-placeholder" indicator="heroui" />,
+        },
+        {
+          label: 'Field border',
+          render: () => <ColorSwatch name="--field-border" indicator="heroui" />,
+        },
+        { label: 'Amber', render: () => <ColorSwatch name="--amber" indicator="app" /> },
+        {
+          label: 'Amber fg',
+          render: () => <ColorSwatch name="--amber-foreground" indicator="unused" />,
+        },
+        { label: 'Mystery', render: () => <ColorSwatch name="--mystery" indicator="unused" /> },
+        {
+          label: 'Mystery fg',
+          render: () => <ColorSwatch name="--mystery-foreground" indicator="unused" />,
+        },
+        { label: 'Segment', render: () => <ColorSwatch name="--segment" indicator="heroui" /> },
+        {
+          label: 'Segment fg',
+          render: () => <ColorSwatch name="--segment-foreground" indicator="heroui" />,
+        },
       ],
     },
   ],

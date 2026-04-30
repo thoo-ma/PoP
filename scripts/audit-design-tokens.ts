@@ -13,7 +13,7 @@
  *   UNUSED  — declared in global.css but not referenced anywhere
  */
 
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
@@ -301,4 +301,43 @@ console.log()
 console.log(`${FG_YELLOW}Note:${RESET} Only searches frontend/ source code. HeroUI's internal module`)
 console.log(`uses its own CSS variables — tokens not directly referenced by app code`)
 console.log(`are marked HEROUI, not UNUSED.`)
+
+// ── Write mode: update storybook indicators ─────────────────────────
+
+if (process.argv.includes('--write')) {
+  const STORY_PATH = resolve(
+    __dirname,
+    '../frontend/components/dev/tokens/TokenStories.tsx',
+  )
+
+  const indicatorMap: Record<string, string> = {}
+  for (const token of allTokens) {
+    const refs = countAppRefs(token)
+    const cat = classify(token, refs)
+    if (cat === 'APP') indicatorMap[token] = 'app'
+    else if (cat === 'HEROUI') indicatorMap[token] = 'heroui'
+    else indicatorMap[token] = 'unused'
+  }
+
+  let storySrc = readFileSync(STORY_PATH, 'utf8')
+  const original = storySrc
+
+  storySrc = storySrc.replace(
+    /ColorSwatch\s+name="(--[^"]+)"(?:\s+indicator="[^"]+")?/g,
+    (match: string, tokenName: string) => {
+      const indicator = indicatorMap[tokenName] ?? 'app'
+      return `ColorSwatch name="${tokenName}" indicator="${indicator}"`
+    },
+  )
+
+  if (storySrc === original) {
+    console.log(`\n${FG_YELLOW}∼ No changes needed — storybook indicators already up to date.${RESET}`)
+  } else {
+    writeFileSync(STORY_PATH, storySrc, 'utf8')
+    console.log(
+      `\n${FG_GREEN}✓ Wrote updated indicators to frontend/components/dev/tokens/TokenStories.tsx${RESET}`,
+    )
+  }
+}
+
 console.log()
