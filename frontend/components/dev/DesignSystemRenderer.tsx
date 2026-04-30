@@ -11,6 +11,13 @@ function getStory(key: string): ComponentStory | null {
     case 'ds:card':
       return (require('@/components/ui/Card.stories') as { cardStories: ComponentStory })
         .cardStories
+    case 'ds:tokens-colors':
+      return (require('@/components/dev/tokens/TokenStories') as { colorStories: ComponentStory })
+        .colorStories
+    case 'ds:tokens-typography':
+      return (
+        require('@/components/dev/tokens/TokenStories') as { typographyStories: ComponentStory }
+      ).typographyStories
     default:
       return null
   }

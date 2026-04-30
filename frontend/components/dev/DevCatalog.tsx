@@ -122,6 +122,8 @@ const CATALOG: CatalogSection[] = [
     entries: [
       ['ds:button', 'Button'],
       ['ds:card', 'Card'],
+      ['ds:tokens-colors', 'Colors'],
+      ['ds:tokens-typography', 'Typography'],
     ],
   },
 ]
