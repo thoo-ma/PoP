@@ -92,7 +92,7 @@ export default memo(function NFTCard({ nft, action }: NFTCardProps) {
               <ProgressBar
                 value={xpPct}
                 colorClass="bg-amber"
-                size="sm"
+                size="md"
                 className="bg-surface-secondary"
               />
             </View>

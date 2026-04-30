@@ -12,31 +12,35 @@ export const pressableFeedbackStories: ComponentStory = {
         {
           label: 'Scale',
           render: () => (
-            <PressableFeedback.Scale>
-              <View className="bg-surface-secondary px-6 py-4 rounded-frame border border-border">
-                <Text className="text-foreground font-bold">Scale</Text>
-              </View>
-            </PressableFeedback.Scale>
+            <PressableFeedback animation={false}>
+              <PressableFeedback.Scale>
+                <View className="bg-surface-secondary px-6 py-4 rounded-frame border border-border">
+                  <Text className="text-foreground font-bold">Scale</Text>
+                </View>
+              </PressableFeedback.Scale>
+            </PressableFeedback>
           ),
         },
         {
           label: 'Highlight',
           render: () => (
-            <PressableFeedback.Highlight>
+            <PressableFeedback>
+              <PressableFeedback.Highlight />
               <View className="bg-surface-secondary px-6 py-4 rounded-frame border border-border">
                 <Text className="text-foreground font-bold">Highlight</Text>
               </View>
-            </PressableFeedback.Highlight>
+            </PressableFeedback>
           ),
         },
         {
           label: 'Ripple',
           render: () => (
-            <PressableFeedback.Ripple>
+            <PressableFeedback>
+              <PressableFeedback.Ripple />
               <View className="bg-surface-secondary px-6 py-4 rounded-frame border border-border">
                 <Text className="text-foreground font-bold">Ripple</Text>
               </View>
-            </PressableFeedback.Ripple>
+            </PressableFeedback>
           ),
         },
       ],

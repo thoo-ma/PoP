@@ -42,40 +42,6 @@ export const colorStories: ComponentStory = {
       ],
     },
     {
-      title: 'Background & Foreground',
-      items: [
-        { label: 'Background', render: () => <ColorSwatch name="--background" indicator="app" /> },
-        { label: 'Foreground', render: () => <ColorSwatch name="--foreground" indicator="app" /> },
-        { label: 'Surface', render: () => <ColorSwatch name="--surface" indicator="app" /> },
-        {
-          label: 'Surface fg',
-          render: () => <ColorSwatch name="--surface-foreground" indicator="heroui" />,
-        },
-        {
-          label: 'Surface 2',
-          render: () => <ColorSwatch name="--surface-secondary" indicator="app" />,
-        },
-        {
-          label: 'Surface 2 fg',
-          render: () => <ColorSwatch name="--surface-secondary-foreground" indicator="heroui" />,
-        },
-        {
-          label: 'Surface 3',
-          render: () => <ColorSwatch name="--surface-tertiary" indicator="app" />,
-        },
-        {
-          label: 'Surface 3 fg',
-          render: () => <ColorSwatch name="--surface-tertiary-foreground" indicator="heroui" />,
-        },
-        { label: 'Overlay', render: () => <ColorSwatch name="--overlay" indicator="heroui" /> },
-        {
-          label: 'Overlay fg',
-          render: () => <ColorSwatch name="--overlay-foreground" indicator="heroui" />,
-        },
-        { label: 'Backdrop', render: () => <ColorSwatch name="--backdrop" indicator="heroui" /> },
-      ],
-    },
-    {
       title: 'Brand & Interactive',
       items: [
         { label: 'Accent', render: () => <ColorSwatch name="--accent" indicator="app" /> },

@@ -32,7 +32,7 @@ export const nftDetailCard = tv({
 // border-radius WITHOUT overflow-hidden, so React Native renders the border
 // correctly at the corners (RN clips border when overflow-hidden is also set).
 export const cardWrapper = tv({
-  base: 'w-full mb-4 border-2 border-border rounded-card flex-1',
+  base: 'w-full mb-4 border-2 border-border rounded-card',
   variants: {
     border: {
       tactile: 'border-b-raise',
@@ -48,7 +48,7 @@ export const cardWrapper = tv({
 // (13px) is used intentionally — it is the nearest available token and the 1px
 // difference is imperceptible on mobile.
 export const cardContainer = tv({
-  base: 'w-full overflow-hidden p-0 rounded-inset flex-1',
+  base: 'w-full overflow-hidden p-0 rounded-inset',
 })
 
 // ── Card title (grid card) ────────────────────────────────────────────────────
@@ -63,6 +63,6 @@ export const xpBar = tv({
   slots: {
     row: 'flex-row items-center mt-1',
     label: 'text-body-sm font-bold w-5 text-stat-comfort',
-    track: 'flex-1 mx-1',
+    track: 'flex-row flex-1 mx-1',
   },
 })
