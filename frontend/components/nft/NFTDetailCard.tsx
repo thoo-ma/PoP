@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { BadgeOverlay } from '@/components/shared'
 import { RemoteImage } from '@/components/styled'
 import { Card } from '@/components/ui'
-import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, typeBadge } from '@/layouts'
+import { cardContainer, cardImageContainer, cardWrapper, nftDetailCard, rarityBadge, typeBadge } from '@/layouts'
 import type { NFT } from '@/types'
 import { formatDisplayName } from '@/utils'
 import NFTProperties from './NFTProperties'
@@ -21,7 +21,7 @@ export default memo(function NFTDetailCard({ nft, energy }: NFTDetailCardProps) 
       <Card
         className={cardContainer()}
         animation="disable-all"
-        accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.type ?? 'unknown'} type`}
+        accessibilityLabel={`${formatDisplayName(nft.name)}, ${nft.rarity ?? 'unknown'} rarity, ${nft.type ?? 'unknown'} type`}
       >
         <Card.Header className={cardImageContainer({ className: 'aspect-auto' })}>
           <RemoteImage
@@ -37,6 +37,11 @@ export default memo(function NFTDetailCard({ nft, energy }: NFTDetailCardProps) 
           <BadgeOverlay position="topRight" colorClass={typeBadge({ type: nft.type })}>
             {nft.type.toUpperCase()}
           </BadgeOverlay>
+          {nft.rarity && (
+            <BadgeOverlay position="bottomLeft" colorClass={rarityBadge({ rarity: nft.rarity })}>
+              {nft.rarity.toUpperCase()}
+            </BadgeOverlay>
+          )}
         </Card.Header>
 
         <Card.Body className={s.body()}>
