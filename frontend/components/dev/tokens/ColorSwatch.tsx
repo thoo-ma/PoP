@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 
 export const ColorSwatch = memo(function ColorSwatch({ name }: { name: string }) {
