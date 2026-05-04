@@ -299,7 +299,9 @@ export default memo(function Repair() {
               className="w-full"
             >
               <Button.Label>
-                {updateLoading ? (
+                {selectedIndex === null ? (
+                  'Select an NFT'
+                ) : updateLoading ? (
                   'Repairing...'
                 ) : poopBalance !== null && poopBalance < poopCost ? (
                   `Need ${poopCost} POOP`
