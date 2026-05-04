@@ -1,5 +1,45 @@
 # pop
 
+## 0.6.0
+
+### Minor Changes
+
+- [#490](https://github.com/thoo-ma/PoP/pull/490) [`3acd7ce`](https://github.com/thoo-ma/PoP/commit/3acd7ce2efc2d0a72f9d5b7603f23c3f9bf2b524) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add 23 design system storybook entries for Tier 1 and Tier 2 components
+
+- [#488](https://github.com/thoo-ma/PoP/pull/488) [`7f578ad`](https://github.com/thoo-ma/PoP/commit/7f578ad4cfa9be4c90f1a0eb7236cfdd0e98889b) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add design system storybook with component stories, design tokens, and usage audit script
+
+### Patch Changes
+
+- [#475](https://github.com/thoo-ma/PoP/pull/475) [`5642972`](https://github.com/thoo-ma/PoP/commit/56429721791f792aa988540da065b6a2beae9128) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate `auth/` to `@/components/ui` wrappers and HeroUI semantic class names.
+
+- [#486](https://github.com/thoo-ma/PoP/pull/486) [`7fc9b15`](https://github.com/thoo-ma/PoP/commit/7fc9b15d7ff83ba3789bb88e7b1e784baf9ba727) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Brand the shared search field wrapper to match PoP controls.
+
+- [#474](https://github.com/thoo-ma/PoP/pull/474) [`8e757d6`](https://github.com/thoo-ma/PoP/commit/8e757d603b2195f26f3f5347137df3a352e0d273) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate `breed/` to `@/components/ui` wrappers and HeroUI semantic class names.
+
+- [#485](https://github.com/thoo-ma/PoP/pull/485) [`7e8a00d`](https://github.com/thoo-ma/PoP/commit/7e8a00dd9115918656f21f1036e99cf26b8b930d) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Align UI wrapper cn imports with the app merge config.
+
+- [#478](https://github.com/thoo-ma/PoP/pull/478) [`94e1a54`](https://github.com/thoo-ma/PoP/commit/94e1a54708d4d118e391fff9e7ac8d0e9c81a27f) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add missing Alert, Select, TagGroup UI wrappers and migrate all remaining heroui-native direct imports to @/components/ui.
+
+- [#491](https://github.com/thoo-ma/PoP/pull/491) [`b08edc7`](https://github.com/thoo-ma/PoP/commit/b08edc7ecce7e7229fa84081f90634e4866bb9e3) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Fix XP bar size on vault NFT cards — XP bar now renders taller than stat bars
+
+- [#477](https://github.com/thoo-ma/PoP/pull/477) [`c5c982e`](https://github.com/thoo-ma/PoP/commit/c5c982ebe785b1097d0fbd49af6e6dc6b46d33fa) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Complete PR 3–7 migration gaps: delete TactileButton and buttons.ts legacy recipes, migrate shared component heroui-native imports to @/components/ui, fix PageIndicator deprecated CSS variable names.
+
+- [#476](https://github.com/thoo-ma/PoP/pull/476) [`074f6f4`](https://github.com/thoo-ma/PoP/commit/074f6f498e7c271e7afff0ef9a4fc4644317234e) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate `proof/` and `styles/shared/` to `@/components/ui` wrappers and HeroUI semantic class names.
+
+- [#471](https://github.com/thoo-ma/PoP/pull/471) [`d6614b7`](https://github.com/thoo-ma/PoP/commit/d6614b7a610bc7409ab23e7b34ceb6a90a80b04f) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Add `components/ui/Button` and `components/ui/Card` wrappers as the sanctioned import path for HeroUI Native's `Button` and `Card`. Bake the brown tactile press animation into `Button` and brand outline + `rounded-card` defaults into `Card`. Add a Biome `noRestrictedImports` rule (warn level) flagging direct `heroui-native` imports outside `frontend/components/ui/`.
+
+- [#469](https://github.com/thoo-ma/PoP/pull/469) [`a77667f`](https://github.com/thoo-ma/PoP/commit/a77667f633c97d9fc87f71690694f9ed89735fe1) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Refactor `global.css` to three-block structure with complete HeroUI semantic var coverage in OKLCH. Lock theme to light at boot via `Uniwind.setTheme('light')`. Add `check:theme` CI gate that diffs HeroUI Native's required vars against `frontend/global.css`. No visual change — legacy MD3 token names continue to compile via a deprecated alias bridge.
+
+- [#473](https://github.com/thoo-ma/PoP/pull/473) [`cebb1f5`](https://github.com/thoo-ma/PoP/commit/cebb1f51212a5362afad236b8e3a507f5d7c5750) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate `nft/` feature surface to `@/components/ui` wrappers and HeroUI semantic class names ([#460](https://github.com/thoo-ma/PoP/issues/460)). Add six new pass-through wrappers (`Dialog`, `Skeleton`, `Tabs`, `SearchField`, `Slider`, `Chip`); route `nft/` component and screen imports through `@/components/ui`, including the re-exported `cn` utility and `useToast` hook, with a single remaining `Spinner` use as the exception. Swap MD3 vocabulary (`text-on-surface`, `bg-surface-container-low`, `border-outline`, `bg-app-success-container`, `bg-app-amber`, `bg-surface-overlay-dim`, …) for HeroUI semantic tokens (`text-foreground`, `bg-surface-secondary`, `border-border`, `bg-success-soft`, `bg-amber`, `bg-black/40`, …) inside `styles/nft/*.ts` recipes and at remaining JSX call sites in `components/nft/*` and `screens/nft/*`. Domain-color recipes (`rarityBadge`, `typeBadge`) and stat color CSS variables retained.
+
+- [#472](https://github.com/thoo-ma/PoP/pull/472) [`fc5297d`](https://github.com/thoo-ma/PoP/commit/fc5297d21f12bf2f2526bc1cef069e7a11210fee) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Migrate `frontend/screens/Profile*` and `frontend/styles/profile/` to the sanctioned `@/components/ui` wrappers and HeroUI semantic class names. Add `Avatar` and `Skeleton` wrappers to `frontend/components/ui/`. Sign-out button now uses the `Button` wrapper (replacing `TactileButton`); stats and balance containers now use the `Card` wrapper. Recipes in `frontend/styles/profile/modals.ts` are layout-only — colors, identity radii, and borders are applied at call sites via semantic utilities (`bg-surface-secondary`, `text-foreground`, `text-muted`, `bg-border`, `border-border`, `border-hairline`).
+
+- [#480](https://github.com/thoo-ma/PoP/pull/480) [`7cf13d9`](https://github.com/thoo-ma/PoP/commit/7cf13d9679ca356521ad3c472d101e154e95df45) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Remove DEPRECATED MD3 alias bridge and tactile utility stubs from `global.css`. Enforce `@/components/ui` import boundary as Biome error.
+
+- [#481](https://github.com/thoo-ma/PoP/pull/481) [`a6e6571`](https://github.com/thoo-ma/PoP/commit/a6e65717b362fea6d879e20d5531e91100058e02) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Rename `frontend/styles/` to `frontend/layouts/` to reflect its role as layout compositions in the three-layer design system.
+
+- [#483](https://github.com/thoo-ma/PoP/pull/483) [`119f168`](https://github.com/thoo-ma/PoP/commit/119f16895905acd784809a8e493763342d296ffa) Thanks [@thoo-ma](https://github.com/thoo-ma)! - Fix custom text-size tokens dropped inside tv() recipes.
+
 ## 0.5.0
 
 ### Minor Changes
